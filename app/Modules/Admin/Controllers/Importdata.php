@@ -1,0 +1,216 @@
+<?php
+
+namespace Modules\Admin\Controllers;
+
+use Modules\Admin\Models\AksesModel;
+use Modules\Admin\Models\ImportdataModel;
+
+
+class Importdata extends \App\Controllers\BaseController
+{
+    public function __construct()
+    {
+        // $this->akses                = new AksesModel();
+        $this->ImportdataModel        = new ImportdataModel();
+        // $this->InModul = "Pulldata";
+        $session = session();
+        $this->user = $session->get('userData');
+    }
+
+    public function index()
+    {
+        $pg = 20;
+        $data = [
+            'title' => 'Daftar pemanggilan data',
+            'pg' => $pg,
+            'qdata' => $this->ImportdataModel->getDok()->paginate($pg),
+            'pager' => $this->ImportdataModel->getDok()->pager
+        ];
+        return view('Modules\Admin\Views\Dok\Importdata', $data);
+    }
+    public function imdata($slug = null)
+    {
+        $d = $this->ImportdataModel->getDok("monika_pull.idpull='{$slug}'")->paginate()[0];
+        // dd($d);
+        $aksi = false;
+        if ($d['st'] == 0) {
+            $txtsql = $this->simpandata($d['idpull'], $d['nmfile']);
+            $post = [
+                'sqlfile_nm'    => $d['nmfile'] . ".sql",
+                'sqlfile_size'  => $txtsql['sqlfile_size'],
+                'sqlfile_row'   => $txtsql['sqlfile_row'],
+                'sqlfile_dt'    => date("ymdHis"),
+                'sqlfile_uid'   => $this->user['uid'],
+                'st'            => 1
+            ];
+            $aksi = true;
+        } elseif ($d['st'] == 1) {
+            $this->importsql($d['nmfile']);
+            $post = [
+                'import_dt'    => date("ymdHis"),
+                'import_uid'   => $this->user['uid'],
+                'st'            => 2
+            ];
+            $aksi = true;
+        } elseif ($d['st'] == 2) {
+            $post = [
+                'import_dt'    => date("ymdHis"),
+                'import_uid'   => $this->user['uid'],
+                'st'            => 2
+            ];
+            $this->ImportdataModel->where('st',  3)->set($post)->update();
+            $post = [
+                'aktif_dt'    => date("ymdHis"),
+                'aktif_uid'   => $this->user['uid'],
+                'st'            => 3
+            ];
+            $aksi = true;
+        }
+
+        if ($aksi == true) {
+            $q = $this->ImportdataModel->where('idpull',  $slug)->set($post)->update();
+        }
+
+        return redirect()->to('/importdata')->with('success', 'Proses selesai');
+    }
+    public function unduh($slug = null, $type = null)
+    {
+        $d = $this->ImportdataModel->getDok("monika_pull.idpull='{$slug}'")->paginate()[0];
+
+        $tipe = 'Txt';
+        $file = $d['nmfile'];
+        $nmFile = $d['nmfile'] . '.txt';
+        if ($type == "sql") {
+            $tipe = 'Sql';
+            $file = $d['sqlfile_nm'];
+            $nmFile = $d['sqlfile_nm'];
+        }
+        $l = WRITEPATH . 'emon/File' . $tipe . '/' . $file;
+        // dd($l);
+        if (!file_exists($l)) {
+            return ['status' => 'Error', 'pesan' => 'File Tidak ada'];
+        } else return $this->response->download(WRITEPATH . 'emon/File' . $tipe . '/' . $file, null)->setFileName($nmFile);
+    }
+
+    function pullimport()
+    {
+        ini_set('max_execution_time', 0);
+
+        // persiapan
+        $nmFile = date("ymdHis") . '_fromemon';
+
+        // pull data
+        $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/");
+
+        //import data
+        $l = WRITEPATH . "emon/FileTxt/" . $nmFile;
+
+        $nf = fopen($l, "w+");
+        fwrite($nf, $data);
+        fclose($nf);
+
+        // save info data
+        if (file_exists($l)) {
+            $post = [
+                'idpull' => null,
+                'nmfile' => $nmFile,
+                'sizefile' => filesize($l),
+                'in_dt' => date("ymdHis"),
+                'in_uid' => $this->user['uid']
+            ];
+
+            $q = $this->ImportdataModel->save($post);
+
+            return redirect()->to('/importdata')->with('success', 'Pull data berhasil');
+        } else {
+            return redirect()->to('/importdata')
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan ketika Pull Data');
+        }
+    }
+
+    function simpandata($idpull, $slug)
+    {
+        $file = WRITEPATH . "emon/FileTxt/$slug";
+        if (!file_exists($file)) {
+            return ['status' => false];
+        } else {
+            $block = 1024 * 1024; //1MB or counld be any higher than HDD block_size*2
+            $fno = array('pagu_51', 'pagu_52', 'pagu_53', 'pagu_rpm', 'pagu_sbsn', 'pagu_phln', 'pagu_total', 'real_51', 'real_52', 'real_53', 'real_rpm', 'real_sbsn', 'real_phln', 'real_total', 'progres_keuangan', 'progres_fisik', 'progres_keu_jan', 'progres_keu_feb', 'progres_keu_mar', 'progres_keu_apr', 'progres_keu_mei', 'progres_keu_jun', 'progres_keu_jul', 'progres_keu_agu', 'progres_keu_sep', 'progres_keu_okt', 'progres_keu_nov', 'progres_keu_des', 'progres_fisik_jan', 'progres_fisik_feb', 'progres_fisik_mar', 'progres_fisik_apr', 'progres_fisik_mei', 'progres_fisik_jun', 'progres_fisik_jul', 'progres_fisik_agu', 'progres_fisik_sep', 'progres_fisik_okt', 'progres_fisik_nov', 'progres_fisik_des', 'ren_keu_jan', 'ren_keu_feb', 'ren_keu_mar', 'ren_keu_apr', 'ren_keu_mei', 'ren_keu_jun', 'ren_keu_jul', 'ren_keu_agu', 'ren_keu_sep', 'ren_keu_okt', 'ren_keu_nov', 'ren_keu_des', 'ren_fis_jan', 'ren_fis_feb', 'ren_fis_mar', 'ren_fis_apr', 'ren_fis_mei', 'ren_fis_jun', 'ren_fis_jul', 'ren_fis_agu', 'ren_fis_sep', 'ren_fis_okt', 'ren_fis_nov', 'ren_fis_des');
+            if ($fh = fopen($file, "r")) {
+
+                $l = WRITEPATH . "emon/FileSql/$slug.sql";
+
+                $nf = fopen($l, "w+");
+                fwrite($nf, "DELETE FROM monika_data;\n");
+                fclose($nf);
+
+                $nf = fopen($l, "a+");
+
+                $left = '';
+                $i = 0;
+                $row = 0;
+                while (!feof($fh)) {
+
+                    $temp = fread($fh, $block);
+                    $temp = str_replace(array("[", "]", "},", "}", "#ku#"), array("", "", "#ku#", "#ku#", "},"), $temp);
+                    $fgetslines = explode("},", $temp);
+                    $fgetslines[0] = $left . $fgetslines[0];
+                    if (!feof($fh)) $left = array_pop($fgetslines);
+
+                    $data = "";
+                    foreach ($fgetslines as $k => $line) {
+                        if ($line != "") $data .= ($data ? ',' : '') . $line . "}";
+                    }
+                    $data = str_replace(array(",}"), array("}"), $data);
+                    $qdata = array();
+                    if ($data != '') {
+                        $qdata = json_decode("[$data]", true);
+                    }
+
+                    if (count($qdata) > 0) {
+                        $ii = 0;
+                        foreach ($qdata as $k => $d) {
+                            if (count($d) > 0) {
+                                if ($ii == 0) $f = "idpull";
+                                $v = "'" . $idpull . "'";
+                                foreach ($d as $field => $value) {
+                                    if ($ii == 0) {
+                                        $f .= ($f ? ',' : '') . $field;
+                                    }
+                                    if (in_array($field, $fno) and $value == "") {
+                                        $value = 0;
+                                    }
+                                    $v .= ($v ? ',' : '') . "'" . str_replace(array("\n", "\t"), array(" ", " "), $value) . "'";
+                                }
+                                if ($ii == 0) {
+                                    fwrite($nf, ($i > 0 ? ";\n" : "") . "INSERT INTO monika_data ($f) VALUES ");
+                                }
+                                fwrite($nf, ($ii > 0 ? ',' : '') . "\n($v)");
+
+                                $ii++;
+                                $row++;
+                            }
+                        }
+                        $i++;
+                    }
+                }
+                fwrite($nf, ";");
+                fclose($nf);
+                fclose($fh);
+
+                // return ['status'=>true, 'query'=>$i, 'rowdata'=>$row, 'imporsql'=>$this->importsql($slug)];
+                return ['status' => true, 'query' => $i, 'sqlfile_row' => $row, 'sqlfile_size' => filesize($l)];
+            }
+        }
+    }
+
+    function importsql($slug)
+    {
+        //$command = "C:\akuxampp7\mysql\bin\mysql --user=root --password=akuok -h localhost -D dev_pu_monika < C:\akuxampp7\htdocs\dev\monika-2\writable\\emon\FileSql\\$slug.sql";
+        $command = "mysql --user=monika --password='#4y0&)04tUh!' -h localhost -D monika < /var/www/monika/writable/emon/FileSql/$slug.sql";
+        // dd($command);
+        $cmd = shell_exec($command);
+        return ['command' => $command];
+    }
+}

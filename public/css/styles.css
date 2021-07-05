@@ -1,0 +1,11 @@
+.table-monitoring td{
+    font-size:11px;
+    padding:.55rem
+}
+.table-monitoring td button{
+    font-size:11px;
+    padding:.50rem .7rem
+}
+.modal-xxl{
+    max-width: 90%;
+}
