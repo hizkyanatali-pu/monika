@@ -49,7 +49,7 @@
     }
 
     /*We need to remove left-right connectors from elements without 
-any siblings*/
+    any siblings*/
     .tree li:only-child::after,
     .tree li:only-child::before {
         display: none;
@@ -61,7 +61,7 @@ any siblings*/
     }
 
     /*Remove left connector from first child and 
-right connector from last child*/
+    right connector from last child*/
     .tree li:first-child::before,
     .tree li:last-child::after {
         border: 0 none;
