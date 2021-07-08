@@ -289,6 +289,10 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 
 /* Pohon Anggaran Dipa */
 /*#region Organizational Chart*/
+.tree{
+    margin-left: -215px;
+}
+
 .tree ul {
     padding-top: 20px;
     position: relative;
@@ -418,5 +422,58 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     min-width: 100px;
 }
 
+/* Background card tree  */
+.bg-tree-1{
+    background-color: #44546A;
+    color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-2{
+    background-color: #9DC3E6;
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-3{
+    background-color: #DEEBF7;
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-footer{
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+/* End  Background card tree  */
+
+/* Titik */
+.tree-content{
+    position: relative;
+}
+
+.tree-dot{
+    position: absolute;
+    bottom: -17px;
+    left: 50%;
+    transform: translate(-50%);
+}
+/* End Titik */
+
 /*#endregion*/
 /* End Pohon Anggaran Dipa */
+
+/* RESPONSIVE */
+@media only screen and (max-width: 539px) {
+    .tree{
+        margin-left: 0px !important;
+    }
+}
+/* END RESPONSIVE */
