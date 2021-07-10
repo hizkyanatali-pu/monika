@@ -1,5 +1,13 @@
 @import url('tree.css');
 
+.w-33{
+    width: 33% !important;
+}
+
+.kl-portlet{
+    overflow-x: auto;
+}
+
 .table-monitoring td{
     font-size:11px;
     padding:.55rem

@@ -289,8 +289,12 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 
 /* Pohon Anggaran Dipa */
 /*#region Organizational Chart*/
-.tree{
+.tree-dipa{
     margin-left: -215px;
+}
+
+.tree-program{
+    margin-left: -105px;
 }
 
 .tree ul {
@@ -380,7 +384,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 .tree li a {
     min-height: 65px;
     /* width: 100%; */
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
     text-decoration: none;
     /* background-color: white; */
     /* color: black; */
@@ -420,6 +424,48 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 
 .tree>ul>li>ul>li>a {
     min-width: 100px;
+}
+
+.tree .ul-down{
+    right: auto;
+    left: 12%;
+    border-left: 2px solid #696969;
+    padding: 10px;
+}
+
+.tree .ul-down .li-down{
+    float: unset;
+    text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 20px 5px 0 5px;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+}
+
+.tree .ul-down::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 0px solid #696969;
+    width: 0;
+    height: 20px;
+}
+
+
+.tree .ul-down .li-down::after{
+    display: none;
+}
+
+.tree .ul-down .li-down::before{
+    content: '';
+    position: absolute;
+    left: 27px;
+    border-top: 2px solid #696969;
+    width: 50%;
+    top: 42%;
+    transform: translate(-50%);
 }
 
 /* Background card tree  */

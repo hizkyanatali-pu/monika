@@ -34,7 +34,7 @@ ORG CHART
                         <hr class="w-75 mb-0">
                     </div> -->
                     
-                    <div class="tree">
+                    <div class="tree tree-dipa">
                         <ul>
                             <li class="w-100">
                                 <a href="#" class="">

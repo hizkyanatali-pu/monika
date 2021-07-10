@@ -27,7 +27,7 @@
 
                 <div class="kt-section__content">
                 
-                    <ol class="organizational-chart">
+                    <!-- <ol class="organizational-chart">
                         <li>
                             <div>
                                 <h4>DIREKTORAT JENDERAL SDA</h4>
@@ -38,7 +38,7 @@
                                 <li>
                                     <div>
                                         <h4>PROGRAM KETAHANAN SDA</h4>
-                                        RP. <?= number_format($programketahanan->total / 1000, 0, ',', '.'); ?>
+                                        Rp. <?= number_format($programketahanan->total / 1000, 0, ',', '.'); ?>
                                     </div>
                                     <ol>
                                         <li>
@@ -135,7 +135,228 @@
 
                             </ol>
                         </li>
-                    </ol>
+                    </ol> -->
+
+                    <div class="tree tree-program">
+                        <ul>
+                            <li class="w-100">
+                                <a href="#" class="">
+                                    <div class="tree-content">
+                                        <div class="card card-body p-3 bg-tree-1" style="background-color: ;">
+                                            <h4 class="mb-0"><b> DIREKTORAT JENDERAL SDA </b></h4>
+                                        </div>
+                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                            <h5 class="mb-0">
+                                                Rp. <?= number_format($djsda->total / 1000, 0, ',', '.'); ?>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </a>
+                                <ul>
+
+                                    <li class="w-50">
+                                        <a href="#" class="">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-1 p-3">
+                                                    <h4 class="mb-0"><b> PROGRAM KETAHANAN SDA </b></h4>
+                                                </div>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                        Rp. <?= number_format($programketahanan->total / 1000, 0, ',', '.'); ?>
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                        <ul>
+                                            <li class="w-33">
+                                                <a href="#" class="">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-2 p-3">
+                                                            <h4 class="mb-0"><b> RUPIAH MURNI </b></h4>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                Rp. <?= number_format($rupiahmurni->total / 1000, 0, ',', '.'); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <ul class="ul-down">
+                                                    <li class="li-down">
+                                                        <a href="#" class="">
+                                                            <div class="tree-content">
+                                                                <div class="card card-body bg-tree-3 p-3">
+                                                                    <h5 class="mb-0"><b> KONTRAK TAHUN JAMAK </b></h5>
+                                                                </div>
+                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        Rp. <?= number_format($rupiahmurni->total / 1000, 0, ',', '.'); ?>
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="li-down">
+                                                        <a href="#" class="">
+                                                            <div class="tree-content">
+                                                                <div class="card card-body bg-tree-3 p-3">
+                                                                    <h5 class="mb-0"><b> SINGLE YEAR </b></h5>
+                                                                </div>
+                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        Rp. <?= number_format($singleyearRM->total / 1000, 0, ',', '.'); ?>
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+
+                                            <li class="w-33">
+                                                <a href="#" class="">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-2 p-3">
+                                                            <h4 class="mb-0"><b> PHLN DAN RMP </b></h4>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                Rp. <?= number_format($phlnrmp->total / 1000, 0, ',', '.'); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <ul class="ul-down">
+                                                    <li class="li-down">
+                                                        <a href="#" class="">
+                                                            <div class="tree-content">
+                                                                <div class="card card-body bg-tree-3 p-3">
+                                                                    <h5 class="mb-0"><b> KONTRAK TAHUN JAMAK </b></h5>
+                                                                </div>
+                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        Rp. <?= number_format($phlnrmp->total / 1000, 0, ',', '.'); ?>
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+
+                                            <li class="w-33">
+                                                <a href="#" class="">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-2 p-3">
+                                                            <h4 class="mb-0"><b> SBSN </b></h4>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                Rp. <?= number_format($sbsn->total / 1000, 0, ',', '.'); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <ul class="ul-down">
+                                                    <li class="li-down">
+                                                        <a href="#" class="">
+                                                            <div class="tree-content">
+                                                                <div class="card card-body bg-tree-3 p-3">
+                                                                    <h5 class="mb-0"><b> KONTRAK TAHUN JAMAK </b></h5>
+                                                                </div>
+                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        Rp. <?= number_format($kontraktahunjamakSBSN->total / 1000, 0, ',', '.'); ?>
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="li-down">
+                                                        <a href="#" class="">
+                                                            <div class="tree-content">
+                                                                <div class="card card-body bg-tree-3 p-3">
+                                                                    <h5 class="mb-0"><b> SINGLE YEAR </b></h5>
+                                                                </div>
+                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        Rp. <?= number_format($singleyearSBSN->total / 1000, 0, ',', '.'); ?>
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+
+                                        </ul>
+
+                                    </li>
+    
+                                    <li class="w-50">
+                                        <a href="#" class="">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-1 p-3">
+                                                    <h4 class="mb-0"><b> PROGRAM DUKUNGAN MANAJEMEN </b></h4>
+                                                </div>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                        Rp. <?= number_format($programdukunganmanajemen->total / 1000, 0, ',', '.'); ?>
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <ul class="ul-down mx-auto" style="width: 60%">
+                                            <li class="li-down">
+                                                <a href="#" class="">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-2 p-3">
+                                                            <h5 class="mb-0"><b> GAJI DAN TUNJANGAN </b></h5>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                Rp. <?= number_format($gajidantunjangan->total / 1000, 0, ',', '.'); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="li-down">
+                                                <a href="#" class="">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-2 p-3">
+                                                            <h5 class="mb-0"><b> ADMINISTRASI SATKER </b></h5>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                Rp. <?= number_format($administrasisatker->total / 1000, 0, ',', '.'); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="li-down">
+                                                <a href="#" class="">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-2 p-3">
+                                                            <h5 class="mb-0"><b> LAYANAN PERKANTORAN DAN SARANA PRASARANA </b></h5>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                Rp. <?= number_format($layananperkantoran->total / 1000, 0, ',', '.'); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+    
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
 
                 </div>
 
