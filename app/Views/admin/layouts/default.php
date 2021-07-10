@@ -29,6 +29,9 @@ $title = $title ?? '';
 
     <?php echo link_tag('css/styles.css'); ?>
 
+    <!-- Tree -->
+    <?php echo link_tag('css/tree.css'); ?>
+
     <!--begin::Layout Skins(used by all pages) -->
 
     <?php echo link_tag('css/skins/header/base/light.css'); ?>

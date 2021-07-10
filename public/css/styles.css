@@ -1,4 +1,70 @@
-@import url('tree.css');
+.table td,
+th {
+    padding: 2px;
+    font-size: 12px;
+    color: #000000;
+    border: 1px solid #333;
+}
+
+.table a {
+    color: #000099;
+}
+
+.table tr:hover {
+    color: #000000;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.tdKodeLabel {
+    width: 500px;
+}
+
+.tdLabelFull {}
+
+.tdKode {
+    width: 200px;
+}
+
+.tdLabel {
+    width: 300px;
+}
+
+.tdTV {
+    width: 90px;
+}
+
+.tdLokasi {
+    width: 120px;
+}
+
+.tdJP {
+    width: 40px;
+}
+
+.tdMP {
+    width: 40px;
+}
+
+.tdNilai {
+    width: 100px;
+}
+
+.tdPersen {
+    width: 50px;
+}
+
+.stw0 {
+    background-color: #ff4da6;
+    color: #FFF;
+}
+
+.stw1 {}
+
+.theader th {
+    background-color: #66ccff;
+    color: #000;
+}
 
 .w-33{
     width: 33% !important;

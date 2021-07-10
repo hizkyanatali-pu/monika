@@ -1,74 +1,6 @@
 <?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content') ?>
-<style>
-    .table td,
-    th {
-        padding: 2px;
-        font-size: 12px;
-        color: #000000;
-        border: 1px solid #333;
-    }
 
-    .table a {
-        color: #000099;
-    }
-
-    .table tr:hover {
-        color: #000000;
-        text-decoration: underline;
-        font-weight: bold;
-    }
-
-    .tdKodeLabel {
-        width: 500px;
-    }
-
-    .tdLabelFull {}
-
-    .tdKode {
-        width: 200px;
-    }
-
-    .tdLabel {
-        width: 300px;
-    }
-
-    .tdTV {
-        width: 90px;
-    }
-
-    .tdLokasi {
-        width: 120px;
-    }
-
-    .tdJP {
-        width: 40px;
-    }
-
-    .tdMP {
-        width: 40px;
-    }
-
-    .tdNilai {
-        width: 100px;
-    }
-
-    .tdPersen {
-        width: 50px;
-    }
-
-    .stw0 {
-        background-color: #ff4da6;
-        color: #FFF;
-    }
-
-    .stw1 {}
-
-    .theader th {
-        background-color: #66ccff;
-        color: #000;
-    }
-</style>
 <!-- begin:: Subheader -->
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
@@ -99,13 +31,13 @@
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid" style="padding:0px; margin:0px;">
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid" style="">
     <div class="kt-portlet">
-        <div class="kt-portlet__body" style="padding:0px;">
+        <div class="kt-portlet__body" style="">
 
             <!--begin::Section-->
             <div class="kt-section">
-                <div class="bg-white rounded box-shadow">
+                <!-- <div class="bg-white rounded box-shadow"> -->
                     <!-- <a id="a-go-" data-toggle="collapse" href="#go-" aria-expanded="true" aria-controls="go-">
                         menu</a>
                         <div id="go-" class="collapse in" role="tabpanel" aria-labelledby="a-go-" >
@@ -220,7 +152,7 @@
                     <!-- <small class="d-block text-right mt-3">
                         <a href="#">All updates</a>
                         </small> -->
-                </div>
+                <!-- </div> -->
 
                 <div class="kt-section__content">
                     <div class="table-responsive tableFixHead">
