@@ -1,229 +1,128 @@
 <?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content') ?>
-
-<style>
-    /*#region Organizational Chart*/
-    .tree * {
-        margin: 0;
-        padding: 0;
-    }
-
-    .tree ul {
-        padding-top: 20px;
-        position: relative;
-
-        -transition: all 0.5s;
-        -webkit-transition: all 0.5s;
-        -moz-transition: all 0.5s;
-    }
-
-    .tree li {
-        float: left;
-        text-align: center;
-        list-style-type: none;
-        position: relative;
-        padding: 20px 5px 0 5px;
-
-        -transition: all 0.5s;
-        -webkit-transition: all 0.5s;
-        -moz-transition: all 0.5s;
-    }
-
-    /*We will use ::before and ::after to draw the connectors*/
-
-    .tree li::before,
-    .tree li::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 50%;
-        border-top: 2px solid #696969;
-        width: 50%;
-        height: 20px;
-    }
-
-    .tree li::after {
-        right: auto;
-        left: 50%;
-        border-left: 2px solid #696969;
-    }
-
-    /*We need to remove left-right connectors from elements without 
-any siblings*/
-    .tree li:only-child::after,
-    .tree li:only-child::before {
-        display: none;
-    }
-
-    /*Remove space from the top of single children*/
-    .tree li:only-child {
-        padding-top: 0;
-    }
-
-    /*Remove left connector from first child and 
-right connector from last child*/
-    .tree li:first-child::before,
-    .tree li:last-child::after {
-        border: 0 none;
-    }
-
-    /*Adding back the vertical connector to the last nodes*/
-    .tree li:last-child::before {
-        border-right: 2px solid #696969;
-        border-radius: 0 5px 0 0;
-        -webkit-border-radius: 0 5px 0 0;
-        -moz-border-radius: 0 5px 0 0;
-    }
-
-    .tree li:first-child::after {
-        border-radius: 5px 0 0 0;
-        -webkit-border-radius: 5px 0 0 0;
-        -moz-border-radius: 5px 0 0 0;
-    }
-
-    /*Time to add downward connectors from parents*/
-    .tree ul ul::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        border-left: 2px solid #696969;
-        width: 0;
-        height: 20px;
-    }
-
-    .tree li a {
-        height: 100px;
-        width: 200px;
-        padding: 5px 10px;
-        text-decoration: none;
-        background-color: white;
-        color: #8b8b8b;
-        font-family: arial, verdana, tahoma;
-        font-size: 11px;
-        display: inline-block;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-
-        -transition: all 0.5s;
-        -webkit-transition: all 0.5s;
-        -moz-transition: all 0.5s;
-    }
-
-    /*Time for some hover effects*/
-    /*We will apply the hover effect the the lineage of the element also*/
-    /* .tree li a:hover,
-    .tree li a:hover+ul li a {
-        background: #cbcbcb;
-        color: #000;
-    } */
-
-    /*Connector styles on hover*/
-    .tree li a:hover+ul li::after,
-    .tree li a:hover+ul li::before,
-    .tree li a:hover+ul::before,
-    .tree li a:hover+ul ul::before {
-        border-color: #94a0b4;
-    }
-
-    .tree li li li a {
-        width: auto;
-    }
-
-    .tree>ul>li>a {
-        width: auto;
-    }
-
-    .tree>ul>li>ul>li>a {
-        width: auto;
-    }
-
-    /*#endregion*/
-</style>
-
 <!--
 ORG CHART
 =========================================-->
 
-<div class="container" style="margin-top:20px">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="tree">
-                <ul>
-                    <li>
-                        <a href="#">
+<!-- begin:: Subheader -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h5 class="kt-subheader__title">
+                <?= $title; ?>
+            </h5>
+            <span class="kt-subheader__separator kt-hidden"></span>
 
-                            <div class="container">
-                                <div class="row">
-                                    DIREKTORAT JENDERAL SDA
-                                </div>
-                                <div class="row">
-                                    RP. <?= number_format($totaldjs->total); ?>
-                                </div>
-                            </div>
+        </div>
 
-                        </a>
+    </div>
+</div>
+
+<!-- end:: Subheader -->
+
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid"">
+    <div class="kt-portlet">
+        <div class="kt-portlet__body" style="padding:0px;">
+
+            <!--begin::Section-->
+            <div class="kt-section  pb-4 pt-3">
+
+                <div class="kt-section__content">
+                    <!-- <div class="text-center mt-4">
+                        <h4 class="text-dark"><b><?= $title; ?></b></h4>
+                        <hr class="w-75 mb-0">
+                    </div> -->
+                    
+                    <div class="tree tree-dipa">
                         <ul>
-                            <li>
-                                <a href="#">
-                                    <div class="container">
-                                        <div class="row">
-                                            PROGRAM KETAHANAN SDA
+                            <li class="w-100">
+                                <a href="#" class="">
+                                    <div class="tree-content">
+                                        <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                        <div class="card card-body p-3 bg-tree-1" style="background-color: ;">
+                                            <h4 class="mb-0"><b> DIREKTORAT JENDERAL SDA </b></h4>
                                         </div>
-                                        <div class="row">
-                                            RP. <?= number_format($totalketahanansda->total); ?>
-                                        </div>
-                                    </div>
-
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#">
-                                    <div class="container">
-                                        <div class="row">
-                                            PROGRAM DUKUNGAN MANAJEMEN
-                                        </div>
-                                        <div class="row">
-                                            RP. <?= number_format($totaldukungan->total); ?>
+                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                            <h5 class="mb-0">
+                                                Rp. <?= number_format($totaldjs->total); ?>
+                                            </h5>
                                         </div>
                                     </div>
-
                                 </a>
                                 <ul>
-                                    <li>
-                                        <a href="#">
-
-                                            <div class="container">
-                                                <div class="row">
-                                                    OPERASIONAL
+                                    <li class="w-50">
+                                        <a href="#" class="">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2 p-3">
+                                                    <h4 class="mb-0"><b> PROGRAM KETAHANAN SDA </b></h4>
                                                 </div>
-                                                <div class="row">
-                                                    RP. <?= number_format($totaloperasional->total); ?>
-                                                </div>
-                                            </div>
-
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-
-                                            <div class="container">
-                                                <div class="row">
-                                                    NON OPERASIONAL
-                                                </div>
-                                                <div class="row">
-                                                    RP. <?= number_format($totalnonoperasional->total); ?>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                        Rp. <?= number_format($totalketahanansda->total); ?>
+                                                    </h5>
                                                 </div>
                                             </div>
 
                                         </a>
                                     </li>
+
+                                    <li class="w-50">
+                                        <a href="#" class="">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2 p-3">
+                                                    <h4 class="mb-0"><b> PROGRAM DUKUNGAN MANAJEMEN </b></h4>
+                                                </div>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                        Rp. <?= number_format($totaldukungan->total); ?>
+                                                    </h5>
+                                                </div>
+                                            </div>
+
+                                        </a>
+                                        <ul>
+                                            <li class="w-50">
+                                                <a href="#" class="">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3 p-3">
+                                                            <h4 class="mb-0"><b> OPERASIONAL </b></h4>
+                                                            <small>(Gaji, tunjangan, operasional perkantoran)</small>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                Rp. <?= number_format($totaloperasional->total); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+
+                                                </a>
+                                            </li>
+                                            <li class="w-50">
+                                                <a href="#" class="">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3 p-3">
+                                                            <h4 class="mb-0"><b> NON OPERASIONAL </b></h4>
+                                                            <small>(Administrasi Kegiatan)</small>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                Rp. <?= number_format($totalnonoperasional->total); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
                                 </ul>
                             </li>
-
                         </ul>
-                    </li>
-                </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
