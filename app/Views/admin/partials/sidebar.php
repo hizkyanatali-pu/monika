@@ -65,7 +65,7 @@
                         <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('posturanggaran/paket-kontraktual'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kontraktual</span></a></li>
                         <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('posturanggaran/sisa-lelang'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Sisa Lelang</span></a></li>
 
-                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('maintenance'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Belum Lelang</span></a></li>
+                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('posturanggaran/sisa-belum-lelang'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Belum Lelang</span></a></li>
 
                     </ul>
                 </div>
