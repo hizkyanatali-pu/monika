@@ -39,14 +39,14 @@ ORG CHART
                             <li class="w-100">
                                 <a href="#" class="">
                                     <div class="tree-content">
-                                        <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
-                                        <div class="card card-body p-3 bg-tree-1" style="background-color: ;">
+                                        <div class="card card-body bg-tree-1">
+                                            <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                             <h4 class="mb-0"><b> DIREKTORAT JENDERAL SDA </b></h4>
-                                        </div>
-                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                            <h5 class="mb-0">
-                                                Rp. <?= number_format($totaldjs->total); ?>
-                                            </h5>
+                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                <h5 class="mb-0">
+                                                    Rp. <?= number_format($totaldjs->total); ?>
+                                                </h5>
+                                            </div>
                                         </div>
                                     </div>
                                 </a>
@@ -54,13 +54,13 @@ ORG CHART
                                     <li class="w-50">
                                         <a href="#" class="">
                                             <div class="tree-content">
-                                                <div class="card card-body bg-tree-2 p-3">
+                                                <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> PROGRAM KETAHANAN SDA </b></h4>
-                                                </div>
-                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                    <h5 class="mb-0">
-                                                        Rp. <?= number_format($totalketahanansda->total); ?>
-                                                    </h5>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            Rp. <?= number_format($totalketahanansda->total); ?>
+                                                        </h5>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -70,13 +70,13 @@ ORG CHART
                                     <li class="w-50">
                                         <a href="#" class="">
                                             <div class="tree-content">
-                                                <div class="card card-body bg-tree-2 p-3">
+                                                <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> PROGRAM DUKUNGAN MANAJEMEN </b></h4>
-                                                </div>
-                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                    <h5 class="mb-0">
-                                                        Rp. <?= number_format($totaldukungan->total); ?>
-                                                    </h5>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            Rp. <?= number_format($totaldukungan->total); ?>
+                                                        </h5>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -85,14 +85,14 @@ ORG CHART
                                             <li class="w-50">
                                                 <a href="#" class="">
                                                     <div class="tree-content">
-                                                        <div class="card card-body bg-tree-3 p-3">
+                                                        <div class="card card-body bg-tree-3">
                                                             <h4 class="mb-0"><b> OPERASIONAL </b></h4>
                                                             <small>(Gaji, tunjangan, operasional perkantoran)</small>
-                                                        </div>
-                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                            <h5 class="mb-0">
-                                                                Rp. <?= number_format($totaloperasional->total); ?>
-                                                            </h5>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    Rp. <?= number_format($totaloperasional->total); ?>
+                                                                </h5>
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -101,14 +101,14 @@ ORG CHART
                                             <li class="w-50">
                                                 <a href="#" class="">
                                                     <div class="tree-content">
-                                                        <div class="card card-body bg-tree-3 p-3">
+                                                        <div class="card card-body bg-tree-3">
                                                             <h4 class="mb-0"><b> NON OPERASIONAL </b></h4>
                                                             <small>(Administrasi Kegiatan)</small>
-                                                        </div>
-                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                            <h5 class="mb-0">
-                                                                Rp. <?= number_format($totalnonoperasional->total); ?>
-                                                            </h5>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    Rp. <?= number_format($totalnonoperasional->total); ?>
+                                                                </h5>
+                                                            </div>
                                                         </div>
                                                     </div>
 

@@ -106,7 +106,7 @@ $title = $title ?? '';
                 </div>
 
                 <!-- begin:: Footer -->
-                <div class="kt-footer  kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop" id="kt_footer">
+                <div class="kt-footer  kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop p-0" id="kt_footer">
                     <?php echo $this->include('admin/partials/footer') ?>
                 </div>
                 <!-- end:: Footer -->
