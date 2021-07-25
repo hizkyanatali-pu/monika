@@ -43,29 +43,6 @@ $title = $title ?? '';
     <?php echo link_tag('css/skins/aside/light.css'); ?>
     <!--end::Layout Skins -->
 
-    <style>
-        .tableFixHead {
-            overflow-y: auto;
-            height: 600px;
-        }
-
-        .tableFixHead thead th {
-            position: sticky;
-            top: 0;
-            border: 1px solid #333;
-        }
-
-        /* Just common table stuff. Really. */
-        .table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        /*th, td { padding: 8px 16px; }*/
-        .table th {
-            background: #f5f5f5;
-        }
-    </style>
 </head>
 
 <body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-aside--minimize">

@@ -470,7 +470,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 
 /* Background card tree  */
 .bg-tree-1{
-    background-color: #44546A;
+    background-color: #39A3D5;
     color: white;
     border: 3px solid white;
     border-radius: 10px;
@@ -478,7 +478,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 }
 
 .bg-tree-2{
-    background-color: #9DC3E6;
+    background-color: #31859D;
     color: black;
     border: 3px solid white;
     border-radius: 10px;
@@ -486,7 +486,15 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 }
 
 .bg-tree-3{
-    background-color: #DEEBF7;
+    background-color: #40A7B6;
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-4{
+    background-color: #9BBC54;
     color: black;
     border: 3px solid white;
     border-radius: 10px;

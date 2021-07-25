@@ -85,7 +85,7 @@ ORG CHART
                                             <li class="w-50">
                                                 <a href="#" class="">
                                                     <div class="tree-content">
-                                                        <div class="card card-body bg-tree-3">
+                                                        <div class="card card-body bg-tree-4">
                                                             <h4 class="mb-0"><b> OPERASIONAL </b></h4>
                                                             <small>(Gaji, tunjangan, operasional perkantoran)</small>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
@@ -101,7 +101,7 @@ ORG CHART
                                             <li class="w-50">
                                                 <a href="#" class="">
                                                     <div class="tree-content">
-                                                        <div class="card card-body bg-tree-3">
+                                                        <div class="card card-body bg-tree-4">
                                                             <h4 class="mb-0"><b> NON OPERASIONAL </b></h4>
                                                             <small>(Administrasi Kegiatan)</small>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
