@@ -44,7 +44,7 @@
                                 </a>
                                 <ul>
 
-                                    <li class="w-50">
+                                    <li class="" style="width: 65%">
                                         <a href="#" class="">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
@@ -59,8 +59,8 @@
                                         </a>
 
                                         <ul>
-                                            <li class="w-33">
-                                                <a href="#" class="">
+                                            <li class="" style="width: 33% !important">
+                                                <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
                                                             <h4 class="mb-0"><b> RUPIAH MURNI </b></h4>
@@ -74,7 +74,7 @@
                                                 </a>
                                                 <ul class="ul-down">
                                                     <li class="li-down">
-                                                        <a href="#" class="">
+                                                        <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-4">
                                                                     <h5 class="mb-0"><b> KONTRAK TAHUN JAMAK </b></h5>
@@ -88,7 +88,7 @@
                                                         </a>
                                                     </li>
                                                     <li class="li-down">
-                                                        <a href="#" class="">
+                                                        <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-4">
                                                                     <h5 class="mb-0"><b> SINGLE YEAR </b></h5>
@@ -104,8 +104,8 @@
                                                 </ul>
                                             </li>
 
-                                            <li class="w-33">
-                                                <a href="#" class="">
+                                            <li class="" style="width: 33% !important">
+                                                <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
                                                             <h4 class="mb-0"><b> PHLN DAN RMP </b></h4>
@@ -119,7 +119,7 @@
                                                 </a>
                                                 <ul class="ul-down">
                                                     <li class="li-down">
-                                                        <a href="#" class="">
+                                                        <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-4">
                                                                     <h5 class="mb-0"><b> KONTRAK TAHUN JAMAK </b></h5>
@@ -135,8 +135,8 @@
                                                 </ul>
                                             </li>
 
-                                            <li class="w-33">
-                                                <a href="#" class="">
+                                            <li class="" style="width: 33% !important">
+                                                <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
                                                             <h4 class="mb-0"><b> SBSN </b></h4>
@@ -150,7 +150,7 @@
                                                 </a>
                                                 <ul class="ul-down">
                                                     <li class="li-down">
-                                                        <a href="#" class="">
+                                                        <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-4">
                                                                     <h5 class="mb-0"><b> KONTRAK TAHUN JAMAK </b></h5>
@@ -164,7 +164,7 @@
                                                         </a>
                                                     </li>
                                                     <li class="li-down">
-                                                        <a href="#" class="">
+                                                        <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-4">
                                                                     <h5 class="mb-0"><b> SINGLE YEAR </b></h5>
@@ -184,8 +184,8 @@
 
                                     </li>
     
-                                    <li class="w-50">
-                                        <a href="#" class="">
+                                    <li class="" style="width: 35%">
+                                        <a href="#" class="position-relative" style="z-index: 10;">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> PROGRAM DUKUNGAN MANAJEMEN </b></h4>
@@ -199,7 +199,7 @@
                                         </a>
                                         <ul class="ul-down mx-auto" style="width: 60%">
                                             <li class="li-down">
-                                                <a href="#" class="">
+                                                <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
                                                             <h5 class="mb-0"><b> GAJI DAN TUNJANGAN </b></h5>
@@ -213,7 +213,7 @@
                                                 </a>
                                             </li>
                                             <li class="li-down">
-                                                <a href="#" class="">
+                                                <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
                                                             <h5 class="mb-0"><b> ADMINISTRASI SATKER </b></h5>
@@ -227,7 +227,7 @@
                                                 </a>
                                             </li>
                                             <li class="li-down">
-                                                <a href="#" class="">
+                                                <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
                                                             <h5 class="mb-0"><b> LAYANAN PERKANTORAN DAN SARANA PRASARANA </b></h5>

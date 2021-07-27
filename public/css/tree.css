@@ -346,7 +346,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 
 /*Remove space from the top of single children*/
 .tree li:only-child {
-    padding-top: 0;
+    /* padding-top: 0; */
 }
 
 /*Remove left connector from first child and 
@@ -406,6 +406,76 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
         color: #000;
     } */
 
+/* LI DOWN  */
+.tree .li-down::before,
+.tree .li-down::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -34%;
+    border-top: 2px solid #696969;
+    width: 63%;
+    height: 20px;
+    transform: rotate(270deg);
+    display:block;
+    z-index: 8;
+}
+
+.tree .li-down::after {
+    right: auto;
+    left: -34%;
+    border-left: 2px solid #696969;
+    top: 23%;
+    display:block !important;
+}
+
+.tree .li-down:first-child::before,
+.tree .li-down:last-child::after {
+    /* border-right: 2px solid #696969; */
+    transform: rotate(270deg);
+    display:block;
+}
+
+.tree .li-down:last-child::before {
+    border-left: 2px solid #696969;
+    border-right: 0px solid #696969;
+    border-radius:5px 0 0 0px;
+    -webkit-border-radius:5px 0 0 0px;
+    -moz-border-radius:5px 0 0 0px;
+    display:block;
+}
+
+.tree .li-down:first-child::after {
+    border-radius: 5px 0 0 0;
+    -webkit-border-radius: 5px 0 0 0;
+    -moz-border-radius: 5px 0 0 0;
+    display:block;
+}
+
+.tree .ul-down::before{
+    display: none;
+}
+
+.tree .li-down a {
+    min-height: 65px;
+    text-decoration: none;
+    display: inline-block;
+
+    -transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+}
+
+.tree .li-down:nth-child(1)::after {
+    border-top: 2px solid #696969 !important;
+    border-left: 2px solid #696969 !important;
+}
+.tree .li-down:nth-child(1)::before {
+    border-left: 0 !important;
+}
+
+/* END LI DOWN  */
+
 /*Connector styles on hover*/
 .tree li a:hover+ul li::after,
 .tree li a:hover+ul li::before,
@@ -426,47 +496,51 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     min-width: 100px;
 }
 
-.tree .ul-down{
+/* .tree .ul-down{
     right: auto;
     left: 12%;
     border-left: 2px solid #696969;
     padding: 10px;
-}
+} */
 
-.tree .ul-down .li-down{
-    float: unset;
+/* .tree .ul-down .li-down{ */
+    /* float: unset;
     text-align: center;
     list-style-type: none;
     position: relative;
     padding: 20px 5px 0 5px;
     transition: all 0.5s;
-    -webkit-transition: all 0.5s;
-}
+    -webkit-transition: all 0.5s; */
+/* } */
 
-.tree .ul-down::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    border-left: 0px solid #696969;
-    width: 0;
-    height: 20px;
-}
-
-
-.tree .ul-down .li-down::after{
+/* .tree .ul-down .li-down::after {
     display: none;
 }
 
-.tree .ul-down .li-down::before{
+.tree .ul-down .li-down::before {
     content: '';
     position: absolute;
-    left: 27px;
     border-top: 2px solid #696969;
     width: 50%;
-    top: 42%;
+    top: 0;
+    left: -35%;
     transform: translate(-50%);
-}
+    transform: rotate(270deg) scaleX(-1);
+} */
+
+/* .tree .ul-down::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12%;
+    border-left: 2px solid #696969;
+    width: 0;
+    height: 100%;
+} */
+
+/* .tree .ul-down::before{
+    display: none;
+} */
 
 /* Background card tree  */
 .bg-tree-1{
