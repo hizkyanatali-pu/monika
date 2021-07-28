@@ -496,51 +496,12 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     min-width: 100px;
 }
 
-/* .tree .ul-down{
-    right: auto;
-    left: 12%;
-    border-left: 2px solid #696969;
-    padding: 10px;
-} */
-
-/* .tree .ul-down .li-down{ */
-    /* float: unset;
-    text-align: center;
-    list-style-type: none;
-    position: relative;
-    padding: 20px 5px 0 5px;
-    transition: all 0.5s;
-    -webkit-transition: all 0.5s; */
-/* } */
-
-/* .tree .ul-down .li-down::after {
-    display: none;
-}
-
-.tree .ul-down .li-down::before {
-    content: '';
-    position: absolute;
-    border-top: 2px solid #696969;
+/* GARIS UNTUK BAGAN KEBAWAH */
+.border-single-tree-down{
+    border-right: 2px solid #696969;
+    height: 20px;
     width: 50%;
-    top: 0;
-    left: -35%;
-    transform: translate(-50%);
-    transform: rotate(270deg) scaleX(-1);
-} */
-
-/* .tree .ul-down::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 12%;
-    border-left: 2px solid #696969;
-    width: 0;
-    height: 100%;
-} */
-
-/* .tree .ul-down::before{
-    display: none;
-} */
+}
 
 /* Background card tree  */
 .bg-tree-1{

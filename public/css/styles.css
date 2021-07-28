@@ -102,3 +102,11 @@ th {
     background-color: #ff4da6;
     color: #FFF !important;
 }
+
+.ml--60{
+    margin-left: -60px !important;
+}
+
+.ml--105{
+    margin-left: -105px !important;
+}

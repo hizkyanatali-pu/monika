@@ -1,324 +1,180 @@
 <?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content') ?>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-    *,
-    *:before,
-    *:after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
 
-    body {
-        background-color: #1d1f20;
-        font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
-    }
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h5 class="kt-subheader__title">
+                POSTUR PAKET BELUM LELANG TA 2021
+            </h5>
+            <span class="kt-subheader__separator kt-hidden"></span>
 
-    #wrapper {
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 80em;
-    }
+        </div>
 
-    #container {
-        float: left;
-        padding: 1em;
-        width: 100%;
-    }
+    </div>
+</div>
 
-    ol.organizational-chart,
-    ol.organizational-chart ol,
-    ol.organizational-chart li,
-    ol.organizational-chart li>div {
-        position: relative;
-    }
+<!-- end:: Subheader -->
 
-    ol.organizational-chart,
-    ol.organizational-chart ol {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid"">
+    <div class="kt-portlet">
+        <div class="kt-portlet__body" style="padding:0px;">
 
-    ol.organizational-chart {
-        text-align: center;
-    }
+            <!--begin::Section-->
+            <div class="kt-section  pb-4 pt-3">
 
-    ol.organizational-chart ol {
-        padding-top: 1em;
-    }
+                <div class="kt-section__content">
+                    <!-- <div class="text-center mt-4">
+                        <h4 class="text-dark"><b><?= $title; ?></b></h4>
+                        <hr class="w-75 mb-0">
+                    </div> -->
+                    
+                    <div class="tree ml--105 pr-4">
+                        <ul>
+                            <li class="w-100">
+                                <a href="#" class="w-25">
+                                    <div class="tree-content">
+                                        <div class="card card-body bg-tree-1">
+                                            <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                            <h4 class="mb-0"><b> BELUM LELANG </b></h4>
+                                            <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                <h5 class="mb-0">
+                                                    Rp. <?= number_format($totaldjs->total); ?>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <ul>
 
-    ol.organizational-chart ol:before,
-    ol.organizational-chart ol:after,
-    ol.organizational-chart li:before,
-    ol.organizational-chart li:after,
-    ol.organizational-chart>li>div:before,
-    ol.organizational-chart>li>div:after {
-        background-color: #b7a6aa;
-        content: '';
-        position: absolute;
-    }
+                                    <li class="" style="width: 60% !important">
+                                        <a href="#" class="w-50">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2">
+                                                    <h4 class="mb-0"><b> RPM </b></h4>
+                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            Rp. <?= number_format($totalketahanansda->total); ?>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <ul>
+                                            <li class="w-50">
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> SYC </b></h4>
+                                                            <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    <?= number_format($totaldjs->total); ?> Paket
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <div class="border-single-tree-down"></div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <h6>Antara Lain :</h6>
+                                                            <p>1. Pembangunan Saluran Drainase Utama Kawasan Industri Kab. Subang; Pagu 96,50 M </p>
+                                                            <p>2. Pembangunan Ambang dan Normalisasi Sungai Bone; Kab. Bone Bolango ; Gorontalo; 0,5 Km; 5 Ha; F; K; SYC; Pagu 58,00 M</p>
+                                                            <p>3. Relokasi Fasilitas Umum Pada Daerah Genangan Bendungan Karian; 0 bendungan; 0 juta m3; F; K; SYC; Pagu 50,00 M</p>
+                                                            <p>4. Dan Lain - Lain</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="w-50">
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                            <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    Rp. 100.000.000
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <div class="border-single-tree-down"></div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <h6>Antara Lain :</h6>
+                                                            <p>1. Penyelesaian Pembangunan Bendungan Keureuto Kabupaten Aceh Utara (MYC); Pagu 80,05 M</p>
+                                                            <p>2. Pembangunan Bendung Gerak Karangnongko di Kab Bojonegoro; 1 bendung; 0 juta m3; F; K; MYC; Pagu 71,94 M </p>
+                                                            <p>3. Pembangunan Penahan Beban (Counterweight) dan Bangunan Pelengkap Lainnya Bendungan Gondang di Kab. Karanganyar; 0 bendungan; 0 juta m3; F; K; MYC; Pagu 67,50 M </p>
+                                                            <p>4. Dan Lain - Lain </p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
 
-    ol.organizational-chart ol>li {
-        padding: 1em 0 0 1em;
-    }
+                                    <li class="" style="width: 40% !important">
+                                        <a href="#" class="w-75">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2">
+                                                    <h4 class="mb-0"><b> PHLN </b></h4>
+                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            Rp <?= number_format($totalketahanansda->total); ?>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="border-single-tree-down"></div>
+                                        <a href="#" class="w-75">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-3">
+                                                    <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            Rp. 100.000.000
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="border-single-tree-down"></div>
+                                        <a href="#" class="w-75">
+                                            <div class="tree-content">
+                                                <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                    <h6>Antara Lain :</h6>
+                                                    <p>1. Rehabilitation D.I. Gumbasa Weir and Groundsill Construction; Kab. Sigi; Sulawesi Tengah; 0 km; 0 hektar; F; K; MYC; Pagu 52,77 M </p>
+                                                    <p>2. Works for PASIGALA raw water transmission system rehabilitation (Paket 1); Kab. Sigi; Sulawesi Tengah; 0 km; 0 m3/detik; F; K; MYC; Pagu 18,62 M </p>
+                                                    <p>3. Works for PASIGALA raw water transmission system rehabilitation (Paket 1); Kab. Sigi; Sulawesi Tengah; 0 km; 0 m3/detik; F; K; MYC; Pagu 18,62 M </p>
+                                                    <p>4. Dan Lain - Lain </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
 
-    ol.organizational-chart>li ol:before {
-        height: 1em;
-        left: 50%;
-        top: 0;
-        width: 3px;
-    }
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-    ol.organizational-chart>li ol:after {
-        height: 3px;
-        left: 3px;
-        top: 1em;
-        width: 50%;
-    }
+            </div>
+        </div>
+    </div>
+</div>
 
-    ol.organizational-chart>li ol>li:not(:last-of-type):before {
-        height: 3px;
-        left: 0;
-        top: 2em;
-        width: 1em;
-    }
-
-    ol.organizational-chart>li ol>li:not(:last-of-type):after {
-        height: 100%;
-        left: 0;
-        top: 0;
-        width: 3px;
-    }
-
-    ol.organizational-chart>li ol>li:last-of-type:before {
-        height: 3px;
-        left: 0;
-        top: 2em;
-        width: 1em;
-    }
-
-    ol.organizational-chart>li ol>li:last-of-type:after {
-        height: 2em;
-        left: 0;
-        top: 0;
-        width: 3px;
-    }
-
-    ol.organizational-chart li>div {
-        background-color: #fff;
-        border-radius: 3px;
-        min-height: 2em;
-        padding: 0.5em;
-    }
-
-    /*** PRIMARY ***/
-    ol.organizational-chart>li>div {
-        background-color: navy;
-        margin-right: 1em;
-    }
-
-    ol.organizational-chart>li>div:before {
-        bottom: 2em;
-        height: 3px;
-        right: -1em;
-        width: 1em;
-    }
-
-    ol.organizational-chart>li>div:first-of-type:after {
-        bottom: 0;
-        height: 2em;
-        right: -1em;
-        width: 3px;
-    }
-
-    ol.organizational-chart>li>div+div {
-        margin-top: 1em;
-    }
-
-    ol.organizational-chart>li>div+div:after {
-        height: calc(100% + 1em);
-        right: -1em;
-        top: -1em;
-        width: 3px;
-    }
-
-    /*** SECONDARY ***/
-    ol.organizational-chart>li>ol:before {
-        left: inherit;
-        right: 0;
-    }
-
-    ol.organizational-chart>li>ol:after {
-        left: 0;
-        width: 100%;
-    }
-
-    ol.organizational-chart>li>ol>li>div {
-        background-color: navy;
-    }
-
-    /*** TERTIARY ***/
-    ol.organizational-chart>li>ol>li>ol>li>div {
-        background-color: gray;
-        color: honeydew;
-    }
-
-    /*** QUATERNARY ***/
-    ol.organizational-chart>li>ol>li>ol>li>ol>li>div {
-        background-color: #fca858;
-    }
-
-    /*** QUINARY ***/
-    ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
-        background-color: #fddc32;
-    }
-
-    /*** MEDIA QUERIES ***/
-    @media only screen and (min-width: 64em) {
-
-        ol.organizational-chart {
-            margin-left: -1em;
-            margin-right: -1em;
-        }
-
-        /* PRIMARY */
-        ol.organizational-chart>li>div {
-            display: inline-block;
-            float: none;
-            margin: 0 1em 1em 1em;
-            vertical-align: bottom;
-        }
-
-        ol.organizational-chart>li>div:only-of-type {
-            margin-bottom: 0;
-            width: calc((100% / 1) - 2em - 4px);
-        }
-
-        ol.organizational-chart>li>div:first-of-type:nth-last-of-type(2),
-        ol.organizational-chart>li>div:first-of-type:nth-last-of-type(2)~div {
-            width: calc((100% / 2) - 2em - 4px);
-        }
-
-        ol.organizational-chart>li>div:first-of-type:nth-last-of-type(3),
-        ol.organizational-chart>li>div:first-of-type:nth-last-of-type(3)~div {
-            width: calc((100% / 3) - 2em - 4px);
-        }
-
-        ol.organizational-chart>li>div:first-of-type:nth-last-of-type(4),
-        ol.organizational-chart>li>div:first-of-type:nth-last-of-type(4)~div {
-            width: calc((100% / 4) - 2em - 4px);
-        }
-
-        ol.organizational-chart>li>div:first-of-type:nth-last-of-type(5),
-        ol.organizational-chart>li>div:first-of-type:nth-last-of-type(5)~div {
-            width: calc((100% / 5) - 2em - 4px);
-        }
-
-        ol.organizational-chart>li>div:before,
-        ol.organizational-chart>li>div:after {
-            bottom: -1em !important;
-            top: inherit !important;
-        }
-
-        ol.organizational-chart>li>div:before {
-            height: 1em !important;
-            left: 50% !important;
-            width: 3px !important;
-        }
-
-        ol.organizational-chart>li>div:only-of-type:after {
-            display: none;
-        }
-
-        ol.organizational-chart>li>div:first-of-type:not(:only-of-type):after,
-        ol.organizational-chart>li>div:last-of-type:not(:only-of-type):after {
-            bottom: -1em;
-            height: 3px;
-            width: calc(50% + 1em + 3px);
-        }
-
-        ol.organizational-chart>li>div:first-of-type:not(:only-of-type):after {
-            left: calc(50% + 3px);
-        }
-
-        ol.organizational-chart>li>div:last-of-type:not(:only-of-type):after {
-            left: calc(-1em - 3px);
-        }
-
-        ol.organizational-chart>li>div+div:not(:last-of-type):after {
-            height: 3px;
-            left: -2em;
-            width: calc(100% + 4em);
-        }
-
-        /* SECONDARY */
-        ol.organizational-chart>li>ol {
-            display: flex;
-            flex-wrap: nowrap;
-        }
-
-        ol.organizational-chart>li>ol:before,
-        ol.organizational-chart>li>ol>li:before {
-            height: 1em !important;
-            left: 50% !important;
-            top: 0 !important;
-            width: 3px !important;
-        }
-
-        ol.organizational-chart>li>ol:after {
-            display: none;
-        }
-
-        ol.organizational-chart>li>ol>li {
-            flex-grow: 1;
-            padding-left: 1em;
-            padding-right: 1em;
-            padding-top: 1em;
-        }
-
-        ol.organizational-chart>li>ol>li:only-of-type {
-            padding-top: 0;
-        }
-
-        ol.organizational-chart>li>ol>li:only-of-type:before,
-        ol.organizational-chart>li>ol>li:only-of-type:after {
-            display: none;
-        }
-
-        ol.organizational-chart>li>ol>li:first-of-type:not(:only-of-type):after,
-        ol.organizational-chart>li>ol>li:last-of-type:not(:only-of-type):after {
-            height: 3px;
-            top: 0;
-            width: 50%;
-        }
-
-        ol.organizational-chart>li>ol>li:first-of-type:not(:only-of-type):after {
-            left: 50%;
-        }
-
-        ol.organizational-chart>li>ol>li:last-of-type:not(:only-of-type):after {
-            left: 0;
-        }
-
-        ol.organizational-chart>li>ol>li+li:not(:last-of-type):after {
-            height: 3px;
-            left: 0;
-            top: 0;
-            width: 100%;
-        }
-
-    }
-</style>
-
-<!--
-ORG CHART
-=========================================-->
-
-<div id="wrapper">
+<!-- <div id="wrapper">
     <div id="container">
         <h1><center>POSTUR PAKET BELUM LELANG TA 2021</center></h1>
         <br>
@@ -444,6 +300,6 @@ ORG CHART
         </ol>
 
     </div>
-</div>
+</div> -->
 
 <?= $this->endSection() ?>
