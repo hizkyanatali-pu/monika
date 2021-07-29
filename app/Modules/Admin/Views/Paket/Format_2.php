@@ -106,7 +106,7 @@
                         </div>
                     */ ?>
                     
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="card card-body text-white bg-primary">
                             <div class="clearfix">
                                 <div class="float-left">
@@ -118,7 +118,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="card card-body text-white bg-success">
                             <div class="clearfix">
                                 <div class="float-left">
@@ -184,9 +184,9 @@
                     </div>
                 </div>
                 
-                <div class="table-responsive tableFixHead">
+                <div class="table-responsive">
                     <?php $colspan = 11; ?>
-                    <table class="table table-bordered">
+                    <table class="table table-bordered w-100 mb-0">
                         <thead class="bg-white">
                             <tr class="text-center theader">
                                 <th colspan="2">&nbsp;</th>
@@ -232,6 +232,10 @@
                                 </th>
                             </tr>
                         </thead>
+                    </table>
+                </div>
+                <div class="table-responsive tableFixHead">
+                    <table class="table table-bordered w-100">
                         <tbody id="tbody-utama">
                             <?php if ($qdata) : ?>
                                 <?php

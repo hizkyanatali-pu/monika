@@ -3,103 +3,12 @@
     height: 600px;
 }
 
-.tableFixHead thead {
-    position: sticky;
-    top: 0;
-    border: 1px solid #333;
-}
-
-/* Just common table stuff. Really. */
-/* .table {
-    border-collapse: collapse;
-    width: 100%;
-} */
-
-/*th, td { padding: 8px 16px; }*/
-/* .table th {
-    background: #f5f5f5;
-}
-
-.table td,
-th {
-    padding: 2px;
-    font-size: 12px;
-    color: #000000;
-    border: 1px solid #333;
-}
-
-.table a {
-    color: #000099;
-}
-
-.table tr:hover {
-    color: #000000;
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-.tdKodeLabel {
-    width: 500px;
-}
-
-.tdLabelFull {}
-
-.tdKode {
-    width: 200px;
-}
-
-.tdLabel {
-    width: 300px;
-}
-
-.tdTV {
-    width: 90px;
-}
-
-.tdLokasi {
-    width: 120px;
-}
-
-.tdJP {
-    width: 40px;
-}
-
-.tdMP {
-    width: 40px;
-}
-
-.tdNilai {
-    width: 100px;
-}
-
-.tdPersen {
-    width: 50px;
-}
-
-.stw1 {}
-
-.w-33{
-    width: 33% !important;
-}
-
-.kl-portlet{
-    overflow-x: auto;
-}
-
-.table-monitoring td{
-    font-size:11px;
-    padding:.55rem
-}
-.table-monitoring td button{
-    font-size:11px;
-    padding:.50rem .7rem
-}
-.modal-xxl{
-    max-width: 90%;
-} */
-
 .stw0 {
     background-color: #ff4da6;
+    color: #FFF !important;
+}
+
+.stw0 td a{
     color: #FFF !important;
 }
 
@@ -110,3 +19,56 @@ th {
 .ml--105{
     margin-left: -105px !important;
 }
+
+.tdsatker {
+    background-color: #eee6ff;
+}
+
+.tdprogram {
+    background-color: gold;
+}
+
+.tdgiat {
+    background-color: #9bc2e6;
+}
+
+.tdoutput {
+    background-color: #ddebf7;
+}
+
+.tdsoutput {
+    background-color: #ffff;
+}
+
+.tdkomponen {
+    background-color: #aa80ff;
+}
+
+.theader th {
+    background-color: #68218b;
+    color: #fff;
+
+}
+
+.tableFixHead1 {
+    overflow-y: auto;
+    height: 600px;
+}
+
+/* Scroll */
+::-webkit-scrollbar {
+    width: 17px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    border: 5px solid transparent;
+    background-clip: content-box;
+    background-color: #8070d4;
+}
+/* end Scroll */
