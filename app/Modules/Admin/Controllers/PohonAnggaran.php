@@ -74,20 +74,27 @@ class PohonAnggaran extends \App\Controllers\BaseController
     {
 
         $query = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span");
+        $paket1 = $this->db->query("SELECT COUNT(*) as paket FROM paket");
         $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC'");
+        $paket2 = $this->db->query("SELECT COUNT(*) as paket FROM paket WHERE kdprogram ='FC'");
         $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'");
+        $paket3 = $this->db->query("SELECT COUNT(*) as paket FROM paket WHERE kdprogram ='WA'");
+
 
 
         $row = $query->getRow();
         $row1 = $query1->getRow();
         $row2 = $query2->getRow();
 
-
         $data = array(
             'title' => 'Pagu Per Program',
             'totaldjs' => $row,
+            'paketdjs' => $paket1->getRow(),
             'totalketahanansda' => $row1,
+            'paketketahanansda' => $paket2->getRow(),
             'totaldukungan' => $row2,
+            'paketdukungan' => $paket3->getRow(),
+
 
         );
 
