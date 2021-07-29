@@ -1,4 +1,90 @@
-@import url('tree.css');
+.tableFixHead {
+    overflow-y: auto;
+    height: 600px;
+}
+
+.tableFixHead thead {
+    position: sticky;
+    top: 0;
+    border: 1px solid #333;
+}
+
+/* Just common table stuff. Really. */
+/* .table {
+    border-collapse: collapse;
+    width: 100%;
+} */
+
+/*th, td { padding: 8px 16px; }*/
+/* .table th {
+    background: #f5f5f5;
+}
+
+.table td,
+th {
+    padding: 2px;
+    font-size: 12px;
+    color: #000000;
+    border: 1px solid #333;
+}
+
+.table a {
+    color: #000099;
+}
+
+.table tr:hover {
+    color: #000000;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.tdKodeLabel {
+    width: 500px;
+}
+
+.tdLabelFull {}
+
+.tdKode {
+    width: 200px;
+}
+
+.tdLabel {
+    width: 300px;
+}
+
+.tdTV {
+    width: 90px;
+}
+
+.tdLokasi {
+    width: 120px;
+}
+
+.tdJP {
+    width: 40px;
+}
+
+.tdMP {
+    width: 40px;
+}
+
+.tdNilai {
+    width: 100px;
+}
+
+.tdPersen {
+    width: 50px;
+}
+
+.stw1 {}
+
+.w-33{
+    width: 33% !important;
+}
+
+.kl-portlet{
+    overflow-x: auto;
+}
 
 .table-monitoring td{
     font-size:11px;
@@ -10,4 +96,17 @@
 }
 .modal-xxl{
     max-width: 90%;
+} */
+
+.stw0 {
+    background-color: #ff4da6;
+    color: #FFF !important;
+}
+
+.ml--60{
+    margin-left: -60px !important;
+}
+
+.ml--105{
+    margin-left: -105px !important;
 }

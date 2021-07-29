@@ -29,6 +29,9 @@ $title = $title ?? '';
 
     <?php echo link_tag('css/styles.css'); ?>
 
+    <!-- Tree -->
+    <?php echo link_tag('css/tree.css'); ?>
+
     <!--begin::Layout Skins(used by all pages) -->
 
     <?php echo link_tag('css/skins/header/base/light.css'); ?>
@@ -40,29 +43,6 @@ $title = $title ?? '';
     <?php echo link_tag('css/skins/aside/light.css'); ?>
     <!--end::Layout Skins -->
 
-    <style>
-        .tableFixHead {
-            overflow-y: auto;
-            height: 600px;
-        }
-
-        .tableFixHead thead th {
-            position: sticky;
-            top: 0;
-            border: 1px solid #333;
-        }
-
-        /* Just common table stuff. Really. */
-        .table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        /*th, td { padding: 8px 16px; }*/
-        .table th {
-            background: #f5f5f5;
-        }
-    </style>
 </head>
 
 <body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-aside--minimize">
@@ -103,7 +83,7 @@ $title = $title ?? '';
                 </div>
 
                 <!-- begin:: Footer -->
-                <div class="kt-footer  kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop" id="kt_footer">
+                <div class="kt-footer  kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop p-0" id="kt_footer">
                     <?php echo $this->include('admin/partials/footer') ?>
                 </div>
                 <!-- end:: Footer -->

@@ -289,8 +289,12 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 
 /* Pohon Anggaran Dipa */
 /*#region Organizational Chart*/
-.tree{
+.tree-dipa{
     margin-left: -215px;
+}
+
+.tree-program{
+    margin-left: -105px;
 }
 
 .tree ul {
@@ -342,7 +346,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 
 /*Remove space from the top of single children*/
 .tree li:only-child {
-    padding-top: 0;
+    /* padding-top: 0; */
 }
 
 /*Remove left connector from first child and 
@@ -380,7 +384,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 .tree li a {
     min-height: 65px;
     /* width: 100%; */
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
     text-decoration: none;
     /* background-color: white; */
     /* color: black; */
@@ -402,6 +406,76 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
         color: #000;
     } */
 
+/* LI DOWN  */
+.tree .li-down::before,
+.tree .li-down::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -34%;
+    border-top: 2px solid #696969;
+    width: 63%;
+    height: 20px;
+    transform: rotate(270deg);
+    display:block;
+    z-index: 8;
+}
+
+.tree .li-down::after {
+    right: auto;
+    left: -34%;
+    border-left: 2px solid #696969;
+    top: 23%;
+    display:block !important;
+}
+
+.tree .li-down:first-child::before,
+.tree .li-down:last-child::after {
+    /* border-right: 2px solid #696969; */
+    transform: rotate(270deg);
+    display:block;
+}
+
+.tree .li-down:last-child::before {
+    border-left: 2px solid #696969;
+    border-right: 0px solid #696969;
+    border-radius:5px 0 0 0px;
+    -webkit-border-radius:5px 0 0 0px;
+    -moz-border-radius:5px 0 0 0px;
+    display:block;
+}
+
+.tree .li-down:first-child::after {
+    border-radius: 5px 0 0 0;
+    -webkit-border-radius: 5px 0 0 0;
+    -moz-border-radius: 5px 0 0 0;
+    display:block;
+}
+
+.tree .ul-down::before{
+    display: none;
+}
+
+.tree .li-down a {
+    min-height: 65px;
+    text-decoration: none;
+    display: inline-block;
+
+    -transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+}
+
+.tree .li-down:nth-child(1)::after {
+    border-top: 2px solid #696969 !important;
+    border-left: 2px solid #696969 !important;
+}
+.tree .li-down:nth-child(1)::before {
+    border-left: 0 !important;
+}
+
+/* END LI DOWN  */
+
 /*Connector styles on hover*/
 .tree li a:hover+ul li::after,
 .tree li a:hover+ul li::before,
@@ -422,9 +496,16 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     min-width: 100px;
 }
 
+/* GARIS UNTUK BAGAN KEBAWAH */
+.border-single-tree-down{
+    border-right: 2px solid #696969;
+    height: 20px;
+    width: 50%;
+}
+
 /* Background card tree  */
 .bg-tree-1{
-    background-color: #44546A;
+    background-color: #39A3D5;
     color: white;
     border: 3px solid white;
     border-radius: 10px;
@@ -432,7 +513,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 }
 
 .bg-tree-2{
-    background-color: #9DC3E6;
+    background-color: #31859D;
     color: black;
     border: 3px solid white;
     border-radius: 10px;
@@ -440,7 +521,15 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 }
 
 .bg-tree-3{
-    background-color: #DEEBF7;
+    background-color: #40A7B6;
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-4{
+    background-color: #9BBC54;
     color: black;
     border: 3px solid white;
     border-radius: 10px;

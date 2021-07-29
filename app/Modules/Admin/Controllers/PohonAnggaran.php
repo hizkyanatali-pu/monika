@@ -100,4 +100,73 @@ class PohonAnggaran extends \App\Controllers\BaseController
 
         return view('Modules\Admin\Views\PosturAnggaran\Alokasi-anggaran', $data);
     }
+
+    public function paketKontraktual(){
+        
+        $query = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span");
+        $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC'");
+        $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'");
+
+
+        $row = $query->getRow();
+        $row1 = $query1->getRow();
+        $row2 = $query2->getRow();
+
+
+        $data = array(
+            'title' => 'Pagu Per Program',
+            'totaldjs' => $row,
+            'totalketahanansda' => $row1,
+            'totaldukungan' => $row2,
+
+        );
+
+        return view('Modules\Admin\Views\PosturAnggaran\Paket-kontraktual', $data);
+    }
+
+    public function sisaLelang(){
+        
+        $query = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span");
+        $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC'");
+        $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'");
+
+
+        $row = $query->getRow();
+        $row1 = $query1->getRow();
+        $row2 = $query2->getRow();
+
+
+        $data = array(
+            'title' => 'Pagu Per Program',
+            'totaldjs' => $row,
+            'totalketahanansda' => $row1,
+            'totaldukungan' => $row2,
+
+        );
+
+        return view('Modules\Admin\Views\PosturAnggaran\Sisa-lelang', $data);
+    }
+
+    public function sisaBelumLelang(){
+        
+        $query = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span");
+        $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC'");
+        $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'");
+
+
+        $row = $query->getRow();
+        $row1 = $query1->getRow();
+        $row2 = $query2->getRow();
+
+
+        $data = array(
+            'title' => 'Pagu Per Program',
+            'totaldjs' => $row,
+            'totalketahanansda' => $row1,
+            'totaldukungan' => $row2,
+
+        );
+
+        return view('Modules\Admin\Views\PosturAnggaran\Sisa-belum-lelang', $data);
+    }
 }
