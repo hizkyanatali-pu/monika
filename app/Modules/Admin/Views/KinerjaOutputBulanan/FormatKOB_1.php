@@ -9,7 +9,7 @@ $this->extend('admin/layouts/default') ?>
     }
 
     .tableFixHead1 thead th {
-        /* position: sticky; */
+        position: sticky;
         top: 0;
         border: 1px solid #333;
     }
@@ -137,8 +137,7 @@ $this->extend('admin/layouts/default') ?>
                     <table class="table table-bordered mb-0 table-striped" id="table">
                         <thead>
 
-
-                            <tr class=" text-center theader">
+                            <tr class=" text-center bg-purple">
                                 <th class="thNo" rowspan="2">No</th>
                                 <th class="thKode" rowspan="2">Kode</th>
                                 <th class="thLabel" rowspan="2">Program/Kegiatan/KRO/RO</th>
@@ -149,7 +148,7 @@ $this->extend('admin/layouts/default') ?>
                                 <th class="thPersen" colspan="2">Keuangan (%)</th>
                                 <th class="thPersen" colspan="3">Fisik (%)</th>
                             </tr>
-                            <tr class=" text-center theader">
+                            <tr class=" text-center bg-purple">
                                 <th class="thPersen">RN</th>
                                 <th class="thPersen">RL</th>
                                 <th class="thPersen">RN</th>

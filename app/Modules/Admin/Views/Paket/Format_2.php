@@ -184,17 +184,17 @@
                     </div>
                 </div>
                 
-                <div class="table-responsive">
+                <div class="table-responsive tableFixHead">
                     <?php $colspan = 11; ?>
                     <table class="table table-bordered w-100 mb-0">
                         <thead class="bg-white">
-                            <tr class="text-center theader">
+                            <tr class="text-center">
                                 <th colspan="2">&nbsp;</th>
                                 <th colspan="5">Pagu (Rp)</th>
                                 <th colspan="2">Progres (%)</th>
                                 <th colspan="2">Deviasi</th>
                             </tr>
-                            <tr class="text-center theader">
+                            <tr class="text-center">
                                 <th class=""><?= $title; ?></th>
                                 <th class="tdNilai">Jml&nbsp;Paket
                                     <!-- <br /><small title="Pagu SDA">Total SDA <i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-right"></i></small> -->
@@ -232,10 +232,7 @@
                                 </th>
                             </tr>
                         </thead>
-                    </table>
-                </div>
-                <div class="table-responsive tableFixHead">
-                    <table class="table table-bordered w-100">
+
                         <tbody id="tbody-utama">
                             <?php if ($qdata) : ?>
                                 <?php

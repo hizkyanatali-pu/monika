@@ -1,3 +1,15 @@
+.tableFixHead thead {
+    position: sticky;
+    top: 0;
+}
+
+.tableFixHead thead th{
+    /* border: 1px solid #333; */
+    /* border-block: none; */
+    /* border-width: 0; */
+    
+}
+
 .tableFixHead {
     overflow-y: auto;
     height: 600px;
@@ -44,15 +56,10 @@
     background-color: #aa80ff;
 }
 
-.theader th {
+.bg-purple {
     background-color: #68218b;
     color: #fff;
 
-}
-
-.tableFixHead1 {
-    overflow-y: auto;
-    height: 600px;
 }
 
 /* Scroll */
