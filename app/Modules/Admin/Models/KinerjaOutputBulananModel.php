@@ -1,4 +1,3 @@
-
 <?php
 
 namespace Modules\Admin\Models;

@@ -66,7 +66,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     });
 
     $routes->group('grafikdata', ['namespace' => 'App\Controllers'], function ($routes) {
-        $routes->get('', '\Modules\Admin\Controllers\Grafikdata::index');
+        $routes->get('progres-keuangan-fisik', '\Modules\Admin\Controllers\Grafikdata::index');
+        $routes->get('progres-per-sumber-dana', '\Modules\Admin\Controllers\Grafikdata::progres_per_sumber_dana');
+
         $routes->get('(:segment)', '\Modules\Admin\Controllers\Grafikdata::index/$1');
     });
 

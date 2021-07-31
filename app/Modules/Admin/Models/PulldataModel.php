@@ -15,6 +15,16 @@ class PulldataModel extends Model
 		'tahun', 'kdsatker', 'kdprogram', 'kdgiat', 'kdoutput', 'kdsoutput', 'kdkmpnen', 'kdpaket', 'kdls', 'nmpaket', 'pagu_51', 'pagu_52', 'pagu_53', 'pagu_rpm', 'pagu_sbsn', 'pagu_phln', 'pagu_total', 'real_51', 'real_52', 'real_53', 'real_rpm', 'real_sbsn', 'real_phln', 'real_total', 'progres_keuangan', 'progres_fisik', 'progres_keu_jan', 'progres_keu_feb', 'progres_keu_mar', 'progres_keu_apr', 'progres_keu_mei', 'progres_keu_jun', 'progres_keu_jul', 'progres_keu_agu', 'progres_keu_sep', 'progres_keu_okt', 'progres_keu_nov', 'progres_keu_des', 'progres_fisik_jan', 'progres_fisik_feb', 'progres_fisik_mar', 'progres_fisik_apr', 'progres_fisik_mei', 'progres_fisik_jun', 'progres_fisik_jul', 'progres_fisik_agu', 'progres_fisik_sep', 'progres_fisik_okt', 'progres_fisik_nov', 'progres_fisik_des', 'ren_keu_jan', 'ren_keu_feb', 'ren_keu_mar', 'ren_keu_apr', 'ren_keu_mei', 'ren_keu_jun', 'ren_keu_jul', 'ren_keu_agu', 'ren_keu_sep', 'ren_keu_okt', 'ren_keu_nov', 'ren_keu_des', 'ren_fis_jan', 'ren_fis_feb', 'ren_fis_mar', 'ren_fis_apr', 'ren_fis_mei', 'ren_fis_jun', 'ren_fis_jul', 'ren_fis_agu', 'ren_fis_sep', 'ren_fis_okt', 'ren_fis_nov', 'ren_fis_des'
     ];
 
+    public function __construct()
+    {
+        helper('dbdinamic');
+        $session = session();
+        $this->user = $session->get('userData');
+        $dbcustom = switch_db($this->user['dbuse']);
+        $this->db = \Config\Database::connect();
+        $this->db_2 = \Config\Database::connect($dbcustom);
+    }
+
     function getBalaiPaket($datatag='', $w='', $ulang=false){
         $this->akses = new AksesModel();
         $w=$this->akses->unitbalai("b", $w);
@@ -131,9 +141,13 @@ class PulldataModel extends Model
         foreach($this->bln() as $k => $d){
             $bln=$k+1;
             if($tag=="keuangan"){
-                // progres
-                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.ren_keu_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
-                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.progres_keu_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
+                // progres awal
+                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.ren_keu_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
+                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.progres_keu_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
+                
+                // progres modif yusfi
+                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.renk_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as rencana_" . $bln;
+                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.rr_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as realisasi_" . $bln;
             }
             else{
                 // fisik
@@ -142,10 +156,19 @@ class PulldataModel extends Model
             }
         }
 
-        return $this->db->query("SELECT count(*) as jml_paket, $Fprogres
-        FROM monika_data md
-        LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
-        LEFT JOIN m_balai b ON b.balaiid=s.balaiid ".$w)->getResultArray();
+        // progres awal
+
+        // return $this->db->query("SELECT count(*) as jml_paket, $Fprogres
+        // FROM monika_data md
+        // LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
+        // LEFT JOIN m_balai b ON b.balaiid=s.balaiid ".$w)->getResultArray();
+
+        //  progres modif yusfi
+        return $this->db_2->query("SELECT count(*) as jml_paket, $Fprogres
+        FROM paket md
+        ".$w)->getResultArray();
+
+
     }
 
     function bln($id=0){

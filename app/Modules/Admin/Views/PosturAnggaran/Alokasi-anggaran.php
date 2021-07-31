@@ -326,13 +326,17 @@ ORG CHART
                 <div>
                     <h1>DITJEN SDA</h1>
                     <hr>
-                    RP. <?= number_format($totaldjs->total); ?>
+                    Paket <?= number_format($paketdjs->paket); ?>
+                    <hr>
+                    Rp. <?= number_format($totaldjs->total); ?>
                 </div>
 
                 <ol>
                     <li>
                         <div>
                             <h2>BARANG NON OPS</h2>
+                            <hr>
+                            Paket <?= number_format($paketketahanansda->paket); ?>
                             <hr>
                             RP. <?= number_format($totalketahanansda->total); ?>
                         </div>
@@ -381,6 +385,8 @@ ORG CHART
                     <li>
                         <div>
                             <h2>BARANG OPS</h2>
+                            <hr>
+                            Paket <?= number_format($paketdukungan->paket); ?>
                             <hr>
                             RP. <?= number_format($totaldukungan->total); ?>
                         </div>

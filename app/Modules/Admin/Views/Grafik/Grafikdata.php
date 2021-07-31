@@ -24,7 +24,7 @@
 
                 <!--begin::Section-->
                 <div class="kt-section">
-
+                    <input type="hidden" class="arrayget" value="<?= date("n") ?>">
                     <div class="kt-section__content">
                         <div class="table-responsive tableFixHead">
                             <div class="col-md-12">
@@ -58,7 +58,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <div class="col-md-12" style="padding:3px; background-color:#a6a6a6; ">Rencana</div>
+                                            <div class="col-md-12" style="padding:3px; background-color:#26f70e; ">Rencana</div>
                                         </td>
                                         <?php foreach($qdata['rencana'] as  $v): ?>
                                         <td class="text-right"><?php echo ($v[0]==0?'&nbsp;':$v[1]);?></td>
@@ -67,7 +67,7 @@
 
                                     <tr>
                                         <td>
-                                            <div class="col-md-12" style="padding:3px; background-color:#0066ff;">Realisasi</div>
+                                            <div class="col-md-12" style="padding:3px; background-color:#ff0000;">Realisasi</div>
                                         </td>
                                         <?php foreach($qdata['realisasi'] as  $v): ?>
                                         <td class="text-right"><?php echo ($v[0]==0?'&nbsp;':$v[1]);?></td>
@@ -102,18 +102,23 @@
         // }
         var line_data1 = {
         data : <?php echo json_encode($qdata['rencana']);?>,
-        color: '#a6a6a6'
+        color: '#26f70e'
         }
         var line_data2 = {
         data : <?php echo json_encode($qdata['realisasi']);?>,
-        color: '#0066ff'
+        color: '#ff0000'
         }
-        $.plot('#line-chart', [line_data1, line_data2], {
+        x = $("input.arrayget").val();
+        yfrom = line_data2.data.reverse()[0][1];
+        yto = line_data1.data[x][1];
+        
+        plot = $.plot('#line-chart', [line_data1, line_data2], {
         grid  : {
             hoverable  : true,
             borderColor: '#f3f3f3',
             borderWidth: 1,
-            tickColor  : '#f3f3f3'
+            tickColor  : '#f3f3f3',
+            markings: [{ lineWidth: 2,  xaxis: { from: x, to: x }, yaxis: { from: yfrom, to: yto}, color: "#00000"}],
         },
         series: {
             shadowSize: 0,
@@ -136,12 +141,30 @@
             ticks: <?php echo json_encode($qdata['bln']);?>
         }
         })
+
+        // $('<div class="data-point-label">' + el[1] + '%</div>').css( {
+        //     position: 'absolute',
+        //     left: o.left - 25,
+        //     top: o.top - 20,
+        //     display: 'none'
+        // }).appendTo(p.getPlaceholder()).fadeIn('slow');
+
         //Initialize tooltip on hover
         $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
         position: 'absolute',
-        display : 'none',
-        opacity : 0.8
-        }).appendTo('body')
+        display: 'none',
+        border: '2px solid #4572A7',
+        padding: '5px',     
+        size: '10',   
+        'background-color': '#fff',
+        opacity: 0.80
+        }).appendTo('body');
+
+        var o = plot.pointOffset({ x: 1, y: parseFloat(yto)+20});
+
+        $('#line-chart').append("<div style='position:absolute;left:" + (o.left + 4) + "px;top:" + o.top + "px;color:#00000;font-size:smaller'><div class='square square-lg bg-secondary'><center style='margin:15px'><h3><u>Deviasi</u></h3><h4> " + (yfrom - yto).toFixed(2) + "%</h4></center></div></div>");
+
+
         $('#line-chart').bind('plothover', function (event, pos, item) {
 
         var bulan = <?php echo json_encode($qdata['bln']);?>;
@@ -154,7 +177,7 @@
                 y = item.datapoint[1].toFixed(2)
             //$('#line-chart-tooltip').html(item.series.label + ' of ' + x + ' = ' + y)
             //$('#line-chart-tooltip').html(bulan[(parseInt(x)-1)][1] + ' of ' + x + ' = ' + y + '%')
-            $('#line-chart-tooltip').html(bulan[(parseInt(x)-1)][1] + ' : ' + y + '%')
+            $('#line-chart-tooltip').html(bulan[(parseInt(x))][1] + ' : ' + y + '%')
             .css({
                 top : item.pageY + 5,
                 left: item.pageX + 5

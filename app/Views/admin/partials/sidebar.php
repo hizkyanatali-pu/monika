@@ -71,7 +71,16 @@
                 </div>
             </li>
             <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('Kinerja-Output-Bulanan/') . encrypt_url(date('n')); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Kinerja Output Bulanan</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
-            <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Grafik Progres Keungan & Fisik</span> </a></li>
+           
+            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Grafik</span><span class="kt-badge kt-badge--danger">N</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+                <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+                    <ul class="kt-menu__subnav">
+                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-keuangan-fisik'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Keungan & Fisik</span> </a></li>
+                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-per-sumber-dana'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Sumber Dana</span> </a></li>
+
+                    </ul>
+                </div>
+            </li>
 
             <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('preferensi'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Preferensi</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
 

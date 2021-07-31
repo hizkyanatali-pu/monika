@@ -35,10 +35,23 @@ class Grafikdata extends \App\Controllers\BaseController
             for($i=1 ; $i<=count($Jbln) ; $i++){
                 $data['bln'][]=[$i, $Jbln[$i-1]];
                 $data['rencana'][]=[$i, number_format($d["rencana_$i"],2,'.','.')];
-                $data['realisasi'][]=[$i, number_format($d["realisasi_$i"],2,'.','.')];
+                if($i<= date("m")){
+                    $data['realisasi'][]=[$i, number_format($d["realisasi_$i"],2,'.','.')];
+                }
             }
         }
         return $data;
     }
+
+    public function progres_per_sumber_dana()
+    {
+        $data = array(
+            'title' => 'Grafik Progres Per Sumber Dana',
+        );
+        return view('Modules\Admin\Views\Grafik\Progress-per-sumber-dana', $data);
+    }
+
+   
+
 
 }
