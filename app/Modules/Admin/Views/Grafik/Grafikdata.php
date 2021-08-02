@@ -161,8 +161,14 @@
         }).appendTo('body');
 
         var o = plot.pointOffset({ x: 1, y: parseFloat(yto)+20});
+        var orealisasi = plot.pointOffset({ x:  x, y: parseFloat(yfrom)});
+        var orencana = plot.pointOffset({ x:  x, y: parseFloat(yto)});
 
         $('#line-chart').append("<div style='position:absolute;left:" + (o.left + 4) + "px;top:" + o.top + "px;color:#00000;font-size:smaller'><div class='square square-lg bg-secondary'><center style='margin:15px'><h3><u>Deviasi</u></h3><h4> " + (yfrom - yto).toFixed(2) + "%</h4></center></div></div>");
+
+        $('#line-chart').append("<div style='position:absolute;left:" + (orencana.left) + "px;top:" + (orencana.top) + "px;color:#26f70e;font-size:smaller'><center><h2>" + yto + "%</h2></center></div>");
+        $('#line-chart').append("<div style='position:absolute;left:" + (orealisasi.left) + "px;top:" + (orealisasi.top) + "px;color:#ff0000;font-size:smaller'><center><h2>" + yfrom + "%</h2></center></div>");
+      
 
 
         $('#line-chart').bind('plothover', function (event, pos, item) {

@@ -145,14 +145,18 @@ class PulldataModel extends Model
                 // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.ren_keu_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
                 // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.progres_keu_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
                 
-                // progres modif yusfi
+                // progres modif (yusfi)
                 $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.renk_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as rencana_" . $bln;
                 $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.rr_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as realisasi_" . $bln;
             }
             else{
-                // fisik
-                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.ren_fis_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
-                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.progres_fisik_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
+                // // fisik awal
+                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.ren_fis_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
+                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.progres_fisik_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
+
+                // fisik modif (yusfi)
+                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*md.renf_b" . $bln . "))/sum(md.pg))*100) as rencana_" . $bln;
+                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.ff_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as realisasi_" . $bln;
             }
         }
 
