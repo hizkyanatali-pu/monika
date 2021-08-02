@@ -131,7 +131,7 @@ $this->extend('admin/layouts/default') ?>
                     </div>
                 </div>    
 
-                <div class="table-responsive">
+                <div class="table-responsive tableFixHead">
 
                     <?php $colspan = 8; ?>
                     <table class="table table-bordered mb-0 table-striped" id="table">
@@ -156,12 +156,7 @@ $this->extend('admin/layouts/default') ?>
                                 <th class="thPersen">Kinerja</th>
                             </tr>
                         </thead>
-                    </table>
 
-                </div>
-
-                <div class="table-responsive tableFixHead1">
-                    <table class="table table-bordered table-striped" id="table">
                         <tbody id="tbody-utama">
                             <?php if ($qdata) : ?>
                                 <?php $idp = [];
