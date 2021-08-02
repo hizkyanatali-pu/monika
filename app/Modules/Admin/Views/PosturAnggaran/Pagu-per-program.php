@@ -80,7 +80,7 @@
                                                                     <h5 class="mb-0"><b> KONTRAK TAHUN JAMAK </b></h5>
                                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                         <h5 class="mb-0">
-                                                                            Rp. <?= number_format($rupiahmurni->total / 1000, 0, ',', '.'); ?>
+                                                                            Rp. <?= number_format($kontraktahunjamakRM->total / 1000, 0, ',', '.'); ?>
                                                                         </h5>
                                                                     </div>
                                                                 </div>
