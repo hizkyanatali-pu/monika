@@ -20,31 +20,60 @@
     <!-- begin:: Content -->
     <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid"">
         <div class="kt-portlet">
+            
+            <ul class="nav nav-pills nav-justified mb-0">
+                <li class="nav-item <?php echo ($current=="keuangan"?'bg-primary':'');?>">
+                    <a class="nav-link" href="<?= site_url('grafikdata/keuangan'); ?>"class=""><span class="<?php echo ($current=="keuangan"?'text-light':'');?>">Keuangan</span>
+                        <!-- <i class="kt-menu__ver-arrow la la-angle-right"></i> -->
+                    </a>
+                </li>
+                <li class="nav-item <?php echo ($current=="fisik"?'bg-primary':'');?>">
+                    <a class="nav-link" href="<?= site_url('grafikdata/fisik'); ?>"class=""><span class="<?php echo ($current=="fisik"?'text-light':'');?>">Fisik</span>
+                        <!-- <i class="kt-menu__ver-arrow la la-angle-right"></i> -->
+                    </a>
+                </li>
+            </ul>
+
             <div class="kt-portlet__body">
+
 
                 <!--begin::Section-->
                 <div class="kt-section">
                     <input type="hidden" class="arrayget" value="<?= date("n") ?>">
-                    <div class="kt-header-menu-wrapper" id="kt_header_menu_wrapper">
-                        <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout-default ">
-                            <ul class="kt-menu__nav ">
-                                <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel <?php echo ($current=="keuangan"?'kt-menu__item--active  bg-primary':'');?>">
-                                    <a href="<?= site_url('grafikdata/keuangan'); ?>"
-                                        class="kt-menu__link"><span class="kt-menu__link-text <?php echo ($current=="keuangan"?'text-light':'');?>">Keuangan</span>
-                                        <i class="kt-menu__ver-arrow la la-angle-right"></i>
-                                    </a>
-                                </li>
-                                <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel <?php echo ($current=="fisik"?'kt-menu__item--active  bg-primary':'');?>">
-                                    <a href="<?= site_url('grafikdata/fisik'); ?>"
-                                        class="kt-menu__link"><span class="kt-menu__link-text <?php echo ($current=="fisik"?'text-light':'');?>">Fisik</span>
-                                        <i class="kt-menu__ver-arrow la la-angle-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                     
                     <div class="card-body">
+                        <div id="line-chart" style="height: 300px;"></div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <td width="5%">
+                                    <div class="badge text-white" style="font-size:13px; padding:3px; background-color:#0abb87; ">Rencana</div>
+                                </td>
+                                <?php foreach($qdata['rencana'] as  $v): ?>
+    
+                                    <?php if ($v[1]) { ?>
+                                        <td class="text-right"><?php echo ($v[0]==0?'&nbsp;':$v[1]);?></td>
+                                    <?php } ?>
+    
+                                <?php endforeach; ?>
+                            </tr>
+    
+                            <tr>
+                                <td width="5%">
+                                    <div class="badge text-white" style="font-size:13px; padding:3px; background-color:#fd397a;">Realisasi</div>
+                                </td>
+                                <?php foreach($qdata['realisasi'] as  $v): ?>
+                                    <?php if ($v[1]) { ?>
+                                        <td class="text-right"><?php echo ($v[0]==0?'&nbsp;':$v[1]);?></td>
+                                    <?php } ?>
+                                <?php endforeach; ?>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- <div class="card-body">
                         <div id="line-chart" style="height: 300px;"></div>
                     </div>
 
@@ -66,7 +95,7 @@
                             <td class="text-right"><?php echo ($v[0]==0?'':$v[1]);?></td>
                             <?php endforeach; ?>
                         </tr>
-                    </table>
+                    </table> -->
 
                 </div>
 
@@ -92,11 +121,11 @@
         // }
         var line_data1 = {
         data : <?php echo json_encode($qdata['rencana']);?>,
-        color: '#26f70e'
+        color: '#0abb87'
         }
         var line_data2 = {
         data : <?php echo json_encode($qdata['realisasi']);?>,
-        color: '#ff0000'
+        color: '#fd397a'
         }
         x = $("input.arrayget").val();
         yfrom = line_data2.data.reverse()[0][1];
@@ -154,10 +183,10 @@
         var orealisasi = plot.pointOffset({ x:  x, y: parseFloat(yfrom)});
         var orencana = plot.pointOffset({ x:  x, y: parseFloat(yto)});
 
-        $('#line-chart').append("<div style='position:absolute;left:" + (o.left + 4) + "px;top:" + o.top + "px;color:#00000;font-size:smaller;'><div class='card card-body bg-secondary' style='height: 20px;'><center style='margin:15px'><h3><u>Deviasi</u></h3><h4> " + (yfrom - yto).toFixed(2) + "%</h4></center></div></div>");
+        $('#line-chart').append("<div class='badge badge-secondary text-center shadow' style='position:absolute; left:" + (o.left + 4) + "px; top:" + o.top + "px;'><h3 class='mb-0'><b>Deviasi</b> " + (yfrom - yto).toFixed(2) + "%</h3></div>");
 
-        $('#line-chart').append("<div style='position:absolute;left:" + (orencana.left) + "px;top:" + (orencana.top) + "px;color:#26f70e;font-size:smaller'><center><h2>" + yto + "%</h2></center></div>");
-        $('#line-chart').append("<div style='position:absolute;left:" + (orealisasi.left) + "px;top:" + (orealisasi.top) + "px;color:#ff0000;font-size:smaller'><center><h2>" + yfrom + "%</h2></center></div>");
+        $('#line-chart').append("<div class='badge badge-success ml-2' style='position:absolute;left:" + (orencana.left) + "px;top:" + (orencana.top) + "px;'><h3 class='mb-0'>" + yto + "%</h3></div>");
+        $('#line-chart').append("<div class='badge badge-danger ml-2' style='position:absolute;left:" + (orealisasi.left) + "px;top:" + (orealisasi.top) + "px;'><h3 class='mb-0'>" + yfrom + "%</h3></div>");
       
 
 
