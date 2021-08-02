@@ -61,7 +61,11 @@
                                             <div class="col-md-12" style="padding:3px; background-color:#26f70e; ">Rencana</div>
                                         </td>
                                         <?php foreach($qdata['rencana'] as  $v): ?>
-                                        <td class="text-right"><?php echo ($v[0]==0?'&nbsp;':$v[1]);?></td>
+
+                                            <?php if ($v[1]) { ?>
+                                                <td class="text-right"><?php echo ($v[0]==0?'&nbsp;':$v[1]);?></td>
+                                           <?php } ?>
+
                                         <?php endforeach; ?>
                                     </tr>
 
@@ -70,7 +74,9 @@
                                             <div class="col-md-12" style="padding:3px; background-color:#ff0000;">Realisasi</div>
                                         </td>
                                         <?php foreach($qdata['realisasi'] as  $v): ?>
-                                        <td class="text-right"><?php echo ($v[0]==0?'&nbsp;':$v[1]);?></td>
+                                            <?php if ($v[1]) { ?>
+                                                <td class="text-right"><?php echo ($v[0]==0?'&nbsp;':$v[1]);?></td>
+                                           <?php } ?>
                                         <?php endforeach; ?>
                                     </tr>
                                     </table>
