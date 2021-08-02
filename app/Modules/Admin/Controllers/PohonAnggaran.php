@@ -57,10 +57,10 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $data['phlnrmp'] = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC' AND sumber_dana in ('B','C')")->getRow();
         $data['sbsn'] = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC' AND sumber_dana='T'")->getRow();
 
-        $data['kontraktahunjamakRM'] = $this->db->query("SELECT SUM(pgrupiah) as total FROM paket where kdprogram='FC' AND kdjnskon > 0")->getRow();
+        $data['kontraktahunjamakRM'] = $this->db->query("SELECT SUM(pgrupiah) as total FROM paket where kdprogram='FC' AND kdjnskon != 0")->getRow();
         $data['singleyearRM'] = $this->db->query("SELECT SUM(pgrupiah)  as total FROM paket where kdprogram='FC' AND kdjnskon = 0")->getRow();
 
-        $data['kontraktahunjamakSBSN'] = $this->db->query("SELECT SUM(pgsbsn) as total FROM paket where kdprogram='FC' AND kdjnskon > 0")->getRow();
+        $data['kontraktahunjamakSBSN'] = $this->db->query("SELECT SUM(pgsbsn) as total FROM paket where kdprogram='FC' AND kdjnskon != 0")->getRow();
         $data['singleyearSBSN'] = $this->db->query("SELECT SUM(pgsbsn)  as total FROM paket where kdprogram='FC' AND kdjnskon = 0")->getRow();
 
         $data['gajidantunjangan'] = $this->db->query("SELECT SUM(pg) as total FROM	paket WHERE kdprogram='WA' AND kdsoutput = '001' AND kdkmpnen='001'")->getRow();
