@@ -1,4 +1,4 @@
-.kt-login.kt-login--v6 {
+/* .kt-login.kt-login--v6 {
     background: #fff; }
     .kt-login.kt-login--v6 .kt-login__aside {
       padding: 2rem;
@@ -214,4 +214,23 @@
           font-size: 1rem;
           margin: 0; } }
 
-          .notification ul{padding-left:0}
+          .notification ul{padding-left:0} */
+
+/* New */
+.login--col-left{
+    height: 100vh;
+    align-items: center;
+    display: flex;
+    background-color: #f2f3f8;
+}
+
+.login--col-right{
+  height: 100vh;
+  background-color: rgba(91, 106, 219, 0.685);
+  align-items: center;
+  display: flex;
+}
+
+.login--col-right .text-content {
+  color: white !important;
+}

@@ -3,13 +3,6 @@
     top: 0;
 }
 
-.tableFixHead thead th{
-    /* border: 1px solid #333; */
-    /* border-block: none; */
-    /* border-width: 0; */
-    
-}
-
 .tableFixHead {
     overflow-y: auto;
     height: 600px;
@@ -76,6 +69,14 @@
     border-radius: 100px;
     border: 5px solid transparent;
     background-clip: content-box;
-    background-color: #8070d4;
+    background-color: #5867dd;
 }
 /* end Scroll */
+
+/* background  */
+.bg-light-primary{
+    color:#5867dd;
+    background:rgba(88, 103, 221, .1);
+    border-color: transparent;
+}
+/* end background  */

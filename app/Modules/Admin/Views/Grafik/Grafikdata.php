@@ -22,12 +22,12 @@
         <div class="kt-portlet">
             
             <ul class="nav nav-pills nav-justified mb-0">
-                <li class="nav-item <?php echo ($current=="keuangan"?'bg-primary':'');?>">
+                <li class="nav-item mr-0 <?php echo ($current=="keuangan"?'bg-primary':'bg-light-primary');?>">
                     <a class="nav-link" href="<?= site_url('grafikdata/keuangan'); ?>"class=""><span class="<?php echo ($current=="keuangan"?'text-light':'');?>">Keuangan</span>
                         <!-- <i class="kt-menu__ver-arrow la la-angle-right"></i> -->
                     </a>
                 </li>
-                <li class="nav-item <?php echo ($current=="fisik"?'bg-primary':'');?>">
+                <li class="nav-item mr-0 <?php echo ($current=="fisik"?'bg-primary':'bg-light-primary');?>">
                     <a class="nav-link" href="<?= site_url('grafikdata/fisik'); ?>"class=""><span class="<?php echo ($current=="fisik"?'text-light':'');?>">Fisik</span>
                         <!-- <i class="kt-menu__ver-arrow la la-angle-right"></i> -->
                     </a>
