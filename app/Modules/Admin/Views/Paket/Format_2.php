@@ -8,19 +8,19 @@
             <h5 class="kt-subheader__title">
                 <?= $title; ?>
             </h5>
-            <small>
-                <!-- <nav aria-label="breadcrumb">
+            <!-- <small>
+                <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Library</li>
                     </ol>
-                    </nav> -->
+                    </nav>
                 <?php $l = '';
                 foreach ($posisi as $key => $data) : ?>
                     <?php $l .= ($l ? ' <i class="fa fa-angle-double-right"></i> ' : '') . $data; ?>
                 <?php endforeach;
                 echo $l; ?>
-            </small>
+            </small> -->
             <span class="kt-subheader__separator kt-hidden"></span>
 
         </div>

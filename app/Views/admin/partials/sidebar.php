@@ -34,7 +34,7 @@
     <div id="kt_aside_menu" class="kt-aside-menu " data-ktmenu-vertical="1" data-ktmenu-scroll="1" data-ktmenu-dropdown-timeout="500">
 
         <ul class="kt-menu__nav ">
-            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Proges Keuangan & Fisik</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fas fa-spinner"></i><span class="kt-menu__link-text">Proges Keuangan & Fisik</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                     <ul class="kt-menu__subnav">
                         <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Proges Keuangan & Fisik</span></span></li>
@@ -53,7 +53,7 @@
             </li>
 
 
-            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Postur Anggaran</span><span class="kt-badge kt-badge--danger">N</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fas fa-project-diagram"></i><span class="kt-menu__link-text">Postur Anggaran</span><span class="kt-badge kt-badge--danger">N</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                     <ul class="kt-menu__subnav">
                         <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Postur Anggaran <span class="badge badge-danger"> New </span></span></span></li>
@@ -70,9 +70,9 @@
                     </ul>
                 </div>
             </li>
-            <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('Kinerja-Output-Bulanan/') . encrypt_url(date('n')); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Kinerja Output Bulanan</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
+            <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('Kinerja-Output-Bulanan/') . encrypt_url(date('n')); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Kinerja Output Bulanan</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
            
-            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Grafik</span><span class="kt-badge kt-badge--danger">N</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fas fa-chart-line"></i><span class="kt-menu__link-text">Grafik</span><span class="kt-badge kt-badge--danger">N</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                     <ul class="kt-menu__subnav">
                         <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-keuangan-fisik'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Keungan & Fisik</span> </a></li>
@@ -82,7 +82,7 @@
                 </div>
             </li>
 
-            <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('preferensi'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Preferensi</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
+            <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('preferensi'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-database"></i><span class="kt-menu__link-text">Preferensi</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
 
         </ul>
     </div>
