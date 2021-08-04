@@ -226,11 +226,19 @@
 
 .login--col-right{
   height: 100vh;
-  background-color: rgba(91, 106, 219, 0.685);
+  background-color: rgba(91, 106, 219, 0.575);
   align-items: center;
   display: flex;
 }
 
 .login--col-right .text-content {
   color: white !important;
+}
+
+.fs-100{
+  font-size: 100px !important;
+}
+
+.fs-31px{
+  font-size: 31px !important;
 }
