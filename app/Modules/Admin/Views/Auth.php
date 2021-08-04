@@ -37,7 +37,7 @@
 				<?= csrf_field() ?>
 
 				<div class="kt-login__actions">
-					<button id="kt_login_signin_submit" class="btn btn-primary btn-pill btn-elevate btn-block">Masuk <i class="fas fa-arrow-circle-right text-warning"></i></button>
+					<button id="kt_login_signin_submit" class="btn btn-primary btn-pill btn-elevate btn-block btn-login"> Masuk <i class="fas fa-arrow-circle-right text-white icon-login"></i></button>
 				</div>
 			</form>
 

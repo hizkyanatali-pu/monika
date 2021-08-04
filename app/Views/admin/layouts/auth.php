@@ -19,6 +19,8 @@ $title = $title ?? '';
 <body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading">
     <?php echo $this->renderSection('content') ?>
     <?php echo $this->renderSection('footer_js') ?>
+
+    <?php echo link_tag('plugins/@fortawesome/fontawesome-free/css/all.min.css'); ?>
 </body>
 
 </html>
