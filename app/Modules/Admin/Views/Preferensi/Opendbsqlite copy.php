@@ -109,47 +109,47 @@
 
             <!--begin::Section-->
             <div class="kt-section">
-
-                <div class="input-group">
-                    <div class="p-0 col-md-2">
-                        <h3 class="mb-0">Daftar Tabel :</h3>
-                    </div>
-                    <div class="p-0 col-md-4">
-                        <div class="input-group">
-                            <!-- <label for="listtable">Daftar Tabel</label> -->
-                            <select class="form-control select2" id="daftartabel">
-                                <?php
-                                foreach ($listtable as $tables) {
-                                    if ($tables == 'd_dipa_span') {
-                                        echo "<option value='$tables'>$tables</option>";
-                                    }
-                                    if ($tables == 'paket') {
-                                        echo "<option value='$tables'>$tables</option>";
-                                    }
-                                }
-                                ?>
-                            </select>
-                            <div class="input-group-prepend">
-                                <button type="button" class="btn btn-success" id="tampilkantabel">Tampilkan</button>
+                <h3 class="card-title">Tabel</h3>
+                <div class="card card-custom gutter-b example example-compact">
+                    <div class="card-header">
+                        <div class="card-toolbar">
+                            <div class="example-tools justify-content-center">
+                                <span class="example-toggle" data-toggle="tooltip" title="" data-original-title="View code"></span>
+                                <span class="example-copy" data-toggle="tooltip" title="" data-original-title="Copy code"></span>
                             </div>
                         </div>
                     </div>
+                    <!--begin::Form-->
+                    <form class="form">
+                        <div class="card-body">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="listtable">Daftar Tabel</label>
+                                    <select class="form-control select2" id="daftartabel">
+                                        <?php
+                                        foreach ($listtable as $tables) {
+                                            if ($tables == 'd_dipa_span') {
+                                                echo "<option value='$tables'>$tables</option>";
+                                            }
+                                            if ($tables == 'paket') {
+                                                echo "<option value='$tables'>$tables</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success mr-2" id="tampilkantabel">Tampilkan</button>
+                        </div>
+            
+                        <!-- <div class="card-footer">
+                            <button type="button" class="btn btn-success mr-2" id="importsql">Import Ke SQL</button>
+                        </div> -->
+                    </form>
+                    <!--end::Form-->
                 </div>
-
-                
-                <div class="form-group">
-                    <div class="example-tools justify-content-center">
-                        <span class="example-toggle" data-toggle="tooltip" title="" data-original-title="View code"></span>
-                        <span class="example-copy" data-toggle="tooltip" title="" data-original-title="Copy code"></span>
-                    </div>
-                </div>
-
-
-                <hr>
-
-                <!-- <div class="card-footer">
-                    <button type="button" class="btn btn-success mr-2" id="importsql">Import Ke SQL</button>
-                </div> -->
+            
+                <br>
             
                 <table style="width:100%" id="tbl-emon" class="table table-bordered table-responsive dataTable no-footer">
                     <thead>
@@ -174,7 +174,6 @@
             
             
                 </table>
-
             </div>
         </div>
     </div>

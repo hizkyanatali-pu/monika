@@ -379,11 +379,11 @@ class Preferensi extends \App\Controllers\BaseController
                 return "[" . date_indo($row->in_dt) . " " . $row->waktu  . '  size: ' . number_format($row->sizefile / 1000000, '2', ',', '.') . " Mb ]";
             }, 'first')
             ->add('status', function ($row) {
-                $elem = '<a href="' . site_url("preferensi/showdbsqlite/" . encrypt_url($row->nmfile)) . '"class="btn btn-brand btn-elevate btn-icon" target="_blank" data-toggle="kt-tooltip" data-placement="right"  data-original-title="Buka Database"> <i class="flaticon-eye"></i></a>';
+                $elem = '<a href="' . site_url("preferensi/showdbsqlite/" . encrypt_url($row->nmfile)) . '"class="btn btn-sm btn-brand btn-elevate btn-icon" target="_blank" data-toggle="kt-tooltip" data-placement="right"  data-original-title="Buka Database"> <i class="fas fa-info"></i></a>';
                 if ($row->status_aktif == '0') {
-                    return $elem . ' <button type="button" class="btn btn-success btn-elevate btn-icon usedatabase" data-toggle="kt-tooltip" data-placement="right" data-original-title="Gunakan Database" Onclick="gunakandatabase(\'' . $row->nmfile . '\')" data-id=""><i class="flaticon-refresh"></i></button>';
+                    return $elem . ' <button type="button" class="btn btn-sm btn-success btn-elevate btn-icon usedatabase" data-toggle="kt-tooltip" data-placement="right" data-original-title="Gunakan Database" Onclick="gunakandatabase(\'' . $row->nmfile . '\')" data-id=""><i class="fas fa-check"></i></button>';
                 } else {
-                    return $elem . '<button class="btn btn-sm" disabled style="cursor: unset;">Aktif</button>';
+                    return $elem . '<div class="badge badge-warning ml-1" disabled style="cursor: unset; font-size: 12px;"> Aktif</div>';
                 }
             }, 'last')
             ->toJson(true);

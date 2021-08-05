@@ -11,6 +11,20 @@
         transition: 0.1s filter linear;
     }
 </style>
+
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h5 class="kt-subheader__title">
+                <?= $title; ?>
+            </h5>
+            <span class="kt-subheader__separator kt-hidden"></span>
+
+        </div>
+
+    </div>
+</div>
+
 <!-- begin:: Content -->
 <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
     <div class="kt-portlet">
@@ -21,78 +35,73 @@
                 <?php echo session()->getFlashdata('error'); ?>
             </div>
         <?php endif; ?>
-        <div class="kt-portlet__head row pt-3">
-            <div class="col-md-6">
-                <div id="container-form">
-                    <div id="body-form">
-                        <div id="filelist">Your browser doesn't have Flashs, Silverlight or HTML5 support.</div>
-                        <div id="container-form">
-                            <div class="form-group">
-
-                                <a id="uploadFile" name="uploadFile" href="javascript:;" class="btn btn-sm btn-primary"> <i class="flaticon2-plus"></i>Select file</a>
-                                <a id="upload" href="javascript:;" class="btn btn-danger btn-sm"><i class="flaticon-upload"></i>Upload files</a>
-                            </div>
-                        </div>
-                        <input type="hidden" id="file_ext" name="file_ext" value="<?= substr(md5(rand(10, 100)), 0, 10) ?>">
-                        <div id="console"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
+        
+        
         <div class="kt-portlet__body">
             <!--begin::Section-->
             <div class="kt-section">
-                <div class="kt-section__content">
-                    <table id="table" class="table table-bordered">
+
+                
+                <div id="body-form">
+                    <label for="">Tambah DB SQLITE</label>
+                    <div id="filelist">Browser Anda tidak memiliki dukungan Flash, Silverlight, atau HTML5.</div>
+                    <div id="container-form">
+                        <div class="form-group">
+                            <a id="uploadFile" name="uploadFile" href="javascript:;" class="btn btn-sm btn-primary"> <i class="flaticon2-plus"></i>Pilih File</a>
+                            <a id="upload" href="javascript:;" class="btn btn-success btn-sm"><i class="flaticon-upload"></i>Upload file</a>
+                        </div>
+                    </div>
+                    <input type="hidden" id="file_ext" name="file_ext" value="<?= substr(md5(rand(10, 100)), 0, 10) ?>">
+                    <div id="console"></div>
+                </div>
+
+                <hr class="mt-0">
+
+                <table id="table" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Waktu / File</th>
+                            <th>Status</th>
+                            <th style="display: none;">idpull</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+                <!-- <div class="table-responsive">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>No</th>
                                 <th>Waktu / File</th>
                                 <th>Status</th>
-                                <th style="display: none;">idpull</th>
-
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            <?php if ($qdata) : ?>
+                                <?php
+                                foreach ($qdata as $k => $d) : ?>
+                                    <tr>
+                                        <td>
+                                            <?php echo "[" . date_indo($d['in_dt'])  . '  size: ' . number_format($d['sizefile'] / 1000000, '2', ',', '.') . " Mb ]"; ?>
+                                        </td>
+                                        <td>
+                                            <a href="<?= site_url("preferensi/showdbsqlite/" . encrypt_url($d['nmfile'])) ?>" class="btn btn-brand btn-elevate btn-icon" target="_blank" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Buka Database"> <i class="flaticon-eye"></i></a>
+
+                                            <?php
+                                            if ($d['status_aktif'] == '0') { ?>
+                                                <button type="button" class="btn btn-success btn-elevate btn-icon usedatabase" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Gunakan Database" data-id="<?= $d['nmfile'] ?>"><i class="flaticon-refresh"></i></button>
+                                            <?php } else { ?>
+                                                <button class="btn btn-sm" disabled style="cursor: unset;">Aktif</button>
+                                            <?php  } ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
                     </table>
+                </div> -->
 
-
-
-                    <!-- <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Waktu / File</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if ($qdata) : ?>
-                                    <?php
-                                    foreach ($qdata as $k => $d) : ?>
-                                        <tr>
-                                            <td>
-                                                <?php echo "[" . date_indo($d['in_dt'])  . '  size: ' . number_format($d['sizefile'] / 1000000, '2', ',', '.') . " Mb ]"; ?>
-                                            </td>
-                                            <td>
-                                                <a href="<?= site_url("preferensi/showdbsqlite/" . encrypt_url($d['nmfile'])) ?>" class="btn btn-brand btn-elevate btn-icon" target="_blank" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Buka Database"> <i class="flaticon-eye"></i></a>
-
-                                                <?php
-                                                if ($d['status_aktif'] == '0') { ?>
-                                                    <button type="button" class="btn btn-success btn-elevate btn-icon usedatabase" data-toggle="kt-tooltip" data-placement="right" title="" data-original-title="Gunakan Database" data-id="<?= $d['nmfile'] ?>"><i class="flaticon-refresh"></i></button>
-                                                <?php } else { ?>
-                                                    <button class="btn btn-sm" disabled style="cursor: unset;">Aktif</button>
-                                                <?php  } ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div> -->
-                </div>
             </div>
             <!--end::Section-->
         </div>
