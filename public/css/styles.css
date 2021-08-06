@@ -103,12 +103,18 @@
 @media (min-width: 1025px) {
     .kt-aside--minimize .kt-aside {
         width: 80px;
-        /* -webkit-transition: all .3s ease; */
-        /* transition: all .3s ease; */
+        -webkit-transition: all .3s ease;
+        transition: all .3s ease;
     }
 }
 
 .kt-aside-menu .kt-menu__nav>.kt-menu__item>.kt-menu__link{
     padding: 9px 15px;
 }
+
+.kt-aside .kt-aside-menu {
+    margin: 0px 0;
+}
 /* end custom sidebar  */
+
+

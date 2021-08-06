@@ -109,35 +109,29 @@
 
             <!--begin::Section-->
             <div class="kt-section">
-
-                <div class="input-group">
-                    <div class="p-0 col-md-2">
-                        <h3 class="mb-0">Daftar Tabel :</h3>
-                    </div>
-                    <div class="p-0 col-md-4">
-                        <div class="input-group">
-                            <!-- <label for="listtable">Daftar Tabel</label> -->
-                            <select class="form-control select2" id="daftartabel">
-                                <?php
-                                foreach ($listtable as $tables) {
-                                    if ($tables == 'd_dipa_span') {
-                                        echo "<option value='$tables'>$tables</option>";
-                                    }
-                                    if ($tables == 'paket') {
-                                        echo "<option value='$tables'>$tables</option>";
-                                    }
-                                }
-                                ?>
-                            </select>
-                            <div class="input-group-prepend">
-                                <button type="button" class="btn btn-success" id="tampilkantabel">Tampilkan</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 
-                <div class="form-group">
+                <div class="input-group select2-bootstrap-prepend">
+                    <h3 class="mb-0 mt-1">Daftar Tabel :</h3>
+                    <div class="w-25 pl-3">
+                        <select class="form-control select2" id="daftartabel">
+                            <?php
+                            foreach ($listtable as $tables) {
+                                if ($tables == 'd_dipa_span') {
+                                    echo "<option value='$tables'>$tables</option>";
+                                }
+                                if ($tables == 'paket') {
+                                    echo "<option value='$tables'>$tables</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-success" id="tampilkantabel"><i class="fas fa-check text-light"></i> Tampilkan</button>
+                    </span>
+                </div>
+                
+                <div class="mt-4">
                     <div class="example-tools justify-content-center">
                         <span class="example-toggle" data-toggle="tooltip" title="" data-original-title="View code"></span>
                         <span class="example-copy" data-toggle="tooltip" title="" data-original-title="Copy code"></span>

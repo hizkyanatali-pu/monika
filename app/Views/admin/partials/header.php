@@ -25,10 +25,10 @@
 				<span class="kt-badge kt-badge--username kt-badge--unified-primary kt-badge--lg kt-badge--rounded kt-badge--bold"><?= substr(session('userData.nama'), 0, 1); ?></span>
 			</div>
 		</div>
-		<div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-xl">
+		<div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-xl" style="border-radius: 22px;">
 
 			<!--begin: Head -->
-			<div class="kt-user-card kt-user-card--skin-light kt-notification-item-padding-x" style="background-image: url(assets/media/misc/bg-1.jpg)">
+			<div class="kt-user-card kt-user-card--skin-light kt-notification-item-padding-x" style="background-image: url(assets/media/misc/bg-1.jpg); border-radius: 22px 22px 0 0;">
 				<div class="kt-user-card__avatar">
 					<!-- <img class="kt-hidden" alt="Pic" src="assets/media/users/300_25.jpg" /> -->
 
