@@ -129,7 +129,7 @@ class Pulldata extends \App\Controllers\BaseController
     }
     public function satker($slug=''){
         $data = array(
-            'title' => 'Satuan Kerja',
+            'title' => 'Balai Teknik',
             'posisi'=>['<i class="fa fa-home"></i>'],
             'idk'=>99,
             'label'=>'Unit Organisasi',
