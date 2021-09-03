@@ -45,13 +45,28 @@ class Grafikdata extends \App\Controllers\BaseController
 
     public function progres_per_sumber_dana()
     {
+        $getGraphicData = $this->PulldataModel->getGraphicDataProgressPerSumberDana();
+
         $data = array(
             'title' => 'Grafik Progres Per Sumber Dana',
+            'pagu'  => $getGraphicData
         );
         return view('Modules\Admin\Views\Grafik\Progress-per-sumber-dana', $data);
     }
 
-   
+    public function progres_per_jenis_belanja()
+    {
+        $data = array(
+            'title' => 'Grafik Progres Per Jenis Belanja '
+        );
+        return view('Modules\Admin\Views\Grafik\Progress-per-jenis-belanja', $data);
+    }
 
-
+    public function progres_per_kegiatan()
+    {
+        $data = array(
+            'title' => 'Grafik Progres Per Kegiatan '
+        );
+        return view('Modules\Admin\Views\Grafik\Progress-per-kegitan', $data);
+    }
 }

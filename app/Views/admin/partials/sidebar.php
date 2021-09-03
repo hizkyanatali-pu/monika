@@ -76,7 +76,9 @@
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                     <ul class="kt-menu__subnav">
                         <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-keuangan-fisik'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Keungan & Fisik</span> </a></li>
-                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('maintenance'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Sumber Dana</span> </a></li>
+                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-per-sumber-dana'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Sumber Dana</span> </a></li>
+                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-per-jenis-belanja'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Jenis Belanja</span> </a></li>
+                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-per-kegiatan'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Kegiatan</span> </a></li>
 
                     </ul>
                 </div>

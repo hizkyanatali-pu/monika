@@ -168,11 +168,14 @@ class PulldataModel extends Model
         // LEFT JOIN m_balai b ON b.balaiid=s.balaiid ".$w)->getResultArray();
 
         //  progres modif yusfi
-        return $this->db_2->query("SELECT count(*) as jml_paket, $Fprogres
+        $returnData = $this->db_2->query("SELECT count(*) as jml_paket, $Fprogres
         FROM paket md
         ".$w)->getResultArray();
+        
+        // echo json_encode($returnData);
+        // exit;
 
-
+        return $returnData;
     }
 
     function bln($id=0){
@@ -180,5 +183,56 @@ class PulldataModel extends Model
                 ['jan', 'feb', 'mar','apr','mei','jun','jul','agu','sep','okt','nov','des']
             ];
         return $bln[$id];
+    }
+
+    function getGraphicDataProgressPerSumberDana() {
+        ################
+        # Progress Keu #
+        $dataProgresKeu = $this->db_2->query("
+            SELECT
+                sum((rr_rupiahm + rr_rupiahp + rr_pnbp) / pg) as rpm,
+                sum(rr_sbsn / pg) as sbsn,
+                sum(rr_pln / pg) as phln
+                /*
+                ((sum((rr_rupiahm + rr_rupiahp + rr_pnbp) / pg)) / sum(pg) * 100) as rpm,
+                ((sum(rr_sbsn / pg) / sum(pg)) * 100) as sbsn,
+                ((sum(rr_pln / pg) / sum(pg)) * 100) as phln
+                */
+            FROM
+                paket
+        ")->getResult();
+        # end-of: Progress Keu #
+        ########################
+
+        ##############
+        # Total Pagu #
+        $dataTotalPagu = $this->db_2->query("
+            SELECT
+                (SUM(CASE WHEN sumber_dana=='A' THEN amount ELSE 0 END)+ SUM(CASE WHEN sumber_dana=='C' THEN amount ELSE 0 END) + SUM(CASE WHEN sumber_dana=='D' THEN amount ELSE 0 END)) as rpm,
+                SUM(CASE WHEN sumber_dana=='T' THEN amount ELSE 0 END) as sbsn,
+                SUM(CASE WHEN sumber_dana=='B' THEN amount ELSE 0 END) as phln
+            FROM
+                d_dipa_span
+        ")->getResult();
+        # end-of: Total Pagu #
+        ######################
+
+        return (object) [
+            (object)[
+                'title' => 'RPM',
+                'progresKeu' => $dataProgresKeu[0]->rpm,
+                'totalPagu' => $dataTotalPagu[0]->rpm
+            ],
+            (object)[
+                'title' => 'SBSN',
+                'progresKeu' => $dataProgresKeu[0]->sbsn,
+                'totalPagu' => $dataTotalPagu[0]->sbsn
+            ],
+            (object)[
+                'title' => 'PHLN',
+                'progresKeu' => $dataProgresKeu[0]->phln,
+                'totalPagu' => $dataTotalPagu[0]->phln
+            ]
+        ];
     }
 }

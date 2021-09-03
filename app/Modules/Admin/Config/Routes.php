@@ -68,6 +68,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('grafikdata', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('progres-keuangan-fisik', '\Modules\Admin\Controllers\Grafikdata::index');
         $routes->get('progres-per-sumber-dana', '\Modules\Admin\Controllers\Grafikdata::progres_per_sumber_dana');
+        $routes->get('progres-per-jenis-belanja', '\Modules\Admin\Controllers\Grafikdata::progres_per_jenis_belanja');
+        $routes->get('progres-per-kegiatan', '\Modules\Admin\Controllers\Grafikdata::progres_per_kegiatan');
 
         $routes->get('(:segment)', '\Modules\Admin\Controllers\Grafikdata::index/$1');
     });
