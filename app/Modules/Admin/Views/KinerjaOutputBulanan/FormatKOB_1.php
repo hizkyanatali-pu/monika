@@ -136,7 +136,6 @@ $this->extend('admin/layouts/default') ?>
                     <?php $colspan = 8; ?>
                     <table class="table table-bordered mb-0 table-striped" id="table">
                         <thead>
-
                             <tr class=" text-center bg-purple">
                                 <th class="thNo" rowspan="2">No</th>
                                 <th class="thKode" rowspan="2">Kode</th>

@@ -70,6 +70,52 @@
                     </ul>
                 </div>
             </li>
+
+            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+                <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                    <i class="kt-menu__link-icon fas fa-project-diagram"></i>
+                    <span class="kt-menu__link-text">Tematik</span>
+                    <span class="kt-badge kt-badge--danger">N</span>
+                    <i class="kt-menu__ver-arrow la la-angle-right"></i>
+                </a>
+                <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+                    <ul class="kt-menu__subnav">
+                        <li class="kt-menu__item " aria-haspopup="true">
+                            <a href="<?= site_url('tematik/food-estate'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">Food Estate</span>
+                            </a>
+                        </li>
+                        <li class="kt-menu__item " aria-haspopup="true">
+                            <a href="<?= site_url('tematik/kawasan-insudtri'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">Kawasan Insdustri</span>
+                            </a>
+                        </li>
+                        <li class="kt-menu__item " aria-haspopup="true">
+                            <a href="<?= site_url('tematik/kspn'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">KSPN</span>
+                            </a>
+                        </li>
+                        <li class="kt-menu__item " aria-haspopup="true">
+                            <a href="<?= site_url('tematik/rekap'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">Rekap</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
             <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('Kinerja-Output-Bulanan/') . encrypt_url(date('n')); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Kinerja Output Bulanan</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
            
             <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fas fa-chart-line"></i><span class="kt-menu__link-text">Grafik</span><span class="kt-badge kt-badge--danger">N</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>

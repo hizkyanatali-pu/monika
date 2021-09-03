@@ -97,6 +97,13 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('sisa-belum-lelang', '\Modules\Admin\Controllers\PohonAnggaran::sisaBelumLelang');
     });
 
+    $routes->group('tematik', ['namespace' => 'App\Controllers'], function($routes) {
+        $routes->get('food-estate', '\Modules\Admin\Controllers\Tematik::pageFoodEstate');
+        $routes->get('kawasan-insudtri', '\Modules\Admin\Controllers\Tematik::pageKawasanIndustri');
+        $routes->get('kspn', '\Modules\Admin\Controllers\Tematik::pageKspn');
+        $routes->get('rekap', '\Modules\Admin\Controllers\Tematik::pageRekap');
+    });
+
     $routes->group('Kinerja-Output-Bulanan', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('(:any)', '\Modules\Admin\Controllers\KinerjaOutputBulanan::index/$1');
     });
