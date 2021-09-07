@@ -100,8 +100,11 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('tematik', ['namespace' => 'App\Controllers'], function($routes) {
         $routes->get('food-estate', '\Modules\Admin\Controllers\Tematik::pageFoodEstate');
         $routes->get('kawasan-insudtri', '\Modules\Admin\Controllers\Tematik::pageKawasanIndustri');
-        $routes->get('kspn', '\Modules\Admin\Controllers\Tematik::pageKspn');
+        $routes->get('kspn/(:any)', '\Modules\Admin\Controllers\Tematik::pageKspn/$1');
         $routes->get('rekap', '\Modules\Admin\Controllers\Tematik::pageRekap');
+        $routes->get('excel/(:any)', '\Modules\Admin\Controllers\Tematik::exportExcel/$1');
+        $routes->get('excel-kspn/(:any)', '\Modules\Admin\Controllers\Tematik::exportExcelKspn/$1');
+        $routes->get('excel-rekap', '\Modules\Admin\Controllers\Tematik::exportExcelRekap');
     });
 
     $routes->group('Kinerja-Output-Bulanan', ['namespace' => 'App\Controllers'], function ($routes) {

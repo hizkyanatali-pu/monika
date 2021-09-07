@@ -30,7 +30,9 @@
                     </div>
                     <div class="col-md-8 text-right mt-3">
                         <div class="form-group">
-                            <a href="" class="btn btn-success btn-sm text-white" target="_blank"><i class="fa fa-file-excel"></i>Excel</a>
+                            <a href="<?php echo site_url('/tematik/excel-rekap') ?>" class="btn btn-success btn-sm text-white" target="_blank">
+                                <i class="fa fa-file-excel"></i>Excel
+                            </a>
                         </div>
                     </div>
                 </div>    
@@ -55,7 +57,31 @@
                         </thead>
 
                         <tbody id="tbody-utama">
-                            
+                            <?php 
+                                $no = 1;
+                                foreach($data as $key => $value): 
+                            ?>
+                                <tr>
+                                    <td><?php echo $no++ ?></td>
+                                    <td><?php echo $value['title'] ?></td>
+                                    <td><?php echo toRupiah($value['totalPagu'], false) ?></td>
+                                    <td><?php echo toRupiah($value['totalRealisasi'], false) ?></td>
+                                    <td><?php echo onlyTwoDecimal($value['totalProgKeu']) ?></td>
+                                    <td><?php echo onlyTwoDecimal($value['totalProgFis']) ?></td>
+                                    <td></td>
+                                </tr>
+                                <?php foreach($value['list'] as $key2 => $value2): ?>
+                                    <tr>
+                                        <td></td>
+                                        <td><?php echo $value2->tematik ?></td>
+                                        <td><?php echo toRupiah($value2->pagu, false) ?></td>
+                                        <td><?php echo toRupiah($value2->realisasi, false) ?></td>
+                                        <td><?php echo onlyTwoDecimal($value2->prog_keu) ?></td>
+                                        <td><?php echo onlyTwoDecimal($value2->prog_fis) ?></td>
+                                        <td><?php echo $value2->ket ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                            <?php endforeach ?>
                         </tbody>
                     </table>
                 </div>

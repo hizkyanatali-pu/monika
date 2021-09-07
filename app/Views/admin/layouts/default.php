@@ -133,6 +133,8 @@ $title = $title ?? '';
 
     <?php echo script_tag('plugins/bootstrap/dist/js/bootstrap.min.js'); ?>
 
+    <?php echo $this->renderSection('upper_footer_js') ?>
+
     <?php echo script_tag('plugins/perfect-scrollbar/dist/perfect-scrollbar.js'); ?>
 
     <?php echo script_tag('plugins/sticky-js/dist/sticky.min.js'); ?>

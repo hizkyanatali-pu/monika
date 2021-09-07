@@ -7,7 +7,7 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h5 class="kt-subheader__title">
-                Food Estate
+                <?php echo $title ?>
             </h5>
             <span class="kt-subheader__separator kt-hidden"></span>
 
@@ -27,16 +27,21 @@
             <div class="kt-section">
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <label class="mb-0">Food Estate TA</label>
+                        <label class="mb-0"><?php echo $filterTitle ?></label>
                         <div class="input-group" style="width:100px !important">
-                            <select class="form-control" id="listmonth" name="month">
+                            <select class="form-control" id="listmonth" name="month" disabled>
                             	<option>2021</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-8 text-right mt-3">
                         <div class="form-group">
-                            <a href="" class="btn btn-success btn-sm text-white" target="_blank"><i class="fa fa-file-excel"></i>Excel</a>
+                            <a 
+                                href="<?php echo site_url('tematik/excel/'.$exportCode) ?>" 
+                                class="btn btn-success btn-sm text-white" target="_blank"
+                            >
+                                <i class="fa fa-file-excel"></i>Excel
+                            </a>
                         </div>
                     </div>
                 </div>    
@@ -62,7 +67,29 @@
                         </thead>
 
                         <tbody id="tbody-utama">
-                            
+                            <?php 
+                                $no = 1;
+                                foreach($data as $key => $value) : 
+                            ?>
+                                <tr>
+                                    <td colspan="11"><?php echo $value->satker ?></td>
+                                </tr>
+                                <?php foreach ($value->paketList as $key => $value) : ?>
+                                    <tr>
+                                        <td><?php echo $no++ ?></td>
+                                        <td><?php echo $value->nmpaket ?></td>
+                                        <td><?php echo ($value->vol) ?></td>
+                                        <td><?php echo $value->satuan ?></td>
+                                        <td><?php echo $value->provinsi ?></td>
+                                        <td><?php echo $value->lokasi ?></td>
+                                        <td><?php echo $value->pengadaan ?></td>
+                                        <td><?php echo toRupiah($value->pagu, false) ?></td>
+                                        <td><?php echo toRupiah($value->realisasi, false) ?></td>
+                                        <td><?php echo onlyTwoDecimal($value->persen_keu) ?></td>
+                                        <td><?php echo onlyTwoDecimal($value->persen_fis) ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                            <?php endforeach ?>
                         </tbody>
                     </table>
                 </div>

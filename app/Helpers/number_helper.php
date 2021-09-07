@@ -7,8 +7,8 @@ if (!function_exists('toTriliun')) {
 }
 
 if (!function_exists('toRupiah')) {
-	function toRupiah($argNumber) {
-		return 'Rp. '.number_format($argNumber, 0, ',', '.');
+	function toRupiah($argNumber, $withRp = true) {
+		return ($withRp ? 'Rp. ' : '') . number_format($argNumber, 0, ',', '.');
 	}
 }
 
