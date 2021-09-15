@@ -89,11 +89,11 @@
                             </a>
                         </li>
                         <li class="kt-menu__item " aria-haspopup="true">
-                            <a href="<?= site_url('tematik/kawasan-insudtri'); ?>" class="kt-menu__link ">
+                            <a href="<?= site_url('tematik/kawasan-industri'); ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                     <span></span>
                                 </i>
-                                <span class="kt-menu__link-text">Kawasan Insdustri</span>
+                                <span class="kt-menu__link-text">Kawasan Industri</span>
                             </a>
                         </li>
                         <li class="kt-menu__item " aria-haspopup="true">
