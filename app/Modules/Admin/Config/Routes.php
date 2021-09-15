@@ -99,7 +99,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
     $routes->group('tematik', ['namespace' => 'App\Controllers'], function($routes) {
         $routes->get('food-estate', '\Modules\Admin\Controllers\Tematik::pageFoodEstate');
-        $routes->get('kawasan-insudtri', '\Modules\Admin\Controllers\Tematik::pageKawasanIndustri');
+        $routes->get('kawasan-industri', '\Modules\Admin\Controllers\Tematik::pageKawasanIndustri');
         $routes->get('kspn/(:any)', '\Modules\Admin\Controllers\Tematik::pageKspn/$1');
         $routes->get('rekap', '\Modules\Admin\Controllers\Tematik::pageRekap');
         $routes->get('excel/(:any)', '\Modules\Admin\Controllers\Tematik::exportExcel/$1');
