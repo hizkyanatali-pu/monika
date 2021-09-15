@@ -14,6 +14,6 @@ if (!function_exists('toRupiah')) {
 
 if (!function_exists('onlyTwoDecimal')) {
 	function onlyTwoDecimal($argNumber) {
-		return number_format($argNumber, 2, ',', '');
+		return number_format($argNumber, 2, '.', '');
 	}
 }

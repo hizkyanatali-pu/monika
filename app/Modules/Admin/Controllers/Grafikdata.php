@@ -56,16 +56,22 @@ class Grafikdata extends \App\Controllers\BaseController
 
     public function progres_per_jenis_belanja()
     {
+        $getGraphicData = $this->PulldataModel->getGraphicDataProgressPerJenisBelanja();
+
         $data = array(
-            'title' => 'Grafik Progres Per Jenis Belanja '
+            'title' => 'Grafik Progres Per Jenis Belanja',
+            'pagu'  => $getGraphicData
         );
         return view('Modules\Admin\Views\Grafik\Progress-per-jenis-belanja', $data);
     }
 
     public function progres_per_kegiatan()
     {
+        $getGraphicData = $this->PulldataModel->getGraphicDataProgressPerKegiatan();
+
         $data = array(
-            'title' => 'Grafik Progres Per Kegiatan '
+            'title' => 'Grafik Progres Per Kegiatan',
+            'pagu'  => $getGraphicData
         );
         return view('Modules\Admin\Views\Grafik\Progress-per-kegitan', $data);
     }

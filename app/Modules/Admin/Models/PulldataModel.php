@@ -185,11 +185,14 @@ class PulldataModel extends Model
         return $bln[$id];
     }
 
+
+
     function getGraphicDataProgressPerSumberDana() {
         ################
         # Progress Keu #
         $dataProgresKeu = $this->db_2->query("
             SELECT
+                (SUM(ufis) / SUM(rtot)) as global_prod_keu_n_fis,
                 sum((rr_rupiahm + rr_rupiahp + rr_pnbp) / pg) as rpm,
                 sum(rr_sbsn / pg) as sbsn,
                 sum(rr_pln / pg) as phln
@@ -221,18 +224,89 @@ class PulldataModel extends Model
             (object)[
                 'title' => 'RPM',
                 'progresKeu' => $dataProgresKeu[0]->rpm,
+                'progresFis' => $dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->rpm,
                 'totalPagu' => $dataTotalPagu[0]->rpm
             ],
             (object)[
                 'title' => 'SBSN',
                 'progresKeu' => $dataProgresKeu[0]->sbsn,
+                'progresFis' => $dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->sbsn,
                 'totalPagu' => $dataTotalPagu[0]->sbsn
             ],
             (object)[
                 'title' => 'PHLN',
                 'progresKeu' => $dataProgresKeu[0]->phln,
+                'progresFis' => $dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->phln,
                 'totalPagu' => $dataTotalPagu[0]->phln
             ]
         ];
+    }
+
+
+
+    function getGraphicDataProgressPerJenisBelanja() {
+        ################
+        # query #
+        $data = $this->db_2->query("
+            SELECT
+                (sum(rr51) / sum(pg51)) as keuPeg,
+                (sum(rr52) / sum(pg52)) as keuBrg,
+                (sum(rr53) / sum(pg53)) as keuMdl,
+                
+                sum(pg51) as paguPeg,
+                sum(pg52) as paguBrg,
+                sum(pg53) as paguMdl,
+                
+                (SUM(ufis) / SUM(rtot)) as global_prod_keu_n_fis
+            FROM
+                paket
+        ")->getResult();
+        # end-of: query #
+        ########################
+
+        return (object) [
+            (object)[
+                'title' => 'Pegawai',
+                'progresKeu' => $data[0]->keuPeg,
+                'progresFis' => $data[0]->global_prod_keu_n_fis * $data[0]->keuPeg,
+                'totalPagu' => $data[0]->paguPeg
+            ],
+            (object)[
+                'title' => 'Barang',
+                'progresKeu' => $data[0]->keuBrg,
+                'progresFis' => $data[0]->global_prod_keu_n_fis * $data[0]->keuBrg,
+                'totalPagu' => $data[0]->paguBrg
+            ],
+            (object)[
+                'title' => 'Modal',
+                'progresKeu' => $data[0]->keuMdl,
+                'progresFis' => $data[0]->global_prod_keu_n_fis * $data[0]->keuMdl,
+                'totalPagu' => $data[0]->paguMdl
+            ]
+        ];
+    }
+
+
+
+    function getGraphicDataProgressPerKegiatan() {
+        ################
+        # query #
+        $data = $this->db_2->query("
+            SELECT 
+                tgiat.kdgiat, 
+                tgiat.nmgiat,
+                SUM(rtot) as keu,
+                SUM(ufis) as fis
+            FROM 
+                tgiat 
+                left join paket on tgiat.kdgiat=paket.kdgiat
+            WHERE 
+                tgiat.kdgiat in ('5036', '5037', '5039', '5040', '5300', '2408')
+                group by tgiat.kdgiat
+        ")->getResult();
+        # end-of: query #
+        ########################
+
+        return $data;
     }
 }

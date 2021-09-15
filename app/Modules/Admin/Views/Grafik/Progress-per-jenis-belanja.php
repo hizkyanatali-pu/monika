@@ -50,15 +50,35 @@
 
     <script>
 		var d1_1 = [
-		  [1325376000000, 10],
-		  [1328054400000, 20],
-		  [1330560000000, 30]
+		  <?php 
+	    		$index = 1325376000000;
+	    		foreach ($pagu as $key => $value): 
+
+	    	?>
+	    		[
+	    			<?php echo $index ?>, 
+	    			<?php echo onlyTwoDecimal($value->progresKeu) ?>
+	    		],
+	    	<?php 
+	    		$index += 2678400000;
+	    		endforeach;
+	    	?>
 		];
 
 		var d1_2 = [
-		  [1325376000000, 80],
-		  [1328054400000, 60],
-		  [1330560000000, 20]
+		  <?php 
+	    		$index = 1325376000000;
+	    		foreach ($pagu as $key => $value): 
+
+	    	?>
+	    		[
+	    			<?php echo $index ?>, 
+	    			<?php echo onlyTwoDecimal($value->progresFis) ?>
+	    		],
+	    	<?php 
+	    		$index += 2678400000;
+	    		endforeach;
+	    	?>
 		];
 
 		var data1 = [{
@@ -112,9 +132,26 @@
 			    color: '#444',
 			},
 		    ticks: [
-		      [1325376000000, 'Pegawai <div style="font-size: 22px; font-weight:bold; margin-top: 12px">90</div>'],
-		      [1328054400000, 'Barang <div style="font-size: 22px; font-weight:bold; margin-top: 12px">80</div>'],
-		      [1330560000000, 'Modal <div style="font-size: 22px; font-weight:bold; margin-top: 12px">50</div>']
+		      <?php 
+		    		$index = 1325376000000;
+		    		foreach ($pagu as $key => $value): 
+
+		    	?>
+		    		[
+		    			<?php echo $index ?>, 
+		    			`
+		    				<?php echo $value->title ?> 
+		    				<div class="title-chart-important">
+		    					<a href=""><?php echo toTriliun($value->totalPagu) ?>
+		    					<span><?php echo toRupiah($value->totalPagu) ?></span>
+		    					</a>
+		    				</div>
+		    			`
+		    		],
+		    	<?php 
+		    		$index += 2678400000;
+		    		endforeach 
+		    	?>
 		    ]
 		  },
 		  yaxis: {

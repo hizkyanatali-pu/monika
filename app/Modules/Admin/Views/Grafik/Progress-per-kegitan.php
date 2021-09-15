@@ -50,15 +50,35 @@
 
     <script>
 		var d1_1 = [
-		  [1325376000000, 10],
-		  [1328054400000, 20],
-		  [1330560000000, 30]
+		  	<?php 
+	    		$index = 1325376000000;
+	    		foreach ($pagu as $key => $value): 
+
+	    	?>
+	    		[
+	    			<?php echo $index ?>, 
+	    			<?php echo onlyTwoDecimal($value->keu) ?>
+	    		],
+	    	<?php 
+	    		$index += 2678400000;
+	    		endforeach 
+	    	?>
 		];
 
 		var d1_2 = [
-		  [1325376000000, 80],
-		  [1328054400000, 60],
-		  [1330560000000, 20]
+		 	<?php 
+	    		$index = 1325376000000;
+	    		foreach ($pagu as $key => $value): 
+
+	    	?>
+	    		[
+	    			<?php echo $index ?>, 
+	    			<?php echo onlyTwoDecimal($value->fis) ?>
+	    		],
+	    	<?php 
+	    		$index += 2678400000;
+	    		endforeach 
+	    	?>
 		];
 
 		var data1 = [{
@@ -112,9 +132,23 @@
 			    color: '#444',
 			},
 		    ticks: [
-		      [1325376000000, '<p style="width: 170px">Pengembangan dan Rehabilitasi Jaringan Irigasi Permukaan, Rawa dan Non-Padi</p>'],
-		      [1328054400000, '<p style="width: 170px">Pengendalian Banjir, Lahar, Pengelolaan Drainase Utama Perkotaan, dan Pengaman Pantai Pembangunan Bendungan, Danau, dan Bangunan Penampung Air Lainnya</p>'],
-		      [1330560000000, '<p style="width: 170px">Penyediaan dan Pengelolaan Air Tanah dan Air Baku</p>']
+		      	<?php 
+		    		$index = 1325376000000;
+		    		foreach ($pagu as $key => $value): 
+
+		    	?>
+		    		[
+		    			<?php echo $index ?>, 
+	    				`
+	    					<div style="width: 150px;">
+	    						<?php echo $value->nmgiat ?>
+	    					</div>
+	    				`
+		    		],
+		    	<?php 
+		    		$index += 2678400000;
+		    		endforeach 
+		    	?>
 		    ]
 		  },
 		  yaxis: {
@@ -163,7 +197,7 @@
 		  });
 		  $('<div class="data-point-label">' + el[1] + '</div>').css({
 		    position: 'absolute',
-		    left: o.left - 95,
+		    left: o.left - 38,
 		    top: o.top - 20,
 		    display: 'none'
 		  }).appendTo(p.getPlaceholder()).fadeIn('slow');

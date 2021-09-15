@@ -61,14 +61,24 @@
 	    		],
 	    	<?php 
 	    		$index += 2678400000;
-	    		endforeach 
+	    		endforeach;
 	    	?>
 		];
 
 		var d1_2 = [
-		  [1325376000000, 80],
-		  [1328054400000, 60],
-		  [1330732800000, 20],
+		   <?php 
+	    		$index = 1325376000000;
+	    		foreach ($pagu as $key => $value): 
+
+	    	?>
+	    		[
+	    			<?php echo $index ?>, 
+	    			<?php echo onlyTwoDecimal($value->progresFis) ?>
+	    		],
+	    	<?php 
+	    		$index += 2678400000;
+	    		endforeach;
+	    	?>
 		];
 
 		var data1 = [{
