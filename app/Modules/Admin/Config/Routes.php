@@ -78,6 +78,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
     $routes->group('preferensi', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('', '\Modules\Admin\Controllers\Preferensi::index');
+        //fitur tarik data dari api
+        $routes->get('tarikdata', '\Modules\Admin\Controllers\Preferensi::tarikdata');
+        
         $routes->get('getdatafromdb', '\Modules\Admin\Controllers\Preferensi::savetodb');
         $routes->get('showdbsqlite/(:any)', '\Modules\Admin\Controllers\Preferensi::showdatasqlite/$1');
         $routes->post('dataemon', '\Modules\Admin\Controllers\Preferensi::opendbsqlite');
