@@ -78,9 +78,9 @@
                                         <td><?php echo toRupiah($value2->realisasi, false) ?></td>
                                         <td><?php echo onlyTwoDecimal($value2->prog_keu) ?></td>
                                         <td><?php echo onlyTwoDecimal($value2->prog_fis) ?></td>
-                                        <!-- <td><?php// echo $value2->ket ?></td> -->
+                                        <td><?php echo $value2->ket ?></td>
 
-                                        <td><?php echo  "- ". str_replace(",","<br> - ",str_replace(", ", ",", $value2->ket))  ?></td>
+                                        <!--<td><?php echo  "- ". str_replace("||","<br> - ",str_replace(", ", ",", $value2->ket))  ?></td>-->
                                     </tr>
                                 <?php endforeach ?>
                             <?php endforeach ?>

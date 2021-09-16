@@ -129,25 +129,24 @@ class TematikModel extends Model
 					tmtlink.kdtematik,
 					sum(pkt.pg) as total_pagu,
 					sum(pkt.rtot) as total_realisasi,
-					(sum(pkt.rtot) / sum(pkt.pg)) as total_prog_keu,
-					(sum(pkt.ufis) / sum(pkt.pg)) as total_prog_fis,
+					sum(pkt.ufis) as total_ufis,
 					(JSON_OBJECT(
 						'tematik', satker.grup,
 						'pagu', sum(pkt.pg),
 						'realisasi', sum(pkt.rtot),
-						'prog_keu', (sum(pkt.rtot) / sum(pkt.pg)),
-						'prog_fis', (sum(pkt.ufis) / sum(pkt.pg)),
+						'prog_keu', ((sum(pkt.rtot) / sum(pkt.pg)) * 100),
+						'prog_fis', ((sum(pkt.ufis) / sum(pkt.pg)) * 100),
 						'ket', (
 							select 
 								GROUP_CONCAT(
 									CASE 
-									WHEN
-										(INSTR(sub_pkt.nmpaket, ';')) > 0
-									THEN
-										SUBSTR(sub_pkt.nmpaket, 1, (INSTR(sub_pkt.nmpaket, ';')-1))
-									ELSE
-										sub_pkt.nmpaket
-									END
+										WHEN
+											(INSTR(sub_pkt.nmpaket, ';')) > 0
+										THEN
+											'- ' || SUBSTR(sub_pkt.nmpaket, 1, (INSTR(sub_pkt.nmpaket, ';')-1))
+										ELSE
+											'- ' || sub_pkt.nmpaket
+									END, '<br>'
 								) 
 							from 
 								paket sub_pkt
@@ -170,14 +169,12 @@ class TematikModel extends Model
 
     		$totalPagu = 0;
     		$totalRealisasi = 0;
-    		$totalProgKeu = 0;
-    		$totalProgFis = 0;
+    		$totalUFis = 0;
     		$itemList = [];
 	    	foreach ($data as $key2 => $value2) {
 	    		$totalPagu += $value2->total_pagu;
 	    		$totalRealisasi += $value2->total_realisasi;
-	    		$totalProgKeu += $value2->total_prog_keu;
-	    		$totalProgFis += $value2->total_prog_fis;
+	    		$totalUFis += $value2->total_ufis;
 	    		array_push($itemList, json_decode($value2->data));
 	    	}
 
@@ -185,8 +182,8 @@ class TematikModel extends Model
 	    		'title' => $value['title'],
 	    		'totalPagu' => $totalPagu,
 				'totalRealisasi' => $totalRealisasi,
-				'totalProgKeu' => $totalProgKeu,
-				'totalProgFis' => $totalProgFis,
+				'totalProgKeu' => ($totalRealisasi / $totalPagu) * 100,
+				'totalProgFis' => ($totalUFis / $totalPagu) * 100,
 				'list' => $itemList
 	    	];
 
