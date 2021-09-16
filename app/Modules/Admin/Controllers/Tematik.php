@@ -59,6 +59,7 @@ class Tematik extends \App\Controllers\BaseController
         $data = $this->TematikModel->getListRekap($grupData);
 
     	return view($this->renderFolder.'\Rekap', [
+            'title'         => 'Rekap',
             'data' => $data
         ]);
     }

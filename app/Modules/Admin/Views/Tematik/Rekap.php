@@ -19,9 +19,9 @@
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid" style="">
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
     <div class="kt-portlet">
-        <div class="kt-portlet__body" style="">
+        <div class="kt-portlet__body">
 
             <!--begin::Section-->
             <div class="kt-section">
@@ -78,7 +78,9 @@
                                         <td><?php echo toRupiah($value2->realisasi, false) ?></td>
                                         <td><?php echo onlyTwoDecimal($value2->prog_keu) ?></td>
                                         <td><?php echo onlyTwoDecimal($value2->prog_fis) ?></td>
-                                        <td><?php echo $value2->ket ?></td>
+                                        <!-- <td><?php// echo $value2->ket ?></td> -->
+
+                                        <td><?php echo  "- ". str_replace(",","<br> - ",str_replace(", ", ",", $value2->ket))  ?></td>
                                     </tr>
                                 <?php endforeach ?>
                             <?php endforeach ?>
