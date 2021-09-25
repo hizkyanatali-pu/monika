@@ -36,7 +36,18 @@ class Grafikdata extends \App\Controllers\BaseController
                 $data['bln'][]=[$i, $Jbln[$i-1]];
                 $data['rencana'][]=[$i, number_format($d["rencana_$i"],2,'.','.')];
                 if($i<= date("m")){
-                    $data['realisasi'][]=[$i, number_format($d["realisasi_$i"],2,'.','.')];
+                    if($i != date("m")){
+                        $data['realisasi'][]=[$i, number_format($d["realisasi_$i"],2,'.','.')];
+                    }else{
+                        $date = date("Y-$i-d");
+                        $a = date("t", strtotime($date));
+                        $day = $a - date("d");
+                        if($day != 0){
+                            $data['realisasi'][]=[($i-1)+0.5, number_format($d["realisasi_$i"],2,'.','.')];
+                        }else{
+                            $data['realisasi'][]=[$i, number_format($d["realisasi_$i"],2,'.','.')];
+                        }
+                    }
                 }
             }
         }

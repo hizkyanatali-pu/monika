@@ -183,7 +183,15 @@
         var orealisasi = plot.pointOffset({ x:  x, y: parseFloat(yfrom)});
         var orencana = plot.pointOffset({ x:  x, y: parseFloat(yto)});
 
-        $('#line-chart').append("<div class='badge badge-secondary text-center shadow' style='position:absolute; left:" + (o.left + 4) + "px; top:" + o.top + "px;'><h3 class='mb-0'><b>Deviasi</b> " + (yfrom - yto).toFixed(2) + "%</h3></div>");
+        //deviasi
+        let var_date = new Date();
+        let this_year = var_date.getFullYear();
+        let this_month = var_date.getMonth();
+        let this_day = var_date.getDate();
+        let days = new Date(this_year, this_month, 0).getDate();
+        let deviasi = (yfrom - yto)/days*this_day;
+
+        $('#line-chart').append("<div class='badge badge-secondary text-center shadow' style='position:absolute; left:" + (o.left + 4) + "px; top:" + o.top + "px;'><h3 class='mb-0'><b>Deviasi</b> " + (deviasi).toFixed(2) + "%</h3></div>");
 
         $('#line-chart').append("<div class='badge badge-success ml-2' style='position:absolute;left:" + (orencana.left) + "px;top:" + (orencana.top) + "px;'><h3 class='mb-0'>" + yto + "%</h3></div>");
         $('#line-chart').append("<div class='badge badge-danger ml-2' style='position:absolute;left:" + (orealisasi.left) + "px;top:" + (orealisasi.top) + "px;'><h3 class='mb-0'>" + yfrom + "%</h3></div>");
