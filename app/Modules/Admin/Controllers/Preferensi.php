@@ -35,6 +35,19 @@ class Preferensi extends \App\Controllers\BaseController
         // return view('Modules\Admin\Views\Dok\Importdata', $data);
         return view('Modules\Admin\Views\Preferensi\Formuploadsqlite', $data);
     }
+    //fitur tarik data
+    public function tarikdata()
+    {
+        $pg = 20;
+        $data = [
+            'title' => 'Tarik Data',
+            'pg' => $pg,
+            'qdata' => $this->ImportdataSqliteModel->getDok()->paginate($pg),
+            'pager' => $this->ImportdataSqliteModel->getDok()->pager,
+        ];
+        // return view('Modules\Admin\Views\Dok\Importdata', $data);
+        return view('Modules\Admin\Views\Preferensi\preferensi', $data);
+    }
 
     //proses tarik data dari API
     public function savetodb()
