@@ -56,7 +56,7 @@ class Preferensi extends \App\Controllers\BaseController
 
         ini_set('max_execution_time', 0);
 
-        $builder = $this->db->table('monika_data');
+        $builder = $this->db1->table('monika_data');
 
 
         $url = 'https://emonitoring.pu.go.id/ws_sda';
