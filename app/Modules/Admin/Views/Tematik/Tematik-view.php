@@ -26,20 +26,15 @@
             <!--begin::Section-->
             <div class="kt-section">
                 <div class="row mb-3">
-                    <div class="col-xm-2">
+                    <div class="col-md-6">
                         <label class="mb-0"><?php echo $filterTitle ?></label>
-                        <div class="input-group" style="width:100px !important">
+                        <div class="input-group" style="width:200px !important">
                             <select class="form-control" id="listmonth" name="month" disabled>
                                 <option>2021</option>
                             </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="mb-0">Filter Column</label>
-                        <div class="input-group" style="width:150px !important">
                             <div class="dropdown dropright">
-                                <button type="button" class="btn btn-primary" dropdown-toggle data-toggle="dropdown">Filter</button>
-                                <div class="dropdown-menu" style="overflow-y: auto; height: 200px;">
+                                <button type="button" class="btn btn-primary ml-3" dropdown-toggle data-toggle="dropdown">Filter</button>
+                                <div class="dropdown-menu" style="overflow-y: auto; height: 200px; z-index: 5;">
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check">
                                             <label for="" class="form-check-label">
@@ -202,12 +197,6 @@
     $("#search").click(function() {
         window.location.href = "<?= site_url('Kinerja-Output-Bulanan/') ?>" + $('#listmonth').val();
     });
-
-    $('div.filter-columns').hide()
-    $(document).on('click', 'button.filter-columns', function(){
-
-        $('div.filter-columns').toggle()
-    })
 
     $("input:checkbox").click(function(){
         
