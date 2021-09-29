@@ -46,7 +46,7 @@ class Preferensi extends \App\Controllers\BaseController
             'pager' => $this->ImportdataSqliteModel->getDok()->pager,
         ];
         // return view('Modules\Admin\Views\Dok\Importdata', $data);
-        return view('Modules\Admin\Views\Preferensi\preferensi', $data);
+        return view('Modules\Admin\Views\Preferensi\Preferensi', $data);
     }
 
     //proses tarik data dari API
@@ -97,7 +97,7 @@ class Preferensi extends \App\Controllers\BaseController
         $data = json_decode($openfile);
 
         if (count($data) > 0) {
-            $builder->truncate();
+            $builder->truncate(); 
             $builder->insertBatch($data);
             // $session->setFlashdata('msg', 'Data Berhasil Disinkronisasikan');
             echo json_encode(count($data));
