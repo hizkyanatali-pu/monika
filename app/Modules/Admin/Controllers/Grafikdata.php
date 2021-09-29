@@ -44,6 +44,9 @@ class Grafikdata extends \App\Controllers\BaseController
                         $day = $a - date("d");
                         if($day != 0){
                             $data['realisasi'][]=[($i-1)+0.5, number_format($d["realisasi_$i"],2,'.','.')];
+                            $data_rencana = $d["rencana_$i"]/$a*date("d");
+                            $data_grafik = [($i-1)+0.5, number_format($data_rencana,2,'.','.')];
+                            array_splice($data['rencana'], $i, 0, [[($i-1)+0.5, number_format($data_rencana,2,'.','.')]]);
                         }else{
                             $data['realisasi'][]=[$i, number_format($d["realisasi_$i"],2,'.','.')];
                         }

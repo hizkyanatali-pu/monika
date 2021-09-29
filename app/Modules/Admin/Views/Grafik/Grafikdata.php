@@ -127,9 +127,27 @@
         data : <?php echo json_encode($qdata['realisasi']);?>,
         color: '#fd397a'
         }
+        
         x = $("input.arrayget").val();
         yfrom = line_data2.data.reverse()[0][1];
         yto = line_data1.data[x][1];
+
+        //mark new variables
+        let x2 = 0, yto2 = 0;
+        let tooltip_date = new Date();
+        let this_year_tooltip = tooltip_date.getFullYear();
+        let this_month_tooltip = tooltip_date.getMonth() + 1;
+        let this_day_tooltip = tooltip_date.getDate();
+        let days_tooltip = new Date(this_year_tooltip, this_month_tooltip, 0).getDate();
+        if((days_tooltip - this_day_tooltip) != 0){
+
+            x2 = line_data2.data[0][0];
+            yto2 = line_data1.data[x][1];
+        }else{
+
+            x2 = line_data2.data[0][0];
+            yto2 = line_data1.data[x][1];
+        }
         
         plot = $.plot('#line-chart', [line_data1, line_data2], {
         grid  : {
@@ -137,7 +155,7 @@
             borderColor: '#f3f3f3',
             borderWidth: 1,
             tickColor  : '#f3f3f3',
-            markings: [{ lineWidth: 2,  xaxis: { from: x, to: x }, yaxis: { from: yfrom, to: yto}, color: "#00000"}],
+            markings: [{ lineWidth: 2,  xaxis: { from: x2, to: x2 }, yaxis: { from: yfrom, to: yto2}, color: "#00000"}],
         },
         series: {
             shadowSize: 0,
@@ -179,22 +197,22 @@
         opacity: 0.80
         }).appendTo('body');
 
-        var o = plot.pointOffset({ x: 1, y: parseFloat(yto)+20});
-        var orealisasi = plot.pointOffset({ x:  x, y: parseFloat(yfrom)});
-        var orencana = plot.pointOffset({ x:  x, y: parseFloat(yto)});
+        var o = plot.pointOffset({ x: 1, y: parseFloat(yto2)+20});
+        var orealisasi = plot.pointOffset({ x:  x2, y: parseFloat(yfrom)});
+        var orencana = plot.pointOffset({ x:  x2, y: parseFloat(yto2)});
 
         //deviasi
         let var_date = new Date();
         let this_year = var_date.getFullYear();
-        let this_month = var_date.getMonth();
+        let this_month = var_date.getMonth() + 1;
         let this_day = var_date.getDate();
         let days = new Date(this_year, this_month, 0).getDate();
         let deviasi = (yfrom - yto)/days*this_day;
 
         $('#line-chart').append("<div class='badge badge-secondary text-center shadow' style='position:absolute; left:" + (o.left + 4) + "px; top:" + o.top + "px;'><h3 class='mb-0'><b>Deviasi</b> " + (deviasi).toFixed(2) + "%</h3></div>");
 
-        $('#line-chart').append("<div class='badge badge-success ml-2' style='position:absolute;left:" + (orencana.left) + "px;top:" + (orencana.top) + "px;'><h3 class='mb-0'>" + yto + "%</h3></div>");
-        $('#line-chart').append("<div class='badge badge-danger ml-2' style='position:absolute;left:" + (orealisasi.left) + "px;top:" + (orealisasi.top) + "px;'><h3 class='mb-0'>" + yfrom + "%</h3></div>");
+        $('#line-chart').append("<div class='badge badge-success ml-3' style='position:absolute;left:" + (orencana.left) + "px;top:" + (orencana.top) + "px;'><h3 class='mb-0'>" + yto2 + "%</h3></div>");
+        $('#line-chart').append("<div class='badge badge-danger ml-3 mt-4' style='position:absolute;left:" + (orealisasi.left) + "px;top:" + (orealisasi.top) + "px;'><h3 class='mb-0'>" + yfrom + "%</h3></div>");
       
 
 
