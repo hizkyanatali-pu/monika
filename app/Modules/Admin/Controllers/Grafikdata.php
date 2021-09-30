@@ -35,13 +35,16 @@ class Grafikdata extends \App\Controllers\BaseController
             for($i=1 ; $i<=count($Jbln) ; $i++){
                 $data['bln'][]=[$i, $Jbln[$i-1]];
                 $data['rencana'][]=[$i, number_format($d["rencana_$i"],2,'.','.')];
+                //Pengecekan data untuk data realisasi
                 if($i<= date("m")){
                     if($i != date("m")){
                         $data['realisasi'][]=[$i, number_format($d["realisasi_$i"],2,'.','.')];
                     }else{
+                        //Menghitung jumlah hari dalam 1 bulan
                         $date = date("Y-$i-d");
                         $a = date("t", strtotime($date));
                         $day = $a - date("d");
+                        //Membuat point baru ketika belum akhir bulan
                         if($day != 0){
                             $data['realisasi'][]=[($i-1)+0.5, number_format($d["realisasi_$i"],2,'.','.')];
                             $data_rencana = $d["rencana_$i"]/$a*date("d");
