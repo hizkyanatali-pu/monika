@@ -70,9 +70,25 @@
                                     <?php } ?>
                                 <?php endforeach; ?>
                             </tr>
+                            
+                            <tr>
+                                <td width="5%">
+                                    <div class="badge text-white" style="font-size:13px; padding:3px; background-color:#b3b3b3;">Deviasi</div>
+                                </td>
+                                <?php foreach($qdata['realisasi'] as $key => $realisasi): ?>
+                                    <?php if($realisasi[1]){ 
+                                            $month = date('n');
+                                            if($key <= $month){
+                                                $date = date("Y-$key-d");
+                                                $a = date("t", strtotime($date));
+                                                $deviasi = $realisasi[1] - $qdata['rencana'][$key][1] / $a * date('d');
+                                    ?>
+                                                <td class="text-right"><?= number_format($deviasi, 2, '.', '.') ?></td>
+                                    <?php } } ?>
+                                <?php endforeach; ?>
+                            </tr>
                         </table>
                     </div>
-                    
                     <!-- <div class="card-body">
                         <div id="line-chart" style="height: 300px;"></div>
                     </div>
