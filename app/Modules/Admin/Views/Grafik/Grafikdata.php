@@ -143,7 +143,7 @@
         data : <?php echo json_encode($qdata['realisasi']);?>,
         color: '#fd397a'
         }
-        
+
         x = $("input.arrayget").val();
         yfrom = line_data2.data.reverse()[0][1];
         yto = line_data1.data[x][1];
@@ -157,10 +157,6 @@
         let this_day_tooltip = tooltip_date.getDate();
         let days_tooltip = new Date(this_year_tooltip, this_month_tooltip, 0).getDate();
         if((days_tooltip - this_day_tooltip) != 0){
-
-            x2 = line_data2.data[0][0];
-            yto2 = line_data1.data[x][1];
-        }else{
 
             x2 = line_data2.data[0][0];
             yto2 = line_data1.data[x][1];
