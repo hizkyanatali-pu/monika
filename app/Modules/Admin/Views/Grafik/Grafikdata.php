@@ -216,12 +216,7 @@
 
         //deviasi
         //bagian untuk badge deviasi
-        let var_date = new Date();
-        let this_year = var_date.getFullYear();
-        let this_month = var_date.getMonth() + 1;
-        let this_day = var_date.getDate();
-        let days = new Date(this_year, this_month, 0).getDate();
-        let deviasi = (yfrom - yto)/days*this_day;
+        let deviasi = yfrom - yto;
 
         $('#line-chart').append("<div class='badge badge-secondary text-center shadow' style='position:absolute; left:" + (o.left + 4) + "px; top:" + o.top + "px;'><h3 class='mb-0'><b>Deviasi</b> " + (deviasi).toFixed(2) + "%</h3></div>");
 
