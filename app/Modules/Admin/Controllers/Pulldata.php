@@ -127,14 +127,14 @@ class Pulldata extends \App\Controllers\BaseController
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
-    public function satker($slug=''){
+    public function balaiteknik($slug=''){
         $data = array(
             'title' => 'Balai Teknik',
             'posisi'=>['<i class="fa fa-home"></i>'],
             'idk'=>99,
             'label'=>'Unit Organisasi',
             'nextlink'=>'paket',
-            'qdata'=> $this->PulldataModel->getBalaiPaket('satker', "b.balaiid!='99'"),
+            'qdata'=> $this->PulldataModel->getBalaiPaket('balai', "b.balaiid!='99'"),
             'rekap'=>'satker'
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
