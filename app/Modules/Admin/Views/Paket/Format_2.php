@@ -105,7 +105,7 @@
                             </div>
                         </div>
                     */ ?>
-                    
+
                     <div class="col-md-6">
                         <div class="card card-body text-white bg-primary">
                             <div class="clearfix">
@@ -157,22 +157,25 @@
                 </div>
 
                 <!-- <div class="bg-white rounded box-shadow"> -->
-                    <!-- <a id="a-go-" data-toggle="collapse" href="#go-" aria-expanded="true" aria-controls="go-">
+                <!-- <a id="a-go-" data-toggle="collapse" href="#go-" aria-expanded="true" aria-controls="go-">
                         menu</a>
                         <div id="go-" class="collapse in" role="tabpanel" aria-labelledby="a-go-" >
                         box-Konten
                         </div> -->
-                    
-                    <!-- <small class="d-block text-right mt-3">
+
+                <!-- <small class="d-block text-right mt-3">
                         <a href="#">All updates</a>
                         </small> -->
                 <!-- </div> -->
-                
+
                 <hr>
 
                 <div class="clearfix mb-3">
                     <div class="float-left">
                         <h6>Progres Keuangan dan Fisik <?= $title; ?></h6>
+                        <div class="kt-section__content">
+                            <button type="button" class="btn btn-warning btn-icon" data-toggle="kt-popover" data-trigger="focus" title="" data-html="true" data-content="a. Deviasi <b>(-)</b> : keuangan lebih besar dari pada fisik. <br> <br>b. Data yang berwarna <b>Merah</b> menandakan dibawah nilai rata-rata." data-original-title="Petunjuk !"><i class="la la-lightbulb-o"></i></button>
+                        </div>
                     </div>
                     <div class="float-right">
                         <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a>
@@ -183,7 +186,7 @@
                         <b>*Dalam Ribuan</b>
                     </div>
                 </div>
-                
+
                 <div class="table-responsive tableFixHead">
                     <?php $colspan = 11; ?>
                     <table class="table table-bordered w-100 mb-0">

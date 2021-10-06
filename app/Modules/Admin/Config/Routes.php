@@ -35,7 +35,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
     $routes->group('pulldata', ['namespace' => 'App\Controllers'], function ($routes) {
         // $routes->get('', '\Modules\Admin\Controllers\Pulldata::index');
-        $routes->get('index', '\Modules\Admin\Controllers\Pulldata::index');
+        // $routes->get('index', '\Modules\Admin\Controllers\Pulldata::index');
         $routes->get('', '\Modules\Admin\Controllers\Pulldata::unitkerja');
         $routes->get('getpaket/(:any)', '\Modules\Admin\Controllers\Pulldata::getpaket/$1');
         $routes->get('getsatker/(:any)', '\Modules\Admin\Controllers\Pulldata::getsatker/$1');
@@ -73,8 +73,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
         $routes->get('(:segment)', '\Modules\Admin\Controllers\Grafikdata::index/$1');
     });
-
-    //from me
 
     $routes->group('preferensi', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('', '\Modules\Admin\Controllers\Preferensi::index');
