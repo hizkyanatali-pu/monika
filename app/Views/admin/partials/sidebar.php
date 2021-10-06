@@ -125,12 +125,22 @@
                         <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-per-sumber-dana'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Sumber Dana</span> </a></li>
                         <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-per-jenis-belanja'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Jenis Belanja</span> </a></li>
                         <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-per-kegiatan'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Kegiatan</span> </a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('preferensi'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-database"></i><span class="kt-menu__link-text">Preferensi</span> <span class="kt-badge kt-badge--danger">N</span></a></li> -->
+           
+            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fas fa-database"></i><span class="kt-menu__link-text">Preferensi</span><span class="kt-badge kt-badge--danger">N</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a></a>
+                <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+                    <ul class="kt-menu__subnav">                   
+                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('preferensi'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Import Data Dari SQLite</span></a></li>
+                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('preferensi/tarik-data-emon') ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tarik Data Dari E-Monitoring</span></a></li>
 
                     </ul>
                 </div>
             </li>
 
-            <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('preferensi'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-database"></i><span class="kt-menu__link-text">Preferensi</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
 
         </ul>
     </div>

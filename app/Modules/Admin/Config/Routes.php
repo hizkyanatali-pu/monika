@@ -78,6 +78,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
     $routes->group('preferensi', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('', '\Modules\Admin\Controllers\Preferensi::index');
+        $routes->get('tarik-data-emon', '\Modules\Admin\Controllers\Importdata::index');
+        
         //fitur tarik data dari api
         $routes->get('tarikdata', '\Modules\Admin\Controllers\Preferensi::tarikdata');
         

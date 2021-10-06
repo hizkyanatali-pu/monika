@@ -45,7 +45,6 @@ class Importdata extends \App\Controllers\BaseController
             ];
             $aksi = true;
         } elseif ($d['st'] == 1) {
-            $this->importsql($d['nmfile']);
             $post = [
                 'import_dt'    => date("ymdHis"),
                 'import_uid'   => $this->user['uid'],
@@ -59,6 +58,7 @@ class Importdata extends \App\Controllers\BaseController
                 'st'            => 2
             ];
             $this->ImportdataModel->where('st',  3)->set($post)->update();
+            $this->importsql($d['nmfile']);
             $post = [
                 'aktif_dt'    => date("ymdHis"),
                 'aktif_uid'   => $this->user['uid'],
@@ -207,8 +207,8 @@ class Importdata extends \App\Controllers\BaseController
 
     function importsql($slug)
     {
-        //$command = "C:\akuxampp7\mysql\bin\mysql --user=root --password=akuok -h localhost -D dev_pu_monika < C:\akuxampp7\htdocs\dev\monika-2\writable\\emon\FileSql\\$slug.sql";
-        $command = "mysql --user=monika --password='#4y0&)04tUh!' -h localhost -D monika < /var/www/monika/writable/emon/FileSql/$slug.sql";
+        $command = "E:\laragon\bin\mysql\mysql-5.7.24-winx64\bin\mysql --user=root --password= -h localhost -D monika < E:\\xampp\\htdocs\\monika\\writable\\emon\FileSql\\$slug.sql";
+        // $command = "mysql --user=monika --password='#4y0&)04tUh!' -h localhost -D monika < /var/www/monika-new/writable/emon/FileSql/$slug.sql";
         // dd($command);
         $cmd = shell_exec($command);
         return ['command' => $command];
