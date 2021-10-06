@@ -100,7 +100,7 @@ class Importdata extends \App\Controllers\BaseController
         $nmFile = date("ymdHis") . '_fromemon';
 
         // pull data
-        $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/");
+        $data = file_get_contents("http://34.120.159.131/ws_sda/");
 
         //import data
         $l = WRITEPATH . "emon/FileTxt/" . $nmFile;
@@ -221,7 +221,7 @@ class Importdata extends \App\Controllers\BaseController
 
             $command = "mysql --user='" . $_ENV['database.default.username'] . "' --password='" . $_ENV['database.default.password'] . "' -h localhost -D " . $_ENV['database.default.database'] . " < /home/mascitra/public_html/monika-sda-new/writable/emon/FileSql/$slug.sql";
         } else {
-            $command = "mysql --user='" . $_ENV['database.default.username'] . "' --password='" . $_ENV['database.default.password'] . "' -h localhost -D . $_ENV['database.default.database'] . < /var/www/monika-new/writable/emon/FileSql/$slug.sql";
+            $command = "mysql --user='" . $_ENV['database.default.username'] . "' --password='" . $_ENV['database.default.password'] . "' -h localhost -D " . $_ENV['database.default.database'] . "< /var/www/monika-new/writable/emon/FileSql/$slug.sql";
         }
         // dd($command);
         $cmd = shell_exec($command);
