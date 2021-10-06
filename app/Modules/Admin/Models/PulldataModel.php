@@ -199,9 +199,9 @@ class PulldataModel extends Model
         $dataProgresKeu = $this->db_2->query("
             SELECT
                 (SUM(ufis) / SUM(rtot)) as global_prod_keu_n_fis,
-                sum((rr_rupiahm + rr_rupiahp + rr_pnbp) / pg) as rpm,
-                sum(rr_sbsn / pg) as sbsn,
-                sum(rr_pln / pg) as phln
+                sum((rr_rupiahm + rr_rupiahp + rr_pnbp) / pg)/ 100 as rpm,
+                sum(rr_sbsn / pg)/ 100 as sbsn,
+                sum(rr_pln / pg)/ 100 as phln
                 /*
                 ((sum((rr_rupiahm + rr_rupiahp + rr_pnbp) / pg)) / sum(pg) * 100) as rpm,
                 ((sum(rr_sbsn / pg) / sum(pg)) * 100) as sbsn,
