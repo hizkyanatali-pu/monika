@@ -214,14 +214,9 @@ class Importdata extends \App\Controllers\BaseController
         ) {
 
             $command = "E:\laragon\bin\mysql\mysql-5.7.24-winx64\bin\mysql --user=root --password= -h localhost -D monika < E:\\xampp\\htdocs\\monika\\writable\\emon\FileSql\\$slug.sql";
-        } else if (
-            $_ENV['SERVER']
-            == 'mascitra'
-        ) {
-
-            $command = "mysql --user=mascitra_monika --password='!)olH+];mSi]' -h localhost -D mascitra_monika_sda < /home/mascitra/public_html/monika-sda-new/writable/emon/FileSql/$slug.sql";
         } else {
-            $command = "mysql --user=monika --password='#4y0&)04tUh!' -h localhost -D monika < /var/www/monika-new/writable/emon/FileSql/$slug.sql";
+
+            $command = "mysql --user='" . $_ENV['database.default.username'] . "' --password='" . $_ENV['database.default.password'] . "' -h localhost -D " . $_ENV['database.default.database'] . " < /home/mascitra/public_html/monika-sda-new/writable/emon/FileSql/$slug.sql";
         }
         // dd($command);
         $cmd = shell_exec($command);

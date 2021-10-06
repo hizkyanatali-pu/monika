@@ -31,9 +31,9 @@
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid" style="">
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
     <div class="kt-portlet">
-        <div class="kt-portlet__body" style="">
+        <div class="kt-portlet__body">
 
             <!--begin::Section-->
             <div class="kt-section">
