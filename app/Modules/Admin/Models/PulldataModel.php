@@ -142,35 +142,41 @@ class PulldataModel extends Model
             $bln=$k+1;
             if($tag=="keuangan"){
                 // progres awal
-                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.ren_keu_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
-                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.progres_keu_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
+                //data diambil dari mysql
+                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.ren_keu_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
+                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.progres_keu_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
+                
                 
                 // progres modif (yusfi)
-                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.renk_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as rencana_" . $bln;
-                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.rr_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as realisasi_" . $bln;
+                //data diambil dari sqlite
+                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.renk_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as rencana_" . $bln;
+                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.rr_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as realisasi_" . $bln;
             }
             else{
                 // // fisik awal
-                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.ren_fis_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
-                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.progres_fisik_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
+                //data diambil dari mysql
+                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.ren_fis_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
+                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pagu_total/100*md.progres_fisik_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
 
                 // fisik modif (yusfi)
-                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*md.renf_b" . $bln . "))/sum(md.pg))*100) as rencana_" . $bln;
-                $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.ff_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as realisasi_" . $bln;
+                //data diambil dari sqlite
+                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*md.renf_b" . $bln . "))/sum(md.pg))*100) as rencana_" . $bln;
+                // $Fprogres .= ($Fprogres?', ':'') . "((sum((md.pg/100*(md.ff_b" .  $bln . "/md.pg*100)))/sum(md.pg))*100) as realisasi_" . $bln;
             }
         }
 
         // progres awal
-
-        // return $this->db->query("SELECT count(*) as jml_paket, $Fprogres
-        // FROM monika_data md
-        // LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
-        // LEFT JOIN m_balai b ON b.balaiid=s.balaiid ".$w)->getResultArray();
+        //select data dari mysql
+        return $this->db->query("SELECT count(*) as jml_paket, $Fprogres
+        FROM monika_data md
+        LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
+        LEFT JOIN m_balai b ON b.balaiid=s.balaiid ".$w)->getResultArray();
 
         //  progres modif yusfi
-        $returnData = $this->db_2->query("SELECT count(*) as jml_paket, $Fprogres
-        FROM paket md
-        ".$w)->getResultArray();
+        //select data dari sqlite
+        // $returnData = $this->db_2->query("SELECT count(*) as jml_paket, $Fprogres
+        // FROM paket md
+        // ".$w)->getResultArray();
         
         // echo json_encode($returnData);
         // exit;

@@ -48,7 +48,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('bws', '\Modules\Admin\Controllers\Pulldata::bws');
 
         $routes->get('satkerpusat', '\Modules\Admin\Controllers\Pulldata::satkerpusat');
-        $routes->get('satker', '\Modules\Admin\Controllers\Pulldata::satker');
+        $routes->get('balaiteknik', '\Modules\Admin\Controllers\Pulldata::balaiteknik');
 
         $routes->get('skpdtpop', '\Modules\Admin\Controllers\Pulldata::skpdtpop');
         $routes->get('satkerpagu100m', '\Modules\Admin\Controllers\Pulldata::satkerpagu100m');

@@ -78,10 +78,10 @@
                                 <?php foreach($qdata['realisasi'] as $key => $realisasi): ?>
                                     <?php if($realisasi[1]){ 
                                             $month = date('n');
-                                            if($key <= $month){ //pengecekan data sampai bulan ini
+                                            if($key <= $month){
                                                 $date = date("Y-$key-d");
                                                 $a = date("t", strtotime($date));
-                                                $deviasi = ($realisasi[1] - $qdata['rencana'][$key][1]) / $a * date('d'); //rumusan untuk nilai deviasi
+                                                $deviasi = $realisasi[1] - $qdata['rencana'][$key][1] / $a * date('d');
                                     ?>
                                                 <td class="text-right"><?= number_format($deviasi, 2, '.', '.') ?></td>
                                     <?php } } ?>
@@ -143,13 +143,12 @@
         data : <?php echo json_encode($qdata['realisasi']);?>,
         color: '#fd397a'
         }
-
+        
         x = $("input.arrayget").val();
         yfrom = line_data2.data.reverse()[0][1];
         yto = line_data1.data[x][1];
 
         //mark new variables
-        //bagian untuk marking pada grafik
         let x2 = 0, yto2 = 0;
         let tooltip_date = new Date();
         let this_year_tooltip = tooltip_date.getFullYear();
@@ -157,6 +156,10 @@
         let this_day_tooltip = tooltip_date.getDate();
         let days_tooltip = new Date(this_year_tooltip, this_month_tooltip, 0).getDate();
         if((days_tooltip - this_day_tooltip) != 0){
+
+            x2 = line_data2.data[0][0];
+            yto2 = line_data1.data[x][1];
+        }else{
 
             x2 = line_data2.data[0][0];
             yto2 = line_data1.data[x][1];
@@ -215,8 +218,12 @@
         var orencana = plot.pointOffset({ x:  x2, y: parseFloat(yto2)});
 
         //deviasi
-        //bagian untuk badge deviasi
-        let deviasi = yfrom - yto;
+        let var_date = new Date();
+        let this_year = var_date.getFullYear();
+        let this_month = var_date.getMonth() + 1;
+        let this_day = var_date.getDate();
+        let days = new Date(this_year, this_month, 0).getDate();
+        let deviasi = (yfrom - yto)/days*this_day;
 
         $('#line-chart').append("<div class='badge badge-secondary text-center shadow' style='position:absolute; left:" + (o.left + 4) + "px; top:" + o.top + "px;'><h3 class='mb-0'><b>Deviasi</b> " + (deviasi).toFixed(2) + "%</h3></div>");
 

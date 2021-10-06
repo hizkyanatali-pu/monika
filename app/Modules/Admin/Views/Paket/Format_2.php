@@ -113,7 +113,7 @@
                                     <h3><?= number_format($qdata[0]['pagusda_progres_keuangan'], 2, ',', '.'); ?>% </h3>
                                 </div>
                                 <div class="float-right text-right">
-                                    <h6> Progres Keungan</h6>
+                                    <h6> Progres Keuangan</h6>
                                 </div>
                             </div>
                         </div>
