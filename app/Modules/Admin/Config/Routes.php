@@ -77,10 +77,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('preferensi', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('', '\Modules\Admin\Controllers\Preferensi::index');
         $routes->get('tarik-data-emon', '\Modules\Admin\Controllers\Importdata::index');
-        
+
         //fitur tarik data dari api
         $routes->get('tarikdata', '\Modules\Admin\Controllers\Preferensi::tarikdata');
-        
+
         $routes->get('getdatafromdb', '\Modules\Admin\Controllers\Preferensi::savetodb');
         $routes->get('showdbsqlite/(:any)', '\Modules\Admin\Controllers\Preferensi::showdatasqlite/$1');
         $routes->post('dataemon', '\Modules\Admin\Controllers\Preferensi::opendbsqlite');
@@ -100,7 +100,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('sisa-belum-lelang', '\Modules\Admin\Controllers\PohonAnggaran::sisaBelumLelang');
     });
 
-    $routes->group('tematik', ['namespace' => 'App\Controllers'], function($routes) {
+    $routes->group('tematik', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('food-estate', '\Modules\Admin\Controllers\Tematik::pageFoodEstate');
         $routes->get('kawasan-industri', '\Modules\Admin\Controllers\Tematik::pageKawasanIndustri');
         $routes->get('kspn/(:any)', '\Modules\Admin\Controllers\Tematik::pageKspn/$1');
