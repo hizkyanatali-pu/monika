@@ -219,7 +219,7 @@ class Importdata extends \App\Controllers\BaseController
             == 'mascitra'
         ) {
 
-            $command = "mysql --user=mascitra_monika --password='!)olH+];mSi]' -h localhost -D mascitra_monika < /home/mascitra/public_html/monika-sda-new/writable/emon/FileSql/$slug.sql";
+            $command = "mysql --user=mascitra_monika --password='!)olH+];mSi]' -h localhost -D mascitra_monika_sda < /home/mascitra/public_html/monika-sda-new/writable/emon/FileSql/$slug.sql";
         } else {
             $command = "mysql --user=monika --password='#4y0&)04tUh!' -h localhost -D monika < /var/www/monika-new/writable/emon/FileSql/$slug.sql";
         }
