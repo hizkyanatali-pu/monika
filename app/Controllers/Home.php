@@ -4,6 +4,7 @@ class Home extends BaseController
 {
 	public function index()
 	{
+		return redirect('auth');
 		$data = [
             'title' => 'Welcome',
 		];
