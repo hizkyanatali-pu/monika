@@ -33,7 +33,7 @@
                                 <option>2021</option>
                             </select>
                             <div class="dropdown dropright">
-                                <button type="button" class="btn btn-primary ml-3" dropdown-toggle data-toggle="dropdown">Filter</button>
+                                <button type="button" class="btn btn-primary btn-icon ml-3" dropdown-toggle data-toggle="dropdown"><i class="la la-filter"></i></button>
                                 <div class="dropdown-menu" style="overflow-y: auto; height: 200px; z-index: 5;">
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check">

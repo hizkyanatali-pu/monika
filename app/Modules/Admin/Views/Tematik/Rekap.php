@@ -28,7 +28,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6 mt-3">
                         <div class="dropdown dropright">
-                            <button type="button" class="btn btn-primary" dropdown-toggle data-toggle="dropdown">Filter</button>
+                            <button type="button" class="btn btn-primary btn-icon" dropdown-toggle data-toggle="dropdown"><i class="la la-filter"></i></button>
                             <div class="dropdown-menu" style="overflow-y: auto; height: 200px; z-index: 5;">
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
