@@ -201,9 +201,9 @@ class PulldataModel extends Model
         $dataProgresKeu = $this->db_2->query("
             SELECT
                 (SUM(ufis) / SUM(rtot)) as global_prod_keu_n_fis,
-                sum((rr_rupiahm + rr_rupiahp + rr_pnbp) / pg)/ 100 as rpm,
-                sum(rr_sbsn / pg)/ 100 as sbsn,
-                sum(rr_pln / pg)/ 100 as phln
+                (sum((rr_rupiahm + rr_rupiahp + rr_pnbp)) / sum(pg))* 100 as rpm,
+                (sum(rr_sbsn) / sum(pg))* 100 as sbsn,
+                (sum(rr_pln) / sum(pg))* 100 as phln
                 /*
                 ((sum((rr_rupiahm + rr_rupiahp + rr_pnbp) / pg)) / sum(pg) * 100) as rpm,
                 ((sum(rr_sbsn / pg) / sum(pg)) * 100) as sbsn,
@@ -258,9 +258,9 @@ class PulldataModel extends Model
         # query #
         $data = $this->db_2->query("
             SELECT
-                (sum(rr51) / sum(pg51)) as keuPeg,
-                (sum(rr52) / sum(pg52)) as keuBrg,
-                (sum(rr53) / sum(pg53)) as keuMdl,
+                (sum(rr51) / sum(pg51))* 100 as keuPeg,
+                (sum(rr52) / sum(pg52))* 100 as keuBrg,
+                (sum(rr53) / sum(pg53))* 100 as keuMdl,
                 
                 sum(pg51) as paguPeg,
                 sum(pg52) as paguBrg,
@@ -305,8 +305,8 @@ class PulldataModel extends Model
             SELECT 
                 tgiat.kdgiat, 
                 tgiat.nmgiat,
-                SUM(rtot) as keu,
-                SUM(ufis) as fis
+                (sum(rtot) / sum(pg))* 100 as keu,
+                (sum(ufis) / sum(pg))* 100 as fis
             FROM 
                 tgiat 
                 left join paket on tgiat.kdgiat=paket.kdgiat
