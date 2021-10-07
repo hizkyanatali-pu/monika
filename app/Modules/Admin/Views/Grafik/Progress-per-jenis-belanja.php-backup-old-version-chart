@@ -25,7 +25,7 @@
                 <!--begin::Section-->
                 <div class="kt-section">
                     <div class="card-body pt-5">
-                        <div class="chart-container mt-2" style="height: 500px">
+                        <div class="chart-container mt-2">
                         	<div id="bar-legend" class="chart-legend"></div>
 						  <div id="placeholder-bar-chart" class="mychart"></div>
 						</div>
@@ -49,38 +49,38 @@
 	<?php echo script_tag('plugins/flot-old/jquery.flot.orderBars.js'); ?>
 
     <script>
-		let data_pagu = <?= json_encode($pagu) ?>;
 		var d1_1 = [
-		  	<?php 
+		  <?php 
 	    		$index = 1325376000000;
 	    		foreach ($pagu as $key => $value): 
 
 	    	?>
 	    		[
 	    			<?php echo $index ?>, 
-	    			<?php echo onlyTwoDecimal($value->keu) ?>
+	    			<?php echo onlyTwoDecimal($value->progresKeu) ?>
 	    		],
 	    	<?php 
 	    		$index += 2678400000;
-	    		endforeach 
+	    		endforeach;
 	    	?>
 		];
 
 		var d1_2 = [
-		 	<?php 
+		  <?php 
 	    		$index = 1325376000000;
 	    		foreach ($pagu as $key => $value): 
 
 	    	?>
 	    		[
 	    			<?php echo $index ?>, 
-	    			<?php echo onlyTwoDecimal($value->fis) ?>
+	    			<?php echo onlyTwoDecimal($value->progresFis) ?>
 	    		],
 	    	<?php 
 	    		$index += 2678400000;
-	    		endforeach 
+	    		endforeach;
 	    	?>
 		];
+
 		var data1 = [{
 		    label: "KEU",
 		    data: d1_1,
@@ -132,18 +132,21 @@
 			    color: '#444',
 			},
 		    ticks: [
-		      	<?php 
+		      <?php 
 		    		$index = 1325376000000;
 		    		foreach ($pagu as $key => $value): 
 
 		    	?>
 		    		[
 		    			<?php echo $index ?>, 
-	    				`
-	    					<div style="width: 150px;">
-	    						<?php echo $value->nmgiat ?>
-	    					</div>
-	    				`
+		    			`
+		    				<?php echo $value->title ?> 
+		    				<div class="title-chart-important">
+		    					<a href=""><?php echo toTriliun($value->totalPagu) ?>
+		    					<span><?php echo toRupiah($value->totalPagu) ?></span>
+		    					</a>
+		    				</div>
+		    			`
 		    		],
 		    	<?php 
 		    		$index += 2678400000;
@@ -152,12 +155,9 @@
 		    ]
 		  },
 		  yaxis: {
-			// if want to yaxis set to 0/ none (backup)
-		    // tickFormatter: function(val, axis) {
-		    //   return '';
-		    // },
-			min: 0, 
-			max: 100,
+		    tickFormatter: function(val, axis) {
+		      return '';
+		    },
 		  },
 		  grid: {
 		    hoverable: true,
@@ -200,7 +200,7 @@
 		  });
 		  $('<div class="data-point-label">' + el[1] + '</div>').css({
 		    position: 'absolute',
-		    left: o.left - 38,
+		    left: o.left - 95,
 		    top: o.top - 20,
 		    display: 'none'
 		  }).appendTo(p.getPlaceholder()).fadeIn('slow');

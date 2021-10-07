@@ -49,7 +49,6 @@
 	<?php echo script_tag('plugins/flot-old/jquery.flot.orderBars.js'); ?>
 
     <script>
-		let data_pagu = <?= json_encode($pagu) ?>;
 		var d1_1 = [
 		  	<?php 
 	    		$index = 1325376000000;
@@ -81,6 +80,7 @@
 	    		endforeach 
 	    	?>
 		];
+
 		var data1 = [{
 		    label: "KEU",
 		    data: d1_1,
@@ -152,12 +152,9 @@
 		    ]
 		  },
 		  yaxis: {
-			// if want to yaxis set to 0/ none (backup)
-		    // tickFormatter: function(val, axis) {
-		    //   return '';
-		    // },
-			min: 0, 
-			max: 100,
+		    tickFormatter: function(val, axis) {
+		      return '';
+		    },
 		  },
 		  grid: {
 		    hoverable: true,
