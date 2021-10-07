@@ -24,7 +24,7 @@
             <span class="kt-subheader__separator kt-hidden"></span>
 
         </div>
-         <marquee direction="scroll" style="font-size: medium;color: firebrick;"><b><i>* Update Data Terakhir Pada Tanggal <?= getLastUpdateData(); ?> </i></b></marquee>
+         <marquee direction="scroll" style="font-size: medium;color: firebrick;"><b><i>* Update Data Terakhir Pada Tanggal <?= (getLastUpdateData() ? getLastUpdateData():0 );  ?> </i></b></marquee>
     </div>
 </div>
 
