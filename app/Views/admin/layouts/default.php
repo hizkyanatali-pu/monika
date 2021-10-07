@@ -50,7 +50,7 @@ $title = $title ?? '';
     <!-- begin:: Header Mobile -->
     <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
         <div class="kt-header-mobile__logo">
-            <a href="index.html">
+            <a href="<?= site_url('pulldata'); ?>">
                 <img alt="Logo" src="<?= base_url('images/pu.png'); ?>" />
             </a>
         </div>

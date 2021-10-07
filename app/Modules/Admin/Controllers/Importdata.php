@@ -100,8 +100,16 @@ class Importdata extends \App\Controllers\BaseController
         $nmFile = date("ymdHis") . '_fromemon';
 
         // pull data
+        if (
+            $_ENV['SERVER']
+            == "local"
+        ) {
+        $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/");
+        }else{
         $data = file_get_contents("http://34.120.159.131/ws_sda/");
+         
 
+        }
         //import data
         $l = WRITEPATH . "emon/FileTxt/" . $nmFile;
 
