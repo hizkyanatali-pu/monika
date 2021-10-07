@@ -1,4 +1,6 @@
-<?php namespace App\Filters;
+<?php
+
+namespace App\Filters;
 
 use Config\Services;
 use CodeIgniter\HTTP\RequestInterface;
@@ -23,36 +25,34 @@ class LoginFilter implements FilterInterface
 	 */
 	public function before(RequestInterface $request, $arguments = null)
 	{
-		if (! function_exists('logged_in'))
-		{
+		if (!function_exists('logged_in')) {
 			helper('auth');
 		}
-		
-		
+
+
 		$current = (string)current_url(true)
 			->setHost('')
 			->setScheme('')
 			->stripQuery('token');
-			
+
 		//redirect if not Administrator
 		$path = $request->uri->getSegments();
-		if(isset($path[0])){
-			if($path[0] ==='users' || $path[0] ==='usergroups' ){
+		if (isset($path[0])) {
+			if ($path[0] === 'users' || $path[0] === 'usergroups') {
 				$session = session();
 				$user = $session->get('userData');
-				if($user['group_id'] !=='Administrator') return redirect('usulan');
+				if ($user['group_id'] !== 'Administrator') return redirect('usulan');
 			}
 		}
 
-		if (in_array((string)$current, [route_to('auth'), route_to('forgot'), route_to('reset-password'), route_to('register')]))
-		{
+		if (in_array((string)$current, [route_to('auth'), route_to('forgot'), route_to('reset-password'), route_to('register')])) {
 			return;
 		}
 
-        if (!logged_in()) {
-        
-           return redirect('auth');
-       }
+		if (!logged_in()) {
+
+			return redirect('auth');
+		}
 	}
 
 	//--------------------------------------------------------------------
