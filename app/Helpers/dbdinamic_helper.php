@@ -14,7 +14,7 @@ function switch_db($name_db)
     $config_app['username'] = '';
     $config_app['password'] = '';
     $config_app['database'] =  $dbnamestr;
-    $config_app['DBDriver'] = 'sqlite3';
+    $config_app['DBDriver'] = 'SQLite3';
     $config_app['DBPrefix'] = '';
     $config_app['pConnect'] = false;
     $config_app['DBDebug'] = (ENVIRONMENT !== 'production');
