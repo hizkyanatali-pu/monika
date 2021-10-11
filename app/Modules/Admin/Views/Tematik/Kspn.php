@@ -51,9 +51,9 @@
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid" style="">
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
     <div class="kt-portlet">
-        <div class="kt-portlet__body" style="">
+        <div class="kt-portlet__body">
 
             <!--begin::Section-->
             <div class="kt-section">
@@ -129,6 +129,7 @@
                                 <i class="fa fa-file-excel"></i>Excel
                             </a>
                         </div>
+                        <i><b>*Dalam Ribuan</b></i>
                     </div>
                 </div>    
 
@@ -166,7 +167,7 @@
                                 foreach($data as $key => $value) : 
                             ?>
                                 <tr>
-                                    <td colspan="13"><?php echo $value->satker ?></td>
+                                    <td colspan="13" class="tdprogram"><?php echo $value->satker ?></td>
                                 </tr>
                                 <?php foreach ($value->paketList as $key => $value) : ?>
                                     <tr>

@@ -8,7 +8,7 @@ if (!function_exists('toTriliun')) {
 
 if (!function_exists('toRupiah')) {
 	function toRupiah($argNumber, $withRp = true) {
-		return ($withRp ? 'Rp. ' : '') . number_format($argNumber, 0, ',', '.');
+		return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000, 0, ',', '.');;
 	}
 }
 

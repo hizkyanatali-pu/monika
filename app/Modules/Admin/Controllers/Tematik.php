@@ -46,6 +46,7 @@ class Tematik extends \App\Controllers\BaseController
         $data = $this->TematikModel->getListTematikKspn($kspCode);
 
     	return view($this->renderFolder.'\Kspn', [
+            'title'         => 'KSPN',
             'uri'           => current_url(true),
             'filterTitle'   => $kspnTitle['filterTitle'],
             'data'          => $data

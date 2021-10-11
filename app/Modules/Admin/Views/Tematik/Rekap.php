@@ -81,6 +81,7 @@
                                 <i class="fa fa-file-excel"></i>Excel
                             </a>
                         </div>
+                        <i><b>*Dalam Ribuan</b></i>
                     </div>
                 </div>    
 
@@ -109,13 +110,13 @@
                                 foreach($data as $key => $value): 
                             ?>
                                 <tr>
-                                    <td class="no"><?php echo $no++ ?></td>
-                                    <td class="tematik"><?php echo $value['title'] ?></td>
-                                    <td class="pagu"><?php echo toRupiah($value['totalPagu'], false) ?></td>
-                                    <td class="realisasi"><?php echo toRupiah($value['totalRealisasi'], false) ?></td>
-                                    <td class="progres"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?></td>
-                                    <td class="progres"><?php echo onlyTwoDecimal($value['totalProgFis']) ?></td>
-                                    <td class="keterangan"></td>
+                                    <td class="no tdprogram"><?php echo $no++ ?></td>
+                                    <td class="tematik tdprogram"><?php echo $value['title'] ?></td>
+                                    <td class="pagu tdprogram"><?php echo toRupiah($value['totalPagu'], false) ?></td>
+                                    <td class="realisasi tdprogram"><?php echo toRupiah($value['totalRealisasi'], false) ?></td>
+                                    <td class="progres tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?></td>
+                                    <td class="progres tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?></td>
+                                    <td class="keterangan tdprogram"></td>
                                 </tr>
                                 <?php foreach($value['list'] as $key2 => $value2): ?>
                                     <tr>
