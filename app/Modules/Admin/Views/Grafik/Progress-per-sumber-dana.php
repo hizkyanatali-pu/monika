@@ -56,6 +56,8 @@
 	<?php echo script_tag('plugins/flot-old/jquery.flot.js'); ?>
 	<?php echo script_tag('plugins/flot-old/jquery.flot.time.min.js'); ?>
     <script>
+
+$( document ).ready(function() {
 		let data_pagu = <?= json_encode($pagu) ?>;
 		var d1_1 = [];
 		let index = 1325376000000;
@@ -300,6 +302,8 @@
 			}).appendTo(p.getPlaceholder()).fadeIn('slow');
 			});
 		}
+
+	});
     </script>
 <?= $this->endSection() ?>
 
