@@ -99,7 +99,7 @@ class Auth extends \App\Controllers\BaseController
 			'in_dt' => date('Y-m-d H:i:s'),
 			'ip' => $this->request->getIPAddress()
 		));
-		return redirect()->to('pulldata');
+		return redirect()->to('pulldata/ditjensda');
 	}
 
 
