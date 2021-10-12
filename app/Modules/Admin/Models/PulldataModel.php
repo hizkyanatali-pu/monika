@@ -231,21 +231,21 @@ class PulldataModel extends Model
         return (object) [
             (object)[
                 'title' => 'RPM',
-                'progresKeu' => $dataProgresKeu[0]->rpm,
-                'progresFis' => $dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->rpm,
-                'totalPagu' => $dataTotalPagu[0]->rpm
+                'progresKeu' => round($dataProgresKeu[0]->rpm,2),
+                'progresFis' => round($dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->rpm,2),
+                'totalPagu' =>  $dataTotalPagu[0]->rpm
             ],
             (object)[
                 'title' => 'SBSN',
-                'progresKeu' => $dataProgresKeu[0]->sbsn,
-                'progresFis' => $dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->sbsn,
-                'totalPagu' => $dataTotalPagu[0]->sbsn
+                'progresKeu' =>  round($dataProgresKeu[0]->sbsn,2),
+                'progresFis' =>  round($dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->sbsn,2),
+                'totalPagu' =>  $dataTotalPagu[0]->sbsn,2
             ],
             (object)[
                 'title' => 'PHLN',
-                'progresKeu' => $dataProgresKeu[0]->phln,
-                'progresFis' => $dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->phln,
-                'totalPagu' => $dataTotalPagu[0]->phln
+                'progresKeu' =>  round($dataProgresKeu[0]->phln,2),
+                'progresFis' =>  round($dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->phln,2),
+                'totalPagu' =>  $dataTotalPagu[0]->phln
             ]
         ];
     }

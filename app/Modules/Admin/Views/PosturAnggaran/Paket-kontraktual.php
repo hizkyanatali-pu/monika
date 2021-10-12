@@ -113,7 +113,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                                <b><i>* Termasuk MYC lanjutan</i></b>
                                         </a>
                                     </li>
 

@@ -36,7 +36,7 @@
 							</div>
                         	<div id="bar-legend" class="chart-legend">
 							</div>
-							<div id="placeholder-bar-chart" class="mychart"></div>
+							<div id="placeholder-bar-chart" class="mychart" style="width:100%;height:100%;"></div>
 						</div>
                     </div>
                 </div>
@@ -55,9 +55,9 @@
 <?= $this->section('footer_js') ?>
 	<?php echo script_tag('plugins/flot-old/jquery.flot.js'); ?>
 	<?php echo script_tag('plugins/flot-old/jquery.flot.time.min.js'); ?>
-	<?php echo script_tag('plugins/flot-old/jquery.flot.orderBars.js'); ?>
-
     <script>
+
+$( document ).ready(function() {
 		let data_pagu = <?= json_encode($pagu) ?>;
 		var d1_1 = [];
 		let index = 1325376000000;
@@ -302,6 +302,8 @@
 			}).appendTo(p.getPlaceholder()).fadeIn('slow');
 			});
 		}
+
+	});
     </script>
 <?= $this->endSection() ?>
 
