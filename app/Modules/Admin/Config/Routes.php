@@ -56,6 +56,15 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('simpandata', '\Modules\Admin\Controllers\Pulldata::simpandata');
 
         $routes->get('rekap/(:any)', '\Modules\Admin\Controllers\Pulldata::rekap/$1');
+
+        //cetak laporan pdf progres keuangan & fisik
+        $routes->get('cetak_unit_kerja', '\Modules\Admin\Controllers\Pulldata::cetak_unitkerja');
+        $routes->get('cetak_bbws', '\Modules\Admin\Controllers\Pulldata::cetak_bbws');
+        $routes->get('cetak_bws', '\Modules\Admin\Controllers\Pulldata::cetak_bws');
+        $routes->get('cetak_satker_pusat', '\Modules\Admin\Controllers\Pulldata::cetak_satkerpusat');
+        $routes->get('cetak_balai_teknik', '\Modules\Admin\Controllers\Pulldata::cetak_balaiteknik');
+        $routes->get('cetak_skpd_tp_op', '\Modules\Admin\Controllers\Pulldata::cetak_skpdtpop');
+        $routes->get('cetak_satker_pagu_100m', '\Modules\Admin\Controllers\Pulldata::cetak_satkerpagu100m');
     });
 
     $routes->group('importdata', ['namespace' => 'App\Controllers'], function ($routes) {

@@ -237,7 +237,7 @@
                         </div>
                     </div>
                     <div class="float-right">
-                        <a href="#" class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
+                        <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
                         <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a>
                         <?PHP if (!in_array($rekap, array("satkerpagu100m"))) : ?>
                             <a target="_blank" href="<?php echo site_url('pulldata/rekap/paket') . "?idk=" . $idk . "&label=" . $label . "&label2=&idks=" . (!empty($idk) ? $idk : 'all') . "&rekap=" . $rekap; ?>" class="btn btn-info btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap <?= ($rekap == "unitkerja" ? "SDA" : $rekap); ?></a>
@@ -346,7 +346,7 @@
                                     <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
 
-                                    <td colspan="4" class="tdPersen text-right">&nbsp;</td>
+                                    <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
@@ -369,7 +369,18 @@
     console.log('additional footer js')
     
     $("input:checkbox").prop("checked", true)
+    
+    let report_open = true
+    let checkbox = $("input:checkbox")
     $("input:checkbox").click(function(){
+        
+        if((checkbox.length - checkbox.filter(":checked").length) == checkbox.length){
+            
+            report_open = false
+        }else{
+
+            report_open = true
+        }
         
         var column = "table ." + $(this).attr("name")
         var columns = "table .col-" + $(this).attr("name")
@@ -391,7 +402,7 @@
         }
         if ($("table .pagu_total").is(":hidden") && $("table .pagu_realisasi").is(":hidden")) {
             
-            $("table .pagu").toggle();
+            $("table .pagu").hide();
         }else{
 
             $("table .pagu").show();
@@ -408,7 +419,7 @@
         }
         if ($("table .keu").is(":hidden") && $("table .fisik").is(":hidden")) {
             
-            $("table .progres").toggle();
+            $("table .progres").hide();
         }else{
 
             $("table .progres").show();
@@ -425,70 +436,69 @@
         }
         if ($("table .percentage").is(":hidden") && $("table .rp").is(":hidden")) {
             
-            $("table .deviasi").toggle();
+            $("table .deviasi").hide();
         }else{
 
             $("table .deviasi").show();
         }
         //deviasi end section
+
+        if ($("table .progres").is(":hidden") && $("table .deviasi").is(":hidden")) {
+
+            $("table .last-col").hide();
+        }else{
+
+            $("table .last-col").show();
+        }
         //managing filter column end
     });
 
-    // $(".pdf-report").click(function(){
+    $(".pdf-report").click(function(){
+        
+        let arr = [];
+        
+        if(!$("input[name=unit_kerja]").prop("checked")){
 
-    //     let arr = [];
+            arr.push("unit_kerja")
+        }
+        if(!$("input[name=paket]").prop("checked")){
 
-    //     if($("input[name=unit_kerja]").prop("checked")){
+            arr.push("paket")
+        }
+        if(!$("input[name=pagu_total]").prop("checked")){
 
-    //         arr.push("unit_kerja")
-    //     }
-    //     if($("input[name=paket]").prop("checked")){
+            arr.push("pagu_total")
+        }
+        if(!$("input[name=pagu_realisasi]").prop("checked")){
 
-    //         arr.push("paket")
-    //     }
-    //     if($("input[name=pagu_total]").prop("checked")){
+            arr.push("pagu_realisasi")
+        }
+        if(!$("input[name=keu]").prop("checked")){
 
-    //         arr.push("pagu_total")
-    //     }
-    //     if($("input[name=pagu_realisasi]").prop("checked")){
+            arr.push("keu")
+        }
+        if(!$("input[name=fisik]").prop("checked")){
 
-    //         arr.push("pagu_realisasi")
-    //     }
-    //     if($("input[name=keu]").prop("checked")){
+            arr.push("fisik")
+        }
+        if(!$("input[name=percentage]").prop("checked")){
 
-    //         arr.push("keu")
-    //     }
-    //     if($("input[name=fisik]").prop("checked")){
+            arr.push("percentage")
+        }
+        if(!$("input[name=rp]").prop("checked")){
 
-    //         arr.push("fisik")
-    //     }
-    //     if($("input[name=percentage]").prop("checked")){
+            arr.push("rp")
+        }
+        console.log($(this))
+        if(report_open){
 
-    //         arr.push("percentage")
-    //     }
-    //     if($("input[name=rp]").prop("checked")){
+            $(this).attr("href", "<?= $id_report ?>?filter="+arr.join(','))
+            $(this).attr("target", "_blank")
+        }else{
 
-    //         arr.push("rp")
-    //     }
-
-    //     $.ajax({
-
-    //         url: "<?= base_url('pulldata/cetak_unit_kerja') ?>",
-    //         headers: {'X-Requested-With': 'XMLHttpRequest'},
-    //         type: 'post',
-    //         data : { data: arr },
-    //         crossDomain: true,
-    //         dataType: 'jsonp',
-    //         success: function(data){
-
-    //             console.log(data)
-    //         },
-    //         error: function(xhr, ajaxOptions, thrownError){
-
-    //             console.log(xhr.status)
-    //             console.log(thrownError)
-    //         }
-    //     })
-    // })
+            $(this).removeAttr("href")
+            $(this).removeAttr("target")
+        }
+    })
 </script>
 <?= $this->endSection() ?>

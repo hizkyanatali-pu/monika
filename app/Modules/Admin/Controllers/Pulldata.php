@@ -48,11 +48,21 @@ class Pulldata extends \App\Controllers\BaseController
             'label' => '',
             'nextlink' => 'satuankerja',
             'qdata' => $this->PulldataModel->getBalaiPaket("balai"),
-            'rekap' => 'unitkerja'
+            'rekap' => 'unitkerja',
+            'id_report' => 'pulldata/cetak_unit_kerja'
         );
         //dd($data);
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
+
+    public function cetak_unitkerja(){
+
+        $data = [
+            'qdata' => $this->PulldataModel->getBalaiPaket("balai")
+        ];
+        return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
+    }
+
     public function pagusda($slug = '')
     {
         $data = array(
@@ -105,11 +115,21 @@ class Pulldata extends \App\Controllers\BaseController
             'label' => '',
             'nextlink' => 'satuankerja',
             'qdata' => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS'"),
-            'rekap' => 'bbws'
+            'rekap' => 'bbws',
+            'id_report' => 'cetak_bbws'
         );
         // dd($data);
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
+
+    public function cetak_bbws(){
+
+        $data = [
+            'qdata' => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS'")
+        ];
+        return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
+    }
+
     public function bws($slug = '')
     {
         $data = array(
@@ -119,10 +139,20 @@ class Pulldata extends \App\Controllers\BaseController
             'label' => '',
             'nextlink' => 'satuankerja',
             'qdata' => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS'"),
-            'rekap' => 'bws'
+            'rekap' => 'bws',
+            'id_report' => 'cetak_bws'
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
+
+    public function cetak_bws(){
+
+        $data = [
+            'qdata' => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS'"),
+        ];
+        return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
+    }
+
     public function satkerpusat($slug = '')
     {
         $data = array(
@@ -132,10 +162,20 @@ class Pulldata extends \App\Controllers\BaseController
             'label' => 'Satker Pusat',
             'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99'"),
-            'rekap' => 'satkerpusat'
+            'rekap' => 'satkerpusat',
+            'id_report' => 'cetak_satker_pusat'
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
+
+    public function cetak_satkerpusat(){
+
+        $data = [
+            'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99'"),
+        ];
+        return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
+    }
+
     public function balaiteknik($slug = '')
     {
         $data = array(
@@ -145,10 +185,20 @@ class Pulldata extends \App\Controllers\BaseController
             'label' => 'Unit Organisasi',
             'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"),
-            'rekap' => 'satker'
+            'rekap' => 'satker',
+            'id_report' => 'cetak_balai_teknik'
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
+
+    public function cetak_balaiteknik(){
+
+        $data = [
+            'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"),
+        ];
+        return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
+    }
+
     public function skpdtpop()
     {
         $data = array(
@@ -158,10 +208,20 @@ class Pulldata extends \App\Controllers\BaseController
             'label' => 'SKPD TP OP',
             'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98'"),
-            'rekap' => 'skpdtpop'
+            'rekap' => 'skpdtpop',
+            'id_report' => 'cetak_skpd_tp_op'
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
+
+    public function cetak_skpdtpop(){
+
+        $data = [
+            'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98'"),
+        ];
+        return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
+    }
+
     public function satkerpagu100m()
     {
         $data = array(
@@ -171,9 +231,18 @@ class Pulldata extends \App\Controllers\BaseController
             'label' => 'Satker',
             'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker100m', "md.jml_pagu_total>100000000000"),
-            'rekap' => 'satkerpagu100m'
+            'rekap' => 'satkerpagu100m',
+            'id_report' => 'cetak_satker_pagu_100m'
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
+    }
+
+    public function cetak_satkerpagu100m(){
+
+        $data = [
+            'qdata' => $this->PulldataModel->getBalaiPaket('satker100m', "md.jml_pagu_total>100000000000"),
+        ];
+        return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
     }
 
     //pindah ya!
