@@ -498,9 +498,9 @@
 
             arr.push("pagu_sbsn")
         }
-        if(!$("input[name=pagu_rpm]").prop("checked")){
+        if(!$("input[name=pagu_phln]").prop("checked")){
 
-            arr.push("pagu_rpm")
+            arr.push("pagu_phln")
         }
         if(!$("input[name=pagu_total]").prop("checked")){
 
