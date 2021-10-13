@@ -363,11 +363,11 @@
                                     <td></td>
                                     <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
-                                    <td class="tdNilai text-right col-pagu_pln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
 
-                                    <td colspan="4" class="tdPersen text-right">&nbsp;</td>
+                                    <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
@@ -476,6 +476,13 @@
             $("table .deviasi").show();
         }
         //deviasi end section
+        if($("table .keu").is(":hidden") && $("table .fisik").is(":hidden") && $("table .percentage").is(":hidden") && $("table .rp").is(":hidden")){
+
+            $("table .last-col").hide()
+        }else{
+
+            $("table .last-col").show()
+        }
         //managing filter column end
     });
 

@@ -90,7 +90,7 @@ $filter = explode(",", $data_filter);
                 <td class="col-pagu_phln"><b><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></b></td>
                 <td class="col-pagu_total"><b><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></b></td>
                 <td class="col-pagu_realisasi"><b><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></b></td>
-                <td colspan="4"></td>
+                <td colspan="4" class="last-col"></td>
             </tr>
         <?php endif; ?>
     </tbody>
@@ -143,6 +143,13 @@ $filter = explode(",", $data_filter);
     if($("table .percentage").is(":hidden") && $("table .rp").is(":hidden")){
 
         $("table .deviasi").hide()
+    }
+    if($("table .keu").is(":hidden") && $("table .fisik").is(":hidden") && $("table .percentage").is(":hidden") && $("table .rp").is(":hidden")){
+
+        $("table .last-col").hide()
+    }else{
+
+        $("table .last-col").show()
     }
     // window.print()
 </script>
