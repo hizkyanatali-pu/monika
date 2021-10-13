@@ -58,6 +58,8 @@ $request = \Config\Services::request();
 		($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satkerskpdtpop'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/skpdtpop'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">SKPD TP OP</span></a></li>
                         <li class="kt-menu__item <?= 
 		($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satkerpagu100m'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satkerpagu100m'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Pagu>100 M</span></a></li>
+           <li class="kt-menu__item <?= 
+		($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'semuasatker'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/semuasatker'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Semua Satker</span></a></li>
                     </ul>
                 </div>
             </li>
