@@ -136,14 +136,40 @@ $filter = explode(",", $data_filter);
         $(".pagu-main").attr("colspan", pagu_counter)
     }
     //pagu end section
-    if($("table .keu").is(":hidden") && $("table .fisik").is(":hidden")){
 
-        $("table .progres").hide()
-    }
-    if($("table .percentage").is(":hidden") && $("table .rp").is(":hidden")){
+    //progres section
+    if ($("table .keu").is(":hidden") || $("table .fisik").is(":hidden")) {
+        
+        $("table .progres").attr("colspan", 1);
+    }else{
 
-        $("table .deviasi").hide()
+        $("table .progres").attr("colspan", 2);
     }
+    if ($("table .keu").is(":hidden") && $("table .fisik").is(":hidden")) {
+        
+        $("table .progres").hide();
+    }else{
+
+        $("table .progres").show();
+    }
+    //progres end section
+
+    //deviasi section
+    if ($("table .percentage").is(":hidden") || $("table .rp").is(":hidden")) {
+        
+        $("table .deviasi").attr("colspan", 1);
+    }else{
+
+        $("table .deviasi").attr("colspan", 2);
+    }
+    if ($("table .percentage").is(":hidden") && $("table .rp").is(":hidden")) {
+        
+        $("table .deviasi").hide();
+    }else{
+
+        $("table .deviasi").show();
+    }
+    //deviasi end section
     if($("table .keu").is(":hidden") && $("table .fisik").is(":hidden") && $("table .percentage").is(":hidden") && $("table .rp").is(":hidden")){
 
         $("table .last-col").hide()
