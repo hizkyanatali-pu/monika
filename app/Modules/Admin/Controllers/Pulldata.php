@@ -185,11 +185,11 @@ class Pulldata extends \App\Controllers\BaseController
         $data = array(
             'title' => 'Balai Teknik',
             'posisi' => ['<i class="fa fa-home"></i>'],
-            'idk' => 99,
-            'label' => 'Unit Organisasi',
-            'nextlink' => 'paket',
+            'idk' => 97,
+            'label' => 'Balai Teknik',
+            'nextlink' => 'balaiteknik',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"),
-            'rekap' => 'satker',
+            'rekap' => 'balaiteknik',
             'id_report' => 'cetak_balai_teknik'
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
@@ -251,6 +251,34 @@ class Pulldata extends \App\Controllers\BaseController
         ];
         return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
     }
+
+
+    // semua satker
+
+    public function semua_satker($slug = '')
+    {
+        $data = array(
+            'title' => 'Semua Satker',
+            'posisi' => ['<i class="fa fa-home"></i>'],
+            'idk' => 'all',
+            'label' => 'Semua Satker',
+            'nextlink' => 'Semua Satker',
+            'qdata' => $this->PulldataModel->getBalaiPaket('satker'),
+            'rekap' => 'semuasatker',
+            'id_report' => 'cetak_semua_satker'
+        );
+        return view('Modules\Admin\Views\Paket\Format_2', $data);
+    }
+
+    public function cetak_semua_satker(){
+
+        $data = [
+            'title' => 'Cetak Semua Satker',
+            'qdata' => $this->PulldataModel->getBalaiPaket("satker")
+        ];
+        return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
+    }
+
 
     //pindah ya!
     // function simpandata(){
@@ -362,6 +390,8 @@ class Pulldata extends \App\Controllers\BaseController
 
         //$balaiid='',$satkerid='',  $balai='', $satker=''
         $hal['paket']     = ['pg' => 'paket', 'idk' => $_GET['idk'], 'label' => $_GET['label'], 'label2' => (!empty($_GET['label2']) ? $_GET['label2'] : ''), 'format' => (!empty($_GET['format']) ? $_GET['format'] : ''), 'filter' => 'satker', 'where' => "md.kdsatker='{$_GET['idks']}'", 'title' => 'Paket'];
+        $hal['balaiteknik']     = ['pg' => 'balaiteknik', 'idk' => $_GET['idk'], 'label' => $_GET['label'], 'filter' => 'satker', 'where' => "b.balaiid='{$_GET['idk']}'", 'title' => 'Balai Teknik'];
+        $hal['semuasatker']     = ['pg' => 'balaiteknik', 'idk' => '', 'label' => $_GET['label'], 'filter' => 'satker', 'where' => "", 'title' => 'Semua Satker'];
 
         foreach ($hal as $key => $value) {
             $hall[] = $key;
