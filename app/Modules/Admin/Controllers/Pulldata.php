@@ -49,15 +49,16 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'satuankerja',
             'qdata' => $this->PulldataModel->getBalaiPaket("balai"),
             'rekap' => 'unitkerja',
-            'id_report' => 'pulldata/cetak_unit_kerja'
+            'id_report' => 'cetak_ditjen_sda'
         );
         //dd($data);
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
 
-    public function cetak_unitkerja(){
+    public function cetak_ditjensda(){
 
         $data = [
+            'title' => 'Unit Kerja',
             'qdata' => $this->PulldataModel->getBalaiPaket("balai")
         ];
         return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
@@ -125,6 +126,7 @@ class Pulldata extends \App\Controllers\BaseController
     public function cetak_bbws(){
 
         $data = [
+            'title' => 'BBWS',
             'qdata' => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS'")
         ];
         return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
@@ -148,6 +150,7 @@ class Pulldata extends \App\Controllers\BaseController
     public function cetak_bws(){
 
         $data = [
+            'title' => 'BWS/PUSAT/SKPD TPOP',
             'qdata' => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS'"),
         ];
         return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
@@ -171,6 +174,7 @@ class Pulldata extends \App\Controllers\BaseController
     public function cetak_satkerpusat(){
 
         $data = [
+            'title' => 'Satker Pusat',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99'"),
         ];
         return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
@@ -194,6 +198,7 @@ class Pulldata extends \App\Controllers\BaseController
     public function cetak_balaiteknik(){
 
         $data = [
+            'title' => 'Balai Teknik',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"),
         ];
         return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
@@ -217,6 +222,7 @@ class Pulldata extends \App\Controllers\BaseController
     public function cetak_skpdtpop(){
 
         $data = [
+            'title' => 'SKPD TP OP',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98'"),
         ];
         return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);
@@ -240,6 +246,7 @@ class Pulldata extends \App\Controllers\BaseController
     public function cetak_satkerpagu100m(){
 
         $data = [
+            'title' => 'Satker Pagu > 100 M',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker100m', "md.jml_pagu_total>100000000000"),
         ];
         return view('Modules\Admin\Views\Paket\Cetak\Format_2_cetak', $data);

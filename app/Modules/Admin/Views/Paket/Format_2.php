@@ -180,14 +180,35 @@
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="unit_kerja"><?= $title ?>
+                                            <input type="checkbox" type="checkbox" class="form-check-input" name="unit_kerja" disabled><?= $title ?>
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="paket">Jml Paket
+                                            <input type="checkbox" type="checkbox" class="form-check-input" name="paket" disabled>Jml Paket
+                                        </label>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                    <div class="form-check">
+                                        <label for="" class="form-check-label">
+                                            <input type="checkbox" type="checkbox" class="form-check-input" name="pagu_rpm">Pagu (RPM)
+                                        </label>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                    <div class="form-check">
+                                        <label for="" class="form-check-label">
+                                            <input type="checkbox" type="checkbox" class="form-check-input" name="pagu_sbsn">Pagu (SBSN)
+                                        </label>
+                                    </div>
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                    <div class="form-check">
+                                        <label for="" class="form-check-label">
+                                            <input type="checkbox" type="checkbox" class="form-check-input" name="pagu_phln">Pagu (PHLN)
                                         </label>
                                     </div>
                                 </a>
@@ -248,14 +269,13 @@
                 </div>
 
                 <div class="table-responsive tableFixHead">
-                    <?php $colspan = 11; ?>
                     <table class="table table-bordered w-100 mb-0">
                         <thead class="bg-white">
                             <tr class="text-center">
                                 <!-- <th colspan="2">&nbsp;</th> -->
                                 <th class="unit_kerja">&nbsp;</th>
                                 <th class="paket">&nbsp;</th>
-                                <th class="pagu" colspan="5">Pagu (Rp)</th>
+                                <th class="pagu-main" colspan="5">Pagu (Rp)</th>
                                 <th class="progres" colspan="2">Progres (%)</th>
                                 <th class="deviasi" colspan="2">Deviasi</th>
                             </tr>
@@ -265,20 +285,20 @@
                                     <!-- <br /><small title="Pagu SDA">Total SDA <i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-right"></i></small> -->
                                 </th>
 
-                                <th class="tdNilai pagu_total">RPM
+                                <th class="tdNilai pagu_rpm pagu">RPM
                                     <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_rpm'] / 1000, 0, ',', '.'); ?></small> -->
                                 </th>
-                                <th class="tdNilai pagu_total">SBSN
+                                <th class="tdNilai pagu_sbsn pagu">SBSN
                                     <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_sbsn'] / 1000, 0, ',', '.'); ?></small> -->
                                 </th>
-                                <th class="tdNilai pagu_total">PLN
+                                <th class="tdNilai pagu_phln pagu">PHLN
                                     <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_phln'] / 1000, 0, ',', '.'); ?></small> -->
                                 </th>
-                                <th class="tdNilai pagu_total">TOTAL
+                                <th class="tdNilai pagu_total pagu">TOTAL
                                     <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_total'] / 1000, 0, ',', '.'); ?></small> -->
                                 </th>
 
-                                <th class="tdNilai pagu_realisasi">Realisasi
+                                <th class="tdNilai pagu_realisasi pagu">Realisasi
                                     <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_real_total'] / 1000, 0, ',', '.'); ?></small> -->
                                 </th>
 
@@ -317,9 +337,9 @@
                                         </td>
                                         <td class="tdNilai text-center col-paket"><?php echo $data['jml_paket']; ?></td>
 
-                                        <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_sbsn'] / 1000, 0, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_pagu_sbsn'] / 1000, 0, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
                                         <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_total'] / 1000, 0, ',', '.'); ?></td>
 
                                         <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
@@ -339,14 +359,15 @@
                                     ?>
                                 <?php endforeach; ?>
                                 <tr style="background-color:#ccb3ff; border:2px solid #ccc;">
-                                    <td colspan="2" class="text-center">TOTAL</td>
-                                    <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
-                                    <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
-                                    <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
+                                    <td class="text-center">TOTAL</td>
+                                    <td></td>
+                                    <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_pln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
 
-                                    <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
+                                    <td colspan="4" class="tdPersen text-right">&nbsp;</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
@@ -374,6 +395,7 @@
     let checkbox = $("input:checkbox")
     $("input:checkbox").click(function(){
         
+        //checking checked checkbox for report button
         if((checkbox.length - checkbox.filter(":checked").length) == checkbox.length){
             
             report_open = false
@@ -389,23 +411,35 @@
 
         //managing filter column start
         //pagu section
+        let pagu_counter = $("table .pagu").length
+
+        if ($("table .pagu_rpm").is(":hidden")) {
+
+            pagu_counter--;
+        }
+        if ($("table .pagu_sbsn").is(":hidden")) {
+
+            pagu_counter--;
+        }
+        if ($("table .pagu_phln").is(":hidden")) {
+
+            pagu_counter--;
+        }
         if ($("table .pagu_total").is(":hidden")) {
-            
-            $("table .pagu").attr("colspan", 1);
+
+            pagu_counter--;
+        }
+        if ($("table .pagu_realisasi").is(":hidden")) {
+
+            pagu_counter--;
+        }
+        if($("table .pagu_rpm").is(":hidden") && $("table .pagu_sbsn").is(":hidden") && $("table .pagu_phln").is(":hidden") && $("table .pagu_total").is(":hidden") && $("table .pagu_realisasi").is(":hidden")){
+
+            $(".pagu-main").hide()
         }else{
 
-            $("table .pagu").attr("colspan", 5);
-        }
-        if ($("table .pagu_total").is(":visible") && $("table .pagu_realisasi").is(":hidden")) {
-            
-            $("table .pagu").attr("colspan", 4);
-        }
-        if ($("table .pagu_total").is(":hidden") && $("table .pagu_realisasi").is(":hidden")) {
-            
-            $("table .pagu").hide();
-        }else{
-
-            $("table .pagu").show();
+            $(".pagu-main").show()
+            $(".pagu-main").attr("colspan", pagu_counter)
         }
         //pagu end section
 
@@ -442,14 +476,6 @@
             $("table .deviasi").show();
         }
         //deviasi end section
-
-        if ($("table .progres").is(":hidden") && $("table .deviasi").is(":hidden")) {
-
-            $("table .last-col").hide();
-        }else{
-
-            $("table .last-col").show();
-        }
         //managing filter column end
     });
 
@@ -457,13 +483,17 @@
         
         let arr = [];
         
-        if(!$("input[name=unit_kerja]").prop("checked")){
+        if(!$("input[name=pagu_rpm]").prop("checked")){
 
-            arr.push("unit_kerja")
+            arr.push("pagu_rpm")
         }
-        if(!$("input[name=paket]").prop("checked")){
+        if(!$("input[name=pagu_sbsn]").prop("checked")){
 
-            arr.push("paket")
+            arr.push("pagu_sbsn")
+        }
+        if(!$("input[name=pagu_rpm]").prop("checked")){
+
+            arr.push("pagu_rpm")
         }
         if(!$("input[name=pagu_total]").prop("checked")){
 
@@ -489,7 +519,9 @@
 
             arr.push("rp")
         }
-        console.log($(this))
+        
+
+        //condition for report button
         if(report_open){
 
             $(this).attr("href", "<?= $id_report ?>?filter="+arr.join(','))

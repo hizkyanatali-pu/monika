@@ -58,7 +58,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('rekap/(:any)', '\Modules\Admin\Controllers\Pulldata::rekap/$1');
 
         //cetak laporan pdf progres keuangan & fisik
-        $routes->get('cetak_unit_kerja', '\Modules\Admin\Controllers\Pulldata::cetak_unitkerja');
+        $routes->get('cetak_ditjen_sda', '\Modules\Admin\Controllers\Pulldata::cetak_ditjensda');
         $routes->get('cetak_bbws', '\Modules\Admin\Controllers\Pulldata::cetak_bbws');
         $routes->get('cetak_bws', '\Modules\Admin\Controllers\Pulldata::cetak_bws');
         $routes->get('cetak_satker_pusat', '\Modules\Admin\Controllers\Pulldata::cetak_satkerpusat');

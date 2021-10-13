@@ -24,19 +24,26 @@ $filter = explode(",", $data_filter);
     } */
 </style>
 <table>
-    <thead>
-        <tr style="background-color: #6ab6e6; font-color: #000;">
-            <th rowspan="2">No.</th>
-            <th class="unit_kerja" rowspan="2">Nama Unit Kerja</th>
-            <th class="paket" rowspan="2">Jml&nbsp;Paket</th>
-            <th class="pagu_total" rowspan="2">PAGU (Rp. Milyar)</th>
-            <th class="pagu_realisasi" rowspan="2">Realisasi (Rp. Milyar)</th>
-            <th class="progres" colspan="2">Progres</th>
+    <thead class="bg-white">
+        <tr class="text-center">
+            <th>&nbsp;</th>
+            <th class="unit_kerja">&nbsp;</th>
+            <th class="paket">&nbsp;</th>
+            <th class="pagu-main" colspan="5">Pagu (Rp)</th>
+            <th class="progres" colspan="2">Progres (%)</th>
             <th class="deviasi" colspan="2">Deviasi</th>
         </tr>
-        <tr style="background-color: #6ab6e6; font-color: #000;">
-            <th class="keu">KEU (%)</th>
-            <th class="fisik">FIS (%)</th>
+        <tr class="text-center">
+            <th>No.</th>
+            <th class="unit_kerja"><?= $title; ?></th>
+            <th class="paket">Jml&nbsp;Paket</th>
+            <th class="pagu_rpm pagu">RPM</th>
+            <th class="pagu_sbsn pagu">SBSN</th>
+            <th class="pagu_phln pagu">PHLN</th>
+            <th class="pagu_total pagu">TOTAL</th>
+            <th class="pagu_realisasi pagu">Realisasi</th>
+            <th class="keu">keu</th>
+            <th class="fisik">fisik</th>
             <th class="percentage">%</th>
             <th class="rp">Rp</th>
         </tr>
@@ -45,7 +52,7 @@ $filter = explode(",", $data_filter);
     <tbody>
         <?php if ($qdata) : ?>
             <?php
-            $total_real_total = $total_pagu_total = $total_deviasi = $keu = $fis = $total_deviasi_percentage = $no =  0;
+            $total_real_total = $total_pagu_total = $total_pagu_rpm = $total_pagu_sbsn = $total_pagu_phln = $no =  0;
             ?>
             <?php
             foreach ($qdata as $key => $data) : ?>
@@ -57,6 +64,9 @@ $filter = explode(",", $data_filter);
                         <?php echo $data['label']; ?>
                     </td>
                     <td class="col-paket"><?php echo $data['jml_paket']; ?></td>
+                    <td class="col-pagu_rpm"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
+                    <td class="col-pagu_sbsn"><?php echo number_format($data['jml_pagu_sbsn'] / 1000, 0, ',', '.'); ?></td>
+                    <td class="col-pagu_phln"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
                     <td class="col-pagu_total"><?php echo number_format($data['jml_pagu_total'] / 1000, 0, ',', '.'); ?></td>
                     <td class="col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
                     <td class="col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
@@ -65,23 +75,22 @@ $filter = explode(",", $data_filter);
                     <td class="col-rp"><?php echo ($data['jml_progres_fisik'] > $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); ?></td>
                 </tr>
                 <?php
+                $total_pagu_rpm += $data['jml_pagu_rpm'];
+                $total_pagu_sbsn += $data['jml_pagu_sbsn'];
+                $total_pagu_phln += $data['jml_pagu_phln'];
                 $total_pagu_total += $data['jml_pagu_total'];
                 $total_real_total += $data['jml_real_total'];
-                $total_deviasi += $data['jml_nilai_deviasi'];
-                $total_deviasi_percentage += $data['jml_persen_deviasi'];
-                $keu += $data['jml_progres_keuangan'];
-                $fis += $data['jml_progres_fisik'];
                 ?>
             <?php endforeach; ?>
             <tr style="background-color: #6ab6e6; font-color: #000;">
                 <td colspan="2"><b>TOTAL</b></td>
-                <td class="col-last_col"></td>
+                <td></td>
+                <td class="col-pagu_rpm"><b><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></b></td>
+                <td class="col-pagu_sbsn"><b><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></b></td>
+                <td class="col-pagu_phln"><b><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></b></td>
                 <td class="col-pagu_total"><b><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></b></td>
                 <td class="col-pagu_realisasi"><b><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></b></td>
-                <td class="col-keu"><b><?php echo number_format($keu/ 100, 2, ',', '.'); ?></b></td>
-                <td class="col-fisik"><b><?php echo number_format($fis/ 100, 2, ',', '.'); ?></b></td>
-                <td class="col-percentage"><b><?php echo number_format($total_deviasi_percentage/ 100, 2, ',', '.'); ?></b></td>
-                <td class="col-rp"><b><?php echo number_format($total_deviasi / 1000, 0, ',', '.'); ?></b></td>
+                <td colspan="4"></td>
             </tr>
         <?php endif; ?>
     </tbody>
@@ -95,6 +104,38 @@ $filter = explode(",", $data_filter);
         $("table ."+val).hide()
         $("table .col-"+val).hide()
     })
+    //pagu section
+    let pagu_counter = $("table .pagu").length
+
+    if ($("table .pagu_rpm").is(":hidden")) {
+
+        pagu_counter--;
+    }
+    if ($("table .pagu_sbsn").is(":hidden")) {
+
+        pagu_counter--;
+    }
+    if ($("table .pagu_phln").is(":hidden")) {
+
+        pagu_counter--;
+    }
+    if ($("table .pagu_total").is(":hidden")) {
+
+        pagu_counter--;
+    }
+    if ($("table .pagu_realisasi").is(":hidden")) {
+
+        pagu_counter--;
+    }
+    if($("table .pagu_rpm").is(":hidden") && $("table .pagu_sbsn").is(":hidden") && $("table .pagu_phln").is(":hidden") && $("table .pagu_total").is(":hidden") && $("table .pagu_realisasi").is(":hidden")){
+
+        $(".pagu-main").hide()
+    }else{
+
+        $(".pagu-main").show()
+        $(".pagu-main").attr("colspan", pagu_counter)
+    }
+    //pagu end section
     if($("table .keu").is(":hidden") && $("table .fisik").is(":hidden")){
 
         $("table .progres").hide()
@@ -102,10 +143,6 @@ $filter = explode(",", $data_filter);
     if($("table .percentage").is(":hidden") && $("table .rp").is(":hidden")){
 
         $("table .deviasi").hide()
-    }
-    if($("table .unit_kerja").is(":hidden") || $("table .paket").is(":hidden")){
-
-        $("table .col-last_col").hide()
     }
     // window.print()
 </script>
