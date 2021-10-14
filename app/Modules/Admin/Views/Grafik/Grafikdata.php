@@ -81,9 +81,11 @@
                                             if($key <= $month){ //pengecekan data sampai bulan ini
                                                 $date = date("Y-$key-d");
                                                 $a = date("t", strtotime($date));
-                                                $deviasi = ($realisasi[1] - $qdata['rencana'][$key][1]) / $a * date('d'); //rumusan untuk nilai deviasi
+                                                // $deviasi = ($realisasi[1] - $qdata['rencana'][$key][1]) / $a * date('d'); //rumusan untuk nilai deviasi
+                                                $deviasi = ($realisasi[1] - $qdata['rencana'][$key][1]) ; //rumusan untuk nilai deviasi
+                                    
                                     ?>
-                                                <td class="text-right"><?= number_format($deviasi, 2, '.', '.') ?></td>
+                                                <td class="text-right"><?= number_format($deviasi, 2, '.', '.') . " %"?></td>
                                     <?php } } ?>
                                 <?php endforeach; ?>
                             </tr>
@@ -125,9 +127,6 @@
     <!-- end:: Content -->
 <?= $this->endSection() ?>
 <?= $this->section('footer_js') ?>
-    <script>
-        console.log('additional footer js')
-    </script>
     <script>
         // var sin = [],
         //     cos = []
