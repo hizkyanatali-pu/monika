@@ -285,7 +285,7 @@ class Preferensi extends \App\Controllers\BaseController
         } elseif (!empty($_FILES)) {
             $fileName = $_FILES["file"]["namafile"];
         } else {
-            $fileName = $_FILES["file"]["namafile"];
+            $fileName = uniqid("file_");
         }
 
         $filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
