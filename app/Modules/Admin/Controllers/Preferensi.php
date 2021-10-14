@@ -260,7 +260,6 @@ class Preferensi extends \App\Controllers\BaseController
 
     public function uploadtoserver()
     {
-        // die(json_encode(["ok"=>1, "info"=>$_REQUEST["namafile"]]));
         // 5 minutes execution time
         @set_time_limit(0);
         // Uncomment this one to fake upload time
@@ -288,7 +287,7 @@ class Preferensi extends \App\Controllers\BaseController
             $fileName = uniqid("file_");
         }
 
-        $filePath = $targetDir . DIRECTORY_SEPARATOR . $_REQUEST["namafile"];
+        $filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
 
         // Chunking might be enabled
         $chunk = isset($_REQUEST["chunk"]) ? intval($_REQUEST["chunk"]) : 0;
