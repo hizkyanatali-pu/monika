@@ -220,10 +220,10 @@
             }],
         },
         // Flash settings
-        flash_swf_url: "plupload/Moxie.swf",
+        flash_swf_url:  BASE_URL+ "/js/plupload/Moxie.swf",
 
         // Silverlight settings
-        silverlight_xap_url: "plupload/Moxie.xap",
+        silverlight_xap_url: BASE_URL+"/js/plupload/Moxie.xap",
         init: {
             PostInit: function() {
                 document.getElementById("filelist").innerHTML = "";

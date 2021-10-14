@@ -22,7 +22,7 @@ class Auth extends \App\Controllers\BaseController
 			'title' => 'Login'
 		);
 		if ($this->session->isLoggedIn) {
-			return redirect()->to('pulldata');
+			return redirect()->to('pulldata/ditjensda');
 		}
 		return view('Modules\Admin\Views\Auth', $data);
 	}

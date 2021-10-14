@@ -52,6 +52,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
         $routes->get('skpdtpop', '\Modules\Admin\Controllers\Pulldata::skpdtpop');
         $routes->get('satkerpagu100m', '\Modules\Admin\Controllers\Pulldata::satkerpagu100m');
+        $routes->get('semuasatker', '\Modules\Admin\Controllers\Pulldata::semua_satker');
+
 
         $routes->get('simpandata', '\Modules\Admin\Controllers\Pulldata::simpandata');
 
@@ -65,6 +67,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('cetak_balai_teknik', '\Modules\Admin\Controllers\Pulldata::cetak_balaiteknik');
         $routes->get('cetak_skpd_tp_op', '\Modules\Admin\Controllers\Pulldata::cetak_skpdtpop');
         $routes->get('cetak_satker_pagu_100m', '\Modules\Admin\Controllers\Pulldata::cetak_satkerpagu100m');
+        $routes->get('cetak_semua_satker', '\Modules\Admin\Controllers\Pulldata::cetak_semua_satker');
+
     });
 
     $routes->group('importdata', ['namespace' => 'App\Controllers'], function ($routes) {
