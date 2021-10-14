@@ -205,7 +205,7 @@
         container: document.getElementById("container-form"), // ... or DOM Element itself
         chunk_size: "10mb",
         url: BASE_URL + "/preferensi/uploadsqlitenew",
-        max_file_count: 5,
+        max_file_count: 5000,
         headers: {
             "x-csrf-token": "<?= csrf_hash(); ?>"
         },
