@@ -280,7 +280,7 @@ class Preferensi extends \App\Controllers\BaseController
         }
 
         // Get a file name
-        if (!empty($_REQUEST["name"])) {
+        if (isset($_REQUEST["name"])) {
             $fileName = $_REQUEST["namafile"];
         } elseif (!empty($_FILES)) {
             $fileName = $_FILES["file"]["namafile"];
@@ -288,7 +288,7 @@ class Preferensi extends \App\Controllers\BaseController
             $fileName = uniqid("file_");
         }
 
-        $filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
+        $filePath = $targetDir . DIRECTORY_SEPARATOR . $_REQUEST["namafile"];
 
         // Chunking might be enabled
         $chunk = isset($_REQUEST["chunk"]) ? intval($_REQUEST["chunk"]) : 0;
