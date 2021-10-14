@@ -280,7 +280,7 @@ class Preferensi extends \App\Controllers\BaseController
         }
 
         // Get a file name
-        if (isset($_REQUEST["name"])) {
+        if (!empty($_REQUEST["name"])) {
             $fileName = $_REQUEST["namafile"];
         } elseif (!empty($_FILES)) {
             $fileName = $_FILES["file"]["namafile"];
