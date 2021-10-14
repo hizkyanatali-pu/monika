@@ -205,7 +205,7 @@
         container: document.getElementById("container-form"), // ... or DOM Element itself
         chunk_size: "10mb",
         url: BASE_URL + "/preferensi/uploadsqlitenew",
-        max_file_count: 5000,
+        max_file_count: 5,
         headers: {
             "x-csrf-token": "<?= csrf_hash(); ?>"
         },
@@ -220,10 +220,10 @@
             }],
         },
         // Flash settings
-        flash_swf_url: "plupload/Moxie.swf",
+        flash_swf_url:  BASE_URL+ "/js/plupload/Moxie.swf",
 
         // Silverlight settings
-        silverlight_xap_url: "plupload/Moxie.xap",
+        silverlight_xap_url: BASE_URL+"/js/plupload/Moxie.xap",
         init: {
             PostInit: function() {
                 document.getElementById("filelist").innerHTML = "";
