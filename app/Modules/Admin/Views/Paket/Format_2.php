@@ -180,77 +180,77 @@
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="unit_kerja" disabled><?= $title ?>
+                                            <input type="checkbox" class="form-check-input" name="unit_kerja" disabled><?= $title ?>
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="paket" disabled>Jml Paket
+                                            <input type="checkbox" class="form-check-input" name="paket" disabled>Jml Paket
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="pagu_rpm">Pagu (RPM)
+                                            <input type="checkbox" class="form-check-input" name="pagu_rpm">Pagu (RPM)
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="pagu_sbsn">Pagu (SBSN)
+                                            <input type="checkbox" class="form-check-input" name="pagu_sbsn">Pagu (SBSN)
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="pagu_phln">Pagu (PHLN)
+                                            <input type="checkbox" class="form-check-input" name="pagu_phln">Pagu (PHLN)
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="pagu_total">Pagu (Total)
+                                            <input type="checkbox" class="form-check-input" name="pagu_total">Pagu (Total)
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="pagu_realisasi">Pagu (Realisasi)
+                                            <input type="checkbox" class="form-check-input" name="pagu_realisasi">Pagu (Realisasi)
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="keu">Progres % (Keu)
+                                            <input type="checkbox" class="form-check-input" name="keu">Progres % (Keu)
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="fisik">Progres % (Fisik)
+                                            <input type="checkbox" class="form-check-input" name="fisik">Progres % (Fisik)
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="percentage">Deviasi (%)
+                                            <input type="checkbox" class="form-check-input" name="percentage">Deviasi (%)
                                         </label>
                                     </div>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
-                                            <input type="checkbox" type="checkbox" class="form-check-input" name="rp">Deviasi (Rp)
+                                            <input type="checkbox" class="form-check-input" name="rp">Deviasi (Rp)
                                         </label>
                                     </div>
                                 </a>

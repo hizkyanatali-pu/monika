@@ -117,6 +117,12 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('excel/(:any)', '\Modules\Admin\Controllers\Tematik::exportExcel/$1');
         $routes->get('excel-kspn/(:any)', '\Modules\Admin\Controllers\Tematik::exportExcelKspn/$1');
         $routes->get('excel-rekap', '\Modules\Admin\Controllers\Tematik::exportExcelRekap');
+
+        //cetak laporan pdf tematik
+        $routes->get('cetak_food_estate', '\Modules\Admin\Controllers\Tematik::cetakFoodEstate');
+        $routes->get('cetak_kawasan_industri', '\Modules\Admin\Controllers\Tematik::cetakKawasanIndustri');
+        $routes->get('cetak_kspn/(:any)', '\Modules\Admin\Controllers\Tematik::cetakKspn/$1');
+        $routes->get('cetak_rekap', '\Modules\Admin\Controllers\Tematik::cetakRekap');
     });
 
     $routes->group('Kinerja-Output-Bulanan', ['namespace' => 'App\Controllers'], function ($routes) {
