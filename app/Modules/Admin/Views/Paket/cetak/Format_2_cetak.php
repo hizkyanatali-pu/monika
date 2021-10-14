@@ -177,5 +177,5 @@ $filter = explode(",", $data_filter);
 
         $("table .last-col").show()
     }
-    // window.print()
+    window.print()
 </script>

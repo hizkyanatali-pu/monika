@@ -36,79 +36,72 @@
                                 <button type="button" class="btn btn-primary btn-icon ml-3" dropdown-toggle data-toggle="dropdown"><i class="la la-filter"></i></button>
                                 <div class="dropdown-menu" style="overflow-y: auto; height: 200px; z-index: 5;">
                                     <a href="#" class="dropdown-item">
-                                        <div class="form-check">
+                                        <div class="form-check-inline">
                                             <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="no" checked>No
+                                                <input type="checkbox" class="form-check-input" name="satker">Satker / Paket
                                             </label>
                                         </div>
                                     </a>
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check-inline">
                                             <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="satker" checked>Satker / Paket
+                                                <input type="checkbox" class="form-check-input" name="vol">Vol
                                             </label>
                                         </div>
                                     </a>
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check-inline">
                                             <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="vol" checked>Vol
+                                                <input type="checkbox" class="form-check-input" name="satuan">Satuan
                                             </label>
                                         </div>
                                     </a>
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check-inline">
                                             <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="satuan" checked>Satuan
+                                                <input type="checkbox" class="form-check-input" name="provinsi">Provinsi
                                             </label>
                                         </div>
                                     </a>
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check-inline">
                                             <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="provinsi" checked>Provinsi
+                                                <input type="checkbox" class="form-check-input" name="lokasi">Lokasi
                                             </label>
                                         </div>
                                     </a>
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check-inline">
                                             <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="lokasi" checked>Lokasi
+                                                <input type="checkbox" class="form-check-input" name="pengadaan">Pengadaan
                                             </label>
                                         </div>
                                     </a>
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check-inline">
                                             <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="pengadaan" checked>Pengadaan
+                                                <input type="checkbox" class="form-check-input" name="pagu">Pagu
                                             </label>
                                         </div>
                                     </a>
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check-inline">
                                             <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="pagu" checked>Pagu
+                                                <input type="checkbox" class="form-check-input" name="realisasi">Realisasi
                                             </label>
                                         </div>
                                     </a>
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check-inline">
                                             <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="realisasi" checked>Realisasi
+                                                <input type="checkbox" class="form-check-input" name="p_keu">% Keu
                                             </label>
                                         </div>
                                     </a>
                                     <a href="#" class="dropdown-item">
                                         <div class="form-check-inline">
                                             <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="p_keu" checked>% Keu
-                                            </label>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        <div class="form-check-inline">
-                                            <label for="" class="form-check-label">
-                                                <input type="checkbox" type="checkbox" class="form-check-input" name="p_fis" checked>% Fis
+                                                <input type="checkbox" class="form-check-input" name="p_fis">% Fis
                                             </label>
                                         </div>
                                     </a>
@@ -118,6 +111,7 @@
                     </div>
                     <div class="col-md-6 text-right mt-3">
                         <div class="form-group">
+                            <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
                             <a 
                                 href="<?php echo site_url('tematik/excel/'.$exportCode) ?>" 
                                 class="btn btn-success btn-sm text-white" target="_blank"
@@ -135,7 +129,7 @@
                     <table class="table table-bordered mb-0 table-striped" id="table">
                         <thead>
                             <tr class=" text-center bg-purple">
-                                <th class="no">No</th>
+                                <th>No</th>
                                 <th class="satker">Satker / Paket</th>
                                 <th class="vol">Vol</th>
                                 <th class="satuan">Satuan</th>
@@ -159,7 +153,7 @@
                                 </tr>
                                 <?php foreach ($value->paketList as $key => $value) : ?>
                                     <tr>
-                                        <td class="col-no"><?php echo $no++ ?></td>
+                                        <td><?php echo $no++ ?></td>
                                         <td class="col-satker"><?php echo $value->nmpaket ?></td>
                                         <td class="col-vol"><?php echo ($value->vol) ?></td>
                                         <td class="col-satuan"><?php echo $value->satuan ?></td>
@@ -199,13 +193,81 @@
         window.location.href = "<?= site_url('Kinerja-Output-Bulanan/') ?>" + $('#listmonth').val();
     });
 
+    let report_open = true
+    let checkbox = $("input:checkbox")
+    $("input:checkbox").prop("checked", true)
     $("input:checkbox").click(function(){
+        
+        //checking checked checkbox for report button
+        if((checkbox.length - checkbox.filter(":checked").length) == checkbox.length){
+            
+            report_open = false
+        }else{
+
+            report_open = true
+        }
         
         var column = "table ." + $(this).attr("name")
         var columns = "table .col-" + $(this).attr("name")
         $(column).toggle();
         $(columns).toggle();
     });
-</script>
+
+    $(".pdf-report").click(function(){
+        
+        let arr = [];
+        
+        if(!$("input[name=satker]").prop("checked")){
+
+            arr.push("satker")
+        }
+        if(!$("input[name=vol]").prop("checked")){
+
+            arr.push("vol")
+        }
+        if(!$("input[name=satuan]").prop("checked")){
+
+            arr.push("satuan")
+        }
+        if(!$("input[name=provinsi]").prop("checked")){
+
+            arr.push("provinsi")
+        }
+        if(!$("input[name=lokasi]").prop("checked")){
+
+            arr.push("lokasi")
+        }
+        if(!$("input[name=pengadaan]").prop("checked")){
+
+            arr.push("pengadaan")
+        }
+        if(!$("input[name=pagu]").prop("checked")){
+
+            arr.push("pagu")
+        }
+        if(!$("input[name=realisasi]").prop("checked")){
+
+            arr.push("realisasi")
+        }
+        if(!$("input[name=p_keu]").prop("checked")){
+
+            arr.push("p_keu")
+        }
+        if(!$("input[name=p_fis]").prop("checked")){
+
+            arr.push("p_fis")
+        }
+
+        //condition for report button
+        if(report_open){
+
+            $(this).attr("href", "<?= $id_report_pdf ?>?filter="+arr.join(','))
+            $(this).attr("target", "_blank")
+        }else{
+
+            $(this).removeAttr("href")
+            $(this).removeAttr("target")
+        }
+    })
 </script>
 <?= $this->endSection() ?>
