@@ -50,17 +50,24 @@ class PulldataModel extends Model
             $f .= ($f ? ',' : '') . " IF(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)<" . $pagusda['jml_progres_keuangan'] . ", 0, IF(((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)<" . $pagusda['jml_progres_fisik'] . ", 0,1)) as stw";
         }
         if ($datatag == "satker") {
-            $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, ";
-            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
+            $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, b.st, ";
+            // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
+            //order by deviasi
+            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) - ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  DESC";
+        
         } elseif ($datatag == "satker100m") {
             $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, ";
             $w = " WHERE  md.jml_progres_keuangan < " . $pagusda['jml_progres_keuangan'] . " AND md.jml_progres_fisik < " . $pagusda['jml_progres_fisik'] . ($w ? ' AND ' : '') . $w;
         } elseif ($datatag == "balai") {
             $f .= ($f ? ',' : '') . "b.balaiid as id, b.balai as label, ";
-            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY b.balaiid ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
+            // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY b.balaiid ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
+            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY b.balaiid  ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) - ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  DESC";
+            
         } else {
             $f = "b.balaiid as id, b.balai as label, ";
-            $w = ($w ? ' WHERE ' : '') . $w . " ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
+            // $w = ($w ? ' WHERE ' : '') . $w . " ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
+            // order by deviasi
+            $w = ($w ? ' WHERE ' : '') . $w . "  ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) - ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  DESC";
         }
         if ($ulang == true) $w = '';
         // REPLACE(FORMAT(sum(md.pagu_rpm),0),',','.')
@@ -83,7 +90,11 @@ class PulldataModel extends Model
         LEFT JOIN m_balai b ON b.balaiid=s.balaiid ";
 
         if ($datatag == "satker100m") {
-            return $this->db->query("SELECT * FROM ( $q GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC ) md " . $w)->getResultArray();
+            // return $this->db->query("SELECT * FROM ( $q GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC ) md " . $w)->getResultArray();
+            //order by deviasi dan nilai bawah rata rata
+            return $this->db->query("SELECT * FROM ( $q GROUP BY md.kdsatker  ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) - ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  DESC ) md " . $w)->getResultArray();
+        
+        
         } else {
             return $this->db->query($q . $w)->getResultArray();
         }

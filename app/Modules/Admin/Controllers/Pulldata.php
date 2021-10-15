@@ -187,7 +187,7 @@ class Pulldata extends \App\Controllers\BaseController
             'posisi' => ['<i class="fa fa-home"></i>'],
             'idk' => 97,
             'label' => 'Balai Teknik',
-            'nextlink' => 'balaiteknik',
+            'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"),
             'rekap' => 'balaiteknik',
             'id_report' => 'cetak_balai_teknik'
@@ -262,7 +262,7 @@ class Pulldata extends \App\Controllers\BaseController
             'posisi' => ['<i class="fa fa-home"></i>'],
             'idk' => 'all',
             'label' => 'Semua Satker',
-            'nextlink' => 'Semua Satker',
+            'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker'),
             'rekap' => 'semuasatker',
             'id_report' => 'cetak_semua_satker'

@@ -275,12 +275,14 @@
                                 <!-- <th colspan="2">&nbsp;</th> -->
                                 <th class="unit_kerja">&nbsp;</th>
                                 <th class="paket">&nbsp;</th>
+                                <?= ($title == 'Semua Satker' ?    '<th class="satker_">&nbsp;</th>' :'')?>
                                 <th class="pagu-main" colspan="5">Pagu (Rp)</th>
                                 <th class="progres" colspan="2">Progres (%)</th>
                                 <th class="deviasi" colspan="2">Deviasi</th>
                             </tr>
                             <tr class="text-center">
                                 <th class="unit_kerja"><?= $title; ?></th>
+                                <?= ($title == 'Semua Satker' ?    '<th class="satker_">Satker</th>' :'')?>
                                 <th class="tdNilai paket">Jml&nbsp;Paket
                                     <!-- <br /><small title="Pagu SDA">Total SDA <i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-right"></i></small> -->
                                 </th>
@@ -335,6 +337,7 @@
                                         <td class="tdKodeLabel col-unit_kerja">
                                             <a class="card-link text-dark" href="<?php echo site_url('pulldata/' . $nextlink . '/' . ($idk ? $idk . '/' : '') . $data['id']); ?>/<?php echo $label; ?>/<?php echo $data['label']; ?>"><?php echo $data['label']; ?></a>
                                         </td>
+                                        <?= ($title == 'Semua Satker' ? '<td class="tdNilai text-center col-paket">'.$data['st'].'</td>' :'')?>
                                         <td class="tdNilai text-center col-paket"><?php echo $data['jml_paket']; ?></td>
 
                                         <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
@@ -347,8 +350,8 @@
                                         <td class="tdPersen text-right col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
                                         <td class="tdPersen text-right col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
 
-                                        <td class="tdPersen text-right col-percentage"><?php echo ($data['jml_progres_fisik'] > $data['jml_progres_keuangan'] ? number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); ?></td>
-                                        <td class="tdPersen text-right col-rp"><?php echo ($data['jml_progres_fisik'] > $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); ?></td>
+                                        <td class="tdPersen text-right col-percentage"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); ?></td>
+                                        <td class="tdPersen text-right col-rp"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); ?></td>
                                     </tr>
                                     <?php
                                     $total_pagu_rpm += $data['jml_pagu_rpm'];

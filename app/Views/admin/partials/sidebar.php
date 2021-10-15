@@ -51,11 +51,12 @@ $request = \Config\Services::request();
 		($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'bws'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/bws'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">BWS</span></a></li>
 
                         <li class="kt-menu__item <?= 
-		($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'balaiteknik'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satkerpusat'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Pusat</span></a></li>
-                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('pulldata/balaiteknik'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Balai Teknik</span></a></li>
+		($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satkerpusat'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satkerpusat'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Pusat</span></a></li>
+                        <li class="kt-menu__item  <?= 
+		($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'balaiteknik'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/balaiteknik'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Balai Teknik</span></a></li>
 
                         <li class="kt-menu__item <?= 
-		($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satkerskpdtpop'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/skpdtpop'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">SKPD TP OP</span></a></li>
+		($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'skpdtpop'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/skpdtpop'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">SKPD TP OP</span></a></li>
                         <li class="kt-menu__item <?= 
 		($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satkerpagu100m'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satkerpagu100m'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Pagu>100 M</span></a></li>
            <li class="kt-menu__item <?= 
