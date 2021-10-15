@@ -147,7 +147,7 @@ $request = \Config\Services::request();
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                     <ul class="kt-menu__subnav">
                         <li class="kt-menu__item <?= 
-		($request->uri->getSegment(1) == 'grafikdata' && $request->uri->getSegment(2) == 'progres-keuangan-fisik'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-keuangan-fisik'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Keungan & Fisik</span> </a></li>
+		($request->uri->getSegment(1) == 'grafikdata' && $request->uri->getSegment(2) == 'progres-keuangan-fisik'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-keuangan-fisik'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Keuangan & Fisik</span> </a></li>
                         <li class="kt-menu__item <?= 
 		($request->uri->getSegment(1) == 'grafikdata' && $request->uri->getSegment(2) == 'progres-per-sumber-dana'  ? ' kt-menu__item--active':'') ?>" aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-per-sumber-dana'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Sumber Dana</span> </a></li>
                         <li class="kt-menu__item <?= 
