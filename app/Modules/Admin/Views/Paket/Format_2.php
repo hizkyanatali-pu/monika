@@ -364,6 +364,7 @@
                                 <tr style="background-color:#ccb3ff; border:2px solid #ccc;">
                                     <td class="text-center">TOTAL</td>
                                     <td></td>
+                                    <?= ($title == 'Semua Satker' ?    '<th class="satker_">&nbsp;</th>' :'')?>
                                     <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
