@@ -43,6 +43,10 @@ class PulldataModel extends Model
 
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_progres_keuangan'] . "' as pagusda_progres_keuangan ";
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_progres_fisik'] . "' as pagusda_progres_fisik ";
+            $f .= ($f ? ',' : '') . " '" . $pagusda['jml_progres_keu_bulan_sebelumnya'] . "' as pagusda_progres_keuangan_bulan_sebelumnya ";
+            $f .= ($f ? ',' : '') . " '" . $pagusda['jml_progres_fisik_bulan_sebelumnya'] . "' as pagusda_progres_fisik_bulan_sebelumnya ";
+
+
 
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_persen_deviasi'] . "' as pagusda_persen_deviasi ";
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_nilai_deviasi'] . "' as pagusda_nilai_deviasi ";
@@ -70,6 +74,11 @@ class PulldataModel extends Model
             $w = ($w ? ' WHERE ' : '') . $w . "  ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  DESC";
         }
         if ($ulang == true) $w = '';
+
+        // get nilai bulan ini
+        $prev_month = date('n')-2;
+        $get_month_str = $this->bln(0)[$prev_month];
+        
         // REPLACE(FORMAT(sum(md.pagu_rpm),0),',','.')
         $q = "SELECT $f count(*) as jml_paket,
         sum(md.pagu_rpm) as jml_pagu_rpm,
@@ -79,9 +88,12 @@ class PulldataModel extends Model
 
         sum(md.real_total) as jml_real_total,
 
+        (sum((md.pagu_total / 100 * md.progres_keu_{$get_month_str})) / sum(md.pagu_total)) * 100 as jml_progres_keu_bulan_sebelumnya,
+        (sum((md.pagu_total / 100 * md.progres_fisik_{$get_month_str})) / sum(md.pagu_total)) * 100 as jml_progres_fisik_bulan_sebelumnya,
+
         ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  as jml_progres_keuangan,
         ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)  as jml_progres_fisik,
-
+        
         ABS(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))  as jml_persen_deviasi,
         ((sum(md.pagu_total)/100)*ABS(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))) as jml_nilai_deviasi
 

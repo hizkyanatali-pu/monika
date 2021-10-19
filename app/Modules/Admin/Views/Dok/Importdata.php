@@ -3,10 +3,24 @@
 
     <!-- begin:: Content -->
     <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+    
         <div class="kt-portlet">
+
+        <ul class="nav nav-pills nav-justified mb-0">
+                <li class="nav-item mr-0 <?php echo ($current=="paket"?'bg-primary':'bg-light-primary');?>">
+                    <a class="nav-link" href="<?= site_url('preferensi/tarik-data-emon/paket'); ?>"class=""><span class="<?php echo ($current=="paket"?'text-light':'');?>">Paket</span>
+                        <!-- <i class="kt-menu__ver-arrow la la-angle-right"></i> -->
+                    </a>
+                </li>
+                <li class="nav-item mr-0 <?php echo ($current=="kontrak"?'bg-primary':'bg-light-primary');?>">
+                    <a class="nav-link" href="<?= site_url('preferensi/tarik-data-emon/kontrak'); ?>"class=""><span class="<?php echo ($current=="kontrak"?'text-light':'');?>">Kontrak</span>
+                        <!-- <i class="kt-menu__ver-arrow la la-angle-right"></i> -->
+                    </a>
+                </li>
+            </ul>
             <div class="kt-portlet__head row pt-3">
                 <div class="col-md-3">
-                        <a href="<?= site_url('importdata/pullimport') ?>" class="btn btn-brand btn-elevate btn-sm">
+                        <a href="<?= site_url('importdata/pullimport/'.$current) ?>" class="btn btn-brand btn-elevate btn-sm">
                             <i class="la la-plus"></i>
                             Pull data
                         </a>
