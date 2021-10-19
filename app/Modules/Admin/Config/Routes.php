@@ -74,7 +74,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('importdata', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('', '\Modules\Admin\Controllers\Importdata::index');
         $routes->get('imdata/(:segment)', '\Modules\Admin\Controllers\Importdata::imdata/$1');
-        $routes->get('pullimport', '\Modules\Admin\Controllers\Importdata::pullimport');
+        $routes->get('pullimport/(:any)', '\Modules\Admin\Controllers\Importdata::pullimport/$1');
         $routes->get('unduh/(:segment)/(:segment)', '\Modules\Admin\Controllers\Importdata::unduh/$1/$2');
     });
 
@@ -89,7 +89,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
     $routes->group('preferensi', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('dari-sqlite', '\Modules\Admin\Controllers\Preferensi::index');
-        $routes->get('tarik-data-emon', '\Modules\Admin\Controllers\Importdata::index');
+        $routes->get('tarik-data-emon/(:any)', '\Modules\Admin\Controllers\Importdata::index/$1');
 
         //fitur tarik data dari api
         $routes->get('tarikdata', '\Modules\Admin\Controllers\Preferensi::tarikdata');

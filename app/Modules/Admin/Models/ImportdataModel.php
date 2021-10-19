@@ -9,7 +9,7 @@ class ImportdataModel extends Model
     protected $table      = 'monika_pull';
     protected $primaryKey = 'idpull';
 
-    protected $allowedFields = ['idpull', 'nmfile', 'sizefile', 'sqlfile_nm', 'sqlfile_size', 'sqlfile_row', 'sqlfile_dt', 'sqlfile_uid', 'st', 'import_dt', 'import_uid', 'aktif_dt', 'aktif_uid', 'in_dt', 'in_uid', 'aksi'];
+    protected $allowedFields = ['idpull', 'nmfile', 'sizefile', 'sqlfile_nm', 'sqlfile_size', 'sqlfile_row', 'sqlfile_dt', 'sqlfile_uid', 'st', 'import_dt', 'import_uid', 'aktif_dt', 'aktif_uid', 'in_dt', 'in_uid', 'aksi','type'];
 
     public function getDok($w = "")
     {

@@ -1,6 +1,12 @@
 <?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content') ?>
+<?php
 
+// jumlah hari bulan ini & tanggal hari ini
+$maxDays=date('t');
+$currentDayOfMonth=date('j');
+
+?>
 <!-- begin:: Subheader -->
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
@@ -110,7 +116,7 @@
                         <div class="card card-body text-white bg-primary">
                             <div class="clearfix">
                                 <div class="float-left">
-                                    <h3><?= number_format($qdata[0]['pagusda_progres_keuangan'], 2, ',', '.'); ?>% </h3>
+                                    <h3><?= number_format((($qdata[0]['pagusda_progres_keuangan']-$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya']) / $maxDays * $currentDayOfMonth )+$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya'], 2, ',', '.'); ?>% </h3>
                                 </div>
                                 <div class="float-right text-right">
                                     <h6> Progres Keuangan</h6>
@@ -122,7 +128,7 @@
                         <div class="card card-body text-white bg-success">
                             <div class="clearfix">
                                 <div class="float-left">
-                                    <h3><?= number_format($qdata[0]['pagusda_progres_fisik'], 2, ',', '.'); ?>% </h3>
+                                    <h3><?= number_format(((($qdata[0]['pagusda_progres_fisik']-$qdata[0]['pagusda_progres_fisik_bulan_sebelumnya']) )  / $maxDays * $currentDayOfMonth ) + $qdata[0]['pagusda_progres_fisik_bulan_sebelumnya'] , 2, ',', '.'); ?>% </h3>
                                 </div>
                                 <div class="float-right text-right">
                                     <h6>Progres Fisik</h6>

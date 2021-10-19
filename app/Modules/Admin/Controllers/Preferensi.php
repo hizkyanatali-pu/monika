@@ -35,7 +35,7 @@ class Preferensi extends \App\Controllers\BaseController
         // return view('Modules\Admin\Views\Dok\Importdata', $data);
         return view('Modules\Admin\Views\Preferensi\Formuploadsqlite', $data);
     }
-    //fitur tarik data
+    //fitur tarik data paket
     public function tarikdata()
     {
         $pg = 20;
