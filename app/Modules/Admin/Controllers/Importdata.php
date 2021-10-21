@@ -121,6 +121,28 @@ class Importdata extends \App\Controllers\BaseController
          
 
         // }
+
+        $pull_get_file =  $this->ImportdataModel->getDok(["type" => $type],"no_order_by")->get()->getRowArray();
+        $namefile = (isset($pull_get_file['nmfile']) ? $pull_get_file['nmfile'] : '') ;
+        $namefilesql = (isset($pull_get_file['sqlfile_nm']) ? $pull_get_file['sqlfile_nm'] : '') ;
+
+        $pullcount = $this->ImportdataModel->getDok(["type" => $type],"no_order_by")->countAllResults();  
+        
+        $targetDir = WRITEPATH . "emon" . DIRECTORY_SEPARATOR . "FileTxt";
+        $targetDir1 = WRITEPATH . "emon" . DIRECTORY_SEPARATOR . "FileSql";
+
+        
+        if ( $pullcount > 14) {
+            
+            $query= $this->ImportdataModel->deleteFiles(["nmfile"=> $namefile,"type" => $type]);
+            
+            unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
+            unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
+
+            
+            }
+
+
         //import data
         $l = WRITEPATH . "emon/FileTxt/" . $nmFile;
 

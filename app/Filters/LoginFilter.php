@@ -49,7 +49,7 @@ class LoginFilter implements FilterInterface
 			return;
 		}
 
-		if (!logged_in()) {
+		if (!logged_in() AND $path[0] != 'api') {
 
 			return redirect('auth');
 		}

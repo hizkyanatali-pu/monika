@@ -7,6 +7,8 @@
 $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('api', ['namespace' => 'App\Controllers'], function ($routes) {
         //$routes->post('datadukung', '\Modules\Admin\Controllers\Api::index');
+        $routes->get('cron-tarik-data/(:any)', '\Modules\Admin\Controllers\CronJob::dataPaket/$1');
+
     });
     $routes->add('dashboard', '\Modules\Admin\Controllers\Dashboard::index');
 
