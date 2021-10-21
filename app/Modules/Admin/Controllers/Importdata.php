@@ -20,12 +20,13 @@ class Importdata extends \App\Controllers\BaseController
     public function index($slug="paket")
     {
         $pg = 20;
+        $type = ["type"=>$slug];
         $data = [
             'title' => 'Daftar pemanggilan data',
             'pg' => $pg,
             'current' => $slug,
-            'qdata' => $this->ImportdataModel->getDok()->paginate($pg),
-            'pager' => $this->ImportdataModel->getDok()->pager
+            'qdata' => $this->ImportdataModel->getDok($type)->paginate($pg),
+            'pager' => $this->ImportdataModel->getDok($type)->pager
         ];
         return view('Modules\Admin\Views\Dok\Importdata', $data);
     }
@@ -58,7 +59,7 @@ class Importdata extends \App\Controllers\BaseController
                 'import_uid'   => $this->user['uid'],
                 'st'            => 2
             ];
-            $this->ImportdataModel->where('st',  3)->set($post)->update();
+            $this->ImportdataModel->where(['st'=> 3, 'type' => $d["type"] ])->set($post)->update();
             $this->importsql($d['nmfile']);
             $post = [
                 'aktif_dt'    => date("ymdHis"),
@@ -69,7 +70,7 @@ class Importdata extends \App\Controllers\BaseController
         }
 
         if ($aksi == true) {
-            $q = $this->ImportdataModel->where('idpull',  $slug)->set($post)->update();
+            $q = $this->ImportdataModel->where(['idpull' => $slug , 'type' => $d["type"] ])->set($post)->update();
         }
 
         return redirect()->to('/preferensi/tarik-data-emon/'.$d["type"])->with('success', 'Proses selesai');
