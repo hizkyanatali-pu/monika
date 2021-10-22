@@ -325,17 +325,47 @@ class PulldataModel extends Model
         ################
         # query #
         $data = $this->db_2->query("
-            SELECT 
-                tgiat.kdgiat, 
-                tgiat.nmgiat,
-                (sum(rtot) / sum(pg))* 100 as keu,
-                (sum(ufis) / sum(pg))* 100 as fis
-            FROM 
-                tgiat 
-                left join paket on tgiat.kdgiat=paket.kdgiat
-            WHERE 
-                tgiat.kdgiat in ('5036', '5037', '5039', '5040', '5300', '2408')
-                group by tgiat.kdgiat
+        SELECT 
+        tgiat.kdgiat,
+        tgiat.nmgiat,
+        (sum(rtot) / sum(pg)) * 100 AS keu,
+        (sum(ufis) / sum(pg)) * 100 AS fis
+    FROM
+        tgiat
+    LEFT JOIN paket ON tgiat.kdgiat = paket.kdgiat
+    WHERE
+        tgiat.kdgiat IN (
+            '5036',
+            '5037',
+            '5039',
+            '5040',
+            '5300',
+            '2408'
+        )
+    GROUP BY
+        tgiat.kdgiat
+    
+    
+    UNION ALL
+    
+    SELECT 
+         0 kdgiat,
+        'Pengaturan Pembinaan Pengawasan (TURBINWAS)' nmgiat,
+        (sum(rtot) / sum(pg)) * 100 AS keu,
+        (sum(ufis) / sum(pg)) * 100 AS fis
+    FROM
+        tgiat
+    LEFT JOIN paket ON tgiat.kdgiat = paket.kdgiat
+    WHERE
+        tgiat.kdgiat NOT IN (
+            '5036',
+            '5037',
+            '5039',
+            '5040',
+            '5300',
+            '2408'
+        )
+    
         ")->getResult();
         # end-of: query #
         ########################
