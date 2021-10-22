@@ -116,7 +116,9 @@ $currentDayOfMonth=date('j');
                         <div class="card card-body text-white bg-primary">
                             <div class="clearfix">
                                 <div class="float-left">
-                                    <h3><?= number_format((($qdata[0]['pagusda_progres_keuangan']-$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya']) / $maxDays * $currentDayOfMonth )+$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya'], 2, ',', '.'); ?>% </h3>
+                                    <!-- <h3><?php //number_format((($qdata[0]['pagusda_progres_keuangan']-$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya']) / $maxDays * $currentDayOfMonth )+$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya'], 2, ',', '.'); ?>% </h3> -->
+                                    <h3><?= number_format($qdata[0]['pagusda_progres_keuangan'], 2, ',', '.'); ?>% </h3>
+                               
                                 </div>
                                 <div class="float-right text-right">
                                     <h6> Progres Keuangan</h6>
@@ -128,7 +130,9 @@ $currentDayOfMonth=date('j');
                         <div class="card card-body text-white bg-success">
                             <div class="clearfix">
                                 <div class="float-left">
-                                    <h3><?= number_format(((($qdata[0]['pagusda_progres_fisik']-$qdata[0]['pagusda_progres_fisik_bulan_sebelumnya']) )  / $maxDays * $currentDayOfMonth ) + $qdata[0]['pagusda_progres_fisik_bulan_sebelumnya'] , 2, ',', '.'); ?>% </h3>
+                                    <!-- <h3><?php // number_format(((($qdata[0]['pagusda_progres_fisik']-$qdata[0]['pagusda_progres_fisik_bulan_sebelumnya']) )  / $maxDays * $currentDayOfMonth ) + $qdata[0]['pagusda_progres_fisik_bulan_sebelumnya'] , 2, ',', '.'); ?>% </h3> -->
+                                    <h3><?= number_format($qdata[0]['pagusda_progres_fisik'] , 2, ',', '.'); ?>% </h3>
+                                
                                 </div>
                                 <div class="float-right text-right">
                                     <h6>Progres Fisik</h6>
