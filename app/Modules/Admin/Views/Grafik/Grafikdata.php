@@ -183,7 +183,8 @@
             color: ['#3c8dbc', '#f56954']
         },
         yaxis : {
-            show: true
+            show: true,
+            labelWidth: 25,
         },
         xaxis : {
             //show: true
