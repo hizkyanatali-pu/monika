@@ -179,11 +179,20 @@ class CronJob extends \App\Controllers\BaseController
                     'sqlfile_row'   => $row,
                     'sqlfile_dt'    => date("ymdHis"),
                     'sqlfile_uid'   => "server",
-                    'st'            => 1
+                    'st'            => 2
                 ];
 
                 $update_convert_to_sql= $this->ImportdataModel->where(['idpull' => $idpull , 'type' => $type ])->set($post)->update();
                 
+
+                $post = [
+                    'import_dt'    => date("ymdHis"),
+                    'import_uid'   =>"server",
+                    'st'            => 2
+                ];
+                $update_convert_to_sql_import=$this->ImportdataModel->where(['st'=> 3, 'type' => $type ])->set($post)->update();
+                // dd($update_convert_to_sql_import);
+
                 $this->importsql($nmFile);
 
                 $post = [
