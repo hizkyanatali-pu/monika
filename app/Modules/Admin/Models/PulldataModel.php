@@ -169,6 +169,8 @@ class PulldataModel extends Model
                 //data diambil dari mysql
                 $Fprogres .= ($Fprogres ? ', ' : '') . "((sum((md.pagu_total/100*md.ren_keu_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
                 $Fprogres .= ($Fprogres ? ', ' : '') . "((sum((md.pagu_total/100*md.progres_keu_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
+                //tambahan 
+                $Fprogres .= ($Fprogres ? ', ' : '') . "((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) as realisasi";
 
 
                 // progres modif (yusfi)
@@ -180,6 +182,9 @@ class PulldataModel extends Model
                 //data diambil dari mysql
                 $Fprogres .= ($Fprogres ? ', ' : '') . "((sum((md.pagu_total/100*md.ren_fis_" . $d . "))/sum(md.pagu_total))*100) as rencana_" . $bln;
                 $Fprogres .= ($Fprogres ? ', ' : '') . "((sum((md.pagu_total/100*md.progres_fisik_" . $d . "))/sum(md.pagu_total))*100) as realisasi_" . $bln;
+                //tambahan
+                $Fprogres .= ($Fprogres ? ', ' : '') . "((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) as realisasi";
+
 
                 // fisik modif (yusfi)
                 //data diambil dari sqlite
