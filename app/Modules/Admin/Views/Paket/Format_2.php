@@ -117,7 +117,7 @@ $currentDayOfMonth=date('j');
                             <div class="clearfix">
                                 <div class="float-left">
                                     <!-- <h3><?php //number_format((($qdata[0]['pagusda_progres_keuangan']-$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya']) / $maxDays * $currentDayOfMonth )+$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya'], 2, ',', '.'); ?>% </h3> -->
-                                    <h3><?= number_format($qdata[0]['pagusda_progres_keuangan'], 2, ',', '.'); ?>% </h3>
+                                    <h3><?= number_format((isset($qdata[0]['pagusda_progres_keuangan']) ? $qdata[0]['pagusda_progres_keuangan'] : 0 ), 2, ',', '.'); ?>% </h3>
                                
                                 </div>
                                 <div class="float-right text-right">
@@ -131,7 +131,7 @@ $currentDayOfMonth=date('j');
                             <div class="clearfix">
                                 <div class="float-left">
                                     <!-- <h3><?php // number_format(((($qdata[0]['pagusda_progres_fisik']-$qdata[0]['pagusda_progres_fisik_bulan_sebelumnya']) )  / $maxDays * $currentDayOfMonth ) + $qdata[0]['pagusda_progres_fisik_bulan_sebelumnya'] , 2, ',', '.'); ?>% </h3> -->
-                                    <h3><?= number_format($qdata[0]['pagusda_progres_fisik'] , 2, ',', '.'); ?>% </h3>
+                                    <h3><?= number_format((isset($qdata[0]['pagusda_progres_fisik']) ? $qdata[0]['pagusda_progres_fisik'] : 0), 2, ',', '.'); ?>% </h3>
                                 
                                 </div>
                                 <div class="float-right text-right">
@@ -141,13 +141,13 @@ $currentDayOfMonth=date('j');
                         </div>
                     </div>
 
-                    <!--
+                   <?php /*
                         <div class="col-md-3 col-sm-3 col-xs-12">
                             <div class="media text-muted pt-3">
                                 <h3>
                                 <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                                 Progres Keuangan (%)
-                                <strong class="d-block text-gray-dark"><?= number_format($qdata[0]['pagusda_progres_keuangan'], 2, ',', '.'); ?></strong>
+                                <strong class="d-block text-gray-dark"><?=number_format($qdata[0]['pagusda_progres_keuangan'], 2, ',', '.'); ?></strong>
                                 </p>
                                 </h3>
                             </div>
@@ -157,12 +157,12 @@ $currentDayOfMonth=date('j');
                                 <h3>
                                 <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                                 Progres Fisik (%)
-                                <strong class="d-block text-gray-dark"><?= number_format($qdata[0]['pagusda_progres_fisik'], 2, ',', '.'); ?></strong>
+                                <strong class="d-block text-gray-dark"><?=number_format($qdata[0]['pagusda_progres_fisik'], 2, ',', '.'); ?></strong>
                                 </p>
                                 </h3>
                             </div>
                         </div>
-                    -->
+                    */ ?>
 
                 </div>
 
@@ -278,15 +278,43 @@ $currentDayOfMonth=date('j');
                     </div>
                 </div>
 
+
+                <?php if($title == 'Semua Satker'){ ?>
+                <div class="clearfix mb-3">
+                    <div class="col-md-4">
+                            <div class="form-group ">
+                            <label>Kegiatan</label>
+						<div class="input-group">
+                        <select name="kegiatan" class="form-control form-control-md">
+                                <option value="all">Semua Kegiatan</option>
+                                <?php 
+                                foreach($kegiatan as $key => $val){
+                                echo "<option value={$val['id']} " .($val['id'] == $slug ? 'selected':'').">{$val['id']}</option>";
+                                }
+                                ?>
+
+                            </select>
+                            
+							<div class="input-group-append">
+								<button class="btn btn-brand btn-elevate btn-icon" type="button" name="search"><i class="fa fa-search"></i></button>
+							</div>
+						</div>
+					</div>
+                            
+                </div>
+                </div>
+                <?php } ?>
+
                 <div class="table-responsive tableFixHead">
                     <table class="table table-bordered w-100 mb-0">
-                        <thead class="bg-white">
+                        <thead class="table-primary">
                             <tr class="text-center">
                                 <!-- <th colspan="2">&nbsp;</th> -->
                                 <th class="unit_kerja">&nbsp;</th>
                                 <th class="paket">&nbsp;</th>
                                 <?= ($title == 'Semua Satker' ?    '<th class="satker_">&nbsp;</th>' :'')?>
-                                <th class="pagu-main" colspan="5">Pagu (Rp)</th>
+                                <th class="pagu-main" colspan="<?= ($title == 'Semua Satker' ? "4":"5")?>">Pagu (Rp)</th>
+                                <?= ($title == 'Semua Satker' ?    ' <th class="pagu-main" colspan="4">Realisasi (Rp)</th>' :'')?>
                                 <th class="progres" colspan="2">Progres (%)</th>
                                 <th class="deviasi" colspan="2">Deviasi</th>
                             </tr>
@@ -298,34 +326,64 @@ $currentDayOfMonth=date('j');
                                 </th>
 
                                 <th class="tdNilai pagu_rpm pagu">RPM
-                                    <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_rpm'] / 1000, 0, ',', '.'); ?></small> -->
+                                <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_rpm'] / 1000, 0, ',', '.'); ?></small>  */ ?>
                                 </th>
                                 <th class="tdNilai pagu_sbsn pagu">SBSN
-                                    <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_sbsn'] / 1000, 0, ',', '.'); ?></small> -->
+                                <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_sbsn'] / 1000, 0, ',', '.'); ?></small> -*/ ?>
                                 </th>
                                 <th class="tdNilai pagu_phln pagu">PHLN
-                                    <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_phln'] / 1000, 0, ',', '.'); ?></small> -->
+                                <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_phln'] / 1000, 0, ',', '.'); ?></small> */ ?>
                                 </th>
                                 <th class="tdNilai pagu_total pagu">TOTAL
-                                    <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_total'] / 1000, 0, ',', '.'); ?></small> -->
+                                <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_total'] / 1000, 0, ',', '.'); ?></small> */?>
                                 </th>
+
+                               
+
+                                <?php 
+                                
+                                if($title == 'Semua Satker'){ ?>
+
+                                <th class="tdNilai pagu_rpm pagu">RPM
+                                <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_rpm'] / 1000, 0, ',', '.'); ?></small> */ ?>
+                                </th>
+                                <th class="tdNilai pagu_sbsn pagu">SBSN
+                                    <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_sbsn'] / 1000, 0, ',', '.'); ?></small> */ ?>
+                                </th>
+                                <th class="tdNilai pagu_phln pagu">PHLN
+                                    <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_phln'] / 1000, 0, ',', '.'); ?></small> */ ?>
+                                </th>
+                                <th class="tdNilai pagu_total pagu">TOTAL
+                                    <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_total'] / 1000, 0, ',', '.'); ?></small> */ ?>
+                                </th>
+
+
+                               <?php }else { ?>
 
                                 <th class="tdNilai pagu_realisasi pagu">Realisasi
-                                    <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_real_total'] / 1000, 0, ',', '.'); ?></small> -->
+                                    <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_real_total'] / 1000, 0, ',', '.'); ?></small> */ ?>
                                 </th>
 
+                                <?php
+                               }
+                                
+                                
+                                ?>
+                                
+
+
                                 <th class="tdPersen keu">keu
-                                    <!-- <br /><small title="Pagu SDA"><b><?= number_format($qdata[0]['pagusda_progres_keuangan'], 2, ',', '.'); ?></b></small> -->
+                                    <?php /* <br /><small title="Pagu SDA"><b><?= number_format($qdata[0]['pagusda_progres_keuangan'], 2, ',', '.'); ?></b></small> */ ?>
                                 </th>
                                 <th class="tdPersen fisik">fisik
-                                    <!-- <br /><small title="Pagu SDA"><b><?= number_format($qdata[0]['pagusda_progres_fisik'], 2, ',', '.'); ?></b></small> -->
+                                    <?php /* <br /><small title="Pagu SDA"><b><?= number_format($qdata[0]['pagusda_progres_fisik'], 2, ',', '.'); ?></b></small> */ ?>
                                 </th>
 
                                 <th class="tdPersen percentage">%
-                                    <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_persen_deviasi'], 2, ',', '.'); ?></small> -->
+                                    <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_persen_deviasi'], 2, ',', '.'); ?></small> */ ?>
                                 </th>
                                 <th class="tdNilai rp">Rp
-                                    <!-- <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_nilai_deviasi'], 0, ',', '.'); ?></small> -->
+                                    <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_nilai_deviasi'], 0, ',', '.'); ?></small> */ ?>
                                 </th>
                             </tr>
                         </thead>
@@ -337,6 +395,10 @@ $currentDayOfMonth=date('j');
                                 $total_pagu_sbsn = 0;
                                 $total_pagu_phln = 0;
                                 $total_pagu_total = 0;
+
+                                $total_real_rpm = 0;
+                                $total_real_sbsn = 0;
+                                $total_real_phln = 0;
                                 $total_real_total = 0;
                                 ?>
                                 <?php
@@ -355,7 +417,17 @@ $currentDayOfMonth=date('j');
                                         <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
                                         <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_total'] / 1000, 0, ',', '.'); ?></td>
 
-                                        <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
+                                       <?php if($title == 'Semua Satker'){ ?>
+                                        <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_real_rpm'] / 1000, 0, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_real_sbsn'] / 1000, 0, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_real_phln'] / 1000, 0, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
+                                        <?php }else { ?>
+
+                                            <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
+
+                                        <?php } ?>
+
 
                                         <td class="tdPersen text-right col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
                                         <td class="tdPersen text-right col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
@@ -368,6 +440,10 @@ $currentDayOfMonth=date('j');
                                     $total_pagu_sbsn += $data['jml_pagu_sbsn'];
                                     $total_pagu_phln += $data['jml_pagu_phln'];
                                     $total_pagu_total += $data['jml_pagu_total'];
+
+                                    $total_real_rpm += $data['jml_real_rpm'];
+                                    $total_real_sbsn += $data['jml_real_sbsn'];
+                                    $total_real_phln += $data['jml_real_phln'];
                                     $total_real_total += $data['jml_real_total'];
                                     ?>
                                 <?php endforeach; ?>
@@ -379,7 +455,18 @@ $currentDayOfMonth=date('j');
                                     <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
+
+                                    <?php  if($title == 'Semua Satker'){  ?>
+                                    <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_real_rpm / 1000, 0, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_real_phln / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+                                    <?php  }else{  ?>
+                                        <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+
+                                    <?php  }  ?>
+
+
 
                                     <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
                                 </tr>
@@ -401,7 +488,22 @@ $currentDayOfMonth=date('j');
 <?= $this->endSection() ?>
 <?= $this->section('footer_js') ?>
 <script>
-    console.log('additional footer js')
+    // console.log('additional footer js')
+
+
+    // filter kegiatan
+
+    $('button[name="search"]').click(function() {
+  
+       giat =  $('select[name="kegiatan"]').val();
+       $(location).attr("href", "<?= site_url('pulldata/semuasatker/') ?>"+giat);
+
+    });
+
+
+    //end filter kegiatan
+
+
     
     $("input:checkbox").prop("checked", true)
     

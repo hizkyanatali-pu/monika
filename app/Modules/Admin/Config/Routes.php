@@ -54,7 +54,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
         $routes->get('skpdtpop', '\Modules\Admin\Controllers\Pulldata::skpdtpop');
         $routes->get('satkerpagu100m', '\Modules\Admin\Controllers\Pulldata::satkerpagu100m');
-        $routes->get('semuasatker', '\Modules\Admin\Controllers\Pulldata::semua_satker');
+        $routes->get('semuasatker/(:any)', '\Modules\Admin\Controllers\Pulldata::semua_satker/$1');
 
 
         $routes->get('simpandata', '\Modules\Admin\Controllers\Pulldata::simpandata');

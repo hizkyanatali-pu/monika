@@ -39,6 +39,10 @@ class PulldataModel extends Model
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_pagu_sbsn'] . "' as pagusda_pagu_sbsn ";
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_pagu_phln'] . "' as pagusda_pagu_phln ";
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_pagu_total'] . "' as pagusda_pagu_total ";
+
+            $f .= ($f ? ',' : '') . " '" . $pagusda['jml_real_rpm'] . "' as pagusda_real_rpm ";
+            $f .= ($f ? ',' : '') . " '" . $pagusda['jml_real_sbsn'] . "' as pagusda_real_sbsn ";
+            $f .= ($f ? ',' : '') . " '" . $pagusda['jml_real_phln'] . "' as pagusda_real_phln ";
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_real_total'] . "' as pagusda_real_total ";
 
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_progres_keuangan'] . "' as pagusda_progres_keuangan ";
@@ -86,6 +90,9 @@ class PulldataModel extends Model
         sum(md.pagu_phln) as jml_pagu_phln,
         sum(md.pagu_total) as jml_pagu_total,
 
+        sum(md.real_rpm) as jml_real_rpm,
+        sum(md.real_sbsn) as jml_real_sbsn,
+        sum(md.real_phln) as jml_real_phln,
         sum(md.real_total) as jml_real_total,
 
         (sum((md.pagu_total / 100 * md.progres_keu_{$get_month_str})) / sum(md.pagu_total)) * 100 as jml_progres_keu_bulan_sebelumnya,
@@ -116,6 +123,11 @@ class PulldataModel extends Model
         $this->akses = new AksesModel();
         $w = $this->akses->unitsatker("", $w);
         return $this->db->query("SELECT satkerid as id, CONCAT_WS(' ', satkerid, satker) as label FROM m_satker " . ($w ? " WHERE " : '') . $w)->getResultArray();
+    }
+
+    function getKegiatan()
+    {
+        return $this->db->query("SELECT kdgiat as id FROM monika_data GROUP BY kdgiat")->getResultArray();
     }
 
     function getPaket($w = '')
@@ -354,7 +366,7 @@ class PulldataModel extends Model
     UNION ALL
     
     SELECT 
-         0 kdgiat,
+         '-' kdgiat,
         'Pengaturan Pembinaan Pengawasan (TURBINWAS)' nmgiat,
         (sum(rtot) / sum(pg)) * 100 AS keu,
         (sum(ufis) / sum(pg)) * 100 AS fis
