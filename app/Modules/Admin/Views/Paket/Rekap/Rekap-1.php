@@ -63,7 +63,7 @@
 
     <table class="table table-bordered">
         <tbody>
-            <tr style="background-color:;">
+            <tr>
                 <td>Progres Keungan SDA</td><th><?=number_format( $qdata[0]['pagusda_progres_keuangan'],2,',','.');?>%</th>
             </tr>
             <tr>
@@ -125,10 +125,10 @@
 
                 <td class="tdNilai text-right"><?php echo $data['jml_real_total']; ?></td>
 
-                <td class="tdPersen text-right"><?php echo $data['jml_progres_keuangan']; ?></td>
-                <td class="tdPersen text-right"><?php echo $data['jml_progres_fisik']; ?></td>
+                <td class="tdPersen text-right"><?php echo number_format($data['jml_progres_keuangan'] ,2,',','.'); ?></td>
+                <td class="tdPersen text-right"><?php echo number_format($data['jml_progres_fisik'],2,',','.'); ?></td>
 
-                <td class="tdPersen text-right"><?php echo ( $data['jml_progres_fisik']>$data['jml_progres_keuangan'] ? $data['jml_persen_deviasi'] :'-' ); ?></td>
+                <td class="tdPersen text-right"><?php echo ( $data['jml_progres_fisik']>$data['jml_progres_keuangan'] ?  number_format($data['jml_persen_deviasi'],2,',','.') :'-' ); ?></td>
                 <td class="tdPersen text-right"><?php echo ( $data['jml_progres_fisik']>$data['jml_progres_keuangan'] ? $data['jml_nilai_deviasi'] :'-' ); ?></td>
             </tr>
             <?php
