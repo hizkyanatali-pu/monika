@@ -17,10 +17,10 @@ class Importdata extends \App\Controllers\BaseController
         $this->user = $session->get('userData');
     }
 
-    public function index($slug="paket")
+    public function index($slug = "paket")
     {
         $pg = 20;
-        $type = ["type"=>$slug];
+        $type = ["type" => $slug];
         $data = [
             'title' => 'Daftar pemanggilan data',
             'pg' => $pg,
@@ -36,7 +36,7 @@ class Importdata extends \App\Controllers\BaseController
         // dd($d);
         $aksi = false;
         if ($d['st'] == 0) {
-            $txtsql = $this->simpandata($d['idpull'], $d['nmfile'],$d["type"]);
+            $txtsql = $this->simpandata($d['idpull'], $d['nmfile'], $d["type"]);
             $post = [
                 'sqlfile_nm'    => $d['nmfile'] . ".sql",
                 'sqlfile_size'  => $txtsql['sqlfile_size'],
@@ -59,7 +59,7 @@ class Importdata extends \App\Controllers\BaseController
                 'import_uid'   => $this->user['uid'],
                 'st'            => 2
             ];
-            $this->ImportdataModel->where(['st'=> 3, 'type' => $d["type"] ])->set($post)->update();
+            $this->ImportdataModel->where(['st' => 3, 'type' => $d["type"]])->set($post)->update();
             $this->importsql($d['nmfile']);
             $post = [
                 'aktif_dt'    => date("ymdHis"),
@@ -70,10 +70,10 @@ class Importdata extends \App\Controllers\BaseController
         }
 
         if ($aksi == true) {
-            $q = $this->ImportdataModel->where(['idpull' => $slug , 'type' => $d["type"] ])->set($post)->update();
+            $q = $this->ImportdataModel->where(['idpull' => $slug, 'type' => $d["type"]])->set($post)->update();
         }
 
-        return redirect()->to('/preferensi/tarik-data-emon/'.$d["type"])->with('success', 'Proses selesai');
+        return redirect()->to('/preferensi/tarik-data-emon/' . $d["type"])->with('success', 'Proses selesai');
     }
     public function unduh($slug = null, $type = null)
     {
@@ -94,7 +94,7 @@ class Importdata extends \App\Controllers\BaseController
         } else return $this->response->download(WRITEPATH . 'emon/File' . $tipe . '/' . $file, null)->setFileName($nmFile);
     }
 
-    function pullimport($type='')
+    function pullimport($type = '')
     {
         ini_set('max_execution_time', 0);
 
@@ -105,50 +105,49 @@ class Importdata extends \App\Controllers\BaseController
         //     == "local"
         // ) {
 
-        if($type == 'paket'){
+        if ($type == 'paket') {
 
             $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket");
             $nmFile = date("ymdHis") . '_fromemon_paket';
-
-        }else{
+        } else if ($type == 'kontrak') {
             $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/kontrak");
             $nmFile = date("ymdHis") . '_fromemon_kontrak';
+        } else {
 
-
+            $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/rekap_unor");
+            $nmFile = date("ymdHis") . '_fromemon_rekap_unor';
         }
         // }else{
         // $data = file_get_contents("http://34.120.159.131/ws_sda/");
-         
+
 
         // }
 
-        $pull_get_file =  $this->ImportdataModel->getDok(["type" => $type],"no_order_by")->get()->getRowArray();
-        $namefile = (isset($pull_get_file['nmfile']) ? $pull_get_file['nmfile'] : '') ;
-        $namefilesql = (isset($pull_get_file['sqlfile_nm']) ? $pull_get_file['sqlfile_nm'] : '') ;
+        $pull_get_file =  $this->ImportdataModel->getDok(["type" => $type], "no_order_by")->get()->getRowArray();
+        $namefile = (isset($pull_get_file['nmfile']) ? $pull_get_file['nmfile'] : '');
+        $namefilesql = (isset($pull_get_file['sqlfile_nm']) ? $pull_get_file['sqlfile_nm'] : '');
 
-        $pullcount = $this->ImportdataModel->getDok(["type" => $type],"no_order_by")->countAllResults();  
-        
+        $pullcount = $this->ImportdataModel->getDok(["type" => $type], "no_order_by")->countAllResults();
+
         $targetDir = WRITEPATH . "emon" . DIRECTORY_SEPARATOR . "FileTxt";
         $targetDir1 = WRITEPATH . "emon" . DIRECTORY_SEPARATOR . "FileSql";
 
-        
-        if ( $pullcount > 14) {
-            
-            $query= $this->ImportdataModel->deleteFiles(["nmfile"=> $namefile,"type" => $type]);
-            
+
+        if ($pullcount > 14) {
+
+            $query = $this->ImportdataModel->deleteFiles(["nmfile" => $namefile, "type" => $type]);
+
             unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
             unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
-
-            
-            }
+        }
 
 
         //import data
         $l = WRITEPATH . "emon/FileTxt/" . $nmFile;
 
-        
+
         $nf = fopen($l, "w+");
-        fwrite($nf,trim(preg_replace('/\s+/', ' ', $data)));
+        fwrite($nf, trim(preg_replace('/\s+/', ' ', $data)));
         fclose($nf);
         // $json = json_encode($data);
         // $json_dcode = json_decode($json,TRUE);
@@ -169,18 +168,18 @@ class Importdata extends \App\Controllers\BaseController
 
 
             // $data = file_get_contents($l);
-    
-          
 
-            return redirect()->to('/preferensi/tarik-data-emon/'.$type)->with('success', 'Pull data berhasil');
+
+
+            return redirect()->to('/preferensi/tarik-data-emon/' . $type)->with('success', 'Pull data berhasil');
         } else {
-            return redirect()->to('/preferensi/tarik-data-emon/'.$type)
+            return redirect()->to('/preferensi/tarik-data-emon/' . $type)
                 ->withInput()
                 ->with('error', 'Terjadi kesalahan ketika Pull Data');
         }
     }
 
-    function simpandata($idpull, $slug,$param)
+    function simpandata($idpull, $slug, $param)
     {
         $file = WRITEPATH . "emon/FileTxt/{$slug}";
         if (!file_exists($file)) {
@@ -188,16 +187,21 @@ class Importdata extends \App\Controllers\BaseController
         } else {
             $block = 1024 * 1024; //1MB or counld be any higher than HDD block_size*2
             // $fno = array('pagu_51', 'pagu_52', 'pagu_53', 'pagu_rpm', 'pagu_sbsn', 'pagu_phln', 'pagu_total', 'real_51', 'real_52', 'real_53', 'real_rpm', 'real_sbsn', 'real_phln', 'real_total', 'progres_keuangan', 'progres_fisik', 'progres_keu_jan', 'progres_keu_feb', 'progres_keu_mar', 'progres_keu_apr', 'progres_keu_mei', 'progres_keu_jun', 'progres_keu_jul', 'progres_keu_agu', 'progres_keu_sep', 'progres_keu_okt', 'progres_keu_nov', 'progres_keu_des', 'progres_fisik_jan', 'progres_fisik_feb', 'progres_fisik_mar', 'progres_fisik_apr', 'progres_fisik_mei', 'progres_fisik_jun', 'progres_fisik_jul', 'progres_fisik_agu', 'progres_fisik_sep', 'progres_fisik_okt', 'progres_fisik_nov', 'progres_fisik_des', 'ren_keu_jan', 'ren_keu_feb', 'ren_keu_mar', 'ren_keu_apr', 'ren_keu_mei', 'ren_keu_jun', 'ren_keu_jul', 'ren_keu_agu', 'ren_keu_sep', 'ren_keu_okt', 'ren_keu_nov', 'ren_keu_des', 'ren_fis_jan', 'ren_fis_feb', 'ren_fis_mar', 'ren_fis_apr', 'ren_fis_mei', 'ren_fis_jun', 'ren_fis_jul', 'ren_fis_agu', 'ren_fis_sep', 'ren_fis_okt', 'ren_fis_nov', 'ren_fis_des');
-            
-            if($param == 'kontrak'){
 
-                $fno =  array('tahun','kdsatker','kdprogram','kdgiat','kdoutput','kdsoutput','kdkmpnen','kdskmpnen','kdpaket','kdls','nmpaket','kdpengadaan','kdkategori','kdjnskon','rkn_nama','rkn_npwp','nomor_kontrak','nilai_kontrak','tanggal_kontrak','tgl_spmk','waktu');
+            if ($param == 'kontrak') {
+
+                $fno =  array('tahun', 'kdsatker', 'kdprogram', 'kdgiat', 'kdoutput', 'kdsoutput', 'kdkmpnen', 'kdskmpnen', 'kdpaket', 'kdls', 'nmpaket', 'kdpengadaan', 'kdkategori', 'kdjnskon', 'rkn_nama', 'rkn_npwp', 'nomor_kontrak', 'nilai_kontrak', 'tanggal_kontrak', 'tgl_spmk', 'waktu');
                 $tabel = "monika_kontrak";
-            }else{
+            } else if ($param == 'paket') {
 
-                $fno = array('pagu_51', 'pagu_52', 'pagu_53', 'pagu_rpm', 'pagu_sbsn', 'pagu_phln', 'pagu_total', 'real_51', 'real_52', 'real_53', 'real_rpm', 'real_sbsn', 'real_phln', 'real_total', 'progres_keuangan', 'progres_fisik', 'progres_keu_jan', 'progres_keu_feb', 'progres_keu_mar', 'progres_keu_apr', 'progres_keu_mei', 'progres_keu_jun', 'progres_keu_jul', 'progres_keu_agu', 'progres_keu_sep', 'progres_keu_okt', 'progres_keu_nov', 'progres_keu_des', 'progres_fisik_jan', 'progres_fisik_feb', 'progres_fisik_mar', 'progres_fisik_apr', 'progres_fisik_mei', 'progres_fisik_jun', 'progres_fisik_jul', 'progres_fisik_agu', 'progres_fisik_sep', 'progres_fisik_okt', 'progres_fisik_nov', 'progres_fisik_des', 'ren_keu_jan', 'ren_keu_feb', 'ren_keu_mar', 'ren_keu_apr', 'ren_keu_mei', 'ren_keu_jun', 'ren_keu_jul', 'ren_keu_agu', 'ren_keu_sep', 'ren_keu_okt', 'ren_keu_nov', 'ren_keu_des', 'ren_fis_jan', 'ren_fis_feb', 'ren_fis_mar', 'ren_fis_apr', 'ren_fis_mei', 'ren_fis_jun', 'ren_fis_jul', 'ren_fis_agu', 'ren_fis_sep', 'ren_fis_okt', 'ren_fis_nov', 'ren_fis_des','kdkabkota','kdlokasi','kdppk','kdskmpen','sat','vol');
+                $fno = array('pagu_51', 'pagu_52', 'pagu_53', 'pagu_rpm', 'pagu_sbsn', 'pagu_phln', 'pagu_total', 'real_51', 'real_52', 'real_53', 'real_rpm', 'real_sbsn', 'real_phln', 'real_total', 'progres_keuangan', 'progres_fisik', 'progres_keu_jan', 'progres_keu_feb', 'progres_keu_mar', 'progres_keu_apr', 'progres_keu_mei', 'progres_keu_jun', 'progres_keu_jul', 'progres_keu_agu', 'progres_keu_sep', 'progres_keu_okt', 'progres_keu_nov', 'progres_keu_des', 'progres_fisik_jan', 'progres_fisik_feb', 'progres_fisik_mar', 'progres_fisik_apr', 'progres_fisik_mei', 'progres_fisik_jun', 'progres_fisik_jul', 'progres_fisik_agu', 'progres_fisik_sep', 'progres_fisik_okt', 'progres_fisik_nov', 'progres_fisik_des', 'ren_keu_jan', 'ren_keu_feb', 'ren_keu_mar', 'ren_keu_apr', 'ren_keu_mei', 'ren_keu_jun', 'ren_keu_jul', 'ren_keu_agu', 'ren_keu_sep', 'ren_keu_okt', 'ren_keu_nov', 'ren_keu_des', 'ren_fis_jan', 'ren_fis_feb', 'ren_fis_mar', 'ren_fis_apr', 'ren_fis_mei', 'ren_fis_jun', 'ren_fis_jul', 'ren_fis_agu', 'ren_fis_sep', 'ren_fis_okt', 'ren_fis_nov', 'ren_fis_des', 'kdkabkota', 'kdlokasi', 'kdppk', 'kdskmpen', 'sat', 'vol');
                 $tabel = "monika_data";
-            
+            } else {
+
+
+                $fno = array('status', 'kdunit', 'nmunit', 'pagu_rpm', 'pagu_sbsn', 'pagu_phln', 'pagu_total', 'real_rpm', 'real_sbsn', 'real_phln', 'real_total', 'progres_keu', 'progres_fisik');
+
+                $tabel = "monika_rekap_unor";
             }
 
 
@@ -227,7 +231,7 @@ class Importdata extends \App\Controllers\BaseController
                     foreach ($fgetslines as $k => $line) {
                         if ($line != "") $data .= ($data ? ',' : '') . $line . "}";
                     }
-                    $data =str_replace(array(",}"), array("}"), $data);
+                    $data = str_replace(array(",}"), array("}"), $data);
                     $qdata = [];
                     if ($data != '') {
                         $qdata = json_decode("[$data]", true);
