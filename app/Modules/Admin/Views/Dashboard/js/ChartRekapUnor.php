@@ -4,6 +4,8 @@
 
     var d1_1 = [];
     var d1_2 = [];
+    var d1_kd_unit = [];
+
 
     index = 1325376000000;
     for (let i = 0; i < data_pagu.length; i++) {
@@ -11,6 +13,7 @@
 
         d1_1[i] = parseFloat(data_pagu[i]['progres_keu'])
         d1_2[i] = parseFloat(data_pagu[i]['progres_fisik'])
+        d1_kd_unit[i] = [data_pagu[i]['kdunit']]
 
 
     }
@@ -20,10 +23,9 @@
     inc2 = 0;
 
 
-
     for (var i = 0; i < d1_1.length; i++) {
 
-        if (index == 1333411200000) {
+        if (d1_kd_unit[i][0] == 06) {
             data1[i] = {
                 label: "KEU",
                 data: [

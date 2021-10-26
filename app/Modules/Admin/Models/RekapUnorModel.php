@@ -29,6 +29,6 @@ class RekapUnorModel extends Model
     {
         $this->akses = new AksesModel();
         $w = $this->akses->unitsatker("", $w);
-        return $this->db->query("SELECT * FROM monika_rekap_unor JOIN tunitkerja ON monika_rekap_unor.kdunit = tunitkerja.kdunit ORDER BY urutan ")->getResultArray();
+        return $this->db->query("SELECT * FROM monika_rekap_unor JOIN tunitkerja ON monika_rekap_unor.kdunit = tunitkerja.kdunit ORDER BY progres_keu DESC ")->getResultArray();
     }
 }

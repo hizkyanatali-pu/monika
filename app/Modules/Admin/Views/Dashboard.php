@@ -64,10 +64,10 @@
                                     <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram'" : "") ?>>
                                         <th scope="row"><?= ++$key ?></th>
                                         <td><?= $val['nmsingkat']; ?></td>
-                                        <td><?= toRupiah($val['pagu_total'], false); ?></td>
-                                        <td><?= toRupiah($val["real_total"], false); ?></td>
-                                        <td><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
-                                        <td><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= toRupiah($val['pagu_total'], false); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= toRupiah($val["real_total"], false); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
 
                                     </tr>
 
