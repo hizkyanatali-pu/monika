@@ -435,7 +435,7 @@
                     <i class="la la-gear"></i>
                 </span>
                 <h3 class="kt-portlet__head-title">
-                    POSTUR PAKET KONTRAKTUAL T.A. 2021
+                    POSTUR PAKET BELUM LELANG TA 2021
                 </h3>
             </div>
         </div>
