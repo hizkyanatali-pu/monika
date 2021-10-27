@@ -20,8 +20,8 @@
     <!-- PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR -->
 
     <div class="kt-portlet kt-portlet--tab">
-        <div class="kt-portlet__head" style="text-align: center;">
-            <div class="kt-portlet__head-label">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
                 </span>
@@ -29,6 +29,7 @@
                     PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR
                 </h3>
             </div>
+
         </div>
         <div class="kt-portlet__body">
             <div class="kt-section">
@@ -79,6 +80,7 @@
                         </table>
                     </div>
                 </div>
+                <hr style="border: 1px solid black;">
                 <div class="chart-container mt-2" style="height: 500px">
                     <div id="bar-legend" class="chart-legend"></div>
                     <div id="placeholder-bar-chart" class="mychart"></div>
@@ -93,7 +95,7 @@
 
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
-            <div class="kt-portlet__head-label">
+            <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
                 </span>
@@ -168,7 +170,7 @@
 
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
-            <div class="kt-portlet__head-label">
+            <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
                 </span>
@@ -317,7 +319,7 @@
 
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
-            <div class="kt-portlet__head-label">
+            <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
                 </span>
@@ -430,7 +432,7 @@
 
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
-            <div class="kt-portlet__head-label">
+            <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
                 </span>
@@ -590,7 +592,7 @@
 
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
-            <div class="kt-portlet__head-label">
+            <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
                 </span>
@@ -649,7 +651,7 @@
 
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
-            <div class="kt-portlet__head-label">
+            <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
                 </span>
@@ -709,7 +711,7 @@
 
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
-            <div class="kt-portlet__head-label">
+            <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
                 </span>
@@ -768,7 +770,7 @@
 
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
-            <div class="kt-portlet__head-label">
+            <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
                 </span>
@@ -846,7 +848,7 @@
 
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
-            <div class="kt-portlet__head-label">
+            <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
                 </span>
@@ -918,6 +920,8 @@
     </div>
 
     <!-- END RENCANA TENDER, PAKET BELUM LELANG RPM -->
+
+
 
 </div>
 
