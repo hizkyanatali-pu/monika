@@ -61,7 +61,7 @@
                             <tbody>
                                 <?php foreach ($rekapunor as $key => $val) { ?>
 
-                                    <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram'" : "") ?>>
+                                    <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram font-weight-bold'" : "") ?>>
                                         <th scope="row"><?= ++$key ?></th>
                                         <td><?= $val['nmsingkat']; ?></td>
                                         <td class="tdNilai text-right col-pagu_phln"><?= toRupiah($val['pagu_total'], false); ?></td>
@@ -586,7 +586,338 @@
 
     <!-- END  POSTUR PAKET BELUM LELANG -->
 
+    <!-- DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN -->
 
+    <div class="kt-portlet kt-portlet--tab">
+        <div class="kt-portlet__head" style="text-align: center;">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon kt-hidden">
+                    <i class="la la-gear"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN
+                </h3>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div class="kt-portlet">
+                <div class="kt-portlet__body">
+
+                    <!--begin::Section-->
+                    <div class="kt-section">
+                        <div class="row mb-3">
+                            <div class="col-md-12 text-right mt-3 float-right">
+                                <i><b>*Dalam Milyar Rupiah</b></i>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive tableFixHead">
+
+                            <?php $colspan = 8; ?>
+                            <table class="table table-bordered mb-0 table-striped" id="table">
+                                <thead>
+                                    <tr class="text-center  text-white" style="background-color: #1562aa;">
+                                        <th>No</th>
+                                        <th>Kegiatan</th>
+                                        <th>Paket</th>
+                                        <th>Pagu</th>
+                                        <th>Antara Lain</th>
+                                </thead>
+
+                                <tbody id="tbody-utama">
+                                    <th scope="row">1</th>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!--end::Section-->
+                </div>
+
+                <!--end::Form-->
+            </div>
+        </div>
+    </div>
+    <!-- END DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN -->
+
+    <!-- DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN -->
+
+    <div class="kt-portlet kt-portlet--tab">
+        <div class="kt-portlet__head" style="text-align: center;">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon kt-hidden">
+                    <i class="la la-gear"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN
+                </h3>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div class="kt-portlet">
+                <div class="kt-portlet__body">
+
+                    <!--begin::Section-->
+                    <div class="kt-section">
+                        <div class="row mb-3">
+                            <div class="col-md-12 text-right mt-3 float-right">
+                                <i><b>*Dalam Milyar Rupiah</b></i>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive tableFixHead">
+
+                            <?php $colspan = 8; ?>
+                            <table class="table table-bordered mb-0 table-striped" id="table">
+                                <thead>
+                                    <tr class="text-center  text-white" style="background-color: #1562aa;">
+                                        <th>No</th>
+                                        <th>Kegiatan</th>
+                                        <th>Paket</th>
+                                        <th>Pagu</th>
+                                        <th>Antara Lain</th>
+                                </thead>
+
+                                <tbody id="tbody-utama">
+                                    <th scope="row">1</th>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!--end::Section-->
+                </div>
+
+                <!--end::Form-->
+            </div>
+        </div>
+    </div>
+    <!-- END DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN -->
+
+
+    <!-- PAKET BELUM LELANG PHLN - MYC PROJECT LOAN -->
+
+    <div class="kt-portlet kt-portlet--tab">
+        <div class="kt-portlet__head" style="text-align: center;">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon kt-hidden">
+                    <i class="la la-gear"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    PAKET BELUM LELANG PHLN - MYC PROJECT LOAN
+                </h3>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div class="kt-portlet">
+                <div class="kt-portlet__body">
+
+                    <!--begin::Section-->
+                    <div class="kt-section">
+                        <div class="row mb-3">
+                            <div class="col-md-12 text-right mt-3 float-right">
+                                <i><b>*Dalam Milyar Rupiah</b></i>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive tableFixHead">
+
+                            <?php $colspan = 8; ?>
+                            <table class="table table-bordered mb-0 table-striped" id="table">
+                                <thead>
+                                    <tr class="text-center  text-white" style="background-color: #1562aa;">
+                                        <th>No</th>
+                                        <th>Kegiatan</th>
+                                        <th>Paket</th>
+                                        <th>Pagu</th>
+                                        <th>Antara Lain</th>
+                                </thead>
+
+                                <tbody id="tbody-utama">
+                                    <th scope="row">1</th>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!--end::Section-->
+                </div>
+
+                <!--end::Form-->
+            </div>
+        </div>
+    </div>
+    <!-- END PAKET BELUM LELANG PHLN - MYC PROJECT LOAN -->
+
+    <!-- RENCANA TENDER, PAKET BELUM LELANG RPM -->
+
+    <div class="kt-portlet kt-portlet--tab">
+        <div class="kt-portlet__head" style="text-align: center;">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon kt-hidden">
+                    <i class="la la-gear"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    RENCANA TENDER, PAKET BELUM LELANG RPM
+                </h3>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div class="kt-section">
+                <div class="kt-section__content">
+                    <div class="tree ml--105 pr-4">
+                        <ul>
+                            <li class="w-100">
+                                <a href="#" class="w-25">
+                                    <div class="tree-content">
+                                        <div class="card card-body bg-tree-1">
+                                            <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                            <h4 class="mb-0"><b> BELUM LELANG </b></h4>
+                                            <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                <h5 class="mb-0">
+                                                    Rp. <?= number_format($totaldjs->total); ?>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <ul>
+
+                                    <li class="" style="width: 60% !important">
+                                        <a href="#" class="w-50">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2">
+                                                    <h4 class="mb-0"><b> RPM </b></h4>
+                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            Rp. <?= number_format($totalketahanansda->total); ?>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    <li class="" style="width: 40% !important">
+                                        <a href="#" class="w-75">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2">
+                                                    <h4 class="mb-0"><b> PLN </b></h4>
+                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            Rp <?= number_format($totalketahanansda->total); ?>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END RENCANA TENDER, PAKET BELUM LELANG RPM -->
+
+    <!-- RENCANA TENDER, PAKET BELUM LELANG PLN -->
+
+    <div class="kt-portlet kt-portlet--tab">
+        <div class="kt-portlet__head" style="text-align: center;">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon kt-hidden">
+                    <i class="la la-gear"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    RENCANA TENDER, PAKET BELUM LELANG PLN
+                </h3>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div class="kt-section">
+                <div class="kt-section__content">
+                    <div class="tree ml--105 pr-4">
+                        <ul>
+                            <li class="w-100">
+                                <a href="#" class="w-25">
+                                    <div class="tree-content">
+                                        <div class="card card-body bg-tree-1">
+                                            <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                            <h4 class="mb-0"><b> BELUM LELANG </b></h4>
+                                            <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                <h5 class="mb-0">
+                                                    Rp. <?= number_format($totaldjs->total); ?>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <ul>
+
+                                    <li class="" style="width: 60% !important">
+                                        <a href="#" class="w-50">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2">
+                                                    <h4 class="mb-0"><b> RPM </b></h4>
+                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            Rp. <?= number_format($totalketahanansda->total); ?>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    <li class="" style="width: 40% !important">
+                                        <a href="#" class="w-75">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2">
+                                                    <h4 class="mb-0"><b> PLN </b></h4>
+                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            Rp <?= number_format($totalketahanansda->total); ?>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END RENCANA TENDER, PAKET BELUM LELANG RPM -->
 
 </div>
 
