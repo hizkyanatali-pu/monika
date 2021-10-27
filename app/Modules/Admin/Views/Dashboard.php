@@ -247,61 +247,61 @@
                             </div>
                         </div>
 
-                        <div class="table-responsive tableFixHead">
+                        <!-- <div class="table-responsive tableFixHead"> -->
 
-                            <?php $colspan = 8; ?>
-                            <table class="table table-bordered mb-0 table-striped" id="table">
-                                <thead>
-                                    <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                        <th rowspan="3">No</th>
-                                        <th class="tematik" rowspan="3">Tematik</th>
-                                        <th class="pagu" rowspan="3">Pagu (dalam Milyar)</th>
-                                        <th class="realisasi" colspan="3">Realisasi</th>
-                                        <th class="keterangan" rowspan="3">Keterangan</th>
-                                    </tr>
-                                    <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                        <th class="progres_keu progres" colspan="2">Keuangan</th>
-                                        <th class="progres_fis progres">Fisik</th>
-                                    </tr>
-                                    <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                        <th class="progres_keu progres">Rp</th>
-                                        <th class="progres_fis progres">%</th>
-                                        <th class="progres_fis progres">%</th>
+                        <?php $colspan = 8; ?>
+                        <table class="table table-bordered mb-0 table-striped" id="table">
+                            <thead>
+                                <tr class="text-center  text-white" style="background-color: #1562aa;">
+                                    <th rowspan="3">No</th>
+                                    <th class="tematik" rowspan="3">Tematik</th>
+                                    <th class="pagu" rowspan="3">Pagu (dalam Milyar)</th>
+                                    <th class="realisasi" colspan="3">Realisasi</th>
+                                    <th class="keterangan" rowspan="3">Keterangan</th>
+                                </tr>
+                                <tr class="text-center  text-white" style="background-color: #1562aa;">
+                                    <th class="progres_keu progres" colspan="2">Keuangan</th>
+                                    <th class="progres_fis progres">Fisik</th>
+                                </tr>
+                                <tr class="text-center  text-white" style="background-color: #1562aa;">
+                                    <th class="progres_keu progres">Rp</th>
+                                    <th class="progres_fis progres">%</th>
+                                    <th class="progres_fis progres">%</th>
 
-                                    </tr>
-                                </thead>
+                                </tr>
+                            </thead>
 
-                                <tbody id="tbody-utama">
-                                    <?php
-                                    $no = 1;
-                                    foreach ($data as $key => $value) :
-                                    ?>
+                            <tbody id="tbody-utama">
+                                <?php
+                                $no = 1;
+                                foreach ($data as $key => $value) :
+                                ?>
+                                    <tr>
+                                        <td class="tdprogram"><?php echo $no++ ?></td>
+                                        <td class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
+                                        <td class="col-pagu tdprogram"><?php echo toMilyar($value['totalPagu'], false) ?></td>
+                                        <td class="col-realisasi tdprogram"><?php echo toMilyar($value['totalRealisasi'], false) ?></td>
+                                        <td class="col-progres_keu tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?></td>
+                                        <td class="col-progres_fis tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?></td>
+                                        <td class="col-keterangan tdprogram"></td>
+                                    </tr>
+                                    <?php foreach ($value['list'] as $key2 => $value2) : ?>
                                         <tr>
-                                            <td class="tdprogram"><?php echo $no++ ?></td>
-                                            <td class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
-                                            <td class="col-pagu tdprogram"><?php echo toMilyar($value['totalPagu'], false) ?></td>
-                                            <td class="col-realisasi tdprogram"><?php echo toMilyar($value['totalRealisasi'], false) ?></td>
-                                            <td class="col-progres_keu tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?></td>
-                                            <td class="col-progres_fis tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?></td>
-                                            <td class="col-keterangan tdprogram"></td>
-                                        </tr>
-                                        <?php foreach ($value['list'] as $key2 => $value2) : ?>
-                                            <tr>
-                                                <td></td>
-                                                <td class="col-tematik"><?php echo $value2->tematik ?></td>
-                                                <td class="col-pagu"><?php echo toMilyar($value2->pagu, false) ?></td>
-                                                <td class="col-realisasi"><?php echo toMilyar($value2->realisasi, false) ?></td>
-                                                <td class="col-progres_keu"><?php echo onlyTwoDecimal($value2->prog_keu) ?></td>
-                                                <td class="col-progres_fis"><?php echo onlyTwoDecimal($value2->prog_fis) ?></td>
-                                                <td class="col-keterangan"><?php echo $value2->ket ?></td>
+                                            <td></td>
+                                            <td class="col-tematik"><?php echo $value2->tematik ?></td>
+                                            <td class="col-pagu"><?php echo toMilyar($value2->pagu, false) ?></td>
+                                            <td class="col-realisasi"><?php echo toMilyar($value2->realisasi, false) ?></td>
+                                            <td class="col-progres_keu"><?php echo onlyTwoDecimal($value2->prog_keu) ?></td>
+                                            <td class="col-progres_fis"><?php echo onlyTwoDecimal($value2->prog_fis) ?></td>
+                                            <td class="col-keterangan"><?php echo $value2->ket ?></td>
 
-                                                <!--<td><?php echo  "- " . str_replace("||", "<br> - ", str_replace(", ", ",", $value2->ket))  ?></td>-->
-                                            </tr>
-                                        <?php endforeach ?>
+                                            <!--<td><?php echo  "- " . str_replace("||", "<br> - ", str_replace(", ", ",", $value2->ket))  ?></td>-->
+                                        </tr>
                                     <?php endforeach ?>
-                                </tbody>
-                            </table>
-                        </div>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                        <!-- </div> -->
 
                     </div>
 
