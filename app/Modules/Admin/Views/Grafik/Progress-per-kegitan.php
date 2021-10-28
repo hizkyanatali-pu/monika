@@ -30,6 +30,38 @@
 						  <div id="placeholder-bar-chart" class="mychart"></div>
 						</div>
                     </div>
+					<div class="card-body pt-5">
+
+					<table class="table table-bordered">
+						  	<thead class="thead-dark">
+						    	<tr>
+						      		<th>No</th>
+						      		<th>Kode Kegiatan</th>
+						      		<th style="text-align: center;">Kegiatan</th>
+						      		<th>Keuangan %</th>
+						      		<th>Fisik %</th>
+
+						    	</tr>
+						  	</thead>
+						  	<tbody>
+							
+								  <?php foreach($pagu as $key => $value){ ?>
+									<tr>
+							      	<th scope="row"><?= ++$key ?></th>
+							      	<td> <?= $value->kdgiat; ?></td>
+							      	<td> <?= $value->nmgiat; ?></td>
+							      	<td> <?= onlyTwoDecimal($value->keu); ?></td>
+							      	<td> <?= onlyTwoDecimal($value->fis); ?></td>
+
+						    	</tr>
+
+								 <?php  } ?>
+
+					
+						  	</tbody>
+						</table>
+				
+				</div>
                 </div>
                 <!--end::Section-->
             </div>

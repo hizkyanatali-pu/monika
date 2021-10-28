@@ -82,9 +82,9 @@
                                 <i class="fa fa-file-excel"></i>Excel
                             </a>
                         </div>
-                        <i><b>*Dalam Ribuan</b></i>
+                        <i><b>*Dalam Milyar Rupiah</b></i>
                     </div>
-                </div>    
+                </div>
 
                 <div class="table-responsive tableFixHead">
 
@@ -106,30 +106,30 @@
                         </thead>
 
                         <tbody id="tbody-utama">
-                            <?php 
-                                $no = 1;
-                                foreach($data as $key => $value): 
+                            <?php
+                            $no = 1;
+                            foreach ($data as $key => $value) :
                             ?>
                                 <tr>
                                     <td class="tdprogram"><?php echo $no++ ?></td>
                                     <td class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
-                                    <td class="col-pagu tdprogram"><?php echo toRupiah($value['totalPagu'], false) ?></td>
-                                    <td class="col-realisasi tdprogram"><?php echo toRupiah($value['totalRealisasi'], false) ?></td>
+                                    <td class="col-pagu tdprogram"><?php echo toMilyar($value['totalPagu'], false) ?></td>
+                                    <td class="col-realisasi tdprogram"><?php echo toMilyar($value['totalRealisasi'], false) ?></td>
                                     <td class="col-progres_keu tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?></td>
                                     <td class="col-progres_fis tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?></td>
                                     <td class="col-keterangan tdprogram"></td>
                                 </tr>
-                                <?php foreach($value['list'] as $key2 => $value2): ?>
+                                <?php foreach ($value['list'] as $key2 => $value2) : ?>
                                     <tr>
                                         <td></td>
                                         <td class="col-tematik"><?php echo $value2->tematik ?></td>
-                                        <td class="col-pagu"><?php echo toRupiah($value2->pagu, false) ?></td>
-                                        <td class="col-realisasi"><?php echo toRupiah($value2->realisasi, false) ?></td>
+                                        <td class="col-pagu"><?php echo toMilyar($value2->pagu, false) ?></td>
+                                        <td class="col-realisasi"><?php echo toMilyar($value2->realisasi, false) ?></td>
                                         <td class="col-progres_keu"><?php echo onlyTwoDecimal($value2->prog_keu) ?></td>
                                         <td class="col-progres_fis"><?php echo onlyTwoDecimal($value2->prog_fis) ?></td>
                                         <td class="col-keterangan"><?php echo $value2->ket ?></td>
 
-                                        <!--<td><?php echo  "- ". str_replace("||","<br> - ",str_replace(", ", ",", $value2->ket))  ?></td>-->
+                                        <!--<td><?php echo  "- " . str_replace("||", "<br> - ", str_replace(", ", ",", $value2->ket))  ?></td>-->
                                     </tr>
                                 <?php endforeach ?>
                             <?php endforeach ?>
@@ -162,13 +162,13 @@
     let report_open = true
     let checkbox = $("input:checkbox")
     $("input:checkbox").prop("checked", true)
-    $("input:checkbox").click(function(){
-        
+    $("input:checkbox").click(function() {
+
         //checking checkbox for report button
-        if((checkbox.length - checkbox.filter(":checked").length) == checkbox.length){
-            
+        if ((checkbox.length - checkbox.filter(":checked").length) == checkbox.length) {
+
             report_open = false
-        }else{
+        } else {
 
             report_open = true
         }
@@ -189,10 +189,10 @@
 
             progres_counter--;
         }
-        if($("table .progres_keu").is(":hidden") && $("table .progres_fis").is(":hidden")){
+        if ($("table .progres_keu").is(":hidden") && $("table .progres_fis").is(":hidden")) {
 
             $(".progres-main").hide()
-        }else{
+        } else {
 
             $(".progres-main").show()
             $(".progres-main").attr("colspan", progres_counter)
@@ -200,41 +200,41 @@
         //progres end section
     });
 
-    $(".pdf-report").click(function(){
-        
+    $(".pdf-report").click(function() {
+
         let arr = [];
-        
-        if(!$("input[name=tematik]").prop("checked")){
+
+        if (!$("input[name=tematik]").prop("checked")) {
 
             arr.push("tematik")
         }
-        if(!$("input[name=pagu]").prop("checked")){
+        if (!$("input[name=pagu]").prop("checked")) {
 
             arr.push("pagu")
         }
-        if(!$("input[name=realisasi]").prop("checked")){
+        if (!$("input[name=realisasi]").prop("checked")) {
 
             arr.push("realisasi")
         }
-        if(!$("input[name=progres_keu]").prop("checked")){
+        if (!$("input[name=progres_keu]").prop("checked")) {
 
             arr.push("progres_keu")
         }
-        if(!$("input[name=progres_fis]").prop("checked")){
+        if (!$("input[name=progres_fis]").prop("checked")) {
 
             arr.push("progres_fis")
         }
-        if(!$("input[name=keterangan]").prop("checked")){
+        if (!$("input[name=keterangan]").prop("checked")) {
 
             arr.push("keterangan")
         }
 
         //condition for report button
-        if(report_open){
+        if (report_open) {
 
-            $(this).attr("href", "<?= $id_report_pdf ?>?filter="+arr.join(','))
+            $(this).attr("href", "<?= $id_report_pdf ?>?filter=" + arr.join(','))
             $(this).attr("target", "_blank")
-        }else{
+        } else {
 
             $(this).removeAttr("href")
             $(this).removeAttr("target")

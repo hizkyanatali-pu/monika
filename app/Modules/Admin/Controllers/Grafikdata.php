@@ -53,13 +53,17 @@ class Grafikdata extends \App\Controllers\BaseController
                         if($day != 0){
 
                             $prev_month = $i - 1;
-
+                            //balik awal
                             //data realisasi 
-                            $data_realisasi = $d["realisasi_$prev_month"] + (date("d")/ $a * ($d["realisasi_$i"] - $d["realisasi_$prev_month"]));
+                            // $data_realisasi = $d["realisasi_$prev_month"] + (date("d")/ $a * ($d["realisasi_$i"] - $d["realisasi_$prev_month"]));
+                            //penyesuaian nilai realisasi
+                            $data_realisasi = $d["realisasi"];
+
                             $data['realisasi'][]=[($i-1)+0.5, number_format($data_realisasi,2,'.','.')];
 
                             //data rencana
                             $data_rencana = $d["rencana_$prev_month"] + (date("d")/ $a * ($d["rencana_$i"] - $d["rencana_$prev_month"]));
+                        
                             array_splice($data['rencana'], $i, 0, [[($i-1)+0.5, number_format($data_rencana,2,'.','.')]]);
                         }else{
                             

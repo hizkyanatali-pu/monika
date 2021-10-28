@@ -204,8 +204,8 @@ if (!function_exists('longdate_indo')) {
 
 function getLastUpdateData(){
     $db      = \Config\Database::connect();
-    $builder = $db->query("SELECT in_dt FROM monika_pull WHERE st = 3 ")->getRow();
-    $timestamp =  $builder->in_dt;
+    $builder = $db->query("SELECT in_dt FROM monika_pull WHERE st = 3 AND type='paket' ")->getRow();
+    $timestamp =  (isset($builder->in_dt) ? $builder->in_dt : "");
     $splitTimeStamp = explode(" ",$timestamp);
     $date = $splitTimeStamp[0];
     $time = $splitTimeStamp[1];
