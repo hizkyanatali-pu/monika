@@ -29,6 +29,12 @@ $title = $title ?? '';
 
     <?php echo link_tag('css/styles.css'); ?>
 
+    <?php echo link_tag('https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css'); ?>
+
+    <?php echo link_tag('https://cdn.datatables.net/scroller/2.0.5/css/scroller.dataTables.min.css'); ?>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- Tree -->
     <?php echo link_tag('css/tree.css'); ?>
 

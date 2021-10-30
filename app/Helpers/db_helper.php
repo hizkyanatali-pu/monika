@@ -1,25 +1,25 @@
 <?php
 
-function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $field2 = '')
+function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $kdkomponen, $field1 = '', $field2 = '')
 {
     $db      = \Config\Database::connect($db);
 
     switch ($param) {
         case 'outputvol':
             $builder = $db->query("SELECT SUM(REPLACE(pkt.vol,',','.')) vol FROM paket pkt WHERE 
-        pkt.kdprogram = '$kdprogram' AND pkt.kdgiat = '$kdgiat' AND pkt.kdoutput = '$kdoutput' 
-        AND pkt.kdkmpnen = '074'")->getRow();
+        pkt.kdprogram = '$kdprogram' AND pkt.kdgiat = '$kdgiat' AND pkt.kdoutput IN ($kdoutput) 
+        AND pkt.kdkmpnen = '$kdkomponen'")->getRow();
             goto out;
             break;
         case 'outputpg':
-            $builder = $db->query("SELECT SUM(pg) vol FROM paket pkt WHERE pkt.kdprogram = '$kdprogram' AND pkt.kdgiat = '$kdgiat' AND pkt.kdoutput = '$kdoutput' 
-            AND pkt.kdkmpnen = '074'")->getRow();
+            $builder = $db->query("SELECT SUM(pg) vol FROM paket pkt WHERE pkt.kdprogram = '$kdprogram' AND pkt.kdgiat = '$kdgiat' AND pkt.kdoutput IN ($kdoutput) 
+            AND pkt.kdkmpnen = '$kdkomponen'")->getRow();
             goto out;
             break;
         case 'outputrealisasi':
             $builder = $db->query("SELECT SUM($field1) vol FROM paket pkt WHERE 
-        pkt.kdprogram = '$kdprogram' AND pkt.kdgiat = '$kdgiat'  AND pkt.kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS') AND pkt.kdoutput = '$kdoutput'
-        AND pkt.kdkmpnen = '074'")->getRow();
+        pkt.kdprogram = '$kdprogram' AND pkt.kdgiat = '$kdgiat'  AND pkt.kdoutput IN ($kdoutput)
+        AND pkt.kdkmpnen = '$kdkomponen'")->getRow();
             goto out;
             break;
 
@@ -31,18 +31,15 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                 WHERE
                 kdprogram = '$kdprogram'
                 AND kdgiat = '$kdgiat'
-                AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                AND kdoutput = '$kdoutput'
-                AND kdkmpnen = '074'
+                AND kdoutput IN ($kdoutput)
+                AND kdkmpnen = '$kdkomponen'
                 ) vol 
                 FROM paket pkt 
                 WHERE 
             pkt.kdprogram = '$kdprogram' 
             AND pkt.kdgiat = '$kdgiat' 
-            AND pkt.kdoutput 
-            IN ('CBG', 'CBS', 'RBG', 'RBS')  
-            AND pkt.kdoutput = '$kdoutput'
-            AND pkt.kdkmpnen = '074'"
+            AND pkt.kdoutput IN ($kdoutput)
+            AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -55,17 +52,15 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                 WHERE
                 kdprogram = '$kdprogram'
                 AND kdgiat = '$kdgiat'
-                AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                AND kdoutput = '$kdoutput'
-                AND kdkmpnen = '074'
+                AND kdoutput IN ($kdoutput)
+                AND kdkmpnen = '$kdkomponen'
                 ) vol 
                 FROM paket pkt 
                 WHERE 
                 pkt.kdprogram = '$kdprogram' 
                 AND pkt.kdgiat = '$kdgiat' 
-                AND pkt.kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')  
-                AND pkt.kdoutput = '$kdoutput'
-                AND pkt.kdkmpnen = '074'"
+                AND pkt.kdoutput IN ($kdoutput)
+                AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -78,17 +73,15 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                 WHERE
                 kdprogram = '$kdprogram'
                 AND kdgiat = '$kdgiat'
-                AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                AND kdoutput = '$kdoutput'
-                AND kdkmpnen = '074'
+                AND kdoutput IN ($kdoutput)
+                AND kdkmpnen = '$kdkomponen'
                 ) vol 
                 FROM paket pkt 
                 WHERE 
                 pkt.kdprogram = '$kdprogram' 
                 AND pkt.kdgiat = '$kdgiat' 
-                AND pkt.kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')  
-                AND pkt.kdoutput = '$kdoutput'
-                AND pkt.kdkmpnen = '074'"
+                AND pkt.kdoutput IN ($kdoutput)
+                AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -101,18 +94,15 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                 WHERE
                 kdprogram = '$kdprogram'
                 AND kdgiat = '$kdgiat'
-                AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                AND kdoutput = '$kdoutput'
-                AND kdkmpnen = '074'
+                AND kdoutput IN ($kdoutput)
+                AND kdkmpnen = '$kdkomponen'
                 ) vol 
                 FROM paket pkt 
                 WHERE 
             pkt.kdprogram = '$kdprogram' 
-            AND pkt.kdgiat = '$kdgiat'  
-            AND pkt.kdoutput 
-            IN ('CBG', 'CBS', 'RBG', 'RBS')  
-            AND pkt.kdoutput = '$kdoutput'
-            AND pkt.kdkmpnen = '074'"
+            AND pkt.kdgiat = '$kdgiat'
+            AND pkt.kdoutput IN ($kdoutput)
+            AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -121,18 +111,18 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
         case 'kegiatanvol':
             $builder = $db->query("SELECT SUM(REPLACE(pkt.vol,',','.')) vol FROM paket pkt WHERE 
             pkt.kdprogram = '$kdprogram' AND pkt.kdgiat = '$kdgiat'  
-            AND pkt.kdkmpnen = '074'")->getRow();
+            AND pkt.kdkmpnen = '$kdkomponen'")->getRow();
             goto out;
             break;
         case 'kegiatanpg':
             $builder = $db->query("SELECT SUM(pg) vol FROM paket pkt WHERE pkt.kdprogram = '$kdprogram' AND pkt.kdgiat = '$kdgiat'  
-                AND pkt.kdkmpnen = '074'")->getRow();
+                AND pkt.kdkmpnen = '$kdkomponen'")->getRow();
             goto out;
             break;
         case 'kegiatanrealisasi':
             $builder = $db->query("SELECT SUM($field1) vol FROM paket pkt WHERE 
-            pkt.kdprogram = '$kdprogram' AND pkt.kdgiat = '$kdgiat'  AND pkt.kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS') 
-            AND pkt.kdkmpnen = '074'")->getRow();
+            pkt.kdprogram = '$kdprogram' AND pkt.kdgiat = '$kdgiat'  AND pkt.kdoutput IN ($kdoutput) 
+            AND pkt.kdkmpnen = '$kdkomponen'")->getRow();
             goto out;
             break;
 
@@ -144,17 +134,17 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                     WHERE
                     kdprogram = '$kdprogram'
                     AND kdgiat = '$kdgiat'
-                    AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                    AND kdkmpnen = '074'
+                    AND kdoutput IN ($kdoutput)
+                    AND kdkmpnen = '$kdkomponen'
                     ) vol 
                     FROM paket pkt 
                     WHERE 
                 pkt.kdprogram = '$kdprogram' 
                 AND pkt.kdgiat = '$kdgiat' 
                 AND pkt.kdoutput 
-                IN ('CBG', 'CBS', 'RBG', 'RBS')  
+                IN ($kdoutput)  
                 
-                AND pkt.kdkmpnen = '074'"
+                AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -167,15 +157,15 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                     WHERE
                     kdprogram = '$kdprogram'
                     AND kdgiat = '$kdgiat'
-                    AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                    AND kdkmpnen = '074'
+                    AND kdoutput IN ($kdoutput)
+                    AND kdkmpnen = '$kdkomponen'
                     ) vol 
                     FROM paket pkt 
                     WHERE 
                     pkt.kdprogram = '$kdprogram' 
                     AND pkt.kdgiat = '$kdgiat' 
-                    AND pkt.kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')  
-                    AND pkt.kdkmpnen = '074'"
+                    AND pkt.kdoutput IN ($kdoutput)  
+                    AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -188,15 +178,15 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                     WHERE
                     kdprogram = '$kdprogram'
                     AND kdgiat = '$kdgiat'
-                    AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                    AND kdkmpnen = '074'
+                    AND kdoutput IN ($kdoutput)
+                    AND kdkmpnen = '$kdkomponen'
                     ) vol 
                     FROM paket pkt 
                     WHERE 
                     pkt.kdprogram = '$kdprogram' 
                     AND pkt.kdgiat = '$kdgiat' 
-                    AND pkt.kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')  
-                    AND pkt.kdkmpnen = '074'"
+                    AND pkt.kdoutput IN ($kdoutput)  
+                    AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -209,17 +199,15 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                     WHERE
                     kdprogram = '$kdprogram'
                     AND kdgiat = '$kdgiat'
-                    AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                    AND kdkmpnen = '074'
+                    AND kdoutput IN ($kdoutput)
+                    AND kdkmpnen = '$kdkomponen'
                     ) vol 
                     FROM paket pkt 
                     WHERE 
                 pkt.kdprogram = '$kdprogram' 
                 AND pkt.kdgiat = '$kdgiat'  
-                AND pkt.kdoutput 
-                IN ('CBG', 'CBS', 'RBG', 'RBS')  
-                
-                AND pkt.kdkmpnen = '074'"
+                AND pkt.kdoutput IN ($kdoutput)  
+                AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -228,18 +216,18 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
         case 'programvol':
             $builder = $db->query("SELECT SUM(REPLACE(pkt.vol,',','.')) vol FROM paket pkt WHERE 
             pkt.kdprogram = '$kdprogram'   
-            AND pkt.kdkmpnen = '074'")->getRow();
+            AND pkt.kdkmpnen = '$kdkomponen'")->getRow();
             goto out;
             break;
         case 'programpg':
             $builder = $db->query("SELECT SUM(pg) vol FROM paket pkt WHERE pkt.kdprogram = '$kdprogram'   
-                AND pkt.kdkmpnen = '074'")->getRow();
+                AND pkt.kdkmpnen = '$kdkomponen'")->getRow();
             goto out;
             break;
         case 'programrealisasi':
             $builder = $db->query("SELECT SUM($field1) vol FROM paket pkt WHERE 
-            pkt.kdprogram = '$kdprogram'   AND pkt.kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS') 
-            AND pkt.kdkmpnen = '074'")->getRow();
+            pkt.kdprogram = '$kdprogram'   AND pkt.kdoutput IN ($kdoutput) 
+            AND pkt.kdkmpnen = '$kdkomponen'")->getRow();
             goto out;
             break;
 
@@ -250,15 +238,14 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                     FROM paket
                     WHERE
                     kdprogram = '$kdprogram'
-                    AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                    AND kdkmpnen = '074'
+                    AND kdoutput IN ($kdoutput)
+                    AND kdkmpnen = '$kdkomponen'
                     ) vol 
                     FROM paket pkt 
                     WHERE 
                 pkt.kdprogram = '$kdprogram' 
-                AND pkt.kdoutput 
-                IN ('CBG', 'CBS', 'RBG', 'RBS')  
-                AND pkt.kdkmpnen = '074'"
+                AND pkt.kdoutput IN ($kdoutput)
+                AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -270,15 +257,14 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                     FROM paket
                     WHERE
                     kdprogram = '$kdprogram'
-                    AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                    AND kdkmpnen = '074'
+                    AND kdoutput IN ($kdoutput)
+                    AND kdkmpnen = '$kdkomponen'
                     ) vol 
                     FROM paket pkt 
                     WHERE 
                     pkt.kdprogram = '$kdprogram' 
-                    AND pkt.kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')  
-                    
-                    AND pkt.kdkmpnen = '074'"
+                    AND pkt.kdoutput IN ($kdoutput) 
+                    AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -290,14 +276,14 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                     FROM paket
                     WHERE
                     kdprogram = '$kdprogram'
-                    AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                    AND kdkmpnen = '074'
+                    AND kdoutput IN ($kdoutput)
+                    AND kdkmpnen = '$kdkomponen'
                     ) vol 
                     FROM paket pkt 
                     WHERE 
                     pkt.kdprogram = '$kdprogram' 
-                    AND pkt.kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')  
-                    AND pkt.kdkmpnen = '074'"
+                    AND pkt.kdoutput IN ($kdoutput)  
+                    AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -309,16 +295,14 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
                     FROM paket
                     WHERE
                     kdprogram = '$kdprogram'
-                    AND kdoutput IN ('CBG', 'CBS', 'RBG', 'RBS')
-                    AND kdkmpnen = '074'
+                    AND kdoutput IN ($kdoutput)
+                    AND kdkmpnen = '$kdkomponen'
                     ) vol 
                     FROM paket pkt 
                     WHERE 
                 pkt.kdprogram = '$kdprogram' 
-                AND pkt.kdoutput 
-                IN ('CBG', 'CBS', 'RBG', 'RBS')  
-                
-                AND pkt.kdkmpnen = '074'"
+                AND pkt.kdoutput IN ($kdoutput) 
+                AND pkt.kdkmpnen = '$kdkomponen'"
             )->getRow();
             goto out;
             break;
@@ -337,6 +321,8 @@ function gettotal($db, $kdprogram, $kdgiat, $kdoutput, $param, $field1 = '', $fi
 
 function unique_multidim_array($array, $key, $key1, $addedKey, $addedKey1, $addedKey2, $addedKey3, $addedKey4, $addedKey5, $addedKey6, $addedKey7, $addedKey8)
 {
+    // ini_set('max_execution_time', '120');
+    set_time_limit(90);
     $temp_array = array();
     $i = 0;
     $key_array = array();
@@ -384,7 +370,7 @@ function getoutputname($db, $kdprogram, $kdgiat, $kdoutput, $kdsoutput)
 {
     $db      = \Config\Database::connect($db);
     $builder = $db->query("SELECT ursoutput FROM d_soutput WHERE 
-        kdprogram = '$kdprogram' AND kdgiat = '$kdgiat' AND kdoutput = '$kdoutput' 
+        kdprogram = '$kdprogram' AND kdgiat = '$kdgiat' AND kdoutput IN ($kdoutput) 
          AND kdsoutput = '$kdsoutput'")->getRow();
     return $builder->ursoutput;
 }
