@@ -187,7 +187,7 @@ class Pulldata extends \App\Controllers\BaseController
             'posisi' => ['<i class="fa fa-home"></i>'],
             'idk' => 97,
             'label' => 'Balai Teknik',
-            'nextlink' => 'balaiteknik',
+            'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"),
             'rekap' => 'balaiteknik',
             'id_report' => 'cetak_balai_teknik'
@@ -257,13 +257,16 @@ class Pulldata extends \App\Controllers\BaseController
 
     public function semua_satker($slug = '')
     {
+        $kdgiat = ($slug == 'all' ? "":"md.kdgiat={$slug}");
         $data = array(
             'title' => 'Semua Satker',
             'posisi' => ['<i class="fa fa-home"></i>'],
             'idk' => 'all',
             'label' => 'Semua Satker',
-            'nextlink' => 'Semua Satker',
-            'qdata' => $this->PulldataModel->getBalaiPaket('satker'),
+            'nextlink' => 'paket',
+            'qdata' => $this->PulldataModel->getBalaiPaket("satker",$kdgiat),
+            'kegiatan' => $this->PulldataModel->getKegiatan(),
+            'slug' => $slug, 
             'rekap' => 'semuasatker',
             'id_report' => 'cetak_semua_satker'
         );

@@ -22,7 +22,7 @@ class Auth extends \App\Controllers\BaseController
 			'title' => 'Login'
 		);
 		if ($this->session->isLoggedIn) {
-			return redirect()->to('pulldata/ditjensda');
+			return redirect()->to('dashboard');
 		}
 		return view('Modules\Admin\Views\Auth', $data);
 	}
@@ -99,7 +99,7 @@ class Auth extends \App\Controllers\BaseController
 			'in_dt' => date('Y-m-d H:i:s'),
 			'ip' => $this->request->getIPAddress()
 		));
-		return redirect()->to('pulldata/ditjensda');
+		return redirect()->to('dashboard');
 	}
 
 

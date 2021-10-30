@@ -43,8 +43,8 @@ class TematikModel extends Model
 	                            ),
 	                            'pagu', paket.pg,
 	                            'realisasi', paket.rtot,
-	                            'persen_keu', (paket.rtot / paket.pg),
-	                            'persen_fis', (paket.ufis / paket.pg)
+	                            'persen_keu', (paket.rtot / paket.pg)*100,
+	                            'persen_fis', (paket.ufis / paket.pg)*100
 	                        )
 	                    ) || ']'
 	                from 
@@ -91,8 +91,8 @@ class TematikModel extends Model
 								'realisasi_rpm', (paket.rr_rupiahm + paket.rr_sbsn),
 								'realisasi_phln', paket.rr_pln,
 								'realisasi_total', paket.rtot,
-								'persen_keu', (paket.rtot/paket.pg),
-								'persen_fi', (paket.ufis/paket.pg)
+								'persen_keu', (paket.rtot/paket.pg)*100,
+								'persen_fi', (paket.ufis/paket.pg)*100
 	                        )
 	                    ) || ']'
 	                from 
