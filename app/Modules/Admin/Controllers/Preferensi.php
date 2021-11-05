@@ -97,7 +97,7 @@ class Preferensi extends \App\Controllers\BaseController
         $data = json_decode($openfile);
 
         if (count($data) > 0) {
-            $builder->truncate(); 
+            $builder->truncate();
             $builder->insertBatch($data);
             // $session->setFlashdata('msg', 'Data Berhasil Disinkronisasikan');
             echo json_encode(count($data));

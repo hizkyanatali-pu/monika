@@ -43,9 +43,9 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
+                        <table class="table-bordered" width="100%">
+                            <thead class="text-center text-white" style="background-color: #1562aa;">
+                                <tr>
                                     <th rowspan="2">No</th>
                                     <th rowspan="2">Unit Organisasi</th>
                                     <th rowspan="2">Pagu</th>
@@ -53,7 +53,7 @@
                                     <th colspan="2">Progress</th>
 
                                 </tr>
-                                <tr class="text-center  text-white" style="background-color: #1562aa;">
+                                <tr>
                                     <th>Keuangan</th>
                                     <th>Fisik</th>
 
@@ -92,9 +92,8 @@
     <!-- END  PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR -->
 
     <!-- PROGRES PROGRAM PADAT KARYA PER KEGIATAN -->
-
     <div class="kt-portlet kt-portlet--tab">
-        <div class="kt-portlet__head" style="text-align: center;">
+        <div class="kt-portlet__head">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
                     <i class="la la-gear"></i>
@@ -108,15 +107,15 @@
             <div class="kt-section">
                 <div class="kt-section__content">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
+                        <table class="table-bordered" width="100%">
+                            <thead class="text-center text-white" style="background-color: #1562aa;">
+                                <tr>
                                     <th rowspan="2" class="text-center">No</th>
                                     <th rowspan="2" class="text-center">Kegiatan</th>
                                     <th colspan="4" class="text-center">Target</th>
                                     <th colspan="8" class="text-center">Realisasi</th>
                                 </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
+                                <tr>
                                     <th>Paket/Lokasi</th>
                                     <th>Pagu</th>
                                     <th>Tenaga Kerja</th>
@@ -250,7 +249,7 @@
                         <!-- <div class="table-responsive tableFixHead"> -->
 
                         <?php $colspan = 8; ?>
-                        <table class="table table-bordered mb-0 table-striped" id="table">
+                        <table class="table-bordered mb-0 table-striped" id="table" width="100%">
                             <thead>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
                                     <th rowspan="3">No</th>
@@ -616,7 +615,7 @@
                         <div class="table-responsive tableFixHead">
 
                             <?php $colspan = 8; ?>
-                            <table class="table table-bordered mb-0 table-striped" id="table">
+                            <table class="table-bordered mb-0 table-striped" id="table" width="100%">
                                 <thead>
                                     <tr class="text-center  text-white" style="background-color: #1562aa;">
                                         <th>No</th>
@@ -675,7 +674,7 @@
                         <div class="table-responsive tableFixHead">
 
                             <?php $colspan = 8; ?>
-                            <table class="table table-bordered mb-0 table-striped" id="table">
+                            <table class="table-bordered mb-0 table-striped" id="table" width="100%">
                                 <thead>
                                     <tr class="text-center  text-white" style="background-color: #1562aa;">
                                         <th>No</th>
@@ -735,7 +734,7 @@
                         <div class="table-responsive tableFixHead">
 
                             <?php $colspan = 8; ?>
-                            <table class="table table-bordered mb-0 table-striped" id="table">
+                            <table class="table-bordered mb-0 table-striped" id="table" width="100%">
                                 <thead>
                                     <tr class="text-center  text-white" style="background-color: #1562aa;">
                                         <th>No</th>
