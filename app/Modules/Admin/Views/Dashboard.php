@@ -65,8 +65,8 @@
                                     <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram font-weight-bold'" : "") ?>>
                                         <th scope="row"><?= ++$key ?></th>
                                         <td><?= $val['nmsingkat']; ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= toRupiah($val['pagu_total'], false); ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= toRupiah($val["real_total"], false); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_total'],0,',','.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_total"],0,',','.'); ?></td>
                                         <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
                                         <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
 
