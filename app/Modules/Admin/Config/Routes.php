@@ -133,6 +133,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
     $routes->group('Kinerja-Output-Bulanan', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('(:any)', '\Modules\Admin\Controllers\KinerjaOutputBulanan::index/$1');
+        $routes->post('sendDataKinerja', '\Modules\Admin\Controllers\KinerjaOutputBulanan::getData');
+        $routes->post('sendDataKegiatan', '\Modules\Admin\Controllers\KinerjaOutputBulanan::getOutput');
+        $routes->post('sendDataRo', '\Modules\Admin\Controllers\KinerjaOutputBulanan::getData');
+        $routes->post('sendDataOutput', '\Modules\Admin\Controllers\KinerjaOutputBulanan::getSOutput');
     });
 
 
