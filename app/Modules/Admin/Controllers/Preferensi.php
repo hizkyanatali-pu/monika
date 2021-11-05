@@ -287,6 +287,7 @@ class Preferensi extends \App\Controllers\BaseController
             $fileName = uniqid("file_");
         }
 
+
         $filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
 
         // Chunking might be enabled
@@ -355,14 +356,18 @@ class Preferensi extends \App\Controllers\BaseController
             $countdata = $query->countAll();
             $query2 = $this->db1->query("SELECT * FROM monika_pull_sqlite ORDER BY idpull asc LIMIT 1");
             $result = $query2->getRow();
+            $fileDelete = $targetDir . DIRECTORY_SEPARATOR . $result->nmfile;
 
             if ($countdata > 4) {
+               if (file_exists($fileDelete)){
 
-                unlink($targetDir . DIRECTORY_SEPARATOR . $result->nmfile);
+                    unlink($fileDelete);
 
                 $query->where('nmfile', $result->nmfile);
                 $query->delete();
             }
+}
+
 
 
             $post = [
