@@ -1,4 +1,3 @@
-<?php error_reporting(0); ?>
 <?=
 $this->extend('admin/layouts/default') ?>
 <?= $this->section('content') ?>
@@ -101,7 +100,6 @@ $this->extend('admin/layouts/default') ?>
             <!--begin::Section-->
             <div class="kt-section">
                 <div class="row mb-3">
-                    <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" id="__csrf">
                     <div class="col-md-4">
                         <label class="mb-0">Pilih Bulan</label>
                         <div class="input-group">
@@ -131,74 +129,169 @@ $this->extend('admin/layouts/default') ?>
                             <b>*Dalam Ribuan</b>
                         </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-3">
-                        <label class="mb-0">Kode Program</label>
-                        <div class="input-group">
-                            <select class="form-control select-opt" id="kd_program">
-                                <option></option>
-                                <option value="FC" selected>FC</option>
-                                <option value="WA">WA</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="mb-0">Kode Kegiatan</label>
-                        <div class="input-group">
-                            <select class="form-control select-opt" id="kd_kegiatan" multiple>
-                                <option></option>
-                                <?php
-                                foreach ($dataKegiatan as $data) { ?>
-                                    <option value="<?= $data->kode ?>"> <?= $data->kode ?> </option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="mb-0">Kode KRO</label>
-                        <div class="input-group">
-                            <select class="form-control select-opt" id="kd_output" multiple>
-                                <option></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="mb-0">Kode SOutput</label>
-                        <div class="input-group">
-                            <select class="form-control select-opt" id="kd_komponen">
-                                <option></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                </div>    
 
-                <div class="table-responsive" style="max-width; 100%;overflow-x: hidden;">
+                <div class="table-responsive tableFixHead">
 
                     <?php $colspan = 8; ?>
-                    <table class="table table-bordered mb-0 table-striped display nowrap" id="table" style="width: 100%;">
+                    <table class="table table-bordered mb-0 table-striped" id="table">
                         <thead>
                             <tr class=" text-center bg-purple">
-                                <th class="thNo text-white" rowspan="2">No</th>
-                                <th class="thKode text-white" rowspan="2">Kode</th>
-                                <th class="thLabel text-white" rowspan="2">Program/Kegiatan/KRO/RO</th>
-                                <th class="thNilai text-white" rowspan="2">Target</th>
-                                <th class="thNilai text-white" rowspan="2">Satuan</th>
-                                <th class="thNilai text-white" rowspan="2">Pagu (Rp Ribu)</th>
-                                <th class="thNilai text-white" rowspan="2">Realisasi (Rp Ribu)</th>
-                                <th class="thPersen text-white" colspan="2">Keuangan (%)</th>
-                                <th class="thPersen text-white" colspan="3">Fisik (%)</th>
+                                <th class="thNo" rowspan="2">No</th>
+                                <th class="thKode" rowspan="2">Kode</th>
+                                <th class="thLabel" rowspan="2">Program/Kegiatan/KRO/RO</th>
+                                <th class="thNilai" rowspan="2">Target</th>
+                                <th class="thNilai" rowspan="2">Satuan</th>
+                                <th class="thNilai" rowspan="2">Pagu (Rp Ribu)</th>
+                                <th class="thNilai" rowspan="2">Realisasi (Rp Ribu)</th>
+                                <th class="thPersen" colspan="2">Keuangan (%)</th>
+                                <th class="thPersen" colspan="3">Fisik (%)</th>
                             </tr>
                             <tr class=" text-center bg-purple">
-                                <th class="thPersen text-white">RN</th>
-                                <th class="thPersen text-white">RL</th>
-                                <th class="thPersen text-white">RN</th>
-                                <th class="thPersen text-white">RL</th>
-                                <th class="thPersen text-white">Kinerja</th>
+                                <th class="thPersen">RN</th>
+                                <th class="thPersen">RL</th>
+                                <th class="thPersen">RN</th>
+                                <th class="thPersen">RL</th>
+                                <th class="thPersen">Kinerja</th>
                             </tr>
                         </thead>
 
                         <tbody id="tbody-utama">
+                            <?php if ($qdata) : ?>
+                                <?php $idp = [];
+                                $idg = [];
+                                $ido = [];
+                                $idso = [];
+                                $idkk = [];
+                                $colspan = 12;
+                                $noprogram = 1;
+                                $nogiat = 1;
+                                $nooutput = 1;
+                                $nosoutput = 1;
+                                $nArraysoutput =  unique_multidim_array($qdata, "kode", "kode", "vol", "pg", "rtot", "rr_b", "renk_b", "renf_b", "ff_b", 'jumlah_data', 'ufis');
+    
+                                // print_r($nArraysoutput);
+                                // exit;
+                                ?>
+    
+    
+                                <?php foreach ($nArraysoutput as $key => $d) :    ?>
+    
+                                    <?php $idk = $d['kdprogram'];
+                                    $jumlah_data = isset($d['jumlah_data']) ? $d['jumlah_data'] : 1;
+                                    ?>
+    
+                                    <?php if (!in_array($idk, $idp)) :
+    
+                                        $pg_program = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programpg');
+                                        $realisasi_program = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programrealisasi', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
+                                        $keu_rn_program = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programkeu_rn', '0', 'pkt.renk_b' . $bulanberjalan) / $pg_program * 100;
+                                        $keu_rl_program = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programkeu_rl', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
+                                        $fis_rn_program = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programfis_rn', 'pkt.renf_b' . $bulanberjalan);
+                                        $fis_rl_program =  gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programfis_rl', ($bulanberjalan == $bulansekarang ?  'pkt.ufis'  : 'pkt.ff_b' . $bulanberjalan));
+    
+                                    ?>
+                                        <tr>
+                                            <td class="tdprogram"><?= $noprogram ?></td>
+                                            <td class="tdprogram"><?php echo '<b>' . $idk . '</b>'; ?></td>
+                                            <td class="tdprogram"><?= '<b>' . $d['nmprogram'] . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right;"><?= '<b>' .   str_replace('.', ',', round(gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programvol'), 2))  . '</b>' ?></td>
+                                            <td class="tdprogram"><?= '<b>' . "Paket Program" . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right;"><?php echo '<b>' . number_format($pg_program / 1000, 0, ',', '.') . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right;"><?php echo '<b>' . number_format($realisasi_program / 1000, 0, ',', '.') . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rn_program, 2)) . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rl_program, 2)) . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rn_program, 2)) . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rl_program, 2)) . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right "><?php echo '<b>' .   ($fis_rn_program != 0 ?  str_replace('.', ',', round($fis_rl_program / $fis_rn_program, 2)) : '~') . '</b>' ?></td>
+    
+                                        </tr>
+                                        <?php $idp = array_merge([$idk], $idp); ?>
+                                    <?php endif; ?>
+    
+                                    <?php $idk =  $d['kdgiat'];   ?>
+                                    <?php if (!in_array($idk, $ido)) :
+    
+                                        $pg_giat = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatanpg');
+                                        $realisasi_giat = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatanrealisasi', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
+                                        $keu_rn_giat = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatankeu_rn', 'pkt.renk_b' . $bulanberjalan);
+                                        $keu_rl_giat = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatankeu_rl', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
+                                        $fis_rn_giat = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatanfis_rn', 'pkt.renf_b' . $bulanberjalan);
+                                        $fis_rl_giat =  gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatanfis_rl', ($bulanberjalan == $bulansekarang ?  'pkt.ufis'  : 'pkt.ff_b' . $bulanberjalan));
+    
+                                    ?>
+                                        <tr>
+                                            <td class="tdgiat"><?= $nogiat++ ?></td>
+                                            <td class="tdgiat"><?php echo $idk; ?></td>
+                                            <td class="tdgiat"><?= '<b>' . $d['nmgiat'] . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?= '<b>' . str_replace('.', ',', round(gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatanvol'), 2))  . '</b>' ?></td>
+                                            <td class="tdgiat"><?= '<b>' . "Paket Kegiatan" . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' . number_format($pg_giat / 1000, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' . number_format($realisasi_giat / 1000, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rn_giat, 2)) . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rl_giat, 2)) . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rn_giat, 2)) . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rl_giat, 2)) . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right "><?php echo '<b>' .   ($fis_rn_giat != 0 ?  str_replace('.', ',', round($fis_rl_giat / $fis_rn_giat, 2)) : '~') . '</b>' ?></td>
+                                        </tr>
+                                        <?php $ido = array_merge([$idk], $ido); ?>
+                                    <?php endif; ?>
+    
+    
+                                    <?php $idk = $idk . '.' . $d['kdoutput']; ?>
+                                    <?php if (!in_array($idk, $ido)) :
+                                        $pg_output = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputpg');
+                                        $realisasi_output = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputrealisasi', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
+                                        $keu_rn = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputkeu_rn', 'pkt.renk_b' . $bulanberjalan);
+                                        $keu_rl = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputkeu_rl', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
+                                        $fis_rn = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputfis_rn', 'pkt.renf_b' . $bulanberjalan);
+                                        $fis_rl =  gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputfis_rl', ($bulanberjalan == $bulansekarang ?  'pkt.ufis'  : 'pkt.ff_b' . $bulanberjalan));
+    
+                                    ?>
+                                        <tr>
+                                            <td class="tdoutput"><?= $nooutput++ ?></td>
+                                            <td class="tdoutput"><?php echo $idk; ?></td>
+                                            <td class="tdoutput"><?= '<b>' . $d['nmoutput'] . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?= '<b>' . str_replace('.', ',', round(gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputvol'), 2)) . '</b>' ?></td>
+                                            <td class="tdoutput"><?= '<b>' . $d['sat'] . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' . number_format($pg_output / 1000, 0, ',', '.') . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' . number_format($realisasi_output / 1000, 0, ',', '.') . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rn, 2)) . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rl, 2)) . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rn, 2)) . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rl, 2)) . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right "><?php echo '<b>' .   ($fis_rn != 0 ?  str_replace('.', ',', round($fis_rl / $fis_rn, 2)) : '~') . '</b>' ?></td>
+                                        </tr>
+                                        <?php $ido = array_merge([$idk], $ido); ?>
+                                    <?php endif; ?>
+    
+                                    <?php $idk = $idk . '.' . $d['kdsoutput']; ?>
+                                    <?php if (!in_array($idk, $ido)) :
+                                        $realisasi = ($bulanberjalan == $bulansekarang ?  $d['rtot']  : $d['rr_b']);
+                                        $rl_keu = ($bulanberjalan == $bulansekarang ?  round($d['rtot'] / $d['pg'] * 100 / $jumlah_data, 2) : round($d['rr_b'] / $d['pg'] * 100 / $jumlah_data, 2));
+                                        $rl_fis = ($bulanberjalan == $bulansekarang ?  round($d['ufis'] / $d['pg'] * 100 / $jumlah_data, 2)  : round($d['ff_b'] / $d['pg'] * 100 / $jumlah_data, 2));
+    
+                                    ?>
+                                        <tr>
+                                            <td class="tdsoutput"><?= $nosoutput++ ?></td>
+                                            <td class="tdsoutput"><?php echo $idk; ?></td>
+                                            <td class="tdsoutput"><?= '<b>' . getoutputname($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], $d['kdsoutput']) . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right;"><?= '<b>' . str_replace('.', ',', round(str_replace(",", ".", $d['vol']), 2)) . '</b>' ?></td>
+                                            <td class=" tdsoutput"><?= '<b>' . $d['sat'] . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' . number_format($d['pg'] / 1000, 0, ',', '.') . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' . number_format($realisasi / 1000, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' . str_replace('.', ',', round($d['renk_b'] / $d['pg'] * 100 / $jumlah_data, 2))  . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .   str_replace('.', ',', $rl_keu)  . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .   str_replace('.', ',', round($d['renf_b'] / $jumlah_data, 2))   . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .    str_replace('.', ',', $rl_fis)  . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .   ($d['renf_b'] != 0 ?  str_replace('.', ',', round($rl_fis / $d['renf_b'], 2)) : '~') . '</b>' ?></td>
+    
+                                        </tr>
+                                        <?php $ido = array_merge([$idk], $ido); ?>
+                                    <?php endif; ?>
+    
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -215,203 +308,15 @@ $this->extend('admin/layouts/default') ?>
 <!-- end:: Content -->
 <?= $this->endSection() ?>
 <?= $this->section('footer_js') ?>
-    
-<?= script_tag('https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js'); ?>
-
-<?= script_tag('https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js'); ?>
-
-<?= script_tag('https://cdn.datatables.net/scroller/2.0.5/js/dataTables.scroller.min.js'); ?>
-
-<?= script_tag('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'); ?>
-
 <script>
-    $(".select-opt").select2();
-
-    let uri = window.location.pathname.split('/');
-    var inputs = {
-        bulan: uri[2],
-        kode_program: 'FC',
-        kode_kegiatan: null,
-        kode_output: null,
-        kode_komponen: null
-    };
-    
-    let csrfName = $("#__csrf").attr("name")
-    let csrfHash = $("#__csrf").val()
-    var table = $("#table").DataTable({
-        processing: true,
-        ordering: false,
-        searching: false,
-        deferRender: true,
-        // serverSide: true,
-        ajax: {
-            url: "<?= site_url('Kinerja-Output-Bulanan/sendDataKinerja') ?>",
-            type: 'post',
-            data : {
-                inputs,
-                [csrfName] : csrfHash
-            },
-        },
-        scrollX: true,
-        scrollY: 350,
-        scrollCollapse: true,
-        scroller: {
-            loadingIndicator: true
-        },
-        'createdRow': function(row, data, rowIndex){
-            $.each($('td', row), function (colIndex) {
-                $(this).attr("class", data.class)
-            });
-        },
-        columns: [
-            {"data": "no"},
-            {"data": "kode"},
-            {"data": "nama_program"},
-            {"data": "target"},
-            {"data": "satuan"},
-            {"data": "pagu"},
-            {"data": "realisasi"},
-            {"data": "keuangan_rn"},
-            {"data": "keuangan_rl"},
-            {"data": "fisik_rn"},
-            {"data": "fisik_rl"},
-            {"data": "fisik_kinerja"}
-        ],
+    var $th = $('.tableFixHead1').find('thead th')
+    $('.tableFixHead1').on('scroll', function() {
+        $th.css('transform', 'translateY(' + this.scrollTop + 'px)');
     })
-
-    $("#kd_output").prop("disabled", true)
-    $("#kd_komponen").prop("disabled", true)
-
-    //bulan
-    inputs.bulan = $("#listmonth").val()
-    $("#listmonth").change(function(){
-
-        inputs.bulan = $(this).val()
-        table.destroy();
-        Datatable(inputs);
-    })
-    //kode program
-    $("#kd_program").change(function(){
-
-        inputs.kode_program = $(this).val()
-        table.destroy();
-        Datatable(inputs);
-    })
-    //kode kegiatan
-    $("#kd_kegiatan").change(function(){
-
-        inputs.kode_kegiatan = $(this).val()
-        if(inputs.kode_kegiatan.length != 0){
-
-            $("#kd_output").prop("disabled", false)
-            $.post("<?= site_url('Kinerja-Output-Bulanan/sendDataKegiatan') ?>",
-            {
-                kode_kegiatan: inputs.kode_kegiatan,
-                [csrfName] : csrfHash
-            },
-            function(data){
-
-                var opt = ''
-                $.each(JSON.parse(data), function(i, val){
-                    
-                    opt += `<option values="`+val.kode+`">`+val.kode+`</option>`;
-                })
-                $("#kd_output").html(opt)
-            })
-        }else{
-
-            $("#kd_output").prop("disabled", true)
-        }
-        table.destroy();
-        Datatable(inputs);
-    })
-    //kode output
-    $("#kd_output").change(function(){
-
-        inputs.kode_output = $(this).val()
-        if(inputs.kode_kegiatan.length != 0 && inputs.kode_output.length != 0){
-
-            $("#kd_komponen").prop("disabled", false)
-            $.post("<?= site_url('Kinerja-Output-Bulanan/sendDataOutput') ?>",
-            {
-                kode_kegiatan: inputs.kode_kegiatan,
-                kode_output: inputs.kode_output,
-                [csrfName] : csrfHash
-            },
-            function(data){
-
-                var opt = `<option value="" selected disabled>Pilih kode soutput</option>`
-                $.each(JSON.parse(data), function(i, val){
-                    
-                    opt += `<option values="`+val.kode+`">`+val.kode+`</option>`;
-                })
-                $("#kd_komponen").html(opt)
-            })
-        }else{
-
-            $("#kd_komponen").prop("disabled", true)
-        }
-        table.destroy();
-        Datatable(inputs);
-    })
-    //kode komponen
-    $("#kd_komponen").change(function(){
-
-        inputs.kode_komponen = $(this).val()
-        table.destroy();
-        Datatable(inputs);
-    })
-
-    function Datatable(inputs){
-        
-        table = $("#table").DataTable({
-            processing: true,
-            ordering: false,
-            searching: false,
-            deferRender: true,
-            // serverSide: true,
-            ajax: {
-                url: "<?= site_url('Kinerja-Output-Bulanan/sendDataKinerja') ?>",
-                type: 'post',
-                data : {
-                    inputs,
-                    [csrfName] : csrfHash
-                },
-            },
-            scrollX: true,
-            scrollY: 350,
-            scrollCollapse: true,
-            scroller: {
-                loadingIndicator: true
-            },
-            'createdRow': function(row, data, rowIndex){
-                $.each($('td', row), function (colIndex) {
-                    $(this).attr("class", data.class)
-                });
-            },
-            columns: [
-                {"data": "no"},
-                {"data": "kode"},
-                {"data": "nama_program"},
-                {"data": "target"},
-                {"data": "satuan"},
-                {"data": "pagu"},
-                {"data": "realisasi"},
-                {"data": "keuangan_rn"},
-                {"data": "keuangan_rl"},
-                {"data": "fisik_rn"},
-                {"data": "fisik_rl"},
-                {"data": "fisik_kinerja"}
-            ],
-        })
-    }
-    // var $th = $('.tableFixHead1').find('thead th')
-    // $('.tableFixHead1').on('scroll', function() {
-    //     $th.css('transform', 'translateY(' + this.scrollTop + 'px)');
-    // })
 
     $("#search").click(function() {
         window.location.href = "<?= site_url('Kinerja-Output-Bulanan/') ?>" + $('#listmonth').val();
     });
+</script>
 </script>
 <?= $this->endSection() ?>
