@@ -566,3 +566,16 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     }
 }
 /* END RESPONSIVE */
+
+/* DANA TIDAK TERSERAP  */
+.tree ul.dana-tidak-terserap ul::before {
+    content: '';
+    position: absolute;
+    top: -52px;
+    right: 20%;
+    border-left: 2px solid #696969;
+    width: 0;
+    height: 72px;
+    left: 81%;
+}
+/* END DANA TIDAK TERSERAP  */
