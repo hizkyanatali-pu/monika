@@ -532,10 +532,10 @@
                                         <div class="card card-body bg-tree-1">
                                             <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                             <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                            <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                            <label> Paket</label>
                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                 <h5 class="mb-0">
-                                                    Rp. <?= number_format($totaldjs->total); ?>
+                                                    <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?> M
                                                 </h5>
                                             </div>
                                         </div>
@@ -548,10 +548,10 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> RPM </b></h4>
-                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <label> Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            Rp. <?= number_format($totalketahanansda->total); ?>
+                                                            ?
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -563,10 +563,10 @@
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
                                                             <h4 class="mb-0"><b> SYC </b></h4>
-                                                            <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                            <label> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    <?= number_format($totaldjs->total); ?> Paket
+                                                                    ?
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -590,10 +590,10 @@
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
                                                             <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                            <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                            <label> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    Rp. 100.000.000
+                                                                    ?
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -620,10 +620,10 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> PHLN </b></h4>
-                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <label> Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            Rp <?= number_format($totalketahanansda->total); ?>
+                                                            ?
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -634,10 +634,10 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-3">
                                                     <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <label> Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            Rp. 100.000.000
+                                                            ?
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -869,10 +869,10 @@
                                         <div class="card card-body bg-tree-1">
                                             <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                             <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                            <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                            <label> ? Paket</label>
                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                 <h5 class="mb-0">
-                                                    Rp. <?= number_format($totaldjs->total); ?>
+                                                    Rp. ?
                                                 </h5>
                                             </div>
                                         </div>
@@ -886,10 +886,10 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> RPM </b></h4>
-                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <label> ? Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            Rp. <?= number_format($totalketahanansda->total); ?>
+                                                            Rp. ?
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -934,10 +934,10 @@
                                         <div class="card card-body bg-tree-1">
                                             <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                             <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                            <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                            <label> ? Paket</label>
                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                 <h5 class="mb-0">
-                                                    Rp. <?= number_format($totaldjs->total); ?>
+                                                    Rp. ?
                                                 </h5>
                                             </div>
                                         </div>
@@ -949,10 +949,10 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> PLN </b></h4>
-                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
+                                                    <label> ? Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            Rp <?= number_format($totalketahanansda->total); ?>
+                                                            Rp ?
                                                         </h5>
                                                     </div>
                                                 </div>

@@ -30,15 +30,6 @@ class Dashboard extends \App\Controllers\BaseController
         $grupData = $this->rekapGroupData();
         $qdata = $this->TematikModel->getListRekap($grupData);
 
-        $query = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span");
-        $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC'");
-        $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'");
-
-
-        $row = $query->getRow();
-        $row1 = $query1->getRow();
-        $row2 = $query2->getRow();
-
         //pohon terkontrak
         $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"]);
         $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"]);
@@ -53,9 +44,6 @@ class Dashboard extends \App\Controllers\BaseController
         $data = array(
             'title' => 'Dashboard',
             'data' => $qdata,
-            'totaldjs' => $row,
-            'totalketahanansda' => $row1,
-            'totaldukungan' => $row2,
             'rekapunor' => $rekapUnor,
 
             //pohon kontraktual
