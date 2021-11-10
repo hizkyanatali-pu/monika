@@ -872,7 +872,7 @@
                                             <label> ? Paket</label>
                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                 <h5 class="mb-0">
-                                                    Rp. ?
+                                                    <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?> M
                                                 </h5>
                                             </div>
                                         </div>
@@ -937,7 +937,7 @@
                                             <label> ? Paket</label>
                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                 <h5 class="mb-0">
-                                                    Rp. ?
+                                                    <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?> M
                                                 </h5>
                                             </div>
                                         </div>
