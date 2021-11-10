@@ -1,6 +1,8 @@
 <?php
 
 namespace Modules\Admin\Controllers;
+use Modules\Admin\Models\PohonAnggaranModel;
+
 
 class PohonAnggaran extends \App\Controllers\BaseController
 {
@@ -13,6 +15,8 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $this->user = $session->get('userData');
         $dbcustom = switch_db($this->user['dbuse']);
         $this->db = \Config\Database::connect($dbcustom);
+        $this->PohonAnggaran        = new PohonAnggaranModel();
+
     }
     public function index()
     {
@@ -102,22 +106,20 @@ class PohonAnggaran extends \App\Controllers\BaseController
     }
 
     public function paketKontraktual(){
+    
         
-        $query = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span");
-        $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC'");
-        $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'");
+        $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender"=>"terkontrak"]); 
+        $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender"=>"Proses Lelang"]); 
+        $qbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender"=>"Belum Lelang"]); 
 
-
-        $row = $query->getRow();
-        $row1 = $query1->getRow();
-        $row2 = $query2->getRow();
-
+        // return  $qterkontrak['total'];
 
         $data = array(
             'title' => 'Pagu Per Program',
-            'totaldjs' => $row,
-            'totalketahanansda' => $row1,
-            'totaldukungan' => $row2,
+            'terkontrak' => $qterkontrak,
+            'proseslelang' => $qproseslelang,
+            'belumlelang' => $qbelumlelang,
+
 
         );
 

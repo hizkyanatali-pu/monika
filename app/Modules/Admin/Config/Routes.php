@@ -8,9 +8,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('api', ['namespace' => 'App\Controllers'], function ($routes) {
         //$routes->post('datadukung', '\Modules\Admin\Controllers\Api::index');
         $routes->get('cron-tarik-data/(:any)', '\Modules\Admin\Controllers\CronJob::dataPaket/$1');
-
     });
     $routes->add('dashboard', '\Modules\Admin\Controllers\Dashboard::index');
+    $routes->add('excel', '\Modules\Admin\Controllers\Dashboard::Excel');
+
 
     $routes->get('auth', '\Modules\Admin\Controllers\Auth::index', ['as' => 'auth']);
     $routes->post('auth', '\Modules\Admin\Controllers\Auth::attemptLogin');
@@ -70,7 +71,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('cetak_skpd_tp_op', '\Modules\Admin\Controllers\Pulldata::cetak_skpdtpop');
         $routes->get('cetak_satker_pagu_100m', '\Modules\Admin\Controllers\Pulldata::cetak_satkerpagu100m');
         $routes->get('cetak_semua_satker', '\Modules\Admin\Controllers\Pulldata::cetak_semua_satker');
-
     });
 
     $routes->group('importdata', ['namespace' => 'App\Controllers'], function ($routes) {
@@ -133,10 +133,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
     $routes->group('Kinerja-Output-Bulanan', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('(:any)', '\Modules\Admin\Controllers\KinerjaOutputBulanan::index/$1');
-        $routes->post('sendDataKinerja', '\Modules\Admin\Controllers\KinerjaOutputBulanan::getData');
-        $routes->post('sendDataKegiatan', '\Modules\Admin\Controllers\KinerjaOutputBulanan::getOutput');
-        $routes->post('sendDataRo', '\Modules\Admin\Controllers\KinerjaOutputBulanan::getData');
-        $routes->post('sendDataOutput', '\Modules\Admin\Controllers\KinerjaOutputBulanan::getSOutput');
     });
 
 
