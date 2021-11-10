@@ -89,9 +89,6 @@ $request = \Config\Services::request();
                                                     ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'sisa-belum-lelang'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/sisa-belum-lelang'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Belum Lelang</span></a></li>
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'dana-tidak-terserap'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/dana-tidak-terserap'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Dana Tidak Terserap</span></a></li>
-
-<li class="kt-menu__item <?=
-                                                    ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'dana-tidak-terserap'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/dana-tidak-terserap'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Dana Tidak Terserap</span></a></li>
                     </ul>
                 </div>
             </li>

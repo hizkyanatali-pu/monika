@@ -230,9 +230,9 @@
 		    x: el[0],
 		    y: el[1]
 		  });
-		  $('<div class="data-point-label">' + el[1] + '</div>').css({
+		  $('<div class="data-point-label">' + el[1] + "%" +  '</div>').css({
 		    position: 'absolute',
-		    left: o.left - 38,
+		    left: o.left - 45,
 		    top: o.top - 20,
 		    display: 'none'
 		  }).appendTo(p.getPlaceholder()).fadeIn('slow');
@@ -243,9 +243,9 @@
 		    x: el[0],
 		    y: el[1]
 		  });
-		  $('<div class="data-point-label">' + el[1] + '</div>').css({
+		  $('<div class="data-point-label">' + el[1] + "%" +  '</div>').css({
 		    position: 'absolute',
-		    left: o.left + 4,
+		    left: o.left + 8,
 		    top: o.top - 20,
 		    display: 'none'
 		  }).appendTo(p.getPlaceholder()).fadeIn('slow');

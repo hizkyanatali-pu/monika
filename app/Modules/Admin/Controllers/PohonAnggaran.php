@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\Admin\Controllers;
+
 use Modules\Admin\Models\PohonAnggaranModel;
 
 
@@ -16,7 +17,6 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $dbcustom = switch_db($this->user['dbuse']);
         $this->db = \Config\Database::connect($dbcustom);
         $this->PohonAnggaran        = new PohonAnggaranModel();
-
     }
     public function index()
     {
@@ -105,12 +105,13 @@ class PohonAnggaran extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\PosturAnggaran\Alokasi-anggaran', $data);
     }
 
-    public function paketKontraktual(){
-    
-        
-        $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender"=>"terkontrak"]); 
-        $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender"=>"Proses Lelang"]); 
-        $qbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender"=>"Belum Lelang"]); 
+    public function paketKontraktual()
+    {
+
+
+        $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"]);
+        $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"]);
+        $qbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"]);
 
         // return  $qterkontrak['total'];
 
@@ -126,54 +127,46 @@ class PohonAnggaran extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\PosturAnggaran\Paket-kontraktual', $data);
     }
 
-    public function sisaLelang(){
-        
-        $query = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span");
-        $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC'");
-        $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'");
+    public function sisaLelang()
+    {
 
-
-        $row = $query->getRow();
-        $row1 = $query1->getRow();
-        $row2 = $query2->getRow();
+        $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"]);
 
 
         $data = array(
             'title' => 'Pagu Per Program',
-            'totaldjs' => $row,
-            'totalketahanansda' => $row1,
-            'totaldukungan' => $row2,
+            'proseslelang' => $qproseslelang
 
         );
 
         return view('Modules\Admin\Views\PosturAnggaran\Sisa-lelang', $data);
     }
 
-    public function sisaBelumLelang(){
-        
-        $query = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span");
-        $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC'");
-        $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'");
+    public function sisaBelumLelang()
+    {
 
-
-        $row = $query->getRow();
-        $row1 = $query1->getRow();
-        $row2 = $query2->getRow();
+        $qprosesbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"]);
 
 
         $data = array(
             'title' => 'Pagu Per Program',
-            'totaldjs' => $row,
-            'totalketahanansda' => $row1,
-            'totaldukungan' => $row2,
+            'prosesbelumlelang' => $qprosesbelumlelang
 
         );
 
         return view('Modules\Admin\Views\PosturAnggaran\Sisa-belum-lelang', $data);
     }
-    
-    public function danatidakTerserap(){
-        $data['title'] = "Dana Tidak Terserap";
+
+    public function danatidakTerserap()
+    {
+        $getData = $this->PohonAnggaran->getDataSisaDataTidakTerserap(["kdunit" => "06"]);
+
+        $data = array(
+            'title' => 'Dana Tidak Terserap',
+            'val' => $getData,
+
+        );
+
         return view('Modules\Admin\Views\PosturAnggaran\Dana-tidak-terserap', $data);
     }
 }

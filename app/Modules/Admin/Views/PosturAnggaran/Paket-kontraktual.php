@@ -39,11 +39,13 @@
                                         <div class="card card-body bg-tree-1">
                                             <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                             <h4 class="mb-0"><b> KONTRAKTUAL </b></h4>
-                                            <small>900.000 Paket</small>
+                                            
                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                            <h6><?= number_format(($terkontrak['jml_paket'] + ($proseslelang['jml_paket']+$belumlelang['jml_paket'])), 0, ',', '.'); ?> Paket</h6>
                                                 <h5 class="mb-0">
-                                                    Rp. 900.000.000
+                                                 <?= toMilyar($terkontrak['nilai_kontrak'] + ($proseslelang['nilai_kontrak']+$belumlelang['nilai_kontrak']),true,2) ; ?> M
                                                 </h5>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -54,10 +56,11 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> BELUM KONTRAK </b></h4>
-                                                    <small>900.000 Paket</small>
+                                                   
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h6><?= number_format(($belumlelang['jml_paket'] +$proseslelang['jml_paket']) , 0, ',', '.'); ?> Paket</h6>
                                                         <h5 class="mb-0">
-                                                            Rp. 100.000.000
+                                                        <?= toMilyar($belumlelang['nilai_kontrak'] + $proseslelang['nilai_kontrak'] ,true,2); ?> M
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -70,10 +73,11 @@
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
                                                             <h4 class="mb-0"><b> PROSES LELANG </b></h4>
-                                                            <small>500.000 Paket</small>
+                                                           
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h6><?= number_format($proseslelang['jml_paket'] ,0, ',', '.'); ?> Paket</h6>
                                                                 <h5 class="mb-0">
-                                                                    Rp. 100.000.000
+                                                                <?= toMilyar($proseslelang['nilai_kontrak'],true, 2); ?> M
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -86,10 +90,11 @@
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
                                                             <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                                            <small>129.000 Paket</small>
+                                                          
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h6><?= number_format($belumlelang['jml_paket'] ,0, ',', '.'); ?> Paket</h6>
                                                                 <h5 class="mb-0">
-                                                                    Rp. 100.0000.000
+                                                                <?= toMilyar($belumlelang['nilai_kontrak'] ,true, 2); ?> M
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -105,10 +110,11 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> TERKONTRAK * </b></h4>
-                                                    <small>10.000.000 Paket</small>
+                                                   
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h6> <?= number_format($terkontrak['jml_paket'] ,0, ',', '.'); ?> Paket</h6>
                                                         <h5 class="mb-0">
-                                                            Rp. 100.000.000
+                                                        <?= toMilyar($terkontrak['nilai_kontrak'],true, 2); ?> M
                                                         </h5>
                                                     </div>
                                                 </div>

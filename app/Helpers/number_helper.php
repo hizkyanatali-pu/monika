@@ -8,16 +8,16 @@ if (!function_exists('toTriliun')) {
 }
 
 if (!function_exists('toRupiah')) {
-	function toRupiah($argNumber, $withRp = true)
+	function toRupiah($argNumber, $withRp = true, $desimal = 0)
 	{
-		return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000, 0, ',', '.');;
+		return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000, $desimal, ',', '.');
 	}
 }
 
 if (!function_exists('toMilyar')) {
-	function toMilyar($argNumber, $withRp = true)
+	function toMilyar($argNumber, $withRp = true, $decimal = 0)
 	{
-		return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000000000, 0, ',', '.');;
+		return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000000000, $decimal, ',', '.');
 	}
 }
 

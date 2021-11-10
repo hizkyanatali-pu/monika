@@ -281,7 +281,7 @@ $( document ).ready(function() {
 				x: el[0],
 				y: el[1]
 			});
-			$('<div class="data-point-label">' + el[1] + '</div>').css({
+			$('<div class="data-point-label">' + el[1] + " %" +'</div>').css({
 				position: 'absolute',
 				left: o.left - 250,
 				top: o.top - 20,
@@ -294,7 +294,7 @@ $( document ).ready(function() {
 				x: el[0],
 				y: el[1]
 			});
-			$('<div class="data-point-label">' + el[1] + '</div>').css({
+			$('<div class="data-point-label">' + el[1] + " %" + '</div>').css({
 				position: 'absolute',
 				left: o.left + 250,
 				top: o.top - 20,

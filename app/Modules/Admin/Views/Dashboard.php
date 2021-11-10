@@ -1,7 +1,64 @@
 <?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content') ?>
+<style>
+    @media print {
+        .pagebreak {
+            clear: both;
+            page-break-after: always;
+
+        }
+
+        @page {
+            size: landscape;
+            background-color: white;
+            margin-top: 0;
+        }
+
+        #kt_subheader {
+            display: none;
+        }
+
+        #kt_header_mobile {
+
+            display: none;
+        }
+
+        .kt-header__topbar-item.kt-header__topbar-item--user {
+            display: none;
+        }
+
+        .kt-grid.kt-grid--hor.kt-grid--root {
+
+            display: none;
+
+        }
+
+        .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid {
+            background-color: white;
+
+        }
+
+        .kt-portlet.kt-portlet--tab {
+
+            margin-top: 0.9cm;
+            /* background-color:#fff;
+        font-family: Arial, Helvetica, sans-serif;
+        color:#424849;
+        font-size:12px;
+        zoom: 1.5; 
+        -moz-transform: scale(1.5);  */
+
+        }
+
+        #tabletematik {
+            width: 100%;
+            zoom: 0.7;
+            -moz-transform: scale(0.7);
+        }
+    }
+</style>
 <!-- begin:: Subheader -->
-<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">
@@ -48,12 +105,22 @@
                                 <tr>
                                     <th rowspan="2">No</th>
                                     <th rowspan="2">Unit Organisasi</th>
-                                    <th rowspan="2">Pagu</th>
-                                    <th rowspan="2">Realisasi</th>
+                                    <th colspan="4">Pagu</th>
+                                    <th colspan="4">Realisasi</th>
                                     <th colspan="2">Progress</th>
 
                                 </tr>
                                 <tr>
+                                    <th>RPM</th>
+                                    <th>SBSN</th>
+                                    <th>PHLN</th>
+                                    <th>Total</th>
+
+                                    <th>RPM</th>
+                                    <th>SBSN</th>
+                                    <th>PHLN</th>
+                                    <th>Total</th>
+
                                     <th>Keuangan</th>
                                     <th>Fisik</th>
 
@@ -65,8 +132,16 @@
                                     <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram font-weight-bold'" : "") ?>>
                                         <th scope="row"><?= ++$key ?></th>
                                         <td><?= $val['nmsingkat']; ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_total'],0,',','.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_total"],0,',','.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_rpm'], 2, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_sbsn'], 2, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_phln'], 2, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_total'], 2, ',', '.'); ?></td>
+
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_rpm"], 2, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_sbsn"], 2, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_phln"], 2, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_total"], 2, ',', '.'); ?></td>
+
                                         <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
                                         <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
 
@@ -82,15 +157,16 @@
                 </div>
                 <hr style="border: 1px solid black;">
                 <div class="chart-container mt-2" style="height: 500px">
+
+                    <div id="placeholder-bar-chart" class="mychart mb-md-4 mt-5"></div>
                     <div id="bar-legend" class="chart-legend"></div>
-                    <div id="placeholder-bar-chart" class="mychart"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- END  PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR -->
-
+    <div class="pagebreak"> </div>
     <!-- PROGRES PROGRAM PADAT KARYA PER KEGIATAN -->
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head">
@@ -159,12 +235,12 @@
 
         </div>
 
-        <div id="line-chart" style="height: 300px;"></div>
+        <div id="line-chart1" style="height: 300px;"></div>
 
     </div>
 
     <!-- END  PROGRES PROGRAM PADAT KARYA PER KEGIATAN -->
-
+    <div class="pagebreak"> </div>
     <!-- PROGRESS KEGIATAN TEMATIK DIREKTORAT JENDERAL SUMBER DAYA AIR T.A.2021 -->
 
     <div class="kt-portlet kt-portlet--tab">
@@ -249,12 +325,12 @@
                         <!-- <div class="table-responsive tableFixHead"> -->
 
                         <?php $colspan = 8; ?>
-                        <table class="table-bordered mb-0 table-striped" id="table" width="100%">
+                        <table class="table-bordered mb-0 table-striped" id="tabletematik" width="100%">
                             <thead>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
                                     <th rowspan="3">No</th>
-                                    <th class="tematik" rowspan="3">Tematik</th>
-                                    <th class="pagu" rowspan="3">Pagu (dalam Milyar)</th>
+                                    <th class="tematik" rowspan="3" style="width: 21%;">Tematik</th>
+                                    <th class="pagu" rowspan="3" style="width: 6%;">Pagu (dalam Milyar)</th>
                                     <th class="realisasi" colspan="3">Realisasi</th>
                                     <th class="keterangan" rowspan="3">Keterangan</th>
                                 </tr>
@@ -263,9 +339,9 @@
                                     <th class="progres_fis progres">Fisik</th>
                                 </tr>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                    <th class="progres_keu progres">Rp</th>
-                                    <th class="progres_fis progres">%</th>
-                                    <th class="progres_fis progres">%</th>
+                                    <th class="progres_keu progres" style="width: 6%;">Rp</th>
+                                    <th class="progres_fis progres" style="width: 6%;">%</th>
+                                    <th class="progres_fis progres" style="width: 6%;">%</th>
 
                                 </tr>
                             </thead>
@@ -278,21 +354,21 @@
                                     <tr>
                                         <td class="tdprogram"><?php echo $no++ ?></td>
                                         <td class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
-                                        <td class="col-pagu tdprogram"><?php echo toMilyar($value['totalPagu'], false) ?></td>
-                                        <td class="col-realisasi tdprogram"><?php echo toMilyar($value['totalRealisasi'], false) ?></td>
-                                        <td class="col-progres_keu tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?></td>
-                                        <td class="col-progres_fis tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?></td>
-                                        <td class="col-keterangan tdprogram"></td>
+                                        <td class="text-right tdprogram"><?php echo toMilyar($value['totalPagu'], false, 2) ?></td>
+                                        <td class="text-right tdprogram"><?php echo toMilyar($value['totalRealisasi'], false, 2) ?></td>
+                                        <td class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?> %</td>
+                                        <td class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?> %</td>
+                                        <td class="col-sm-10 tdprogram"></td>
                                     </tr>
                                     <?php foreach ($value['list'] as $key2 => $value2) : ?>
                                         <tr>
                                             <td></td>
                                             <td class="col-tematik"><?php echo $value2->tematik ?></td>
-                                            <td class="col-pagu"><?php echo toMilyar($value2->pagu, false) ?></td>
-                                            <td class="col-realisasi"><?php echo toMilyar($value2->realisasi, false) ?></td>
-                                            <td class="col-progres_keu"><?php echo onlyTwoDecimal($value2->prog_keu) ?></td>
-                                            <td class="col-progres_fis"><?php echo onlyTwoDecimal($value2->prog_fis) ?></td>
-                                            <td class="col-keterangan"><?php echo $value2->ket ?></td>
+                                            <td class="text-right text-right"><?php echo toMilyar($value2->pagu, false, 2) ?></td>
+                                            <td class="text-right"><?php echo toMilyar($value2->realisasi, false, 2) ?></td>
+                                            <td class="text-right"><?php echo onlyTwoDecimal($value2->prog_keu) ?> %</td>
+                                            <td class="text-right"><?php echo onlyTwoDecimal($value2->prog_fis) ?> %</td>
+                                            <td class="col-sm-10"><?php echo $value2->ket ?></td>
 
                                             <!--<td><?php echo  "- " . str_replace("||", "<br> - ", str_replace(", ", ",", $value2->ket))  ?></td>-->
                                         </tr>
@@ -312,8 +388,7 @@
         </div>
     </div>
     <!-- END  PROGRESS KEGIATAN TEMATIK DIREKTORAT JENDERAL SUMBER DAYA AIR T.A.2021 -->
-
-
+    <div class="pagebreak"> </div>
     <!-- POSTUR PAKET KONTRAKTUAL -->
 
     <div class="kt-portlet kt-portlet--tab">
@@ -338,11 +413,13 @@
                                         <div class="card card-body bg-tree-1">
                                             <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                             <h4 class="mb-0"><b> KONTRAKTUAL </b></h4>
-                                            <small>900.000 Paket</small>
+
                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                <h6><?= number_format(($terkontrak['jml_paket'] + ($proseslelang['jml_paket'] + $belumlelang['jml_paket'])), 0, ',', '.'); ?> Paket</h6>
                                                 <h5 class="mb-0">
-                                                    Rp. 900.000.000
+                                                    <?= toMilyar($terkontrak['nilai_kontrak'] + ($proseslelang['nilai_kontrak'] + $belumlelang['nilai_kontrak']), true, 2); ?> M
                                                 </h5>
+
                                             </div>
                                         </div>
                                     </div>
@@ -353,10 +430,11 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> BELUM KONTRAK </b></h4>
-                                                    <small>900.000 Paket</small>
+
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h6><?= number_format(($belumlelang['jml_paket'] + $proseslelang['jml_paket']), 0, ',', '.'); ?> Paket</h6>
                                                         <h5 class="mb-0">
-                                                            Rp. 100.000.000
+                                                            <?= toMilyar($belumlelang['nilai_kontrak'] + $proseslelang['nilai_kontrak'], true, 2); ?> M
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -369,10 +447,11 @@
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
                                                             <h4 class="mb-0"><b> PROSES LELANG </b></h4>
-                                                            <small>500.000 Paket</small>
+
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h6><?= number_format($proseslelang['jml_paket'], 0, ',', '.'); ?> Paket</h6>
                                                                 <h5 class="mb-0">
-                                                                    Rp. 100.000.000
+                                                                    <?= toMilyar($proseslelang['nilai_kontrak'], true, 2); ?> M
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -385,10 +464,11 @@
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
                                                             <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                                            <small>129.000 Paket</small>
+
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h6><?= number_format($belumlelang['jml_paket'], 0, ',', '.'); ?> Paket</h6>
                                                                 <h5 class="mb-0">
-                                                                    Rp. 100.0000.000
+                                                                    <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?> M
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -404,10 +484,11 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> TERKONTRAK * </b></h4>
-                                                    <small>10.000.000 Paket</small>
+
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h6> <?= number_format($terkontrak['jml_paket'], 0, ',', '.'); ?> Paket</h6>
                                                         <h5 class="mb-0">
-                                                            Rp. 100.000.000
+                                                            <?= toMilyar($terkontrak['nilai_kontrak'], true, 2); ?> M
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -426,7 +507,7 @@
     </div>
 
     <!-- END  POSTUR PAKET KONTRAKTUAL -->
-
+    <div class="pagebreak"> </div>
     <!-- POSTUR PAKET BELUM LELANG -->
 
     <div class="kt-portlet kt-portlet--tab">
@@ -586,7 +667,7 @@
     </div>
 
     <!-- END  POSTUR PAKET BELUM LELANG -->
-
+    <div class="pagebreak"> </div>
     <!-- DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN -->
 
     <div class="kt-portlet kt-portlet--tab">
@@ -645,7 +726,7 @@
         </div>
     </div>
     <!-- END DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN -->
-
+    <div class="pagebreak"> </div>
     <!-- DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN -->
 
     <div class="kt-portlet kt-portlet--tab">
@@ -704,8 +785,7 @@
         </div>
     </div>
     <!-- END DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN -->
-
-
+    <div class="pagebreak"> </div>
     <!-- PAKET BELUM LELANG PHLN - MYC PROJECT LOAN -->
 
     <div class="kt-portlet kt-portlet--tab">
@@ -764,7 +844,7 @@
         </div>
     </div>
     <!-- END PAKET BELUM LELANG PHLN - MYC PROJECT LOAN -->
-
+    <div class="pagebreak"> </div>
     <!-- RENCANA TENDER, PAKET BELUM LELANG RPM -->
 
     <div class="kt-portlet kt-portlet--tab">
@@ -798,8 +878,9 @@
                                         </div>
                                     </div>
                                 </a>
-                                <ul>
 
+
+                                <ul>
                                     <li class="" style="width: 60% !important">
                                         <a href="#" class="w-50">
                                             <div class="tree-content">
@@ -815,24 +896,10 @@
                                             </div>
                                         </a>
                                     </li>
-
-                                    <li class="" style="width: 40% !important">
-                                        <a href="#" class="w-75">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> PLN </b></h4>
-                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            Rp <?= number_format($totalketahanansda->total); ?>
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-
+                                    <li></li>
                                 </ul>
+
+
                             </li>
                         </ul>
                     </div>
@@ -842,7 +909,7 @@
     </div>
 
     <!-- END RENCANA TENDER, PAKET BELUM LELANG RPM -->
-
+    <div class="pagebreak"> </div>
     <!-- RENCANA TENDER, PAKET BELUM LELANG PLN -->
 
     <div class="kt-portlet kt-portlet--tab">
@@ -877,23 +944,6 @@
                                     </div>
                                 </a>
                                 <ul>
-
-                                    <li class="" style="width: 60% !important">
-                                        <a href="#" class="w-50">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> RPM </b></h4>
-                                                    <label><?= number_format($totaldjs->total); ?> Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            Rp. <?= number_format($totalketahanansda->total); ?>
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-
                                     <li class="" style="width: 40% !important">
                                         <a href="#" class="w-75">
                                             <div class="tree-content">
@@ -919,21 +969,192 @@
     </div>
 
     <!-- END RENCANA TENDER, PAKET BELUM LELANG RPM -->
+    <div class="pagebreak"> </div>
+    <!-- PROGRES KEUANGAN & FISIK DITJEN SDA -->
+    <div class="kt-portlet kt-portlet--tab">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label card-center">
+                <span class="kt-portlet__head-icon kt-hidden">
+                    <i class="la la-gear"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    PROGRES KEUANGAN & FISIK DITJEN SDA
+                </h3>
+            </div>
+
+        </div>
+        <div class="kt-portlet__body">
+            <div class="kt-section">
+                <div class="kt-section__content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <!--begin::Portlet-->
+                            <div class="kt-portlet">
+                                <div class="kt-portlet__head">
+                                    <div class="kt-portlet__head-label">
+                                        <span class="kt-portlet__head-icon kt-hidden">
+                                            <i class="la la-gear"></i>
+                                        </span>
+                                        <h3 class="kt-portlet__head-title">
+                                            PROGRESS KEUANGAN
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="kt-portlet__body">
+                                    <input type="hidden" class="arrayget" value="<?= date("n") ?>">
+                                    <div id="line-chart" style="height: 300px;"></div>
+                                </div>
+                            </div>
+                            <!--end::Portlet-->
+                            <!--begin::Portlet-->
+                            <div class="kt-portlet">
+                                <div class="kt-portlet__head">
+                                    <div class="kt-portlet__head-label">
+                                        <span class="kt-portlet__head-icon kt-hidden">
+                                            <i class="la la-gear"></i>
+                                        </span>
+                                        <h3 class="kt-portlet__head-title">
+                                            PROGRESS FISIK
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="kt-portlet__body">
+                                    <div id="line-chart2" style="height: 300px;"></div>
+                                </div>
+                            </div>
+                            <!--end::Portlet-->
+                        </div>
+                        <div class="col-lg-6">
+                            <!--begin::Portlet-->
+                            <div class="kt-portlet">
+                                <div class="kt-portlet__head">
+                                    <div class="kt-portlet__head-label">
+                                        <span class="kt-portlet__head-icon kt-hidden">
+                                            <i class="la la-gear"></i>
+                                        </span>
+                                        <h3 class="kt-portlet__head-title">
+                                            PROGRESS PER SUMBER DANA
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="kt-portlet__body">
+                                    <div class="kt-section">
+                                        <div class="card-body pt-5">
+                                            <div class="chart-container mt-2">
+                                                <div id="bar-legend" class="chart-legend"></div>
+                                                <div id="persumberdana" style="height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Portlet-->
+                            <!--begin::Portlet-->
+                            <div class="kt-portlet">
+                                <div class="kt-portlet__head">
+                                    <div class="kt-portlet__head-label">
+                                        <span class="kt-portlet__head-icon kt-hidden">
+                                            <i class="la la-gear"></i>
+                                        </span>
+                                        <h3 class="kt-portlet__head-title">
+                                            PROGRESS PER JENIS BELANJA
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="kt-portlet__body">
+                                    <div id="bar-legend-jenis-belanja" class="chart-legend"></div>
+                                    <div id="chatperjenisbelanja" style="height: 300px;"></div>
+                                </div>
+                            </div>
+                            <!--end::Portlet-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PROGRES KEUANGAN & FISIK DITJEN SDA-->
+    <div class="pagebreak"> </div>
+    <!-- PROGRES  PROGRES KEUANGAN & FISIK PER KEGIATAN -->
+    <div class="kt-portlet kt-portlet--tab">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label card-center">
+                <span class="kt-portlet__head-icon kt-hidden">
+                    <i class="la la-gear"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    PROGRES KEUANGAN & FISIK PER KEGIATAN
+                </h3>
+            </div>
+
+        </div>
+        <div class="kt-portlet__body">
+            <div class="kt-section">
+                <div class="card-body pt-5">
+                    <div class="chart-container mt-2" style="height: 500px">
+                        <div id="bar-legend-perkegiatan" class="chart-legend"></div>
+                        <div id="perkegiatan" class="mychart"></div>
+                    </div>
+                </div>
+                <div class="card-body pt-5">
+
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>No</th>
+                                <th>Kode Kegiatan</th>
+                                <th style="text-align: center;">Kegiatan</th>
+                                <th>Keuangan %</th>
+                                <th>Fisik %</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <?php foreach ($perkegiatan as $key => $value) { ?>
+                                <tr>
+                                    <th scope="row"><?= ++$key ?></th>
+                                    <td> <?= $value->kdgiat; ?></td>
+                                    <td> <?= $value->nmgiat; ?></td>
+                                    <td> <?= onlyTwoDecimal($value->keu); ?></td>
+                                    <td> <?= onlyTwoDecimal($value->fis); ?></td>
+
+                                </tr>
+
+                            <?php  } ?>
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- END PROGRES  PROGRES KEUANGAN & FISIK PER KEGIATAN-->
+
+
+    </div>
+
+
+    <!-- end:: Content -->
+    <?= $this->endSection() ?>
+    <?= $this->section('footer_js') ?>
+    <?php echo script_tag('plugins/flot-old/jquery.flot.js'); ?>
+    <?php echo script_tag('plugins/flot-old/jquery.flot.time.min.js'); ?>
+
+
+    <!-- CHART REKAP REKAP UNOR -->
+    <?php echo view('Modules\Admin\Views\Dashboard\js\ChartRekapUnor'); ?>
+    <?php echo view('Modules\Admin\Views\Dashboard\js\ChartProgresKeuFis'); ?>
+    <?php echo view('Modules\Admin\Views\Dashboard\js\ChartPersumberDana'); ?>
+    <?php echo view('Modules\Admin\Views\Dashboard\js\ChartPerJenisBelanja'); ?>
+    <?php echo view('Modules\Admin\Views\Dashboard\js\ChartPerkegiatan'); ?>
 
 
 
-</div>
 
+    <!-- END CHART REKAP REKAP UNOR -->
 
-<!-- end:: Content -->
-<?= $this->endSection() ?>
-<?= $this->section('footer_js') ?>
-<?php echo script_tag('plugins/flot-old/jquery.flot.js'); ?>
-<?php echo script_tag('plugins/flot-old/jquery.flot.time.min.js'); ?>
-
-
-<!-- CHART REKAP REKAP UNOR -->
-<?php echo view('Modules\Admin\Views\Dashboard\js\ChartRekapUnor'); ?>
-<!-- END CHART REKAP REKAP UNOR -->
-
-<?= $this->endSection() ?>
+    <?= $this->endSection() ?>

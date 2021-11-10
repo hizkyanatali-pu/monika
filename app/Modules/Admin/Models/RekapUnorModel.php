@@ -25,10 +25,10 @@ class RekapUnorModel extends Model
         $this->db_2 = \Config\Database::connect($dbcustom);
     }
 
-    function getRekapUnor($w = '')
+    function getRekapUnor($w = '', $sort = 'progres_keu DESC')
     {
         $this->akses = new AksesModel();
         $w = $this->akses->unitsatker("", $w);
-        return $this->db->query("SELECT * FROM monika_rekap_unor JOIN tunitkerja ON monika_rekap_unor.kdunit = tunitkerja.kdunit ORDER BY progres_keu DESC ")->getResultArray();
+        return $this->db->query("SELECT * FROM monika_rekap_unor JOIN tunitkerja ON monika_rekap_unor.kdunit = tunitkerja.kdunit ORDER BY $sort ")->getResultArray();
     }
 }

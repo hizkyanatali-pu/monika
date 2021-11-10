@@ -33,7 +33,7 @@
                 ],
                 bars: {
                     show: true,
-                    barWidth: 12 * 44 * 60 * 60 * 300,
+                    barWidth: 12 * 44 * 60 * 60 * 500,
                     fill: true,
                     lineWidth: 0,
                     order: 1,
@@ -52,7 +52,7 @@
                 ],
                 bars: {
                     show: true,
-                    barWidth: 12 * 44 * 60 * 60 * 300,
+                    barWidth: 12 * 44 * 60 * 60 * 500,
                     fill: true,
                     lineWidth: 0,
                     order: 2,
@@ -72,7 +72,7 @@
                 ],
                 bars: {
                     show: true,
-                    barWidth: 12 * 44 * 60 * 60 * 300,
+                    barWidth: 12 * 44 * 60 * 60 * 500,
                     fill: true,
                     lineWidth: 0,
                     order: 1,
@@ -88,7 +88,7 @@
                 ],
                 bars: {
                     show: true,
-                    barWidth: 12 * 44 * 60 * 60 * 300,
+                    barWidth: 12 * 44 * 60 * 60 * 500,
                     fill: true,
                     lineWidth: 0,
                     order: 2,
@@ -194,9 +194,9 @@
         });
 
         if (i < 10) {
-            $('<div class="data-point-label">' + el.data[0][1] + '</div>').css({
+            $('<div class="data-point-label"><b>' + el.data[0][1] + "%"+ '</b></div>').css({
                 position: 'absolute',
-                left: o.left - 38,
+                left: o.left - 45,
                 top: o.top - 20,
                 display: 'none'
             }).appendTo(p.getPlaceholder()).fadeIn('slow');
@@ -204,9 +204,9 @@
 
         } else {
 
-            $('<div class="data-point-label">' + el.data[0][1] + '</div>').css({
+            $('<div class="data-point-label"><b>' + el.data[0][1] +  "%"+ '</b></div>').css({
                 position: 'absolute',
-                left: o.left + 4,
+                left: o.left + 8,
                 top: o.top - 20,
                 display: 'none'
             }).appendTo(p.getPlaceholder()).fadeIn('slow');
