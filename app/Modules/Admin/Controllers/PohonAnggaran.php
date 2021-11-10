@@ -171,4 +171,9 @@ class PohonAnggaran extends \App\Controllers\BaseController
 
         return view('Modules\Admin\Views\PosturAnggaran\Sisa-belum-lelang', $data);
     }
+    
+    public function danatidakTerserap(){
+        $data['title'] = "Dana Tidak Terserap";
+        return view('Modules\Admin\Views\PosturAnggaran\Dana-tidak-terserap', $data);
+    }
 }
