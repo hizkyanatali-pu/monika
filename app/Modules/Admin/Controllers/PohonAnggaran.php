@@ -112,6 +112,8 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"]);
         $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"]);
         $qbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"]);
+        $qpersiapankontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Persiapan kontrak"]);
+
 
         // return  $qterkontrak['total'];
 
@@ -120,6 +122,8 @@ class PohonAnggaran extends \App\Controllers\BaseController
             'terkontrak' => $qterkontrak,
             'proseslelang' => $qproseslelang,
             'belumlelang' => $qbelumlelang,
+            'persiapankontrak' => $qpersiapankontrak,
+
 
 
         );

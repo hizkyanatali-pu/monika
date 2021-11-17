@@ -34,6 +34,7 @@ class Dashboard extends \App\Controllers\BaseController
         $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"]);
         $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"]);
         $qbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"]);
+        $qpersiapankontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Persiapan kontrak"]);
 
 
         $rekapUnor =  $this->RekapUnorModel->getRekapUnor();
@@ -50,6 +51,8 @@ class Dashboard extends \App\Controllers\BaseController
             'terkontrak' => $qterkontrak,
             'proseslelang' => $qproseslelang,
             'belumlelang' => $qbelumlelang,
+            'persiapankontrak' => $qpersiapankontrak,
+
             'keu' => $this->getprogreskeu("keuangan"),
             'fis' => $this->getprogreskeu("fisik"),
             'pagu' =>    $getGraphicData,

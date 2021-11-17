@@ -19,119 +19,119 @@
 
 <!-- begin:: Content -->
 <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid"">
-    <div class="kt-portlet">
-        <div class="kt-portlet__body" style="padding:0px;">
+    <div class=" kt-portlet">
+    <div class="kt-portlet__body" style="padding:0px;">
 
-            <!--begin::Section-->
-            <div class="kt-section  pb-4 pt-3">
+        <!--begin::Section-->
+        <div class="kt-section  pb-4 pt-3">
 
-                <div class="kt-section__content">
-                    <!-- <div class="text-center mt-4">
+            <div class="kt-section__content">
+                <!-- <div class="text-center mt-4">
                         <h4 class="text-dark"><b><?= $title; ?></b></h4>
                         <hr class="w-75 mb-0">
                     </div> -->
-                    
-                    <div class="tree">
-                        <ul>
-                            <li class="w-100">
-                                <a href="#" class="">
-                                    <div class="tree-content">
-                                        <div class="card card-body bg-tree-1">
-                                            <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
-                                            <h4 class="mb-0"><b> KONTRAKTUAL </b></h4>
-                                            
-                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                            <h6><?= number_format(($terkontrak['jml_paket'] + ($proseslelang['jml_paket']+$belumlelang['jml_paket'])), 0, ',', '.'); ?> Paket</h6>
-                                                <h5 class="mb-0">
-                                                 <?= toMilyar($terkontrak['nilai_kontrak'] + ($proseslelang['nilai_kontrak']+$belumlelang['nilai_kontrak']),true,2) ; ?> M
-                                                </h5>
-                                                
-                                            </div>
+
+                <div class="tree">
+                    <ul>
+                        <li class="w-100">
+                            <a href="#" class="">
+                                <div class="tree-content">
+                                    <div class="card card-body bg-tree-1">
+                                        <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                        <h4 class="mb-0"><b> KONTRAKTUAL </b></h4>
+
+                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                            <h6><?= number_format(($terkontrak['jml_paket'] + ($proseslelang['jml_paket'] + $belumlelang['jml_paket'] + $persiapankontrak['jml_paket'])), 0, ',', '.'); ?> Paket</h6>
+                                            <h5 class="mb-0">
+                                                <?= toMilyar($terkontrak['nilai_kontrak'] + ($proseslelang['nilai_kontrak'] + $belumlelang['nilai_kontrak']), true, 2); ?> M
+                                            </h5>
+
                                         </div>
                                     </div>
-                                </a>
-                                <ul>
-                                    <li class="w-50">
-                                        <a href="#" class="">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> BELUM KONTRAK </b></h4>
-                                                   
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                    <h6><?= number_format(($belumlelang['jml_paket'] +$proseslelang['jml_paket']) , 0, ',', '.'); ?> Paket</h6>
-                                                        <h5 class="mb-0">
-                                                        <?= toMilyar($belumlelang['nilai_kontrak'] + $proseslelang['nilai_kontrak'] ,true,2); ?> M
-                                                        </h5>
-                                                    </div>
+                                </div>
+                            </a>
+                            <ul>
+                                <li class="w-50">
+                                    <a href="#" class="">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-2">
+                                                <h4 class="mb-0"><b> BELUM KONTRAK </b></h4>
+
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h6><?= number_format(($belumlelang['jml_paket'] + $proseslelang['jml_paket']), 0, ',', '.'); ?> Paket</h6>
+                                                    <h5 class="mb-0">
+                                                        <?= toMilyar($belumlelang['nilai_kontrak'] + $proseslelang['nilai_kontrak'], true, 2); ?> M
+                                                    </h5>
                                                 </div>
                                             </div>
+                                        </div>
 
-                                        </a>
-                                        <ul>
-                                            <li class="w-50">
-                                                <a href="#" class="">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-4">
-                                                            <h4 class="mb-0"><b> PROSES LELANG </b></h4>
-                                                           
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                            <h6><?= number_format($proseslelang['jml_paket'] ,0, ',', '.'); ?> Paket</h6>
-                                                                <h5 class="mb-0">
-                                                                <?= toMilyar($proseslelang['nilai_kontrak'],true, 2); ?> M
-                                                                </h5>
-                                                            </div>
+                                    </a>
+                                    <ul>
+                                        <li class="w-50">
+                                            <a href="#" class="">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-4">
+                                                        <h4 class="mb-0"><b> PROSES LELANG </b></h4>
+
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h6><?= number_format($proseslelang['jml_paket'], 0, ',', '.'); ?> Paket</h6>
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($proseslelang['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
                                                         </div>
-                                                    </div>
-
-                                                </a>
-                                            </li>
-                                            <li class="w-50">
-                                                <a href="#" class="">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-4">
-                                                            <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                                          
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                            <h6><?= number_format($belumlelang['jml_paket'] ,0, ',', '.'); ?> Paket</h6>
-                                                                <h5 class="mb-0">
-                                                                <?= toMilyar($belumlelang['nilai_kontrak'] ,true, 2); ?> M
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li class="w-50">
-                                        <a href="#" class="">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> TERKONTRAK * </b></h4>
-                                                   
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                    <h6> <?= number_format($terkontrak['jml_paket'] ,0, ',', '.'); ?> Paket</h6>
-                                                        <h5 class="mb-0">
-                                                        <?= toMilyar($terkontrak['nilai_kontrak'],true, 2); ?> M
-                                                        </h5>
                                                     </div>
                                                 </div>
-                                            </div>
-                                                <b><i>* Termasuk MYC lanjutan</i></b>
-                                        </a>
-                                    </li>
 
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                                            </a>
+                                        </li>
+                                        <li class="w-50">
+                                            <a href="#" class="">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-4">
+                                                        <h4 class="mb-0"><b> BELUM LELANG </b></h4>
+
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h6><?= number_format($belumlelang['jml_paket'], 0, ',', '.'); ?> Paket</h6>
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="w-50">
+                                    <a href="#" class="">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-2">
+                                                <h4 class="mb-0"><b> TERKONTRAK * </b></h4>
+
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h6> <?= number_format($terkontrak['jml_paket'], 0, ',', '.'); ?> Paket</h6>
+                                                    <h5 class="mb-0">
+                                                        <?= toMilyar($terkontrak['nilai_kontrak'], true, 2); ?> M
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <b><i>* Termasuk MYC lanjutan</i></b>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
-
             </div>
+
         </div>
     </div>
+</div>
 </div>
 
 <!-- <div id="wrapper">
