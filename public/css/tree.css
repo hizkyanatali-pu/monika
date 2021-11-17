@@ -596,7 +596,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     position: absolute;
     top: -20px;
     right: 0;
-    border-left: 2px solid #696969;
+    border-left: 0px solid #696969;
     width: 0;
     height: 40px;
     margin-left: 470px;
@@ -608,7 +608,25 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     bottom: -42px;
     left: 0px;
     border-right: 2px solid #696969;
-    height: 20px;
+    height: 42px;
     width: 50%;
+}
+
+@media (max-width: 991.98px) {
+    
+    .border-single-tree-down-pemaketan-2{
+        height: 59px;
+        bottom: -60px;
+    }
+
+}
+
+@media (max-width: 1200px) {
+    
+    .border-single-tree-down-pemaketan-2{
+        height: 59px;
+        bottom: -60px;
+    }
+
 }
 /* END pROGRES PEMAKETAN  */
