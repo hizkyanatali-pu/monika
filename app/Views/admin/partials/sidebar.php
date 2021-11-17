@@ -177,6 +177,7 @@ $request = \Config\Services::request();
                 </div>
             </li>
 
+            <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('pemaketan'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Progres Pemaketan</span></a></li>
 
         </ul>
     </div>

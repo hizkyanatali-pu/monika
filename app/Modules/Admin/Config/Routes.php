@@ -139,4 +139,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
 
     $routes->get('maintenance', '\Modules\Admin\Controllers\Maintenance::index');
+
+    $routes->get('pemaketan', '\Modules\Admin\Controllers\Pemaketan::index');
 });

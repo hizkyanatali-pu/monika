@@ -6,8 +6,6 @@ use \CodeIgniter\Controller;
 use \Hermawan\DataTables\DataTable;
 use Modules\Admin\Models\ImportdataSqliteModel;
 
-
-
 class Preferensi extends \App\Controllers\BaseController
 {
     public function __construct()

@@ -579,3 +579,36 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     left: 81%;
 }
 /* END DANA TIDAK TERSERAP  */
+
+/* pROGRES PEMAKETAN  */
+.tree.tree-pemaketan ul ul::before{
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    border-left: 2px solid #696969;
+    width: 0;
+    height: 26px;
+}
+
+.tree.tree-pemaketan ul ul.pemaketan-2::before{
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: 0;
+    border-left: 2px solid #696969;
+    width: 0;
+    height: 40px;
+    margin-left: 470px;
+}
+
+.border-single-tree-down-pemaketan-2{
+    border-bottom: 2px solid #696969;
+    position: absolute;
+    bottom: -42px;
+    left: 0px;
+    border-right: 2px solid #696969;
+    height: 20px;
+    width: 50%;
+}
+/* END pROGRES PEMAKETAN  */
