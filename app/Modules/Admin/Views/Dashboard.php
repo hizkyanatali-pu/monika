@@ -405,102 +405,102 @@
         <div class="kt-portlet__body">
             <div class="kt-section">
                 <div class="kt-section__content">
-                    <div class="tree">
-                        <ul>
-                            <li class="w-100">
-                                <a href="#" class="">
-                                    <div class="tree-content">
-                                        <div class="card card-body bg-tree-1">
-                                            <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
-                                            <h4 class="mb-0"><b> KONTRAKTUAL </b></h4>
+                <div class="tree">
+                    <ul>
+                        <li class="w-100">
+                            <a href="#" class="">
+                                <div class="tree-content">
+                                    <div class="card card-body bg-tree-1">
+                                        <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                        <h4 class="mb-0"><b> KONTRAKTUAL </b></h4>
 
-                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                <h6><?= number_format(($terkontrak['jml_paket'] + ($proseslelang['jml_paket'] + $belumlelang['jml_paket'] + $persiapankontrak['jml_paket'])), 0, ',', '.'); ?> Paket</h6>
-                                                <h5 class="mb-0">
-                                                    <?= toMilyar($terkontrak['nilai_kontrak'] + ($proseslelang['nilai_kontrak'] + $belumlelang['nilai_kontrak']), true, 2); ?> M
-                                                </h5>
+                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                            <h6><?= number_format(($terkontrak['jml_paket'] + ($proseslelang['jml_paket'] + $belumlelang['jml_paket'] + $persiapankontrak['jml_paket'])), 0, ',', '.'); ?> Paket</h6>
+                                            <h5 class="mb-0">
+                                                <?= toMilyar($terkontrak['nilai_kontrak'] + ($proseslelang['nilai_kontrak'] + $belumlelang['nilai_kontrak']+$persiapankontrak['nilai_kontrak']), true, 2); ?> M
+                                            </h5>
 
-                                            </div>
                                         </div>
                                     </div>
-                                </a>
-                                <ul>
-                                    <li class="w-50">
-                                        <a href="#" class="">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> BELUM KONTRAK </b></h4>
+                                </div>
+                            </a>
+                            <ul>
+                                <li class="w-50">
+                                    <a href="#" class="">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-2">
+                                                <h4 class="mb-0"><b> BELUM KONTRAK </b></h4>
 
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h6><?= number_format(($belumlelang['jml_paket'] + $proseslelang['jml_paket']), 0, ',', '.'); ?> Paket</h6>
-                                                        <h5 class="mb-0">
-                                                            <?= toMilyar($belumlelang['nilai_kontrak'] + $proseslelang['nilai_kontrak'], true, 2); ?> M
-                                                        </h5>
-                                                    </div>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h6><?= number_format(($belumlelang['jml_paket'] + $proseslelang['jml_paket']), 0, ',', '.'); ?> Paket</h6>
+                                                    <h5 class="mb-0">
+                                                        <?= toMilyar($belumlelang['nilai_kontrak'] + $proseslelang['nilai_kontrak'], true, 2); ?> M
+                                                    </h5>
                                                 </div>
                                             </div>
+                                        </div>
 
-                                        </a>
-                                        <ul>
-                                            <li class="w-50">
-                                                <a href="#" class="">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-4">
-                                                            <h4 class="mb-0"><b> PROSES LELANG </b></h4>
+                                    </a>
+                                    <ul>
+                                        <li class="w-50">
+                                            <a href="#" class="">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-4">
+                                                        <h4 class="mb-0"><b> PROSES LELANG </b></h4>
 
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h6><?= number_format($proseslelang['jml_paket'], 0, ',', '.'); ?> Paket</h6>
-                                                                <h5 class="mb-0">
-                                                                    <?= toMilyar($proseslelang['nilai_kontrak'], true, 2); ?> M
-                                                                </h5>
-                                                            </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h6><?= number_format($proseslelang['jml_paket'], 0, ',', '.'); ?> Paket</h6>
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($proseslelang['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
                                                         </div>
-                                                    </div>
-
-                                                </a>
-                                            </li>
-                                            <li class="w-50">
-                                                <a href="#" class="">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-4">
-                                                            <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h6><?= number_format($belumlelang['jml_paket'], 0, ',', '.'); ?> Paket</h6>
-                                                                <h5 class="mb-0">
-                                                                    <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?> M
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li class="w-50">
-                                        <a href="#" class="">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> TERKONTRAK * </b></h4>
-
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h6> <?= number_format($terkontrak['jml_paket'], 0, ',', '.'); ?> Paket</h6>
-                                                        <h5 class="mb-0">
-                                                            <?= toMilyar($terkontrak['nilai_kontrak'], true, 2); ?> M
-                                                        </h5>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <b><i>* Termasuk MYC lanjutan</i></b>
-                                        </a>
-                                    </li>
 
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                                            </a>
+                                        </li>
+                                        <li class="w-50">
+                                            <a href="#" class="">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-4">
+                                                        <h4 class="mb-0"><b> BELUM LELANG </b></h4>
+
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h6><?= number_format($belumlelang['jml_paket'], 0, ',', '.'); ?> Paket</h6>
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="w-50">
+                                    <a href="#" class="">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-2">
+                                                <h4 class="mb-0"><b> TERKONTRAK * </b></h4>
+
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h6> <?= number_format($terkontrak['jml_paket']+$persiapankontrak['jml_paket'], 0, ',', '.'); ?> Paket</h6>
+                                                    <h5 class="mb-0">
+                                                        <?= toMilyar($terkontrak['nilai_kontrak']+$persiapankontrak['nilai_kontrak'], true, 2); ?> M
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <b><i>* Termasuk MYC lanjutan</i></b>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
                 </div>
             </div>
         </div>
@@ -524,143 +524,149 @@
         <div class="kt-portlet__body">
             <div class="kt-section">
                 <div class="kt-section__content">
-                    <div class="tree ml--105 pr-4">
-                        <ul>
-                            <li class="w-100">
-                                <a href="#" class="w-25">
-                                    <div class="tree-content">
-                                        <div class="card card-body bg-tree-1">
-                                            <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
-                                            <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                            <label> Paket</label>
-                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                <h5 class="mb-0">
-                                                    <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?> M
-                                                </h5>
-                                            </div>
+                <div class="tree ml--105 pr-4">
+                    <ul>
+                        <li class="w-100">
+                            <a href="#" class="w-25">
+                                <div class="tree-content">
+                                    <div class="card card-body bg-tree-1">
+                                        <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                        <h4 class="mb-0"><b> BELUM LELANG </b></h4>
+                                        <label> Paket</label>
+                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                            <h5 class="mb-0">
+                                            <?= toMilyar($mycbaru1['total_phln']+$mycbaru2['total_phln']+$syc['total_rpm']+$mycbaru1['total_rpm']+$mycbaru2['total_rpm'], true, 2); ?> M
+                                            </h5>
                                         </div>
                                     </div>
-                                </a>
-                                <ul>
+                                </div>
+                            </a>
+                            <ul>
 
-                                    <li class="" style="width: 60% !important">
-                                        <a href="#" class="w-50">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> RPM </b></h4>
-                                                    <label> Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            ?
-                                                        </h5>
-                                                    </div>
+                                <li class="" style="width: 60% !important">
+                                    <a href="#" class="w-50">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-2">
+                                                <h4 class="mb-0"><b> RPM </b></h4>
+                                                <label> Paket</label>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                    <?= toMilyar($syc['total_rpm']+$mycbaru1['total_rpm']+$mycbaru2['total_rpm'], true, 2); ?> M
+                                                    </h5>
                                                 </div>
                                             </div>
-                                        </a>
-                                        <ul>
-                                            <li class="w-50">
-                                                <a href="#" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> SYC </b></h4>
-                                                            <label> Paket</label>
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
-                                                                    ?
-                                                                </h5>
-                                                            </div>
+                                        </div>
+                                    </a>
+                                    <ul>
+                                        <li class="w-50">
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-3">
+                                                        <h4 class="mb-0"><b> SYC </b></h4>
+                                                        <label> Paket</label>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                              <?= toMilyar($syc['total_rpm'], true, 2); ?>
+                                                            </h5>
                                                         </div>
                                                     </div>
-                                                </a>
-                                                <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                            <h6>Antara Lain :</h6>
-                                                            <p>1. Pembangunan Saluran Drainase Utama Kawasan Industri Kab. Subang; Pagu 96,50 M </p>
-                                                            <p>2. Pembangunan Ambang dan Normalisasi Sungai Bone; Kab. Bone Bolango ; Gorontalo; 0,5 Km; 5 Ha; F; K; SYC; Pagu 58,00 M</p>
-                                                            <p>3. Relokasi Fasilitas Umum Pada Daerah Genangan Bendungan Karian; 0 bendungan; 0 juta m3; F; K; SYC; Pagu 50,00 M</p>
-                                                            <p>4. Dan Lain - Lain</p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="w-50">
-                                                <a href="#" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                            <label> Paket</label>
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
-                                                                    ?
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                            <h6>Antara Lain :</h6>
-                                                            <p>1. Penyelesaian Pembangunan Bendungan Keureuto Kabupaten Aceh Utara (MYC); Pagu 80,05 M</p>
-                                                            <p>2. Pembangunan Bendung Gerak Karangnongko di Kab Bojonegoro; 1 bendung; 0 juta m3; F; K; MYC; Pagu 71,94 M </p>
-                                                            <p>3. Pembangunan Penahan Beban (Counterweight) dan Bangunan Pelengkap Lainnya Bendungan Gondang di Kab. Karanganyar; 0 bendungan; 0 juta m3; F; K; MYC; Pagu 67,50 M </p>
-                                                            <p>4. Dan Lain - Lain </p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                        <h6>Antara Lain :</h6>
+                                                        <?php foreach($syclist AS $key => $daftarsyc){ ?>
 
-                                    <li class="" style="width: 40% !important">
-                                        <a href="#" class="w-75">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> PHLN </b></h4>
-                                                    <label> Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            ?
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <div class="border-single-tree-down"></div>
-                                        <a href="#" class="w-75">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-3">
-                                                    <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                    <label> Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            ?
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <div class="border-single-tree-down"></div>
-                                        <a href="#" class="w-75">
-                                            <div class="tree-content">
-                                                <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                    <h6>Antara Lain :</h6>
-                                                    <p>1. Rehabilitation D.I. Gumbasa Weir and Groundsill Construction; Kab. Sigi; Sulawesi Tengah; 0 km; 0 hektar; F; K; MYC; Pagu 52,77 M </p>
-                                                    <p>2. Works for PASIGALA raw water transmission system rehabilitation (Paket 1); Kab. Sigi; Sulawesi Tengah; 0 km; 0 m3/detik; F; K; MYC; Pagu 18,62 M </p>
-                                                    <p>3. Works for PASIGALA raw water transmission system rehabilitation (Paket 1); Kab. Sigi; Sulawesi Tengah; 0 km; 0 m3/detik; F; K; MYC; Pagu 18,62 M </p>
-                                                    <p>4. Dan Lain - Lain </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
+                                                            <p><?= ++$key .". ". $daftarsyc['nmpaket'] ?></p>
 
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="w-50">
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-3">
+                                                        <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                        <label> Paket</label>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                            <?= toMilyar($mycbaru1['total_rpm']+$mycbaru2['total_rpm'], true, 2); ?> M
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                        <h6>Antara Lain :</h6>
+                                                        <?php foreach($mycbarulist AS $key => $daftarsyc){ ?>
+
+                                                            <p><?= ++$key .". ". $daftarsyc['nmpaket'] ?></p>
+
+
+                                                            <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="" style="width: 40% !important">
+                                    <a href="#" class="w-75">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-2">
+                                                <h4 class="mb-0"><b> PHLN </b></h4>
+                                                <label> Paket</label>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                    <?= toMilyar($mycbaru1['total_phln']+$mycbaru2['total_phln'], true, 2); ?> M
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="border-single-tree-down"></div>
+                                    <a href="#" class="w-75">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-3">
+                                                <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                <label> Paket</label>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                    <?= toMilyar($mycbaru1['total_phln']+$mycbaru2['total_phln'], true, 2); ?> M
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="border-single-tree-down"></div>
+                                    <a href="#" class="w-75">
+                                        <div class="tree-content">
+                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                <h6>Antara Lain :</h6>
+                                                <?php foreach($mycbaruphlnlist AS $key => $daftarsyc){ ?>
+
+                                                    <p><?= ++$key .". ". $daftarsyc['nmpaket'] ?></p>
+
+
+                                                    <?php } ?>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
                 </div>
             </div>
         </div>

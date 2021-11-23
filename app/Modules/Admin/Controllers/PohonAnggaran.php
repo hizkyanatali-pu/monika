@@ -118,7 +118,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
         // return  $qterkontrak['total'];
 
         $data = array(
-            'title' => 'Pagu Per Program',
+            'title' => 'Kontraktual',
             'terkontrak' => $qterkontrak,
             'proseslelang' => $qproseslelang,
             'belumlelang' => $qbelumlelang,
@@ -138,7 +138,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
 
 
         $data = array(
-            'title' => 'Pagu Per Program',
+            'title' => 'Sisa Lelang',
             'proseslelang' => $qproseslelang
 
         );
@@ -149,12 +149,29 @@ class PohonAnggaran extends \App\Controllers\BaseController
     public function sisaBelumLelang()
     {
 
-        $qprosesbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"]);
+
+        $syc = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"0"]);
+        $mycbaru1 = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"1"]);
+        $mycbaru2 = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"3"]);
+        $myclanjutan = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"2"]);
+
+        $syclist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"0"],"pagu_rpm");
+        $mycbarulist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"1","kdjnskon"=>"3"],"pagu_rpm");
+        $mycbaruphlnlist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"0"],"pagu_phln");
+
+    
 
 
         $data = array(
-            'title' => 'Pagu Per Program',
-            'prosesbelumlelang' => $qprosesbelumlelang
+            'title' => 'Belum Lelang',
+            'syc' => $syc,
+            'mycbaru1' => $mycbaru1,
+            'mycbaru2' => $mycbaru2,
+            'myclanjutan' => $myclanjutan,
+            'syclist' => $syclist,
+            'mycbarulist' => $mycbarulist,
+            'mycbaruphlnlist' => $mycbaruphlnlist
+
 
         );
 

@@ -42,6 +42,26 @@ class Dashboard extends \App\Controllers\BaseController
         $getGraphicDataJenisBelanja = $this->PulldataModel->getGraphicDataProgressPerJenisBelanja();
         $getGraphicDataPerkegiatan = $this->PulldataModel->getGraphicDataProgressPerKegiatan();
 
+        $syc = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"0"]);
+        $mycbaru1 = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"1"]);
+        $mycbaru2 = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"3"]);
+        $myclanjutan = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"2"]);
+
+        $syclist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"0"],"pagu_rpm");
+        $mycbarulist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"1","kdjnskon"=>"3"],"pagu_rpm");
+        $mycbaruphlnlist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"0"],"pagu_phln");
+
+    
+
+
+        $data = array(
+            'title' => 'Belum Lelang',
+            
+
+
+        );
+
+
         $data = array(
             'title' => 'Dashboard',
             'data' => $qdata,
@@ -57,7 +77,16 @@ class Dashboard extends \App\Controllers\BaseController
             'fis' => $this->getprogreskeu("fisik"),
             'pagu' =>    $getGraphicData,
             'jenisbelanja' =>  $getGraphicDataJenisBelanja,
-            'perkegiatan' =>  $getGraphicDataPerkegiatan
+            'perkegiatan' =>  $getGraphicDataPerkegiatan,
+
+            // belum lelang
+            'syc' => $syc,
+            'mycbaru1' => $mycbaru1,
+            'mycbaru2' => $mycbaru2,
+            'myclanjutan' => $myclanjutan,
+            'syclist' => $syclist,
+            'mycbarulist' => $mycbarulist,
+            'mycbaruphlnlist' => $mycbaruphlnlist
 
 
         );
