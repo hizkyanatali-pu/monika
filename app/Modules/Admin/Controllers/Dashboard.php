@@ -42,21 +42,33 @@ class Dashboard extends \App\Controllers\BaseController
         $getGraphicDataJenisBelanja = $this->PulldataModel->getGraphicDataProgressPerJenisBelanja();
         $getGraphicDataPerkegiatan = $this->PulldataModel->getGraphicDataProgressPerKegiatan();
 
-        $syc = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"0"]);
-        $mycbaru1 = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"1"]);
-        $mycbaru2 = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"3"]);
-        $myclanjutan = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"2"]);
 
-        $syclist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"0"],"pagu_rpm");
-        $mycbarulist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"1","kdjnskon"=>"3"],"pagu_rpm");
-        $mycbaruphlnlist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"0"],"pagu_phln");
+        // postur belum lelang
+        $syc = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "pagu_rpm");
+        $mycbaru1rpm = $this->PohonAnggaran->getDataBelumLelangNilai([[1]], "pagu_rpm");
+        $mycbaru2rpm = $this->PohonAnggaran->getDataBelumLelangNilai([[3]], "pagu_rpm");
 
-    
+        $mycbaru1phln = $this->PohonAnggaran->getDataBelumLelangNilai([[1]], "pagu_phln");
+        $mycbaru2phln = $this->PohonAnggaran->getDataBelumLelangNilai([[3]], "pagu_phln");
+
+        $myclanjutan = $this->PohonAnggaran->getDataBelumLelangNilai([[2]], "pagu_rpm");
+        $Sbsn =  $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "pagu_sbsn");
+
+        //table perkegiatan
+
+        $belumlelangPerkegiatanRpmSyc =  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_rpm", 0, true);
+        $belumlelangPerkegiatanMyc =  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_total", "1,2,3");
+
+
+        $syclist =  $this->PohonAnggaran->getDataBelumLelangList([[0]], "pagu_rpm");
+        $mycbarulist =  $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "pagu_rpm");
+        $mycbaruphlnlist =  $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "pagu_phln");
+
 
 
         $data = array(
             'title' => 'Belum Lelang',
-            
+
 
 
         );
@@ -81,12 +93,21 @@ class Dashboard extends \App\Controllers\BaseController
 
             // belum lelang
             'syc' => $syc,
-            'mycbaru1' => $mycbaru1,
-            'mycbaru2' => $mycbaru2,
+            'mycbaru1' => $mycbaru1rpm,
+            'mycbaru2' => $mycbaru2rpm,
+            'mycbaruphln' => $mycbaru1phln + $mycbaru2phln,
+            'sbsn' => $Sbsn,
             'myclanjutan' => $myclanjutan,
             'syclist' => $syclist,
             'mycbarulist' => $mycbarulist,
-            'mycbaruphlnlist' => $mycbaruphlnlist
+            'mycbaruphlnlist' => $mycbaruphlnlist,
+
+            // belum lelang RPM syc
+            'belum_lelang_rpm_syc' => $belumlelangPerkegiatanRpmSyc,
+            'belum_lelang_myc' => $belumlelangPerkegiatanMyc,
+
+            'qdata' => ["bbws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS'"), "bws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS'"), "pusat" => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99'"), 'Balai Teknik' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"), 'dinas' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98'"), 'Semua Satker' => $this->PulldataModel->getBalaiPaket("satker10terendah")],
+
 
 
         );

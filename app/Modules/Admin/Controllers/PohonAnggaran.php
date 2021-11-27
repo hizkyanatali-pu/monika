@@ -150,24 +150,32 @@ class PohonAnggaran extends \App\Controllers\BaseController
     {
 
 
-        $syc = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"0"]);
-        $mycbaru1 = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"1"]);
-        $mycbaru2 = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"3"]);
-        $myclanjutan = $this->PohonAnggaran->getDataBelumLelangNilai(["kdjnskon"=>"2"]);
+        $syc = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "pagu_rpm");
+        $mycbaru1rpm = $this->PohonAnggaran->getDataBelumLelangNilai([[1]], "pagu_rpm");
+        $mycbaru2rpm = $this->PohonAnggaran->getDataBelumLelangNilai([[3]], "pagu_rpm");
 
-        $syclist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"0"],"pagu_rpm");
-        $mycbarulist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"1","kdjnskon"=>"3"],"pagu_rpm");
-        $mycbaruphlnlist =  $this->PohonAnggaran->getDataBelumLelangList(["kdjnskon"=>"0"],"pagu_phln");
+        $mycbaru1phln = $this->PohonAnggaran->getDataBelumLelangNilai([[1]], "pagu_phln");
+        $mycbaru2phln = $this->PohonAnggaran->getDataBelumLelangNilai([[3]], "pagu_phln");
 
-    
+        $myclanjutan = $this->PohonAnggaran->getDataBelumLelangNilai([[2]], "pagu_rpm");
+        $Sbsn =  $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "pagu_sbsn");
+
+        $syclist =  $this->PohonAnggaran->getDataBelumLelangList([[0]], "pagu_rpm");
+        $mycbarulist =  $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "pagu_rpm");
+        $mycbaruphlnlist =  $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "pagu_phln");
+
+
+
 
 
         $data = array(
             'title' => 'Belum Lelang',
             'syc' => $syc,
-            'mycbaru1' => $mycbaru1,
-            'mycbaru2' => $mycbaru2,
+            'mycbaru1' => $mycbaru1rpm,
+            'mycbaru2' => $mycbaru2rpm,
+            'mycbaruphln' => $mycbaru1phln + $mycbaru2phln,
             'myclanjutan' => $myclanjutan,
+            'sbsn' => $Sbsn,
             'syclist' => $syclist,
             'mycbarulist' => $mycbarulist,
             'mycbaruphlnlist' => $mycbaruphlnlist

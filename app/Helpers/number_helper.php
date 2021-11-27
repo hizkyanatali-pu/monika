@@ -26,4 +26,11 @@ if (!function_exists('onlyTwoDecimal')) {
 	{
 		return number_format($argNumber, 2, '.', '');
 	}
+
+	if (!function_exists('formatNumber')) {
+		function formatNumber($argNumber)
+		{
+			return number_format($argNumber, 0, ',', '.');
+		}
+	}
 }

@@ -38,10 +38,10 @@
                                     <div class="card card-body bg-tree-1">
                                         <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                         <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                        <label> Paket</label>
+                                        <label> <?= formatNumber($mycbaru1['jml_paket'] + $mycbaru2['jml_paket'] + $syc['jml_paket'] + $mycbaruphln['jml_paket']); ?> Paket</label>
                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                             <h5 class="mb-0">
-                                            <?= toMilyar($mycbaru1['total_phln']+$mycbaru2['total_phln']+$syc['total_rpm']+$mycbaru1['total_rpm']+$mycbaru2['total_rpm'], true, 2); ?> M
+                                                <?= toMilyar($syc['total_rpm'] + $mycbaru1['total_rpm'] + $mycbaru2['total_rpm'] + $mycbaruphln['total_phln'], true, 2); ?> M
                                             </h5>
                                         </div>
                                     </div>
@@ -49,15 +49,15 @@
                             </a>
                             <ul>
 
-                                <li class="" style="width: 60% !important">
+                                <li class="" style="width: 50% !important">
                                     <a href="#" class="w-50">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> RPM </b></h4>
-                                                <label> Paket</label>
+                                                <label> <?= formatNumber($syc['jml_paket'] + $mycbaru1['jml_paket'] + $mycbaru2['jml_paket']) ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                    <?= toMilyar($syc['total_rpm']+$mycbaru1['total_rpm']+$mycbaru2['total_rpm'], true, 2); ?> M
+                                                        <?= toMilyar($syc['total_rpm'] + $mycbaru1['total_rpm'] + $mycbaru2['total_rpm'], true, 2); ?> M
                                                     </h5>
                                                 </div>
                                             </div>
@@ -69,10 +69,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-3">
                                                         <h4 class="mb-0"><b> SYC </b></h4>
-                                                        <label> Paket</label>
+                                                        <label> <?= formatNumber($syc['jml_paket']); ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                              <?= toMilyar($syc['total_rpm'], true, 2); ?>
+                                                                <?= toMilyar($syc['total_rpm'], true, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -83,9 +83,9 @@
                                                 <div class="tree-content">
                                                     <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
                                                         <h6>Antara Lain :</h6>
-                                                        <?php foreach($syclist AS $key => $daftarsyc){ ?>
+                                                        <?php foreach ($syclist as $key => $daftarsyc) { ?>
 
-                                                            <p><?= ++$key .". ". $daftarsyc['nmpaket'] ?></p>
+                                                            <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
 
 
                                                         <?php } ?>
@@ -98,10 +98,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-3">
                                                         <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                        <label> Paket</label>
+                                                        <label> <?= formatNumber($mycbaru1['jml_paket'] + $mycbaru2['jml_paket']); ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                            <?= toMilyar($mycbaru1['total_rpm']+$mycbaru2['total_rpm'], true, 2); ?> M
+                                                                <?= toMilyar($mycbaru1['total_rpm'] + $mycbaru2['total_rpm'], true, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -112,28 +112,42 @@
                                                 <div class="tree-content">
                                                     <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
                                                         <h6>Antara Lain :</h6>
-                                                        <?php foreach($mycbarulist AS $key => $daftarsyc){ ?>
+                                                        <?php foreach ($mycbarulist as $key => $daftarsyc) { ?>
 
-                                                            <p><?= ++$key .". ". $daftarsyc['nmpaket'] ?></p>
+                                                            <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
 
 
-                                                            <?php } ?>
+                                                        <?php } ?>
                                                     </div>
                                                 </div>
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
-
-                                <li class="" style="width: 40% !important">
+                                <li class="" style="width: 20% !important">
+                                    <a href="#" class="w-75">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-2">
+                                                <h4 class="mb-0"><b> SBSN </b></h4>
+                                                <label><?= formatNumber($sbsn['jml_paket']); ?> Paket</label>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                        <?= toMilyar($sbsn['total_sbsn'], true, 2); ?> M
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="" style="width: 30% !important">
                                     <a href="#" class="w-75">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> PHLN </b></h4>
-                                                <label> Paket</label>
+                                                <label><?= formatNumber($mycbaruphln['jml_paket']); ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                    <?= toMilyar($mycbaru1['total_phln']+$mycbaru2['total_phln'], true, 2); ?> M
+                                                        <?= toMilyar($mycbaruphln['total_phln'], true, 2); ?> M
                                                     </h5>
                                                 </div>
                                             </div>
@@ -144,10 +158,10 @@
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-3">
                                                 <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                <label> Paket</label>
+                                                <label><?= formatNumber($mycbaruphln['jml_paket']); ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                    <?= toMilyar($mycbaru1['total_phln']+$mycbaru2['total_phln'], true, 2); ?> M
+                                                        <?= toMilyar($mycbaruphln['total_phln'], true, 2); ?> M
                                                     </h5>
                                                 </div>
                                             </div>
@@ -158,16 +172,18 @@
                                         <div class="tree-content">
                                             <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
                                                 <h6>Antara Lain :</h6>
-                                                <?php foreach($mycbaruphlnlist AS $key => $daftarsyc){ ?>
+                                                <?php foreach ($mycbaruphlnlist as $key => $daftarsyc) { ?>
 
-                                                    <p><?= ++$key .". ". $daftarsyc['nmpaket'] ?></p>
+                                                    <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
 
 
-                                                    <?php } ?>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </a>
                                 </li>
+
+
 
                             </ul>
                         </li>
