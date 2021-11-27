@@ -20,7 +20,8 @@ class PohonAnggaranModel extends Model
         //     ;
         // if ($w != "") $query->where($w);
         $db = \Config\Database::connect();
-       $query = $db->query("SELECT
+        $query = $db->query(
+            "SELECT
             SUM(monika_data.pagu_total) nilai_kontrak,
            COUNT(mnk_kontrak.nilai_kontrak) jml_paket
 
@@ -49,11 +50,11 @@ class PohonAnggaranModel extends Model
         FROM
             monika_kontrak
     ) mnk_kontrak ON monika_data.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.status_tender = :status_tender:",
-    
-    $w
-    );
 
-     
+            $w
+        );
+
+
         $return =  $query->getRowArray();
 
         return $return;
@@ -72,15 +73,16 @@ class PohonAnggaranModel extends Model
     }
 
 
-    public function getDataBelumLelangNilai($w = "")
+    public function getDataBelumLelangNilai($w = "", $nama_pagu = "")
     {
+        // dd($nama_pagu);
         // $query = $this->table($this->table)
         //     ->select("
 
         //     sum(pagu_rpm) AS total_rpm,
         //     sum(pagu_phln)AS total_phln,
         //     sum(pagu_sbsn) AS total_sbsn
-            
+
         //     ")
         //     ->join('monika_data', "{$this->table}.kdpaket = monika_data.kdpaket", 'left')
         //     ;
@@ -92,10 +94,12 @@ class PohonAnggaranModel extends Model
 
 
         $db = \Config\Database::connect();
-        $query = $db->query("SELECT
+        $query = $db->query(
+            "SELECT
         sum(monika_data.pagu_rpm) AS total_rpm,
         sum(monika_data.pagu_phln)AS total_phln,
-        sum(monika_data.pagu_sbsn) AS total_sbsn
+        sum(monika_data.pagu_sbsn) AS total_sbsn,
+        count(monika_data.nmpaket) AS jml_paket
  
      FROM
          monika_data
@@ -103,6 +107,7 @@ class PohonAnggaranModel extends Model
          SELECT
              monika_kontrak.nilai_kontrak,
              monika_kontrak.kdjnskon,
+             monika_kontrak.status_tender,
              CASE
          WHEN LENGTH(monika_kontrak.kdpaket) - LENGTH(
              REPLACE (
@@ -121,26 +126,29 @@ class PohonAnggaranModel extends Model
          END AS kdpaket_kontrak
          FROM
              monika_kontrak
-     ) mnk_kontrak ON monika_data.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.kdjnskon IN (:kdjnskon:) ",
-     
-     $w
-     );
- 
-      
-         $return =  $query->getRowArray();
+     ) mnk_kontrak ON monika_data.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.kdjnskon IN ? AND mnk_kontrak.status_tender = 'Belum Lelang'
+     AND
+     monika_data.$nama_pagu != 0 AND monika_data.$nama_pagu IS NOT NULL
+     ",
 
-         return $return;
+            $w
+        );
+
+
+        $return =  $query->getRowArray();
+
+        return $return;
     }
 
-    
-    public function getDataBelumLelangList($w = "",$pagu)
+
+    public function getDataBelumLelangList($w = "", $pagu)
     {
         // $query = $this->table($this->table)
         //     ->select("
 
         //     monika_data.nmpaket,
         //     monika_data.$pagu
-            
+
         //     ")
         //     ->join('monika_data', "{$this->table}.kdpaket = monika_data.kdpaket", 'left')
         //     ;
@@ -152,7 +160,8 @@ class PohonAnggaranModel extends Model
 
 
         $db = \Config\Database::connect();
-        $query = $db->query("SELECT
+        $query = $db->query(
+            "SELECT
         monika_data.nmpaket,
         monika_data.$pagu
  
@@ -162,6 +171,7 @@ class PohonAnggaranModel extends Model
          SELECT
              monika_kontrak.nilai_kontrak,
              monika_kontrak.kdjnskon,
+             monika_kontrak.status_tender,
              CASE
          WHEN LENGTH(monika_kontrak.kdpaket) - LENGTH(
              REPLACE (
@@ -180,18 +190,76 @@ class PohonAnggaranModel extends Model
          END AS kdpaket_kontrak
          FROM
              monika_kontrak
-     ) mnk_kontrak ON monika_data.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.kdjnskon IN (:kdjnskon:) LIMIT 4",
-     
-     $w
-     );
- 
-      
-      $return =  $query->getResultArray();
+     ) mnk_kontrak ON monika_data.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.kdjnskon IN ? AND mnk_kontrak.status_tender = 'Belum Lelang' AND  monika_data.$pagu != 0 AND monika_data.$pagu IS NOT NULL ORDER BY monika_data.$pagu DESC LIMIT 4",
+
+            $w
+        );
+
+
+        $return =  $query->getResultArray();
 
         return $return;
-
-
     }
 
 
+
+    public function getDataBelumLelangPerKegiatan($sumber_dana, $kdjnskon, $where = false)
+    {
+
+
+        $db = \Config\Database::connect();
+
+        ($where != false ? $where = " AND monika_data.$sumber_dana != 0 AND monika_data.$sumber_dana IS NOT NULL" : $where = "");
+        $data = $db->query("
+        
+        SELECT
+        monika_data.kdgiat,
+        tgiat.nmgiat,
+        monika_kontrak.nmpaket,
+        SUM(monika_data.$sumber_dana) AS pagu,
+        COUNT(monika_data.nmpaket) AS jml_paket,
+        (
+            JSON_OBJECT (
+                'paket',
+                GROUP_CONCAT(
+                    CASE 
+                        WHEN
+                            (INSTR(monika_kontrak.nmpaket, ';')) > 0
+                        THEN
+						CONCAT('- ',SUBSTR(monika_kontrak.nmpaket, 1, (INSTR(monika_kontrak.nmpaket, ';')-1)))									
+                        ELSE
+                           CONCAT('- ',monika_kontrak.nmpaket)
+                    END, '<br>'
+                ) 
+            )
+        ) AS paket
+    FROM
+        monika_data
+    RIGHT JOIN monika_kontrak ON monika_data.kdsatker = monika_kontrak.kdsatker
+    AND monika_data.kdprogram = monika_kontrak.kdprogram
+    AND monika_data.kdgiat = monika_kontrak.kdgiat
+    AND monika_data.kdoutput = monika_kontrak.kdoutput
+    AND monika_data.kdsoutput = monika_kontrak.kdsoutput
+    AND monika_data.kdkmpnen = monika_kontrak.kdkmpnen
+    AND monika_data.kdskmpnen = monika_kontrak.kdskmpnen
+    LEFT JOIN tgiat ON tgiat.kdgiat = monika_data.kdgiat
+    WHERE
+        monika_kontrak.status_tender = 'Belum Lelang'
+        AND monika_kontrak.kdjnskon IN ($kdjnskon)
+    {$where}
+    GROUP BY
+        monika_kontrak.kdgiat
+        
+        ")->getResult();
+
+        return array_map(function ($arr) {
+            return (object) [
+                'kdgiat'     => $arr->kdgiat,
+                'nmgiat'     => $arr->nmgiat,
+                'pagu'     => $arr->pagu,
+                'jml_paket'     => $arr->jml_paket,
+                'paketList' => json_decode($arr->paket)
+            ];
+        }, $data);
+    }
 }
