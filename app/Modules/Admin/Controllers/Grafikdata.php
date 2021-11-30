@@ -4,6 +4,7 @@ namespace Modules\Admin\Controllers;
 
 // use Modules\Admin\Models\AksesModel;
 use Modules\Admin\Models\PulldataModel;
+use Modules\Admin\Models\RekapUnorModel;
 
 
 class Grafikdata extends \App\Controllers\BaseController
@@ -11,6 +12,7 @@ class Grafikdata extends \App\Controllers\BaseController
     public function __construct()
     {
         $this->PulldataModel        = new PulldataModel();
+        $this->RekapUnorModel       = new RekapUnorModel();
         // $this->akses                = new AksesModel();
     }
 
@@ -107,5 +109,15 @@ class Grafikdata extends \App\Controllers\BaseController
             'pagu'  => $getGraphicData
         );
         return view('Modules\Admin\Views\Grafik\Progress-per-kegitan', $data);
+    }
+
+    public function progres_pupr(){
+
+        $rekapUnor =  $this->RekapUnorModel->getRekapUnor();
+        $data = array(
+            'title' => 'Grafik Progres PUPR',
+            'rekapunor' => $rekapUnor,
+        );
+        return view('Modules\Admin\Views\Grafik\Progres-pupr', $data);
     }
 }

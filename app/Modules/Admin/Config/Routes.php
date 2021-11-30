@@ -56,6 +56,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('skpdtpop', '\Modules\Admin\Controllers\Pulldata::skpdtpop');
         $routes->get('satkerpagu100m', '\Modules\Admin\Controllers\Pulldata::satkerpagu100m');
         $routes->get('semuasatker/(:any)', '\Modules\Admin\Controllers\Pulldata::semua_satker/$1');
+        $routes->get('satker_terendah', '\Modules\Admin\Controllers\Pulldata::satker_terendah');
 
 
         $routes->get('simpandata', '\Modules\Admin\Controllers\Pulldata::simpandata');
@@ -85,6 +86,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('progres-per-sumber-dana', '\Modules\Admin\Controllers\Grafikdata::progres_per_sumber_dana');
         $routes->get('progres-per-jenis-belanja', '\Modules\Admin\Controllers\Grafikdata::progres_per_jenis_belanja');
         $routes->get('progres-per-kegiatan', '\Modules\Admin\Controllers\Grafikdata::progres_per_kegiatan');
+        $routes->get('progres-grafik-pupr', '\Modules\Admin\Controllers\Grafikdata::progres_pupr');
 
         $routes->get('(:segment)', '\Modules\Admin\Controllers\Grafikdata::index/$1');
     });

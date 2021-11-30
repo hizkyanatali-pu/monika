@@ -63,6 +63,8 @@ $request = \Config\Services::request();
                                                     ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satkerpagu100m'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satkerpagu100m'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Pagu>100 M</span></a></li>
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'semuasatker'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/semuasatker/all'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Semua Satker</span></a></li>
+                        <li class="kt-menu__item <?=
+                                                    ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satker_terendah'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satker_terendah'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Terendah</span></a></li>
                     </ul>
                 </div>
             </li>
@@ -158,6 +160,8 @@ $request = \Config\Services::request();
                                                     ($request->uri->getSegment(1) == 'grafikdata' && $request->uri->getSegment(2) == 'progres-per-jenis-belanja'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-per-jenis-belanja'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Jenis Belanja</span> </a></li>
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'grafikdata' && $request->uri->getSegment(2) == 'progres-per-kegiatan'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-per-kegiatan'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Progres Per Kegiatan</span> </a></li>
+                        <li class="kt-menu__item <?=
+                                                    ($request->uri->getSegment(1) == 'grafikdata' && $request->uri->getSegment(2) == 'progres-grafik-pupr'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('grafikdata/progres-grafik-pupr'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon flaticon2-sort-down"></i><span class="kt-menu__link-text">Grafik Progres PUPR</span> </a></li>
                     </ul>
                 </div>
             </li>

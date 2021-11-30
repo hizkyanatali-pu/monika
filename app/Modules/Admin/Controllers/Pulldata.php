@@ -282,6 +282,21 @@ class Pulldata extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\Paket\cetak\Format_2_cetak', $data);
     }
 
+    //satker terendah
+    public function satker_terendah(){
+        
+        $data = [
+            'title' => 'Satker Terendah',
+            'posisi' => ['<i class="fa fa-home"></i>'],
+            'idk' => 'all',
+            'label' => 'Satker Terendah',
+            'nextlink' => 'paket',
+            'qdata' => ['Satker Terendah' => $this->PulldataModel->getBalaiPaket("satker10terendah")],
+            'rekap' => 'satkerterendah',
+            'id_report' => 'cetak_satker_terendah'
+        ];
+        return view('Modules\Admin\Views\Paket\Satker_terendah', $data);
+    }
 
     //pindah ya!
     // function simpandata(){
