@@ -1023,7 +1023,7 @@
             <div class="kt-section">
                 <div class="kt-section__content">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-6">
                             <!--begin::Portlet-->
                             <div class="kt-portlet">
                                 <div class="kt-portlet__head">
@@ -1060,7 +1060,7 @@
                             </div>
                             <!--end::Portlet-->
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-6">
                             <!--begin::Portlet-->
                             <div class="kt-portlet">
                                 <div class="kt-portlet__head">
