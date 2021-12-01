@@ -12,9 +12,15 @@
             size: landscape;
             background-color: white;
             margin-top: 0;
+            width: 270mm;
+            height: 360mm;
         }
 
         #kt_subheader {
+            display: none;
+        }
+
+        #kt_scrolltop {
             display: none;
         }
 
@@ -39,14 +45,16 @@
         }
 
         .kt-portlet.kt-portlet--tab {
-
+            color: black;
+            font-size: 16px;
             margin-top: 0.9cm;
-            /* background-color:#fff;
-        font-family: Arial, Helvetica, sans-serif;
-        color:#424849;
-        font-size:12px;
-        zoom: 1.5; 
-        -moz-transform: scale(1.5);  */
+            font-family: Arial, Helvetica, sans-serif;
+            /* background-color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #424849;
+            font-size: 12px;
+            zoom: 1.5;
+            -moz-transform: scale(1.5); */
 
         }
 
@@ -1211,7 +1219,7 @@
                                 </div> -->
                             <i><b>*Dalam Ribu Rupiah</b></i>
                         </div>
-                        <div class="table-responsive tableFixHead">
+                        <div class="table-responsive">
                             <table class="table-bordered mb-0 table-striped" width="100%">
                                 <thead class="text-center text-white" style="background-color: #1562aa;">
                                     <tr class="text-center">

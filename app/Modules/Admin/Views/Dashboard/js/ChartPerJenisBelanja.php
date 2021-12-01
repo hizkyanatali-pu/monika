@@ -89,7 +89,7 @@
                         `
 		    				<?php echo $value->title ?> 
 		    				<div class="title-chart-important">
-		    					<a href=""><?php echo toMilyar($value->totalPagu, true, 2) . " M" ?> 
+		    					<a href=""><?php echo toTriliun($value->totalPagu) ?> 
 		    					<span><?php echo toRupiah($value->totalPagu) ?></span>
 		    					</a>
 		    				</div>
