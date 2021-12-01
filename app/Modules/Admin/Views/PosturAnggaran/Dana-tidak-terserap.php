@@ -47,35 +47,35 @@
                         <tbody>
                             <tr>
                                 <td>Total</td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['pagu_total'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['real_total'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['pagu_total'] - $val['real_total'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold">?</td>
-                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;">?</td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['pagu_total'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['real_total'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['pagu_total'] - $getDataTotal['real_total'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['prognosis'] - $getDataTotal['real_total'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;"><?= number_format($getDataTotal['pagu_total'] - $getDataTotal['prognosis'], 2, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td>RPM</td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['pagu_rpm'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['real_rpm'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['pagu_rpm'] - $val['real_rpm'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold">?</td>
-                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;">?</td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['pagu_rpm'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['real_rpm'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['pagu_rpm'] - $getDataRpm['real_rpm'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['prognosis'] - $getDataRpm['real_rpm'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;"><?= number_format($getDataRpm['real_rpm'] - $getDataRpm['prognosis'], 2, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td>SBSN</td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['pagu_sbsn'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['real_sbsn'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['pagu_sbsn'] - $val['real_sbsn'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold">?</td>
-                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;">?</td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['pagu_sbsn'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['real_sbsn'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['pagu_sbsn'] - $getDataSbsn['real_sbsn'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['prognosis'] - $getDataSbsn['real_sbsn'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;"><?= number_format($getDataSbsn['real_sbsn'] - $getDataSbsn['prognosis'], 2, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td>PHLN</td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['pagu_phln'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['real_phln'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($val['pagu_phln'] - $val['real_phln'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold">?</td>
-                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000; border-bottom: 3px solid #C90000;">?</td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['pagu_phln'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['real_phln'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['pagu_phln'] - $getDataPhln['real_phln'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['prognosis'] - $getDataPhln['real_phln'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000; border-bottom: 3px solid #C90000;"><?= number_format($getDataPhln['real_phln'] - $getDataPhln['prognosis'], 2, ',', '.'); ?></td>
                             </tr>
                         </tbody>
                     </table>

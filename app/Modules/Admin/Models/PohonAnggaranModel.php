@@ -60,16 +60,40 @@ class PohonAnggaranModel extends Model
         return $return;
     }
 
-    public function getDataSisaDataTidakTerserap($w = "")
+    public function getDataSisaDataTidakTerserap($sumber_dana = "")
     {
+        ini_set('max_execution_time', 0);
+
+
         $db = \Config\Database::connect();
-        $query = $db->table("monika_rekap_unor")
-            ->select("pagu_rpm,pagu_sbsn,pagu_phln,pagu_total,real_rpm,real_sbsn,real_phln,real_total");
-        if ($w != "") $query->where($w);
-
-        $return =  $query->get()->getRowArray();
-
-        return $return;
+        $qdata = $db->query("SELECT
+	SUM(pagu_$sumber_dana) pagu_$sumber_dana,
+    SUM(real_$sumber_dana) real_$sumber_dana,
+	SUM(prognosis) as prognosis
+FROM
+	monika_data md
+LEFT JOIN (
+	SELECT
+		SUM(prognosis) AS prognosis,
+		kode_ang
+	FROM
+		d_pkt_prognosis
+	RIGHT JOIN monika_data ON d_pkt_prognosis.kode_ang = monika_data.kdpaket
+	WHERE
+		monika_data.pagu_$sumber_dana != 0
+	AND monika_data.pagu_$sumber_dana IS NOT NULL
+    AND (kode_ang LIKE '%FC%' OR kode_ang LIKE '%WA%')
+	GROUP BY
+		monika_data.kdpaket
+) AS prog ON prog.kode_ang = md.kdpaket
+WHERE
+pagu_$sumber_dana != 0
+AND pagu_$sumber_dana IS NOT NULL
+AND (kode_ang LIKE '%FC%' OR kode_ang LIKE '%WA%')
+        
+        
+        ")->getRowArray();
+        return $qdata;
     }
 
 

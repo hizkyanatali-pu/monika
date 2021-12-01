@@ -35,13 +35,13 @@
                 <?php echo session()->getFlashdata('error'); ?>
             </div>
         <?php endif; ?>
-        
-        
+
+
         <div class="kt-portlet__body">
             <!--begin::Section-->
             <div class="kt-section">
 
-                
+
                 <div id="body-form">
                     <label for="">Tambah DB SQLITE</label>
                     <div id="filelist">Browser Anda tidak memiliki dukungan Flash, Silverlight, atau HTML5.</div>
@@ -220,10 +220,10 @@
             }],
         },
         // Flash settings
-        flash_swf_url:  BASE_URL+ "/js/plupload/Moxie.swf",
+        flash_swf_url: BASE_URL + "/js/plupload/Moxie.swf",
 
         // Silverlight settings
-        silverlight_xap_url: BASE_URL+"/js/plupload/Moxie.xap",
+        silverlight_xap_url: BASE_URL + "/js/plupload/Moxie.xap",
         init: {
             PostInit: function() {
                 document.getElementById("filelist").innerHTML = "";

@@ -188,12 +188,13 @@ class PohonAnggaran extends \App\Controllers\BaseController
 
     public function danatidakTerserap()
     {
-        $getData = $this->PohonAnggaran->getDataSisaDataTidakTerserap(["kdunit" => "06"]);
 
         $data = array(
             'title' => 'Dana Tidak Terserap',
-            'val' => $getData,
-
+            'getDataRpm' => $this->PohonAnggaran->getDataSisaDataTidakTerserap("rpm"),
+            'getDataPhln' => $this->PohonAnggaran->getDataSisaDataTidakTerserap("phln"),
+            'getDataSbsn' => $this->PohonAnggaran->getDataSisaDataTidakTerserap("sbsn"),
+            'getDataTotal' => $this->PohonAnggaran->getDataSisaDataTidakTerserap("total")
         );
 
         return view('Modules\Admin\Views\PosturAnggaran\Dana-tidak-terserap', $data);

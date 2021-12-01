@@ -190,13 +190,14 @@ class Dashboard extends \App\Controllers\BaseController
     public function Excel()
     {
 
+
         ini_set('max_execution_time', 300);
 
         $rekapUnor =  $this->RekapUnorModel->getRekapUnor('', 'urutan ASC');
 
 
         $inputFileType = 'Xlsx'; // Xlsx - Xml - Ods - Slk - Gnumeric - Csv
-        $inputFileName =  WRITEPATH . "template" . DIRECTORY_SEPARATOR . "test.xlsx";
+        $inputFileName =  WRITEPATH . "template" . DIRECTORY_SEPARATOR . "test1.xlsx";
 
         /**  Create a new Reader of the type defined in $inputFileType  **/
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
@@ -224,7 +225,7 @@ class Dashboard extends \App\Controllers\BaseController
             }
 
             $writer = new Xlsx($spreadsheet);
-            $filename =  'Data-Siswa-' . date('Y-m-d-His');
+            $filename =  'PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR' . date('Y-m-d-His');
 
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename=' . $filename . '.xlsx');
