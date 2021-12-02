@@ -922,26 +922,20 @@
                                         </div>
                                     </div>
                                 </a>
-
-
-                                <ul>
-                                    <li class="" style="width: 60% !important">
-                                        <a href="#" class="w-50">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> RPM </b></h4>
-                                                    <label> ? Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            Rp. ?
-                                                        </h5>
-                                                    </div>
-                                                </div>
+                                <div class="border-single-tree-down"></div>
+                                <a href="#" class="w-25">
+                                    <div class="tree-content">
+                                        <div class="card card-body bg-tree-2">
+                                            <h4 class="mb-0"><b> RPM </b></h4>
+                                            <label> ? Paket</label>
+                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                <h5 class="mb-0">
+                                                    Rp. ?
+                                                </h5>
                                             </div>
-                                        </a>
-                                    </li>
-                                    <li></li>
-                                </ul>
+                                        </div>
+                                    </div>
+                                </a>
 
 
                             </li>
@@ -987,23 +981,20 @@
                                         </div>
                                     </div>
                                 </a>
-                                <ul>
-                                    <li class="" style="width: 40% !important">
-                                        <a href="#" class="w-75">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> PLN </b></h4>
-                                                    <label> ? Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            Rp ?
-                                                        </h5>
-                                                    </div>
-                                                </div>
+                                <div class="border-single-tree-down"></div>
+                                <a href="#" class="w-25">
+                                    <div class="tree-content">
+                                        <div class="card card-body bg-tree-2">
+                                            <h4 class="mb-0"><b> PLN </b></h4>
+                                            <label> ? Paket</label>
+                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                <h5 class="mb-0">
+                                                    Rp ?
+                                                </h5>
                                             </div>
-                                        </a>
-                                    </li>
-                                </ul>
+                                        </div>
+                                    </div>
+                                </a>
                             </li>
                         </ul>
                     </div>
