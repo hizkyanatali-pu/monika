@@ -7,19 +7,20 @@ use CodeIgniter\Model;
 class TematikModel extends Model
 {
 	public function __construct()
-    {
-        helper('dbdinamic');
-        $session = session();
-        $this->user = $session->get('userData');
-        $dbcustom = switch_db($this->user['dbuse']);
-        $this->db = \Config\Database::connect();
-        $this->db_2 = \Config\Database::connect($dbcustom);
-    }
+	{
+		helper('dbdinamic');
+		$session = session();
+		$this->user = $session->get('userData');
+		$dbcustom = switch_db($this->user['dbuse']);
+		$this->db = \Config\Database::connect();
+		$this->db_2 = \Config\Database::connect($dbcustom);
+	}
 
 
 
-    public function getListTematik($argKdTematik) {
-    	$data = $this->db_2->query("
+	public function getListTematik($argKdTematik)
+	{
+		$data = $this->db_2->query("
     		select 
 	            kdsatker,
 	            nmsatker,
@@ -62,18 +63,19 @@ class TematikModel extends Model
 	            (select count(paket.kdunit) from paket left join tematik_link on paket.kode = tematik_link.kode_ang where paket.kdsatker=satker_sda.kdsatker and tematik_link.kdtematik='$argKdTematik') > 0
     	")->getResult();
 
-    	return array_map(function($arr) {
-    		return (object) [
-    			'satker' 	=> $arr->nmsatker,
-    			'paketList' => json_decode($arr->paket)
-    		];
-    	}, $data);
-    }
+		return array_map(function ($arr) {
+			return (object) [
+				'satker' 	=> $arr->nmsatker,
+				'paketList' => json_decode($arr->paket)
+			];
+		}, $data);
+	}
 
 
 
-    public function getListTematikKspn($kspnCode) {
-    	$data = $this->db_2->query("
+	public function getListTematikKspn($kspnCode)
+	{
+		$data = $this->db_2->query("
     		select 
 	            kdsatker,
 	            nmsatker,
@@ -110,28 +112,29 @@ class TematikModel extends Model
 	            (select count(paket.kdunit) from paket left join tematik_link on paket.kode = tematik_link.kode_ang where paket.kdsatker=satker_sda.kdsatker and tematik_link.kdtematik='$kspnCode') > 0
     	")->getResult();
 
-    	return array_map(function($arr) {
-    		return (object) [
-    			'satker' 	=> $arr->nmsatker,
-    			'paketList' => json_decode($arr->paket)
-    		];
-    	}, $data);
-    }
+		return array_map(function ($arr) {
+			return (object) [
+				'satker' 	=> $arr->nmsatker,
+				'paketList' => json_decode($arr->paket)
+			];
+		}, $data);
+	}
 
 
 
-    public function getListRekap($option) {
-    	$listData = [];
-    	foreach ($option as $key => $value) {
-    		$strTematikCode = join(',', $value['tematikCode']);
-    		$data = $this->db_2->query("
+	public function getListRekap($option)
+	{
+		$listData = [];
+		foreach ($option as $key => $value) {
+			$strTematikCode = join(',', $value['tematikCode']);
+			$data = $this->db_2->query("
 	    		select 
 					tmtlink.kdtematik,
 					sum(pkt.pg) as total_pagu,
 					sum(pkt.rtot) as total_realisasi,
 					sum(pkt.ufis) as total_ufis,
 					(JSON_OBJECT(
-						'tematik', satker.grup,
+						'tematik', satker.nmsatker,
 						'pagu', sum(pkt.pg),
 						'realisasi', sum(pkt.rtot),
 						'prog_keu', ((sum(pkt.rtot) / sum(pkt.pg)) * 100),
@@ -153,7 +156,7 @@ class TematikModel extends Model
 								left join satker_sda sub_satker on sub_pkt.kdsatker=sub_satker.kdsatker
 								left join tematik_link sub_tmtlink on sub_pkt.kode=sub_tmtlink.kode_ang
 							where 
-								sub_satker.grup=satker.grup
+								sub_satker.nmsatker=satker.nmsatker
 								and sub_tmtlink.kdtematik = tmtlink.kdtematik
 						)
 					)) as data
@@ -164,32 +167,32 @@ class TematikModel extends Model
 				WHERE
 					tmtlink.kdtematik in ($strTematikCode)
 				group by 
-					satker.grup
+				satker.nmsatker
 	    	")->getResult();
 
-    		$totalPagu = 0;
-    		$totalRealisasi = 0;
-    		$totalUFis = 0;
-    		$itemList = [];
-	    	foreach ($data as $key2 => $value2) {
-	    		$totalPagu += $value2->total_pagu;
-	    		$totalRealisasi += $value2->total_realisasi;
-	    		$totalUFis += $value2->total_ufis;
-	    		array_push($itemList, json_decode($value2->data));
-	    	}
+			$totalPagu = 0;
+			$totalRealisasi = 0;
+			$totalUFis = 0;
+			$itemList = [];
+			foreach ($data as $key2 => $value2) {
+				$totalPagu += $value2->total_pagu;
+				$totalRealisasi += $value2->total_realisasi;
+				$totalUFis += $value2->total_ufis;
+				array_push($itemList, json_decode($value2->data));
+			}
 
-	    	$pushedArr = [
-	    		'title' => $value['title'],
-	    		'totalPagu' => $totalPagu,
+			$pushedArr = [
+				'title' => $value['title'],
+				'totalPagu' => $totalPagu,
 				'totalRealisasi' => $totalRealisasi,
 				'totalProgKeu' => ($totalRealisasi / $totalPagu) * 100,
 				'totalProgFis' => ($totalUFis / $totalPagu) * 100,
 				'list' => $itemList
-	    	];
+			];
 
-	    	array_push($listData, $pushedArr);
-    	}
+			array_push($listData, $pushedArr);
+		}
 
-    	return $listData;
-    }
+		return $listData;
+	}
 }
