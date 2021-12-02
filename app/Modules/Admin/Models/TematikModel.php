@@ -134,7 +134,7 @@ class TematikModel extends Model
 					sum(pkt.rtot) as total_realisasi,
 					sum(pkt.ufis) as total_ufis,
 					(JSON_OBJECT(
-						'tematik', satker.nmsatker,
+						'tematik', satker.grup,
 						'pagu', sum(pkt.pg),
 						'realisasi', sum(pkt.rtot),
 						'prog_keu', ((sum(pkt.rtot) / sum(pkt.pg)) * 100),
@@ -156,7 +156,7 @@ class TematikModel extends Model
 								left join satker_sda sub_satker on sub_pkt.kdsatker=sub_satker.kdsatker
 								left join tematik_link sub_tmtlink on sub_pkt.kode=sub_tmtlink.kode_ang
 							where 
-								sub_satker.nmsatker=satker.nmsatker
+								sub_satker.grup=satker.grup
 								and sub_tmtlink.kdtematik = tmtlink.kdtematik
 						)
 					)) as data
@@ -167,7 +167,7 @@ class TematikModel extends Model
 				WHERE
 					tmtlink.kdtematik in ($strTematikCode)
 				group by 
-				satker.nmsatker
+				satker.grup
 	    	")->getResult();
 
 			$totalPagu = 0;
