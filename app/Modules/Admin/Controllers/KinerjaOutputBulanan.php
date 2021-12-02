@@ -17,7 +17,7 @@ class KinerjaOutputBulanan extends \App\Controllers\BaseController
         $this->db = \Config\Database::connect($dbcustom);
     }
 
-    public function index($bulan = '')
+    public function index($bulan = '', $keyword = '')
     {
         $bulan = decrypt_url($bulan);
         if ($bulan == '') {
@@ -25,6 +25,11 @@ class KinerjaOutputBulanan extends \App\Controllers\BaseController
         }
         if (empty($_GET['exp'])) {
             $_GET['exp'] = '';
+        }
+
+        if ($keyword) {
+
+            $keyword = "AND d_soutput.ursoutput LIKE '%$keyword'";
         }
 
 
@@ -63,13 +68,13 @@ class KinerjaOutputBulanan extends \App\Controllers\BaseController
         WHEN pkt.ufis = '' THEN 0
         ELSE pkt.ufis
         END as ufis
-        --,d_soutput.ursoutput
+        ,d_soutput.ursoutput
         FROM paket pkt 
         LEFT JOIN tprogram tp ON tp.kdprogram = pkt.kdprogram  
         LEFT JOIN tgiat ON tgiat.kdgiat = pkt.kdgiat  
         LEFT JOIN toutput ON pkt.kdgiat = toutput.kdgiat AND pkt.kdoutput = toutput.kdoutput 
-        -- LEFT JOIN d_soutput ON pkt.kdprogram = d_soutput.kdprogram AND pkt.kdgiat = d_soutput.kdgiat AND pkt.kdoutput = d_soutput.kdoutput AND pkt.kdsoutput = d_soutput.kdsoutput  
-        WHERE pkt.kdprogram = 'FC' AND pkt.kdgiat IN ($filterkdgiat) AND pkt.kdoutput IN ($filterkdoutput) AND pkt.kdkmpnen = '074' ORDER BY pkt.kdgiat,pkt.kdoutput,pkt.kdsoutput")->getResultArray();
+        LEFT JOIN d_soutput ON pkt.kdprogram = d_soutput.kdprogram AND pkt.kdgiat = d_soutput.kdgiat AND pkt.kdoutput = d_soutput.kdoutput AND pkt.kdsoutput = d_soutput.kdsoutput  
+        WHERE pkt.kdprogram = 'FC' AND pkt.kdgiat IN ($filterkdgiat) AND pkt.kdoutput IN ($filterkdoutput) AND pkt.kdkmpnen = '074' $keyword ORDER BY pkt.kdgiat,pkt.kdoutput,pkt.kdsoutput")->getResultArray();
 
         $data = array(
             'title' => 'Kinerja Output Bulanan',

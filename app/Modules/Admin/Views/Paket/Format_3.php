@@ -125,7 +125,7 @@
                         </div> -->
                         <?php $colspan = 11; ?>
                         <table class="table table-bordered table-striped">
-                            <thead>
+                            <thead class="table-primary">
                                 <tr>
                                     <th class="text-right text-danger" colspan="<?= $colspan; ?>" style="border:0px;">
                                         <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label . "&label2=" . (!empty($label2) ? $label2 : '') . "&idks=" . (!empty($idks) ? $idks : '') . "&rekap="; ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap Pagu</a>

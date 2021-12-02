@@ -5,7 +5,7 @@ namespace Modules\Admin\Models;
 use CodeIgniter\Model;
 // use Modules\Admin\Models\AksesModel;
 
-class KinerjaOutputBulananModelModel extends Model
+class KinerjaOutputBulananModel extends Model
 {
 
     protected $table      = 'paket';
