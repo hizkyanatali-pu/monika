@@ -251,7 +251,7 @@ $this->extend('admin/layouts/default') ?>
                                             <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rl_giat, 2)) . '</b>' ?></td>
                                             <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rn_giat, 2)) . '</b>' ?></td>
                                             <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rl_giat, 2)) . '</b>' ?></td>
-                                            <td class="tdgiat" style="text-align: right "><?php echo '<b>' .   ($fis_rn_giat != 0 ?  str_replace('.', ',', round($fis_rl_giat / $fis_rn_giat, 2)) : '~') . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right "><?php echo '<b>' .   ($fis_rn_giat != 0 ?  str_replace('.', ',', round($fis_rl_giat / $fis_rn_giat, 2) * 100) : '~') . '</b>' ?></td>
                                         </tr>
                                         <?php $ido = array_merge([$idk], $ido); ?>
                                     <?php endif; ?>
@@ -279,7 +279,7 @@ $this->extend('admin/layouts/default') ?>
                                             <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rl, 2)) . '</b>' ?></td>
                                             <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rn, 2)) . '</b>' ?></td>
                                             <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rl, 2)) . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right "><?php echo '<b>' .   ($fis_rn != 0 ?  str_replace('.', ',', round($fis_rl / $fis_rn, 2)) : '~') . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right "><?php echo '<b>' .   ($fis_rn != 0 ?  str_replace('.', ',', round($fis_rl / $fis_rn, 2) * 100) : '~') . '</b>' ?></td>
                                         </tr>
                                         <?php $ido = array_merge([$idk], $ido); ?>
                                     <?php endif; ?>
@@ -303,7 +303,7 @@ $this->extend('admin/layouts/default') ?>
                                             <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .   str_replace('.', ',', $rl_keu)  . '</b>' ?></td>
                                             <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .   str_replace('.', ',', round($d['renf_b'] / $jumlah_data, 2))   . '</b>' ?></td>
                                             <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .    str_replace('.', ',', $rl_fis)  . '</b>' ?></td>
-                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .   ($d['renf_b'] != 0 ?  str_replace('.', ',', round($rl_fis / $d['renf_b'], 2)) : '~') . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .   ($d['renf_b'] != 0 ?  str_replace('.', ',', round($rl_fis / $d['renf_b'], 2) * 100) : '~') . '</b>' ?></td>
 
                                         </tr>
                                         <?php $ido = array_merge([$idk], $ido); ?>
