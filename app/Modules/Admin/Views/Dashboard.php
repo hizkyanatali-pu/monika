@@ -1,19 +1,25 @@
 <?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content') ?>
 <style>
+    footer{
+        display: none;
+    }
     @media print {
         .pagebreak {
             clear: both;
             page-break-after: always;
-
         }
 
         @page {
             size: landscape;
             background-color: white;
             margin-top: 0;
-            width: 270mm;
-            height: 360mm;
+            width: 290mm;
+            height: 420mm;
+        }
+
+        .table-bordered thead td, .table-bordered thead th{
+            padding: 8px !important;
         }
 
         #kt_subheader {
@@ -63,6 +69,16 @@
             zoom: 0.7;
             -moz-transform: scale(0.7);
         }
+
+        .kt-footer{
+            display: none;
+        }
+
+        .footer{
+            display: block;
+            /* position: absolute; */
+            /* bottom: 0px; */
+        }
     }
 </style>
 <!-- begin:: Subheader -->
@@ -97,7 +113,7 @@
 
         </div>
         <div class="kt-portlet__body">
-            <div class="kt-section">
+            <div class="kt-section mb-0">
                 <div class="kt-section__content">
                     <div class="float-left">
                         <i><b>Status : <?= $rekapunor[0]['status'] ?></b></i>
@@ -107,30 +123,30 @@
                         <i><b>*Dalam Ribu Rupiah</b></i>
                     </div>
 
-                    <div class="table-responsive">
+                    <div class="">
                         <table class="table-bordered" width="100%">
                             <thead class="text-center text-white" style="background-color: #1562aa;">
                                 <tr>
-                                    <th rowspan="2">No</th>
-                                    <th rowspan="2">Unit Organisasi</th>
-                                    <th colspan="4">Pagu</th>
-                                    <th colspan="4">Realisasi</th>
-                                    <th colspan="2">Progress</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">No</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">Unit Organisasi</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="4">Pagu</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="4">Realisasi</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progress</th>
 
                                 </tr>
                                 <tr>
-                                    <th>RPM</th>
-                                    <th>SBSN</th>
-                                    <th>PHLN</th>
-                                    <th>Total</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">RPM</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">SBSN</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">PHLN</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
 
-                                    <th>RPM</th>
-                                    <th>SBSN</th>
-                                    <th>PHLN</th>
-                                    <th>Total</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">RPM</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">SBSN</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">PHLN</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
 
-                                    <th>Keuangan</th>
-                                    <th>Fisik</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keuangan</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Fisik</th>
 
                                 </tr>
                             </thead>
@@ -138,20 +154,20 @@
                                 <?php foreach ($rekapunor as $key => $val) { ?>
 
                                     <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram font-weight-bold'" : "") ?>>
-                                        <th scope="row"><?= ++$key ?></th>
-                                        <td><?= $val['nmsingkat']; ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_rpm'], 2, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_sbsn'], 2, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_phln'], 2, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_total'], 2, ',', '.'); ?></td>
+                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" scope="row"><?= ++$key ?></th>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px"><?= $val['nmsingkat']; ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_rpm'], 2, ',', '.'); ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_sbsn'], 2, ',', '.'); ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_phln'], 2, ',', '.'); ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_total'], 2, ',', '.'); ?></td>
 
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_rpm"], 2, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_sbsn"], 2, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_phln"], 2, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_total"], 2, ',', '.'); ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_rpm"], 2, ',', '.'); ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_sbsn"], 2, ',', '.'); ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_phln"], 2, ',', '.'); ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_total"], 2, ',', '.'); ?></td>
 
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
+                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
 
                                     </tr>
 
@@ -163,18 +179,21 @@
                         </table>
                     </div>
                 </div>
-                <hr style="border: 1px solid black;">
+                <hr style="border: 1px solid #ddd;">
                 <div class="chart-container mt-2" style="height: 500px">
-
-                    <div id="placeholder-bar-chart" class="mychart mb-md-4 mt-5"></div>
+                    <div id="placeholder-bar-chart" class="mychart mb-md-4"></div>
                     <div id="bar-legend" class="chart-legend"></div>
                 </div>
             </div>
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
-
     <!-- END  PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR -->
-    <div class="pagebreak"> </div>
+
+    <div class="pagebreak"></div>
+    
     <!-- PROGRES PROGRAM PADAT KARYA PER KEGIATAN -->
     <div class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head">
@@ -188,52 +207,51 @@
             </div>
         </div>
         <div class="kt-portlet__body">
-            <div class="kt-section">
+            <div class="kt-section mb-0">
                 <div class="kt-section__content">
                     <div class="table-responsive">
                         <table class="table-bordered" width="100%">
                             <thead class="text-center text-white" style="background-color: #1562aa;">
                                 <tr>
-                                    <th rowspan="2" class="text-center">No</th>
-                                    <th rowspan="2" class="text-center">Kegiatan</th>
-                                    <th colspan="4" class="text-center">Target</th>
-                                    <th colspan="8" class="text-center">Realisasi</th>
+                                    <th style="padding: 1px !important;" rowspan="2" class="text-center">No</th>
+                                    <th style="padding: 1px !important;" rowspan="2" class="text-center">Kegiatan</th>
+                                    <th style="padding: 1px !important;" colspan="4" class="text-center">Target</th>
+                                    <th style="padding: 1px !important;" colspan="8" class="text-center">Realisasi</th>
                                 </tr>
                                 <tr>
-                                    <th>Paket/Lokasi</th>
-                                    <th>Pagu</th>
-                                    <th>Tenaga Kerja</th>
-                                    <th>H.O.K</th>
+                                    <th style="padding: 1px !important;">Paket/Lokasi</th>
+                                    <th style="padding: 1px !important;">Pagu</th>
+                                    <th style="padding: 1px !important;">Tenaga Kerja</th>
+                                    <th style="padding: 1px !important;">H.O.K</th>
 
-                                    <th>Paket/Lokasi</th>
-                                    <th>%</th>
-                                    <th>Pagu</th>
-                                    <th>%</th>
-                                    <th>Tenaga Kerja</th>
-                                    <th>%</th>
-                                    <th>H.O.K</th>
-                                    <th>%</th>
+                                    <th style="padding: 1px !important;">Paket/Lokasi</th>
+                                    <th style="padding: 1px !important;">%</th>
+                                    <th style="padding: 1px !important;">Pagu</th>
+                                    <th style="padding: 1px !important;">%</th>
+                                    <th style="padding: 1px !important;">Tenaga Kerja</th>
+                                    <th style="padding: 1px !important;">%</th>
+                                    <th style="padding: 1px !important;">H.O.K</th>
+                                    <th style="padding: 1px !important;">%</th>
 
 
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-
-                                    <td>Table cell</td>
+                                    <th style="padding: 1px !important;" scope="row">1</th>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <td style="padding: 1px !important;">Table cell</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -245,6 +263,9 @@
 
         <div id="line-chart1" style="height: 300px;"></div>
 
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
 
     <!-- END  PROGRES PROGRAM PADAT KARYA PER KEGIATAN -->
@@ -267,7 +288,7 @@
                 <div class="kt-portlet__body">
 
                     <!--begin::Section-->
-                    <div class="kt-section">
+                    <div class="kt-section mb-0">
                         <div class="row mb-3">
                             <!-- <div class="col-md-6 mt-3">
                                 <div class="dropdown dropright">
@@ -336,20 +357,20 @@
                         <table class="table-bordered mb-0 table-striped" id="tabletematik" width="100%">
                             <thead>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                    <th rowspan="3">No</th>
-                                    <th class="tematik" rowspan="3" style="width: 21%;">Tematik</th>
-                                    <th class="pagu" rowspan="3" style="width: 6%;">Pagu (dalam Milyar)</th>
-                                    <th class="realisasi" colspan="3">Realisasi</th>
-                                    <th class="keterangan" rowspan="3">Keterangan</th>
+                                    <th style="padding: 1px !important;" rowspan="3">No</th>
+                                    <th style="1adding: 4px !important; width: 25%;" class="tematik" rowspan="3" style="width: 21%;">Tematik</th>
+                                    <th style="padding: 1px !important;" class="pagu" rowspan="3" style="width: 6%;">Pagu (dalam Milyar)</th>
+                                    <th style="1adding: 4px !important; width: 25%;" class="realisasi" colspan="3">Realisasi</th>
+                                    <th style="padding: 1px !important;" class="keterangan" rowspan="3">Keterangan</th>
                                 </tr>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                    <th class="progres_keu progres" colspan="2">Keuangan</th>
-                                    <th class="progres_fis progres">Fisik</th>
+                                    <th style="padding: 1px !important;" class="progres_keu progres" colspan="2">Keuangan</th>
+                                    <th style="padding: 1px !important;" class="progres_fis progres">Fisik</th>
                                 </tr>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                    <th class="progres_keu progres" style="width: 6%;">Rp</th>
-                                    <th class="progres_fis progres" style="width: 6%;">%</th>
-                                    <th class="progres_fis progres" style="width: 6%;">%</th>
+                                    <th style="padding: 1px !important;" class="progres_keu progres" style="width: 6%;">Rp</th>
+                                    <th style="padding: 1px !important;" class="progres_fis progres" style="width: 6%;">%</th>
+                                    <th style="padding: 1px !important;" class="progres_fis progres" style="width: 6%;">%</th>
 
                                 </tr>
                             </thead>
@@ -360,23 +381,23 @@
                                 foreach ($data as $key => $value) :
                                 ?>
                                     <tr>
-                                        <td class="tdprogram"><?php echo $no++ ?></td>
-                                        <td class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
-                                        <td class="text-right tdprogram"><?php echo toMilyar($value['totalPagu'], false, 2) ?></td>
-                                        <td class="text-right tdprogram"><?php echo toMilyar($value['totalRealisasi'], false, 2) ?></td>
-                                        <td class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?> %</td>
-                                        <td class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?> %</td>
-                                        <td class="col-sm-10 tdprogram"></td>
+                                        <td style="padding: 1px !important;" class="tdprogram"><?php echo $no++ ?></td>
+                                        <td style="padding: 1px !important;" class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
+                                        <td style="padding: 1px !important;" class="text-right tdprogram"><?php echo toMilyar($value['totalPagu'], false, 2) ?></td>
+                                        <td style="padding: 1px !important;" class="text-right tdprogram"><?php echo toMilyar($value['totalRealisasi'], false, 2) ?></td>
+                                        <td style="padding: 1px !important;" class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?> %</td>
+                                        <td style="padding: 1px !important;" class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?> %</td>
+                                        <td style="padding: 1px !important;" class="col-sm-10 tdprogram"></td>
                                     </tr>
                                     <?php foreach ($value['list'] as $key2 => $value2) : ?>
                                         <tr>
-                                            <td></td>
-                                            <td class="col-tematik"><?php echo $value2->tematik ?></td>
-                                            <td class="text-right text-right"><?php echo toMilyar($value2->pagu, false, 2) ?></td>
-                                            <td class="text-right"><?php echo toMilyar($value2->realisasi, false, 2) ?></td>
-                                            <td class="text-right"><?php echo onlyTwoDecimal($value2->prog_keu) ?> %</td>
-                                            <td class="text-right"><?php echo onlyTwoDecimal($value2->prog_fis) ?> %</td>
-                                            <td class="col-sm-10"><?php echo $value2->ket ?></td>
+                                            <td style="padding: 1px !important;"></td>
+                                            <td style="padding: 1px !important;" class="col-tematik"><?php echo $value2->tematik ?></td>
+                                            <td style="padding: 1px !important;" class="text-right text-right"><?php echo toMilyar($value2->pagu, false, 2) ?></td>
+                                            <td style="padding: 1px !important;" class="text-right"><?php echo toMilyar($value2->realisasi, false, 2) ?></td>
+                                            <td style="padding: 1px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_keu) ?> %</td>
+                                            <td style="padding: 1px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_fis) ?> %</td>
+                                            <td style="padding: 1px !important;" class="col-sm-10"><?php echo $value2->ket ?></td>
 
                                             <!--<td><?php echo  "- " . str_replace("||", "<br> - ", str_replace(", ", ",", $value2->ket))  ?></td>-->
                                         </tr>
@@ -394,7 +415,11 @@
                 <!--end::Form-->
             </div>
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
+
     <!-- END  PROGRESS KEGIATAN TEMATIK DIREKTORAT JENDERAL SUMBER DAYA AIR T.A.2021 -->
     <div class="pagebreak"> </div>
     <!-- POSTUR PAKET KONTRAKTUAL -->
@@ -411,7 +436,7 @@
             </div>
         </div>
         <div class="kt-portlet__body">
-            <div class="kt-section">
+            <div class="kt-section mb-0">
                 <div class="kt-section__content">
                     <div class="tree">
                         <ul>
@@ -512,6 +537,9 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
 
     <!-- END  POSTUR PAKET KONTRAKTUAL -->
@@ -530,7 +558,7 @@
             </div>
         </div>
         <div class="kt-portlet__body">
-            <div class="kt-section">
+            <div class="kt-section mb-0">
                 <div class="kt-section__content">
                     <div class="tree ml--105 pr-4">
                         <ul>
@@ -694,6 +722,9 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
 
     <!-- END  POSTUR PAKET BELUM LELANG -->
@@ -716,7 +747,7 @@
                 <div class="kt-portlet__body">
 
                     <!--begin::Section-->
-                    <div class="kt-section">
+                    <div class="kt-section mb-0">
                         <div class="row mb-3">
                             <div class="col-md-12 text-right mt-3 float-right">
                                 <i><b>*Dalam Milyar Rupiah</b></i>
@@ -729,11 +760,11 @@
                             <table class="table-bordered mb-0 table-striped" id="table" width="100%">
                                 <thead>
                                     <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                        <th>No</th>
-                                        <th>Kegiatan</th>
-                                        <th>Paket</th>
-                                        <th>Pagu</th>
-                                        <th>Antara Lain</th>
+                                        <th style="padding: 4px !important">No</th>
+                                        <th style="padding: 4px !important">Kegiatan</th>
+                                        <th style="padding: 4px !important">Paket</th>
+                                        <th style="padding: 4px !important">Pagu</th>
+                                        <th style="padding: 4px !important">Antara Lain</th>
                                 </thead>
 
                                 <tbody id="tbody-utama">
@@ -741,11 +772,11 @@
 
                                     foreach ($belum_lelang_rpm_syc as $key => $val) { ?>
                                         <tr>
-                                            <th scope="row"><?= ++$key ?></th>
-                                            <td><?= $val->nmgiat; ?></td>
-                                            <td><?= $val->jml_paket; ?></td>
-                                            <td><?= toMilyar($val->pagu, false, 2); ?></td>
-                                            <td><?= str_replace(",", "", $val->paketList->paket) ?></td>
+                                            <th style="padding: 4px !important" scope="row"><?= ++$key ?></th>
+                                            <td style="padding: 4px !important"><?= $val->nmgiat; ?></td>
+                                            <td style="padding: 4px !important"><?= $val->jml_paket; ?></td>
+                                            <td style="padding: 4px !important"><?= toMilyar($val->pagu, false, 2); ?></td>
+                                            <td style="padding: 4px !important"><?= str_replace(",", "", $val->paketList->paket) ?></td>
                                         </tr>
 
                                     <?php }   ?>
@@ -761,6 +792,9 @@
                 <!--end::Form-->
             </div>
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
     <!-- END DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN -->
     <div class="pagebreak"> </div>
@@ -782,7 +816,7 @@
                 <div class="kt-portlet__body">
 
                     <!--begin::Section-->
-                    <div class="kt-section">
+                    <div class="kt-section mb-0">
                         <div class="row mb-3">
                             <div class="col-md-12 text-right mt-3 float-right">
                                 <i><b>*Dalam Milyar Rupiah</b></i>
@@ -795,11 +829,11 @@
                             <table class="table-bordered mb-0 table-striped" id="table" width="100%">
                                 <thead>
                                     <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                        <th>No</th>
-                                        <th>Kegiatan</th>
-                                        <th>Paket</th>
-                                        <th>Pagu</th>
-                                        <th>Antara Lain</th>
+                                        <th style="padding: 4px !important">No</th>
+                                        <th style="padding: 4px !important">Kegiatan</th>
+                                        <th style="padding: 4px !important">Paket</th>
+                                        <th style="padding: 4px !important">Pagu</th>
+                                        <th style="padding: 4px !important">Antara Lain</th>
                                 </thead>
 
                                 <tbody id="tbody-utama">
@@ -807,11 +841,11 @@
 
                                     foreach ($belum_lelang_myc as $key => $val) { ?>
                                         <tr>
-                                            <th scope="row"><?= ++$key ?></th>
-                                            <td><?= $val->nmgiat; ?></td>
-                                            <td><?= $val->jml_paket; ?></td>
-                                            <td><?= toMilyar($val->pagu, false, 2); ?></td>
-                                            <td><?= str_replace(",", "", $val->paketList->paket) ?></td>
+                                            <th style="padding: 4px !important" scope="row"><?= ++$key ?></th>
+                                            <td style="padding: 4px !important"><?= $val->nmgiat; ?></td>
+                                            <td style="padding: 4px !important"><?= $val->jml_paket; ?></td>
+                                            <td style="padding: 4px !important"><?= toMilyar($val->pagu, false, 2); ?></td>
+                                            <td style="padding: 4px !important"><?= str_replace(",", "", $val->paketList->paket) ?></td>
                                         </tr>
 
                                     <?php }   ?>
@@ -827,6 +861,9 @@
                 <!--end::Form-->
             </div>
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
     <!-- END DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN -->
     <div class="pagebreak"> </div>
@@ -848,7 +885,7 @@
                 <div class="kt-portlet__body">
 
                     <!--begin::Section-->
-                    <div class="kt-section">
+                    <div class="kt-section mb-0">
                         <div class="row mb-3">
                             <div class="col-md-12 text-right mt-3 float-right">
                                 <i><b>*Dalam Milyar Rupiah</b></i>
@@ -861,19 +898,19 @@
                             <table class="table-bordered mb-0 table-striped" id="table" width="100%">
                                 <thead>
                                     <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                        <th>No</th>
-                                        <th>Kegiatan</th>
-                                        <th>Paket</th>
-                                        <th>Pagu</th>
-                                        <th>Antara Lain</th>
+                                        <th style="padding: 4px !important">No</th>
+                                        <th style="padding: 4px !important">Kegiatan</th>
+                                        <th style="padding: 4px !important">Paket</th>
+                                        <th style="padding: 4px !important">Pagu</th>
+                                        <th style="padding: 4px !important">Antara Lain</th>
                                 </thead>
 
                                 <tbody id="tbody-utama">
-                                    <th scope="row">1</th>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
+                                    <th style="padding: 4px !important" scope="row">1</th>
+                                    <td style="padding: 4px !important">Table cell</td>
+                                    <td style="padding: 4px !important">Table cell</td>
+                                    <td style="padding: 4px !important">Table cell</td>
+                                    <td style="padding: 4px !important">Table cell</td>
                                 </tbody>
                             </table>
                         </div>
@@ -886,6 +923,9 @@
                 <!--end::Form-->
             </div>
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
     <!-- END PAKET BELUM LELANG PHLN - MYC PROJECT LOAN -->
     <div class="pagebreak"> </div>
@@ -903,7 +943,7 @@
             </div>
         </div>
         <div class="kt-portlet__body">
-            <div class="kt-section">
+            <div class="kt-section mb-0">
                 <div class="kt-section__content">
                     <div class="tree ml--105 pr-4">
                         <ul>
@@ -944,6 +984,9 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
 
     <!-- END RENCANA TENDER, PAKET BELUM LELANG RPM -->
@@ -962,7 +1005,7 @@
             </div>
         </div>
         <div class="kt-portlet__body">
-            <div class="kt-section">
+            <div class="kt-section mb-0">
                 <div class="kt-section__content">
                     <div class="tree ml--105 pr-4">
                         <ul>
@@ -1001,6 +1044,9 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
 
     <!-- END RENCANA TENDER, PAKET BELUM LELANG RPM -->
@@ -1019,7 +1065,7 @@
 
         </div>
         <div class="kt-portlet__body">
-            <div class="kt-section">
+            <div class="kt-section mb-0">
                 <div class="kt-section__content">
                     <div class="row">
                         <div class="col-6">
@@ -1035,9 +1081,9 @@
                                         </h3>
                                     </div>
                                 </div>
-                                <div class="kt-portlet__body">
+                                <div class="kt-portlet__body pl-0">
                                     <input type="hidden" class="arrayget" value="<?= date("n") ?>">
-                                    <div id="line-chart" style="height: 300px;"></div>
+                                    <div id="line-chart" style="height: 250px;"></div>
                                 </div>
                             </div>
                             <!--end::Portlet-->
@@ -1054,7 +1100,7 @@
                                     </div>
                                 </div>
                                 <div class="kt-portlet__body">
-                                    <div id="line-chart2" style="height: 300px;"></div>
+                                    <div id="line-chart2" style="height: 250px;"></div>
                                 </div>
                             </div>
                             <!--end::Portlet-->
@@ -1072,14 +1118,10 @@
                                         </h3>
                                     </div>
                                 </div>
-                                <div class="kt-portlet__body">
-                                    <div class="kt-section">
-                                        <div class="card-body pt-5">
-                                            <div class="chart-container mt-2">
-                                                <div id="bar-legend" class="chart-legend"></div>
-                                                <div id="persumberdana" style="height: 300px;"></div>
-                                            </div>
-                                        </div>
+                                <div class="kt-portlet__body pt-0 pb-0">
+                                    <div class="chart-container mt-2">
+                                        <div id="bar-legend" class="chart-legend"></div>
+                                        <div id="persumberdana" style="height: 250px;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -1096,9 +1138,9 @@
                                         </h3>
                                     </div>
                                 </div>
-                                <div class="kt-portlet__body">
+                                <div class="kt-portlet__body pt-0">
                                     <div id="bar-legend-jenis-belanja" class="chart-legend"></div>
-                                    <div id="chatperjenisbelanja" style="height: 300px;"></div>
+                                    <div id="chatperjenisbelanja" style="height: 250px;"></div>
                                 </div>
                             </div>
                             <!--end::Portlet-->
@@ -1107,6 +1149,9 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
     <!-- END PROGRES KEUANGAN & FISIK DITJEN SDA-->
     <div class="pagebreak"> </div>
@@ -1123,24 +1168,24 @@
             </div>
 
         </div>
-        <div class="kt-portlet__body">
-            <div class="kt-section">
-                <div class="card-body pt-5">
+        <div class="kt-portlet__body pt-1">
+            <div class="kt-section mb-0">
+                <div class="card-body">
                     <div class="chart-container mt-2" style="height: 500px">
                         <div id="bar-legend-perkegiatan" class="chart-legend"></div>
                         <div id="perkegiatan" class="mychart"></div>
                     </div>
                 </div>
-                <div class="card-body pt-5">
+                <div class="card-body">
 
                     <table class="table table-bordered">
                         <thead class="thead-dark">
                             <tr>
-                                <th>No</th>
-                                <th>Kode Kegiatan</th>
-                                <th style="text-align: center;">Kegiatan</th>
-                                <th>Keuangan %</th>
-                                <th>Fisik %</th>
+                                <th style="padding: 4px !important">No</th>
+                                <th style="padding: 4px !important">Kode Kegiatan</th>
+                                <th style="padding: 4px !important" style="text-align: center;">Kegiatan</th>
+                                <th style="padding: 4px !important">Keuangan %</th>
+                                <th style="padding: 4px !important">Fisik %</th>
 
                             </tr>
                         </thead>
@@ -1148,11 +1193,11 @@
 
                             <?php foreach ($perkegiatan as $key => $value) { ?>
                                 <tr>
-                                    <th scope="row"><?= ++$key ?></th>
-                                    <td> <?= $value->kdgiat; ?></td>
-                                    <td> <?= $value->nmgiat; ?></td>
-                                    <td> <?= onlyTwoDecimal($value->keu); ?></td>
-                                    <td> <?= onlyTwoDecimal($value->fis); ?></td>
+                                    <th style="padding: 4px !important" scope="row"><?= ++$key ?></th>
+                                    <td style="padding: 4px !important"> <?= $value->kdgiat; ?></td>
+                                    <td style="padding: 4px !important"> <?= $value->nmgiat; ?></td>
+                                    <td style="padding: 4px !important"> <?= onlyTwoDecimal($value->keu); ?></td>
+                                    <td style="padding: 4px !important"> <?= onlyTwoDecimal($value->fis); ?></td>
 
                                 </tr>
 
@@ -1166,8 +1211,10 @@
             </div>
 
         </div>
+        <!-- <div class="footer">
+            <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+        </div> -->
     </div>
-
     <!-- END PROGRES  PROGRES KEUANGAN & FISIK PER KEGIATAN-->
 
     <?php
@@ -1198,9 +1245,9 @@
 
             </div>
             <div class="kt-portlet__body">
-                <div class="kt-section">
-                    <div class="card-body pt-5">
-                        <div class="col-md-12 text-right mt-3 float-right">
+                <div class="kt-section mb-0">
+                    <div class="">
+                        <div class="col-md-12 text-right float-right">
                             <!-- <div class="form-group">
                                     <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
                                     <a href="<?php //echo site_url('/tematik/excel-rekap') 
@@ -1210,48 +1257,48 @@
                                 </div> -->
                             <i><b>*Dalam Ribu Rupiah</b></i>
                         </div>
-                        <div class="table-responsive">
+                        <div class="">
                             <table class="table-bordered mb-0 table-striped" width="100%">
                                 <thead class="text-center text-white" style="background-color: #1562aa;">
                                     <tr class="text-center">
                                         <!-- <th colspan="2">&nbsp;</th> -->
-                                        <th class="unit_kerja">&nbsp;</th>
-                                        <th class="paket">&nbsp;</th>
-                                        <?= ($key1 == 'Semua Satker' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
-                                        <th class="pagu-main" colspan="<?= ($key1 == 'Semua Satker' ? "4" : "5") ?>">Pagu (Rp)</th>
-                                        <?= ($key1 == 'Semua Satker' ?    ' <th class="pagu-main" colspan="4">Realisasi (Rp)</th>' : '') ?>
-                                        <th class="progres" colspan="2">Progres (%)</th>
-                                        <th class="deviasi" colspan="2">Deviasi</th>
+                                        <th style="padding: 4px !important" class="unit_kerja">&nbsp;</th>
+                                        <th style="padding: 4px !important" class="paket">&nbsp;</th>
+                                        <?= ($key1 == 'Semua Satker' ?    '<th style="padding: 4px !important" class="satker_">&nbsp;</th>' : '') ?>
+                                        <th style="padding: 4px !important" class="pagu-main" colspan="<?= ($key1 == 'Semua Satker' ? "4" : "5") ?>">Pagu (Rp)</th>
+                                        <?= ($key1 == 'Semua Satker' ?    ' <th style="padding: 4px !important" class="pagu-main" colspan="4">Realisasi (Rp)</th>' : '') ?>
+                                        <th style="padding: 4px !important" class="progres" colspan="2">Progres (%)</th>
+                                        <th style="padding: 4px !important" class="deviasi" colspan="2">Deviasi</th>
                                     </tr>
                                     <tr class="text-center">
-                                        <th class="unit_kerja"><?= $key1; ?></th>
-                                        <?= ($key1 == 'Semua Satker' ?    '<th class="satker_">Satker</th>' : '') ?>
-                                        <th class="tdNilai paket">Jml&nbsp;Paket</th>
-                                        <th class="tdNilai pagu_rpm pagu">RPM</th>
-                                        <th class="tdNilai pagu_sbsn pagu">SBSN</th>
-                                        <th class="tdNilai pagu_phln pagu">PHLN </th>
-                                        <th class="tdNilai pagu_total pagu">TOTAL </th>
+                                        <th style="padding: 4px !important" class="unit_kerja"><?= $key1; ?></th>
+                                        <?= ($key1 == 'Semua Satker' ?    '<th style="padding: 4px !important" class="satker_">Satker</th>' : '') ?>
+                                        <th style="padding: 4px !important" class="tdNilai paket">Jml&nbsp;Paket</th>
+                                        <th style="padding: 4px !important" class="tdNilai pagu_rpm pagu">RPM</th>
+                                        <th style="padding: 4px !important" class="tdNilai pagu_sbsn pagu">SBSN</th>
+                                        <th style="padding: 4px !important" class="tdNilai pagu_phln pagu">PHLN </th>
+                                        <th style="padding: 4px !important" class="tdNilai pagu_total pagu">TOTAL </th>
 
                                         <?php
 
                                         if ($key1 == 'Semua Satker') { ?>
 
-                                            <th class="tdNilai pagu_rpm pagu">RPM </th>
-                                            <th class="tdNilai pagu_sbsn pagu">SBSN </th>
-                                            <th class="tdNilai pagu_phln pagu">PHLN </th>
-                                            <th class="tdNilai pagu_total pagu">TOTAL </th>
+                                            <th style="padding: 4px !important" class="tdNilai pagu_rpm pagu">RPM </th>
+                                            <th style="padding: 4px !important" class="tdNilai pagu_sbsn pagu">SBSN </th>
+                                            <th style="padding: 4px !important" class="tdNilai pagu_phln pagu">PHLN </th>
+                                            <th style="padding: 4px !important" class="tdNilai pagu_total pagu">TOTAL </th>
 
 
                                         <?php } else { ?>
 
-                                            <th class="tdNilai pagu_realisasi pagu">Realisasi</th>
+                                            <th style="padding: 4px !important" class="tdNilai pagu_realisasi pagu">Realisasi</th>
                                         <?php
                                         }
                                         ?>
-                                        <th class="tdPersen keu">keu</th>
-                                        <th class="tdPersen fisik">fisik</th>
-                                        <th class="tdPersen percentage">%</th>
-                                        <th class="tdNilai rp">Rp</th>
+                                        <th style="padding: 4px !important" class="tdPersen keu">keu</th>
+                                        <th style="padding: 4px !important" class="tdPersen fisik">fisik</th>
+                                        <th style="padding: 4px !important" class="tdPersen percentage">%</th>
+                                        <th style="padding: 4px !important" class="tdNilai rp">Rp</th>
                                     </tr>
                                 </thead>
 
@@ -1275,34 +1322,34 @@
 
                                             <!-- balai -->
                                             <tr class="stw<?= $data['stw']; ?>">
-                                                <td class="tdKodeLabel col-unit_kerja">
+                                                <td style="padding: 4px !important" class="tdKodeLabel col-unit_kerja">
                                                     <?php echo $data['label']; ?>
                                                 </td>
-                                                <?= ($key1 == 'Semua Satker' ? '<td class="tdNilai text-center col-paket">' . $data['st'] . '</td>' : '') ?>
-                                                <td class="tdNilai text-center col-paket"><?php echo $data['jml_paket']; ?></td>
+                                                <?= ($key1 == 'Semua Satker' ? '<td style="padding: 4px !important" class="tdNilai text-center col-paket">' . $data['st'] . '</td>' : '') ?>
+                                                <td style="padding: 4px !important" class="tdNilai text-center col-paket"><?php echo $data['jml_paket']; ?></td>
 
-                                                <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
-                                                <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_pagu_sbsn'] / 1000, 0, ',', '.'); ?></td>
-                                                <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
-                                                <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_total'] / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_pagu_sbsn'] / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_total'] / 1000, 0, ',', '.'); ?></td>
 
                                                 <?php if ($key1 == 'Semua Satker') { ?>
-                                                    <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_real_rpm'] / 1000, 0, ',', '.'); ?></td>
-                                                    <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_real_sbsn'] / 1000, 0, ',', '.'); ?></td>
-                                                    <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_real_phln'] / 1000, 0, ',', '.'); ?></td>
-                                                    <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td style="padding: 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_real_rpm'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td style="padding: 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_real_sbsn'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td style="padding: 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_real_phln'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td style="padding: 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
                                                 <?php } else { ?>
 
-                                                    <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td style="padding: 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
 
                                                 <?php } ?>
 
 
-                                                <td class="tdPersen text-right col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
-                                                <td class="tdPersen text-right col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdPersen text-right col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdPersen text-right col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
 
-                                                <td class="tdPersen text-right col-percentage"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); ?></td>
-                                                <td class="tdPersen text-right col-rp"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); ?></td>
+                                                <td style="padding: 4px !important" class="tdPersen text-right col-percentage"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); ?></td>
+                                                <td style="padding: 4px !important" class="tdPersen text-right col-rp"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); ?></td>
                                             </tr>
                                             <?php
                                             $total_pagu_rpm += $data['jml_pagu_rpm'];
@@ -1319,29 +1366,29 @@
                                             ?>
                                         <?php endforeach; ?>
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
-                                            <td class="text-center">TOTAL</td>
+                                            <td style="padding: 4px !important" class="text-center">TOTAL</td>
                                             <?= ($key1 == 'Semua Satker' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
-                                            <td class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 4px !important" class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td>
+                                            <td style="padding: 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
 
                                             <?php if ($key1 == 'Semua Satker') {  ?>
-                                                <!-- <td class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td> -->
-                                                <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_real_rpm / 1000, 0, ',', '.'); ?></td>
-                                                <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
-                                                <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_real_phln / 1000, 0, ',', '.'); ?></td>
-                                                <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+                                                <!-- <td style="padding: 4px !important" class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td> -->
+                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_real_rpm / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_real_phln / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
                                             <?php  } else {  ?>
-                                                <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
-                                                <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_real_total / $total_pagu_total * 100, 2, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($total_real_total / $total_pagu_total * 100, 2, ',', '.'); ?></td>
 
                                             <?php  }  ?>
 
 
 
-                                            <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
+                                            <td style="padding: 4px !important" colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -1353,12 +1400,19 @@
 
             </div>
 
+            <!-- <div class="footer">
+                <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+            </div> -->
         </div>
         <!-- END PROGRES KEU & FISIK BBWS -->
     <?php } ?>
+    
 
 </div>
 
+<footer>
+    <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+</footer>
 
 <!-- end:: Content -->
 <?= $this->endSection() ?>
