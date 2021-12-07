@@ -423,9 +423,9 @@
                                             <h4 class="mb-0"><b> KONTRAKTUAL </b></h4>
 
                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                <h6><?= number_format(($terkontrak['jml_paket'] + ($proseslelang['jml_paket'] + $belumlelang['jml_paket'] + $persiapankontrak['jml_paket'])), 0, ',', '.'); ?> Paket</h6>
+                                                <h6><?= number_format(($terkontrak['jml_paket'] + ($proseslelang['jml_paket'] + $belumlelang['jml_paket'] + $persiapankontrak['jml_paket'] + $gagallelang['jml_paket'])), 0, ',', '.'); ?> Paket</h6>
                                                 <h5 class="mb-0">
-                                                    <?= toMilyar($terkontrak['nilai_kontrak'] + ($proseslelang['nilai_kontrak'] + $belumlelang['nilai_kontrak'] + $persiapankontrak['nilai_kontrak']), true, 2); ?> M
+                                                    <?= toMilyar($terkontrak['nilai_kontrak'] + ($proseslelang['nilai_kontrak'] + $belumlelang['nilai_kontrak'] + $persiapankontrak['nilai_kontrak'] + $gagallelang['nilai_kontrak']), true, 2); ?> M
                                                 </h5>
 
                                             </div>
@@ -440,9 +440,9 @@
                                                     <h4 class="mb-0"><b> BELUM KONTRAK </b></h4>
 
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h6><?= number_format(($belumlelang['jml_paket'] + $proseslelang['jml_paket']), 0, ',', '.'); ?> Paket</h6>
+                                                        <h6><?= number_format(($belumlelang['jml_paket'] + $proseslelang['jml_paket'] + $gagallelang['jml_paket']), 0, ',', '.'); ?> Paket</h6>
                                                         <h5 class="mb-0">
-                                                            <?= toMilyar($belumlelang['nilai_kontrak'] + $proseslelang['nilai_kontrak'], true, 2); ?> M
+                                                            <?= toMilyar($belumlelang['nilai_kontrak'] + $proseslelang['nilai_kontrak'] + $gagallelang['nilai_kontrak'], true, 2); ?> M
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -450,7 +450,24 @@
 
                                         </a>
                                         <ul>
-                                            <li class="w-50">
+                                            <li class="w-30">
+                                                <a href="#" class="">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-4">
+                                                            <h4 class="mb-0"><b> GAGAL LELANG </b></h4>
+
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h6><?= number_format($gagallelang['jml_paket'], 0, ',', '.'); ?> Paket</h6>
+                                                                <h5 class="mb-0">
+                                                                    <?= toMilyar($gagallelang['nilai_kontrak'], true, 2); ?> M
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </a>
+                                            </li>
+                                            <li class="w-30">
                                                 <a href="#" class="">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
@@ -467,7 +484,7 @@
 
                                                 </a>
                                             </li>
-                                            <li class="w-50">
+                                            <li class="w-40">
                                                 <a href="#" class="">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
@@ -1126,7 +1143,7 @@
         <div class="kt-portlet__body">
             <div class="kt-section">
                 <div class="card-body pt-5">
-                    <div class="chart-container mt-2" style="height: 500px">
+                    <div class="chart-container mt-2" style="height: 400px">
                         <div id="bar-legend-perkegiatan" class="chart-legend"></div>
                         <div id="perkegiatan" class="mychart"></div>
                     </div>
@@ -1146,17 +1163,21 @@
                         </thead>
                         <tbody>
 
-                            <?php foreach ($perkegiatan as $key => $value) { ?>
-                                <tr>
-                                    <th scope="row"><?= ++$key ?></th>
-                                    <td> <?= $value->kdgiat; ?></td>
-                                    <td> <?= $value->nmgiat; ?></td>
-                                    <td> <?= onlyTwoDecimal($value->keu); ?></td>
-                                    <td> <?= onlyTwoDecimal($value->fis); ?></td>
+                            <?php foreach ($perkegiatan as $key => $value) {
 
-                                </tr>
+                                if ($value->kdgiat != '-') {
+                            ?>
+                                    <tr>
+                                        <th scope="row"><?= ++$key ?></th>
+                                        <td> <?= $value->kdgiat; ?></td>
+                                        <td> <?= $value->nmgiat; ?></td>
+                                        <td> <?= onlyTwoDecimal($value->keu); ?></td>
+                                        <td> <?= onlyTwoDecimal($value->fis); ?></td>
 
-                            <?php  } ?>
+                                    </tr>
+
+                            <?php  }
+                            } ?>
 
 
                         </tbody>
