@@ -343,46 +343,102 @@ class PulldataModel extends Model
         ################
         # query #
         $data = $this->db_2->query("
-        SELECT 
-        tgiat.kdgiat,
-        tgiat.nmgiat,
-        (sum(rtot) / sum(pg)) * 100 AS keu,
-        (sum(ufis) / sum(pg)) * 100 AS fis
-    FROM
-        tgiat
-    LEFT JOIN paket ON tgiat.kdgiat = paket.kdgiat
-    WHERE
-        tgiat.kdgiat IN (
-            '5036',
-            '5037',
-            '5039',
-            '5040',
-            '5300',
-            '2408'
-        )
-    GROUP BY
-        tgiat.kdgiat
-    
-    
-    UNION ALL
-    
-    SELECT 
-         '-' kdgiat,
-        'Pengaturan Pembinaan Pengawasan (TURBINWAS)' nmgiat,
-        (sum(rtot) / sum(pg)) * 100 AS keu,
-        (sum(ufis) / sum(pg)) * 100 AS fis
-    FROM
-        tgiat
-    LEFT JOIN paket ON tgiat.kdgiat = paket.kdgiat
-    WHERE
-        tgiat.kdgiat NOT IN (
-            '5036',
-            '5037',
-            '5039',
-            '5040',
-            '5300',
-            '2408'
-        )
+        SELECT
+	tgiat.kdgiat,
+	tgiat.nmgiat,
+	(sum(rtot) / sum(pg)) * 100 AS keu,
+	(sum(ufis) / sum(pg)) * 100 AS fis
+FROM
+	tgiat
+LEFT JOIN paket ON tgiat.kdgiat = paket.kdgiat
+WHERE
+	tgiat.kdgiat IN (
+		'5036',
+		'5037',
+		'5039',
+		'5040',
+		'5300',
+		'2408'
+	)
+GROUP BY
+	tgiat.kdgiat
+UNION ALL
+	SELECT
+		tgiat.kdgiat,
+		tgiat.nmgiat,
+		(sum(rtot) / sum(pg)) * 100 AS keu,
+		(sum(ufis) / sum(pg)) * 100 AS fis
+	FROM
+		(
+			SELECT
+				kdgiat,
+				nmgiat,
+				kdunit
+			FROM
+				tgiat
+			WHERE
+				tgiat.kdgiat NOT IN (
+					'5036',
+					'5037',
+					'5039',
+					'5040',
+					'5300',
+					'2408'
+				)
+			AND tgiat.kdunit = '06'
+			GROUP BY
+				tgiat.kdgiat
+		) AS tgiat
+	LEFT JOIN paket ON tgiat.kdgiat = paket.kdgiat
+	WHERE
+		tgiat.kdgiat NOT IN (
+			'5036',
+			'5037',
+			'5039',
+			'5040',
+			'5300',
+			'2408'
+		)
+	GROUP BY
+		tgiat.kdgiat
+	UNION ALL
+		SELECT
+			'-' kdgiat,
+			GROUP_CONCAT(DISTINCT(tgiat.kdgiat)) nmgiat,
+			(sum(rtot) / sum(pg)) * 100 AS keu,
+			(sum(ufis) / sum(pg)) * 100 AS fis
+		FROM
+			(
+				SELECT
+					kdgiat,
+					nmgiat,
+					kdunit
+				FROM
+					tgiat
+				WHERE
+					tgiat.kdgiat NOT IN (
+						'5036',
+						'5037',
+						'5039',
+						'5040',
+						'5300',
+						'2408'
+					)
+				AND tgiat.kdunit = '06'
+				GROUP BY
+					tgiat.kdgiat
+			) AS tgiat
+		LEFT JOIN paket ON tgiat.kdgiat = paket.kdgiat
+		WHERE
+			tgiat.kdgiat NOT IN (
+				'5036',
+				'5037',
+				'5039',
+				'5040',
+				'5300',
+				'2408'
+			)
+		AND tgiat.kdunit = '06'
     
         ")->getResult();
         # end-of: query #

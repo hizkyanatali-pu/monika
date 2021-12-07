@@ -123,6 +123,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
             'proseslelang' => $qproseslelang,
             'belumlelang' => $qbelumlelang,
             'persiapankontrak' => $qpersiapankontrak,
+            'gagallelang' => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Gagal Lelang"])
 
 
 

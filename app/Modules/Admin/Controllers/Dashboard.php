@@ -84,6 +84,8 @@ class Dashboard extends \App\Controllers\BaseController
             'proseslelang' => $qproseslelang,
             'belumlelang' => $qbelumlelang,
             'persiapankontrak' => $qpersiapankontrak,
+            'gagallelang' => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Gagal Lelang"]),
+
 
             'keu' => $this->getprogreskeu("keuangan"),
             'fis' => $this->getprogreskeu("fisik"),
