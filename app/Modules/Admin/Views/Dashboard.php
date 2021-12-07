@@ -360,9 +360,9 @@
                             <thead>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
                                     <th style="padding: 1px !important;" rowspan="3">No</th>
-                                    <th style="1adding: 4px !important; width: 25%;" class="tematik" rowspan="3" style="width: 21%;">Tematik</th>
+                                    <th style="padding: 4px !important; width: 25%;" class="tematik" rowspan="3" style="width: 21%;">Tematik</th>
                                     <th style="padding: 1px !important;" class="pagu" rowspan="3" style="width: 6%;">Pagu (dalam Milyar)</th>
-                                    <th style="1adding: 4px !important; width: 25%;" class="realisasi" colspan="3">Realisasi</th>
+                                    <th style="padding: 4px !important; width: 25%;" class="realisasi" colspan="3">Realisasi</th>
                                     <th style="padding: 1px !important;" class="keterangan" rowspan="3">Keterangan</th>
                                 </tr>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
