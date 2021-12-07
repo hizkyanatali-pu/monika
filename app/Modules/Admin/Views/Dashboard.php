@@ -183,7 +183,7 @@
                 </div>
                 <hr style="border: 1px solid #ddd;">
                 <div class="chart-container mt-2" style="height: 500px">
-                    <div id="placeholder-bar-chart" class="mychart mb-md-4"></div>
+                    <div id="placeholder-bar-chart" class="mychart"></div>
                     <div id="bar-legend" class="chart-legend"></div>
                 </div>
             </div>
@@ -215,45 +215,45 @@
                         <table class="table-bordered" width="100%">
                             <thead class="text-center text-white" style="background-color: #1562aa;">
                                 <tr>
-                                    <th style="padding: 1px !important;" rowspan="2" class="text-center">No</th>
-                                    <th style="padding: 1px !important;" rowspan="2" class="text-center">Kegiatan</th>
-                                    <th style="padding: 1px !important;" colspan="4" class="text-center">Target</th>
-                                    <th style="padding: 1px !important;" colspan="8" class="text-center">Realisasi</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" rowspan="2" class="text-center">No</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" rowspan="2" class="text-center">Kegiatan</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" colspan="4" class="text-center">Target</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" colspan="8" class="text-center">Realisasi</th>
                                 </tr>
                                 <tr>
-                                    <th style="padding: 1px !important;">Paket/Lokasi</th>
-                                    <th style="padding: 1px !important;">Pagu</th>
-                                    <th style="padding: 1px !important;">Tenaga Kerja</th>
-                                    <th style="padding: 1px !important;">H.O.K</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">Paket/Lokasi</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">Pagu</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">Tenaga Kerja</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">H.O.K</th>
 
-                                    <th style="padding: 1px !important;">Paket/Lokasi</th>
-                                    <th style="padding: 1px !important;">%</th>
-                                    <th style="padding: 1px !important;">Pagu</th>
-                                    <th style="padding: 1px !important;">%</th>
-                                    <th style="padding: 1px !important;">Tenaga Kerja</th>
-                                    <th style="padding: 1px !important;">%</th>
-                                    <th style="padding: 1px !important;">H.O.K</th>
-                                    <th style="padding: 1px !important;">%</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">Paket/Lokasi</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">%</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">Pagu</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">%</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">Tenaga Kerja</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">%</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">H.O.K</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;">%</th>
 
 
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th style="padding: 1px !important;" scope="row">1</th>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
-                                    <td style="padding: 1px !important;">Table cell</td>
+                                    <th style="padding: 0px 4px 0px 4px !important;" scope="row">1</th>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important;">Table cell</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -359,20 +359,20 @@
                         <table class="table-bordered mb-0 table-striped" id="tabletematik" width="100%">
                             <thead>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                    <th style="padding: 1px !important;" rowspan="3">No</th>
-                                    <th style="1adding: 4px !important; width: 25%;" class="tematik" rowspan="3" style="width: 21%;">Tematik</th>
-                                    <th style="padding: 1px !important;" class="pagu" rowspan="3" style="width: 6%;">Pagu (dalam Milyar)</th>
-                                    <th style="1adding: 4px !important; width: 25%;" class="realisasi" colspan="3">Realisasi</th>
-                                    <th style="padding: 1px !important;" class="keterangan" rowspan="3">Keterangan</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" rowspan="3">No</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; width: 20%;" class="tematik" rowspan="3" style="width: 21%;">Tematik</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; width: 9%;" class="pagu" rowspan="3" style="width: 6%;">Pagu (dalam Milyar)</th>
+                                    <th style="padding: 0px 4px 0px 4px !important; width: 25%;" class="realisasi" colspan="3">Realisasi</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" class="keterangan" rowspan="3">Keterangan</th>
                                 </tr>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                    <th style="padding: 1px !important;" class="progres_keu progres" colspan="2">Keuangan</th>
-                                    <th style="padding: 1px !important;" class="progres_fis progres">Fisik</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" class="progres_keu progres" colspan="2">Keuangan</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres">Fisik</th>
                                 </tr>
                                 <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                    <th style="padding: 1px !important;" class="progres_keu progres" style="width: 6%;">Rp</th>
-                                    <th style="padding: 1px !important;" class="progres_fis progres" style="width: 6%;">%</th>
-                                    <th style="padding: 1px !important;" class="progres_fis progres" style="width: 6%;">%</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" class="progres_keu progres" style="width: 6%;">Rp</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres" style="width: 6%;">%</th>
+                                    <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres" style="width: 6%;">%</th>
 
                                 </tr>
                             </thead>
@@ -383,23 +383,23 @@
                                 foreach ($data as $key => $value) :
                                 ?>
                                     <tr>
-                                        <td style="padding: 1px !important;" class="tdprogram"><?php echo $no++ ?></td>
-                                        <td style="padding: 1px !important;" class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
-                                        <td style="padding: 1px !important;" class="text-right tdprogram"><?php echo toMilyar($value['totalPagu'], false, 2) ?></td>
-                                        <td style="padding: 1px !important;" class="text-right tdprogram"><?php echo toMilyar($value['totalRealisasi'], false, 2) ?></td>
-                                        <td style="padding: 1px !important;" class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?> %</td>
-                                        <td style="padding: 1px !important;" class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?> %</td>
-                                        <td style="padding: 1px !important;" class="col-sm-10 tdprogram"></td>
+                                        <td style="padding: 0px 4px 0px 4px !important;" class="tdprogram"><?php echo $no++ ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important;" class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo toMilyar($value['totalPagu'], false, 2) ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo toMilyar($value['totalRealisasi'], false, 2) ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?> %</td>
+                                        <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?> %</td>
+                                        <td style="padding: 0px 4px 0px 4px !important;" class="col-sm-10 tdprogram"></td>
                                     </tr>
                                     <?php foreach ($value['list'] as $key2 => $value2) : ?>
                                         <tr>
-                                            <td style="padding: 1px !important;"></td>
-                                            <td style="padding: 1px !important;" class="col-tematik"><?php echo $value2->tematik ?></td>
-                                            <td style="padding: 1px !important;" class="text-right text-right"><?php echo toMilyar($value2->pagu, false, 2) ?></td>
-                                            <td style="padding: 1px !important;" class="text-right"><?php echo toMilyar($value2->realisasi, false, 2) ?></td>
-                                            <td style="padding: 1px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_keu) ?> %</td>
-                                            <td style="padding: 1px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_fis) ?> %</td>
-                                            <td style="padding: 1px !important;" class="col-sm-10"><?php echo $value2->ket ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important;"></td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="col-tematik"><?php echo $value2->tematik ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right text-right"><?php echo toMilyar($value2->pagu, false, 2) ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo toMilyar($value2->realisasi, false, 2) ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_keu) ?> %</td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_fis) ?> %</td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="col-sm-10"><?php echo $value2->ket ?></td>
 
                                             <!--<td><?php echo  "- " . str_replace("||", "<br> - ", str_replace(", ", ",", $value2->ket))  ?></td>-->
                                         </tr>
@@ -779,11 +779,11 @@
                             <table class="table-bordered mb-0 table-striped" id="table" width="100%">
                                 <thead>
                                     <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                        <th style="padding: 4px !important">No</th>
-                                        <th style="padding: 4px !important">Kegiatan</th>
-                                        <th style="padding: 4px !important">Paket</th>
-                                        <th style="padding: 4px !important">Pagu</th>
-                                        <th style="padding: 4px !important">Antara Lain</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">No</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Kegiatan</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Paket</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Pagu</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Antara Lain</th>
                                 </thead>
 
                                 <tbody id="tbody-utama">
@@ -791,11 +791,11 @@
 
                                     foreach ($belum_lelang_rpm_syc as $key => $val) { ?>
                                         <tr>
-                                            <th style="padding: 4px !important" scope="row"><?= ++$key ?></th>
-                                            <td style="padding: 4px !important"><?= $val->nmgiat; ?></td>
-                                            <td style="padding: 4px !important"><?= $val->jml_paket; ?></td>
-                                            <td style="padding: 4px !important"><?= toMilyar($val->pagu, false, 2); ?></td>
-                                            <td style="padding: 4px !important"><?= str_replace(",", "", $val->paketList->paket) ?></td>
+                                            <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= $val->nmgiat; ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= $val->jml_paket; ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= toMilyar($val->pagu, false, 2); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= str_replace(",", "", $val->paketList->paket) ?></td>
                                         </tr>
 
                                     <?php }   ?>
@@ -848,11 +848,11 @@
                             <table class="table-bordered mb-0 table-striped" id="table" width="100%">
                                 <thead>
                                     <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                        <th style="padding: 4px !important">No</th>
-                                        <th style="padding: 4px !important">Kegiatan</th>
-                                        <th style="padding: 4px !important">Paket</th>
-                                        <th style="padding: 4px !important">Pagu</th>
-                                        <th style="padding: 4px !important">Antara Lain</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">No</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Kegiatan</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Paket</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Pagu</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Antara Lain</th>
                                 </thead>
 
                                 <tbody id="tbody-utama">
@@ -860,11 +860,11 @@
 
                                     foreach ($belum_lelang_myc as $key => $val) { ?>
                                         <tr>
-                                            <th style="padding: 4px !important" scope="row"><?= ++$key ?></th>
-                                            <td style="padding: 4px !important"><?= $val->nmgiat; ?></td>
-                                            <td style="padding: 4px !important"><?= $val->jml_paket; ?></td>
-                                            <td style="padding: 4px !important"><?= toMilyar($val->pagu, false, 2); ?></td>
-                                            <td style="padding: 4px !important"><?= str_replace(",", "", $val->paketList->paket) ?></td>
+                                            <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= $val->nmgiat; ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= $val->jml_paket; ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= toMilyar($val->pagu, false, 2); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= str_replace(",", "", $val->paketList->paket) ?></td>
                                         </tr>
 
                                     <?php }   ?>
@@ -917,19 +917,19 @@
                             <table class="table-bordered mb-0 table-striped" id="table" width="100%">
                                 <thead>
                                     <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                        <th style="padding: 4px !important">No</th>
-                                        <th style="padding: 4px !important">Kegiatan</th>
-                                        <th style="padding: 4px !important">Paket</th>
-                                        <th style="padding: 4px !important">Pagu</th>
-                                        <th style="padding: 4px !important">Antara Lain</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">No</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Kegiatan</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Paket</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Pagu</th>
+                                        <th style="padding: 0px 4px 0px 4px !important">Antara Lain</th>
                                 </thead>
 
                                 <tbody id="tbody-utama">
-                                    <th style="padding: 4px !important" scope="row">1</th>
-                                    <td style="padding: 4px !important">Table cell</td>
-                                    <td style="padding: 4px !important">Table cell</td>
-                                    <td style="padding: 4px !important">Table cell</td>
-                                    <td style="padding: 4px !important">Table cell</td>
+                                    <th style="padding: 0px 4px 0px 4px !important" scope="row">1</th>
+                                    <td style="padding: 0px 4px 0px 4px !important">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important">Table cell</td>
+                                    <td style="padding: 0px 4px 0px 4px !important">Table cell</td>
                                 </tbody>
                             </table>
                         </div>
@@ -1200,11 +1200,11 @@
                     <table class="table table-bordered">
                         <thead class="thead-dark">
                             <tr>
-                                <th style="padding: 4px !important">No</th>
-                                <th style="padding: 4px !important">Kode Kegiatan</th>
-                                <th style="padding: 4px !important" style="text-align: center;">Kegiatan</th>
-                                <th style="padding: 4px !important">Keuangan %</th>
-                                <th style="padding: 4px !important">Fisik %</th>
+                                <th style="padding: 0px 4px 0px 4px !important">No</th>
+                                <th style="padding: 0px 4px 0px 4px !important">Kode Kegiatan</th>
+                                <th style="padding: 0px 4px 0px 4px !important" style="text-align: center;">Kegiatan</th>
+                                <th style="padding: 0px 4px 0px 4px !important">Keuangan %</th>
+                                <th style="padding: 0px 4px 0px 4px !important">Fisik %</th>
 
                             </tr>
                         </thead>
@@ -1215,11 +1215,11 @@
                                 if ($value->kdgiat != '-') {
                             ?>
                                     <tr>
-                                        <th style="padding: 4px !important" scope="row"><?= ++$key ?></th>
-                                        <td style="padding: 4px !important"> <?= $value->kdgiat; ?></td>
-                                        <td style="padding: 4px !important"> <?= $value->nmgiat; ?></td>
-                                        <td style="padding: 4px !important"> <?= onlyTwoDecimal($value->keu); ?></td>
-                                        <td style="padding: 4px !important"> <?= onlyTwoDecimal($value->fis); ?></td>
+                                        <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
+                                        <td style="padding: 0px 4px 0px 4px !important"> <?= $value->kdgiat; ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important"> <?= $value->nmgiat; ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important"> <?= onlyTwoDecimal($value->keu); ?></td>
+                                        <td style="padding: 0px 4px 0px 4px !important"> <?= onlyTwoDecimal($value->fis); ?></td>
 
                                     </tr>
 
@@ -1285,43 +1285,43 @@
                                 <thead class="text-center text-white" style="background-color: #1562aa;">
                                     <tr class="text-center">
                                         <!-- <th colspan="2">&nbsp;</th> -->
-                                        <th style="padding: 4px !important" class="unit_kerja">&nbsp;</th>
-                                        <th style="padding: 4px !important" class="paket">&nbsp;</th>
-                                        <?= ($key1 == 'Semua Satker' ?    '<th style="padding: 4px !important" class="satker_">&nbsp;</th>' : '') ?>
-                                        <th style="padding: 4px !important" class="pagu-main" colspan="<?= ($key1 == 'Semua Satker' ? "4" : "5") ?>">Pagu (Rp)</th>
-                                        <?= ($key1 == 'Semua Satker' ?    ' <th style="padding: 4px !important" class="pagu-main" colspan="4">Realisasi (Rp)</th>' : '') ?>
-                                        <th style="padding: 4px !important" class="progres" colspan="2">Progres (%)</th>
-                                        <th style="padding: 4px !important" class="deviasi" colspan="2">Deviasi</th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="unit_kerja">&nbsp;</th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="paket">&nbsp;</th>
+                                        <?= ($key1 == 'Semua Satker' ?    '<th style="padding: 0px 4px 0px 4px !important" class="satker_">&nbsp;</th>' : '') ?>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="pagu-main" colspan="<?= ($key1 == 'Semua Satker' ? "4" : "5") ?>">Pagu (Rp)</th>
+                                        <?= ($key1 == 'Semua Satker' ?    ' <th style="padding: 0px 4px 0px 4px !important" class="pagu-main" colspan="4">Realisasi (Rp)</th>' : '') ?>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="progres" colspan="2">Progres (%)</th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="deviasi" colspan="2">Deviasi</th>
                                     </tr>
                                     <tr class="text-center">
-                                        <th style="padding: 4px !important" class="unit_kerja"><?= $key1; ?></th>
-                                        <?= ($key1 == 'Semua Satker' ?    '<th style="padding: 4px !important" class="satker_">Satker</th>' : '') ?>
-                                        <th style="padding: 4px !important" class="tdNilai paket">Jml&nbsp;Paket</th>
-                                        <th style="padding: 4px !important" class="tdNilai pagu_rpm pagu">RPM</th>
-                                        <th style="padding: 4px !important" class="tdNilai pagu_sbsn pagu">SBSN</th>
-                                        <th style="padding: 4px !important" class="tdNilai pagu_phln pagu">PHLN </th>
-                                        <th style="padding: 4px !important" class="tdNilai pagu_total pagu">TOTAL </th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="unit_kerja"><?= $key1; ?></th>
+                                        <?= ($key1 == 'Semua Satker' ?    '<th style="padding: 0px 4px 0px 4px !important" class="satker_">Satker</th>' : '') ?>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="tdNilai paket">Jml&nbsp;Paket</th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="tdNilai pagu_rpm pagu">RPM</th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="tdNilai pagu_sbsn pagu">SBSN</th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="tdNilai pagu_phln pagu">PHLN </th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="tdNilai pagu_total pagu">TOTAL </th>
 
                                         <?php
 
                                         if ($key1 == 'Semua Satker') { ?>
 
-                                            <th style="padding: 4px !important" class="tdNilai pagu_rpm pagu">RPM </th>
-                                            <th style="padding: 4px !important" class="tdNilai pagu_sbsn pagu">SBSN </th>
-                                            <th style="padding: 4px !important" class="tdNilai pagu_phln pagu">PHLN </th>
-                                            <th style="padding: 4px !important" class="tdNilai pagu_total pagu">TOTAL </th>
+                                            <th style="padding: 0px 4px 0px 4px !important" class="tdNilai pagu_rpm pagu">RPM </th>
+                                            <th style="padding: 0px 4px 0px 4px !important" class="tdNilai pagu_sbsn pagu">SBSN </th>
+                                            <th style="padding: 0px 4px 0px 4px !important" class="tdNilai pagu_phln pagu">PHLN </th>
+                                            <th style="padding: 0px 4px 0px 4px !important" class="tdNilai pagu_total pagu">TOTAL </th>
 
 
                                         <?php } else { ?>
 
-                                            <th style="padding: 4px !important" class="tdNilai pagu_realisasi pagu">Realisasi</th>
+                                            <th style="padding: 0px 4px 0px 4px !important" class="tdNilai pagu_realisasi pagu">Realisasi</th>
                                         <?php
                                         }
                                         ?>
-                                        <th style="padding: 4px !important" class="tdPersen keu">keu</th>
-                                        <th style="padding: 4px !important" class="tdPersen fisik">fisik</th>
-                                        <th style="padding: 4px !important" class="tdPersen percentage">%</th>
-                                        <th style="padding: 4px !important" class="tdNilai rp">Rp</th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="tdPersen keu">keu</th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="tdPersen fisik">fisik</th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="tdPersen percentage">%</th>
+                                        <th style="padding: 0px 4px 0px 4px !important" class="tdNilai rp">Rp</th>
                                     </tr>
                                 </thead>
 
@@ -1345,34 +1345,34 @@
 
                                             <!-- balai -->
                                             <tr class="stw<?= $data['stw']; ?>">
-                                                <td style="padding: 4px !important" class="tdKodeLabel col-unit_kerja">
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdKodeLabel col-unit_kerja">
                                                     <?php echo $data['label']; ?>
                                                 </td>
-                                                <?= ($key1 == 'Semua Satker' ? '<td style="padding: 4px !important" class="tdNilai text-center col-paket">' . $data['st'] . '</td>' : '') ?>
-                                                <td style="padding: 4px !important" class="tdNilai text-center col-paket"><?php echo $data['jml_paket']; ?></td>
+                                                <?= ($key1 == 'Semua Satker' ? '<td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-center col-paket">' . $data['st'] . '</td>' : '') ?>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-center col-paket"><?php echo $data['jml_paket']; ?></td>
 
-                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_pagu_sbsn'] / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_total'] / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_pagu_sbsn'] / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_total'] / 1000, 0, ',', '.'); ?></td>
 
                                                 <?php if ($key1 == 'Semua Satker') { ?>
-                                                    <td style="padding: 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_real_rpm'] / 1000, 0, ',', '.'); ?></td>
-                                                    <td style="padding: 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_real_sbsn'] / 1000, 0, ',', '.'); ?></td>
-                                                    <td style="padding: 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_real_phln'] / 1000, 0, ',', '.'); ?></td>
-                                                    <td style="padding: 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_real_rpm'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_real_sbsn'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_real_phln'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
                                                 <?php } else { ?>
 
-                                                    <td style="padding: 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
 
                                                 <?php } ?>
 
 
-                                                <td style="padding: 4px !important" class="tdPersen text-right col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
-                                                <td style="padding: 4px !important" class="tdPersen text-right col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdPersen text-right col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdPersen text-right col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
 
-                                                <td style="padding: 4px !important" class="tdPersen text-right col-percentage"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); ?></td>
-                                                <td style="padding: 4px !important" class="tdPersen text-right col-rp"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdPersen text-right col-percentage"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdPersen text-right col-rp"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); ?></td>
                                             </tr>
                                             <?php
                                             $total_pagu_rpm += $data['jml_pagu_rpm'];
@@ -1389,29 +1389,29 @@
                                             ?>
                                         <?php endforeach; ?>
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
-                                            <td style="padding: 4px !important" class="text-center">TOTAL</td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="text-center">TOTAL</td>
                                             <?= ($key1 == 'Semua Satker' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
-                                            <td style="padding: 4px !important" class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td>
-                                            <td style="padding: 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
-                                            <td style="padding: 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
-                                            <td style="padding: 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
-                                            <td style="padding: 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
 
                                             <?php if ($key1 == 'Semua Satker') {  ?>
-                                                <!-- <td style="padding: 4px !important" class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td> -->
-                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_real_rpm / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_real_phln / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+                                                <!-- <td style="padding: 0px 4px 0px 4px !important" class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td> -->
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_real_rpm / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_real_phln / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
                                             <?php  } else {  ?>
-                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($total_real_total / $total_pagu_total * 100, 2, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($total_real_total / $total_pagu_total * 100, 2, ',', '.'); ?></td>
 
                                             <?php  }  ?>
 
 
 
-                                            <td style="padding: 4px !important" colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
+                                            <td style="padding: 0px 4px 0px 4px !important" colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
