@@ -45,8 +45,14 @@ class CronJob extends \App\Controllers\BaseController
                 $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/kontrak");
                 $nmFile = date("ymdHis") . '_fromemon_kontrak';
 
-                $fno =  array('tahun', 'kdsatker', 'kdprogram', 'kdgiat', 'kdoutput', 'kdsoutput', 'kdkmpnen', 'kdskmpnen', 'kdpaket', 'kdls', 'nmpaket', 'kdpengadaan', 'kdkategori', 'kdjnskon', 'rkn_nama', 'rkn_npwp', 'nomor_kontrak', 'nilai_kontrak', 'tanggal_kontrak', 'tgl_spmk', 'waktu', 'status_tender');
+                $fno =  array('tahun', 'kdsatker', 'kdprogram', 'kdgiat', 'kdoutput', 'kdsoutput', 'kdkmpnen', 'kdskmpnen', 'kdpaket', 'kdls', 'nmpaket', 'kdpengadaan', 'kdkategori', 'kdjnskon', 'rkn_nama', 'rkn_npwp', 'nomor_kontrak', 'nilai_kontrak', 'tanggal_kontrak', 'tgl_spmk', 'waktu', 'status_tender', 'tgl_rencana_lelang', 'jadwal_pengumuman', 'jadwal_pemenang', 'jadwal_kontrak', 'jadwal_tgl_kontrak', 'status_sipbj', 'ufis', 'pfis');
                 $tabel = "monika_kontrak";
+            } else if ($type == 'paket_register') {
+                $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket_register");
+                $nmFile = date("ymdHis") . '_fromemon_paket_register';
+
+                $fno = array('tahun', 'kode', 'kdregister');
+                $tabel = "monika_paket_register";
             } else {
 
                 $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/rekap_unor");

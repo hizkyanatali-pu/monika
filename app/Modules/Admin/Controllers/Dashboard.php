@@ -107,6 +107,8 @@ class Dashboard extends \App\Controllers\BaseController
             // belum lelang RPM syc
             'belum_lelang_rpm_syc' => $belumlelangPerkegiatanRpmSyc,
             'belum_lelang_myc' => $belumlelangPerkegiatanMyc,
+            'belum_lelang_phln_project_loan' =>  $this->PohonAnggaran->getDataBelumLelangPhlnMycProjectLoan("pagu_phln", "1,2,3"),
+
 
             'qdata' => ["bbws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS'"), "bws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS'"), "pusat" => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99'"), 'Balai Teknik' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"), 'dinas' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98'"), 'Semua Satker' => $this->PulldataModel->getBalaiPaket("satker10terendah")],
 

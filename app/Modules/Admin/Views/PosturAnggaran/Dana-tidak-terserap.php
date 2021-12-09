@@ -48,39 +48,43 @@
                         <tbody>
                             <tr>
                                 <td>Total</td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['pagu_total'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['real_total'], 2, ',', '.'); ?></td>
-                                <!-- <td class="text-center font-weight-bold"><?= number_format($getDataTotal['prognosis'], 2, ',', '.'); ?></td> -->
-                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['pagu_total'] - $getDataTotal['real_total'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['prognosis'] - $getDataTotal['real_total'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;"><?= number_format($getDataTotal['pagu_total'] - $getDataTotal['prognosis'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['monika_rekap']['pagu_total'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['monika_rekap']['real_total'], 2, ',', '.'); ?></td>
+                                <!-- <td class="text-center font-weight-bold"><?php //echo number_format($getDataTotal['monika_data']['prognosis'], 2, ',', '.') 
+                                                                                ?></td> -->
+                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['monika_rekap']['pagu_total'] - $getDataTotal['monika_rekap']['real_total'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataTotal['monika_data']['prognosis'] - $getDataTotal['monika_rekap']['real_total'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;"><?= number_format($getDataTotal['monika_rekap']['pagu_total'] - $getDataTotal['monika_data']['prognosis'], 2, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td>RPM</td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['pagu_rpm'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['real_rpm'], 2, ',', '.'); ?></td>
-                                <!-- <td class="text-center font-weight-bold"><?= number_format($getDataRpm['prognosis'], 2, ',', '.'); ?></td> -->
-                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['pagu_rpm'] - $getDataRpm['real_rpm'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['prognosis'] - $getDataRpm['real_rpm'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;"><?= number_format($getDataRpm['pagu_rpm'] - $getDataRpm['prognosis'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['monika_rekap']['pagu_rpm'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['monika_rekap']['real_rpm'], 2, ',', '.'); ?></td>
+                                <!-- <td class="text-center font-weight-bold"><?php // number_format($getDataRpm['prognosis'], 2, ',', '.'); 
+                                                                                ?></td> -->
+                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['monika_rekap']['pagu_rpm'] - $getDataRpm['monika_rekap']['real_rpm'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataRpm['monika_data']['prognosis'] - $getDataRpm['monika_rekap']['real_rpm'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;"><?= number_format($getDataRpm['monika_rekap']['pagu_rpm'] - $getDataRpm['monika_data']['prognosis'], 2, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td>SBSN</td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['pagu_sbsn'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['real_sbsn'], 2, ',', '.'); ?></td>
-                                <!-- <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['prognosis'], 2, ',', '.'); ?></td> -->
-                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['pagu_sbsn'] - $getDataSbsn['real_sbsn'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['prognosis'] - $getDataSbsn['real_sbsn'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;"><?= number_format($getDataSbsn['pagu_sbsn'] - $getDataSbsn['prognosis'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['monika_rekap']['pagu_sbsn'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['monika_rekap']['real_sbsn'], 2, ',', '.'); ?></td>
+                                <!-- <td class="text-center font-weight-bold"><?php // number_format($getDataSbsn['prognosis'], 2, ',', '.'); 
+                                                                                ?></td> -->
+                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['monika_rekap']['pagu_sbsn'] - $getDataSbsn['monika_rekap']['real_sbsn'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataSbsn['monika_data']['prognosis'] - $getDataSbsn['monika_rekap']['real_sbsn'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000;"><?= number_format($getDataSbsn['monika_rekap']['pagu_sbsn'] - $getDataSbsn['monika_data']['prognosis'], 2, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td>PHLN</td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['pagu_phln'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['real_phln'], 2, ',', '.'); ?></td>
-                                <!-- <td class="text-center font-weight-bold"><?= number_format($getDataPhln['prognosis'], 2, ',', '.'); ?></td> -->
-                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['pagu_phln'] - $getDataPhln['real_phln'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['prognosis'] - $getDataPhln['real_phln'], 2, ',', '.'); ?></td>
-                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000; border-bottom: 3px solid #C90000;"><?= number_format($getDataPhln['pagu_phln'] - $getDataPhln['prognosis'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['monika_rekap']['pagu_phln'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['monika_rekap']['real_phln'], 2, ',', '.'); ?></td>
+                                <!-- <td class="text-center font-weight-bold"><?php //number_format($getDataPhln['prognosis'], 2, ',', '.'); 
+                                                                                ?></td> -->
+                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['monika_rekap']['pagu_phln'] - $getDataPhln['monika_rekap']['real_phln'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold"><?= number_format($getDataPhln['monika_data']['prognosis'] - $getDataPhln['monika_rekap']['real_phln'], 2, ',', '.'); ?></td>
+                                <td class="text-center font-weight-bold" style="border-left: 3px solid #C90000; border-right: 3px solid #C90000; border-bottom: 3px solid #C90000;"><?= number_format($getDataPhln['monika_rekap']['pagu_phln'] - $getDataPhln['monika_data']['prognosis'], 2, ',', '.'); ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -90,7 +94,7 @@
                             <li class="w-100">
                                 <ul>
                                     <li class="" style="width: 25% !important">
-                                        <table class="table table-bordered mb-0" style="">
+                                        <table class="table table-bordered mb-0">
                                             <thead>
                                                 <tr style="background-color: #f5b184; ">
                                                     <th colspan="2" style="border: 2px solid #c88a5b;">
@@ -120,7 +124,7 @@
                                     </li>
 
                                     <li class="" style="width: 25% !important">
-                                        <table class="table table-bordered mb-0" style="">
+                                        <table class="table table-bordered mb-0">
                                             <thead>
                                                 <tr style="background-color: #f3f3f3; ">
                                                     <th colspan="2" style="border: 2px solid #e5e5e5;">
@@ -154,7 +158,7 @@
                                     </li>
 
                                     <li class="" style="width: 25% !important">
-                                        <table class="table table-bordered mb-0" style="">
+                                        <table class="table table-bordered mb-0">
                                             <thead>
                                                 <tr style="background-color: #1ab7d5; ">
                                                     <th colspan="2" style="border: 2px solid #74ACB9;">
@@ -188,7 +192,7 @@
                                     </li>
 
                                     <li class="" style="width: 25% !important">
-                                        <table class="table table-bordered mb-0" style="">
+                                        <table class="table table-bordered mb-0">
                                             <thead>
                                                 <tr style="background-color: #C1C1C1; ">
                                                     <th colspan="2" style="border: 2px solid #7E7E7E;">

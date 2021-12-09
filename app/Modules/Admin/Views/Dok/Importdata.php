@@ -22,6 +22,11 @@
                     <!-- <i class="kt-menu__ver-arrow la la-angle-right"></i> -->
                 </a>
             </li>
+            <li class="nav-item mr-0 <?php echo ($current == "paket_register" ? 'bg-primary' : 'bg-light-primary'); ?>">
+                <a class="nav-link" href="<?= site_url('preferensi/tarik-data-emon/paket_register'); ?>" class=""><span class="<?php echo ($current == "paket_register" ? 'text-light' : ''); ?>">Paket Register</span>
+                    <!-- <i class="kt-menu__ver-arrow la la-angle-right"></i> -->
+                </a>
+            </li>
         </ul>
         <div class="kt-portlet__head row pt-3">
             <div class="col-md-3">

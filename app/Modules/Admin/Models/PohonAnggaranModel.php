@@ -66,33 +66,32 @@ class PohonAnggaranModel extends Model
 
 
         $db = \Config\Database::connect();
-        $qdata = $db->query("SELECT
-	SUM(pagu_$sumber_dana) pagu_$sumber_dana,
-    SUM(real_$sumber_dana) real_$sumber_dana,
-	SUM(prognosis) as prognosis
-FROM
+        $qdata['monika_data'] = $db->query("SELECT
+	SUM(prognosis) / 1000 as prognosis
+    FROM
 	monika_data md
-LEFT JOIN (
-	SELECT
-		SUM(prognosis) AS prognosis,
-		kode_ang
-	FROM
-		d_pkt_prognosis
-	RIGHT JOIN monika_data ON d_pkt_prognosis.kode_ang = monika_data.kdpaket
-	WHERE
-		monika_data.pagu_$sumber_dana != 0
-	AND monika_data.pagu_$sumber_dana IS NOT NULL
-    AND (kode_ang LIKE '%FC%' OR kode_ang LIKE '%WA%')
-	GROUP BY
-		monika_data.kdpaket
-) AS prog ON prog.kode_ang = md.kdpaket
-WHERE
-pagu_$sumber_dana != 0
-AND pagu_$sumber_dana IS NOT NULL
-AND (kode_ang LIKE '%FC%' OR kode_ang LIKE '%WA%')
-        
+
+    WHERE
+    pagu_$sumber_dana != 0
+    AND pagu_$sumber_dana IS NOT NULL
+            
         
         ")->getRowArray();
+
+        $qdata['monika_rekap'] = $db->query("SELECT
+    pagu_rpm,pagu_sbsn,pagu_phln,pagu_total,real_rpm,real_sbsn,real_phln,real_total
+
+        FROM
+       monika_rekap_unor
+
+    WHERE
+    kdunit = '06'
+        
+    
+    ")->getRowArray();
+
+
+
         return $qdata;
     }
 
@@ -280,6 +279,67 @@ AND (kode_ang LIKE '%FC%' OR kode_ang LIKE '%WA%')
             return (object) [
                 'kdgiat'     => $arr->kdgiat,
                 'nmgiat'     => $arr->nmgiat,
+                'pagu'     => $arr->pagu,
+                'jml_paket'     => $arr->jml_paket,
+                'paketList' => json_decode($arr->paket)
+            ];
+        }, $data);
+    }
+
+    public function getDataBelumLelangPhlnMycProjectLoan($sumber_dana, $kdjnskon, $where = false)
+    {
+
+
+        $db = \Config\Database::connect();
+
+        ($where != false ? $where = " AND monika_data.$sumber_dana != 0 AND monika_data.$sumber_dana IS NOT NULL" : $where = "");
+        $data = $db->query("
+        
+        SELECT
+        t_register.nmloan,
+        t_register.register,
+        monika_kontrak.nmpaket,
+        SUM(monika_data.$sumber_dana) AS pagu,
+        COUNT(monika_data.nmpaket) AS jml_paket,
+        (
+            JSON_OBJECT (
+                'paket',
+                GROUP_CONCAT(
+                    CASE 
+                        WHEN
+                            (INSTR(monika_kontrak.nmpaket, ';')) > 0
+                        THEN
+						CONCAT('- ',SUBSTR(monika_kontrak.nmpaket, 1, (INSTR(monika_kontrak.nmpaket, ';')-1)))									
+                        ELSE
+                           CONCAT('- ',monika_kontrak.nmpaket)
+                    END, '<br>'
+                ) 
+            )
+        ) AS paket
+    FROM
+        monika_data
+    RIGHT JOIN monika_kontrak ON monika_data.kdsatker = monika_kontrak.kdsatker
+    AND monika_data.kdprogram = monika_kontrak.kdprogram
+    AND monika_data.kdgiat = monika_kontrak.kdgiat
+    AND monika_data.kdoutput = monika_kontrak.kdoutput
+    AND monika_data.kdsoutput = monika_kontrak.kdsoutput
+    AND monika_data.kdkmpnen = monika_kontrak.kdkmpnen
+    AND monika_data.kdskmpnen = monika_kontrak.kdskmpnen
+    LEFT JOIN monika_paket_register ON monika_paket_register.kode = monika_data.kdpaket
+    LEFT JOIN t_register ON monika_paket_register.kdregister = t_register.register
+    WHERE
+        monika_kontrak.status_tender = 'Belum Lelang'
+        AND monika_kontrak.kdjnskon IN ($kdjnskon)
+    {$where}
+    GROUP BY
+        monika_paket_register.kode
+        
+        ")->getResult();
+
+        return array_map(function ($arr) {
+            return (object) [
+                'kdregister'     => $arr->register,
+                'nmloan'     => $arr->nmloan,
                 'pagu'     => $arr->pagu,
                 'jml_paket'     => $arr->jml_paket,
                 'paketList' => json_decode($arr->paket)

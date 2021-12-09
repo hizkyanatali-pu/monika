@@ -925,11 +925,23 @@
                                 </thead>
 
                                 <tbody id="tbody-utama">
-                                    <th style="padding: 0px 4px 0px 4px !important" scope="row">1</th>
-                                    <td style="padding: 0px 4px 0px 4px !important">Table cell</td>
-                                    <td style="padding: 0px 4px 0px 4px !important">Table cell</td>
-                                    <td style="padding: 0px 4px 0px 4px !important">Table cell</td>
-                                    <td style="padding: 0px 4px 0px 4px !important">Table cell</td>
+                                    <?php
+                                    foreach ($belum_lelang_phln_project_loan as $key => $dt) { ?>
+                                        <tr>
+                                            <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= $dt->nmloan; ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= $dt->jml_paket; ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= toMilyar($dt->pagu, false, 2); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"><?= str_replace(",", "", $dt->paketList->paket) ?></td>
+
+                                        </tr>
+
+
+
+                                    <?php }
+
+                                    ?>
+
                                 </tbody>
                             </table>
                         </div>
