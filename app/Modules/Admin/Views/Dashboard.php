@@ -426,7 +426,7 @@
     <div class="pagebreak"> </div>
     <!-- POSTUR PAKET KONTRAKTUAL -->
 
-    <div class="kt-portlet kt-portlet--tab">
+    <div id="viewkontraktual" class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -443,7 +443,7 @@
                     <div class="tree">
                         <ul>
                             <li class="w-100">
-                                <a href="#" class="">
+                                <a href="#viewkontraktual" class="">
                                     <div class="tree-content">
                                         <div class="card card-body bg-tree-1">
                                             <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
@@ -460,8 +460,8 @@
                                     </div>
                                 </a>
                                 <ul>
-                                    <li class="w-50">
-                                        <a href="#" class="">
+                                    <li class="" style="width: 60% !important">
+                                        <a href="#viewkontraktual" class="">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> BELUM KONTRAK </b></h4>
@@ -478,7 +478,7 @@
                                         </a>
                                         <ul>
                                             <li class="w-30">
-                                                <a href="#" class="">
+                                                <a href="#viewkontraktual" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
                                                             <h4 class="mb-0"><b> GAGAL LELANG </b></h4>
@@ -495,7 +495,7 @@
                                                 </a>
                                             </li>
                                             <li class="w-30">
-                                                <a href="#" class="">
+                                                <a href="#viewkontraktual" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
                                                             <h4 class="mb-0"><b> PROSES LELANG </b></h4>
@@ -512,7 +512,7 @@
                                                 </a>
                                             </li>
                                             <li class="w-40">
-                                                <a href="#" class="">
+                                                <a href="#belum-lelang" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-4">
                                                             <h4 class="mb-0"><b> BELUM LELANG </b></h4>
@@ -531,8 +531,8 @@
                                         </ul>
                                     </li>
 
-                                    <li class="w-50">
-                                        <a href="#" class="">
+                                    <li class="" style="width: 40% !important">
+                                        <a href="#viewkontraktual" class="">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> TERKONTRAK * </b></h4>
@@ -565,7 +565,7 @@
     <div class="pagebreak"> </div>
     <!-- POSTUR PAKET BELUM LELANG -->
 
-    <div class="kt-portlet kt-portlet--tab">
+    <div id="belum-lelang" class="kt-portlet kt-portlet--tab">
         <div class="kt-portlet__head" style="text-align: center;">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -582,7 +582,7 @@
                     <div class="tree ml--105 pr-4">
                         <ul>
                             <li class="w-100">
-                                <a href="#" class="w-25">
+                                <a href="#belum-lelang" class="w-25">
                                     <div class="tree-content">
                                         <div class="card card-body bg-tree-1">
                                             <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
@@ -599,7 +599,7 @@
                                 <ul>
 
                                     <li class="" style="width: 50% !important">
-                                        <a href="#" class="w-50">
+                                        <a href="#belum-lelang" class="w-50">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> RPM </b></h4>
@@ -614,7 +614,7 @@
                                         </a>
                                         <ul>
                                             <li class="w-50">
-                                                <a href="#" class="w-100">
+                                                <a href="#belum-lelang" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
                                                             <h4 class="mb-0"><b> SYC </b></h4>
@@ -627,23 +627,25 @@
                                                         </div>
                                                     </div>
                                                 </a>
-                                                <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                            <h6>Antara Lain :</h6>
-                                                            <?php foreach ($syclist as $key => $daftarsyc) { ?>
+                                                <?php if ($syc['jml_paket'] != 0) { ?>
+                                                    <div class="border-single-tree-down"></div>
+                                                    <a href="#belum-lelang" class="w-100">
+                                                        <div class="tree-content">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                                <h6>Antara Lain :</h6>
+                                                                <?php foreach ($syclist as $key => $daftarsyc) { ?>
 
-                                                                <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
+                                                                    <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
 
 
-                                                            <?php } ?>
+                                                                <?php } ?>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </a>
+                                                    </a>
+                                                <?php } ?>
                                             </li>
                                             <li class="w-50">
-                                                <a href="#" class="w-100">
+                                                <a href="#belum-lelang" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
                                                             <h4 class="mb-0"><b> MYC Baru </b></h4>
@@ -656,25 +658,29 @@
                                                         </div>
                                                     </div>
                                                 </a>
-                                                <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                            <h6>Antara Lain :</h6>
-                                                            <?php foreach ($mycbarulist as $key => $daftarsyc) { ?>
+                                                <?php if ($mycbaru1['jml_paket'] + $mycbaru2['jml_paket'] != 0) { ?>
 
-                                                                <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
+                                                    <div class="border-single-tree-down"></div>
+                                                    <a href="#belum-lelang" class="w-100">
+                                                        <div class="tree-content">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                                <h6>Antara Lain :</h6>
+                                                                <?php foreach ($mycbarulist as $key => $daftarsyc) { ?>
+
+                                                                    <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
 
 
-                                                            <?php } ?>
+                                                                <?php } ?>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </a>
+                                                    </a>
+                                                <?php } ?>
+
                                             </li>
                                         </ul>
                                     </li>
                                     <li class="" style="width: 20% !important">
-                                        <a href="#" class="w-75">
+                                        <a href="#belum-lelang" class="w-75">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> SBSN </b></h4>
@@ -689,7 +695,7 @@
                                         </a>
                                     </li>
                                     <li class="" style="width: 30% !important">
-                                        <a href="#" class="w-75">
+                                        <a href="#belum-lelang" class="w-75">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> PHLN </b></h4>
@@ -703,7 +709,7 @@
                                             </div>
                                         </a>
                                         <div class="border-single-tree-down"></div>
-                                        <a href="#" class="w-75">
+                                        <a href="#belum-lelang" class="w-75">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-3">
                                                     <h4 class="mb-0"><b> MYC Baru </b></h4>
@@ -716,21 +722,24 @@
                                                 </div>
                                             </div>
                                         </a>
-                                        <div class="border-single-tree-down"></div>
-                                        <a href="#" class="w-75">
-                                            <div class="tree-content">
-                                                <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                    <h6>Antara Lain :</h6>
-                                                    <?php foreach ($mycbaruphlnlist as $key => $daftarsyc) { ?>
+                                        <?php if ($mycbaruphln['jml_paket'] != 0) { ?>
 
-                                                        <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#belum-lelang" class="w-75">
+                                                <div class="tree-content">
+                                                    <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                        <h6>Antara Lain :</h6>
+                                                        <?php foreach ($mycbaruphlnlist as $key => $daftarsyc) { ?>
+
+                                                            <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
 
 
-                                                    <?php } ?>
+                                                        <?php } ?>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </a>
+                                            </a>
                                     </li>
+                                <?php } ?>
 
 
 
@@ -788,17 +797,22 @@
 
                                 <tbody id="tbody-utama">
                                     <?php
+                                    if ($belum_lelang_rpm_syc) {
+                                        foreach ($belum_lelang_rpm_syc as $key => $val) { ?>
+                                            <tr>
+                                                <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= $val->nmgiat; ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= $val->jml_paket; ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= toMilyar($val->pagu, false, 2); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= str_replace(",", "", $val->paketList->paket) ?></td>
+                                            </tr>
 
-                                    foreach ($belum_lelang_rpm_syc as $key => $val) { ?>
+                                        <?php }
+                                    } else { ?>
                                         <tr>
-                                            <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= $val->nmgiat; ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= $val->jml_paket; ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= toMilyar($val->pagu, false, 2); ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= str_replace(",", "", $val->paketList->paket) ?></td>
-                                        </tr>
-
-                                    <?php }   ?>
+                                            <td style="padding: 0px 4px 0px 4px !important;text-align: center;" scope="row" colspan="5"><b>Tidak Ada Data</b></td>
+                                        </tr>;
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
@@ -857,17 +871,22 @@
 
                                 <tbody id="tbody-utama">
                                     <?php
+                                    if ($belum_lelang_myc) {
+                                        foreach ($belum_lelang_myc as $key => $val) { ?>
+                                            <tr>
+                                                <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= $val->nmgiat; ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= $val->jml_paket; ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= toMilyar($val->pagu, false, 2); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= str_replace(",", "", $val->paketList->paket) ?></td>
+                                            </tr>
 
-                                    foreach ($belum_lelang_myc as $key => $val) { ?>
+                                        <?php }
+                                    } else {  ?>
                                         <tr>
-                                            <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= $val->nmgiat; ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= $val->jml_paket; ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= toMilyar($val->pagu, false, 2); ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= str_replace(",", "", $val->paketList->paket) ?></td>
-                                        </tr>
-
-                                    <?php }   ?>
+                                            <td style="padding: 0px 4px 0px 4px !important;text-align: center;" scope="row" colspan="5"><b>Tidak Ada Data</b></td>
+                                        </tr>;
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
@@ -926,22 +945,26 @@
 
                                 <tbody id="tbody-utama">
                                     <?php
-                                    foreach ($belum_lelang_phln_project_loan as $key => $dt) { ?>
+                                    if ($belum_lelang_phln_project_loan) {
+
+                                        foreach ($belum_lelang_phln_project_loan as $key => $dt) { ?>
+                                            <tr>
+                                                <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= $dt->nmloan; ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= $dt->jml_paket; ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= toMilyar($dt->pagu, false, 2); ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important"><?= str_replace(",", "", $dt->paketList->paket) ?></td>
+
+                                            </tr>
+
+
+
+                                        <?php }
+                                    } else {  ?>
                                         <tr>
-                                            <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= $dt->nmloan; ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= $dt->jml_paket; ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= toMilyar($dt->pagu, false, 2); ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important"><?= str_replace(",", "", $dt->paketList->paket) ?></td>
-
-                                        </tr>
-
-
-
-                                    <?php }
-
-                                    ?>
-
+                                            <td style="padding: 0px 4px 0px 4px !important;text-align: center;" scope="row" colspan="5"><b>Tidak Ada Data</b></td>
+                                        </tr>;
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
@@ -1400,31 +1423,31 @@
 
                                             ?>
                                         <?php endforeach; ?>
-                                        <tr class="text-center text-white" style="background-color: #1562aa;">
+                                        <!-- <tr class="text-center text-white" style="background-color: #1562aa;">
                                             <td style="padding: 0px 4px 0px 4px !important" class="text-center">TOTAL</td>
                                             <?= ($key1 == 'Semua Satker' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
                                             <td style="padding: 0px 4px 0px 4px !important" class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td>
                                             <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
                                             <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
                                             <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td> -->
 
-                                            <?php if ($key1 == 'Semua Satker') {  ?>
-                                                <!-- <td style="padding: 0px 4px 0px 4px !important" class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td> -->
-                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_real_rpm / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_real_phln / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
-                                            <?php  } else {  ?>
-                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
-                                                <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($total_real_total / $total_pagu_total * 100, 2, ',', '.'); ?></td>
+                                        <!-- <?php if ($key1 == 'Semua Satker') {  ?> -->
+                                        <!-- <td style="padding: 0px 4px 0px 4px !important" class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td> -->
+                                        <!-- <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_real_rpm / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_real_phln / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+                                        <?php  } else {  ?>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important" class="tdNilai text-right col-pagu_total"><?php echo number_format($total_real_total / $total_pagu_total * 100, 2, ',', '.'); ?></td>
 
-                                            <?php  }  ?>
+                                        <?php  }  ?> -->
 
 
 
-                                            <td style="padding: 0px 4px 0px 4px !important" colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
-                                        </tr>
+                                        <!-- <td style="padding: 0px 4px 0px 4px !important" colspan="4" class="tdPersen text-right last-col">&nbsp;</td> -->
+                                        <!-- </tr> -->
                                     <?php endif; ?>
                                 </tbody>
                             </table>

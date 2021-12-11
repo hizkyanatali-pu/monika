@@ -124,6 +124,7 @@ class TematikModel extends Model
 
 	public function getListRekap($option)
 	{
+
 		$listData = [];
 		foreach ($option as $key => $value) {
 			$strTematikCode = join(',', $value['tematikCode']);

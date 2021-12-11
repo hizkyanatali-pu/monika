@@ -388,3 +388,40 @@ function getoutputname($db, $kdprogram, $kdgiat, $kdoutput, $kdsoutput)
          AND kdsoutput = '$kdsoutput'")->getRow();
     return $builder->ursoutput;
 }
+
+
+function sum_data($bulan = '', $kdprogram = false, $kdgiat = false, $kdoutput = false, $kdsoutput = false)
+{
+
+    $bulan = strtolower(medium_bulan($bulan));
+    if ($bulan == '') {
+        $bulan = strtolower(medium_bulan(date('n')));
+    }
+
+    if ($kdprogram != false) {
+
+        $w = "kdprogram = '$kdprogram' ";
+    }
+    if ($kdgiat != false) {
+        $w .= "AND kdgiat = '$kdgiat'";
+    }
+    if ($kdoutput != false) {
+        $w .= "AND kdoutput = '$kdoutput'";
+    }
+    if ($kdsoutput != false) {
+        $w .= "AND kdsoutput = '$kdsoutput'";
+    }
+    $db      = \Config\Database::connect();
+    $builder = $db->query("SELECT 
+    SUM(pagu_total) / 1000 as pagu,
+    SUM(vol) as vol,
+    (progres_keu_$bulan/100 * SUM(real_total)) /1000 as rtot,
+    (SUM(ren_keu_$bulan) / COUNT(ren_keu_$bulan)) as renk_b,
+    (SUM(ren_fis_$bulan) / COUNT(ren_fis_$bulan)) as renf_b ,
+    (SUM(progres_keu_$bulan) / COUNT(progres_keu_$bulan)) as rl_keu,
+    (SUM(progres_fisik_$bulan) / COUNT(progres_fisik_$bulan)) as rl_fis
+    FROM monika_data WHERE 
+          $w
+         ")->getRow();
+    return $builder;
+}

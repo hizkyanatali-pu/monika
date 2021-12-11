@@ -88,8 +88,12 @@
 
     $('div#line-chart').append("<div class='badge badge-secondary text-center shadow' style='position:absolute; left:" + (o.left + 4) + "px; top:" + o.top + "px;'><h3 class='mb-0'><b>Deviasi</b> " + (deviasi).toFixed(2) + "%</h3></div>");
 
-    $('div#line-chart').append("<div class='badge badge-success ml-3' style='position:absolute;left:" + (orencana.left) + "px;top:" + (orencana.top) + "px;'><h3 class='mb-0'>" + yto2 + "%</h3></div>");
-    $('div#line-chart').append("<div class='badge badge-danger ml-3 mt-4' style='position:absolute;left:" + (orealisasi.left) + "px;top:" + (orealisasi.top) + "px;'><h3 class='mb-0'>" + yfrom + "%</h3></div>");
+    // $('div#line-chart').append("<div class='badge badge-success ml-3' style='position:absolute;left:" + (orencana.left) + "px;top:" + (orencana.top) + "px;'><h3 class='mb-0'>" + yto2 + "%</h3></div>");
+    // $('div#line-chart').append("<div class='badge badge-danger ml-3 mt-4' style='position:absolute;left:" + (orealisasi.left) + "px;top:" + (orealisasi.top) + "px;'><h3 class='mb-0'>" + yfrom + "%</h3></div>");
+
+    $('div#line-chart').append("<div class='badge badge-success ml-3' style='position:absolute;left:85%;top:55%;'><h5 class='mb-0'>" + yto2 + "%</h5></div>");
+    $('div#line-chart').append("<div class='badge badge-danger ml-3 mt-4' style='position:absolute;left:85%;top:65%;'><h5 class='mb-0'>" + yfrom + "%</h5></div>");
+
 
 
 
@@ -227,8 +231,12 @@
 
     $('div#line-chart2').append("<div class='badge badge-secondary text-center shadow' style='position:absolute; left:" + (o2.left + 4) + "px; top:" + o2.top + "px;'><h3 class='mb-0'><b>Deviasi</b> " + (deviasi1).toFixed(2) + "%</h3></div>");
 
-    $('div#line-chart2').append("<div class='badge badge-success ml-3' style='position:absolute;left:" + (orencana2.left) + "px;top:" + (orencana2.top) + "px;'><h3 class='mb-0'>" + yto_1 + "%</h3></div>");
-    $('div#line-chart2').append("<div class='badge badge-danger ml-3 mt-4' style='position:absolute;left:" + (orealisasi2.left) + "px;top:" + (orealisasi2.top) + "px;'><h3 class='mb-0'>" + yfrom_1 + "%</h3></div>");
+    // $('div#line-chart2').append("<div class='badge badge-success ml-3' style='position:absolute;left:" + (orencana2.left) + "px;top:" + (orencana2.top) + "px;'><h3 class='mb-0'>" + yto_1 + "%</h3></div>");
+    // $('div#line-chart2').append("<div class='badge badge-danger ml-3 mt-4' style='position:absolute;left:" + (orealisasi2.left) + "px;top:" + (orealisasi2.top) + "px;'><h3 class='mb-0'>" + yfrom_1 + "%</h3></div>");
+
+    $('div#line-chart2').append("<div class='badge badge-success ml-3' style='position:absolute;left:85%;top:55%;'><h5 class='mb-0'>" + yto_1 + "%</h5></div>");
+    $('div#line-chart2').append("<div class='badge badge-danger ml-3 mt-4' style='position:absolute;left:85%;top:65%;'><h5 class='mb-0'>" + yfrom_1 + "%</h5></div>");
+
 
 
 

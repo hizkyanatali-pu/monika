@@ -118,16 +118,16 @@ $this->extend('admin/layouts/default') ?>
                                 ?>
 
                             </select>
-                            <div class="input-group-append">
+                            <!-- <div class="input-group-append">
                                 <button class="btn btn-primary" type="button" id="search">
                                     <div class="fa fa-search"></div>
                                 </button>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="col-md-8 text-right mt-3">
                         <div class="form-group">
-                            <a href="<?= site_url('Kinerja-Output-Bulanan/') . $uri->getSegment(2) . "?exp=xlxs" ?>" class="btn btn-success btn-sm text-white" target="_blank"><i class="fa fa-file-excel"></i>Excel</a>
+                            <a href="<?= site_url('Kinerja-Output-Bulanan/') . $uri->getSegment(2) . ($uri->getSegment(3) ? "/" . $uri->getSegment(3) : '') . "?exp=xlxs" ?>" class="btn btn-success btn-sm text-white" target="_blank"><i class="fa fa-file-excel"></i>Excel</a>
                             <b>*Dalam Ribuan</b>
                         </div>
                     </div>
@@ -182,132 +182,106 @@ $this->extend('admin/layouts/default') ?>
                                 $ido = [];
                                 $idso = [];
                                 $idkk = [];
-                                $colspan = 12;
-                                $noprogram = 1;
+                                $noprog = 1;
                                 $nogiat = 1;
                                 $nooutput = 1;
                                 $nosoutput = 1;
-                                $nArraysoutput =  unique_multidim_array($qdata, "kode", "kode", "vol", "pg", "rtot", "rr_b", "renk_b", "renf_b", "ff_b", 'jumlah_data', 'ufis');
 
-                                // print_r($nArraysoutput);
-                                // exit;
+                                $total_pagu_soutput = array();
+
                                 ?>
+                                <?php foreach ($qdata as $key => $d) :
 
 
-                                <?php foreach ($nArraysoutput as $key => $d) :    ?>
 
-                                    <?php $idk = $d['kdprogram'];
-                                    $jumlah_data = isset($d['jumlah_data']) ? $d['jumlah_data'] : 1;
-                                    ?>
-
+                                ?>
+                                    <?php $idk = $d['kdprogram']; ?>
                                     <?php if (!in_array($idk, $idp)) :
 
-                                        $pg_program = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programpg');
-                                        $realisasi_program = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programrealisasi', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
-                                        $keu_rn_program = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programkeu_rn', '0', 'pkt.renk_b' . $bulanberjalan) / $pg_program * 100;
-                                        $keu_rl_program = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programkeu_rl', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
-                                        $fis_rn_program = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programfis_rn', 'pkt.renf_b' . $bulanberjalan);
-                                        $fis_rl_program =  gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programfis_rl', ($bulanberjalan == $bulansekarang ?  'pkt.ufis'  : 'pkt.ff_b' . $bulanberjalan));
-
+                                        $sum_prog = sum_data($bulanberjalan, $d['kdprogram']);
                                     ?>
                                         <tr>
-                                            <td class="tdprogram"><?= $noprogram ?></td>
-                                            <td class="tdprogram"><?php echo '<b>' . $idk . '</b>'; ?></td>
-                                            <td class="tdprogram"><?= '<b>' . $d['nmprogram'] . '</b>' ?></td>
-                                            <td class="tdprogram" style="text-align: right;"><?= '<b>' .   str_replace('.', ',', round(gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'programvol'), 2))  . '</b>' ?></td>
-                                            <td class="tdprogram"><?= '<b>' . "Paket Program" . '</b>' ?></td>
-                                            <td class="tdprogram" style="text-align: right;"><?php echo '<b>' . number_format($pg_program / 1000, 0, ',', '.') . '</b>' ?></td>
-                                            <td class="tdprogram" style="text-align: right;"><?php echo '<b>' . number_format($realisasi_program / 1000, 0, ',', '.') . '</b>' ?></td>
-                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rn_program, 2)) . '</b>' ?></td>
-                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rl_program, 2)) . '</b>' ?></td>
-                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rn_program, 2)) . '</b>' ?></td>
-                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rl_program, 2)) . '</b>' ?></td>
-                                            <td class="tdprogram" style="text-align: right "><?php echo '<b>' .   ($fis_rn_program != 0 ?  str_replace('.', ',', round($fis_rl_program / $fis_rn_program, 2)) : '~') . '</b>' ?></td>
+                                            <td class="tdprogram"><?= $noprog++ ?></td>
+                                            <td class="tdprogram"><?php echo $idk; ?></td>
+                                            <td class="tdprogram"><?php echo $d['nmprogram']; ?></td>
+                                            <td class="tdprogram"><?php echo number_format($sum_prog->vol, 0, ',', '.'); ?></td>
+                                            <td class="tdprogram"><?php echo "Paket Program"; ?></td>
+                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' . number_format($sum_prog->pagu, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' . number_format($sum_prog->rtot, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' . number_format($sum_prog->renk_b, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>'  . number_format($sum_prog->rl_keu, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' . number_format($sum_prog->renf_b, 2, ',', '.') .  '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right"><?php echo '<b>' . number_format($sum_prog->rl_fis, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdprogram" style="text-align: right "><?php echo '<b>' . ($sum_prog->renf_b == 0 ? "-" : number_format($sum_prog->rl_fis / $sum_prog->renf_b * 100, 2, ',', '.'))  . '</b>' ?></td>
 
                                         </tr>
                                         <?php $idp = array_merge([$idk], $idp); ?>
                                     <?php endif; ?>
+                                    <?php $idk = $idk . '.' . $d['kdgiat']; ?>
+                                    <?php if (!in_array($idk, $idp)) :
 
-                                    <?php $idk =  $d['kdgiat'];   ?>
-                                    <?php if (!in_array($idk, $ido)) :
-
-                                        $pg_giat = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatanpg');
-                                        $realisasi_giat = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatanrealisasi', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
-                                        $keu_rn_giat = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatankeu_rn', 'pkt.renk_b' . $bulanberjalan);
-                                        $keu_rl_giat = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatankeu_rl', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
-                                        $fis_rn_giat = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatanfis_rn', 'pkt.renf_b' . $bulanberjalan);
-                                        $fis_rl_giat =  gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatanfis_rl', ($bulanberjalan == $bulansekarang ?  'pkt.ufis'  : 'pkt.ff_b' . $bulanberjalan));
-
+                                        $sum_giat = sum_data($bulanberjalan, $d['kdprogram'], $d['kdgiat']);
                                     ?>
                                         <tr>
-                                            <td class="tdgiat"><?= $nogiat++ ?></td>
-                                            <td class="tdgiat"><?php echo $idk; ?></td>
-                                            <td class="tdgiat"><?= '<b>' . $d['nmgiat'] . '</b>' ?></td>
-                                            <td class="tdgiat" style="text-align: right"><?= '<b>' . str_replace('.', ',', round(gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'kegiatanvol'), 2))  . '</b>' ?></td>
-                                            <td class="tdgiat"><?= '<b>' . "Paket Kegiatan" . '</b>' ?></td>
-                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' . number_format($pg_giat / 1000, 0, ',', '.')  . '</b>' ?></td>
-                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' . number_format($realisasi_giat / 1000, 0, ',', '.')  . '</b>' ?></td>
-                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rn_giat, 2)) . '</b>' ?></td>
-                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rl_giat, 2)) . '</b>' ?></td>
-                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rn_giat, 2)) . '</b>' ?></td>
-                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rl_giat, 2)) . '</b>' ?></td>
-                                            <td class="tdgiat" style="text-align: right "><?php echo '<b>' .   ($fis_rn_giat != 0 ?  str_replace('.', ',', round($fis_rl_giat / $fis_rn_giat, 2) * 100) : '~') . '</b>' ?></td>
+                                            <td class="tdgiat"><b><?= $nogiat++ ?></b></td>
+                                            <td class="tdgiat"><b><?php echo $idk; ?></b></td>
+                                            <td class="tdgiat"><b><?php echo $d['nmgiat']; ?></b></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' . number_format($sum_giat->vol, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdgiat"><?php echo "<b>Paket Kegiatan</b>"; ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' . number_format($sum_giat->pagu, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' .  number_format($sum_giat->rtot, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' . number_format($sum_giat->renk_b, 2, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>'  . number_format($sum_giat->rl_keu, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' . number_format($sum_giat->renf_b, 2, ',', '.')  .  '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right"><?php echo '<b>' . number_format($sum_giat->rl_fis, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdgiat" style="text-align: right "><?php echo '<b>' . ($sum_giat->renf_b == 0 ? "-" : number_format($sum_giat->rl_fis / $sum_giat->renf_b * 100, 2, ',', '.'))  . '</b>' ?></td>
                                         </tr>
-                                        <?php $ido = array_merge([$idk], $ido); ?>
+                                        <?php $idp = array_merge([$idk], $idp); ?>
                                     <?php endif; ?>
-
 
                                     <?php $idk = $idk . '.' . $d['kdoutput']; ?>
                                     <?php if (!in_array($idk, $ido)) :
-                                        $pg_output = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputpg');
-                                        $realisasi_output = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputrealisasi', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
-                                        $keu_rn = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputkeu_rn', 'pkt.renk_b' . $bulanberjalan);
-                                        $keu_rl = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputkeu_rl', ($bulanberjalan == $bulansekarang ?  'pkt.rtot'  : 'rr_b' . $bulanberjalan));
-                                        $fis_rn = gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputfis_rn', 'pkt.renf_b' . $bulanberjalan);
-                                        $fis_rl =  gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputfis_rl', ($bulanberjalan == $bulansekarang ?  'pkt.ufis'  : 'pkt.ff_b' . $bulanberjalan));
+                                        $sum_output = sum_data($bulanberjalan, $d['kdprogram'], $d['kdgiat'], $d['kdoutput']);
 
                                     ?>
                                         <tr>
-                                            <td class="tdoutput"><?= $nooutput++ ?></td>
-                                            <td class="tdoutput"><?php echo $idk; ?></td>
-                                            <td class="tdoutput"><?= '<b>' . $d['nmoutput'] . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right"><?= '<b>' . str_replace('.', ',', round(gettotal($dbuse, 'FC', $d['kdgiat'], $d['kdoutput'], 'outputvol'), 2)) . '</b>' ?></td>
-                                            <td class="tdoutput"><?= '<b>' . $d['sat'] . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' . number_format($pg_output / 1000, 0, ',', '.') . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' . number_format($realisasi_output / 1000, 0, ',', '.') . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rn, 2)) . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($keu_rl, 2)) . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rn, 2)) . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .  str_replace('.', ',', round($fis_rl, 2)) . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right "><?php echo '<b>' .   ($fis_rn != 0 ?  str_replace('.', ',', round($fis_rl / $fis_rn, 2) * 100) : '~') . '</b>' ?></td>
+                                            <td class="tdoutput"><b><?= $nooutput++ ?></b></td>
+                                            <td class="tdoutput"><b><?php echo $idk; ?></b></td>
+                                            <td class="tdoutput"><b><?php echo $d['nmoutput']; ?></b></td>
+                                            <td class="tdoutput" style="text-align: right"><b><?php echo number_format($sum_output->vol, 0, ',', '.'); ?></b></td>
+                                            <td class="tdoutput"><b><?php echo $d['toutputsat']; ?></b></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .   number_format($sum_output->pagu, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .   number_format($sum_output->rtot, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .    number_format($sum_output->renk_b, 2, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>'  . number_format($sum_output->rl_keu, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' .   number_format($sum_output->renf_b, 2, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right"><?php echo '<b>' . number_format($sum_output->rl_fis, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right "><?php echo '<b>' . ($sum_output->rl_fis == 0 ? "-" : number_format($sum_output->rl_fis / sum_data($bulanberjalan, $d['kdprogram'], $d['kdgiat'], $d['kdoutput'])->renf_b * 100, 2, ',', '.')) . '</b>' ?></td>
                                         </tr>
                                         <?php $ido = array_merge([$idk], $ido); ?>
                                     <?php endif; ?>
 
                                     <?php $idk = $idk . '.' . $d['kdsoutput']; ?>
-                                    <?php if (!in_array($idk, $ido)) :
-                                        $realisasi = ($bulanberjalan == $bulansekarang ?  $d['rtot']  : $d['rr_b']);
-                                        $rl_keu = ($bulanberjalan == $bulansekarang ?  round($d['rtot'] / $d['pg'] * 100 / $jumlah_data, 2) : round($d['rr_b'] / $d['pg'] * 100 / $jumlah_data, 2));
-                                        $rl_fis = ($bulanberjalan == $bulansekarang ?  round($d['ufis'] / $d['pg'] * 100 / $jumlah_data, 2)  : round($d['ff_b'] / $d['pg'] * 100 / $jumlah_data, 2));
+                                    <?php if (!in_array($idk, $idso)) :
+                                        $sum_soutput = sum_data($bulanberjalan, $d['kdprogram'], $d['kdgiat'], $d['kdoutput'], $d['kdsoutput']); ?>
+                                        <tr>
+                                            <td class="tdsoutput"><b><?= $nosoutput++ ?></b></td>
+                                            <td class="tdsoutput"><b><?php echo $idk; ?></b></td>
+                                            <td class="tdsoutput"><b><?php echo $d['nmro']; ?></b></td>
+                                            <td class="tdsoutput" style="text-align: right"><b><?php echo number_format($sum_soutput->vol, 0, ',', '.'); ?></b></td>
+                                            <td class="tdsoutput"><b><?php echo $d['sat']; ?></b></td>
+                                            <td class="tdsoutput" style="text-align: right"><?php echo '<b>' . number_format($sum_soutput->pagu, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right"><?php echo '<b>' . number_format($sum_soutput->rtot, 0, ',', '.')  . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right"><?php echo '<b>' .  number_format($sum_soutput->renk_b, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right"><?php echo '<b>' . number_format($sum_soutput->rl_keu, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right"><?php echo '<b>' .  number_format($sum_soutput->renf_b, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right"><?php echo '<b>' .  number_format($sum_soutput->rl_fis, 2, ',', '.') . '</b>' ?></td>
+                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' . ($sum_soutput->renf_b == 0 ? "-" : number_format($sum_soutput->rl_fis / $sum_soutput->renf_b * 100, 2, ',', '.'))  . '</b>' ?></td>
+                                        </tr>
+                                        <?php $idso = array_merge([$idk], $idso); ?>
+                                    <?php endif;
 
                                     ?>
-                                        <tr>
-                                            <td class="tdsoutput"><?= $nosoutput++ ?></td>
-                                            <td class="tdsoutput"><?php echo $idk; ?></td>
-                                            <td class="tdsoutput"><?= '<b>' . $d['ursoutput'] . '</b>' ?></td>
-                                            <td class="tdsoutput" style="text-align: right;"><?= '<b>' . str_replace('.', ',', round(str_replace(",", ".", $d['vol']), 2)) . '</b>' ?></td>
-                                            <td class=" tdsoutput"><?= '<b>' . $d['sat'] . '</b>' ?></td>
-                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' . number_format($d['pg'] / 1000, 0, ',', '.') . '</b>' ?></td>
-                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' . number_format($realisasi / 1000, 0, ',', '.')  . '</b>' ?></td>
-                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' . str_replace('.', ',', round($d['renk_b'] / $d['pg'] * 100 / $jumlah_data, 2))  . '</b>' ?></td>
-                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .   str_replace('.', ',', $rl_keu)  . '</b>' ?></td>
-                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .   str_replace('.', ',', round($d['renf_b'] / $jumlah_data, 2))   . '</b>' ?></td>
-                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .    str_replace('.', ',', $rl_fis)  . '</b>' ?></td>
-                                            <td class="tdsoutput" style="text-align: right "><?php echo '<b>' .   ($d['renf_b'] != 0 ?  str_replace('.', ',', round($rl_fis / $d['renf_b'], 2) * 100) : '~') . '</b>' ?></td>
-
-                                        </tr>
-                                        <?php $ido = array_merge([$idk], $ido); ?>
-                                    <?php endif; ?>
 
                                 <?php endforeach; ?>
                             <?php endif; ?>
@@ -333,9 +307,9 @@ $this->extend('admin/layouts/default') ?>
         $th.css('transform', 'translateY(' + this.scrollTop + 'px)');
     })
 
-    $("#search").click(function() {
-        window.location.href = "<?= site_url('Kinerja-Output-Bulanan/') ?>" + $('#listmonth').val();
-    });
+    // $("#search").click(function() {
+    //     window.location.href = "<?= site_url('Kinerja-Output-Bulanan/') ?>" + $('#listmonth').val();
+    // });
 
     $("#searchkeyword").click(function() {
         window.location.href = "<?= site_url('Kinerja-Output-Bulanan/') ?>" + $('#listmonth').val() + "/" + $('#keyword').val();

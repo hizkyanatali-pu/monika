@@ -15,6 +15,7 @@ class KinerjaOutputBulanan extends \App\Controllers\BaseController
         $this->user = $session->get('userData');
         $dbcustom = switch_db($this->user['dbuse']);
         $this->db = \Config\Database::connect($dbcustom);
+        $this->db_mysql = \Config\Database::connect();
     }
 
     public function index($bulan = '', $keyword = '')
@@ -29,52 +30,91 @@ class KinerjaOutputBulanan extends \App\Controllers\BaseController
 
         if ($keyword) {
 
-            $keyword = "AND d_soutput.ursoutput LIKE '%$keyword'";
+            $keyword = "WHERE tsoutput.nmro LIKE '%$keyword'";
         }
 
-
-        $filterkdgiat = "'2408', '5036', '5037', '5039', '5040'";
-        $filterkdoutput = "'CBG','CBS','RBG','RBS'";
-        $qpaket = $this->db->query("SELECT
-        pkt.kdprogram,pkt.kdgiat,pkt.kdoutput,pkt.kdsoutput,pkt.kdkmpnen,tp.nmprogram,tgiat.nmgiat,toutput.nmoutput,toutput.sat,
-        pkt.pg,CAST(REPLACE(pkt.vol,',','.') AS DECIMAL) vol,pkt.kdprogram || '.' || pkt.kdgiat || '.' || pkt.kdoutput || '.' || pkt.kdsoutput || pkt.kdkmpnen AS kode
-        ,CASE
-        WHEN pkt.rtot is null THEN 0
-        WHEN pkt.rtot = '' THEN 0
-        ELSE pkt.rtot
-        END as rtot
-        ,CASE
-        WHEN pkt.rr_b$bulan is null THEN 0
-        WHEN pkt.rr_b$bulan = '' THEN 0
-        ELSE pkt.rr_b$bulan
-        END as rr_b
-        ,CASE
-        WHEN pkt.renk_b$bulan is null THEN 0
-        WHEN pkt.renk_b$bulan = '' THEN 0
-        ELSE pkt.renk_b$bulan
-        END as renk_b
-        ,CASE
-        WHEN pkt.renf_b$bulan is null THEN 0
-        WHEN pkt.renf_b$bulan = '' THEN 0
-        ELSE pkt.renf_b$bulan
-        END as renf_b
-        ,CASE
-        WHEN pkt.ff_b$bulan is null THEN 0
-        WHEN pkt.ff_b$bulan = '' THEN 0
-        ELSE pkt.ff_b$bulan
-        END as ff_b
-        ,CASE
-        WHEN pkt.ufis is null THEN 0
-        WHEN pkt.ufis = '' THEN 0
-        ELSE pkt.ufis
-        END as ufis
-        ,d_soutput.ursoutput
-        FROM paket pkt 
-        LEFT JOIN tprogram tp ON tp.kdprogram = pkt.kdprogram  
-        LEFT JOIN tgiat ON tgiat.kdgiat = pkt.kdgiat  
-        LEFT JOIN toutput ON pkt.kdgiat = toutput.kdgiat AND pkt.kdoutput = toutput.kdoutput 
-        LEFT JOIN d_soutput ON pkt.kdprogram = d_soutput.kdprogram AND pkt.kdgiat = d_soutput.kdgiat AND pkt.kdoutput = d_soutput.kdoutput AND pkt.kdsoutput = d_soutput.kdsoutput  
-        WHERE pkt.kdprogram = 'FC' AND pkt.kdgiat IN ($filterkdgiat) AND pkt.kdoutput IN ($filterkdoutput) AND pkt.kdkmpnen = '074' $keyword ORDER BY pkt.kdgiat,pkt.kdoutput,pkt.kdsoutput")->getResultArray();
+        $qpaket = $this->db_mysql->query("SELECT
+        pkt.kdprogram,
+        pkt.kdgiat,
+        pkt.kdoutput,
+        pkt.kdsoutput,
+        pkt.kdkmpnen,
+        pkt.sat,
+        tp.nmprogram,
+        tgiat.nmgiat,
+        toutput.nmoutput,
+        toutput.sat AS toutputsat,
+        pkt.pagu_total,
+        CAST(
+            REPLACE (pkt.vol, ',', '.') AS DECIMAL
+        ) vol,
+        pkt.kdprogram || '.' || pkt.kdgiat || '.' || pkt.kdoutput || '.' || pkt.kdsoutput || pkt.kdkmpnen AS kode,
+    -- CASE
+    -- WHEN pkt.real_total IS NULL THEN
+    --     0
+    -- WHEN pkt.real_total = '' THEN
+    --     0
+    -- ELSE
+    -- pkt.progres_keu_des/100 * pkt.real_total
+    -- END AS rtot,
+    -- CASE
+    -- WHEN pkt.progres_keu_des IS NULL THEN
+    --     0
+    -- WHEN pkt.progres_keu_des = '' THEN
+    --     0
+    -- ELSE
+    --     pkt.progres_keu_des
+    -- END AS rr_b,
+    -- CASE
+    -- WHEN pkt.progres_fisik_des IS NULL THEN
+    --     0
+    -- WHEN pkt.progres_fisik_des = '' THEN
+    --     0
+    -- ELSE
+    --     pkt.progres_keu_des
+    -- END AS ff_b,
+    --  CASE
+    -- WHEN pkt.ren_keu_des IS NULL THEN
+    --     0
+    -- WHEN pkt.ren_keu_des = '' THEN
+    --     0
+    -- ELSE
+    --     pkt.ren_keu_des
+    -- END AS renk_b,
+    --  CASE
+    -- WHEN pkt.ren_fis_des IS NULL THEN
+    --     0
+    -- WHEN pkt.ren_fis_des = '' THEN
+    --     0
+    -- ELSE
+    --     pkt.ren_fis_des
+    -- END AS renf_b,
+    
+    --  CASE
+    -- WHEN pkt.ufis IS NULL THEN
+    --     0
+    -- WHEN pkt.ufis = '' THEN
+    --     0
+    -- ELSE
+    --     pkt.ufis
+    -- END AS ufis,
+     tsoutput.nmro
+    FROM
+        monika_data pkt
+    LEFT JOIN tprogram tp ON tp.kdprogram = pkt.kdprogram
+    LEFT JOIN tgiat ON tgiat.kdgiat = pkt.kdgiat
+    LEFT JOIN toutput ON pkt.kdgiat = toutput.kdgiat
+    AND pkt.kdoutput = toutput.kdoutput
+    LEFT JOIN tsoutput ON
+    pkt.kdgiat = tsoutput.kdgiat
+    AND pkt.kdoutput = tsoutput.kdkro
+    AND pkt.kdsoutput = tsoutput.kdro
+    $keyword
+    ORDER BY
+    pkt.kdprogram,
+        pkt.kdgiat,
+        pkt.kdoutput,
+        pkt.kdsoutput")->getResultArray();
 
         $data = array(
             'title' => 'Kinerja Output Bulanan',
