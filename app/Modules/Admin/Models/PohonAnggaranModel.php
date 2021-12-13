@@ -325,7 +325,12 @@ class PohonAnggaranModel extends Model
     AND monika_data.kdsoutput = monika_kontrak.kdsoutput
     AND monika_data.kdkmpnen = monika_kontrak.kdkmpnen
     AND monika_data.kdskmpnen = monika_kontrak.kdskmpnen
-    LEFT JOIN monika_paket_register ON monika_paket_register.kode = monika_data.kdpaket
+    LEFT JOIN 
+    (
+
+        SELECT * FROM monika_paket_register GROUP BY kode
+        
+        ) monika_paket_register ON monika_paket_register.kode = monika_data.kdpaket
     LEFT JOIN t_register ON monika_paket_register.kdregister = t_register.register
     WHERE
         monika_kontrak.status_tender = 'Belum Lelang'
