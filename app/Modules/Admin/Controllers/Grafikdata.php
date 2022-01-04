@@ -16,35 +16,35 @@ class Grafikdata extends \App\Controllers\BaseController
         // $this->akses                = new AksesModel();
     }
 
-    public function index($slug="keuangan")
+    public function index($slug = "keuangan")
     {
         $data = array(
-            'title' => 'Grafik Progres ' . ($slug==="keuangan"?'Keuangan':'Fisik'),
+            'title' => 'Grafik Progres ' . ($slug === "keuangan" ? 'Keuangan' : 'Fisik'),
             'current' => $slug,
-            'qdata'=>$this->getdata($slug)
+            'qdata' => $this->getdata($slug)
         );
         return view('Modules\Admin\Views\Grafik\Grafikdata', $data);
     }
 
-    function getdata($slug='')
+    function getdata($slug = '')
     {
-        $q = $this->PulldataModel->getgrafik($slug);
+        $q = $this->PulldataModel->getgrafik($slug, "md.tahun=" . session('userData.tahun'));
         $Jbln = $this->PulldataModel->bln();
-        $data['bln'][]=[0, ''];
-        $data['rencana'][]=[0, 0];
-        $data['realisasi'][]=[0, 0];
-        foreach ($q as $k =>$d){
-            for($i=1 ; $i<=count($Jbln) ; $i++){
-                $data['bln'][]=[$i, $Jbln[$i-1]];
-                $data['rencana'][]=[$i, number_format($d["rencana_$i"],2,'.','.')];
+        $data['bln'][] = [0, ''];
+        $data['rencana'][] = [0, 0];
+        $data['realisasi'][] = [0, 0];
+        foreach ($q as $k => $d) {
+            for ($i = 1; $i <= count($Jbln); $i++) {
+                $data['bln'][] = [$i, $Jbln[$i - 1]];
+                $data['rencana'][] = [$i, number_format($d["rencana_$i"], 2, '.', '.')];
 
                 //Pengecekan data untuk data realisasi
-                if($i<= date("m")){
+                if ($i <= date("m")) {
 
-                    if($i != date("m")){
+                    if ($i != date("m")) {
 
-                        $data['realisasi'][]=[$i, number_format($d["realisasi_$i"],2,'.','.')];
-                    }else{
+                        $data['realisasi'][] = [$i, number_format($d["realisasi_$i"], 2, '.', '.')];
+                    } else {
 
                         //Menghitung jumlah hari dalam 1 bulan
                         $date = date("Y-$i-d");
@@ -52,24 +52,26 @@ class Grafikdata extends \App\Controllers\BaseController
                         $day = $a - date("d");
 
                         //Membuat point baru ketika belum akhir bulan
-                        if($day != 0){
+                        if ($day != 0) {
 
-                            $prev_month = $i - 1;
+                            // $prev_month = $i - 1;
+                            $prev_month =  ($i == 1 ? 1 : $i - 1);
+
                             //balik awal
                             //data realisasi 
                             // $data_realisasi = $d["realisasi_$prev_month"] + (date("d")/ $a * ($d["realisasi_$i"] - $d["realisasi_$prev_month"]));
                             //penyesuaian nilai realisasi
-                            $data_realisasi = $d["realisasi"];
+                            $data_realisasi = $d["realisasi_$i"];
 
-                            $data['realisasi'][]=[($i-1)+0.5, number_format($data_realisasi,2,'.','.')];
+                            $data['realisasi'][] = [($i - 1) + 0.5, number_format($data_realisasi, 2, '.', '.')];
 
                             //data rencana
-                            $data_rencana = $d["rencana_$prev_month"] + (date("d")/ $a * ($d["rencana_$i"] - $d["rencana_$prev_month"]));
-                        
-                            array_splice($data['rencana'], $i, 0, [[($i-1)+0.5, number_format($data_rencana,2,'.','.')]]);
-                        }else{
-                            
-                            $data['realisasi'][]=[$i, number_format($d["realisasi_$i"],2,'.','.')];
+                            $data_rencana = $d["rencana_$prev_month"] + (date("d") / $a * ($d["rencana_$i"] - $d["rencana_$prev_month"]));
+
+                            array_splice($data['rencana'], $i, 0, [[($i - 1) + 0.5, number_format($data_rencana, 2, '.', '.')]]);
+                        } else {
+
+                            $data['realisasi'][] = [$i, number_format($d["realisasi_$i"], 2, '.', '.')];
                         }
                     }
                 }
@@ -111,7 +113,8 @@ class Grafikdata extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\Grafik\Progress-per-kegitan', $data);
     }
 
-    public function progres_pupr(){
+    public function progres_pupr()
+    {
 
         $rekapUnor =  $this->RekapUnorModel->getRekapUnor();
         $data = array(

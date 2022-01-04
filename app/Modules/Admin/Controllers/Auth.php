@@ -91,7 +91,8 @@ class Auth extends \App\Controllers\BaseController
 			'unitbalai'		=> $this->akses->getunitbalai($user['uid']),
 			'unitsatker'	=> $this->akses->getunitsatker($user['uid']),
 			'unitgiat'		=> $this->akses->getunitgiat($user['uid']),
-			'dbuse'			=> $cekdb
+			'dbuse'			=> $cekdb,
+			'tahun'			=> $this->request->getPost('tahun')
 		]);
 		$log = new LogloginModel();
 		$log->save(array(

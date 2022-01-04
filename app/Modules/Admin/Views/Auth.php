@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 
 <div class="">
-	
+
 	<div class="bg-login">
 		<img src="<?= base_url('images/background-login.png'); ?>" alt="">
 	</div>
@@ -49,16 +49,29 @@
 								</div>
 								<div id="idpengguna-error" class="error invalid-feedback"><?= session('errors.sandi') ?></div>
 							</div>
-				
+							<div class="form-group">
+								<div class="input-group">
+									<div class="input-group-text bg-green mr-3">
+										<i class="text-white fas fa-calendar"></i>
+									</div>
+									<select class="form-control" name="tahun">
+										<?php for ($date = 2021; $date <= date("Y"); $date++) {
+										?>
+											<option value="<?= $date ?>"><?= $date ?></option>
+										<?php } ?>
+									</select>
+								</div>
+								<div id="idpengguna-error" class="error invalid-feedback"><?= session('errors.sandi') ?></div>
+							</div>
 							<?= csrf_field() ?>
-				
+
 							<div class="text-center">
 								<button id="kt_login_signin_submit" class="btn btn-green btn-login"> Masuk </button>
 							</div>
 						</form>
 					</div>
 				</div>
-		
+
 			</div>
 		</div>
 	</div>

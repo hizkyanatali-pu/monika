@@ -63,7 +63,7 @@ class PulldataModel extends Model
             //order by deviasi
             $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  DESC";
         } elseif ($datatag == "satker100m") {
-            $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, ";
+            $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label,md.tahun, ";
             $w = " WHERE  md.jml_progres_keuangan < " . $pagusda['jml_progres_keuangan'] . " AND md.jml_progres_fisik < " . $pagusda['jml_progres_fisik'] . ($w ? ' AND ' : '') . $w;
         } elseif ($datatag == "balai") {
             $f .= ($f ? ',' : '') . "b.balaiid as id, b.balai as label, ";
@@ -83,7 +83,7 @@ class PulldataModel extends Model
         if ($ulang == true) $w = '';
 
         // get nilai bulan ini
-        $prev_month = date('n') - 2;
+        $prev_month = date('n') - 1;
         $get_month_str = $this->bln(0)[$prev_month];
 
         // REPLACE(FORMAT(sum(md.pagu_rpm),0),',','.')
