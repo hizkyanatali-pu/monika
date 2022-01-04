@@ -140,7 +140,7 @@ class Dashboard extends \App\Controllers\BaseController
     {
 
         // grafik progres keu
-        $q = $this->PulldataModel->getgrafik($p);
+        $q = $this->PulldataModel->getgrafik($p, "md.tahun=" . session('userData.tahun'));
         $Jbln = $this->PulldataModel->bln();
         $Arry['bln'][] = [0, ''];
         $Arry['rencana'][] = [0, 0];
