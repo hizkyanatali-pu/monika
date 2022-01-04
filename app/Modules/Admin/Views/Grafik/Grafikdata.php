@@ -240,13 +240,14 @@
     //bagian untuk badge deviasi
     let deviasi = yfrom - yto;
 
-    $('#line-chart').append("<div class='badge badge-secondary text-center shadow' style='position:absolute; left:" + (o.left + 4) + "px; top:" + o.top + "px;'><h3 class='mb-0'><b>Deviasi</b> " + (deviasi).toFixed(2) + "%</h3></div>");
+    $('#line-chart').append("<div class='badge badge-secondary text-center shadow' style='position:absolute; left:" + (o.left + 4) + "px; top:" + 10 + "%;'><h3 class='mb-0'><b>Deviasi</b> " + (deviasi).toFixed(2) + "%</h3></div>");
 
-    $('#line-chart').append("<div class='badge badge-success ml-3' style='position:absolute;left:" + (orencana.left) + "px;top:" + (orencana.top) + "px;'><h3 class='mb-0'>" + yto2 + "%</h3></div>");
-    $('#line-chart').append("<div class='badge badge-danger ml-3 mt-4' style='position:absolute;left:" + (orealisasi.left) + "px;top:" + (orealisasi.top) + "px;'><h3 class='mb-0'>" + yfrom + "%</h3></div>");
+    // $('#line-chart').append("<div class='badge badge-success ml-3' style='position:absolute;left:" + (orencana.left) + "px;top:" + (orencana.top) + "px;'><h3 class='mb-0'>" + yto2 + "%</h3></div>");
+    // $('#line-chart').append("<div class='badge badge-danger ml-3 mt-4' style='position:absolute;left:" + (orealisasi.left) + "px;top:" + (orealisasi.top) + "px;'><h3 class='mb-0'>" + yfrom + "%</h3></div>");
 
 
-
+    $('div#line-chart').append("<div class='badge badge-success ml-3' style='position:absolute;left:85%;top:55%;'><h5 class='mb-0'>" + yto2 + "%</h5></div>");
+    $('div#line-chart').append("<div class='badge badge-danger ml-3 mt-4' style='position:absolute;left:85%;top:65%;'><h5 class='mb-0'>" + yfrom + "%</h5></div>");
     $('#line-chart').bind('plothover', function(event, pos, item) {
 
         var bulan = <?php echo json_encode($qdata['bln']); ?>;
