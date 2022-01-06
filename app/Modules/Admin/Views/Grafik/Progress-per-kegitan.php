@@ -91,16 +91,16 @@
 		<?php
 		$index = 1325376000000;
 		foreach ($pagu as $key => $value) :
-			if ($value->kdgiat == 2408 or $value->kdgiat ==  5036 or $value->kdgiat ==  5037 or $value->kdgiat == 5039 or $value->kdgiat == 5040 or $value->kdgiat == 5300 or $value->kdgiat == "-") {
+			// if ($value->kdgiat == 2408 or $value->kdgiat ==  5036 or $value->kdgiat ==  5037 or $value->kdgiat == 5039 or $value->kdgiat == 5040 or $value->kdgiat == 5300 or $value->kdgiat == "-") {
 
 
 		?>[
-					<?php echo $index ?>,
-					<?php echo onlyTwoDecimal($value->keu) ?>
-				],
+				<?php echo $index ?>,
+				<?php echo onlyTwoDecimal($value->keu) ?>
+			],
 		<?php
-				$index += 2678400000;
-			}
+			$index += 2678400000;
+		// }
 		endforeach
 		?>
 	];
@@ -109,14 +109,14 @@
 		<?php
 		$index = 1325376000000;
 		foreach ($pagu as $key => $value) :
-			if ($value->kdgiat == 2408 or $value->kdgiat ==  5036 or $value->kdgiat ==  5037 or $value->kdgiat == 5039 or $value->kdgiat == 5040 or $value->kdgiat == 5300 or $value->kdgiat == "-") {
+			// if ($value->kdgiat == 2408 or $value->kdgiat ==  5036 or $value->kdgiat ==  5037 or $value->kdgiat == 5039 or $value->kdgiat == 5040 or $value->kdgiat == 5300 or $value->kdgiat == "-") {
 		?>[
-					<?php echo $index ?>,
-					<?php echo onlyTwoDecimal($value->fis) ?>
-				],
+				<?php echo $index ?>,
+				<?php echo onlyTwoDecimal($value->fis) ?>
+			],
 		<?php
-				$index += 2678400000;
-			}
+			$index += 2678400000;
+		// }
 		endforeach
 		?>
 	];
@@ -174,19 +174,19 @@
 				<?php
 				$index = 1325376000000;
 				foreach ($pagu as $key => $value) :
-					if ($value->kdgiat == 2408 or $value->kdgiat ==  5036 or $value->kdgiat ==  5037 or $value->kdgiat == 5039 or $value->kdgiat == 5040 or $value->kdgiat == 5300 or $value->kdgiat == "-") {
+					// if ($value->kdgiat == 2408 or $value->kdgiat ==  5036 or $value->kdgiat ==  5037 or $value->kdgiat == 5039 or $value->kdgiat == 5040 or $value->kdgiat == 5300 or $value->kdgiat == "-") {
 
 				?>[
-							<?php echo $index ?>,
-							`
+						<?php echo $index ?>,
+						`
 	    					<div style="width: 150px;">
-	    						<?php echo $value->nmgiat ?>
+	    						<?php echo $value->kdgiat ?>
 	    					</div>
 	    				`
-						],
+					],
 				<?php
-						$index += 2678400000;
-					}
+					$index += 2678400000;
+				// }
 				endforeach
 				?>
 			]
