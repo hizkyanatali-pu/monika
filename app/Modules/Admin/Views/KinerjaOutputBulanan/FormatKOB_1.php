@@ -110,7 +110,8 @@ $this->extend('admin/layouts/default') ?>
                                 $uri = current_url(true);
                                 $bulanberjalan = decrypt_url($uri->getSegment(2)); // 3
                                 $bulansekarang = date('n');
-                                for ($index = 0; $index < $bulansekarang; $index++) { ?>
+                                for ($index = 0; $index < 12; $index++) {
+                                ?>
                                     <option value="<?= encrypt_url($noBulan) ?>" <?= ($bulanberjalan ==  $noBulan ? 'selected="selected"' : '') ?>> <?= $namaBulan[$index] ?> </option>;
                                 <?php
                                     $noBulan++;

@@ -20,6 +20,7 @@ class KinerjaOutputBulanan extends \App\Controllers\BaseController
 
     public function index($bulan = '', $keyword = '')
     {
+        $tahun = $this->user['tahun'];
         $bulan = decrypt_url($bulan);
         if ($bulan == '') {
             $bulan = date('n');
@@ -30,8 +31,13 @@ class KinerjaOutputBulanan extends \App\Controllers\BaseController
 
         if ($keyword) {
 
-            $keyword = "WHERE tsoutput.nmro LIKE '%$keyword'";
+            $keyword = "WHERE tsoutput.nmro LIKE '%$keyword' AND  pkt.tahun ='$tahun'";
+        } else {
+
+            $keyword = "WHERE pkt.tahun ='$tahun'";
         }
+
+
 
         $qpaket = $this->db_mysql->query("SELECT
         pkt.kdprogram,
