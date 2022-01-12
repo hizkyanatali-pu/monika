@@ -118,7 +118,7 @@
             <div class="kt-section mb-0">
                 <div class="kt-section__content">
                     <div class="float-left">
-                        <i><b>Status : <?= $rekapunor[0]['status'] ?></b></i>
+                        <i><b>Status : <?= $rekapunor['total']['status'] ?></b></i>
                     </div>
 
                     <div class="float-right">
@@ -153,7 +153,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($rekapunor as $key => $val) { ?>
+                                <?php foreach ($rekapunor['unor'] as $key => $val) { ?>
 
                                     <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram font-weight-bold'" : "") ?>>
                                         <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" scope="row"><?= ++$key ?></th>
@@ -176,7 +176,21 @@
 
                                 <?php   } ?>
 
+                                <tr class="text-center text-white" style="background-color: #1562aa;">
+                                    <td colspan="2">TOTAL</td>
+                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['pagu_rpm'], 2, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['pagu_sbsn'], 2, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['pagu_phln'], 2, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['pagu_total'], 2, ',', '.'); ?></td>
 
+                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']["real_rpm"], 2, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']["real_sbsn"], 2, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']["real_phln"], 2, ',', '.'); ?></td>
+                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']["real_total"], 2, ',', '.'); ?></td>
+
+                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_keu'], 2, ',', '.'); ?> %</td>
+                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_fisik'], 2, ',', '.'); ?> %</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -281,7 +295,7 @@
                     <i class="la la-gear"></i>
                 </span>
                 <h3 class="kt-portlet__head-title">
-                    PROGRESS KEGIATAN TEMATIK DIREKTORAT JENDERAL SUMBER DAYA AIR T.A.2021
+                    PROGRESS KEGIATAN TEMATIK DIREKTORAT JENDERAL SUMBER DAYA AIR T.A.<?= session('userData.tahun') ?>
                 </h3>
             </div>
         </div>
@@ -433,7 +447,7 @@
                     <i class="la la-gear"></i>
                 </span>
                 <h3 class="kt-portlet__head-title">
-                    POSTUR PAKET KONTRAKTUAL T.A. 2021
+                    POSTUR PAKET KONTRAKTUAL T.A. <?= session('userData.tahun') ?>
                 </h3>
             </div>
         </div>
@@ -572,7 +586,7 @@
                     <i class="la la-gear"></i>
                 </span>
                 <h3 class="kt-portlet__head-title">
-                    POSTUR PAKET BELUM LELANG TA 2021
+                    POSTUR PAKET BELUM LELANG TA <?= session('userData.tahun') ?>
                 </h3>
             </div>
         </div>
@@ -1293,7 +1307,7 @@
                             PROGRES KEUANGAN & FISIK - <?= strtoupper($key1) ?>
                         <?php } else { ?>
 
-                            <center>PROGRES 10 SATUAN KERJA TERENDAH TA 2021 <br>
+                            <center>PROGRES 10 SATUAN KERJA TERENDAH TA <?= session('userData.tahun') ?> <br>
                                 <small>Direktorat Jenderal Sumber Daya Air</small>
                             </center>
 

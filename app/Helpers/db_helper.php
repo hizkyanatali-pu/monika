@@ -390,8 +390,10 @@ function getoutputname($db, $kdprogram, $kdgiat, $kdoutput, $kdsoutput)
 }
 
 
-function sum_data($bulan = '', $kdprogram = false, $kdgiat = false, $kdoutput = false, $kdsoutput = false)
+function sum_data($tahun = '2021', $bulan = '', $kdprogram = false, $kdgiat = false, $kdoutput = false, $kdsoutput = false)
 {
+
+    // dd($tahun);
 
     $bulan = strtolower(medium_bulan($bulan));
     if ($bulan == '') {
@@ -420,7 +422,7 @@ function sum_data($bulan = '', $kdprogram = false, $kdgiat = false, $kdoutput = 
     (SUM(ren_fis_$bulan) / COUNT(ren_fis_$bulan)) as renf_b ,
     (SUM(progres_keu_$bulan) / COUNT(progres_keu_$bulan)) as rl_keu,
     (SUM(progres_fisik_$bulan) / COUNT(progres_fisik_$bulan)) as rl_fis
-    FROM monika_data WHERE 
+    FROM monika_data_$tahun WHERE 
           $w
          ")->getRow();
     return $builder;

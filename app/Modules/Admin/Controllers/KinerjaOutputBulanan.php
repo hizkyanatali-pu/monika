@@ -106,7 +106,7 @@ class KinerjaOutputBulanan extends \App\Controllers\BaseController
     -- END AS ufis,
      tsoutput.nmro
     FROM
-        monika_data pkt
+        monika_data_{$tahun} pkt
     LEFT JOIN tprogram tp ON tp.kdprogram = pkt.kdprogram
     LEFT JOIN tgiat ON tgiat.kdgiat = pkt.kdgiat
     LEFT JOIN toutput ON pkt.kdgiat = toutput.kdgiat

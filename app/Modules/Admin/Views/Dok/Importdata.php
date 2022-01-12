@@ -28,9 +28,10 @@
                 </a>
             </li>
         </ul>
+
         <div class="kt-portlet__head row pt-3">
-            <div class="col-md-3">
-                <a href="<?= site_url('importdata/pullimport/' . $current) ?>" class="btn btn-brand btn-elevate btn-sm">
+            <div class="col-md-3 mt-2 mb-2">
+                <a href="<?= site_url('importdata/pullimport/' . $current . "?thang=" . session("userData.tahun")) ?>" class="btn btn-brand btn-elevate btn-sm">
                     <i class="la la-plus"></i>
                     Pull data
                 </a>
