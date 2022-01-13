@@ -257,7 +257,7 @@ $this->extend('admin/layouts/default') ?>
                                             <td class="tdoutput" style="text-align: right"><?php echo '<b>'  . number_format($sum_output->rl_keu, 2, ',', '.') . '</b>' ?></td>
                                             <td class="tdoutput" style="text-align: right"><?php echo '<b>' .   number_format($sum_output->renf_b, 2, ',', '.')  . '</b>' ?></td>
                                             <td class="tdoutput" style="text-align: right"><?php echo '<b>' . number_format($sum_output->rl_fis, 2, ',', '.') . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right "><?php echo '<b>' . ($sum_output->rl_fis == 0 ? "-" : number_format($sum_output->rl_fis / sum_data(session('userData.tahun'), $bulanberjalan, $d['kdprogram'], $d['kdgiat'], $d['kdoutput'])->renf_b * 100, 2, ',', '.')) . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right "><?php echo '<b>' . ($sum_output->renf_b == 0 ? "-" : number_format($sum_output->rl_fis / $sum_output->renf_b * 100, 2, ',', '.')) . '</b>' ?></td>
                                         </tr>
                                         <?php $ido = array_merge([$idk], $ido); ?>
                                     <?php endif; ?>

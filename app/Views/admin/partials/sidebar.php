@@ -65,6 +65,8 @@ $request = \Config\Services::request();
                                                     ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'semuasatker'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/semuasatker/all'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Semua Satker</span></a></li>
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satker_terendah'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satker_terendah'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Terendah</span></a></li>
+                        <li class="kt-menu__item <?=
+                                                    ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satker_tertinggi'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satker_tertinggi'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Tertinggi</span></a></li>
                     </ul>
                 </div>
             </li>

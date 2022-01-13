@@ -33,6 +33,13 @@ class PulldataModel extends Model
         $w = $this->akses->unitgiat("md", $w, 'kdgiat');
         $pagusda = array();
         $f = '';
+
+        ## Ambil Data progres PUPR digunakan Penentuan dibawah rata2
+        $progresPUPR = $this->db->query("SELECT progres_keu,progres_fisik FROM monika_rekap_unor_{$this->user['tahun']}  WHERE kdunit = '033'")->getRow();
+        // dd($progresPUPR);
+
+        ##
+
         if ($datatag != '' and $ulang == false) {
             $pagusda = $this->getBalaiPaket('', $w, true)[0];
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_pagu_rpm'] . "' as pagusda_pagu_rpm ";
@@ -55,7 +62,14 @@ class PulldataModel extends Model
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_persen_deviasi'] . "' as pagusda_persen_deviasi ";
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_nilai_deviasi'] . "' as pagusda_nilai_deviasi ";
 
-            $f .= ($f ? ',' : '') . " IF(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)<" . $pagusda['jml_progres_keuangan'] . ", 0, IF(((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)<" . $pagusda['jml_progres_fisik'] . ", 0,1)) as stw";
+
+            ## penentuan dibawah rata rata SDA
+            // $f .= ($f ? ',' : '') . " IF(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)<" . $pagusda['jml_progres_keuangan'] . ", 0, IF(((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)<" . $pagusda['jml_progres_fisik'] . ", 0,1)) as stw";
+            ########
+
+            ## penentuan dibawah rata rata PUPR
+            $f .= ($f ? ',' : '') . " IF(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) <" . $progresPUPR->progres_keu . ", 0, IF(((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)<" . $progresPUPR->progres_fisik . ", 0,1)) as stw";
+            ######
         }
         if ($datatag == "satker") {
             $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, b.st, ";
@@ -74,6 +88,11 @@ class PulldataModel extends Model
             // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
             //order by deviasi
             $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw ASC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  ASC LIMIT 10";
+        } elseif ($datatag == "satker10tertinggi") {
+            $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, b.st, ";
+            // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
+            //order by deviasi
+            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  ASC LIMIT 10";
         } else {
             $f = "b.balaiid as id, b.balai as label, ";
             // $w = ($w ? ' WHERE ' : '') . $w . " ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
