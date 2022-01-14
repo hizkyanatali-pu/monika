@@ -33,6 +33,13 @@ class PulldataModel extends Model
         $w = $this->akses->unitgiat("md", $w, 'kdgiat');
         $pagusda = array();
         $f = '';
+
+        ## Ambil Data progres PUPR digunakan Penentuan dibawah rata2
+        $progresPUPR = $this->db->query("SELECT progres_keu,progres_fisik FROM monika_rekap_unor_{$this->user['tahun']}  WHERE kdunit = '033'")->getRow();
+        // dd($progresPUPR);
+
+        ##
+
         if ($datatag != '' and $ulang == false) {
             $pagusda = $this->getBalaiPaket('', $w, true)[0];
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_pagu_rpm'] . "' as pagusda_pagu_rpm ";
@@ -55,7 +62,14 @@ class PulldataModel extends Model
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_persen_deviasi'] . "' as pagusda_persen_deviasi ";
             $f .= ($f ? ',' : '') . " '" . $pagusda['jml_nilai_deviasi'] . "' as pagusda_nilai_deviasi ";
 
-            $f .= ($f ? ',' : '') . " IF(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)<" . $pagusda['jml_progres_keuangan'] . ", 0, IF(((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)<" . $pagusda['jml_progres_fisik'] . ", 0,1)) as stw";
+
+            ## penentuan dibawah rata rata SDA
+            // $f .= ($f ? ',' : '') . " IF(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)<" . $pagusda['jml_progres_keuangan'] . ", 0, IF(((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)<" . $pagusda['jml_progres_fisik'] . ", 0,1)) as stw";
+            ########
+
+            ## penentuan dibawah rata rata PUPR
+            $f .= ($f ? ',' : '') . " IF(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) <" . $progresPUPR->progres_keu . ", 0, IF(((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)<" . $progresPUPR->progres_fisik . ", 0,1)) as stw";
+            ######
         }
         if ($datatag == "satker") {
             $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, b.st, ";
@@ -74,6 +88,11 @@ class PulldataModel extends Model
             // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
             //order by deviasi
             $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw ASC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  ASC LIMIT 10";
+        } elseif ($datatag == "satker10tertinggi") {
+            $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, b.st, ";
+            // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
+            //order by deviasi
+            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  ASC LIMIT 10";
         } else {
             $f = "b.balaiid as id, b.balai as label, ";
             // $w = ($w ? ' WHERE ' : '') . $w . " ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
@@ -107,7 +126,7 @@ class PulldataModel extends Model
         ABS(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))  as jml_persen_deviasi,
         ((sum(md.pagu_total)/100)*ABS(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))) as jml_nilai_deviasi
 
-        FROM monika_data md
+        FROM monika_data_{$this->user['tahun']} md
         LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
         LEFT JOIN m_balai b ON b.balaiid=s.balaiid ";
 
@@ -128,7 +147,7 @@ class PulldataModel extends Model
 
     function getKegiatan()
     {
-        return $this->db->query("SELECT kdgiat as id FROM monika_data GROUP BY kdgiat")->getResultArray();
+        return $this->db->query("SELECT kdgiat as id FROM monika_data_{$this->user['tahun']} GROUP BY kdgiat")->getResultArray();
     }
 
     function getPaket($w = '')
@@ -154,7 +173,7 @@ class PulldataModel extends Model
         ABS(md.progres_keuangan - md.progres_fisik) as persen_deviasi,
         ((md.pagu_total/100) * ABS(md.progres_keuangan - md.progres_fisik)) as nilai_deviasi
 
-        FROM monika_data md
+        FROM monika_data_{$this->user['tahun']} md
 		LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
 		LEFT JOIN m_balai b ON b.balaiid=s.balaiid
         " . ($w ? " WHERE " : '') . $w . " ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
@@ -162,7 +181,7 @@ class PulldataModel extends Model
     }
     function getperSatker($id)
     {
-        return $this->db->query("SELECT * FROM monika_data WHERE kdsatker='$id'")->getResultArray();
+        return $this->db->query("SELECT * FROM monika_data_{$this->user['tahun']} WHERE kdsatker='$id'")->getResultArray();
     }
 
     function getgrafik($tag = '', $w = '')
@@ -209,7 +228,7 @@ class PulldataModel extends Model
         // progres awal
         //select data dari mysql
         return $this->db->query("SELECT count(*) as jml_paket, $Fprogres
-        FROM monika_data md
+        FROM monika_data_{$this->user['tahun']} md
         LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
         LEFT JOIN m_balai b ON b.balaiid=s.balaiid " . $w)->getResultArray();
 
@@ -235,36 +254,69 @@ class PulldataModel extends Model
 
 
 
-    function getGraphicDataProgressPerSumberDana()
+    function getGraphicDataProgressPerSumberDana($w = '', $tag = '')
     {
+
+        //mysql
         ################
         # Progress Keu #
-        $dataProgresKeu = $this->db_2->query("
+        // $dataProgresKeu = $this->db->query("
+        //     SELECT
+        //         (SUM(ufis) / SUM(real_total)) as global_prod_keu_n_fis,
+        //         (sum(real_rpm) / sum(pagu_total))* 100 as rpm,
+        //         (sum(real_sbsn) / sum(pagu_total))* 100 as sbsn,
+        //         (sum(real_phln) / sum(pagu_total))* 100 as phln
+
+        //     FROM
+        //         monika_data_{$this->user['tahun']}
+        // ")->getResult();
+        # end-of: Progress Keu #
+        ########################
+
+        ##############
+        # Total Pagu #
+        // $dataTotalPagu = $this->db->query("
+        //     SELECT
+        //         SUM(CASE WHEN pagu_rpm > 0 THEN pagu_rpm ELSE 0 END) as rpm,
+        //         SUM(CASE WHEN pagu_sbsn > 0 THEN pagu_sbsn ELSE 0 END) as sbsn,
+        //         SUM(CASE WHEN pagu_phln > 0 THEN pagu_phln ELSE 0 END) as phln
+        //     FROM
+        //     monika_data_{$this->user['tahun']}
+
+        // ")->getResult();
+        # end-of: Total Pagu #
+        ######################
+
+        ################
+        # Progress Keu #
+        $dataProgresKeu = $this->db->query("
             SELECT
-                (SUM(ufis) / SUM(rtot)) as global_prod_keu_n_fis,
-                (sum((rr_rupiahm + rr_rupiahp + rr_pnbp)) / sum(pg))* 100 as rpm,
-                (sum(rr_sbsn) / sum(pg))* 100 as sbsn,
-                (sum(rr_pln) / sum(pg))* 100 as phln
-                /*
-                ((sum((rr_rupiahm + rr_rupiahp + rr_pnbp) / pg)) / sum(pg) * 100) as rpm,
-                ((sum(rr_sbsn / pg) / sum(pg)) * 100) as sbsn,
-                ((sum(rr_pln / pg) / sum(pg)) * 100) as phln
-                */
+                progres_fisik,
+                (sum(real_rpm) / sum(pagu_rpm))*100 as rpm,
+                (sum(real_sbsn) / sum(pagu_sbsn))*100 as sbsn,
+                (sum(real_phln) / sum(pagu_phln))*100 as phln
+
             FROM
-                paket
+            monika_rekap_unor_{$this->user['tahun']}
+            WHERE 
+            kdunit = 06
         ")->getResult();
         # end-of: Progress Keu #
         ########################
 
         ##############
         # Total Pagu #
-        $dataTotalPagu = $this->db_2->query("
-            SELECT
-                (SUM(CASE WHEN sumber_dana=='A' THEN amount ELSE 0 END)+ SUM(CASE WHEN sumber_dana=='C' THEN amount ELSE 0 END) + SUM(CASE WHEN sumber_dana=='D' THEN amount ELSE 0 END)) as rpm,
-                SUM(CASE WHEN sumber_dana=='T' THEN amount ELSE 0 END) as sbsn,
-                SUM(CASE WHEN sumber_dana=='B' THEN amount ELSE 0 END) as phln
-            FROM
-                d_dipa_span
+        $dataTotalPagu = $this->db->query("
+        SELECT
+        pagu_rpm as rpm,
+        pagu_sbsn as sbsn,
+        pagu_phln as phln
+
+        FROM
+        monika_rekap_unor_{$this->user['tahun']}
+        WHERE 
+        kdunit = 06
+
         ")->getResult();
         # end-of: Total Pagu #
         ######################
@@ -273,19 +325,19 @@ class PulldataModel extends Model
             (object)[
                 'title' => 'RPM',
                 'progresKeu' => round($dataProgresKeu[0]->rpm, 2),
-                'progresFis' => round($dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->rpm, 2),
+                'progresFis' => round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->rpm, 2),
                 'totalPagu' =>  $dataTotalPagu[0]->rpm
             ],
             (object)[
                 'title' => 'SBSN',
                 'progresKeu' =>  round($dataProgresKeu[0]->sbsn, 2),
-                'progresFis' =>  round($dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->sbsn, 2),
+                'progresFis' =>  round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->sbsn, 2),
                 'totalPagu' =>  $dataTotalPagu[0]->sbsn, 2
             ],
             (object)[
                 'title' => 'PHLN',
                 'progresKeu' =>  round($dataProgresKeu[0]->phln, 2),
-                'progresFis' =>  round($dataProgresKeu[0]->global_prod_keu_n_fis * $dataProgresKeu[0]->phln, 2),
+                'progresFis' =>  round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->phln, 2),
                 'totalPagu' =>  $dataTotalPagu[0]->phln
             ]
         ];
@@ -297,19 +349,20 @@ class PulldataModel extends Model
     {
         ################
         # query #
-        $data = $this->db_2->query("
+        $data = $this->db->query("
             SELECT
-                (sum(rr51) / sum(pg51))* 100 as keuPeg,
-                (sum(rr52) / sum(pg52))* 100 as keuBrg,
-                (sum(rr53) / sum(pg53))* 100 as keuMdl,
+                (sum(real_51) / sum(pagu_51))* 100 as keuPeg,
+                (sum(real_52) / sum(pagu_52))* 100 as keuBrg,
+                (sum(real_53) / sum(pagu_53))* 100 as keuMdl,
                 
-                sum(pg51) as paguPeg,
-                sum(pg52) as paguBrg,
-                sum(pg53) as paguMdl,
+                sum(pagu_51) as paguPeg,
+                sum(pagu_52) as paguBrg,
+                sum(pagu_53) as paguMdl,
                 
-                (SUM(ufis) / SUM(rtot)) as global_prod_keu_n_fis
+                CASE WHEN (SUM(ufis) / SUM(real_total)) > 0 THEN (SUM(ufis) / SUM(real_total)) ELSE 0 END as global_prod_keu_n_fis
             FROM
-                paket
+            monika_data_{$this->user['tahun']}
+
         ")->getResult();
         # end-of: query #
         ########################
@@ -317,19 +370,19 @@ class PulldataModel extends Model
         return (object) [
             (object)[
                 'title' => 'Pegawai',
-                'progresKeu' => $data[0]->keuPeg,
+                'progresKeu' => (int)$data[0]->keuPeg,
                 'progresFis' => $data[0]->global_prod_keu_n_fis * $data[0]->keuPeg,
                 'totalPagu' => $data[0]->paguPeg
             ],
             (object)[
                 'title' => 'Barang',
-                'progresKeu' => $data[0]->keuBrg,
+                'progresKeu' => (int)$data[0]->keuBrg,
                 'progresFis' => $data[0]->global_prod_keu_n_fis * $data[0]->keuBrg,
                 'totalPagu' => $data[0]->paguBrg
             ],
             (object)[
                 'title' => 'Modal',
-                'progresKeu' => $data[0]->keuMdl,
+                'progresKeu' => (int)$data[0]->keuMdl,
                 'progresFis' => $data[0]->global_prod_keu_n_fis * $data[0]->keuMdl,
                 'totalPagu' => $data[0]->paguMdl
             ]
@@ -447,15 +500,15 @@ class PulldataModel extends Model
         ########################
 
 
-        $data = $this->db_2->query("
+        $data = $this->db->query("
         SELECT
 	tgiat.kdgiat,
 	tgiat.nmgiat,
-	(sum(rtot) / sum(pg)) * 100 AS keu,
-	(sum(ufis) / sum(pg)) * 100 AS fis
+	(sum(real_total) / sum(pagu_total)) * 100 AS keu,
+	(sum(ufis) / sum(pagu_total)) * 100 AS fis
 FROM
 	tgiat
-LEFT JOIN paket ON tgiat.kdgiat = paket.kdgiat
+LEFT JOIN monika_data_{$this->user['tahun']} md ON tgiat.kdgiat = md.kdgiat
 WHERE
 tgiat.kdunit ='06'
 GROUP BY

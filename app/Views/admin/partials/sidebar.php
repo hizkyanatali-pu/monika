@@ -65,6 +65,8 @@ $request = \Config\Services::request();
                                                     ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'semuasatker'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/semuasatker/all'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Semua Satker</span></a></li>
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satker_terendah'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satker_terendah'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Terendah</span></a></li>
+                        <li class="kt-menu__item <?=
+                                                    ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satker_tertinggi'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satker_tertinggi'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Tertinggi</span></a></li>
                     </ul>
                 </div>
             </li>
@@ -78,9 +80,9 @@ $request = \Config\Services::request();
                         <li class="kt-menu__item  <?=
                                                     ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'pohon-anggaran-dipa'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/pohon-anggaran-dipa'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pohon Anggaran DIPA</span></a></li>
 
-                        <li class="kt-menu__item <?=
-                                                    ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'pagu-per-program'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/pagu-per-program'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pagu Per Program</span></a></li>
-                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('maintenance'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Alokasi Anggaran</span></a></li>
+                        <!-- <li class="kt-menu__item <?=
+                                                        ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'pagu-per-program'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/pagu-per-program'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pagu Per Program</span></a></li>
+                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('maintenance'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Alokasi Anggaran</span></a></li> -->
 
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'paket-kontraktual'  ? ' kt-menu__item--active' : '') ?> " aria-haspopup="true"><a href="<?= site_url('posturanggaran/paket-kontraktual'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kontraktual</span></a></li>

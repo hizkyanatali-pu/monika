@@ -83,13 +83,13 @@
                 <?php
                 $index = 1325376000000;
                 foreach ($pagu as $key => $value) :
-
+                    $nilai_total_pagu = strlen($value->totalPagu);
                 ?>[
                         <?php echo $index ?>,
                         `
 		    				<?php echo $value->title ?> 
 		    				<div class="title-chart-important">
-		    					<a href=""><?php echo toTriliun($value->totalPagu) ?>
+		    					<a href=""><?= ($nilai_total_pagu >= 17 ? toTriliun($value->totalPagu) : ($nilai_total_pagu >= 14 && $nilai_total_pagu < 17 ? toMilyar($value->totalPagu, false, 2) . " M" : toRupiah($value->totalPagu))) ?>
 		    					<span><?php echo toRupiah($value->totalPagu) ?></span>
 		    					</a>
 		    				</div>

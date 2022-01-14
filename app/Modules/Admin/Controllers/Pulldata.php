@@ -307,6 +307,23 @@ class Pulldata extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\Paket\Satker_terendah', $data);
     }
 
+    //satker tertinggi
+    public function satker_tertinggi()
+    {
+
+        $data = [
+            'title' => 'Satker Tertinggi',
+            'posisi' => ['<i class="fa fa-home"></i>'],
+            'idk' => 'all',
+            'label' => 'Satker Tertinggi',
+            'nextlink' => 'paket',
+            'qdata' => ['Satker Tertinggi' => $this->PulldataModel->getBalaiPaket("satker10tertinggi", "md.tahun = " . session('userData.tahun'))],
+            'rekap' => 'satkertertinggi',
+            'id_report' => 'cetak_satker_tertinggi'
+        ];
+        return view('Modules\Admin\Views\Paket\Satker_terendah', $data);
+    }
+
     //pindah ya!
     // function simpandata(){
     //     $this->akses->goakses('add', $this->InModul);

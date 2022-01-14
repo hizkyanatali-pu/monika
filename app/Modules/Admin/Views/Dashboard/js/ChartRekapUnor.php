@@ -1,6 +1,5 @@
 <script>
-    let data_pagu = <?= json_encode($rekapunor) ?>;
-
+    let data_pagu = <?= json_encode($rekapunor['unor']) ?>;
 
     var d1_1 = [];
     var d1_2 = [];
@@ -124,7 +123,7 @@
             ticks: [
                 <?php
                 $index = 1325376000000;
-                foreach ($rekapunor as $key => $value) :
+                foreach ($rekapunor['unor'] as $key => $value) :
 
                 ?>[
                         <?php echo $index ?>,
@@ -194,7 +193,7 @@
         });
 
         if (i < 10) {
-            $('<div class="data-point-label"><b>' + el.data[0][1] + "%"+ '</b></div>').css({
+            $('<div class="data-point-label"><b>' + el.data[0][1] + "%" + '</b></div>').css({
                 position: 'absolute',
                 left: o.left - 45,
                 top: o.top - 20,
@@ -204,7 +203,7 @@
 
         } else {
 
-            $('<div class="data-point-label"><b>' + el.data[0][1] +  "%"+ '</b></div>').css({
+            $('<div class="data-point-label"><b>' + el.data[0][1] + "%" + '</b></div>').css({
                 position: 'absolute',
                 left: o.left + 8,
                 top: o.top - 20,

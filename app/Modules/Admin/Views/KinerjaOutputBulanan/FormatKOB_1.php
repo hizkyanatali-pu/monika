@@ -199,7 +199,7 @@ $this->extend('admin/layouts/default') ?>
                                     <?php $idk = $d['kdprogram']; ?>
                                     <?php if (!in_array($idk, $idp)) :
 
-                                        $sum_prog = sum_data($bulanberjalan, $d['kdprogram']);
+                                        $sum_prog = sum_data(session('userData.tahun'), $bulanberjalan, $d['kdprogram']);
                                     ?>
                                         <tr>
                                             <td class="tdprogram"><?= $noprog++ ?></td>
@@ -221,7 +221,7 @@ $this->extend('admin/layouts/default') ?>
                                     <?php $idk = $idk . '.' . $d['kdgiat']; ?>
                                     <?php if (!in_array($idk, $idp)) :
 
-                                        $sum_giat = sum_data($bulanberjalan, $d['kdprogram'], $d['kdgiat']);
+                                        $sum_giat = sum_data(session('userData.tahun'), $bulanberjalan, $d['kdprogram'], $d['kdgiat']);
                                     ?>
                                         <tr>
                                             <td class="tdgiat"><b><?= $nogiat++ ?></b></td>
@@ -242,7 +242,7 @@ $this->extend('admin/layouts/default') ?>
 
                                     <?php $idk = $idk . '.' . $d['kdoutput']; ?>
                                     <?php if (!in_array($idk, $ido)) :
-                                        $sum_output = sum_data($bulanberjalan, $d['kdprogram'], $d['kdgiat'], $d['kdoutput']);
+                                        $sum_output = sum_data(session('userData.tahun'), $bulanberjalan, $d['kdprogram'], $d['kdgiat'], $d['kdoutput']);
 
                                     ?>
                                         <tr>
@@ -257,14 +257,14 @@ $this->extend('admin/layouts/default') ?>
                                             <td class="tdoutput" style="text-align: right"><?php echo '<b>'  . number_format($sum_output->rl_keu, 2, ',', '.') . '</b>' ?></td>
                                             <td class="tdoutput" style="text-align: right"><?php echo '<b>' .   number_format($sum_output->renf_b, 2, ',', '.')  . '</b>' ?></td>
                                             <td class="tdoutput" style="text-align: right"><?php echo '<b>' . number_format($sum_output->rl_fis, 2, ',', '.') . '</b>' ?></td>
-                                            <td class="tdoutput" style="text-align: right "><?php echo '<b>' . ($sum_output->rl_fis == 0 ? "-" : number_format($sum_output->rl_fis / sum_data($bulanberjalan, $d['kdprogram'], $d['kdgiat'], $d['kdoutput'])->renf_b * 100, 2, ',', '.')) . '</b>' ?></td>
+                                            <td class="tdoutput" style="text-align: right "><?php echo '<b>' . ($sum_output->renf_b == 0 ? "-" : number_format($sum_output->rl_fis / $sum_output->renf_b * 100, 2, ',', '.')) . '</b>' ?></td>
                                         </tr>
                                         <?php $ido = array_merge([$idk], $ido); ?>
                                     <?php endif; ?>
 
                                     <?php $idk = $idk . '.' . $d['kdsoutput']; ?>
                                     <?php if (!in_array($idk, $idso)) :
-                                        $sum_soutput = sum_data($bulanberjalan, $d['kdprogram'], $d['kdgiat'], $d['kdoutput'], $d['kdsoutput']); ?>
+                                        $sum_soutput = sum_data(session('userData.tahun'), $bulanberjalan, $d['kdprogram'], $d['kdgiat'], $d['kdoutput'], $d['kdsoutput']); ?>
                                         <tr>
                                             <td class="tdsoutput"><b><?= $nosoutput++ ?></b></td>
                                             <td class="tdsoutput"><b><?php echo $idk; ?></b></td>
