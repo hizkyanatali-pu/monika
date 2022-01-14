@@ -214,3 +214,13 @@
   margin-right: -50%;
   transform: translate(-50%, -50%);
 }
+
+.img-footer{
+  width: 50%;
+}
+
+@media (min-width: 1910px) {
+  .img-footer{
+    width: 35%;
+  }
+}
