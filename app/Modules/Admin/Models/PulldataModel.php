@@ -308,9 +308,9 @@ class PulldataModel extends Model
         # Total Pagu #
         $dataTotalPagu = $this->db->query("
         SELECT
-        pagu_rpm as rpm,
-        pagu_sbsn as sbsn,
-        pagu_phln as phln
+        pagu_rpm*1000 as rpm,
+        pagu_sbsn*1000 as sbsn,
+        pagu_phln*1000 as phln
 
         FROM
         monika_rekap_unor_{$this->user['tahun']}

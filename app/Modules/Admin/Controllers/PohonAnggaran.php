@@ -151,38 +151,23 @@ class PohonAnggaran extends \App\Controllers\BaseController
     {
 
 
-        $syc = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "pagu_rpm");
-        $mycbaru1rpm = $this->PohonAnggaran->getDataBelumLelangNilai([[1]], "pagu_rpm");
-        $mycbaru2rpm = $this->PohonAnggaran->getDataBelumLelangNilai([[3]], "pagu_rpm");
+        $data['title'] = "Belum Lelang";
+        $data['nilai_rpm'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "RPM");
+        $data['nilai_sbsn'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "SBSN");
+        $data['nilai_phln'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "PHLN");
 
-        $mycbaru1phln = $this->PohonAnggaran->getDataBelumLelangNilai([[1]], "pagu_phln");
-        $mycbaru2phln = $this->PohonAnggaran->getDataBelumLelangNilai([[3]], "pagu_phln");
+        $data['rpmSyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "RPM");
+        $data['rpmMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "RPM");
 
-        $myclanjutan = $this->PohonAnggaran->getDataBelumLelangNilai([[2]], "pagu_rpm");
-        $Sbsn =  $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "pagu_sbsn");
-
-        $syclist =  $this->PohonAnggaran->getDataBelumLelangList([[0]], "pagu_rpm");
-        $mycbarulist =  $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "pagu_rpm");
-        $mycbaruphlnlist =  $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "pagu_phln");
+        $data['phlnMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "PHLN");
 
 
+        $data['rpmSycList'] = $this->PohonAnggaran->getDataBelumLelangList([[0]], "RPM");
+        $data['rpmMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "RPM");
+        $data['phlnMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "PHLN");
 
 
 
-        $data = array(
-            'title' => 'Belum Lelang',
-            'syc' => $syc,
-            'mycbaru1' => $mycbaru1rpm,
-            'mycbaru2' => $mycbaru2rpm,
-            'mycbaruphln' => $mycbaru1phln + $mycbaru2phln,
-            'myclanjutan' => $myclanjutan,
-            'sbsn' => $Sbsn,
-            'syclist' => $syclist,
-            'mycbarulist' => $mycbarulist,
-            'mycbaruphlnlist' => $mycbaruphlnlist
-
-
-        );
 
         return view('Modules\Admin\Views\PosturAnggaran\Sisa-belum-lelang', $data);
     }

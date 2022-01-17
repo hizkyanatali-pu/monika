@@ -125,46 +125,53 @@ class PohonAnggaranModel extends Model
 
 
         $db = \Config\Database::connect();
-        $query = $db->query(
-            "SELECT
-        sum(monika_data_{$this->user['tahun']}.pagu_rpm) AS total_rpm,
-        sum(monika_data_{$this->user['tahun']}.pagu_phln)AS total_phln,
-        sum(monika_data_{$this->user['tahun']}.pagu_sbsn) AS total_sbsn,
-        count(monika_data_{$this->user['tahun']}.nmpaket) AS jml_paket
- 
-     FROM
-         monika_data_{$this->user['tahun']}
-     RIGHT JOIN (
-         SELECT
-             monika_kontrak_{$this->user['tahun']}.nilai_kontrak,
-             monika_kontrak_{$this->user['tahun']}.kdjnskon,
-             monika_kontrak_{$this->user['tahun']}.status_tender,
-             CASE
-         WHEN LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - LENGTH(
-             REPLACE (
-                 monika_kontrak_{$this->user['tahun']}.kdpaket,
-                 '.',
-                 ''
-             )
-         ) > 7 THEN
-             SUBSTRING(
-                 monika_kontrak_{$this->user['tahun']}.kdpaket,
-                 1,
-                 CHAR_LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - 2
-             )
-         ELSE
-             monika_kontrak_{$this->user['tahun']}.kdpaket
-         END AS kdpaket_kontrak
-         FROM
-             monika_kontrak_{$this->user['tahun']}
-     ) mnk_kontrak ON monika_data_{$this->user['tahun']}.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.kdjnskon IN ? AND mnk_kontrak.status_tender = 'Belum Lelang'
-     AND
-     monika_data_{$this->user['tahun']}.$nama_pagu != 0 AND monika_data_{$this->user['tahun']}.$nama_pagu IS NOT NULL
-     ",
+        //     $query = $db->query(
+        //         "SELECT
+        //     sum(monika_data_{$this->user['tahun']}.pagu_rpm) AS total_rpm,
+        //     sum(monika_data_{$this->user['tahun']}.pagu_phln)AS total_phln,
+        //     sum(monika_data_{$this->user['tahun']}.pagu_sbsn) AS total_sbsn,
+        //     count(monika_data_{$this->user['tahun']}.nmpaket) AS jml_paket
 
-            $w
-        );
+        //  FROM
+        //      monika_data_{$this->user['tahun']}
+        //  RIGHT JOIN (
+        //      SELECT
+        //          monika_kontrak_{$this->user['tahun']}.nilai_kontrak,
+        //          monika_kontrak_{$this->user['tahun']}.kdjnskon,
+        //          monika_kontrak_{$this->user['tahun']}.status_tender,
+        //          CASE
+        //      WHEN LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - LENGTH(
+        //          REPLACE (
+        //              monika_kontrak_{$this->user['tahun']}.kdpaket,
+        //              '.',
+        //              ''
+        //          )
+        //      ) > 7 THEN
+        //          SUBSTRING(
+        //              monika_kontrak_{$this->user['tahun']}.kdpaket,
+        //              1,
+        //              CHAR_LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - 2
+        //          )
+        //      ELSE
+        //          monika_kontrak_{$this->user['tahun']}.kdpaket
+        //      END AS kdpaket_kontrak
+        //      FROM
+        //          monika_kontrak_{$this->user['tahun']}
+        //  ) mnk_kontrak ON monika_data_{$this->user['tahun']}.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.kdjnskon IN ? AND mnk_kontrak.status_tender = 'Belum Lelang'
+        //  AND
+        //  monika_data_{$this->user['tahun']}.$nama_pagu != 0 AND monika_data_{$this->user['tahun']}.$nama_pagu IS NOT NULL
+        //  ",
 
+        //         $w
+        //     );
+
+        $query =  $db->query("SELECT sum(pfis) AS nilai_kontrak,count(nmpaket) AS jml_paket
+        FROM monika_kontrak_{$this->user['tahun']} 
+        WHERE  status_tender = 'Belum Lelang'
+        AND sumber_dana = '{$nama_pagu}'
+
+        AND kdjnskon IN ?
+         ", $w);
 
         $return =  $query->getRowArray();
 
@@ -191,40 +198,47 @@ class PohonAnggaranModel extends Model
 
 
         $db = \Config\Database::connect();
-        $query = $db->query(
-            "SELECT
-        monika_data_{$this->user['tahun']}.nmpaket,
-        monika_data_{$this->user['tahun']}.$pagu
- 
-     FROM
-         monika_data_{$this->user['tahun']}
-     RIGHT JOIN (
-         SELECT
-             monika_kontrak_{$this->user['tahun']}.nilai_kontrak,
-             monika_kontrak_{$this->user['tahun']}.kdjnskon,
-             monika_kontrak_{$this->user['tahun']}.status_tender,
-             CASE
-         WHEN LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - LENGTH(
-             REPLACE (
-                 monika_kontrak_{$this->user['tahun']}.kdpaket,
-                 '.',
-                 ''
-             )
-         ) > 7 THEN
-             SUBSTRING(
-                 monika_kontrak_{$this->user['tahun']}.kdpaket,
-                 1,
-                 CHAR_LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - 2
-             )
-         ELSE
-             monika_kontrak_{$this->user['tahun']}.kdpaket
-         END AS kdpaket_kontrak
-         FROM
-             monika_kontrak_{$this->user['tahun']}
-     ) mnk_kontrak ON monika_data_{$this->user['tahun']}.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.kdjnskon IN ? AND mnk_kontrak.status_tender = 'Belum Lelang' AND  monika_data_{$this->user['tahun']}.$pagu != 0 AND monika_data_{$this->user['tahun']}.$pagu IS NOT NULL ORDER BY monika_data_{$this->user['tahun']}.$pagu DESC LIMIT 4",
+        //     $query = $db->query(
+        //         "SELECT
+        //     monika_data_{$this->user['tahun']}.nmpaket,
+        //     monika_data_{$this->user['tahun']}.$pagu
 
-            $w
-        );
+        //  FROM
+        //      monika_data_{$this->user['tahun']}
+        //  RIGHT JOIN (
+        //      SELECT
+        //          monika_kontrak_{$this->user['tahun']}.nilai_kontrak,
+        //          monika_kontrak_{$this->user['tahun']}.kdjnskon,
+        //          monika_kontrak_{$this->user['tahun']}.status_tender,
+        //          CASE
+        //      WHEN LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - LENGTH(
+        //          REPLACE (
+        //              monika_kontrak_{$this->user['tahun']}.kdpaket,
+        //              '.',
+        //              ''
+        //          )
+        //      ) > 7 THEN
+        //          SUBSTRING(
+        //              monika_kontrak_{$this->user['tahun']}.kdpaket,
+        //              1,
+        //              CHAR_LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - 2
+        //          )
+        //      ELSE
+        //          monika_kontrak_{$this->user['tahun']}.kdpaket
+        //      END AS kdpaket_kontrak
+        //      FROM
+        //          monika_kontrak_{$this->user['tahun']}
+        //  ) mnk_kontrak ON monika_data_{$this->user['tahun']}.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.kdjnskon IN ? AND mnk_kontrak.status_tender = 'Belum Lelang' AND  monika_data_{$this->user['tahun']}.$pagu != 0 AND monika_data_{$this->user['tahun']}.$pagu IS NOT NULL ORDER BY monika_data_{$this->user['tahun']}.$pagu DESC LIMIT 4",
+
+        //         $w
+        //     );
+
+        $query =  $db->query("SELECT nmpaket
+                FROM monika_kontrak_{$this->user['tahun']} 
+                WHERE  status_tender = 'Belum Lelang'
+                AND sumber_dana = '{$pagu}'
+                AND  kdjnskon IN ?  ORDER BY pfis DESC LIMIT 4", $w);
+
 
 
         $return =  $query->getResultArray();
@@ -358,5 +372,22 @@ class PohonAnggaranModel extends Model
                 'paketList' => json_decode($arr->paket)
             ];
         }, $data);
+    }
+
+
+    public function getDataRencanaTenderBelumLelang($w = '')
+    {
+
+        $db = \Config\Database::connect();
+        $query = $db->query("SELECT DATE_FORMAT(now(),'%m') ,MID(tgl_rencana_lelang,4,2),sum(pfis) as nilai_kontrak,count(nmpaket) AS jml_paket FROM monika_kontrak_{$this->user['tahun']}
+        
+        WHERE status_tender = 'Belum Lelang' AND DATE_FORMAT(now(),'%m') = MID(tgl_rencana_lelang,4,2)
+
+        AND sumber_dana = '{$w}'
+
+        ");
+
+
+        return $query->getRowArray();
     }
 }

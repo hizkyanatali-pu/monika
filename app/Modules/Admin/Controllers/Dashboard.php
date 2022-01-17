@@ -27,6 +27,9 @@ class Dashboard extends \App\Controllers\BaseController
 
     public function index()
     {
+
+
+
         $grupData = $this->rekapGroupData();
         $qdata = $this->TematikModel->getListRekap($grupData);
 
@@ -44,25 +47,14 @@ class Dashboard extends \App\Controllers\BaseController
 
 
         // postur belum lelang
-        $syc = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "pagu_rpm");
-        $mycbaru1rpm = $this->PohonAnggaran->getDataBelumLelangNilai([[1]], "pagu_rpm");
-        $mycbaru2rpm = $this->PohonAnggaran->getDataBelumLelangNilai([[3]], "pagu_rpm");
 
-        $mycbaru1phln = $this->PohonAnggaran->getDataBelumLelangNilai([[1]], "pagu_phln");
-        $mycbaru2phln = $this->PohonAnggaran->getDataBelumLelangNilai([[3]], "pagu_phln");
 
-        $myclanjutan = $this->PohonAnggaran->getDataBelumLelangNilai([[2]], "pagu_rpm");
-        $Sbsn =  $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "pagu_sbsn");
 
         //table perkegiatan
 
         $belumlelangPerkegiatanRpmSyc =  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_rpm", 0, true);
         $belumlelangPerkegiatanMyc =  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_total", "1,2,3");
 
-
-        $syclist =  $this->PohonAnggaran->getDataBelumLelangList([[0]], "pagu_rpm");
-        $mycbarulist =  $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "pagu_rpm");
-        $mycbaruphlnlist =  $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "pagu_phln");
 
 
 
@@ -90,17 +82,6 @@ class Dashboard extends \App\Controllers\BaseController
             'jenisbelanja' =>  $getGraphicDataJenisBelanja,
             'perkegiatan' =>  $getGraphicDataPerkegiatan,
 
-            // belum lelang
-            'syc' => $syc,
-            'mycbaru1' => $mycbaru1rpm,
-            'mycbaru2' => $mycbaru2rpm,
-            'mycbaruphln' => $mycbaru1phln + $mycbaru2phln,
-            'sbsn' => $Sbsn,
-            'myclanjutan' => $myclanjutan,
-            'syclist' => $syclist,
-            'mycbarulist' => $mycbarulist,
-            'mycbaruphlnlist' => $mycbaruphlnlist,
-
             // belum lelang RPM syc
             'belum_lelang_rpm_syc' => $belumlelangPerkegiatanRpmSyc,
             'belum_lelang_myc' => $belumlelangPerkegiatanMyc,
@@ -112,6 +93,29 @@ class Dashboard extends \App\Controllers\BaseController
 
 
         );
+
+        // belum lelang 
+
+        $data['nilai_rpm'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "RPM");
+        $data['nilai_sbsn'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "SBSN");
+        $data['nilai_phln'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "PHLN");
+
+        $data['rpmSyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "RPM");
+        $data['rpmMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "RPM");
+
+        $data['phlnMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "PHLN");
+
+
+        $data['rpmSycList'] = $this->PohonAnggaran->getDataBelumLelangList([[0]], "RPM");
+        $data['rpmMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "RPM");
+        $data['phlnMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "PHLN");
+
+
+        //rencana tender
+        $data['tenderRpm'] =  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("RPM");
+        $data['tenderPhln'] =  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("PHLN");
+
+
         return view('Modules\Admin\Views\Dashboard', $data);
     }
 

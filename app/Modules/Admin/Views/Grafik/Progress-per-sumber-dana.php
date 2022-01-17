@@ -85,7 +85,7 @@
 		$.each(data_pagu, function(key, val) {
 			if (key == choices) {
 				nilai_total_pagu = val.totalPagu;
-				console.log(nilai_total_pagu)
+				// console.log(nilai_total_pagu)
 				ticks.push(index_ticks,
 					val.title +
 					`<div class="title-chart-important">
