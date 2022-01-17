@@ -1021,7 +1021,7 @@
                                         <div class="card card-body bg-tree-1">
                                             <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                             <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                            <label> ? Paket</label>
+                                            <label> <?= $belumlelang['jml_paket']  ?> Paket</label>
                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                 <h5 class="mb-0">
                                                     <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?> M

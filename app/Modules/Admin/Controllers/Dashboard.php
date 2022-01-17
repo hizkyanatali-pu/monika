@@ -66,12 +66,9 @@ class Dashboard extends \App\Controllers\BaseController
 
 
 
-        $data = array(
-            'title' => 'Belum Lelang',
-
-
-
-        );
+        // $data = array(
+        //     'title' => 'Belum Lelang',
+        // );
 
 
         $data = array(

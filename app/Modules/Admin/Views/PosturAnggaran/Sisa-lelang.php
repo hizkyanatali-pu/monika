@@ -5,7 +5,7 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h5 class="kt-subheader__title">
-                POSTUR SISA LELANG DARI PAKET TERKONTRAK TA 2021
+                POSTUR SISA LELANG DARI PAKET TERKONTRAK TA <?= session("userData.tahun") ?>
             </h5>
             <span class="kt-subheader__separator kt-hidden"></span>
 

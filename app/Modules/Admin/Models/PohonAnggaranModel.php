@@ -25,39 +25,42 @@ class PohonAnggaranModel extends Model
         //     ;
         // if ($w != "") $query->where($w);
         $db = \Config\Database::connect();
-        $query = $db->query(
-            "SELECT
-            SUM(monika_data_{$this->user['tahun']}.pagu_total) nilai_kontrak,
-           COUNT(mnk_kontrak.nilai_kontrak) jml_paket
+        //     $query = $db->query(
+        //         "SELECT
+        //         SUM(monika_data_{$this->user['tahun']}.pagu_total) nilai_kontrak,
+        //        COUNT(mnk_kontrak.nilai_kontrak) jml_paket
 
-    FROM
-        monika_data_{$this->user['tahun']}
-    RIGHT JOIN (
-        SELECT
-            monika_kontrak_{$this->user['tahun']}.nilai_kontrak,
-            monika_kontrak_{$this->user['tahun']}.status_tender,
-            CASE
-        WHEN LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - LENGTH(
-            REPLACE (
-                monika_kontrak_{$this->user['tahun']}.kdpaket,
-                '.',
-                ''
-            )
-        ) > 7 THEN
-            SUBSTRING(
-                monika_kontrak_{$this->user['tahun']}.kdpaket,
-                1,
-                CHAR_LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - 2
-            )
-        ELSE
-            monika_kontrak_{$this->user['tahun']}.kdpaket
-        END AS kdpaket_kontrak
-        FROM
-            monika_kontrak_{$this->user['tahun']}
-    ) mnk_kontrak ON monika_data_{$this->user['tahun']}.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.status_tender = :status_tender:",
+        // FROM
+        //     monika_data_{$this->user['tahun']}
+        // RIGHT JOIN (
+        //     SELECT
+        //         monika_kontrak_{$this->user['tahun']}.nilai_kontrak,
+        //         monika_kontrak_{$this->user['tahun']}.status_tender,
+        //         CASE
+        //     WHEN LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - LENGTH(
+        //         REPLACE (
+        //             monika_kontrak_{$this->user['tahun']}.kdpaket,
+        //             '.',
+        //             ''
+        //         )
+        //     ) > 7 THEN
+        //         SUBSTRING(
+        //             monika_kontrak_{$this->user['tahun']}.kdpaket,
+        //             1,
+        //             CHAR_LENGTH(monika_kontrak_{$this->user['tahun']}.kdpaket) - 2
+        //         )
+        //     ELSE
+        //         monika_kontrak_{$this->user['tahun']}.kdpaket
+        //     END AS kdpaket_kontrak
+        //     FROM
+        //         monika_kontrak_{$this->user['tahun']}
+        // ) mnk_kontrak ON monika_data_{$this->user['tahun']}.kdpaket = mnk_kontrak.kdpaket_kontrak WHERE mnk_kontrak.status_tender = :status_tender:",
 
-            $w
-        );
+        //         $w
+        //     );
+
+        $query = $db->query("SELECT COUNT(pfis) jml_paket,SUM(pfis) as nilai_kontrak  FROM monika_kontrak_{$this->user['tahun']}  WHERE status_tender = :status_tender: ", $w);
+
 
 
         $return =  $query->getRowArray();
