@@ -287,8 +287,8 @@ class PohonAnggaranModel extends Model
     AND monika_data_{$this->user['tahun']}.kdsoutput = monika_kontrak_{$this->user['tahun']}.kdsoutput
     AND monika_data_{$this->user['tahun']}.kdkmpnen = monika_kontrak_{$this->user['tahun']}.kdkmpnen
     AND monika_data_{$this->user['tahun']}.kdskmpnen = monika_kontrak_{$this->user['tahun']}.kdskmpnen
-    LEFT JOIN tgiat ON tgiat.kdgiat = monika_data_{$this->user['tahun']}.kdgiat
-    WHERE
+    LEFT JOIN tgiat ON tgiat.kdgiat = monika_data_{$this->user['tahun']}.kdgiat AND tgiat.tahun_anggaran = {$this->user['tahun']}
+WHERE
         monika_kontrak_{$this->user['tahun']}.status_tender = 'Belum Lelang'
         AND monika_kontrak_{$this->user['tahun']}.kdjnskon IN ($kdjnskon)
     {$where}

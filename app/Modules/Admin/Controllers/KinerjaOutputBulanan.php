@@ -55,66 +55,19 @@ class KinerjaOutputBulanan extends \App\Controllers\BaseController
             REPLACE (pkt.vol, ',', '.') AS DECIMAL
         ) vol,
         pkt.kdprogram || '.' || pkt.kdgiat || '.' || pkt.kdoutput || '.' || pkt.kdsoutput || pkt.kdkmpnen AS kode,
-    -- CASE
-    -- WHEN pkt.real_total IS NULL THEN
-    --     0
-    -- WHEN pkt.real_total = '' THEN
-    --     0
-    -- ELSE
-    -- pkt.progres_keu_des/100 * pkt.real_total
-    -- END AS rtot,
-    -- CASE
-    -- WHEN pkt.progres_keu_des IS NULL THEN
-    --     0
-    -- WHEN pkt.progres_keu_des = '' THEN
-    --     0
-    -- ELSE
-    --     pkt.progres_keu_des
-    -- END AS rr_b,
-    -- CASE
-    -- WHEN pkt.progres_fisik_des IS NULL THEN
-    --     0
-    -- WHEN pkt.progres_fisik_des = '' THEN
-    --     0
-    -- ELSE
-    --     pkt.progres_keu_des
-    -- END AS ff_b,
-    --  CASE
-    -- WHEN pkt.ren_keu_des IS NULL THEN
-    --     0
-    -- WHEN pkt.ren_keu_des = '' THEN
-    --     0
-    -- ELSE
-    --     pkt.ren_keu_des
-    -- END AS renk_b,
-    --  CASE
-    -- WHEN pkt.ren_fis_des IS NULL THEN
-    --     0
-    -- WHEN pkt.ren_fis_des = '' THEN
-    --     0
-    -- ELSE
-    --     pkt.ren_fis_des
-    -- END AS renf_b,
-    
-    --  CASE
-    -- WHEN pkt.ufis IS NULL THEN
-    --     0
-    -- WHEN pkt.ufis = '' THEN
-    --     0
-    -- ELSE
-    --     pkt.ufis
-    -- END AS ufis,
+   
      tsoutput.nmro
     FROM
         monika_data_{$tahun} pkt
     LEFT JOIN tprogram tp ON tp.kdprogram = pkt.kdprogram
-    LEFT JOIN tgiat ON tgiat.kdgiat = pkt.kdgiat
+    LEFT JOIN tgiat ON tgiat.kdgiat = pkt.kdgiat AND tgiat.tahun_anggaran = {$tahun}
     LEFT JOIN toutput ON pkt.kdgiat = toutput.kdgiat
-    AND pkt.kdoutput = toutput.kdoutput
+    AND pkt.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran = {$tahun}
     LEFT JOIN tsoutput ON
     pkt.kdgiat = tsoutput.kdgiat
     AND pkt.kdoutput = tsoutput.kdkro
     AND pkt.kdsoutput = tsoutput.kdro
+    AND tsoutput.tahun_anggaran = {$tahun}
     $keyword
     ORDER BY
     pkt.kdprogram,

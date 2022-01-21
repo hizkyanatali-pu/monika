@@ -508,7 +508,7 @@ class PulldataModel extends Model
 	(sum(ufis) / sum(pagu_total)) * 100 AS fis
 FROM
 	tgiat
-LEFT JOIN monika_data_{$this->user['tahun']} md ON tgiat.kdgiat = md.kdgiat
+LEFT JOIN monika_data_{$this->user['tahun']} md ON tgiat.kdgiat = md.kdgiat AND tgiat.tahun_anggaran = {$this->user['tahun']}
 WHERE
 tgiat.kdunit ='06'
 GROUP BY

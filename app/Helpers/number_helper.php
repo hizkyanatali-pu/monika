@@ -34,3 +34,17 @@ if (!function_exists('onlyTwoDecimal')) {
 		}
 	}
 }
+
+if (!function_exists('checkMorT')) {
+	function checkMorT($argNumber, $withRp = true, $decimal = 0)
+	{
+
+		$check = strlen((string)$argNumber);
+
+		if ($check >= 10 and $check < 13) {
+			return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000000000, $decimal, ',', '.') . " M";
+		} elseif ($check >= 13) {
+			return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000000000000, $decimal, ',', '.') . " T";
+		}
+	}
+}
