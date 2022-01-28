@@ -304,7 +304,7 @@ class Importdata extends \App\Controllers\BaseController
         } else {
             $command = "mysql --user='" . $_ENV['database.default.username'] . "' --password='" . $_ENV['database.default.password'] . "' -h localhost -D " . $_ENV['database.default.database'] . "< /var/www/monika-new/writable/emon/FileSql/$slug.sql";
         }
-        // dd($command);
+        //dd($command);
         $cmd = shell_exec($command);
         return ['command' => $command];
     }
