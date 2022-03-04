@@ -186,8 +186,8 @@ class TematikModel extends Model
 				'title' => $value['title'],
 				'totalPagu' => $totalPagu,
 				'totalRealisasi' => $totalRealisasi,
-				'totalProgKeu' => ($totalRealisasi / $totalPagu) * 100,
-				'totalProgFis' => ($totalUFis / $totalPagu) * 100,
+				'totalProgKeu' => ($totalPagu !=  0  ? ($totalRealisasi / $totalPagu) * 100:0),
+				'totalProgFis' => ($totalPagu !=  0  ?($totalUFis / $totalPagu) * 100:0),
 				'list' => $itemList
 			];
 
