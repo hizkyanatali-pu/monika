@@ -103,7 +103,7 @@ $currentDayOfMonth = date('j');
                                 <div class="float-left">
                                     <!-- <h3><?php //number_format((($qdata[0]['pagusda_progres_keuangan']-$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya']) / $maxDays * $currentDayOfMonth )+$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya'], 2, ',', '.'); 
                                                 ?>% </h3> -->
-                                    <h3><?= number_format((isset($qdata["Satker Terendah"][0]['pagusda_progres_keuangan']) ? $qdata["Satker Terendah"][0]['pagusda_progres_keuangan'] : 0), 2, ',', '.'); ?>% </h3>
+                                    <h3><?= number_format((isset($qdata["Satker Terendah"][0]['pagusda_progres_keuangan']) ? $qdata["Satker Terendah"][0]['pagusda_progres_keuangan'] : $qdata["Satker Tertinggi"][0]['pagusda_progres_keuangan']), 2, ',', '.'); ?>% </h3>
 
                                 </div>
                                 <div class="float-right text-right">
@@ -118,7 +118,7 @@ $currentDayOfMonth = date('j');
                                 <div class="float-left">
                                     <!-- <h3><?php // number_format(((($qdata[0]['pagusda_progres_fisik']-$qdata[0]['pagusda_progres_fisik_bulan_sebelumnya']) )  / $maxDays * $currentDayOfMonth ) + $qdata[0]['pagusda_progres_fisik_bulan_sebelumnya'] , 2, ',', '.'); 
                                                 ?>% </h3> -->
-                                    <h3><?= number_format((isset($qdata["Satker Terendah"][0]['pagusda_progres_fisik']) ? $qdata["Satker Terendah"][0]['pagusda_progres_fisik'] : 0), 2, ',', '.'); ?>% </h3>
+                                    <h3><?= number_format((isset($qdata["Satker Terendah"][0]['pagusda_progres_fisik']) ? $qdata["Satker Terendah"][0]['pagusda_progres_fisik'] : $qdata["Satker Tertinggi"][0]['pagusda_progres_fisik']), 2, ',', '.'); ?>% </h3>
 
                                 </div>
                                 <div class="float-right text-right">
@@ -172,8 +172,8 @@ $currentDayOfMonth = date('j');
                         <h6>Progres Keuangan dan Fisik <?= $title; ?></h6>
                         <!-- <div class="kt-section__content dropdown dropright">
                             <button type="button" class="btn btn-warning btn-icon" data-toggle="kt-popover" data-trigger="focus" title="" data-html="true" data-content="a. Deviasi <b>(-)</b> : keuangan lebih besar dari pada fisik. <br> <br>b. Data yang berwarna <b>Merah</b> menandakan dibawah nilai rata-rata." data-original-title="Petunjuk !"><i class="la la-lightbulb-o"></i></button> -->
-                            <!-- <button type="button" class="btn btn-primary btn-icon" dropdown-toggle data-toggle="dropdown"><i class="la la-filter"></i></button> -->
-                            <!--<div class="dropdown-menu" style="overflow-y: auto; height: 200px; z-index: 5;">
+                        <!-- <button type="button" class="btn btn-primary btn-icon" dropdown-toggle data-toggle="dropdown"><i class="la la-filter"></i></button> -->
+                        <!--<div class="dropdown-menu" style="overflow-y: auto; height: 200px; z-index: 5;">
                                 <a href="#" class="dropdown-item">
                                     <div class="form-check">
                                         <label for="" class="form-check-label">
@@ -354,8 +354,8 @@ $currentDayOfMonth = date('j');
                                             <td class="tdPersen text-right col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
                                             <td class="tdPersen text-right col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
 
-                                            <td class="tdPersen text-right col-percentage"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); ?></td>
-                                            <td class="tdPersen text-right col-rp"><?php echo ($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); ?></td>
+                                            <td class="tdPersen text-right col-percentage"><?php echo  number_format($data['jml_persen_deviasi'], 2, ',', '.'); ?></td>
+                                            <td class="tdPersen text-right col-rp"><?php echo  number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.'); ?></td>
                                         </tr>
                                         <?php
                                         $total_pagu_rpm += $data['jml_pagu_rpm'];

@@ -58,6 +58,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('semuasatker/(:any)', '\Modules\Admin\Controllers\Pulldata::semua_satker/$1');
         $routes->get('satker_terendah', '\Modules\Admin\Controllers\Pulldata::satker_terendah');
         $routes->get('satker_tertinggi', '\Modules\Admin\Controllers\Pulldata::satker_tertinggi');
+        $routes->get('satker_deviasi_terbesar', '\Modules\Admin\Controllers\Pulldata::satker_deviasi_terbesar');
+
 
 
 

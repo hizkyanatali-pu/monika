@@ -9,14 +9,19 @@ $filter = explode(",", $data_filter);
         background-color: #ff4da6;
         color: #FFF !important;
     }
-    table, th, td{
+
+    table,
+    th,
+    td {
         text-align: center;
         border: 1px solid #000;
     }
-    #toolbarContainer{
+
+    #toolbarContainer {
 
         display: none !important;
     }
+
     /* @media print{
         .no-print, .no-print *{
             display: none !important;
@@ -71,8 +76,8 @@ $filter = explode(",", $data_filter);
                     <td class="col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
                     <td class="col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
                     <td class="col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
-                    <td class="col-percentage"><?php echo ($data['jml_progres_fisik'] > $data['jml_progres_keuangan'] ? number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); ?></td>
-                    <td class="col-rp"><?php echo ($data['jml_progres_fisik'] > $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); ?></td>
+                    <td class="col-percentage"><?php echo number_format($data['jml_persen_deviasi'], 2, ',', '.'); ?></td>
+                    <td class="col-rp"><?php echo number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.'); ?></td>
                 </tr>
                 <?php
                 $total_pagu_rpm += $data['jml_pagu_rpm'];
@@ -101,8 +106,8 @@ $filter = explode(",", $data_filter);
     const filter = <?= json_encode($filter) ?>;
     filter.forEach((val, key) => {
 
-        $("table ."+val).hide()
-        $("table .col-"+val).hide()
+        $("table ." + val).hide()
+        $("table .col-" + val).hide()
     })
     //pagu section
     let pagu_counter = $("table .pagu").length
@@ -127,10 +132,10 @@ $filter = explode(",", $data_filter);
 
         pagu_counter--;
     }
-    if($("table .pagu_rpm").is(":hidden") && $("table .pagu_sbsn").is(":hidden") && $("table .pagu_phln").is(":hidden") && $("table .pagu_total").is(":hidden") && $("table .pagu_realisasi").is(":hidden")){
+    if ($("table .pagu_rpm").is(":hidden") && $("table .pagu_sbsn").is(":hidden") && $("table .pagu_phln").is(":hidden") && $("table .pagu_total").is(":hidden") && $("table .pagu_realisasi").is(":hidden")) {
 
         $(".pagu-main").hide()
-    }else{
+    } else {
 
         $(".pagu-main").show()
         $(".pagu-main").attr("colspan", pagu_counter)
@@ -139,16 +144,16 @@ $filter = explode(",", $data_filter);
 
     //progres section
     if ($("table .keu").is(":hidden") || $("table .fisik").is(":hidden")) {
-        
+
         $("table .progres").attr("colspan", 1);
-    }else{
+    } else {
 
         $("table .progres").attr("colspan", 2);
     }
     if ($("table .keu").is(":hidden") && $("table .fisik").is(":hidden")) {
-        
+
         $("table .progres").hide();
-    }else{
+    } else {
 
         $("table .progres").show();
     }
@@ -156,24 +161,24 @@ $filter = explode(",", $data_filter);
 
     //deviasi section
     if ($("table .percentage").is(":hidden") || $("table .rp").is(":hidden")) {
-        
+
         $("table .deviasi").attr("colspan", 1);
-    }else{
+    } else {
 
         $("table .deviasi").attr("colspan", 2);
     }
     if ($("table .percentage").is(":hidden") && $("table .rp").is(":hidden")) {
-        
+
         $("table .deviasi").hide();
-    }else{
+    } else {
 
         $("table .deviasi").show();
     }
     //deviasi end section
-    if($("table .keu").is(":hidden") && $("table .fisik").is(":hidden") && $("table .percentage").is(":hidden") && $("table .rp").is(":hidden")){
+    if ($("table .keu").is(":hidden") && $("table .fisik").is(":hidden") && $("table .percentage").is(":hidden") && $("table .rp").is(":hidden")) {
 
         $("table .last-col").hide()
-    }else{
+    } else {
 
         $("table .last-col").show()
     }

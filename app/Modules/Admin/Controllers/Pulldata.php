@@ -324,6 +324,23 @@ class Pulldata extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\Paket\Satker_terendah', $data);
     }
 
+
+    //satker deviasi terbesar
+    public function satker_deviasi_terbesar()
+    {
+
+        $data = [
+            'title' => 'Satker Deviasi terbesar',
+            'posisi' => ['<i class="fa fa-home"></i>'],
+            'idk' => 'all',
+            'label' => 'Satker Deviasi terbesar',
+            'nextlink' => 'paket',
+            'qdata' => ['Satker Deviasi terbesar' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar", "md.tahun = " . session('userData.tahun'))],
+            'rekap' => 'satkerdeviasiterbesar',
+            'id_report' => 'cetak_satker_deviasi_terbesar'
+        ];
+        return view('Modules\Admin\Views\Paket\Satker_deviasi_terbesar', $data);
+    }
     //pindah ya!
     // function simpandata(){
     //     $this->akses->goakses('add', $this->InModul);

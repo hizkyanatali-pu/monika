@@ -229,8 +229,8 @@
                         <td class="tdPersen text-right"><?php echo number_format($d['progres_keuangan'], 2, ',', '.'); ?></td>
                         <td class="tdPersen text-right"><?php echo number_format($d['progres_fisik'], 2, ',', '.'); ?></td>
 
-                        <td class="tdPersen text-right"><?php echo ($d['progres_fisik'] > $d['progres_keuangan'] ? number_format($d['persen_deviasi'], 2, ',', '.') : '-'); ?></td>
-                        <td class="tdNilai text-right"><?php echo ($d['progres_fisik'] > $d['progres_keuangan'] ? round($d['nilai_deviasi']) : '-'); ?></td>
+                        <td class="tdPersen text-right"><?php echo number_format($d['persen_deviasi'], 2, ',', '.'); ?></td>
+                        <td class="tdNilai text-right"><?php echo round($d['nilai_deviasi']); ?></td>
                     </tr>
 
                 <?php endforeach; ?>

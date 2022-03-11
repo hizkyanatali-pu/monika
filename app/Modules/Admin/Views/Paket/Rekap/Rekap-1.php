@@ -206,8 +206,8 @@
                         <td class="tdPersen text-right"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
                         <td class="tdPersen text-right"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
 
-                        <td class="tdPersen text-right"><?php echo ($data['jml_progres_fisik'] > $data['jml_progres_keuangan'] ?  number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); ?></td>
-                        <td class="tdPersen text-right"><?php echo ($data['jml_progres_fisik'] > $data['jml_progres_keuangan'] ? round($data['jml_nilai_deviasi']) : '-'); ?></td>
+                        <td class="tdPersen text-right"><?php echo  number_format($data['jml_persen_deviasi'], 2, ',', '.'); ?></td>
+                        <td class="tdPersen text-right"><?php echo round($data['jml_nilai_deviasi']); ?></td>
                     </tr>
                     <?php
                     $total_pagu_rpm += $data['jml_pagu_rpm'];

@@ -230,8 +230,8 @@
                                             <td class="tdPersen text-right"><?php echo number_format($d['progres_keuangan'], 2, ',', '.'); ?></td>
                                             <td class="tdPersen text-right"><?php echo number_format($d['progres_fisik'], 2, ',', '.'); ?></td>
 
-                                            <td class="tdPersen text-right"><?php echo ($d['progres_fisik'] > $d['progres_keuangan'] ? number_format($d['persen_deviasi'], 2, ',', '.') : '-'); ?></td>
-                                            <td class="tdNilai text-right"><?php echo ($d['progres_fisik'] > $d['progres_keuangan'] ? number_format($d['nilai_deviasi'] / 1000, 0, ',', '.') : '-'); ?></td>
+                                            <td class="tdPersen text-right"><?php echo number_format($d['persen_deviasi'], 2, ',', '.'); ?></td>
+                                            <td class="tdNilai text-right"><?php echo number_format($d['nilai_deviasi'] / 1000, 0, ',', '.'); ?></td>
                                         </tr>
 
                                     <?php endforeach; ?>

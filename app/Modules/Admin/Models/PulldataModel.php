@@ -93,6 +93,11 @@ class PulldataModel extends Model
             // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
             //order by deviasi
             $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  ASC LIMIT 10";
+        } elseif ($datatag == "satkerdeviasiterbesar") {
+            $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, b.st, ";
+            // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
+            //order by deviasi
+            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC, jml_persen_deviasi  DESC LIMIT 10";
         } else {
             $f = "b.balaiid as id, b.balai as label, ";
             // $w = ($w ? ' WHERE ' : '') . $w . " ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
