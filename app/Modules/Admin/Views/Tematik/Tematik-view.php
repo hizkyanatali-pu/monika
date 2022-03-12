@@ -30,7 +30,7 @@
                         <label class="mb-0"><?php echo $filterTitle ?></label>
                         <div class="input-group" style="width:200px !important">
                             <select class="form-control" id="listmonth" name="month" disabled>
-                                <option>2021</option>
+                                <option><?= session('userData.tahun') ?></option>
                             </select>
                             <div class="dropdown dropright">
                                 <button type="button" class="btn btn-primary btn-icon ml-3" dropdown-toggle data-toggle="dropdown"><i class="la la-filter"></i></button>
@@ -112,17 +112,14 @@
                     <div class="col-md-6 text-right mt-3">
                         <div class="form-group">
                             <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
-                            <a 
-                                href="<?php echo site_url('tematik/excel/'.$exportCode) ?>" 
-                                class="btn btn-success btn-sm text-white" target="_blank"
-                            >
+                            <a href="<?php echo site_url('tematik/excel/' . $exportCode) ?>" class="btn btn-success btn-sm text-white" target="_blank">
                                 <i class="fa fa-file-excel"></i>Excel
                             </a>
                         </div>
                         <i><b>*Dalam Ribuan</b></i>
                     </div>
                 </div>
-    
+
                 <div class="table-responsive tableFixHead">
 
                     <?php $colspan = 8; ?>
@@ -144,9 +141,14 @@
                         </thead>
 
                         <tbody id="tbody-utama">
-                            <?php 
-                                $no = 1;
-                                foreach($data as $key => $value) : 
+                            <?php
+                            $no = 1;
+                            if (empty($data)) {
+                                echo "<tr><td colspan='13'>Tidak Ada Data</td></tr>
+                                
+                                ";
+                            }
+                            foreach ($data as $key => $value) :
                             ?>
                                 <tr>
                                     <td colspan="11" class="tdprogram"><?php echo $value->satker ?></td>
@@ -154,7 +156,7 @@
                                 <?php foreach ($value->paketList as $key => $value) : ?>
                                     <tr>
                                         <td><?php echo $no++ ?></td>
-                                        <td class="col-satker"><?php echo $value->nmpaket ?></td>
+                                        <td co class="col-satker"><?php echo $value->nmpaket ?></td>
                                         <td class="col-vol"><?php echo ($value->vol) ?></td>
                                         <td class="col-satuan"><?php echo $value->satuan ?></td>
                                         <td class="col-provinsi"><?php echo $value->provinsi ?></td>
@@ -196,74 +198,74 @@
     let report_open = true
     let checkbox = $("input:checkbox")
     $("input:checkbox").prop("checked", true)
-    $("input:checkbox").click(function(){
-        
+    $("input:checkbox").click(function() {
+
         //checking checked checkbox for report button
-        if((checkbox.length - checkbox.filter(":checked").length) == checkbox.length){
-            
+        if ((checkbox.length - checkbox.filter(":checked").length) == checkbox.length) {
+
             report_open = false
-        }else{
+        } else {
 
             report_open = true
         }
-        
+
         var column = "table ." + $(this).attr("name")
         var columns = "table .col-" + $(this).attr("name")
         $(column).toggle();
         $(columns).toggle();
     });
 
-    $(".pdf-report").click(function(){
-        
+    $(".pdf-report").click(function() {
+
         let arr = [];
-        
-        if(!$("input[name=satker]").prop("checked")){
+
+        if (!$("input[name=satker]").prop("checked")) {
 
             arr.push("satker")
         }
-        if(!$("input[name=vol]").prop("checked")){
+        if (!$("input[name=vol]").prop("checked")) {
 
             arr.push("vol")
         }
-        if(!$("input[name=satuan]").prop("checked")){
+        if (!$("input[name=satuan]").prop("checked")) {
 
             arr.push("satuan")
         }
-        if(!$("input[name=provinsi]").prop("checked")){
+        if (!$("input[name=provinsi]").prop("checked")) {
 
             arr.push("provinsi")
         }
-        if(!$("input[name=lokasi]").prop("checked")){
+        if (!$("input[name=lokasi]").prop("checked")) {
 
             arr.push("lokasi")
         }
-        if(!$("input[name=pengadaan]").prop("checked")){
+        if (!$("input[name=pengadaan]").prop("checked")) {
 
             arr.push("pengadaan")
         }
-        if(!$("input[name=pagu]").prop("checked")){
+        if (!$("input[name=pagu]").prop("checked")) {
 
             arr.push("pagu")
         }
-        if(!$("input[name=realisasi]").prop("checked")){
+        if (!$("input[name=realisasi]").prop("checked")) {
 
             arr.push("realisasi")
         }
-        if(!$("input[name=p_keu]").prop("checked")){
+        if (!$("input[name=p_keu]").prop("checked")) {
 
             arr.push("p_keu")
         }
-        if(!$("input[name=p_fis]").prop("checked")){
+        if (!$("input[name=p_fis]").prop("checked")) {
 
             arr.push("p_fis")
         }
 
         //condition for report button
-        if(report_open){
+        if (report_open) {
 
-            $(this).attr("href", "<?= $id_report_pdf ?>?filter="+arr.join(','))
+            $(this).attr("href", "<?= $id_report_pdf ?>?filter=" + arr.join(','))
             $(this).attr("target", "_blank")
-        }else{
+        } else {
 
             $(this).removeAttr("href")
             $(this).removeAttr("target")

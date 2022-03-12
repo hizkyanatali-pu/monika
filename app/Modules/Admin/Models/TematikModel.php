@@ -43,7 +43,7 @@ class TematikModel extends Model
 	                                END
 	                            ),
 	                            'pagu', paket.pg,
-	                            'realisasi', paket.rtot,
+	                            'realisasi', CASE  WHEN paket.rtot='' THEN 0 ELSE paket.rtot END ,
 	                            'persen_keu', (paket.rtot / paket.pg)*100,
 	                            'persen_fis', (paket.ufis / paket.pg)*100
 	                        )
@@ -84,15 +84,15 @@ class TematikModel extends Model
 	                    '[' || GROUP_CONCAT(
 	                        JSON_OBJECT(
 	                            'nmpaket', paket.nmpaket,
-								'vol', paket.vol,
+								'vol', CASE  WHEN paket.vol = '' THEN 0 ELSE paket.vol END,
 								'satuan', paket.sat,
 								'lokasi', tlokasi.nmlokasi,
 								'pagu_rpm', (paket.pgrupiah + paket.pgsbsn),
 								'pagu_phln', paket.pgpln,
 								'pagu_total', paket.pg,
-								'realisasi_rpm', (paket.rr_rupiahm + paket.rr_sbsn),
-								'realisasi_phln', paket.rr_pln,
-								'realisasi_total', paket.rtot,
+								'realisasi_rpm', CASE  WHEN (paket.rr_rupiahm + paket.rr_sbsn) ='' THEN 0 ELSE  (paket.rr_rupiahm + paket.rr_sbsn) END,
+								'realisasi_phln', CASE  WHEN paket.rr_pln='' THEN 0 ELSE paket.rr_pln  END,
+								'realisasi_total', CASE  WHEN paket.rtot ='' THEN 0 ELSE paket.rtot END ,
 								'persen_keu', (paket.rtot/paket.pg)*100,
 								'persen_fi', (paket.ufis/paket.pg)*100
 	                        )
@@ -186,8 +186,8 @@ class TematikModel extends Model
 				'title' => $value['title'],
 				'totalPagu' => $totalPagu,
 				'totalRealisasi' => $totalRealisasi,
-				'totalProgKeu' => ($totalPagu !=  0  ? ($totalRealisasi / $totalPagu) * 100:0),
-				'totalProgFis' => ($totalPagu !=  0  ?($totalUFis / $totalPagu) * 100:0),
+				'totalProgKeu' => ($totalPagu !=  0  ? ($totalRealisasi / $totalPagu) * 100 : 0),
+				'totalProgFis' => ($totalPagu !=  0  ? ($totalUFis / $totalPagu) * 100 : 0),
 				'list' => $itemList
 			];
 

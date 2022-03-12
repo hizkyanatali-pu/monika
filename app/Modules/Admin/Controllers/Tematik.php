@@ -6,7 +6,7 @@ use Modules\Admin\Models\TematikModel;
 
 class Tematik extends \App\Controllers\BaseController
 {
-	private $renderFolder = 'Modules\Admin\Views\Tematik';
+    private $renderFolder = 'Modules\Admin\Views\Tematik';
 
 
 
@@ -17,9 +17,10 @@ class Tematik extends \App\Controllers\BaseController
 
 
 
-    public function pageFoodEstate() {
-        $data = $this->TematikModel->getListTematik('TXX0003');
-    	return view($this->renderFolder.'\Tematik-view', [
+    public function pageFoodEstate()
+    {
+        $data = $this->TematikModel->getListTematik('T060019');
+        return view($this->renderFolder . '\Tematik-view', [
             'title'         => 'Food Estate',
             'filterTitle'   => 'Food Estate TA',
             'exportCode'    => 'food_estate',
@@ -28,20 +29,22 @@ class Tematik extends \App\Controllers\BaseController
         ]);
     }
 
-    public function cetakFoodEstate(){
+    public function cetakFoodEstate()
+    {
 
         $data = [
             'title' => 'Food Estate',
-            'data'  => $this->TematikModel->getListTematik('TXX0003')
+            'data'  => $this->TematikModel->getListTematik('T060019')
         ];
 
-        return view($this->renderFolder."\Cetak\Tematik-pdf", $data);
+        return view($this->renderFolder . "\Cetak\Tematik-pdf", $data);
     }
 
 
-    public function pageKawasanIndustri() {
-        $data = $this->TematikModel->getListTematik('T060012');
-        return view($this->renderFolder.'\Tematik-view', [
+    public function pageKawasanIndustri()
+    {
+        $data = $this->TematikModel->getListTematik('TMKEM0005');
+        return view($this->renderFolder . '\Tematik-view', [
             'title'         => 'Kawasan Industri',
             'filterTitle'   => 'Dukungan Kawasan Industri di Lingkungan Ditjen SDA TA',
             'exportCode'    => 'kawasan_industri',
@@ -50,22 +53,24 @@ class Tematik extends \App\Controllers\BaseController
         ]);
     }
 
-    public function cetakKawasanIndustri(){
+    public function cetakKawasanIndustri()
+    {
 
         $data = [
             'title' => 'Kawasan Industri',
-            'data'  => $this->TematikModel->getListTematik('T060012')
+            'data'  => $this->TematikModel->getListTematik('TMKEM0005')
         ];
 
-        return view($this->renderFolder."\Cetak\Tematik-pdf", $data);
+        return view($this->renderFolder . "\Cetak\Tematik-pdf", $data);
     }
 
 
-    public function pageKspn($kspCode) {
+    public function pageKspn($kspCode)
+    {
         $kspnTitle = $this->kspnFilterTitle($kspCode);
         $data = $this->TematikModel->getListTematikKspn($kspCode);
 
-    	return view($this->renderFolder.'\Kspn', [
+        return view($this->renderFolder . '\Kspn', [
             'title'         => 'KSPN',
             'uri'           => current_url(true),
             'filterTitle'   => $kspnTitle['filterTitle'],
@@ -74,7 +79,8 @@ class Tematik extends \App\Controllers\BaseController
         ]);
     }
 
-    public function cetakKspn($kspCode){
+    public function cetakKspn($kspCode)
+    {
 
         $data = [
             'title' => 'KSPN',
@@ -82,46 +88,48 @@ class Tematik extends \App\Controllers\BaseController
             'id_report_pdf' => 'cetak_kspn'
         ];
 
-        return view($this->renderFolder."\Cetak\Kspn-pdf", $data);
+        return view($this->renderFolder . "\Cetak\Kspn-pdf", $data);
     }
 
 
-    public function pageRekap() {
+    public function pageRekap()
+    {
         $grupData = $this->rekapGroupData();
         $data = $this->TematikModel->getListRekap($grupData);
 
-    	return view($this->renderFolder.'\Rekap', [
+        return view($this->renderFolder . '\Rekap', [
             'title'         => 'Rekap',
             'data' => $data,
             'id_report_pdf' => 'cetak_rekap'
         ]);
     }
 
-    public function cetakRekap(){
+    public function cetakRekap()
+    {
 
         $data = [
             'title' => 'Rekap',
             'data'  => $this->TematikModel->getListRekap($this->rekapGroupData())
         ];
 
-        return view($this->renderFolder."\Cetak\Rekap-pdf", $data);
+        return view($this->renderFolder . "\Cetak\Rekap-pdf", $data);
     }
 
 
-    public function exportExcel($tematikType) {
+    public function exportExcel($tematikType)
+    {
         if ($tematikType == 'food_estate') {
-            $tematikCode = "TXX0003";
+            $tematikCode = "T060019";
             $title = "Food Estate";
             $filterTitle = "Food Estate TA";
-        }
-        else {
-            $tematikCode = "T060012";
+        } else {
+            $tematikCode = "TMKEM0005";
             $title = "Kawasan Industri";
             $filterTitle = "Dukungan Kawasan Industri di Lingkungan Ditjen SDA TA";
         }
 
         $data = $this->TematikModel->getListTematik($tematikCode);
-        return view($this->renderFolder.'\Cetak\Tematik-excel', [
+        return view($this->renderFolder . '\Cetak\Tematik-excel', [
             'title'         => $title,
             'filterTitle'   => $filterTitle,
             'data'          => $data
@@ -130,10 +138,11 @@ class Tematik extends \App\Controllers\BaseController
 
 
 
-    public function exportExcelKspn($kspnCode) {
+    public function exportExcelKspn($kspnCode)
+    {
         $kspnTitle = $this->kspnFilterTitle($kspnCode);
         $data = $this->TematikModel->getListTematikKspn($kspnCode);
-        return view($this->renderFolder.'\Cetak\Kspn-excel', [
+        return view($this->renderFolder . '\Cetak\Kspn-excel', [
             'title'         => $kspnTitle['title'],
             'filterTitle'   => $kspnTitle['filterTitle'],
             'data'          => $data
@@ -142,18 +151,20 @@ class Tematik extends \App\Controllers\BaseController
 
 
 
-    public function exportExcelRekap() {
+    public function exportExcelRekap()
+    {
         $grupData = $this->rekapGroupData();
         $data = $this->TematikModel->getListRekap($grupData);
 
-        return view($this->renderFolder.'\Cetak\Rekap-excel', [
+        return view($this->renderFolder . '\Cetak\Rekap-excel', [
             'data'          => $data
         ]);
     }
 
 
 
-    private function kspnFilterTitle($kspnCode) {
+    private function kspnFilterTitle($kspnCode)
+    {
         switch ($kspnCode):
             case 'kspn01':
                 $title = 'Danau Toba';
@@ -179,7 +190,22 @@ class Tematik extends \App\Controllers\BaseController
                 $title = 'Manado';
                 $filterTitle = 'Manado - Bitung - Likupang TA';
                 break;
-            
+
+            case 'kspn06':
+                $title = 'Tanjung Kelayang ';
+                $filterTitle = 'Tanjung Kelayang  TA';
+                break;
+
+            case 'kspn08':
+                $title = 'Wakatobi';
+                $filterTitle = 'Wakatobi TA';
+                break;
+
+            case 'kspn09':
+                $title = 'Morotai';
+                $filterTitle = 'Morotai TA';
+                break;
+
             default:
                 $title = '';
                 $filterTitle = '';
@@ -193,19 +219,20 @@ class Tematik extends \App\Controllers\BaseController
 
 
 
-    private function rekapGroupData() {
+    private function rekapGroupData()
+    {
         return [
             [
                 'title' => 'Food Estate',
-                'tematikCode' => ["'TXX0003'"]
+                'tematikCode' => ["'T060019'"]
             ],
             [
                 'title' => 'Kawasan Industri',
-                'tematikCode' => ["'T060012'"]
+                'tematikCode' => ["'TMKEM0005'"]
             ],
             [
                 'title' => 'KSPN',
-                'tematikCode' => ["'kspn01'", "'kspn02'", "'kspn03'", "'kspn04'", "'kspn05'"]
+                'tematikCode' => ["'kspn01'", "'kspn02'", "'kspn03'", "'kspn04'", "'kspn05'", "'kspn06'", "'kspn08'", "'kspn09'"]
             ]
         ];
     }

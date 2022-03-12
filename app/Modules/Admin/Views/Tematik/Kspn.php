@@ -7,38 +7,32 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h5 class="kt-subheader__title">
-                KSPN 
+                KSPN
             </h5>
             <select class="form-control" id="selectKspn" style="width: 140px;">
-                <option 
-                    value="kspn01" 
-                    <?php if($uri->getSegment(3) == "kspn01"): ?> selected <?php endif; ?>
-                >
+                <option value="kspn01" <?php if ($uri->getSegment(3) == "kspn01") : ?> selected <?php endif; ?>>
                     Danau Toba
                 </option>
-                <option 
-                    value="kspn02" 
-                    <?php if($uri->getSegment(3) == "kspn02"): ?> selected <?php endif; ?>
-                >
+                <option value="kspn02" <?php if ($uri->getSegment(3) == "kspn02") : ?> selected <?php endif; ?>>
                     Borobudur
                 </option>
-                <option 
-                    value="kspn03" 
-                    <?php if($uri->getSegment(3) == "kspn03"): ?> selected <?php endif; ?>
-                >
+                <option value="kspn03" <?php if ($uri->getSegment(3) == "kspn03") : ?> selected <?php endif; ?>>
                     Mandalika
                 </option>
-                <option 
-                    value="kspn04" 
-                    <?php if($uri->getSegment(3) == "kspn04"): ?> selected <?php endif; ?>
-                >
+                <option value="kspn04" <?php if ($uri->getSegment(3) == "kspn04") : ?> selected <?php endif; ?>>
                     Labuan Bojo
                 </option>
-                <option 
-                    value="kspn05" 
-                    <?php if($uri->getSegment(3) == "kspn05"): ?> selected <?php endif; ?>
-                >
+                <option value="kspn05" <?php if ($uri->getSegment(3) == "kspn05") : ?> selected <?php endif; ?>>
                     Manado
+                </option>
+                <option value="kspn06" <?php if ($uri->getSegment(3) == "kspn06") : ?> selected <?php endif; ?>>
+                    Tanjung Kelayang
+                </option>
+                <option value="kspn08" <?php if ($uri->getSegment(3) == "kspn08") : ?> selected <?php endif; ?>>
+                    Wakatobi
+                </option>
+                <option value="kspn09" <?php if ($uri->getSegment(3) == "kspn09") : ?> selected <?php endif; ?>>
+                    Morotai
                 </option>
             </select>
             <span class="kt-subheader__separator kt-hidden"></span>
@@ -62,7 +56,7 @@
                         <label class="mb-0"><?php echo $filterTitle ?></label>
                         <div class="input-group" style="width:200px !important">
                             <select class="form-control" id="listmonth" name="month" disabled>
-                            	<option>2021</option>
+                                <option><?= session('userData.tahun') ?></option>
                             </select>
                             <div class="dropdown dropright">
                                 <button type="button" class="btn btn-primary btn-icon ml-3" dropdown-toggle data-toggle="dropdown"><i class="la la-filter"></i></button>
@@ -158,16 +152,13 @@
                     <div class="col-md-6 text-right mt-3">
                         <div class="form-group">
                             <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
-                            <a 
-                                href="<?php echo site_url('tematik/excel-kspn/'.$uri->getSegment(3)) ?>" 
-                                class="btn btn-success btn-sm text-white" target="_blank"
-                            >
+                            <a href="<?php echo site_url('tematik/excel-kspn/' . $uri->getSegment(3)) ?>" class="btn btn-success btn-sm text-white" target="_blank">
                                 <i class="fa fa-file-excel"></i>Excel
                             </a>
                         </div>
                         <i><b>*Dalam Ribuan</b></i>
                     </div>
-                </div>    
+                </div>
 
                 <div class="table-responsive tableFixHead">
 
@@ -198,9 +189,14 @@
                         </thead>
 
                         <tbody id="tbody-utama">
-                            <?php 
-                                $no = 1;
-                                foreach($data as $key => $value) : 
+                            <?php
+                            $no = 1;
+                            if (empty($data)) {
+                                echo "<tr><td colspan='13' class='text-center'>Tidak Ada Data</td></tr>
+                                
+                                ";
+                            }
+                            foreach ($data as $key => $value) :
                             ?>
                                 <tr>
                                     <td colspan="13" class="tdprogram"><?php echo $value->satker ?></td>
@@ -209,7 +205,7 @@
                                     <tr>
                                         <td><?php echo $no++ ?></td>
                                         <td class="col-satker"><?php echo $value->nmpaket ?></td>
-                                        <td class="col-target_vol"><?php echo onlyTwoDecimal($value->vol) ?></td>
+                                        <td class="col-target_vol"><?php echo $value->vol ?></td>
                                         <td class="col-target_satuan"><?php echo $value->satuan ?></td>
                                         <td class="col-lokasi"><?php echo $value->lokasi ?></td>
                                         <td class="col-pagu_rpm"><?php echo toRupiah($value->pagu_rpm, false) ?></td>
@@ -242,7 +238,7 @@
 <?= $this->section('upper_footer_js') ?>
 <script>
     $('#selectKspn').on('change', function() {
-        
+
         window.location = "<?php echo site_url('tematik/kspn/') ?>" + $(this).val();
     });
 </script>
@@ -262,13 +258,13 @@
     let report_open = true
     let checkbox = $("input:checkbox")
     $("input:checkbox").prop("checked", true)
-    $("input:checkbox").click(function(){
-        
+    $("input:checkbox").click(function() {
+
         //checking checked checkbox for report button
-        if((checkbox.length - checkbox.filter(":checked").length) == checkbox.length){
-            
+        if ((checkbox.length - checkbox.filter(":checked").length) == checkbox.length) {
+
             report_open = false
-        }else{
+        } else {
 
             report_open = true
         }
@@ -289,10 +285,10 @@
 
             target_counter--;
         }
-        if($("table .target_vol").is(":hidden") && $("table .target_satuan").is(":hidden")){
+        if ($("table .target_vol").is(":hidden") && $("table .target_satuan").is(":hidden")) {
 
             $(".target-main").hide()
-        }else{
+        } else {
 
             $(".target-main").show()
             $(".target-main").attr("colspan", target_counter)
@@ -314,10 +310,10 @@
 
             pagu_counter--;
         }
-        if($("table .pagu_rpm").is(":hidden") && $("table .pagu_phln").is(":hidden") && $("table .pagu_total").is(":hidden")){
+        if ($("table .pagu_rpm").is(":hidden") && $("table .pagu_phln").is(":hidden") && $("table .pagu_total").is(":hidden")) {
 
             $(".pagu-main").hide()
-        }else{
+        } else {
 
             $(".pagu-main").show()
             $(".pagu-main").attr("colspan", pagu_counter)
@@ -339,10 +335,10 @@
 
             realisasi_counter--;
         }
-        if($("table .realisasi_rpm").is(":hidden") && $("table .realisasi_phln").is(":hidden") && $("table .realisasi_total").is(":hidden")){
+        if ($("table .realisasi_rpm").is(":hidden") && $("table .realisasi_phln").is(":hidden") && $("table .realisasi_total").is(":hidden")) {
 
             $(".realisasi-main").hide()
-        }else{
+        } else {
 
             $(".realisasi-main").show()
             $(".realisasi-main").attr("colspan", realisasi_counter)
@@ -360,10 +356,10 @@
 
             progres_counter--;
         }
-        if($("table .progres_keu").is(":hidden") && $("table .progres_fis").is(":hidden")){
+        if ($("table .progres_keu").is(":hidden") && $("table .progres_fis").is(":hidden")) {
 
             $(".progres-main").hide()
-        }else{
+        } else {
 
             $(".progres-main").show()
             $(".progres-main").attr("colspan", progres_counter)
@@ -371,65 +367,65 @@
         //progres end section
     });
 
-    $(".pdf-report").click(function(){
-        
+    $(".pdf-report").click(function() {
+
         let arr = [];
-        
-        if(!$("input[name=satker]").prop("checked")){
+
+        if (!$("input[name=satker]").prop("checked")) {
 
             arr.push("satker")
         }
-        if(!$("input[name=target_vol]").prop("checked")){
+        if (!$("input[name=target_vol]").prop("checked")) {
 
             arr.push("target_vol")
         }
-        if(!$("input[name=target_satuan]").prop("checked")){
+        if (!$("input[name=target_satuan]").prop("checked")) {
 
             arr.push("target_satuan")
         }
-        if(!$("input[name=lokasi]").prop("checked")){
+        if (!$("input[name=lokasi]").prop("checked")) {
 
             arr.push("lokasi")
         }
-        if(!$("input[name=pagu_rpm]").prop("checked")){
+        if (!$("input[name=pagu_rpm]").prop("checked")) {
 
             arr.push("pagu_rpm")
         }
-        if(!$("input[name=pagu_phln]").prop("checked")){
+        if (!$("input[name=pagu_phln]").prop("checked")) {
 
             arr.push("pagu_phln")
         }
-        if(!$("input[name=pagu_total]").prop("checked")){
+        if (!$("input[name=pagu_total]").prop("checked")) {
 
             arr.push("pagu_total")
         }
-        if(!$("input[name=realisasi_rpm]").prop("checked")){
+        if (!$("input[name=realisasi_rpm]").prop("checked")) {
 
             arr.push("realisasi_rpm")
         }
-        if(!$("input[name=realisasi_phln]").prop("checked")){
+        if (!$("input[name=realisasi_phln]").prop("checked")) {
 
             arr.push("realisasi_phln")
         }
-        if(!$("input[name=realisasi_total]").prop("checked")){
+        if (!$("input[name=realisasi_total]").prop("checked")) {
 
             arr.push("realisasi_total")
         }
-        if(!$("input[name=progres_keu]").prop("checked")){
+        if (!$("input[name=progres_keu]").prop("checked")) {
 
             arr.push("progres_keu")
         }
-        if(!$("input[name=progres_fis]").prop("checked")){
+        if (!$("input[name=progres_fis]").prop("checked")) {
 
             arr.push("progres_fis")
         }
 
         //condition for report button
-        if(report_open){
+        if (report_open) {
 
-            $(this).attr("href", "<?= site_url("tematik/").$id_report_pdf ?>/<?= $uri->getSegment(3) ?>?filter="+arr.join(','))
+            $(this).attr("href", "<?= site_url("tematik/") . $id_report_pdf ?>/<?= $uri->getSegment(3) ?>?filter=" + arr.join(','))
             $(this).attr("target", "_blank")
-        }else{
+        } else {
 
             $(this).removeAttr("href")
             $(this).removeAttr("target")
