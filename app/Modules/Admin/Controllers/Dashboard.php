@@ -119,20 +119,38 @@ class Dashboard extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\Dashboard', $data);
     }
 
+    // private function rekapGroupData()
+    // {
+    //     return [
+    //         [
+    //             'title' => 'Food Estate',
+    //             'tematikCode' => ["'TXX0003'"]
+    //         ],
+    //         [
+    //             'title' => 'Kawasan Industri',
+    //             'tematikCode' => ["'T060012'"]
+    //         ],
+    //         [
+    //             'title' => 'KSPN',
+    //             'tematikCode' => ["'kspn01'", "'kspn02'", "'kspn03'", "'kspn04'", "'kspn05'"]
+    //         ]
+    //     ];
+    // }
+
     private function rekapGroupData()
     {
         return [
             [
                 'title' => 'Food Estate',
-                'tematikCode' => ["'TXX0003'"]
+                'tematikCode' => ["'T060019'"]
             ],
             [
                 'title' => 'Kawasan Industri',
-                'tematikCode' => ["'T060012'"]
+                'tematikCode' => ["'TMKEM0005'"]
             ],
             [
                 'title' => 'KSPN',
-                'tematikCode' => ["'kspn01'", "'kspn02'", "'kspn03'", "'kspn04'", "'kspn05'"]
+                'tematikCode' => ["'kspn01'", "'kspn02'", "'kspn03'", "'kspn04'", "'kspn05'", "'kspn06'", "'kspn08'", "'kspn09'"]
             ]
         ];
     }
