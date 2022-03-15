@@ -92,6 +92,54 @@ class Tematik extends \App\Controllers\BaseController
     }
 
 
+    public function pageG20()
+    {
+        $data = $this->TematikModel->getListTematik('T060020');
+        return view($this->renderFolder . '\Tematik-view', [
+            'title'         => 'G20',
+            'filterTitle'   => 'G20 TA',
+            'exportCode'    => 'g20',
+            'data'          => $data,
+            'id_report_pdf' => 'cetak_g20'
+        ]);
+    }
+
+
+    public function cetakG20()
+    {
+        $data = [
+            'title' => 'G20',
+            'data'  => $this->TematikModel->getListTematik('T060020')
+        ];
+
+        return view($this->renderFolder . "\Cetak\Tematik-pdf", $data);
+    }
+
+
+    public function pageIkn()
+    {
+        $data = $this->TematikModel->getListTematik('TXX0011');
+        return view($this->renderFolder . '\Tematik-view', [
+            'title'         => 'Ibu Kota Negara (IKN)',
+            'filterTitle'   => 'IKN TA',
+            'exportCode'    => 'ikn',
+            'data'          => $data,
+            'id_report_pdf' => 'cetak_ikn'
+        ]);
+    }
+
+
+    public function cetakIkn()
+    {
+        $data = [
+            'title' => 'Ibu Kota Negara (IKN)',
+            'data'  => $this->TematikModel->getListTematik('TXX0011')
+        ];
+
+        return view($this->renderFolder . "\Cetak\Tematik-pdf", $data);
+    }
+
+
     public function pageRekap()
     {
         $grupData = $this->rekapGroupData();
@@ -122,7 +170,18 @@ class Tematik extends \App\Controllers\BaseController
             $tematikCode = "T060019";
             $title = "Food Estate";
             $filterTitle = "Food Estate TA";
-        } else {
+        }
+        elseif ($tematikType == 'g20') {
+            $tematikCode = "T060020";
+            $title = "G20";
+            $filterTitle = "G20 TA";
+        } 
+        elseif ($tematikType == 'ikn') {
+            $tematikCode = "TXX0011";
+            $title = "Ibu Kota Negara (IKN)";
+            $filterTitle = "IKN TA";
+        } 
+        else {
             $tematikCode = "TMKEM0005";
             $title = "Kawasan Industri";
             $filterTitle = "Dukungan Kawasan Industri di Lingkungan Ditjen SDA TA";

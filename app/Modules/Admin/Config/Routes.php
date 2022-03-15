@@ -126,6 +126,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('food-estate', '\Modules\Admin\Controllers\Tematik::pageFoodEstate');
         $routes->get('kawasan-industri', '\Modules\Admin\Controllers\Tematik::pageKawasanIndustri');
         $routes->get('kspn/(:any)', '\Modules\Admin\Controllers\Tematik::pageKspn/$1');
+        $routes->get('g20', '\Modules\Admin\Controllers\Tematik::pageG20');
+        $routes->get('ikn', '\Modules\Admin\Controllers\Tematik::pageIkn');
         $routes->get('rekap', '\Modules\Admin\Controllers\Tematik::pageRekap');
         $routes->get('excel/(:any)', '\Modules\Admin\Controllers\Tematik::exportExcel/$1');
         $routes->get('excel-kspn/(:any)', '\Modules\Admin\Controllers\Tematik::exportExcelKspn/$1');
@@ -135,6 +137,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('cetak_food_estate', '\Modules\Admin\Controllers\Tematik::cetakFoodEstate');
         $routes->get('cetak_kawasan_industri', '\Modules\Admin\Controllers\Tematik::cetakKawasanIndustri');
         $routes->get('cetak_kspn/(:any)', '\Modules\Admin\Controllers\Tematik::cetakKspn/$1');
+        $routes->get('cetak_g20', '\Modules\Admin\Controllers\Tematik::cetakG20');
+        $routes->get('cetak_ikn', '\Modules\Admin\Controllers\Tematik::cetakIkn');
         $routes->get('cetak_rekap', '\Modules\Admin\Controllers\Tematik::cetakRekap');
     });
 

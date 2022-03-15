@@ -137,6 +137,24 @@ $request = \Config\Services::request();
                             </a>
                         </li>
                         <li class="kt-menu__item  <?=
+                                                    ($request->uri->getSegment(1) == 'tematik' && $request->uri->getSegment(2) == 'g20'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <a href="<?= site_url('tematik/g20'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">G20</span>
+                            </a>
+                        </li>
+                        <li class="kt-menu__item  <?=
+                                                    ($request->uri->getSegment(1) == 'tematik' && $request->uri->getSegment(2) == 'ikn'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <a href="<?= site_url('tematik/ikn'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">Ibu Kota Negara (IKN)</span>
+                            </a>
+                        </li>
+                        <li class="kt-menu__item  <?=
                                                     ($request->uri->getSegment(1) == 'tematik' && $request->uri->getSegment(2) == 'rekap'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                             <a href="<?= site_url('tematik/rekap'); ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
