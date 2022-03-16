@@ -147,7 +147,7 @@ class Tematik extends \App\Controllers\BaseController
 
         return view($this->renderFolder . '\Rekap', [
             'title'         => 'Rekap',
-            'data' => $data,
+            'data'          => $data,
             'id_report_pdf' => 'cetak_rekap'
         ]);
     }
@@ -292,6 +292,14 @@ class Tematik extends \App\Controllers\BaseController
             [
                 'title' => 'KSPN',
                 'tematikCode' => ["'kspn01'", "'kspn02'", "'kspn03'", "'kspn04'", "'kspn05'", "'kspn06'", "'kspn08'", "'kspn09'"]
+            ],
+            [
+                'title' => 'G20',
+                'tematikCode' => ["'T060020'"]
+            ],
+            [
+                'title' => 'Ibu Kota Negara (IKN)',
+                'tematikCode' => ["'TXX0011'"]
             ]
         ];
     }
