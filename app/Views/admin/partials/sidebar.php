@@ -168,7 +168,7 @@ $request = \Config\Services::request();
             </li>
 
             <li class="kt-menu__item  <?=
-                                        ($request->uri->getSegment(1) == 'sisa-lelang' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('sisa-lelang/'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Sisa Lelang</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
+                                        ($request->uri->getSegment(1) == 'sisa-lelang' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('sisa-lelang'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Sisa Lelang</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
 
             <li class="kt-menu__item  <?=
                                         ($request->uri->getSegment(1) == 'Kinerja-Output-Bulanan' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('Kinerja-Output-Bulanan/') . encrypt_url(date('n')); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Kinerja Output Bulanan</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
