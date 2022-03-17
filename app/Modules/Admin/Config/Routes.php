@@ -142,6 +142,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('cetak_rekap', '\Modules\Admin\Controllers\Tematik::cetakRekap');
     });
 
+    $routes->get('sisa-lelang', '\Modules\Admin\Controllers\SisaLelang::index');
+
     $routes->group('Kinerja-Output-Bulanan', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('(:any)', '\Modules\Admin\Controllers\KinerjaOutputBulanan::index/$1');
         $routes->get('(:any)/(:any)', '\Modules\Admin\Controllers\KinerjaOutputBulanan::index/$1/$2');
