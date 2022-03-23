@@ -167,8 +167,33 @@ $request = \Config\Services::request();
                 </div>
             </li>
 
-            <li class="kt-menu__item  <?=
-                                        ($request->uri->getSegment(1) == 'sisa-lelang' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('sisa-lelang/'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Sisa Lelang</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
+            
+            <li class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'sisa-lelang' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fas fa-project-diagram"></i><span class="kt-menu__link-text">Sisa Lelang</span><span class="kt-badge kt-badge--danger">N</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+                <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+                    <ul class="kt-menu__subnav">
+                        <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'sisa-lelang' && $request->uri->getSegment(2) == 'ditjen-sda'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <a href="<?= site_url('sisa-lelang/ditjen-sda'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">
+                                    Ditjen SDA
+                                </span>
+                            </a>
+                        </li>
+                        <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'sisa-lelang' && $request->uri->getSegment(2) == 'per-kategori'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <a href="<?= site_url('sisa-lelang/per-kategori'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">
+                                    Per Kategori
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
 
             <li class="kt-menu__item  <?=
                                         ($request->uri->getSegment(1) == 'Kinerja-Output-Bulanan' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('Kinerja-Output-Bulanan/') . encrypt_url(date('n')); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Kinerja Output Bulanan</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
@@ -202,6 +227,15 @@ $request = \Config\Services::request();
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'preferensi' && $request->uri->getSegment(2) == 'tarik-data-emon'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('preferensi/tarik-data-emon/paket') ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tarik Data Dari E-Monitoring</span></a></li>
 
+                        <li 
+                            class="kt-menu__item 
+                            <?= ($request->uri->getSegment(1) == 'preferensi' && $request->uri->getSegment(2) == 'tarik-data-emon-sisa-lelang-sda'  ? ' kt-menu__item--active' : '') ?>" 
+                            aria-haspopup="true"
+                        >
+                            <a href="<?= site_url('preferensi/tarik-data-emon-sisa-lelang-sda') ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tarik Data Emon Sisa Lelang SDA</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>

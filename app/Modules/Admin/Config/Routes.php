@@ -60,6 +60,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('satker_tertinggi', '\Modules\Admin\Controllers\Pulldata::satker_tertinggi');
         $routes->get('satker_deviasi_terbesar', '\Modules\Admin\Controllers\Pulldata::satker_deviasi_terbesar');
 
+        $routes->get('emon-sisa-lelang-sda', '\Modules\Admin\Controllers\SisaLelangSda::tarikDataEmonSisaLelangSda');
+
 
 
 
@@ -98,6 +100,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('preferensi', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('dari-sqlite', '\Modules\Admin\Controllers\Preferensi::index');
         $routes->get('tarik-data-emon/(:any)', '\Modules\Admin\Controllers\Importdata::index/$1');
+        $routes->get('tarik-data-emon-sisa-lelang-sda', '\Modules\Admin\Controllers\SisaLelangSda::pageTarikData');
 
         //fitur tarik data dari api
         $routes->get('tarikdata', '\Modules\Admin\Controllers\Preferensi::tarikdata');
@@ -142,7 +145,11 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('cetak_rekap', '\Modules\Admin\Controllers\Tematik::cetakRekap');
     });
 
-    $routes->get('sisa-lelang', '\Modules\Admin\Controllers\SisaLelang::index');
+    
+    $routes->group('sisa-lelang', ['namespace' => 'App\Controllers'], function ($routes) {
+        $routes->get('ditjen-sda', '\Modules\Admin\Controllers\SisaLelangSda::index');
+        $routes->get('per-kategori', '\Modules\Admin\Controllers\SisaLelangSda::pagePerKategori');
+    });
 
     $routes->group('Kinerja-Output-Bulanan', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('(:any)', '\Modules\Admin\Controllers\KinerjaOutputBulanan::index/$1');
