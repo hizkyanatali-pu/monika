@@ -32,9 +32,10 @@ class SisaLelangSda extends \App\Controllers\BaseController
 
         $qdata = $this->paketTable->select("
             SUBSTRING_INDEX(kode, '.', 1) as kodeKeg,
-            '-' as namaKeg,
+            tgiat.nmgiat as namaKeg,
             SUM(sisa_lelang) as jumlah
         ")
+        ->join('tgiat', "SUBSTRING_INDEX(emon_tarik_sisalelang_sda_paketpekerjaan.kode, '.', 1) = tgiat.kdgiat")
         ->where('tarik_id', $lastTarikId)
         ->groupBy("SUBSTRING_INDEX(kode, '.', 1)")
         ->get();
