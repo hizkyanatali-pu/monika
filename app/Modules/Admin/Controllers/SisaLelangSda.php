@@ -73,6 +73,9 @@ class SisaLelangSda extends \App\Controllers\BaseController
 
     public function tarikDataEmonSisaLelangSda()
     {
+        $this->tarikTable->truncate();
+        $this->satkerTable->truncate();
+        $this->paketTable->truncate();
         $content = file_get_contents('https://emonitoring.pu.go.id/api_pep/sisa_lelang_sda');
         $dom = new \DOMDocument();
         @$dom->loadHTML($content);
@@ -116,11 +119,11 @@ class SisaLelangSda extends \App\Controllers\BaseController
                     'nama'                => $this->trimString($node->item(2)->nodeValue),
                     'jenis_kontrak'       => $this->trimString($node->item(3)->nodeValue),
                     'nomor_kontrak'       => $this->trimString($node->item(4)->nodeValue),
-                    'pagu_pengadaan'      => $this->trimString($node->item(5)->nodeValue),
-                    'pagu_dipa_2022'      => $this->trimString($node->item(6)->nodeValue),
-                    'nilai_kontrak_induk' => $this->trimString($node->item(7)->nodeValue),
-                    'nilai_kontrak_anak'  => $this->trimString($node->item(8)->nodeValue),
-                    'sisa_lelang'         => $this->trimString($node->item(9)->nodeValue)
+                    'pagu_pengadaan'      => str_replace(".", "", $this->trimString($node->item(5)->nodeValue)),
+                    'pagu_dipa_2022'      =>  str_replace(".", "", $this->trimString($node->item(6)->nodeValue)),
+                    'nilai_kontrak_induk' =>  str_replace(".", "", $this->trimString($node->item(7)->nodeValue)),
+                    'nilai_kontrak_anak'  =>  str_replace(".", "", $this->trimString($node->item(8)->nodeValue)),
+                    'sisa_lelang'         =>  str_replace(".", "", $this->trimString($node->item(9)->nodeValue))
                 ];
 
                 $this->paketTable->insert($paketInsert);
