@@ -22,7 +22,7 @@ class SisaLelangSda extends \App\Controllers\BaseController
 
     public function index()
     {
-        return view('Modules\Admin\Views\SisaLelangSda\SisaLelang.php');
+        return view('Modules\Admin\Views\SisaLelangSDA\SisaLelang.php');
     }
 
     public function pagePerKategori()
