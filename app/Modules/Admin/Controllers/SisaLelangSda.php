@@ -40,6 +40,7 @@ class SisaLelangSda extends \App\Controllers\BaseController
         ")
             ->join('tgiat', "SUBSTRING_INDEX(emon_tarik_sisalelang_sda_paketpekerjaan.kode, '.', 1) = tgiat.kdgiat")
             ->where('tarik_id', $lastTarikId)
+            ->where('tahun_anggaran', $this->user["tahun"])
             ->groupBy("SUBSTRING_INDEX(kode, '.', 1)")
             ->orderBy("tgiat.kdgiat")
             ->get();
