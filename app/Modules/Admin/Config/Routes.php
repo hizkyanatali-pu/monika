@@ -8,6 +8,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('api', ['namespace' => 'App\Controllers'], function ($routes) {
         //$routes->post('datadukung', '\Modules\Admin\Controllers\Api::index');
         $routes->get('cron-tarik-data/(:any)', '\Modules\Admin\Controllers\CronJob::dataPaket/$1');
+        $routes->get('cron-tarik-data-sisa-lelang', '\Modules\Admin\Controllers\CronJob::tarikDataEmonSisaLelangSda/$1');
     });
     $routes->add('dashboard', '\Modules\Admin\Controllers\Dashboard::index');
     $routes->add('excel', '\Modules\Admin\Controllers\Dashboard::Excel');
@@ -145,7 +146,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('cetak_rekap', '\Modules\Admin\Controllers\Tematik::cetakRekap');
     });
 
-    
+
     $routes->group('sisa-lelang', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('ditjen-sda', '\Modules\Admin\Controllers\SisaLelangSda::index');
         $routes->get('per-kategori', '\Modules\Admin\Controllers\SisaLelangSda::pagePerKategori');
