@@ -44,14 +44,14 @@
                             </thead>
 
                             <tbody id="tbody-utama">
-                                <?php 
-                                    $totalJumlah = 0;
-                                    if ($qdata) : 
+                                <?php
+                                $totalJumlah = 0;
+                                if ($qdata) :
                                 ?>
-                                    <?php 
-                                        $no = 1;
-                                        foreach ($qdata as $k => $d) : 
-                                            $totalJumlah += $d->jumlah;
+                                    <?php
+                                    $no = 1;
+                                    foreach ($qdata as $k => $d) :
+                                        $totalJumlah += $d->jumlah;
                                     ?>
                                         <tr>
                                             <td class="text-center"><?php echo $no++ ?></td>
@@ -66,12 +66,14 @@
                             </tbody>
                             <tfooter>
                                 <tr>
-                                    <td colspan="3">
+
+                                    <th></th>
+                                    <th colspan="2" style="text-align: center;">
                                         <strong>Total</strong>
-                                    </td>
-                                    <td class="text-right"> 
+                                    </th>
+                                    <th class="text-right">
                                         <strong><?php echo str_replace(',', '.', number_format($totalJumlah)) ?></strong>
-                                    </td>
+                                    </th>
                                 </tr>
                             </tfooter>
                         </table>

@@ -40,24 +40,24 @@ class CreateTableEmonTarikSisalelangSdaPaketpekerjaan extends Migration
                 'constraint' => 255
             ],
             'pagu_pengadaan' => [
-                'type'       => 'INT',
-                'constraint' => 255
+                'type'       => 'DECIMAL',
+                'constraint' => 20
             ],
             'pagu_dipa_2022' => [
-                'type'       => 'INT',
-                'constraint' => 255
+                'type'       => 'DECIMAL',
+                'constraint' => 20
             ],
             'nilai_kontrak_induk' => [
-                'type'       => 'INT',
-                'constraint' => 255
+                'type'       => 'DECIMAL',
+                'constraint' => 20
             ],
             'nilai_kontrak_anak' => [
-                'type'       => 'INT',
-                'constraint' => 255
+                'type'       => 'DECIMAL',
+                'constraint' => 20
             ],
             'sisa_lelang' => [
-                'type'       => 'INT',
-                'constraint' => 255
+                'type'       => 'DECIMAL',
+                'constraint' => 20
             ]
         ]);
         $this->forge->addKey('id', true);

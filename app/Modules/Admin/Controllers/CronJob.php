@@ -8,9 +8,12 @@ class CronJob extends \App\Controllers\BaseController
 {
     public function __construct()
     {
-
         // $this->TopikModel        = new TopikModel();
         $this->ImportdataModel        = new ImportdataModel();
+        $this->db = \Config\Database::connect();
+        $this->tarikTable = $this->db->table('emon_tarik_sisalelang_sda');
+        $this->satkerTable = $this->db->table('emon_tarik_sisalelang_sda_satker');
+        $this->paketTable = $this->db->table('emon_tarik_sisalelang_sda_paketpekerjaan');
     }
 
 
@@ -217,18 +220,93 @@ class CronJob extends \App\Controllers\BaseController
         } else {
 
 
+            log_message('error', 'Error Tarik Data');
+            return json_encode(["error" => "Auth Failure"]);
+        }
+    }
 
+
+    public function tarikDataEmonSisaLelangSda()
+    {
+        $param =  $this->request->getVar("apikey");
+        if ($param == "monika2k21") {
+            $this->tarikTable->truncate();
+            $this->satkerTable->truncate();
+            $this->paketTable->truncate();
+            $content = file_get_contents('https://emonitoring.pu.go.id/api_pep/sisa_lelang_sda');
+            $dom = new \DOMDocument();
+            @$dom->loadHTML($content);
+            $xpath = new \DomXpath($dom);
+
+            $header = $xpath->query("//div[@align='center']");
+            $entries = $xpath->query("//table[@id='csstab1']/tr");
+
+            $explodeHeader = explode('STATUS ', $this->trimString($header->item(0)->nodeValue));
+            $headerStatus = explode(' ; ', $explodeHeader[1]);
+
+            $results = array();
+            $tarik_id = 0;
+            $satker_id = 0;
+
+            $this->tarikTable->insert([
+                'data_tanggal' => $headerStatus[0],
+                'data_waktu'   => $headerStatus[1]
+            ]);
+            $tarik_id = $this->db->insertID();
+
+            foreach ($entries as $entry) {
+                $node = $xpath->query("td", $entry);
+
+                if ($node->length == 8) {
+                    // Satker
+                    $satkerInsert = [
+                        "tarik_id" => $tarik_id,
+                        "kode"     => $this->trimString($node->item(1)->nodeValue),
+                        "nama"     => $this->trimString($node->item(2)->nodeValue)
+                    ];
+
+                    $this->satkerTable->insert($satkerInsert);
+                    $satker_id = $this->db->insertID();
+                } else {
+                    // Paket Pekerjaan
+                    $paketInsert = [
+                        'tarik_id'            => $tarik_id,
+                        'satker_id'           => $satker_id,
+                        'kode'                => $this->trimString($node->item(1)->nodeValue),
+                        'nama'                => $this->trimString($node->item(2)->nodeValue),
+                        'jenis_kontrak'       => $this->trimString($node->item(3)->nodeValue),
+                        'nomor_kontrak'       => $this->trimString($node->item(4)->nodeValue),
+                        'pagu_pengadaan'      => str_replace(".", "", $this->trimString($node->item(5)->nodeValue)),
+                        'pagu_dipa_2022'      =>  str_replace(".", "", $this->trimString($node->item(6)->nodeValue)),
+                        'nilai_kontrak_induk' =>  str_replace(".", "", $this->trimString($node->item(7)->nodeValue)),
+                        'nilai_kontrak_anak'  =>  str_replace(".", "", $this->trimString($node->item(8)->nodeValue)),
+                        'sisa_lelang'         =>  str_replace(".", "", $this->trimString($node->item(9)->nodeValue))
+                    ];
+
+                    $this->paketTable->insert($paketInsert);
+                }
+            }
+            log_message('error', 'Berhasil Tarik Data');
+        } else {
+
+            log_message('error', 'Error Tarik Data');
             return json_encode(["error" => "Auth Failure"]);
         }
 
-
-
-        // // if ($this->request->isAJAX()) {
-
-        //     return json_encode(['success'=> 'success', 'csrf' => csrf_hash(), 'query ' => "haloo" ]);
-        // // }
-
+        // log_message('error', 'Some variable did not contain a value.');
     }
+
+    private function trimString($_text)
+    {
+        return rtrim(ltrim($_text));
+    }
+
+
+
+    // // if ($this->request->isAJAX()) {
+
+    //     return json_encode(['success'=> 'success', 'csrf' => csrf_hash(), 'query ' => "haloo" ]);
+    // // }
 
 
     function importsql($slug)
