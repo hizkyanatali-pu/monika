@@ -149,8 +149,6 @@ class PohonAnggaran extends \App\Controllers\BaseController
 
     public function sisaBelumLelang()
     {
-
-
         $data['title'] = "Belum Lelang";
         $data['nilai_rpm'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "RPM");
         $data['nilai_sbsn'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "SBSN");
@@ -166,10 +164,27 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $data['rpmMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "RPM");
         $data['phlnMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "PHLN");
 
-
-
-
         return view('Modules\Admin\Views\PosturAnggaran\Sisa-belum-lelang', $data);
+    }
+
+    public function rencanaTender()
+    {
+        $data['title'] = "Belum Lelang";
+        $data['nilai_rpm'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "RPM");
+        $data['nilai_sbsn'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "SBSN");
+        $data['nilai_phln'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "PHLN");
+
+        $data['rpmSyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "RPM");
+        $data['rpmMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "RPM");
+
+        $data['phlnMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "PHLN");
+
+
+        $data['rpmSycList'] = $this->PohonAnggaran->getDataBelumLelangList([[0]], "RPM");
+        $data['rpmMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "RPM");
+        $data['phlnMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "PHLN");
+
+        return view('Modules\Admin\Views\PosturAnggaran\Rencana-tender', $data);
     }
 
     public function danatidakTerserap()

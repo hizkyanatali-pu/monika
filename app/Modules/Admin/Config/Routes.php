@@ -8,7 +8,12 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('api', ['namespace' => 'App\Controllers'], function ($routes) {
         //$routes->post('datadukung', '\Modules\Admin\Controllers\Api::index');
         $routes->get('cron-tarik-data/(:any)', '\Modules\Admin\Controllers\CronJob::dataPaket/$1');
+
+        $routes->group('posturanggaran', ['namespace' => 'App\Controllers'], function ($routes) {
+            $routes->get('get-data-rencana-tender/(:any)', '\Modules\Admin\Controllers\Api\RencanaTender::getData_rencanaTender/$1');
+        });
     });
+    
     $routes->add('dashboard', '\Modules\Admin\Controllers\Dashboard::index');
     $routes->add('excel', '\Modules\Admin\Controllers\Dashboard::Excel');
 
@@ -122,6 +127,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('paket-kontraktual', '\Modules\Admin\Controllers\PohonAnggaran::paketKontraktual');
         $routes->get('sisa-lelang', '\Modules\Admin\Controllers\PohonAnggaran::sisaLelang');
         $routes->get('sisa-belum-lelang', '\Modules\Admin\Controllers\PohonAnggaran::sisaBelumLelang');
+        $routes->get('rencana-tender', '\Modules\Admin\Controllers\PohonAnggaran::rencanaTender');
+        $routes->get('get-data-rencana-tender', '\Modules\Admin\Controllers\Api\RencanaTender::getData_rencanaTender');
         $routes->get('dana-tidak-terserap', '\Modules\Admin\Controllers\PohonAnggaran::danatidakTerserap');
     });
 

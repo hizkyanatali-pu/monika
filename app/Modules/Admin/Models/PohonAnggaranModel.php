@@ -375,19 +375,32 @@ WHERE
     }
 
 
-    public function getDataRencanaTenderBelumLelang($w = '')
+    public function getDataRencanaTenderBelumLelang($w = '', $_rangeMonthOperation = null, $_bulan = null)
     {
+        $whereMonthYear = "";
+        if (!is_null($_bulan)) {
+            $whereMonthYear = " AND DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y') = '" . session("userData.tahun") . "' ";
+            $whereMonthYear .= " AND DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m') $_rangeMonthOperation '" . session("userData.tahun").'-'.$_bulan . "' ";
+        }
+        else {
+            $whereMonthYear = " AND DATE_FORMAT(now(),'%m') = MID(tgl_rencana_lelang,4,2) ";
+        }
 
         $db = \Config\Database::connect();
         $query = $db->query("SELECT DATE_FORMAT(now(),'%m') ,MID(tgl_rencana_lelang,4,2),sum(pfis) as nilai_kontrak,count(nmpaket) AS jml_paket FROM monika_kontrak_{$this->user['tahun']}
-        
-        WHERE status_tender = 'Belum Lelang' AND DATE_FORMAT(now(),'%m') = MID(tgl_rencana_lelang,4,2)
-
+        WHERE status_tender = 'Belum Lelang' 
+        $whereMonthYear
         AND sumber_dana = '{$w}'
-
         ");
 
-
         return $query->getRowArray();
+    }
+
+
+
+    public function getDataRencanaTender_detail4Bulan($_pagu) {
+        return [
+            'pagu' => 'aleksander'
+        ];
     }
 }
