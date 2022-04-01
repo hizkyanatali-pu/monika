@@ -536,6 +536,14 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.bg-tree-yellow{
+    background-color: #f7ff9c;
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 .bg-tree-footer{
     border: 3px solid white;
     border-radius: 10px;
