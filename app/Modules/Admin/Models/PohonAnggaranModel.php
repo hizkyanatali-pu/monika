@@ -379,8 +379,8 @@ WHERE
     {
         $whereMonthYear = "";
         if (!is_null($_bulan)) {
-            $whereMonthYear = " AND DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y') = '" . session("userData.tahun") . "' ";
-            $whereMonthYear .= " AND DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m') $_rangeMonthOperation '" . session("userData.tahun").'-'.$_bulan . "' ";
+            // $whereMonthYear = " AND DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y') = '" . session("userData.tahun") . "' ";
+            $whereMonthYear = " AND DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m') $_rangeMonthOperation '" . session("userData.tahun").'-'.$_bulan . "' ";
         }
         else {
             $whereMonthYear = " AND DATE_FORMAT(now(),'%m') = MID(tgl_rencana_lelang,4,2) ";

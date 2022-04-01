@@ -31,7 +31,7 @@ class RencanaTender extends ResourceController
         return $this->respond([
             'pagu' => $_pagu,
             'data' => [
-                'pagu'     => $this->PohonAnggaran->getDataRencanaTenderBelumLelang($_pagu),
+                'pagu'     => $this->PohonAnggaran->getDataRencanaTenderBelumLelang($_pagu, '<=',  $bulan),
                 'perBulan' => $res_perBulan
             ]
         ]);

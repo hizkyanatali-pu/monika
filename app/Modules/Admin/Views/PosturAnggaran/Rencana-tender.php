@@ -154,7 +154,15 @@
 
 
         toMilyar(_number) {
-            return "Rp. " + this.toFixed((_number / 1000000000), 2) + " M";
+            let stringLength = _number > 0 ? _number.length - 3 :  0;
+            let pembagi = 1000000000;
+            let suffix = 'M';
+
+            if (stringLength >= 13) {
+                pembagi = 1000000000000;
+                suffix = 'T';
+            }
+            return "Rp. " + this.toFixed((_number / pembagi), 2) + " " + suffix;
         }
 
         toFixed(num, fixed) {
