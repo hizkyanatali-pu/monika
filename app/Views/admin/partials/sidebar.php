@@ -82,9 +82,9 @@ $request = \Config\Services::request();
                         <li class="kt-menu__item  <?=
                                                     ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'pohon-anggaran-dipa'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/pohon-anggaran-dipa'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pohon Anggaran DIPA</span></a></li>
 
-                        <!-- <li class="kt-menu__item <?=
-                                                        ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'pagu-per-program'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/pagu-per-program'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pagu Per Program</span></a></li>
-                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('maintenance'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Alokasi Anggaran</span></a></li> -->
+                        <li class="kt-menu__item <?=
+                                                    ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'pagu-per-program'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/pagu-per-program'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pagu Per Program</span></a></li>
+                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('maintenance'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Alokasi Anggaran</span></a></li>
 
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'paket-kontraktual'  ? ' kt-menu__item--active' : '') ?> " aria-haspopup="true"><a href="<?= site_url('posturanggaran/paket-kontraktual'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kontraktual</span></a></li>
@@ -169,7 +169,7 @@ $request = \Config\Services::request();
                 </div>
             </li>
 
-            
+
             <li class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'sisa-lelang' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fas fa-project-diagram"></i><span class="kt-menu__link-text">Sisa Lelang</span><span class="kt-badge kt-badge--danger">N</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                     <ul class="kt-menu__subnav">
@@ -229,11 +229,8 @@ $request = \Config\Services::request();
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'preferensi' && $request->uri->getSegment(2) == 'tarik-data-emon'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('preferensi/tarik-data-emon/paket') ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tarik Data Dari E-Monitoring</span></a></li>
 
-                        <li 
-                            class="kt-menu__item 
-                            <?= ($request->uri->getSegment(1) == 'preferensi' && $request->uri->getSegment(2) == 'tarik-data-emon-sisa-lelang-sda'  ? ' kt-menu__item--active' : '') ?>" 
-                            aria-haspopup="true"
-                        >
+                        <li class="kt-menu__item 
+                            <?= ($request->uri->getSegment(1) == 'preferensi' && $request->uri->getSegment(2) == 'tarik-data-emon-sisa-lelang-sda'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                             <a href="<?= site_url('preferensi/tarik-data-emon-sisa-lelang-sda') ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tarik Data Emon Sisa Lelang SDA</span>
                             </a>
