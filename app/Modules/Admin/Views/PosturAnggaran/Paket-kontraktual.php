@@ -145,6 +145,122 @@
                     </ul>
                 </div>
             </div>
+           
+            <div class="kt-section__content">
+                <!-- <div class="text-center mt-4">
+                        <h4 class="text-dark"><b><?= $title; ?></b></h4>
+                        <hr class="w-75 mb-0">
+                    </div> -->
+
+                <div class="tree">
+                    <ul>
+                        <li class="w-100">
+                            <a href="#" class="">
+                                <div class="tree-content">
+                                    <div class="card card-body bg-tree-1">
+                                        <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                        <h4 class="mb-0"> KONTRAKTUAL </h4>
+                                        <h4 class="mb-0">DITJEN SDA</h4>
+                                        <h4 class="mb-0">Rp/ 28.05 Triliun</h4>
+                                        <h4 class="mb-0">2.006 Paket</h4>
+                                    </div>
+                                </div>
+                            </a>
+                            <ul>
+                                <li class="w-50">
+                                    <a href="#" class="">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-2">
+                                                <h4 class="mb-0"><b> BELUM KONTRAK </b></h4>
+
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h6> Paket</h6>
+                                                    <h5 class="mb-0">
+                                                        M
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </a>
+                                    <ul>
+                                        <li class="w-30">
+                                            <a href="#" class="">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-4">
+                                                        <h4 class="mb-0"><b> GAGAL LELANG </b></h4>
+
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h6>Paket</h6>
+                                                            <h5 class="mb-0">
+                                                                 M
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </a>
+                                        </li>
+                                        <li class="w-30">
+                                            <a href="#" class="">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-4">
+                                                        <h4 class="mb-0"><b> PROSES LELANG </b></h4>
+
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h6> Paket</h6>
+                                                            <h5 class="mb-0">
+                                                                 M
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </a>
+                                        </li>
+                                        <li class="w-40">
+                                            <a href="#" class="">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-4">
+                                                        <h4 class="mb-0"><b> BELUM LELANG </b></h4>
+
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h6>Paket</h6>
+                                                            <h5 class="mb-0">
+                                                                 M
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="w-50">
+                                    <a href="#" class="">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-2">
+                                                <h4 class="mb-0"><b> TERKONTRAK * </b></h4>
+
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h6>  Paket</h6>
+                                                    <h5 class="mb-0">
+                                                        M
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <b><i>* Termasuk MYC lanjutan</i></b>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
         </div>
     </div>
