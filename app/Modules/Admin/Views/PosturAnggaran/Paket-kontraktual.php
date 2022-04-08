@@ -9,7 +9,12 @@
                 POSTUR PAKET KONTRAKTUAL TA <?= session("userData.tahun") ?>
             </h5>
             <span class="kt-subheader__separator kt-hidden"></span>
-
+            <div>
+                <select class="form-control" name="filter_paguAnggaran">
+                    <option value="tmp1">Template 1</option>
+                    <option value="tmp2">Template 2</option>
+                </select>
+            </div>
         </div>
 
     </div>
@@ -145,121 +150,144 @@
                     </ul>
                 </div>
             </div>
-           
+
             <div class="kt-section__content">
                 <!-- <div class="text-center mt-4">
                         <h4 class="text-dark"><b><?= $title; ?></b></h4>
                         <hr class="w-75 mb-0">
                     </div> -->
 
-                <div class="tree">
+                <d<div class="tree tree-program">
                     <ul>
                         <li class="w-100">
-                            <a href="#" class="">
+                            <a href="#" class="w-25">
                                 <div class="tree-content">
-                                    <div class="card card-body bg-tree-1">
-                                        <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                    <div class="card card-body bg-tree-black shadow-lg">
                                         <h4 class="mb-0"> KONTRAKTUAL </h4>
                                         <h4 class="mb-0">DITJEN SDA</h4>
-                                        <h4 class="mb-0">Rp/ 28.05 Triliun</h4>
+                                        <h4 class="mb-0">Rp 28,05 Triliun</h4>
                                         <h4 class="mb-0">2.006 Paket</h4>
                                     </div>
                                 </div>
                             </a>
                             <ul>
-                                <li class="w-50">
-                                    <a href="#" class="">
-                                        <div class="tree-content">
-                                            <div class="card card-body bg-tree-2">
-                                                <h4 class="mb-0"><b> BELUM KONTRAK </b></h4>
 
-                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                    <h6> Paket</h6>
-                                                    <h5 class="mb-0">
-                                                        M
-                                                    </h5>
-                                                </div>
+                                <li class="" style="width: 65%">
+                                    <a href="#" class="w-50">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-grey">
+                                                <h4 class="mb-0"><b> MYC BARU & SYC </b></h4>
+                                                <h4 class="mb-0">Rp 11,70 Triliun</h4>
+                                                <h4 class="mb-0">1.513 Paket</h4>
                                             </div>
                                         </div>
-
                                     </a>
+
                                     <ul>
-                                        <li class="w-30">
-                                            <a href="#" class="">
+                                        <li class="" style="width: 33% !important">
+                                            <a href="#" class="w-100 position-relative" style="z-index: 10;">
                                                 <div class="tree-content">
-                                                    <div class="card card-body bg-tree-4">
-                                                        <h4 class="mb-0"><b> GAGAL LELANG </b></h4>
-
-                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                            <h6>Paket</h6>
-                                                            <h5 class="mb-0">
-                                                                 M
-                                                            </h5>
-                                                        </div>
+                                                    <div class="card card-body bg-tree-009fff">
+                                                        <h4 class="mb-0"><b> Sudah Lelang</b></h4>
+                                                        <h4 class="mb-0">Rp 6,38 Triliun</h4>
+                                                        <h4 class="mb-0">992 Paket</h4>
                                                     </div>
                                                 </div>
-
                                             </a>
-                                        </li>
-                                        <li class="w-30">
-                                            <a href="#" class="">
-                                                <div class="tree-content">
-                                                    <div class="card card-body bg-tree-4">
-                                                        <h4 class="mb-0"><b> PROSES LELANG </b></h4>
-
-                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                            <h6> Paket</h6>
-                                                            <h5 class="mb-0">
-                                                                 M
-                                                            </h5>
+                                            <ul class="ul-down">
+                                                <li class="li-down w-100">
+                                                    <a href="#" class="w-100 position-relative" style="z-index: 10;">
+                                                        <div class="tree-content">
+                                                            <div class="card card-body bg-tree-ffbc00">
+                                                                <h4 class="mb-0"><b> Terkontrak </b></h4>
+                                                                <h4 class="mb-0">Rp 4,78 Triliun</h4>
+                                                                <h4 class="mb-0">693 Paket</h4>
+                                                            </div>
                                                         </div>
+                                                    </a>
+                                                </li>
+                                                <li class="li-down w-100">
+                                                    <a href="#" class="w-100 position-relative" style="z-index: 10;">
+                                                        <div class="tree-content">
+                                                            <div class="card card-body bg-tree-ffbc00">
+                                                                <h4 class="mb-0"><b> Persiapan Kontrak </b></h4>
+                                                                <h4 class="mb-0">Rp 1,60 Triliun</h4>
+                                                                <h4 class="mb-0">299 Paket</h4>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="" style="width: 33% !important">
+                                            <a href="#" class="w-100 position-relative" style="z-index: 10;">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-009fff">
+                                                        <h4 class="mb-0"><b> Proses Lelang </b></h4>
+                                                        <h4 class="mb-0">Rp 3,60 Triliun</h4>
+                                                        <h4 class="mb-0">343 Paket</h4>
                                                     </div>
                                                 </div>
-
                                             </a>
                                         </li>
-                                        <li class="w-40">
-                                            <a href="#" class="">
-                                                <div class="tree-content">
-                                                    <div class="card card-body bg-tree-4">
-                                                        <h4 class="mb-0"><b> BELUM LELANG </b></h4>
 
-                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                            <h6>Paket</h6>
-                                                            <h5 class="mb-0">
-                                                                 M
-                                                            </h5>
-                                                        </div>
+                                        <li class="" style="width: 33% !important">
+                                            <a href="#" class="w-100 position-relative" style="z-index: 10;">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-009fff">
+                                                        <h4 class="mb-0"><b> Belum Lelang </b></h4>
+                                                        <h4 class="mb-0">Rp 1,72 Triliun</h4>
+                                                        <h4 class="mb-0">178 Paket</h4>
                                                     </div>
                                                 </div>
-
                                             </a>
+                                            <ul class="ul-down">
+                                                <li class="li-down w-100">
+                                                    <a href="#" class="w-100 position-relative" style="z-index: 10;">
+                                                        <div class="tree-content">
+                                                            <div class="card card-body bg-tree-ffbc00">
+                                                                <h4 class="mb-0"><b> Terjadwal </b></h4>
+                                                                <h4 class="mb-0">Rp 1,69 Triliun</h4>
+                                                                <h4 class="mb-0">175 Paket</h4>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="li-down w-100">
+                                                    <a href="#" class="w-100 position-relative" style="z-index: 10;">
+                                                        <div class="tree-content">
+                                                            <div class="card card-body bg-tree-ffbc00">
+                                                                <h4 class="mb-0"><b> Gagal Lelang </b></h4>
+                                                                <h4 class="mb-0">Rp 0,03 Triliun</h4>
+                                                                <h4 class="mb-0">3 Paket</h4>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </li>
+
                                     </ul>
+
                                 </li>
 
-                                <li class="w-50">
-                                    <a href="#" class="">
+                                <li class="" style="width: 35%">
+                                    <a href="#" class="position-relative w-50" style="z-index: 10;">
                                         <div class="tree-content">
-                                            <div class="card card-body bg-tree-2">
-                                                <h4 class="mb-0"><b> TERKONTRAK * </b></h4>
-
-                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                    <h6>  Paket</h6>
-                                                    <h5 class="mb-0">
-                                                        M
-                                                    </h5>
-                                                </div>
+                                            <div class="card card-body bg-tree-grey">
+                                                <h4 class="mb-0"><b> MYC LANJUTAN </b></h4>
+                                                <h4 class="mb-0">Rp 16,35 Triliun</h4>
+                                                <h4 class="mb-0">493 Paket</h4>
                                             </div>
                                         </div>
-                                        <b><i>* Termasuk MYC lanjutan</i></b>
                                     </a>
                                 </li>
 
                             </ul>
                         </li>
                     </ul>
-                </div>
+
             </div>
 
         </div>
