@@ -411,7 +411,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 .tree .li-down::after {
     content: '';
     position: absolute;
-    top: 0;
+    top: -20px;
     left: -34%;
     border-top: 2px solid #696969;
     width: 63%;
@@ -425,7 +425,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     right: auto;
     left: -34%;
     border-left: 2px solid #696969;
-    top: 23%;
+    top: -14%;
     display:block !important;
 }
 
@@ -548,6 +548,38 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     border: 3px solid white;
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-black{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    background: black;
+}
+
+.bg-tree-grey{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    background: grey;
+}
+
+.bg-tree-009fff{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    background: #009fff;
+}
+
+.bg-tree-ffbc00{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    background: #ffbc00;
 }
 /* End  Background card tree  */
 
