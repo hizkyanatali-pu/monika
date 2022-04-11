@@ -134,15 +134,40 @@ class PohonAnggaran extends \App\Controllers\BaseController
 
     public function sisaLelang()
     {
+        $data['title'] = 'Sisa Lelang';
 
-        $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"]);
+        $dataRpm = $this->PohonAnggaran->getDataSisaLelang('RPM');
+        $data['nilaiRpm']['nilai_kontrak'] = $dataRpm['nilai_kontrak'] * 1000;
+        $data['nilaiRpm']['jml_paket']     = $dataRpm['jml_paket'];
 
+        $dataSbsn = $this->PohonAnggaran->getDataSisaLelang('SBSN');
+        $data['nilaiSbsn']['nilai_kontrak'] = $dataSbsn['nilai_kontrak'] * 1000;
+        $data['nilaiSbsn']['jml_paket']     = $dataSbsn['jml_paket'];
 
-        $data = array(
-            'title' => 'Sisa Lelang',
-            'proseslelang' => $qproseslelang
+        $dataPhln = $this->PohonAnggaran->getDataSisaLelang('PHLN');
+        $data['nilaiPhln']['nilai_kontrak'] = $dataPhln['nilai_kontrak'] * 1000;
+        $data['nilaiPhln']['jml_paket']     = $dataPhln['jml_paket'];
 
-        );
+        $dataRpmSyc = $this->PohonAnggaran->getDataSisaLelang('RPM', ['SYC ']);
+        $data['nilaiRpmSyc']['nilai_kontrak'] = $dataRpmSyc['nilai_kontrak'] * 1000;
+        $data['nilaiRpmSyc']['jml_paket']     = $dataRpmSyc['jml_paket'];
+
+        $dataSbsnSyc = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['SYC ']);
+        $data['nilaiSbsnSyc']['nilai_kontrak'] = $dataSbsnSyc['nilai_kontrak'] * 1000;
+        $data['nilaiSbsnSyc']['jml_paket']     = $dataSbsnSyc['jml_paket'];
+
+        $dataPhlnSyc = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['SYC ']);
+        $data['nilaiPhlnSyc']['nilai_kontrak'] = $dataPhlnSyc['nilai_kontrak'] * 1000;
+        $data['nilaiPhlnSyc']['jml_paket']     = $dataPhlnSyc['jml_paket'];
+
+        $dataPhlnMycBaru = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['MYC Baru ']);
+        $data['nilaiPhlnMycBaru']['nilai_kontrak'] = $dataPhlnMycBaru['nilai_kontrak'] * 1000;
+        $data['nilaiPhlnMycBaru']['jml_paket']     = $dataPhlnMycBaru['jml_paket'];
+
+        $data['listPaketRpmSyc'] = $this->PohonAnggaran->getDataSisaLelang('RPM', ['SYC '], true);
+        $data['listPaketSbsnSyc'] = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['SYC '], true);
+        $data['listPaketPhlnSyc'] = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['SYC '], true);
+        $data['listPaketPhlnMycBaru'] = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['MYC Baru '], true);
 
         return view('Modules\Admin\Views\PosturAnggaran\Sisa-lelang', $data);
     }

@@ -40,8 +40,7 @@
                                         <h4 class="mb-0"><b> SISA LELANG </b></h4>
                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                             <h5 class="mb-0">
-                                                <?= toMilyar($proseslelang['nilai_kontrak'], true, 2); ?> M
-
+                                                <?= checkMorT(($nilaiRpm['nilai_kontrak'] + $nilaiSbsn['nilai_kontrak'] + $nilaiPhln['nilai_kontrak']), true, 2); ?>
                                             </h5>
                                         </div>
                                     </div>
@@ -53,9 +52,10 @@
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> RPM </b></h4>
+                                                <label> <?= formatNumber($nilaiRpm['jml_paket']) ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        Rp. ?
+                                                        <?= checkMorT($nilaiRpm['nilai_kontrak'], true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -66,26 +66,31 @@
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-3">
                                                 <h4 class="mb-0"><b> SYC </b></h4>
+                                                <label> <?= formatNumber($nilaiRpmSyc['jml_paket']) ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        ?
+                                                        <?= checkMorT($nilaiRpmSyc['nilai_kontrak'], true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
+                                    <?php if (count($listPaketRpmSyc) > 0) : ?>
                                     <div class="border-single-tree-down"></div>
                                     <a href="#" class="w-100">
                                         <div class="tree-content">
                                             <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
                                                 <h6>Antara Lain :</h6>
-                                                <p>1. Pembangunan Pengendali Banjir Kali Kemuning Kab. Sampang (Lanjutan); Sisa Lelang 31,68 M </p>
-                                                <p>2. Peningkatan Jaringan Irigasi DI Ladongi Kab. Kolaka Timur Provinsi Sulawesi Tenggara; Sisa Lelang 18,54 M</p>
-                                                <p>3. Pembangunan Bendung Lereh I DI Lereh Kabupaten Jayapura Tahap III; Papua; Kab. Jayapura; 0.55 bendung; 0.55 bendung; F; K; SYC; Sisa Lelang 16,85 M </p>
-                                                <p>4. Dan Lain - Lain </p>
+                                                <?php foreach ($listPaketRpmSyc as $key_listPaketRpmSyc => $data_listPaketRpmSyc) : ?>
+                                                    <p>
+                                                        <?php echo $key_listPaketRpmSyc+1 ?>. 
+                                                        <?php echo ($key_listPaketRpmSyc+1 == 4) ? 'Dan Lain - Lain' : $data_listPaketRpmSyc['nama_paket'] ?> 
+                                                    </p>
+                                                <?php endforeach ?>
                                             </div>
                                         </div>
                                     </a>
+                                    <?php endif; ?>
                                 </li>
 
                                 <li class="" style="width: 25% !important">
@@ -93,9 +98,10 @@
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> SBSN </b></h4>
+                                                <label> <?= formatNumber($nilaiSbsn['jml_paket']) ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        Rp. ?
+                                                        <?= checkMorT($nilaiSbsn['nilai_kontrak'], true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -106,26 +112,31 @@
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-3">
                                                 <h4 class="mb-0"><b> SYC </b></h4>
+                                                <label> <?= formatNumber($nilaiSbsnSyc['jml_paket']) ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        ?
+                                                        <?= checkMorT($nilaiSbsnSyc['nilai_kontrak'], true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
-                                    <div class="border-single-tree-down"></div>
-                                    <a href="#" class="w-100">
-                                        <div class="tree-content">
-                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                <h6>Antara Lain :</h6>
-                                                <p>1. Pembangunan Pengaman Pantai Kalianda (Pantai Sukaraja) Kabupaten Lampung Selatan; Sisa Lelang 24,48 M</p>
-                                                <p>2. Pembangunan Pengaman Pantai Kalianda (Pantai Maja) Kabupaten Lampung Selatan; Sisa Lelang 18,85 M </p>
-                                                <p>3. Pembangunan Prasarana Pengamanan Pantai Ruas Lembeng - Purnama di Kabupaten Gianyar; Sisa Lelang 18,67 M </p>
-                                                <p>4. Dan Lain - Lain </p>
+                                    <?php if (count($listPaketSbsnSyc) > 0) : ?>
+                                        <div class="border-single-tree-down"></div>
+                                        <a href="#" class="w-100">
+                                            <div class="tree-content">
+                                                <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                    <h6>Antara Lain :</h6>
+                                                    <?php foreach ($listPaketSbsnSyc as $key_listPaketSbsnSyc => $data_listPaketSbsnSyc) : ?>
+                                                        <p>
+                                                            <?php echo $key_listPaketSbsnSyc+1 ?>. 
+                                                            <?php echo ($key_listPaketSbsnSyc+1 == 4) ? 'Dan Lain - Lain' : $data_listPaketSbsnSyc['nama_paket'] ?> 
+                                                        </p>
+                                                    <?php endforeach ?>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
+                                        </a>
+                                    <?php endif; ?>
                                 </li>
 
                                 <li class="" style="width: 50% !important">
@@ -133,9 +144,10 @@
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> PHLN </b></h4>
+                                                <label> <?= formatNumber($nilaiPhln['jml_paket']) ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        Rp. ?
+                                                        <?= checkMorT($nilaiPhln['nilai_kontrak'], true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -147,49 +159,62 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-3">
                                                         <h4 class="mb-0"><b> SYC </b></h4>
+                                                        <label> <?= formatNumber($nilaiPhlnSyc['jml_paket']) ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                ?
+                                                                <?= checkMorT($nilaiPhlnSyc['nilai_kontrak'], true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </a>
-                                            <div class="border-single-tree-down"></div>
-                                            <a href="#" class="w-100">
-                                                <div class="tree-content">
-                                                    <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                        <h6>Antara Lain :</h6>
-                                                        <p>1. Review Penyusunan PSETK DI Kewenangan Pusat; Sisa Lelang 0,18 M </p>
+                                            <?php if (count($listPaketPhlnSyc) > 0) : ?>
+                                                <div class="border-single-tree-down"></div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <h6>Antara Lain :</h6>
+                                                            <?php foreach ($listPaketPhlnSyc as $key_listPaketPhlnSyc => $data_listPaketPhlnSyc) : ?>
+                                                                <p>
+                                                                    <?php echo $key_listPaketPhlnSyc+1 ?>. 
+                                                                    <?php echo ($key_listPaketPhlnSyc+1 == 4) ? 'Dan Lain - Lain' : $data_listPaketPhlnSyc['nama_paket'] ?> 
+                                                                </p>
+                                                            <?php endforeach ?>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
+                                                </a>
+                                            <?php endif; ?>
                                         </li>
                                         <li class="w-50">
                                             <a href="#" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-3">
                                                         <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                        <label> <?= formatNumber($nilaiPhlnMycBaru['jml_paket']) ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                ?
+                                                                <?= checkMorT($nilaiPhlnMycBaru['nilai_kontrak'], true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </a>
-                                            <div class="border-single-tree-down"></div>
-                                            <a href="#" class="w-100">
-                                                <div class="tree-content">
-                                                    <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                        <h6>Antara Lain :</h6>
-                                                        <p>1. Penyusunan Dokumen Lingkungan Daerah Irigasi Rawa Karang Agung Tengah di Kab. Musi Banyuasin; Sisa Lelang 0,08 M </p>
-                                                        <p>2. Penyusunan Dokumen Lingkungan Daerah Irigasi Rawa Delta Air Sugihan Kiri di Kab. Banyuasin; Sisa Lelang 0,08 M </p>
-                                                        <p>3. Penyusunan Dokumen Lingkungan Daerah Irigasi Kelingi Tugu Mulyo di Kota Lubuk Linggau dan Kab. Musi Rawas; Sisa Lelang 0,08 M </p>
-                                                        <p>4. Dan Lain - Lain </p>
+                                            <?php if (count($listPaketPhlnMycBaru) > 0) : ?>
+                                                <div class="border-single-tree-down"></div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <h6>Antara Lain :</h6>
+                                                            <?php foreach ($listPaketPhlnMycBaru as $key_listPaketPhlnMycBaru => $data_listPaketPhlnMycBaru) : ?>
+                                                                <p>
+                                                                    <?php echo $key_listPaketPhlnMycBaru+1 ?>. 
+                                                                    <?php echo ($key_listPaketPhlnMycBaru+1 == 4) ? 'Dan Lain - Lain' : $data_listPaketPhlnMycBaru['nama_paket'] ?> 
+                                                                </p>
+                                                            <?php endforeach ?>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
+                                                </a>
+                                            <?php endif; ?>
                                         </li>
                                     </ul>
                                 </li>

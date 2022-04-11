@@ -41,7 +41,10 @@ if (!function_exists('checkMorT')) {
 
 		$check = strlen((string)$argNumber);
 
-		if ($check >= 10 and $check < 13) {
+		if ($check < 10) {
+			return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000000000, $decimal, ',', '.') . " M";
+		}
+		elseif ($check >= 10 and $check < 13) {
 			return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000000000, $decimal, ',', '.') . " M";
 		} elseif ($check >= 13) {
 			return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000000000000, $decimal, ',', '.') . " T";

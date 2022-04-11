@@ -403,4 +403,49 @@ WHERE
             'pagu' => 'aleksander'
         ];
     }
+    
+    
+    
+    public function getDataSisaLelang($_namaPagu, $_jenisKontrak=[], $selectList=false) {
+        $db = \Config\Database::connect();
+
+        $whereInJenisKontrak = '';
+        if (count($_jenisKontrak) > 0) {
+            $mapJenisKontrak = array_map(function($arr) {
+                return "'$arr'";
+            }, $_jenisKontrak);
+            $implodeJenisKontrak = implode(",", $mapJenisKontrak);
+            $whereInJenisKontrak = "AND jenis_kontrak IN ($implodeJenisKontrak)";
+        }
+
+        $select = '';
+        $limit = '';
+        if ($selectList) {
+            $select = "
+                a.nama as nama_paket
+            ";
+            $limit = "LIMIT 4";
+        }
+        else {
+            $select = "
+                sum(a.sisa_lelang) AS nilai_kontrak,
+                count(a.nama) AS jml_paket
+            ";
+        }
+
+        $query =  $db->query("SELECT 
+                $select
+            FROM 
+                emon_tarik_sisalelang_sda_paketpekerjaan a
+                left join monika_kontrak_{$this->user['tahun']} b on SUBSTRING_INDEX(b.kdpaket, '.', -6) = a.kode
+            WHERE 
+                b.status_tender = 'Belum Lelang'
+                AND sumber_dana = '$_namaPagu' 
+                $whereInJenisKontrak 
+            $limit
+         ");
+
+        $return = ($selectList) ? $query->getResultArray() : $query->getRowArray();
+        return $return;
+    }
 }
