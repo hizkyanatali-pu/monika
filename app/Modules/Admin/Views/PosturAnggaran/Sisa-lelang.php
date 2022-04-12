@@ -38,6 +38,7 @@
                                     <div class="card card-body bg-tree-1">
                                         <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                         <h4 class="mb-0"><b> SISA LELANG </b></h4>
+                                        <label> <?= formatNumber($nilaiRpm['jml_paket'] + $nilaiSbsn['jml_paket'] + $nilaiPhln['jml_paket']) ?> Paket</label>
                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                             <h5 class="mb-0">
                                                 <?= checkMorT(($nilaiRpm['nilai_kontrak'] + $nilaiSbsn['nilai_kontrak'] + $nilaiPhln['nilai_kontrak']), true, 2); ?>
