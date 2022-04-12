@@ -38,9 +38,9 @@ if (!function_exists('onlyTwoDecimal')) {
 if (!function_exists('checkMorT')) {
 	function checkMorT($argNumber, $withRp = true, $decimal = 0)
 	{
-
-		$check = strlen((string)$argNumber);
-
+		$explodeCheck = explode('.', (string)$argNumber);
+		$check = strlen($explodeCheck[0]);
+		
 		if ($check < 10) {
 			return ($withRp ? 'Rp. ' : '') . number_format($argNumber / 1000000000, $decimal, ',', '.') . " M";
 		}

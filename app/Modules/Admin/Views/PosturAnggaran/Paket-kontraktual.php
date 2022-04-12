@@ -11,8 +11,8 @@
             <span class="kt-subheader__separator kt-hidden"></span>
             <div>
                 <select class="form-control" name="filter_paguAnggaran">
-                    <option value="tmp1">Template 1</option>
-                    <option value="tmp2">Template 2</option>
+                    <option value="template1">Template 1</option>
+                    <option value="template2" selected>Template 2</option>
                 </select>
             </div>
         </div>
@@ -30,7 +30,7 @@
         <!--begin::Section-->
         <div class="kt-section  pb-4 pt-3">
 
-            <div class="kt-section__content">
+            <div class="kt-section__content  d-none" id="container_template1">
                 <!-- <div class="text-center mt-4">
                         <h4 class="text-dark"><b><?= $title; ?></b></h4>
                         <hr class="w-75 mb-0">
@@ -151,7 +151,7 @@
                 </div>
             </div>
 
-            <div class="kt-section__content">
+            <div class="kt-section__content" id="container_template2">
                 <!-- <div class="text-center mt-4">
                         <h4 class="text-dark"><b><?= $title; ?></b></h4>
                         <hr class="w-75 mb-0">
@@ -165,8 +165,8 @@
                                     <div class="card card-body bg-tree-black shadow-lg">
                                         <h4 class="mb-0"> KONTRAKTUAL </h4>
                                         <h4 class="mb-0">DITJEN SDA</h4>
-                                        <h4 class="mb-0">Rp 28,05 Triliun</h4>
-                                        <h4 class="mb-0">2.006 Paket</h4>
+                                        <h4 class="mb-0"><?= checkMorT(($template2['mycBaruSyc']['nilai_kontrak'] + $template2['mycLanjutan']['nilai_kontrak']), true, 2) ?></h4>
+                                        <h4 class="mb-0"><?= $template2['mycBaruSyc']['jml_paket'] + $template2['mycLanjutan']['jml_paket'] ?> Paket</h4>
                                     </div>
                                 </div>
                             </a>
@@ -177,8 +177,8 @@
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-grey">
                                                 <h4 class="mb-0"><b> MYC BARU & SYC </b></h4>
-                                                <h4 class="mb-0">Rp 11,70 Triliun</h4>
-                                                <h4 class="mb-0">1.513 Paket</h4>
+                                                <h4 class="mb-0"><?= checkMorT($template2['mycBaruSyc']['nilai_kontrak'], true, 2) ?></h4>
+                                                <h4 class="mb-0"><?= $template2['mycBaruSyc']['jml_paket'] ?> Paket</h4>
                                             </div>
                                         </div>
                                     </a>
@@ -189,8 +189,8 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-009fff">
                                                         <h4 class="mb-0"><b> Sudah Lelang</b></h4>
-                                                        <h4 class="mb-0">Rp 6,38 Triliun</h4>
-                                                        <h4 class="mb-0">992 Paket</h4>
+                                                        <h4 class="mb-0"><?= checkMorT(($template2['data_mycBaruSyc']['sudahLelang_terkontrak']['nilai_kontrak'] + $template2['data_mycBaruSyc']['sudahLelang_persiapanKontrak']['nilai_kontrak']), true, 2) ?></h4>
+                                                        <h4 class="mb-0"><?= $template2['data_mycBaruSyc']['sudahLelang_terkontrak']['jml_paket'] + $template2['data_mycBaruSyc']['sudahLelang_persiapanKontrak']['jml_paket'] ?> Paket</h4>
                                                     </div>
                                                 </div>
                                             </a>
@@ -200,8 +200,8 @@
                                                         <div class="tree-content">
                                                             <div class="card card-body bg-tree-ffbc00">
                                                                 <h4 class="mb-0"><b> Terkontrak </b></h4>
-                                                                <h4 class="mb-0">Rp 4,78 Triliun</h4>
-                                                                <h4 class="mb-0">693 Paket</h4>
+                                                                <h4 class="mb-0"><?= checkMorT($template2['data_mycBaruSyc']['sudahLelang_terkontrak']['nilai_kontrak'], true, 2) ?></h4>
+                                                                <h4 class="mb-0"><?= $template2['data_mycBaruSyc']['sudahLelang_terkontrak']['jml_paket'] ?> Paket</h4>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -211,8 +211,8 @@
                                                         <div class="tree-content">
                                                             <div class="card card-body bg-tree-ffbc00">
                                                                 <h4 class="mb-0"><b> Persiapan Kontrak </b></h4>
-                                                                <h4 class="mb-0">Rp 1,60 Triliun</h4>
-                                                                <h4 class="mb-0">299 Paket</h4>
+                                                                <h4 class="mb-0"><?= checkMorT($template2['data_mycBaruSyc']['sudahLelang_persiapanKontrak']['nilai_kontrak'], true, 2) ?></h4>
+                                                                <h4 class="mb-0"><?= $template2['data_mycBaruSyc']['sudahLelang_persiapanKontrak']['jml_paket'] ?> Paket</h4>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -225,8 +225,8 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-009fff">
                                                         <h4 class="mb-0"><b> Proses Lelang </b></h4>
-                                                        <h4 class="mb-0">Rp 3,60 Triliun</h4>
-                                                        <h4 class="mb-0">343 Paket</h4>
+                                                        <h4 class="mb-0"><?= checkMorT($template2['data_mycBaruSyc']['prosesLelang']['nilai_kontrak'], true, 2) ?></h4>
+                                                        <h4 class="mb-0"><?= $template2['data_mycBaruSyc']['prosesLelang']['jml_paket'] ?> Paket</h4>
                                                     </div>
                                                 </div>
                                             </a>
@@ -237,8 +237,8 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-009fff">
                                                         <h4 class="mb-0"><b> Belum Lelang </b></h4>
-                                                        <h4 class="mb-0">Rp 1,72 Triliun</h4>
-                                                        <h4 class="mb-0">178 Paket</h4>
+                                                        <h4 class="mb-0"><?= checkMorT(($template2['data_mycBaruSyc']['belumLelang_terjadwal']['nilai_kontrak'] + $template2['data_mycBaruSyc']['belumLelang_gagalLelang']['nilai_kontrak']), true, 2) ?></h4>
+                                                        <h4 class="mb-0"><?= $template2['data_mycBaruSyc']['belumLelang_terjadwal']['jml_paket'] + $template2['data_mycBaruSyc']['belumLelang_gagalLelang']['jml_paket'] ?> Paket</h4>
                                                     </div>
                                                 </div>
                                             </a>
@@ -248,8 +248,8 @@
                                                         <div class="tree-content">
                                                             <div class="card card-body bg-tree-ffbc00">
                                                                 <h4 class="mb-0"><b> Terjadwal </b></h4>
-                                                                <h4 class="mb-0">Rp 1,69 Triliun</h4>
-                                                                <h4 class="mb-0">175 Paket</h4>
+                                                                <h4 class="mb-0"><?= checkMorT($template2['data_mycBaruSyc']['belumLelang_terjadwal']['nilai_kontrak'], true, 2) ?></h4>
+                                                                <h4 class="mb-0"><?= $template2['data_mycBaruSyc']['belumLelang_terjadwal']['jml_paket'] ?> Paket</h4>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -259,8 +259,8 @@
                                                         <div class="tree-content">
                                                             <div class="card card-body bg-tree-ffbc00">
                                                                 <h4 class="mb-0"><b> Gagal Lelang </b></h4>
-                                                                <h4 class="mb-0">Rp 0,03 Triliun</h4>
-                                                                <h4 class="mb-0">3 Paket</h4>
+                                                                <h4 class="mb-0"><?= checkMorT($template2['data_mycBaruSyc']['belumLelang_gagalLelang']['nilai_kontrak'], true, 2) ?></h4>
+                                                                <h4 class="mb-0"><?= $template2['data_mycBaruSyc']['belumLelang_gagalLelang']['jml_paket'] ?> Paket</h4>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -277,8 +277,8 @@
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-grey">
                                                 <h4 class="mb-0"><b> MYC LANJUTAN </b></h4>
-                                                <h4 class="mb-0">Rp 16,35 Triliun</h4>
-                                                <h4 class="mb-0">493 Paket</h4>
+                                                <h4 class="mb-0"><?= checkMorT($template2['mycLanjutan']['nilai_kontrak'], true, 2) ?></h4>
+                                                <h4 class="mb-0"><?= $template2['mycLanjutan']['jml_paket'] ?> Paket</h4>
                                             </div>
                                         </div>
                                     </a>
@@ -358,4 +358,15 @@
     </div>
 </div> -->
 
+<?= $this->endSection() ?>
+
+
+
+<?= $this->section('footer_js') ?>
+<script>
+    $(document).on('change', 'select[name=filter_paguAnggaran]', function() {
+        $('.kt-section__content').addClass('d-none');
+        $('#container_'+$(this).val()).removeClass('d-none');
+    });
+</script>
 <?= $this->endSection() ?>

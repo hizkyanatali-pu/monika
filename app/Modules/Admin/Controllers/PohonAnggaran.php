@@ -107,26 +107,29 @@ class PohonAnggaran extends \App\Controllers\BaseController
 
     public function paketKontraktual()
     {
-
-
         $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"]);
         $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"]);
         $qbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"]);
         $qpersiapankontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Persiapan kontrak"]);
 
-
-        // return  $qterkontrak['total'];
-
         $data = array(
-            'title' => 'Kontraktual',
-            'terkontrak' => $qterkontrak,
-            'proseslelang' => $qproseslelang,
-            'belumlelang' => $qbelumlelang,
+            'title'            => 'Kontraktual',
+            'terkontrak'       => $qterkontrak,
+            'proseslelang'     => $qproseslelang,
+            'belumlelang'      => $qbelumlelang,
             'persiapankontrak' => $qpersiapankontrak,
-            'gagallelang' => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Gagal Lelang"])
-
-
-
+            'gagallelang'      => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Gagal Lelang"]),
+            'template2'        => [
+                'mycBaruSyc'      => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => ['terkontrak', 'persiapan kontrak', 'Proses Lelang', 'Gagal Lelang']]),
+                'mycLanjutan'     => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['2']]),
+                'data_mycBaruSyc' => [
+                    'sudahLelang_terkontrak'       => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => "terkontrak"]),
+                    'sudahLelang_persiapanKontrak' => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => "persiapan kontrak"]),
+                    'prosesLelang'                 => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => "Proses Lelang"]),
+                    'belumLelang_terjadwal'        => ['nilai_kontrak' => 0, 'jml_paket' => 0],
+                    'belumLelang_gagalLelang'      => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => "Gagal Lelang"])
+                ]
+            ]
         );
 
         return view('Modules\Admin\Views\PosturAnggaran\Paket-kontraktual', $data);
