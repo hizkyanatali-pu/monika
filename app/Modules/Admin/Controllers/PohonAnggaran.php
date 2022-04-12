@@ -120,13 +120,13 @@ class PohonAnggaran extends \App\Controllers\BaseController
             'persiapankontrak' => $qpersiapankontrak,
             'gagallelang'      => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Gagal Lelang"]),
             'template2'        => [
-                'mycBaruSyc'      => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => ['terkontrak', 'persiapan kontrak', 'Proses Lelang', 'Gagal Lelang']]),
+                'mycBaruSyc'      => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => ['terkontrak', 'persiapan kontrak', 'Proses Lelang', 'Gagal Lelang', 'Belum Lelang']]),
                 'mycLanjutan'     => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['2']]),
                 'data_mycBaruSyc' => [
                     'sudahLelang_terkontrak'       => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => "terkontrak"]),
                     'sudahLelang_persiapanKontrak' => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => "persiapan kontrak"]),
                     'prosesLelang'                 => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => "Proses Lelang"]),
-                    'belumLelang_terjadwal'        => ['nilai_kontrak' => 0, 'jml_paket' => 0],
+                    'belumLelang_terjadwal'        => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => "Belum Lelang"]),
                     'belumLelang_gagalLelang'      => $this->PohonAnggaran->getDataKontrak(["jenis_kontrak" => ['0', '1', '3'], "status_tender" => "Gagal Lelang"])
                 ]
             ]
