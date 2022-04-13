@@ -19,7 +19,7 @@ class Tematik extends \App\Controllers\BaseController
 
     public function pageFoodEstate()
     {
-        $data = $this->TematikModel->getListTematik('T060019');
+        $data = $this->TematikModel->getListTematikFoodEstate('T060019');
         return view($this->renderFolder . '\Tematik-view', [
             'title'         => 'Food Estate',
             'filterTitle'   => 'Food Estate TA',
@@ -43,7 +43,8 @@ class Tematik extends \App\Controllers\BaseController
 
     public function pageKawasanIndustri()
     {
-        $data = $this->TematikModel->getListTematik('TMKEM0005');
+        // $data = $this->TematikModel->getListTematik('TMKEM0005');
+        $data = $this->TematikModel->getListTematik('T060012');
         return view($this->renderFolder . '\Tematik-view', [
             'title'         => 'Kawasan Industri',
             'filterTitle'   => 'Dukungan Kawasan Industri di Lingkungan Ditjen SDA TA',

@@ -121,7 +121,6 @@
                 </div>
 
                 <div class="table-responsive tableFixHead">
-
                     <?php $colspan = 8; ?>
                     <table class="table table-bordered mb-0 table-striped" id="table">
                         <thead>
@@ -151,12 +150,17 @@
                             foreach ($data as $key => $value) :
                             ?>
                                 <tr>
-                                    <td colspan="11" class="tdprogram"><?php echo $value->satker ?></td>
+                                    <td colspan="11" class="tdprogram">
+                                        <?php echo $value->idSatker ?> - 
+                                        <?php echo $value->satker ?>
+                                    </td>
                                 </tr>
                                 <?php foreach ($value->paketList as $key => $value) : ?>
                                     <tr>
                                         <td><?php echo $no++ ?></td>
-                                        <td co class="col-satker"><?php echo $value->nmpaket ?></td>
+                                        <td co class="col-satker">
+                                            <?php echo $value->nmpaket ?>
+                                        </td>
                                         <td class="col-vol"><?php echo ($value->vol) ?></td>
                                         <td class="col-satuan"><?php echo $value->satuan ?></td>
                                         <td class="col-provinsi"><?php echo $value->provinsi ?></td>

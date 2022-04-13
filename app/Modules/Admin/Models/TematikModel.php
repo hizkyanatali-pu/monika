@@ -73,6 +73,81 @@ class TematikModel extends Model
 
 
 
+	public function getListTematikFoodEstate($argKdTematik)
+	{
+		/** section get satker used in tematik link (sqlite) */
+		$get_satkerUsed = $this->db_2->query("SELECT
+	            kdsatker
+			FROM
+				tematik_link
+			WHERE
+				tematik_link.kdtematik='$argKdTematik'
+			GROUP BY kdsatker
+		")->getResult();
+
+		$map_satkerUsed = array_map(function($arr) {
+			return $arr->kdsatker;
+		}, $get_satkerUsed);
+
+		$satkerUserd = implode(',', $map_satkerUsed);
+		/** end-of: section get satker used in tematik link (sqlite) */
+
+
+		/** get satker (mysql) */
+		$tableSatker = $this->db->table('m_satker');
+		$dataSatker = $tableSatker->select('satkerid, satker')
+		->where("satkerid IN ($satkerUserd)")->get()->getResult();
+		/** end-of: get satker (mysql) */
+
+		/** section get paket */
+		$data_satkerPaket = array_map(function($arr) use ($argKdTematik) {
+			$dataPaket = $this->db_2->query("
+				select 
+					('[' || GROUP_CONCAT(
+						JSON_OBJECT(
+							'nmpaket', paket.nmpaket,
+							'vol', paket.vol,
+							'satuan', paket.sat,
+							'provinsi', tlokasi.nmlokasi,
+							'lokasi', tkabkota.nmkabkota,
+							'pengadaan', (
+								CASE 
+									WHEN paket.kdpengadaan=0 THEN 'A'
+									WHEN paket.kdpengadaan=1 THEN 'K'
+									WHEN paket.kdpengadaan=2 THEN 'S'
+									WHEN paket.kdpengadaan=3 THEN 'E'
+									ELSE 'L'
+								END
+							),
+							'pagu', paket.pg,
+							'realisasi', CASE  WHEN paket.rtot='' THEN 0 ELSE paket.rtot END ,
+							'persen_keu', (paket.rtot / paket.pg)*100,
+							'persen_fis', (paket.ufis / paket.pg)*100
+						)
+					) || ']') as paket
+				from 
+					paket 
+					left join tematik_link on paket.kode = tematik_link.kode_ang
+					left join tlokasi on paket.kdlokasi=tlokasi.kdlokasi
+					left join tkabkota on (paket.kdkabkota=tkabkota.kdkabkota and paket.kdlokasi=tkabkota.kdlokasi)
+				where
+					tematik_link.kdtematik='$argKdTematik'
+					and paket.kdsatker='$arr->satkerid'
+			")->getResult();
+
+			return (object) [
+				'idSatker' 	=> $arr->satkerid,
+				'satker' 	=> $arr->satker,
+				'paketList' => json_decode($dataPaket[0]->paket)
+			];
+		}, $dataSatker);
+		/** end-of: section get paket */
+
+		return $data_satkerPaket;
+	}
+
+
+
 	public function getListTematikKspn($kspnCode)
 	{
 		$data = $this->db_2->query("
