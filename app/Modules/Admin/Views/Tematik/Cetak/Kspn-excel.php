@@ -1,6 +1,7 @@
 <?php 
     ob_start();
-    $new_file  = "$filterTitle 2021.xls";
+    $tahunSelected = session('userData.tahun');
+    $new_file  = "$filterTitle $tahunSelected.xls";
     header("Content-type: application/vnd.ms-excel");
     header("Content-disposition: attachment; filename=$new_file");
     header("Pragma: no-cache");
@@ -48,7 +49,7 @@
             <tr>
                 <td colspan='22' class="JUDUL">
                     <section>
-                        <h4><?php echo $filterTitle ?> 2021</h4>
+                        <h4><?php echo $filterTitle . ' ' . $tahunSelected ?></h4>
                     </section>
                 </td>
             </tr>
