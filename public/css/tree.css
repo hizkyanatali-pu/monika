@@ -670,3 +670,89 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 
 }
 /* END pROGRES PEMAKETAN  */
+
+/* POSTUR ANGGARAN */
+.border-red-dashed{
+    position: absolute;
+    border-radius: 10px;
+    width: 95%;
+    height: 164px;
+    border: 2px dashed red;
+    top: 172px;
+    left: 1%;
+}
+
+.tree ul.postur-anggaran-3::before {
+    border-left: 0px solid #696969 !important;
+}
+
+.border-single-tree-down.last-custom{
+border-bottom: 2px solid black;
+    border-radius: 0px 0px 10px 0px;
+    margin-bottom: -2px;
+}
+
+.border-single-tree-down.last-custom-2{
+border-bottom: 2px solid black;
+    border-radius: 0px 0px 0px 0px;
+    margin-bottom: -2px;
+}
+
+.border-red-dashed-lahan{
+    position: absolute;
+    border-radius: 10px;
+    width: 20%;
+    height: 336px;
+    border: 2px dashed red;
+    right: 3.5%;
+    bottom: -797px;
+}
+
+.bg-tree-27324C{
+    background-color: #27324C;
+    color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-FCD964{
+    background-color: #FCD964;
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-C5E2B7{
+    background-color: #C5E2B7;
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-FEBF2C{
+    background-color: #FEBF2C;
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-F4B083{
+    background-color: #F4B083;
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.bg-tree-9EC2E7{
+    background-color: #9EC2E7;
+    color: black;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+/* POSTUR ANGGARAN */
