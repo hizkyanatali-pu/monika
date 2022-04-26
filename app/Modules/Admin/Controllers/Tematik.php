@@ -34,7 +34,7 @@ class Tematik extends \App\Controllers\BaseController
 
         $data = [
             'title' => 'Food Estate',
-            'data'  => $this->TematikModel->getListTematikFoodEstate('T060019')
+            'data'  => $this->TematikModel->getListTematik('T060019')
         ];
 
         return view($this->renderFolder . "\Cetak\Tematik-pdf", $data);
@@ -56,10 +56,10 @@ class Tematik extends \App\Controllers\BaseController
 
     public function cetakKawasanIndustri()
     {
+
         $data = [
             'title' => 'Kawasan Industri',
-            // 'data'  => $this->TematikModel->getListTematik('TMKEM0005')
-            'data'  => $this->TematikModel->getListTematik('T060012')
+            'data'  => $this->TematikModel->getListTematik('TMKEM0005')
         ];
 
         return view($this->renderFolder . "\Cetak\Tematik-pdf", $data);
@@ -82,6 +82,7 @@ class Tematik extends \App\Controllers\BaseController
 
     public function cetakKspn($kspCode)
     {
+
         $data = [
             'title' => 'KSPN',
             'data'  => $this->TematikModel->getListTematikKspn($kspCode),
@@ -182,20 +183,12 @@ class Tematik extends \App\Controllers\BaseController
             $filterTitle = "IKN TA";
         } 
         else {
-            // $tematikCode = "TMKEM0005";
-            $tematikCode = "T060012";
+            $tematikCode = "TMKEM0005";
             $title = "Kawasan Industri";
             $filterTitle = "Dukungan Kawasan Industri di Lingkungan Ditjen SDA TA";
         }
 
-
-        if ($tematikType == 'food_estate') {
-            $data = $this->TematikModel->getListTematikFoodEstate($tematikCode);
-        }
-        else {
-            $data = $this->TematikModel->getListTematik($tematikCode);
-        }
-
+        $data = $this->TematikModel->getListTematik($tematikCode);
         return view($this->renderFolder . '\Cetak\Tematik-excel', [
             'title'         => $title,
             'filterTitle'   => $filterTitle,
