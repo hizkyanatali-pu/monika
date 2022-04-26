@@ -1,6 +1,7 @@
 <?php 
     ob_start();
-    $new_file  = "Rekap 2021.xls";
+    $tahunSelected = session('userData.tahun');
+    $new_file  = "Rekap $tahunSelected.xls";
     header("Content-type: application/vnd.ms-excel");
     header("Content-disposition: attachment; filename=$new_file");
     header("Pragma: no-cache");
