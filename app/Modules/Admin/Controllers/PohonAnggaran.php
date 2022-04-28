@@ -98,11 +98,88 @@ class PohonAnggaran extends \App\Controllers\BaseController
             'paketketahanansda' => $paket2->getRow(),
             'totaldukungan' => $row2,
             'paketdukungan' => $paket3->getRow(),
-
-
         );
 
         return view('Modules\Admin\Views\PosturAnggaran\Alokasi-anggaran', $data);
+    }
+
+    
+
+    public function alokasiAnggaranNew()
+    {
+        $db    = \Config\Database::connect();
+        $tahun = session("userData.tahun");
+
+        $query_treeRow1 = $db->query("
+            select
+                SUM(pagu_51) as total_pagu_51,
+                SUM(pagu_52) as total_pagu_52,
+                SUM(pagu_53) as total_pagu_53
+            FROM
+                monika_data_$tahun
+        ")
+        ->getRow();
+        $alokasiAnggaran = $query_treeRow1->total_pagu_51 + $query_treeRow1->total_pagu_52 + $query_treeRow1->total_pagu_53;
+
+        $query_treeRow3_tender = $db->query("SELECT SUM(pfis) as total FROM  monika_kontrak_$tahun")->getRow();
+
+        $query_treeLevel4_syc         = $db->query("SELECT SUM(pfis) as total FROM  monika_kontrak_$tahun WHERE kdjnskon='0'")->getRow()->total;
+        $query_treeLevel4_mycBaru     = $db->query("SELECT SUM(pfis) as total FROM  monika_kontrak_$tahun WHERE kdjnskon IN ('1', '3')")->getRow()->total;
+        $query_treeLevel4_mycLanjutan = $db->query("SELECT SUM(pfis) as total FROM  monika_kontrak_$tahun WHERE kdjnskon='2'")->getRow()->total;
+
+
+        $data = [
+            'title'                        => 'Alokasi Anggaran',
+
+            '_0_alokasiAnggaran'           => $alokasiAnggaran,
+            '_1_belanjaPegawai'            => $query_treeRow1->total_pagu_51,
+            '_1_belanjaPegawai_persentase' => round(($query_treeRow1->total_pagu_51 / $alokasiAnggaran) * 100, 2),
+            '_2_belanjaBarang'             => $query_treeRow1->total_pagu_52,
+            '_2_belanjaBarang_persentase'  => round(($query_treeRow1->total_pagu_52 / $alokasiAnggaran) * 100, 2),
+            '_3_belanjaModal'              => $query_treeRow1->total_pagu_53,
+            '_3_belanjaModal_persentase'   => round(($query_treeRow1->total_pagu_53 / $alokasiAnggaran) * 100, 2),
+
+            '_31_barangModalOperasional'               => 0,
+            '_31_barangModalOperasional_persentase'    => 0,
+            '_32_barangModalNonOperasional'            => 0,
+            '_32_barangModalNonOperasional_persentase' => 0,
+
+            '_321_tender'               => $query_treeRow3_tender->total,
+            '_321_tender_persentase'    => '-',
+            '_322_nonTender'            => 0,
+            '_322_nonTender_persentase' => 0,
+
+            '_3211_syc'                    => $query_treeLevel4_syc,
+            '_3211_syc_persentase'         => round(($query_treeLevel4_syc / $query_treeRow3_tender->total) * 100, 2),
+            '_3212_mycBaru'                => $query_treeLevel4_mycBaru,
+            '_3212_mycBaru_persentase'     => round(($query_treeLevel4_mycBaru / $query_treeRow3_tender->total) * 100, 2),
+            '_3213_mycLanjutan'            => $query_treeLevel4_mycLanjutan,
+            '_3213_mycLanjutan_persentase' => round(($query_treeLevel4_mycLanjutan / $query_treeRow3_tender->total) * 100, 2),
+
+            '_3221_barang'              => 0,
+            '_3221_barang_persentase'   => 0,
+            '_3222_nonLahan'            => 0,
+            '_3222_nonLahan_persentase' => 0,
+            '_3222_lahan'               => 0,
+            '_3222_lahan_persentase'    => 0,
+
+            '_32111_barang'            => 0,
+            '_32111_barang_persentase' => 0,
+            '_32112_modal'             => 0,
+            '_32112_modal_persentase'  => 0,
+
+            '_32121_barang'            => 0,
+            '_32121_barang_persentase' => 0,
+            '_32122_modal'             => 0,
+            '_32122_modal_persentase'  => 0,
+
+            '_32131_barang'            => 0,
+            '_32131_barang_persentase' => 0,
+            '_32132_modal'             => 0,
+            '_32132_modal_persentase'  => 0,
+        ];
+
+        return view('Modules\Admin\Views\PosturAnggaran\Alokasi-anggaran-new', $data);
     }
 
     public function paketKontraktual()
