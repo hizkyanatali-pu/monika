@@ -125,6 +125,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('pohon-anggaran-dipa', '\Modules\Admin\Controllers\PohonAnggaran::index');
         $routes->get('pagu-per-program', '\Modules\Admin\Controllers\PohonAnggaran::posturPagu');
         $routes->get('alokasi-anggaran', '\Modules\Admin\Controllers\PohonAnggaran::alokasiAnggaran');
+        $routes->get('alokasi-anggaran-new', '\Modules\Admin\Controllers\PohonAnggaran::alokasiAnggaranNew');
         $routes->get('paket-kontraktual', '\Modules\Admin\Controllers\PohonAnggaran::paketKontraktual');
         $routes->get('sisa-lelang', '\Modules\Admin\Controllers\PohonAnggaran::sisaLelang');
         $routes->get('sisa-belum-lelang', '\Modules\Admin\Controllers\PohonAnggaran::sisaBelumLelang');

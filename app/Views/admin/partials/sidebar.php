@@ -84,7 +84,16 @@ $request = \Config\Services::request();
 
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'pagu-per-program'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/pagu-per-program'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pagu Per Program</span></a></li>
-                        <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('maintenance'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Alokasi Anggaran</span></a></li>
+                        
+                        
+                        <li class="kt-menu__item <?=($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'alokasi-anggaran-new'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <a href="<?= site_url('posturanggaran/alokasi-anggaran-new'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                <span class="kt-menu__link-text">
+                                    Alokasi Anggaran
+                                </span>
+                            </a>
+                        </li>
 
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'paket-kontraktual'  ? ' kt-menu__item--active' : '') ?> " aria-haspopup="true"><a href="<?= site_url('posturanggaran/paket-kontraktual'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kontraktual</span></a></li>
