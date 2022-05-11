@@ -4,6 +4,7 @@ namespace Modules\Admin\Models;
 
 use CodeIgniter\Model;
 use Modules\Admin\Models\AksesModel;
+use Modules\Admin\Models\RekapUnorModel;
 
 class PulldataModel extends Model
 {
@@ -20,6 +21,7 @@ class PulldataModel extends Model
         helper('dbdinamic');
         $session = session();
         $this->user = $session->get('userData');
+        $this->RekapUnorModel = new RekapUnorModel();
         $dbcustom = switch_db($this->user['dbuse']);
         $this->db = \Config\Database::connect();
         $this->db_2 = \Config\Database::connect($dbcustom);
@@ -37,6 +39,9 @@ class PulldataModel extends Model
         ## Ambil Data progres PUPR digunakan Penentuan dibawah rata2
         $progresPUPR = $this->db->query("SELECT progres_keu,progres_fisik FROM monika_rekap_unor_{$this->user['tahun']}  WHERE kdunit = '033'")->getRow();
         // dd($progresPUPR);
+
+        // Fisik Progress Sda
+        $fisikProgresSda = $this->RekapUnorModel->getProgresSda();
 
         ##
 
@@ -68,7 +73,9 @@ class PulldataModel extends Model
             ########
 
             ## penentuan dibawah rata rata PUPR
-            $f .= ($f ? ',' : '') . " IF(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) <" . $progresPUPR->progres_keu . ", 0, IF(((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)<" . $progresPUPR->progres_fisik . ", 0,1)) as stw";
+            //$f .= ($f ? ',' : '') . " IF(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) <" . $progresPUPR->progres_keu . ", 0, IF(((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)<" . $progresPUPR->progres_fisik . ", 0,1)) as stw";
+            $hitungProgresKeu = "((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)";
+            $f .= ($f ? ',' : '') . " (CASE WHEN $hitungProgresKeu < $fisikProgresSda THEN '1' ELSE '0' END) as stw";
             ######
         }
         if ($datatag == "satker") {
@@ -128,8 +135,14 @@ class PulldataModel extends Model
         ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  as jml_progres_keuangan,
         ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)  as jml_progres_fisik,
         
-        ABS(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))  as jml_persen_deviasi,
-        ((sum(md.pagu_total)/100)*ABS(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))) as jml_nilai_deviasi
+        (((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))  as jml_persen_deviasi,
+        CONCAT(
+            CASE WHEN 
+                ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) > ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)
+            THEN '-' 
+            ELSE '' END, 
+            ((sum(md.pagu_total)/100)*ABS(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)))
+        ) as jml_nilai_deviasi
 
         FROM monika_data_{$this->user['tahun']} md
         LEFT JOIN m_satker s ON s.satkerid=md.kdsatker

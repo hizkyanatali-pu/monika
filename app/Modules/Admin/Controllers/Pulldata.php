@@ -137,7 +137,7 @@ class Pulldata extends \App\Controllers\BaseController
     public function bws($slug = '')
     {
         $data = array(
-            'title' => 'BWS/PUSAT/SKPD TPOP',
+            'title' => 'BWS',
             'posisi' => ['<i class="fa fa-home"></i>'],
             'idk' => $slug,
             'label' => '',
@@ -266,15 +266,15 @@ class Pulldata extends \App\Controllers\BaseController
     {
         $kdgiat = ($slug == 'all' ?  "md.tahun = " . session('userData.tahun') : "md.kdgiat={$slug} AND md.tahun = " . session('userData.tahun'));
         $data = array(
-            'title' => 'Semua Satker',
-            'posisi' => ['<i class="fa fa-home"></i>'],
-            'idk' => 'all',
-            'label' => 'Semua Satker',
-            'nextlink' => 'paket',
-            'qdata' => $this->PulldataModel->getBalaiPaket("satker", $kdgiat),
-            'kegiatan' => $this->PulldataModel->getKegiatan(),
-            'slug' => $slug,
-            'rekap' => 'semuasatker',
+            'title'     => 'Semua Satker',
+            'posisi'    => ['<i class="fa fa-home"></i>'],
+            'idk'       => 'all',
+            'label'     => 'Semua Satker',
+            'nextlink'  => 'paket',
+            'qdata'     => $this->PulldataModel->getBalaiPaket("satker", $kdgiat),
+            'kegiatan'  => $this->PulldataModel->getKegiatan(),
+            'slug'      => $slug,
+            'rekap'     => 'semuasatker',
             'id_report' => 'cetak_semua_satker'
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
