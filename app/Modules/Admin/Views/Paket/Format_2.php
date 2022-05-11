@@ -1,5 +1,8 @@
 <?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content') ?>
+
+
+
 <?php
 
 // jumlah hari bulan ini & tanggal hari ini
@@ -434,11 +437,18 @@ $currentDayOfMonth = date('j');
                                         <?php } ?>
 
 
-                                        <td class="tdPersen text-right col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
+                                        <td class="tdPersen text-right col-keu">
+                                            <?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?>
+                                        </td>
                                         <td class="tdPersen text-right col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
 
-                                        <td class="tdPersen text-right col-percentage"><?php echo number_format($data['jml_persen_deviasi'], 2, ',', '.'); ?></td>
-                                        <td class="tdPersen text-right col-rp"><?php echo number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.'); ?></td>
+                                        <td class="tdPersen text-right col-percentage">
+                                            <?php echo number_format($data['jml_persen_deviasi'], 2, ',', '.'); ?>
+                                        </td>
+                                        <td class="tdPersen text-right col-rp">
+                                            <?php echo number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.'); ?>
+                                            <?php echo $data['stw'] ?>
+                                        </td>
                                     </tr>
                                     <?php
                                     $total_paket += $data['jml_paket'];

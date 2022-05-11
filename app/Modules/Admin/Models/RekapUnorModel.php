@@ -33,4 +33,22 @@ class RekapUnorModel extends Model
         $data['total'] = $this->db->query("SELECT * FROM monika_rekap_unor_{$this->user['tahun']} WHERE kdunit='033'")->getRowArray();
         return $data;
     }
+
+    function getProgresSda($_fieldName = 'progres_fisik', $_renderSubquery = false) {
+        $query = "SELECT
+                $_fieldName
+            FROM
+                monika_rekap_unor_{$this->user['tahun']}
+            WHERE
+                nmunit LIKE '%Sumber Daya Air%'
+                OR nmunit LIKE '%SDA%'
+        ";
+
+        if ($_renderSubquery) return $query;
+
+        $data = $this->db->query($query)
+        ->getRowArray();
+
+        return $data[$_fieldName];
+    }
 }
