@@ -266,6 +266,7 @@
 
         //condition for report button
         if (report_open) {
+
             $(this).attr("href", "<?= $id_report_pdf ?>?filter=" + arr.join(','))
             $(this).attr("target", "_blank")
         } else {

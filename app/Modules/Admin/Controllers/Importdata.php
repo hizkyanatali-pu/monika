@@ -152,7 +152,11 @@ class Importdata extends \App\Controllers\BaseController
 
 
         $nf = fopen($l, "w+");
-        fwrite($nf, trim(preg_replace('/\s+/', ' ', $data)));
+        $regex = preg_replace('/\s+/', ' ', $data);
+        $regex = preg_replace('/"+"/', '"', $regex);
+        $regex = preg_replace('/:+",+"/', ':"","', $regex);
+
+        fwrite($nf, trim($regex));
         fclose($nf);
         // $json = json_encode($data);
         // $json_dcode = json_decode($json,TRUE);
