@@ -40,10 +40,11 @@ class PulldataModel extends Model
         $progresPUPR = $this->db->query("SELECT progres_keu,progres_fisik FROM monika_rekap_unor_{$this->user['tahun']}  WHERE kdunit = '033'")->getRow();
         // dd($progresPUPR);
 
-        // Fisik Progress Sda
-        $fisikProgresSda = $this->RekapUnorModel->getProgresSda();
+        // Keu Progress Sda
+        $keuProgresSda = $this->RekapUnorModel->getProgresSda('progres_keu');
 
         ##
+        $hitungProgresKeu = "((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)";
 
         if ($datatag != '' and $ulang == false) {
             $pagusda = $this->getBalaiPaket('', $w, true)[0];
@@ -74,8 +75,7 @@ class PulldataModel extends Model
 
             ## penentuan dibawah rata rata PUPR
             //$f .= ($f ? ',' : '') . " IF(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) <" . $progresPUPR->progres_keu . ", 0, IF(((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)<" . $progresPUPR->progres_fisik . ", 0,1)) as stw";
-            $hitungProgresKeu = "((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)";
-            $f .= ($f ? ',' : '') . " (CASE WHEN $hitungProgresKeu < $fisikProgresSda THEN '1' ELSE '0' END) as stw";
+            $f .= ($f ? ',' : '') . " (CASE WHEN $hitungProgresKeu > $keuProgresSda THEN '1' ELSE '0' END) as stw";
             ######
         }
         if ($datatag == "satker") {
@@ -85,7 +85,11 @@ class PulldataModel extends Model
             $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  DESC";
         } elseif ($datatag == "satker100m") {
             $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label,md.tahun, ";
-            $w = " WHERE  md.jml_progres_keuangan < " . $pagusda['jml_progres_keuangan'] . " AND md.jml_progres_fisik < " . $pagusda['jml_progres_fisik'] . ($w ? ' AND ' : '') . $w;
+
+            //old where
+            //$w = " WHERE  md.jml_progres_keuangan < " . $pagusda['jml_progres_keuangan'] . " AND md.jml_progres_fisik < " . $pagusda['jml_progres_fisik'] . ($w ? ' AND ' : '') . $w;
+
+            $w = ($w ? ' WHERE ' : '') . $w . " ORDER BY stw DESC, md.jml_progres_keuangan DESC";
         } elseif ($datatag == "balai") {
             $f .= ($f ? ',' : '') . "b.balaiid as id, b.balai as label, ";
             // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY b.balaiid ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
@@ -99,12 +103,18 @@ class PulldataModel extends Model
             $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, b.st, ";
             // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
             //order by deviasi
-            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  ASC LIMIT 10";
+            // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  ASC LIMIT 10";
+            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  DESC LIMIT 10";
         } elseif ($datatag == "satkerdeviasiterbesar") {
             $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, b.st, ";
             // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
             //order by deviasi
-            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC, jml_persen_deviasi  DESC LIMIT 10";
+
+            // berdasarkan persentase
+            // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC, jml_persen_deviasi ASC LIMIT 10";
+
+            //berdasarkan nominal
+            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC, ((sum(md.pagu_total)/100)*(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))) ASC  LIMIT 10";
         } else {
             $f = "b.balaiid as id, b.balai as label, ";
             // $w = ($w ? ' WHERE ' : '') . $w . " ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
@@ -136,6 +146,8 @@ class PulldataModel extends Model
         ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)  as jml_progres_fisik,
         
         (((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))  as jml_persen_deviasi,
+        
+        /*
         CONCAT(
             CASE WHEN 
                 ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) > ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)
@@ -143,6 +155,9 @@ class PulldataModel extends Model
             ELSE '' END, 
             ((sum(md.pagu_total)/100)*ABS(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)))
         ) as jml_nilai_deviasi
+        */
+
+        ((sum(md.pagu_total)/100)*(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))) as jml_nilai_deviasi
 
         FROM monika_data_{$this->user['tahun']} md
         LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
