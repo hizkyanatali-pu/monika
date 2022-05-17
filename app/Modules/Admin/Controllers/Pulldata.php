@@ -4,17 +4,19 @@ namespace Modules\Admin\Controllers;
 
 use Modules\Admin\Models\AksesModel;
 use Modules\Admin\Models\PulldataModel;
+use Modules\Admin\Models\RekapUnorModel;
 
 
 class Pulldata extends \App\Controllers\BaseController
 {
     public function __construct()
     {
-        $this->akses                = new AksesModel();
-        $this->PulldataModel        = new PulldataModel();
-        $this->InModul = "Pulldata";
-        $session = session();
-        $this->user = $session->get('userData');
+        $this->akses          = new AksesModel();
+        $this->PulldataModel  = new PulldataModel();
+        $this->RekapUnorModel = new RekapUnorModel();
+        $this->InModul        = "Pulldata";
+        $session              = session();
+        $this->user           = $session->get('userData');
     }
 
     public function index()
@@ -49,7 +51,9 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'satuankerja',
             'qdata' => $this->PulldataModel->getBalaiPaket("balai", "md.tahun = " . session('userData.tahun')),
             'rekap' => 'unitkerja',
-            'id_report' => 'cetak_ditjen_sda'
+            'id_report' => 'cetak_ditjen_sda',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         );
         //dd($data);
         return view('Modules\Admin\Views\Paket\Format_2', $data);
@@ -118,7 +122,9 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'satuankerja',
             'qdata' => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS' AND md.tahun =" . session('userData.tahun')),
             'rekap' => 'bbws',
-            'id_report' => 'cetak_bbws'
+            'id_report' => 'cetak_bbws',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         );
         // dd($data);
         return view('Modules\Admin\Views\Paket\Format_2', $data);
@@ -144,7 +150,9 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'satuankerja',
             'qdata' => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS' AND md.tahun =" . session('userData.tahun')),
             'rekap' => 'bws',
-            'id_report' => 'cetak_bws'
+            'id_report' => 'cetak_bws',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
@@ -169,7 +177,9 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99' AND md.tahun =" . session('userData.tahun')),
             'rekap' => 'satkerpusat',
-            'id_report' => 'cetak_satker_pusat'
+            'id_report' => 'cetak_satker_pusat',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
@@ -194,7 +204,9 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97' AND md.tahun =" . session('userData.tahun')),
             'rekap' => 'balaiteknik',
-            'id_report' => 'cetak_balai_teknik'
+            'id_report' => 'cetak_balai_teknik',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
@@ -219,7 +231,9 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98' AND md.tahun =" . session('userData.tahun')),
             'rekap' => 'skpdtpop',
-            'id_report' => 'cetak_skpd_tp_op'
+            'id_report' => 'cetak_skpd_tp_op',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
@@ -244,7 +258,9 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'paket',
             'qdata' => $this->PulldataModel->getBalaiPaket('satker100m', "md.tahun =" . session('userData.tahun') . " AND md.jml_pagu_total>100000000000"),
             'rekap' => 'satkerpagu100m',
-            'id_report' => 'cetak_satker_pagu_100m'
+            'id_report' => 'cetak_satker_pagu_100m',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
@@ -266,16 +282,18 @@ class Pulldata extends \App\Controllers\BaseController
     {
         $kdgiat = ($slug == 'all' ?  "md.tahun = " . session('userData.tahun') : "md.kdgiat={$slug} AND md.tahun = " . session('userData.tahun'));
         $data = array(
-            'title'     => 'Semua Satker',
-            'posisi'    => ['<i class="fa fa-home"></i>'],
-            'idk'       => 'all',
-            'label'     => 'Semua Satker',
-            'nextlink'  => 'paket',
-            'qdata'     => $this->PulldataModel->getBalaiPaket("satker", $kdgiat),
-            'kegiatan'  => $this->PulldataModel->getKegiatan(),
-            'slug'      => $slug,
-            'rekap'     => 'semuasatker',
-            'id_report' => 'cetak_semua_satker'
+            'title'            => 'Semua Satker',
+            'posisi'           => ['<i class="fa fa-home"></i>'],
+            'idk'              => 'all',
+            'label'            => 'Semua Satker',
+            'nextlink'         => 'paket',
+            'qdata'            => $this->PulldataModel->getBalaiPaket("satker", $kdgiat),
+            'kegiatan'         => $this->PulldataModel->getKegiatan(),
+            'slug'             => $slug,
+            'rekap'            => 'semuasatker',
+            'id_report'        => 'cetak_semua_satker',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         );
         return view('Modules\Admin\Views\Paket\Format_2', $data);
     }
@@ -302,7 +320,9 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'paket',
             'qdata' => ['Satker Terendah' => $this->PulldataModel->getBalaiPaket("satker10terendah", "md.tahun = " . session('userData.tahun'))],
             'rekap' => 'satkerterendah',
-            'id_report' => 'cetak_satker_terendah'
+            'id_report' => 'cetak_satker_terendah',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         ];
         return view('Modules\Admin\Views\Paket\Satker_terendah', $data);
     }
@@ -319,7 +339,9 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'paket',
             'qdata' => ['Satker Tertinggi' => $this->PulldataModel->getBalaiPaket("satker10tertinggi", "md.tahun = " . session('userData.tahun'))],
             'rekap' => 'satkertertinggi',
-            'id_report' => 'cetak_satker_tertinggi'
+            'id_report' => 'cetak_satker_tertinggi',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         ];
         return view('Modules\Admin\Views\Paket\Satker_terendah', $data);
     }
@@ -328,7 +350,6 @@ class Pulldata extends \App\Controllers\BaseController
     //satker deviasi terbesar
     public function satker_deviasi_terbesar()
     {
-
         $data = [
             'title' => 'Satker Deviasi terbesar',
             'posisi' => ['<i class="fa fa-home"></i>'],
@@ -337,7 +358,9 @@ class Pulldata extends \App\Controllers\BaseController
             'nextlink' => 'paket',
             'qdata' => ['Satker Deviasi terbesar' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar", "md.tahun = " . session('userData.tahun'))],
             'rekap' => 'satkerdeviasiterbesar',
-            'id_report' => 'cetak_satker_deviasi_terbesar'
+            'id_report' => 'cetak_satker_deviasi_terbesar',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         ];
         return view('Modules\Admin\Views\Paket\Satker_deviasi_terbesar', $data);
     }

@@ -103,8 +103,8 @@ $currentDayOfMonth = date('j');
                                 <div class="float-left">
                                     <!-- <h3><?php //number_format((($qdata[0]['pagusda_progres_keuangan']-$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya']) / $maxDays * $currentDayOfMonth )+$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya'], 2, ',', '.'); 
                                                 ?>% </h3> -->
-                                    <h3><?= number_format((isset($qdata["Satker Terendah"][0]['pagusda_progres_keuangan']) ? $qdata["Satker Terendah"][0]['pagusda_progres_keuangan'] : $qdata["Satker Tertinggi"][0]['pagusda_progres_keuangan']), 2, ',', '.'); ?>% </h3>
-
+                                    <!-- <h3><?= number_format((isset($qdata["Satker Terendah"][0]['pagusda_progres_keuangan']) ? $qdata["Satker Terendah"][0]['pagusda_progres_keuangan'] : $qdata["Satker Tertinggi"][0]['pagusda_progres_keuangan']), 2, ',', '.'); ?>% </h3> -->
+                                    <h3><?= number_format($keuProgressSda, 2, ',', '.') ?>%</h3>
                                 </div>
                                 <div class="float-right text-right">
                                     <h6> Progres Keuangan</h6>
@@ -118,8 +118,8 @@ $currentDayOfMonth = date('j');
                                 <div class="float-left">
                                     <!-- <h3><?php // number_format(((($qdata[0]['pagusda_progres_fisik']-$qdata[0]['pagusda_progres_fisik_bulan_sebelumnya']) )  / $maxDays * $currentDayOfMonth ) + $qdata[0]['pagusda_progres_fisik_bulan_sebelumnya'] , 2, ',', '.'); 
                                                 ?>% </h3> -->
-                                    <h3><?= number_format((isset($qdata["Satker Terendah"][0]['pagusda_progres_fisik']) ? $qdata["Satker Terendah"][0]['pagusda_progres_fisik'] : $qdata["Satker Tertinggi"][0]['pagusda_progres_fisik']), 2, ',', '.'); ?>% </h3>
-
+                                    <!-- <h3><?= number_format((isset($qdata["Satker Terendah"][0]['pagusda_progres_fisik']) ? $qdata["Satker Terendah"][0]['pagusda_progres_fisik'] : $qdata["Satker Tertinggi"][0]['pagusda_progres_fisik']), 2, ',', '.'); ?>% </h3> -->
+                                    <h3><?= number_format($fisikProgressSda, 2, ',', '.') ?>%</h3>
                                 </div>
                                 <div class="float-right text-right">
                                     <h6>Progres Fisik</h6>
