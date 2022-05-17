@@ -41,6 +41,7 @@ class CronJob extends \App\Controllers\BaseController
 
                 $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket?thang=" . date("Y"));
                 $nmFile = date("ymdHis") . '_fromemon_paket_' . date("Y");
+                $regex = preg_replace('/\s+/', ' ', $data);
 
                 $fno = array('pagu_51', 'pagu_52', 'pagu_53', 'pagu_rpm', 'pagu_sbsn', 'pagu_phln', 'pagu_total', 'real_51', 'real_52', 'real_53', 'real_rpm', 'real_sbsn', 'real_phln', 'real_total', 'progres_keuangan', 'progres_fisik', 'progres_keu_jan', 'progres_keu_feb', 'progres_keu_mar', 'progres_keu_apr', 'progres_keu_mei', 'progres_keu_jun', 'progres_keu_jul', 'progres_keu_agu', 'progres_keu_sep', 'progres_keu_okt', 'progres_keu_nov', 'progres_keu_des', 'progres_fisik_jan', 'progres_fisik_feb', 'progres_fisik_mar', 'progres_fisik_apr', 'progres_fisik_mei', 'progres_fisik_jun', 'progres_fisik_jul', 'progres_fisik_agu', 'progres_fisik_sep', 'progres_fisik_okt', 'progres_fisik_nov', 'progres_fisik_des', 'ren_keu_jan', 'ren_keu_feb', 'ren_keu_mar', 'ren_keu_apr', 'ren_keu_mei', 'ren_keu_jun', 'ren_keu_jul', 'ren_keu_agu', 'ren_keu_sep', 'ren_keu_okt', 'ren_keu_nov', 'ren_keu_des', 'ren_fis_jan', 'ren_fis_feb', 'ren_fis_mar', 'ren_fis_apr', 'ren_fis_mei', 'ren_fis_jun', 'ren_fis_jul', 'ren_fis_agu', 'ren_fis_sep', 'ren_fis_okt', 'ren_fis_nov', 'ren_fis_des', 'kdkabkota', 'kdlokasi', 'kdppk', 'kdskmpen', 'sat', 'vol', 'ufis', 'pfis', 'prognosis');
                 $tabel = "monika_data_" . date("Y");
@@ -48,11 +49,16 @@ class CronJob extends \App\Controllers\BaseController
                 $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/kontrak?thang=" . date("Y"));
                 $nmFile = date("ymdHis") . '_fromemon_kontrak_' . date("Y");
 
+                $regex = preg_replace('/\s+/', ' ', $data);
+                $regex = preg_replace('/"+"/', '"', $regex);
+                $regex = preg_replace('/:+",+"/', ':"","', $regex);
+
                 $fno =  array('tahun', 'kdsatker', 'kdprogram', 'kdgiat', 'kdoutput', 'kdsoutput', 'kdkmpnen', 'kdskmpnen', 'kdpaket', 'kdls', 'nmpaket', 'kdpengadaan', 'kdkategori', 'kdjnskon', 'rkn_nama', 'rkn_npwp', 'nomor_kontrak', 'nilai_kontrak', 'tanggal_kontrak', 'tgl_spmk', 'waktu', 'status_tender', 'tgl_rencana_lelang', 'jadwal_pengumuman', 'jadwal_pemenang', 'jadwal_kontrak', 'jadwal_tgl_kontrak', 'status_sipbj', 'ufis', 'pfis', 'sumber_dana');
                 $tabel = "monika_kontrak_" . date("Y");
             } else if ($type == 'paket_register') {
                 $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket_register?thang=" . date("Y"));
                 $nmFile = date("ymdHis") . '_fromemon_paket_register_' . date("Y");
+                $regex = preg_replace('/\s+/', ' ', $data);
 
                 $fno = array('tahun', 'kode', 'kdregister');
                 $tabel = "monika_paket_register_" . date("Y");
@@ -60,6 +66,7 @@ class CronJob extends \App\Controllers\BaseController
 
                 $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/rekap_unor?thang=" . date("Y"));
                 $nmFile = date("ymdHis") . '_fromemon_rekap_unor_' . date("Y");
+                $regex = preg_replace('/\s+/', ' ', $data);
 
                 $fno = array('status', 'kdunit', 'nmunit', 'pagu_rpm', 'pagu_sbsn', 'pagu_phln', 'pagu_total', 'real_rpm', 'real_sbsn', 'real_phln', 'real_total', 'progres_keu', 'progres_fisik');
                 $tabel = "monika_rekap_unor_" . date("Y");
@@ -80,7 +87,7 @@ class CronJob extends \App\Controllers\BaseController
             $targetDir1 = WRITEPATH . "emon" . DIRECTORY_SEPARATOR . "FileSql";
 
 
-            if ($pullcount > 14) {
+            if ($pullcount > 45) {
 
                 $query = $this->ImportdataModel->deleteFiles(["nmfile" => $namefile, "type" => $type]);
 
@@ -94,7 +101,8 @@ class CronJob extends \App\Controllers\BaseController
 
 
             $nf = fopen($l, "w+");
-            fwrite($nf, trim(preg_replace('/\s+/', ' ', $data)));
+
+            fwrite($nf, trim($regex));
             fclose($nf);
             // $json = json_encode($data);
             // $json_dcode = json_decode($json,TRUE);
