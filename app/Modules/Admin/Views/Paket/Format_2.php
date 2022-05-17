@@ -122,7 +122,7 @@ $currentDayOfMonth = date('j');
                                     <!-- <h3><?php //number_format((($qdata[0]['pagusda_progres_keuangan']-$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya']) / $maxDays * $currentDayOfMonth )+$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya'], 2, ',', '.'); 
                                                 ?>% </h3> -->
                                     <h3><?= number_format((isset($qdata[0]['pagusda_progres_keuangan']) ? $qdata[0]['pagusda_progres_keuangan'] : 0), 2, ',', '.'); ?>% </h3>
-
+                                    123
                                 </div>
                                 <div class="float-right text-right">
                                     <h6> Progres Keuangan</h6>
@@ -447,7 +447,6 @@ $currentDayOfMonth = date('j');
                                         </td>
                                         <td class="tdPersen text-right col-rp">
                                             <?php echo number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.'); ?>
-                                            <?php echo $data['stw'] ?>
                                         </td>
                                     </tr>
                                     <?php

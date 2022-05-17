@@ -40,7 +40,7 @@ class Dashboard extends \App\Controllers\BaseController
         $qpersiapankontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Persiapan kontrak"]);
 
 
-        $rekapUnor =  $this->RekapUnorModel->getRekapUnor();
+        $rekapUnor = $this->RekapUnorModel->getRekapUnor();
         $getGraphicData = $this->PulldataModel->getGraphicDataProgressPerSumberDana();
         $getGraphicDataJenisBelanja = $this->PulldataModel->getGraphicDataProgressPerJenisBelanja();
         $getGraphicDataPerkegiatan = $this->PulldataModel->getGraphicDataProgressPerKegiatan();
