@@ -111,16 +111,22 @@ class Importdata extends \App\Controllers\BaseController
 
             $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_paket_' . $tahunAnggaran;
+            $regex = preg_replace('/\s+/', ' ', $data);
         } else if ($type == 'kontrak') {
             $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/kontrak?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_kontrak_' . $tahunAnggaran;
+            $regex = preg_replace('/\s+/', ' ', $data);
+            $regex = preg_replace('/"+"/', '"', $regex);
+            $regex = preg_replace('/:+",+"/', ':"","', $regex);
         } else if ($type == 'paket_register') {
             $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket_register?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_paket_register_' . $tahunAnggaran;
+            $regex = preg_replace('/\s+/', ' ', $data);
         } else {
 
             $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/rekap_unor?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_rekap_unor_' . $tahunAnggaran;
+            $regex = preg_replace('/\s+/', ' ', $data);
         }
         // }else{
         // $data = file_get_contents("http://34.120.159.131/ws_sda/");
@@ -152,9 +158,7 @@ class Importdata extends \App\Controllers\BaseController
 
 
         $nf = fopen($l, "w+");
-        $regex = preg_replace('/\s+/', ' ', $data);
-        $regex = preg_replace('/"+"/', '"', $regex);
-        $regex = preg_replace('/:+",+"/', ':"","', $regex);
+
 
         fwrite($nf, trim($regex));
         fclose($nf);
