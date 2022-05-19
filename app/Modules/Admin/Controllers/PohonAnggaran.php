@@ -22,10 +22,10 @@ class PohonAnggaran extends \App\Controllers\BaseController
     {
 
         $query = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span");
-        $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC'");
-        $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'");
-        $query3 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA' AND kdoutput = 'EAA'");
-        $query4 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA' AND kdoutput <> 'EAA'");
+        $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE '%FC'");
+        $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE '%WA'");
+        $query3 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE '%WA' AND kdoutput = 'EAA'");
+        $query4 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE '%WA' AND kdoutput <> 'EAA'");
 
 
 
@@ -53,8 +53,6 @@ class PohonAnggaran extends \App\Controllers\BaseController
     {
 
         $data['title'] = 'Pagu Per Program';
-        $data['djsda'] = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span")->getRow();
-        $data['programdukunganmanajemen'] = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'")->getRow();
         $data['programketahanan'] = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC'")->getRow();
 
         $data['rupiahmurni'] = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%FC' AND sumber_dana='A'")->getRow();
@@ -67,9 +65,33 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $data['kontraktahunjamakSBSN'] = $this->db->query("SELECT SUM(pgsbsn) as total FROM paket where kdprogram='FC' AND kdjnskon != 0")->getRow();
         $data['singleyearSBSN'] = $this->db->query("SELECT SUM(pgsbsn)  as total FROM paket where kdprogram='FC' AND kdjnskon = 0")->getRow();
 
-        $data['gajidantunjangan'] = $this->db->query("SELECT SUM(pg) as total FROM	paket WHERE kdprogram='WA' AND kdsoutput = '001' AND kdkmpnen='001'")->getRow();
-        $data['administrasisatker'] = $this->db->query("SELECT SUM(pg) as total FROM paket WHERE kdprogram='WA' AND kdsoutput = '970'")->getRow();
-        $data['layananperkantoran'] = $this->db->query("SELECT SUM(pg) as total FROM paket WHERE kdprogram='WA' AND kdsoutput IN ('001','950','951') AND kdkmpnen != '001'")->getRow();
+        /** OLD */
+        // $data['gajidantunjangan'] = $this->db->query("SELECT SUM(pg) as total FROM	paket WHERE kdprogram='WA' AND kdsoutput = '001' AND kdkmpnen='001'")->getRow();
+        // $data['administrasisatker'] = $this->db->query("SELECT SUM(pg) as total FROM paket WHERE kdprogram='WA' AND kdsoutput = '970'")->getRow();
+        // $data['layananperkantoran'] = $this->db->query("SELECT SUM(pg) as total FROM paket WHERE kdprogram='WA' AND kdsoutput IN ('001','950','951') AND kdkmpnen != '001'")->getRow();
+
+        $queryCondition_gajidantunjangan   = "kdgiat='2421' AND kdoutput='EBA' AND kdsoutput='994' AND kdkmpnen='001'";
+        $queryCondition_administrasisatker = "(kdgiat='2421' AND kdoutput='EBA' AND kdsoutput='960') OR (kdgiat='2421' AND kdoutput='EAH')"; 
+
+        $data['gajidantunjangan']   = $this->db->query("SELECT SUM(pg) as total FROM paket WHERE $queryCondition_gajidantunjangan")->getRow();
+        $data['administrasisatker'] = $this->db->query("SELECT SUM(pg) as total FROM paket WHERE $queryCondition_administrasisatker")->getRow();
+        $data['layananperkantoran'] = $this->db->query("SELECT 
+                SUM(pg) as total 
+            FROM 
+                paket 
+            WHERE 
+                ((kdgiat='2421' AND kdoutput='EBB') OR (kdgiat='2421' AND kdoutput='EBA' AND kdsoutput='994' AND kdkmpnen='002'))
+                AND kode NOT IN (SELECT kode FROM paket WHERE $queryCondition_gajidantunjangan)
+                AND kode NOT IN (SELECT kode FROM paket WHERE $queryCondition_administrasisatker)
+        ")->getRow();
+
+        // OLD
+        // $data['programdukunganmanajemen'] = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE'%WA'")->getRow();
+        $data['programdukunganmanajemen'] = (object) ['total' => ($data['gajidantunjangan']->total + $data['administrasisatker']->total + $data['layananperkantoran']->total)];
+
+        // OLD
+        // $data['djsda'] = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span")->getRow();
+        $data['djsda'] = (object) ['total' => ($data['programketahanan']->total + $data['programdukunganmanajemen']->total)];
 
         return view('Modules\Admin\Views\PosturAnggaran\Pagu-per-program', $data);
     }
