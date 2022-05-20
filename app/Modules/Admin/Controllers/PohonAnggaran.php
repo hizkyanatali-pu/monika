@@ -18,15 +18,21 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $this->db = \Config\Database::connect($dbcustom);
         $this->PohonAnggaran        = new PohonAnggaranModel();
     }
+
+    
     public function index()
     {
 
         $query = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span");
         $query1 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE '%FC'");
         $query2 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE '%WA'");
+
+        /* OLD
         $query3 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE '%WA' AND kdoutput = 'EAA'");
         $query4 = $this->db->query("SELECT SUM(amount) as total FROM d_dipa_span WHERE program LIKE '%WA' AND kdoutput <> 'EAA'");
-
+        */
+        $query3 = $this->db->query("SELECT SUM(pgrupiah) as total FROM paket WHERE kdgiat='2421' AND kdoutput='EBA' AND kdsoutput='994'");
+        $query4 = $this->db->query("SELECT sum(pgrupiah) as total FROM paket WHERE kdgiat='2421' AND kode NOT IN (SELECT kode FROM paket WHERE kdgiat='2421' AND kdoutput='EBA' AND kdsoutput='994')");
 
 
         $row = $query->getRow();
@@ -36,6 +42,12 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $row4 = $query4->getRow();
 
 
+        $total_operasional_nonOperasional = $row3->total + $row4->total;
+
+        // echo $row2->total;
+        // echo '<br/>';
+        // echo $total_operasional_nonOperasional;
+        // exit;
 
 
         $data = array(

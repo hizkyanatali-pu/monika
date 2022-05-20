@@ -20,10 +20,20 @@ class RencanaTender extends ResourceController
             $bulan = date('m', strtotime("+$iMonth month"));
 
             $prefixBulan = $iMonth == 0 ? 's/d ' : '';
-            $queryCondition = $iMonth == 0 ? '<=' : '=';
+            $suffixBulan = $iMonth == 3 ? ', DST ' : '';
+            // $queryCondition = $iMonth == 0 ? '<=' : '=';
+            if ($iMonth == 0) {
+                $queryCondition = "<=";
+            }
+            elseif ($iMonth == 3) {
+                $queryCondition = ">=";
+            }
+            else {
+                $queryCondition = "=";
+            }
 
             $dataBulan = $this->PohonAnggaran->getDataRencanaTenderBelumLelang($_pagu, $queryCondition, $bulan);
-            $dataBulan['bulan'] = $prefixBulan . bulan($bulan);
+            $dataBulan['bulan'] = $prefixBulan . bulan($bulan) . $suffixBulan;
 
             array_push($res_perBulan, $dataBulan);
         }
@@ -31,7 +41,7 @@ class RencanaTender extends ResourceController
         return $this->respond([
             'pagu' => $_pagu,
             'data' => [
-                'pagu'     => $this->PohonAnggaran->getDataRencanaTenderBelumLelang($_pagu, '<=',  $bulan),
+                'pagu'     => $this->PohonAnggaran->getDataRencanaTenderBelumLelang($_pagu, null, null, true),
                 'perBulan' => $res_perBulan
             ]
         ]);

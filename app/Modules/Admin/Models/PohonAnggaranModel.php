@@ -405,7 +405,7 @@ WHERE
     }
 
 
-    public function getDataRencanaTenderBelumLelang($w = '', $_rangeMonthOperation = null, $_bulan = null)
+    public function getDataRencanaTenderBelumLelang($w = '', $_rangeMonthOperation = null, $_bulan = null, $full = false)
     {
         $whereMonthYear = "";
         if (!is_null($_bulan)) {
@@ -413,7 +413,11 @@ WHERE
             $whereMonthYear = " AND DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m') $_rangeMonthOperation '" . session("userData.tahun").'-'.$_bulan . "' ";
         }
         else {
-            $whereMonthYear = " AND DATE_FORMAT(now(),'%m') = MID(tgl_rencana_lelang,4,2) ";
+            if ($full) {
+                $whereMonthYear = "  ";
+            } else {
+                $whereMonthYear = " AND DATE_FORMAT(now(),'%m') = MID(tgl_rencana_lelang,4,2) ";
+            }
         }
 
         $db = \Config\Database::connect();

@@ -73,6 +73,7 @@
                                     </th>
                                     <th class="text-right">
                                         <strong><?php echo str_replace(',', '.', number_format($totalJumlah)) ?></strong>
+                                        <!-- <strong><?php echo str_replace(',', '.', number_format($total)) ?></strong> -->
                                     </th>
                                 </tr>
                             </tfooter>

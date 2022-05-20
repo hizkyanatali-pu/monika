@@ -38,15 +38,17 @@ class SisaLelangSda extends \App\Controllers\BaseController
             tgiat.nmgiat as namaKeg,
             SUM(sisa_lelang) as jumlah
         ")
-            ->join('tgiat', "SUBSTRING_INDEX(emon_tarik_sisalelang_sda_paketpekerjaan.kode, '.', 1) = tgiat.kdgiat")
-            ->where('tarik_id', $lastTarikId)
-            ->where('tahun_anggaran', $this->user["tahun"])
-            ->groupBy("SUBSTRING_INDEX(kode, '.', 1)")
-            ->orderBy("tgiat.kdgiat")
-            ->get();
+        ->join('tgiat', "SUBSTRING_INDEX(emon_tarik_sisalelang_sda_paketpekerjaan.kode, '.', 1) = tgiat.kdgiat")
+        ->where('tarik_id', $lastTarikId)
+        ->where("nama != 'TOTAL'")
+        ->where('tahun_anggaran', $this->user["tahun"])
+        ->groupBy("SUBSTRING_INDEX(kode, '.', 1)")
+        ->orderBy("tgiat.kdgiat")
+        ->get();
 
         return view('Modules\Admin\Views\SisaLelangSDA\PerKategori.php', [
-            'qdata' => $qdata->getResult()
+            'qdata' => $qdata->getResult(),
+            'total' => $this->paketTable->select("sisa_lelang")->where("nama = 'TOTAL'")->get()->getFirstRow()->sisa_lelang
         ]);
     }
 
@@ -126,6 +128,24 @@ class SisaLelangSda extends \App\Controllers\BaseController
                     'nilai_kontrak_induk' =>  str_replace(".", "", $this->trimString($node->item(7)->nodeValue)),
                     'nilai_kontrak_anak'  =>  str_replace(".", "", $this->trimString($node->item(8)->nodeValue)),
                     'sisa_lelang'         =>  str_replace(".", "", $this->trimString($node->item(9)->nodeValue))
+                ];
+
+                $this->paketTable->insert($paketInsert);
+            }
+
+            if ($node->item(0)->nodeValue == 'TOTAL') {
+                $paketInsert = [
+                    'tarik_id'            => $tarik_id,
+                    'satker_id'           => $satker_id,
+                    'kode'                => '',
+                    'nama'                => 'TOTAL',
+                    'jenis_kontrak'       => '',
+                    'nomor_kontrak'       => '',
+                    'pagu_pengadaan'      => str_replace(".", "", $this->trimString($node->item(3)->nodeValue)),
+                    'pagu_dipa_2022'      => str_replace(".", "", $this->trimString($node->item(4)->nodeValue)),
+                    'nilai_kontrak_induk' => '',
+                    'nilai_kontrak_anak'  => str_replace(".", "", $this->trimString($node->item(6)->nodeValue)),
+                    'sisa_lelang'         => str_replace(".", "", $this->trimString($node->item(7)->nodeValue))
                 ];
 
                 $this->paketTable->insert($paketInsert);

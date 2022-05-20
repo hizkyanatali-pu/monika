@@ -167,246 +167,262 @@ $currentDayOfMonth = date('j');
 
                 <hr>
 
-                <div class="clearfix mb-3">
-                    <div class="float-left">
-                        <h6>Progres Keuangan dan Fisik <?= $title; ?></h6>
-                        <!-- <div class="kt-section__content dropdown dropright">
-                            <button type="button" class="btn btn-warning btn-icon" data-toggle="kt-popover" data-trigger="focus" title="" data-html="true" data-content="a. Deviasi <b>(-)</b> : keuangan lebih besar dari pada fisik. <br> <br>b. Data yang berwarna <b>Merah</b> menandakan dibawah nilai rata-rata." data-original-title="Petunjuk !"><i class="la la-lightbulb-o"></i></button> -->
-                        <!-- <button type="button" class="btn btn-primary btn-icon" dropdown-toggle data-toggle="dropdown"><i class="la la-filter"></i></button> -->
-                        <!--<div class="dropdown-menu" style="overflow-y: auto; height: 200px; z-index: 5;">
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="unit_kerja" disabled><?= $title ?>
-                                        </label>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="paket" disabled>Jml Paket
-                                        </label>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="pagu_rpm">Pagu (RPM)
-                                        </label>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="pagu_sbsn">Pagu (SBSN)
-                                        </label>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="pagu_phln">Pagu (PHLN)
-                                        </label>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="pagu_total">Pagu (Total)
-                                        </label>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="pagu_realisasi">Pagu (Realisasi)
-                                        </label>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="keu">Progres % (Keu)
-                                        </label>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="fisik">Progres % (Fisik)
-                                        </label>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="percentage">Deviasi (%)
-                                        </label>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <div class="form-check">
-                                        <label for="" class="form-check-label">
-                                            <input type="checkbox" class="form-check-input" name="rp">Deviasi (Rp)
-                                        </label>
-                                    </div>
-                                </a>
-                            </div>
-                        </div> -->
+
+
+
+
+
+
+
+
+                <?php 
+                    for ($i=0; $i < 2; $i++) { 
+                        $titleDescription = $i==0 ? 'Nominal Deviasi Terbesar' : 'Persentase Deviase Terbesar';
+                        $dataLoop = $i==0 ? $qdata : $qdata2;
+                ?>
+                    <div style="height: 400px">
+                    <div class="clearfix mb-0">
+                        <div class="float-left">
+                            <h6>Progres Keuangan dan Fisik <?= $title; ?> (<?= $titleDescription ?>)</h6>
+                            <!-- <div class="kt-section__content dropdown dropright">
+                                <button type="button" class="btn btn-warning btn-icon" data-toggle="kt-popover" data-trigger="focus" title="" data-html="true" data-content="a. Deviasi <b>(-)</b> : keuangan lebih besar dari pada fisik. <br> <br>b. Data yang berwarna <b>Merah</b> menandakan dibawah nilai rata-rata." data-original-title="Petunjuk !"><i class="la la-lightbulb-o"></i></button> -->
+                            <!-- <button type="button" class="btn btn-primary btn-icon" dropdown-toggle data-toggle="dropdown"><i class="la la-filter"></i></button> -->
+                            <!--<div class="dropdown-menu" style="overflow-y: auto; height: 200px; z-index: 5;">
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="unit_kerja" disabled><?= $title ?>
+                                            </label>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="paket" disabled>Jml Paket
+                                            </label>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="pagu_rpm">Pagu (RPM)
+                                            </label>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="pagu_sbsn">Pagu (SBSN)
+                                            </label>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="pagu_phln">Pagu (PHLN)
+                                            </label>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="pagu_total">Pagu (Total)
+                                            </label>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="pagu_realisasi">Pagu (Realisasi)
+                                            </label>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="keu">Progres % (Keu)
+                                            </label>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="fisik">Progres % (Fisik)
+                                            </label>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="percentage">Deviasi (%)
+                                            </label>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <div class="form-check">
+                                            <label for="" class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" name="rp">Deviasi (Rp)
+                                            </label>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="float-right">
+                            <!-- <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
+                            <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a> -->
+                            <b>*Dalam Ribuan</b>
+                        </div>
                     </div>
-                    <div class="float-right">
-                        <!-- <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
-                        <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a> -->
-                        <b>*Dalam Ribuan</b>
-                    </div>
-                </div>
 
-                <?php foreach ($qdata as $key1 => $progfis) { ?>
-
-                    <div class="table-responsive tableFixHead">
-                        <table class="table-bordered mb-0 table-striped" width="100%">
-                            <thead class="text-center text-white" style="background-color: #1562aa;">
-                                <tr class="text-center">
-                                    <!-- <th colspan="2">&nbsp;</th> -->
-                                    <th class="unit_kerja">&nbsp;</th>
-                                    <th class="paket">&nbsp;</th>
-                                    <?= ($key1 == 'Satker Deviasi terbesar' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
-                                    <th class="pagu-main" colspan="<?= ($key1 == 'Satker Deviasi terbesar' ? "4" : "5") ?>">Pagu (Rp)</th>
-                                    <?= ($key1 == 'Satker Deviasi terbesar' ?    ' <th class="pagu-main" colspan="4">Realisasi (Rp)</th>' : '') ?>
-                                    <th class="progres" colspan="2">Progres (%)</th>
-                                    <th class="deviasi" colspan="2">Deviasi</th>
-                                </tr>
-                                <tr class="text-center">
-                                    <th class="unit_kerja"><?= $key1; ?></th>
-                                    <?= ($key1 == 'Satker Deviasi terbesar' ?    '<th class="satker_">Satker</th>' : '') ?>
-                                    <th class="tdNilai paket">Jml&nbsp;Paket</th>
-                                    <th class="tdNilai pagu_rpm pagu">RPM</th>
-                                    <th class="tdNilai pagu_sbsn pagu">SBSN</th>
-                                    <th class="tdNilai pagu_phln pagu">PHLN </th>
-                                    <th class="tdNilai pagu_total pagu">TOTAL </th>
-
-                                    <?php
-
-                                    if ($key1 == 'Satker Deviasi terbesar') { ?>
-
-                                        <th class="tdNilai pagu_rpm pagu">RPM </th>
-                                        <th class="tdNilai pagu_sbsn pagu">SBSN </th>
+                    <?php foreach ($dataLoop as $key1 => $progfis) { ?>
+                        <div class="table-responsive tableFixHead">
+                            <table class="table-bordered mb-0 table-striped" width="100%">
+                                <thead class="text-center text-white" style="background-color: #1562aa;">
+                                    <tr class="text-center">
+                                        <!-- <th colspan="2">&nbsp;</th> -->
+                                        <th class="unit_kerja">&nbsp;</th>
+                                        <th class="paket">&nbsp;</th>
+                                        <?= ($key1 == 'Satker Deviasi terbesar' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
+                                        <th class="pagu-main" colspan="<?= ($key1 == 'Satker Deviasi terbesar' ? "4" : "5") ?>">Pagu (Rp)</th>
+                                        <?= ($key1 == 'Satker Deviasi terbesar' ?    ' <th class="pagu-main" colspan="4">Realisasi (Rp)</th>' : '') ?>
+                                        <th class="progres" colspan="2">Progres (%)</th>
+                                        <th class="deviasi" colspan="2">Deviasi</th>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <th class="unit_kerja"><?= $key1; ?></th>
+                                        <?= ($key1 == 'Satker Deviasi terbesar' ?    '<th class="satker_">Satker</th>' : '') ?>
+                                        <th class="tdNilai paket">Jml&nbsp;Paket</th>
+                                        <th class="tdNilai pagu_rpm pagu">RPM</th>
+                                        <th class="tdNilai pagu_sbsn pagu">SBSN</th>
                                         <th class="tdNilai pagu_phln pagu">PHLN </th>
                                         <th class="tdNilai pagu_total pagu">TOTAL </th>
 
-
-                                    <?php } else { ?>
-
-                                        <th class="tdNilai pagu_realisasi pagu">Realisasi</th>
-                                    <?php
-                                    }
-                                    ?>
-                                    <th class="tdPersen keu">keu</th>
-                                    <th class="tdPersen fisik">fisik</th>
-                                    <th class="tdPersen percentage">%</th>
-                                    <th class="tdNilai rp">Rp</th>
-                                </tr>
-                            </thead>
-
-                            <tbody id="tbody-utama">
-                                <?php if ($progfis) : ?>
-                                    <?php
-                                    $total_pagu_rpm = 0;
-                                    $total_pagu_sbsn = 0;
-                                    $total_pagu_phln = 0;
-                                    $total_pagu_total = 0;
-
-                                    $total_real_rpm = 0;
-                                    $total_real_sbsn = 0;
-                                    $total_real_phln = 0;
-                                    $total_real_total = 0;
-                                    $total_paket = 0;
-
-                                    ?>
-                                    <?php
-                                    foreach ($progfis as $key => $data) : ?>
-
-                                        <!-- balai -->
-                                        <tr class="stw<?= $data['stw']; ?>">
-                                            <td class="tdKodeLabel col-unit_kerja">
-                                                <?php echo $data['label']; ?>
-                                            </td>
-                                            <?= ($key1 == 'Satker Deviasi terbesar' ? '<td class="tdNilai text-center col-paket">' . $data['st'] . '</td>' : '') ?>
-                                            <td class="tdNilai text-center col-paket"><?php echo $data['jml_paket']; ?></td>
-
-                                            <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_pagu_sbsn'] / 1000, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_total'] / 1000, 0, ',', '.'); ?></td>
-
-                                            <?php if ($key1 == 'Satker Deviasi terbesar') { ?>
-                                                <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_real_rpm'] / 1000, 0, ',', '.'); ?></td>
-                                                <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_real_sbsn'] / 1000, 0, ',', '.'); ?></td>
-                                                <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_real_phln'] / 1000, 0, ',', '.'); ?></td>
-                                                <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
-                                            <?php } else { ?>
-
-                                                <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
-
-                                            <?php } ?>
-
-
-                                            <td class="tdPersen text-right col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
-                                            <td class="tdPersen text-right col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
-
-                                            <!-- <td class="tdPersen text-right col-percentage"><?php //($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); 
-                                                                                                ?></td> -->
-                                            <!-- <td class="tdPersen text-right col-rp"><?php //echo($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); 
-                                                                                        ?></td> -->
-
-                                            <td class="tdPersen text-right col-percentage"><?= number_format($data['jml_persen_deviasi'], 2, ',', '.'); ?></td>
-                                            <td class="tdPersen text-right col-rp"><?php echo number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.'); ?></td>
-
-                                        </tr>
                                         <?php
-                                        $total_pagu_rpm += $data['jml_pagu_rpm'];
-                                        $total_pagu_sbsn += $data['jml_pagu_sbsn'];
-                                        $total_pagu_phln += $data['jml_pagu_phln'];
-                                        $total_pagu_total += $data['jml_pagu_total'];
 
-                                        $total_real_rpm += $data['jml_real_rpm'];
-                                        $total_real_sbsn += $data['jml_real_sbsn'];
-                                        $total_real_phln += $data['jml_real_phln'];
-                                        $total_real_total += $data['jml_real_total'];
-                                        $total_paket += $data['jml_paket'];
+                                        if ($key1 == 'Satker Deviasi terbesar') { ?>
+
+                                            <th class="tdNilai pagu_rpm pagu">RPM </th>
+                                            <th class="tdNilai pagu_sbsn pagu">SBSN </th>
+                                            <th class="tdNilai pagu_phln pagu">PHLN </th>
+                                            <th class="tdNilai pagu_total pagu">TOTAL </th>
+
+
+                                        <?php } else { ?>
+
+                                            <th class="tdNilai pagu_realisasi pagu">Realisasi</th>
+                                        <?php
+                                        }
+                                        ?>
+                                        <th class="tdPersen keu">keu</th>
+                                        <th class="tdPersen fisik">fisik</th>
+                                        <th class="tdPersen percentage">%</th>
+                                        <th class="tdNilai rp">Rp</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="tbody-utama">
+                                    <?php if ($progfis) : ?>
+                                        <?php
+                                        $total_pagu_rpm = 0;
+                                        $total_pagu_sbsn = 0;
+                                        $total_pagu_phln = 0;
+                                        $total_pagu_total = 0;
+
+                                        $total_real_rpm = 0;
+                                        $total_real_sbsn = 0;
+                                        $total_real_phln = 0;
+                                        $total_real_total = 0;
+                                        $total_paket = 0;
 
                                         ?>
-                                    <?php endforeach; ?>
-                                    <tr class="text-center text-white" style="background-color: #1562aa;">
-                                        <td class="text-center">TOTAL</td>
-                                        <?= ($key1 == 'Satker Deviasi terbesar' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
-                                        <td class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
-                                        <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
+                                        <?php
+                                        foreach ($progfis as $key => $data) : ?>
 
-                                        <?php if ($key1 == 'Satker Deviasi terbesar') {  ?>
-                                            <!-- <td class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td> -->
-                                            <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_real_rpm / 1000, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_real_phln / 1000, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
-                                        <?php  } else {  ?>
-                                            <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
-                                            <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_real_total / $total_pagu_total * 100, 2, ',', '.'); ?></td>
+                                            <!-- balai -->
+                                            <tr class="stw<?= $data['stw']; ?>">
+                                                <td class="tdKodeLabel col-unit_kerja">
+                                                    <?php echo $data['label']; ?>
+                                                </td>
+                                                <?= ($key1 == 'Satker Deviasi terbesar' ? '<td class="tdNilai text-center col-paket">' . $data['st'] . '</td>' : '') ?>
+                                                <td class="tdNilai text-center col-paket"><?php echo $data['jml_paket']; ?></td>
 
-                                        <?php  }  ?>
+                                                <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
+                                                <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_pagu_sbsn'] / 1000, 0, ',', '.'); ?></td>
+                                                <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
+                                                <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_total'] / 1000, 0, ',', '.'); ?></td>
+
+                                                <?php if ($key1 == 'Satker Deviasi terbesar') { ?>
+                                                    <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_real_rpm'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_real_sbsn'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_real_phln'] / 1000, 0, ',', '.'); ?></td>
+                                                    <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
+                                                <?php } else { ?>
+
+                                                    <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($data['jml_real_total'] / 1000, 0, ',', '.'); ?></td>
+
+                                                <?php } ?>
+
+
+                                                <td class="tdPersen text-right col-keu"><?php echo number_format($data['jml_progres_keuangan'], 2, ',', '.'); ?></td>
+                                                <td class="tdPersen text-right col-fisik"><?php echo number_format($data['jml_progres_fisik'], 2, ',', '.'); ?></td>
+
+                                                <!-- <td class="tdPersen text-right col-percentage"><?php //($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_persen_deviasi'], 2, ',', '.') : '-'); 
+                                                                                                    ?></td> -->
+                                                <!-- <td class="tdPersen text-right col-rp"><?php //echo($data['jml_progres_fisik'] >= $data['jml_progres_keuangan'] ? number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.') : '-'); 
+                                                                                            ?></td> -->
+
+                                                <td class="tdPersen text-right col-percentage"><?= number_format($data['jml_persen_deviasi'], 2, ',', '.'); ?></td>
+                                                <td class="tdPersen text-right col-rp"><?php echo number_format($data['jml_nilai_deviasi'] / 1000, 0, ',', '.'); ?></td>
+
+                                            </tr>
+                                            <?php
+                                            $total_pagu_rpm += $data['jml_pagu_rpm'];
+                                            $total_pagu_sbsn += $data['jml_pagu_sbsn'];
+                                            $total_pagu_phln += $data['jml_pagu_phln'];
+                                            $total_pagu_total += $data['jml_pagu_total'];
+
+                                            $total_real_rpm += $data['jml_real_rpm'];
+                                            $total_real_sbsn += $data['jml_real_sbsn'];
+                                            $total_real_phln += $data['jml_real_phln'];
+                                            $total_real_total += $data['jml_real_total'];
+                                            $total_paket += $data['jml_paket'];
+
+                                            ?>
+                                        <?php endforeach; ?>
+                                        <tr class="text-center text-white" style="background-color: #1562aa;">
+                                            <td class="text-center">TOTAL</td>
+                                            <?= ($key1 == 'Satker Deviasi terbesar' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
+                                            <td class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td>
+                                            <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
+                                            <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
+                                            <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
+                                            <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
+
+                                            <?php if ($key1 == 'Satker Deviasi terbesar') {  ?>
+                                                <!-- <td class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td> -->
+                                                <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_real_rpm / 1000, 0, ',', '.'); ?></td>
+                                                <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
+                                                <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_real_phln / 1000, 0, ',', '.'); ?></td>
+                                                <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+                                            <?php  } else {  ?>
+                                                <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+                                                <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_real_total / $total_pagu_total * 100, 2, ',', '.'); ?></td>
+
+                                            <?php  }  ?>
 
 
 
-                                        <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
+                                            <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php } ?>
                     </div>
                 <?php } ?>
+
 
             </div>
 

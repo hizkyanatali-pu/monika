@@ -357,6 +357,7 @@ class Pulldata extends \App\Controllers\BaseController
             'label' => 'Satker Deviasi terbesar',
             'nextlink' => 'paket',
             'qdata' => ['Satker Deviasi terbesar' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar", "md.tahun = " . session('userData.tahun'))],
+            'qdata2' => ['Satker Deviasi terbesar' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar_persen", "md.tahun = " . session('userData.tahun'))],
             'rekap' => 'satkerdeviasiterbesar',
             'id_report' => 'cetak_satker_deviasi_terbesar',
             'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
