@@ -262,14 +262,41 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $data['nilaiPhln']['nilai_kontrak'] = $dataPhln['nilai_kontrak'] * 1000;
         $data['nilaiPhln']['jml_paket']     = $dataPhln['jml_paket'];
 
+        /** 
+         * syc-myc-list RPM
+        */
         $dataRpmSyc = $this->PohonAnggaran->getDataSisaLelang('RPM', ['SYC ']);
         $data['nilaiRpmSyc']['nilai_kontrak'] = $dataRpmSyc['nilai_kontrak'] * 1000;
         $data['nilaiRpmSyc']['jml_paket']     = $dataRpmSyc['jml_paket'];
 
+        $dataRpmMycBaru = $this->PohonAnggaran->getDataSisaLelang('RPM', ['MYC Baru ']);
+        $data['nilaiRpmMycBaru']['nilai_kontrak'] = $dataRpmMycBaru['nilai_kontrak'] * 1000;
+        $data['nilaiRpmMycBaru']['jml_paket']     = $dataRpmMycBaru['jml_paket'];
+
+        $data['listPaketRpmSyc'] = $this->PohonAnggaran->getDataSisaLelang('RPM', ['SYC '], true);
+        $data['listPaketRpmMycBaru'] = $this->PohonAnggaran->getDataSisaLelang('RPM', ['MYC Baru '], true);
+        /** end-of: syc-myc-list RPM */
+
+
+        /** 
+         * syc-myc-list SBSN
+        */
         $dataSbsnSyc = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['SYC ']);
         $data['nilaiSbsnSyc']['nilai_kontrak'] = $dataSbsnSyc['nilai_kontrak'] * 1000;
         $data['nilaiSbsnSyc']['jml_paket']     = $dataSbsnSyc['jml_paket'];
 
+        $dataSbsnMycBaru = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['MYC Baru ']);
+        $data['nilaiSbsnMycBaru']['nilai_kontrak'] = $dataSbsnMycBaru['nilai_kontrak'] * 1000;
+        $data['nilaiSbsnMycBaru']['jml_paket']     = $dataSbsnMycBaru['jml_paket'];
+
+        $data['listPaketSbsnSyc'] = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['SYC '], true);
+        $data['listPaketSbsnMycBaru'] = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['MYC Baru '], true);
+        /** end-of: syc-myc-list SBSN */
+
+
+        /** 
+         * syc-myc-list PHLN
+        */
         $dataPhlnSyc = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['SYC ']);
         $data['nilaiPhlnSyc']['nilai_kontrak'] = $dataPhlnSyc['nilai_kontrak'] * 1000;
         $data['nilaiPhlnSyc']['jml_paket']     = $dataPhlnSyc['jml_paket'];
@@ -278,10 +305,10 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $data['nilaiPhlnMycBaru']['nilai_kontrak'] = $dataPhlnMycBaru['nilai_kontrak'] * 1000;
         $data['nilaiPhlnMycBaru']['jml_paket']     = $dataPhlnMycBaru['jml_paket'];
 
-        $data['listPaketRpmSyc'] = $this->PohonAnggaran->getDataSisaLelang('RPM', ['SYC '], true);
-        $data['listPaketSbsnSyc'] = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['SYC '], true);
         $data['listPaketPhlnSyc'] = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['SYC '], true);
         $data['listPaketPhlnMycBaru'] = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['MYC Baru '], true);
+         /** end-of: syc-myc-list PHLN */
+
 
         return view('Modules\Admin\Views\PosturAnggaran\Sisa-lelang', $data);
     }
@@ -296,11 +323,20 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $data['rpmSyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "RPM");
         $data['rpmMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "RPM");
 
+        $data['sbsnSyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "SBSN");
+        $data['sbsnMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "SBSN");
+
+        $data['phlnSyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "PHLN");
         $data['phlnMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "PHLN");
 
 
         $data['rpmSycList'] = $this->PohonAnggaran->getDataBelumLelangList([[0]], "RPM");
         $data['rpmMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "RPM");
+
+        $data['sbsnSycList'] = $this->PohonAnggaran->getDataBelumLelangList([[0]], "SBSN");
+        $data['sbsnMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "SBSN");
+
+        $data['phlnSycList'] = $this->PohonAnggaran->getDataBelumLelangList([[0]], "PHLN");
         $data['phlnMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "PHLN");
 
         return view('Modules\Admin\Views\PosturAnggaran\Sisa-belum-lelang', $data);
