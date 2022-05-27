@@ -38,17 +38,17 @@ class SisaLelangSda extends \App\Controllers\BaseController
             tgiat.nmgiat as namaKeg,
             SUM(sisa_lelang) as jumlah
         ")
-        ->join('tgiat', "SUBSTRING_INDEX(emon_tarik_sisalelang_sda_paketpekerjaan.kode, '.', 1) = tgiat.kdgiat")
-        ->where('tarik_id', $lastTarikId)
-        ->where("nama != 'TOTAL'")
-        ->where('tahun_anggaran', $this->user["tahun"])
-        ->groupBy("SUBSTRING_INDEX(kode, '.', 1)")
-        ->orderBy("tgiat.kdgiat")
-        ->get();
+            ->join('tgiat', "SUBSTRING_INDEX(emon_tarik_sisalelang_sda_paketpekerjaan.kode, '.', 1) = tgiat.kdgiat")
+            ->where('tarik_id', $lastTarikId)
+            ->where("nama != 'TOTAL'")
+            ->where('tahun_anggaran', $this->user["tahun"])
+            ->groupBy("SUBSTRING_INDEX(kode, '.', 1)")
+            ->orderBy("tgiat.kdgiat")
+            ->get();
 
         return view('Modules\Admin\Views\SisaLelangSDA\PerKategori.php', [
             'qdata' => $qdata->getResult(),
-            'total' => $this->paketTable->select("sisa_lelang")->where("nama = 'TOTAL'")->get()->getFirstRow()->sisa_lelang
+            // 'total' => $this->paketTable->select("sisa_lelang")->where("nama = 'TOTAL'")->get()->getFirstRow()->sisa_lelang
         ]);
     }
 
