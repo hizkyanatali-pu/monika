@@ -449,6 +449,53 @@ WHERE
                 return "'$arr'";
             }, $_jenisKontrak);
             $implodeJenisKontrak = implode(",", $mapJenisKontrak);
+            // $whereInJenisKontrak = "AND (SELECT jenis_kontrak FROM monika_kontrak_{$this->user['tahun']} c WHERE SUBSTRING_INDEX(c.kdpaket, '.', -5) = SUBSTRING_INDEX(a.kode, '.', 5) LIMIT 1) IN ($implodeJenisKontrak)";
+            $whereInJenisKontrak = "AND jenis_kontrak IN ($implodeJenisKontrak)";
+        }
+
+        $select = '';
+        $limit = '';
+        if ($selectList) {
+            $select = "
+                a.nama as nama_paket
+            ";
+            $limit = "LIMIT 4";
+        }
+        else {
+            $select = "
+                sum(a.sisa_lelang) AS nilai_kontrak,
+                count(a.nama) AS jml_paket
+            ";
+        }
+
+        $query =  $db->query("SELECT 
+                $select
+            FROM 
+                emon_tarik_sisalelang_sda_paketpekerjaan a
+            WHERE 
+                a.nama != 'TOTAL' 
+                AND a.sumber_dana = '$_namaPagu' 
+                /*AND IFNULL((SELECT sumber_dana FROM monika_kontrak_2022 b WHERE SUBSTRING_INDEX(b.kdpaket, '.', -5)=SUBSTRING_INDEX(a.kode, '.', 5) ORDER BY `sumber_dana` ASC LIMIT 1), 'RPM') = '$_namaPagu'*/
+                $whereInJenisKontrak 
+            $limit
+        ");
+
+        $return = ($selectList) ? $query->getResultArray() : $query->getRowArray();
+        return $return;
+    }
+    
+
+
+    /*
+    public function getDataSisaLelang($_namaPagu, $_jenisKontrak=[], $selectList=false) {
+        $db = \Config\Database::connect();
+
+        $whereInJenisKontrak = '';
+        if (count($_jenisKontrak) > 0) {
+            $mapJenisKontrak = array_map(function($arr) {
+                return "'$arr'";
+            }, $_jenisKontrak);
+            $implodeJenisKontrak = implode(",", $mapJenisKontrak);
             $whereInJenisKontrak = "AND jenis_kontrak IN ($implodeJenisKontrak)";
         }
 
@@ -482,4 +529,5 @@ WHERE
         $return = ($selectList) ? $query->getResultArray() : $query->getRowArray();
         return $return;
     }
+    */
 }

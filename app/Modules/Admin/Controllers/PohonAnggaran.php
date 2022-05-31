@@ -272,9 +272,18 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $dataRpmMycBaru = $this->PohonAnggaran->getDataSisaLelang('RPM', ['MYC Baru ']);
         $data['nilaiRpmMycBaru']['nilai_kontrak'] = $dataRpmMycBaru['nilai_kontrak'] * 1000;
         $data['nilaiRpmMycBaru']['jml_paket']     = $dataRpmMycBaru['jml_paket'];
+        // $data['nilaiRpmMycBaru']['nilai_kontrak'] = 0;
+        // $data['nilaiRpmMycBaru']['jml_paket']     = 0;
+
+        $dataRpmMycLanjutan = $this->PohonAnggaran->getDataSisaLelang('RPM', ['MYC Lanjutan ']);
+        $data['nilaiRpmMycLanjutan']['nilai_kontrak'] = $dataRpmMycLanjutan['nilai_kontrak'] * 1000;
+        $data['nilaiRpmMycLanjutan']['jml_paket']     = $dataRpmMycLanjutan['jml_paket'];
+        // $data['nilaiRpmMycLanjutan']['nilai_kontrak'] = 0;
+        // $data['nilaiRpmMycLanjutan']['jml_paket']     = 0;
 
         $data['listPaketRpmSyc'] = $this->PohonAnggaran->getDataSisaLelang('RPM', ['SYC '], true);
         $data['listPaketRpmMycBaru'] = $this->PohonAnggaran->getDataSisaLelang('RPM', ['MYC Baru '], true);
+        $data['listPaketRpmMycLanjutan'] = $this->PohonAnggaran->getDataSisaLelang('RPM', ['MYC Lanjutan '], true);
         /** end-of: syc-myc-list RPM */
 
 
@@ -288,9 +297,18 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $dataSbsnMycBaru = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['MYC Baru ']);
         $data['nilaiSbsnMycBaru']['nilai_kontrak'] = $dataSbsnMycBaru['nilai_kontrak'] * 1000;
         $data['nilaiSbsnMycBaru']['jml_paket']     = $dataSbsnMycBaru['jml_paket'];
+        // $data['nilaiSbsnMycBaru']['nilai_kontrak'] = 0;
+        // $data['nilaiSbsnMycBaru']['jml_paket']     = 0;
+
+        $dataSbsnMycLanjutan = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['MYC Lanjutan ']);
+        $data['nilaiSbsnMycLanjutan']['nilai_kontrak'] = $dataSbsnMycLanjutan['nilai_kontrak'] * 1000;
+        $data['nilaiSbsnMycLanjutan']['jml_paket']     = $dataSbsnMycLanjutan['jml_paket'];
+        // $data['nilaiSbsnMycLanjutan']['nilai_kontrak'] = 0;
+        // $data['nilaiSbsnMycLanjutan']['jml_paket']     = 0;
 
         $data['listPaketSbsnSyc'] = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['SYC '], true);
         $data['listPaketSbsnMycBaru'] = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['MYC Baru '], true);
+        $data['listPaketSbsnMycLanjutan'] = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['MYC Lanjutan '], true);
         /** end-of: syc-myc-list SBSN */
 
 
@@ -304,9 +322,18 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $dataPhlnMycBaru = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['MYC Baru ']);
         $data['nilaiPhlnMycBaru']['nilai_kontrak'] = $dataPhlnMycBaru['nilai_kontrak'] * 1000;
         $data['nilaiPhlnMycBaru']['jml_paket']     = $dataPhlnMycBaru['jml_paket'];
+        // $data['nilaiPhlnMycBaru']['nilai_kontrak'] = 0;
+        // $data['nilaiPhlnMycBaru']['jml_paket']     = 0;
+
+        $dataPhlnMycLanjutan = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['MYC Lanjutan ']);
+        $data['nilaiPhlnMycLanjutan']['nilai_kontrak'] = $dataPhlnMycLanjutan['nilai_kontrak'] * 1000;
+        $data['nilaiPhlnMycLanjutan']['jml_paket']     = $dataPhlnMycLanjutan['jml_paket'];
+        // $data['nilaiPhlnMycLanjutan']['nilai_kontrak'] = 0;
+        // $data['nilaiPhlnMycLanjutan']['jml_paket']     = 0;
 
         $data['listPaketPhlnSyc'] = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['SYC '], true);
         $data['listPaketPhlnMycBaru'] = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['MYC Baru '], true);
+        $data['listPaketPhlnMycLanjutan'] = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['MYC Lanjutan '], true);
          /** end-of: syc-myc-list PHLN */
 
 
