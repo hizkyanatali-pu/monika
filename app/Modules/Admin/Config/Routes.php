@@ -160,6 +160,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('per-kategori', '\Modules\Admin\Controllers\SisaLelangSda::pagePerKategori');
     });
 
+    $routes->get('blokir', '\Modules\Admin\Controllers\Blokir::index');
+
     $routes->group('Kinerja-Output-Bulanan', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('(:any)', '\Modules\Admin\Controllers\KinerjaOutputBulanan::index/$1');
         $routes->get('(:any)/(:any)', '\Modules\Admin\Controllers\KinerjaOutputBulanan::index/$1/$2');

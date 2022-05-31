@@ -45,8 +45,8 @@
 
                             <tbody id="tbody-utama">
                                 <?php
-                                $totalJumlah = 0;
-                                if ($qdata) :
+                                    $totalJumlah = 0;
+                                    if ($qdata) :
                                 ?>
                                     <?php
                                     $no = 1;
@@ -66,7 +66,6 @@
                             </tbody>
                             <tfooter>
                                 <tr>
-
                                     <th></th>
                                     <th colspan="2" style="text-align: center;">
                                         <strong>Total</strong>
