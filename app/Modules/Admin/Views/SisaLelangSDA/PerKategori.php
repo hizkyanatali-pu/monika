@@ -5,10 +5,18 @@
 <!-- begin:: Subheader -->
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
-        <div class="kt-subheader__main">
-            <h5 class="kt-subheader__title">
-                Sisa Lelang / Per Kategori
-            </h5>
+        <div class="kt-subheader__main w-100">
+            <div class="d-flex w-100">
+                <h5 class="kt-subheader__title">
+                    Sisa Lelang / Per Kategori
+                </h5>
+
+                <select name="kategori_show" class="form-control" style="width:270px">
+                    <option value="keg" selected>Per Kegiatan</option>
+                    <option value="sum">Per Sumber Dana</option>
+                    <option value="keg_sum">Per Kegiatan dan Sumber Dana</option>
+                </select>
+            </div>
             <span class="kt-subheader__separator kt-hidden"></span>
 
         </div>
@@ -20,10 +28,10 @@
 
 <!-- begin:: Content -->
 <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
-    <div class="kt-portlet">
-        <div class="kt-portlet__body p-0">
 
-            <!--begin::Section-->
+    <!--begin::Per Kategori-->
+    <div class="kt-portlet d-none" id="_container_perKategori">
+        <div class="kt-portlet__body p-0">
             <div class="kt-section p-0">
                 <div class="row mb-3 p-0">
                     <div class="col-md-12">
@@ -80,12 +88,89 @@
                         </table>
                     </div>
                 </div>
-
             </div>
-            <!--end::Section-->
         </div>
-        <!--end::Form-->
     </div>
+    <!--end::Per Kategori-->
+
+
+
+
+    <!--begin::Per Sumber Dana-->
+    <div class="kt-portlet d-none" id="_container_perSumberDana">
+        <div class="kt-portlet__body p-0">
+            <div class="kt-section p-0">
+                <div class="row mb-3 p-0">
+                    <div class="col-md-12">
+                        <div class="text-center pt-4">
+                            <h3>Rekap Sisa Lelang Berdasarkan Sumber Dana</h3>
+                        </div>
+                        <div class="text-right mr-3 mb-3">
+                            <strong>* (Rp. Ribu)</strong>
+                        </div>
+                        <table class="table table-bordered mb-0 table-striped" id="table">
+                            <thead>
+                                <tr class=" text-center bg-purple">
+                                    <th width="100px">Kode</th>
+                                    <th>Kegiatan</th>
+                                    <th width="170px">RPM</th>
+                                    <th width="170px">SBSN</th>
+                                    <th width="170px">PHLN</th>
+                                    <th width="170px">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                    $totalRpm  = 0;
+                                    $totalSbsn = 0;
+                                    $totalPhln = 0;
+                                    foreach ($qdata as $keySumberData => $dataSumberDana) : 
+                                        $totalRpm  += $dataSumberDana->rpm;
+                                        $totalSbsn += $dataSumberDana->sbsn;
+                                        $totalPhln += $dataSumberDana->phln;
+                                ?>
+                                    <tr>
+                                        <td><?php echo $dataSumberDana->kodeKeg ?></td>
+                                        <td><?php echo $dataSumberDana->namaKeg ?></td>
+                                        <td class="text-right">
+                                            <?php echo str_replace(',', '.', number_format($dataSumberDana->rpm)) ?>
+                                        </td>
+                                        <td class="text-right">
+                                            <?php echo str_replace(',', '.', number_format($dataSumberDana->sbsn)) ?>
+                                        </td>
+                                        <td class="text-right">
+                                            <?php echo str_replace(',', '.', number_format($dataSumberDana->phln)) ?>
+                                        </td>
+                                        <td class="text-right">
+                                            <?php echo str_replace(',', '.', number_format($dataSumberDana->rpm + $dataSumberDana->sbsn + $dataSumberDana->phln)) ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                            <tfooter>
+                                <tr>
+                                    <th colspan="2">Jumlah</th>
+                                    <th class="text-right">
+                                        <?php echo str_replace(',', '.', number_format($totalRpm)) ?>
+                                    </th>
+                                    <th class="text-right">
+                                        <?php echo str_replace(',', '.', number_format($totalSbsn)) ?>
+                                    </th>
+                                    <th class="text-right">
+                                        <?php echo str_replace(',', '.', number_format($totalPhln)) ?>
+                                    </th>
+                                    <th class="text-right">
+                                        <?php echo str_replace(',', '.', number_format($totalRpm + $totalSbsn + $totalPhln)) ?>
+                                    </th>
+                                </tr>
+                            </tfooter>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Per Sumber Dana-->
 </div>
 
 <!-- end:: Content -->
@@ -175,6 +260,28 @@
 
             $(this).removeAttr("href")
             $(this).removeAttr("target")
+        }
+    })
+
+
+    $(document).ready(function() {
+        $("select[name=kategori_show]").trigger('change')
+    })
+
+    $("select[name=kategori_show]").change(function() {
+        if ($(this).val() == 'keg') {
+            $('#_container_perKategori').removeClass('d-none')
+            $('#_container_perSumberDana').addClass('d-none')
+        }
+            
+        if ($(this).val() == 'sum') {
+            $('#_container_perKategori').addClass('d-none')
+            $('#_container_perSumberDana').removeClass('d-none')
+        }
+
+        if ($(this).val() == 'keg_sum') {
+            $('#_container_perKategori').removeClass('d-none')
+            $('#_container_perSumberDana').removeClass('d-none')
         }
     })
 </script>

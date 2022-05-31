@@ -34,11 +34,11 @@
                             <thead>
                                 <tr class=" text-center bg-purple">
                                     <th width="100px">Kode</th>
-                                    <th width="250px">Kegiatan</th>
-                                    <th>RPM</th>
-                                    <th>SBSN</th>
-                                    <th>PHLN</th>
-                                    <th width="300px">TOTAL</th>
+                                    <th>Kegiatan</th>
+                                    <th width="170px">RPM</th>
+                                    <th width="170px">SBSN</th>
+                                    <th width="170px">PHLN</th>
+                                    <th width="170px">TOTAL</th>
                                 </tr>
                             </thead>
 

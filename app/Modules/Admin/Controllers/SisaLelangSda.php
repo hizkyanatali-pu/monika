@@ -27,27 +27,8 @@ class SisaLelangSda extends \App\Controllers\BaseController
 
     public function pagePerKategori()
     {
-        $lastTarikId = $this->tarikTable->select('id')
-            ->orderBy('id', 'DESC')
-            ->limit(1)
-            ->get()
-            ->getFirstRow()->id;
-
-        $qdata = $this->paketTable->select("
-            SUBSTRING_INDEX(kode, '.', 1) as kodeKeg,
-            tgiat.nmgiat as namaKeg,
-            SUM(sisa_lelang) as jumlah
-        ")
-            ->join('tgiat', "SUBSTRING_INDEX(emon_tarik_sisalelang_sda_paketpekerjaan.kode, '.', 1) = tgiat.kdgiat")
-            ->where('tarik_id', $lastTarikId)
-            ->where("nama != 'TOTAL'")
-            ->where('tahun_anggaran', $this->user["tahun"])
-            ->groupBy("SUBSTRING_INDEX(kode, '.', 1)")
-            ->orderBy("tgiat.kdgiat")
-            ->get();
-
         return view('Modules\Admin\Views\SisaLelangSDA\PerKategori.php', [
-            'qdata' => $qdata->getResult(),
+            'qdata' => $this->getDataSisaLelangPerKategori(),
             // 'total' => $this->paketTable->select("sisa_lelang")->where("nama = 'TOTAL'")->get()->getFirstRow()->sisa_lelang
         ]);
     }
@@ -160,5 +141,38 @@ class SisaLelangSda extends \App\Controllers\BaseController
     private function trimString($_text)
     {
         return rtrim(ltrim($_text));
+    }
+
+    private function getDataSisaLelangPerKategori() {
+        $lastTarikId = $this->tarikTable->select('id')
+            ->orderBy('id', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getFirstRow()->id;
+
+        $subRpm = $this->subQuery_getDataSisaLelangPerKategori('RPM');
+        $subSbsn = $this->subQuery_getDataSisaLelangPerKategori('SBSN');
+        $subPhln = $this->subQuery_getDataSisaLelangPerKategori('PHLN');
+
+        return $this->paketTable->select("
+            SUBSTRING_INDEX(kode, '.', 1) as kodeKeg,
+            tgiat.nmgiat as namaKeg,
+            SUM(sisa_lelang) as jumlah,
+            ($subRpm) as rpm,
+            ($subSbsn) as sbsn,
+            ($subPhln) as phln
+        ")
+        ->join('tgiat', "SUBSTRING_INDEX(emon_tarik_sisalelang_sda_paketpekerjaan.kode, '.', 1) = tgiat.kdgiat")
+        ->where('tarik_id', $lastTarikId)
+        ->where("nama != 'TOTAL'")
+        ->where('tahun_anggaran', $this->user["tahun"])
+        ->groupBy("SUBSTRING_INDEX(kode, '.', 1)")
+        ->orderBy("tgiat.kdgiat")
+        ->get()
+        ->getResult();
+    }
+
+    private function subQuery_getDataSisaLelangPerKategori($_sumberDana) {
+        return "SELECT IFNULL(SUM($_sumberDana.sisa_lelang), 0) FROM emon_tarik_sisalelang_sda_paketpekerjaan $_sumberDana WHERE $_sumberDana.sumber_dana = '$_sumberDana' AND SUBSTRING_INDEX($_sumberDana.kode, '.', 1) = kodeKeg";
     }
 }
