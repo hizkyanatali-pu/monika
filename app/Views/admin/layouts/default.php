@@ -34,6 +34,7 @@ $title = $title ?? '';
     <?php echo link_tag('https://cdn.datatables.net/scroller/2.0.5/css/scroller.dataTables.min.css'); ?>
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 
     <!-- Tree -->
     <?php echo link_tag('css/tree.css'); ?>
@@ -150,6 +151,8 @@ $title = $title ?? '';
     <?php echo script_tag('plugins/sweetalert2/dist/sweetalert2.min.js'); ?>
 
     <?php echo script_tag('js/scripts.bundle.js'); ?>
+
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 
     <?php echo $this->renderSection('footer_js') ?>
 </body>

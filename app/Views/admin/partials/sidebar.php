@@ -255,6 +255,18 @@ $request = \Config\Services::request();
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tarik Data Emon Sisa Lelang SDA</span>
                             </a>
                         </li>
+
+                        <li 
+                            class="kt-menu__item <?= ($request->uri->getSegment(1) == 'preferensi' && $request->uri->getSegment(2) == 'master-satker'  ? ' kt-menu__item--active' : '') ?>" 
+                            aria-haspopup="true"
+                        >
+                            <a href="<?= site_url('preferensi/master-satker'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">Master Data Satker</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>

@@ -107,6 +107,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('dari-sqlite', '\Modules\Admin\Controllers\Preferensi::index');
         $routes->get('tarik-data-emon/(:any)', '\Modules\Admin\Controllers\Importdata::index/$1');
         $routes->get('tarik-data-emon-sisa-lelang-sda', '\Modules\Admin\Controllers\SisaLelangSda::pageTarikData');
+        
+        $routes->get('master-satker', '\Modules\Admin\Controllers\MasterSatker::index');
+        $routes->get('master-satker-export-excel', '\Modules\Admin\Controllers\MasterSatker::exportDataToExcel');
+        $routes->post('master-satker-import-excel', '\Modules\Admin\Controllers\MasterSatker::importDataToExcel');
 
         //fitur tarik data dari api
         $routes->get('tarikdata', '\Modules\Admin\Controllers\Preferensi::tarikdata');
