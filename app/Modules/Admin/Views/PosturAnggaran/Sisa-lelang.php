@@ -72,26 +72,19 @@
                                     <?php if ($nilaiRpmSyc['jml_paket'] > 0 || $nilaiRpmMycBaru['jml_paket'] > 0) : ?>
                                         <ul>
                                             <li style="width: 33%">
-                                                <?php if ($nilaiRpmSyc['jml_paket'] <= 0) : ?>
-                                                    <div class="blocker-line-syc-1"></div>
-                                                    <div class="blocker-line-syc-2"></div>
-                                                <?php endif; ?>
-
-                                                <?php if ($nilaiRpmSyc['jml_paket'] > 0) : ?>
-                                                    <a href="#" class="w-100">
-                                                        <div class="tree-content">
-                                                            <div class="card card-body bg-tree-3">
-                                                                <h4 class="mb-0"><b> SYC </b></h4>
-                                                                <label> <?= formatNumber($nilaiRpmSyc['jml_paket']) ?> Paket</label>
-                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                    <h5 class="mb-0">
-                                                                        <?= checkMorT($nilaiRpmSyc['nilai_kontrak'], true, 2); ?>
-                                                                    </h5>
-                                                                </div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> SYC </b></h4>
+                                                            <label> <?= formatNumber($nilaiRpmSyc['jml_paket']) ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    <?= checkMorT($nilaiRpmSyc['nilai_kontrak'], true, 2); ?>
+                                                                </h5>
                                                             </div>
                                                         </div>
-                                                    </a>
-                                                <?php endif; ?>
+                                                    </div>
+                                                </a>
 
                                                 <?php if (count($listPaketRpmSyc) > 0) : ?>
                                                     <div class="border-single-tree-down"></div>
@@ -112,26 +105,19 @@
                                             </li>
                                             
                                             <li style="width: 33%">
-                                                <?php if ($nilaiRpmMycBaru['jml_paket'] <= 0) : ?>
-                                                    <div class="blocker-line-myc-1"></div>
-                                                    <div class="blocker-line-myc-2"></div>
-                                                <?php endif; ?>
-
-                                                <?php if ($nilaiRpmMycBaru['jml_paket'] > 0) : ?>
-                                                    <a href="#" class="w-100">
-                                                        <div class="tree-content">
-                                                            <div class="card card-body bg-tree-3">
-                                                                <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                                <label> <?= formatNumber($nilaiRpmMycBaru['jml_paket']) ?> Paket</label>
-                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                    <h5 class="mb-0">
-                                                                        <?= checkMorT($nilaiRpmMycBaru['nilai_kontrak'], true, 2); ?>
-                                                                    </h5>
-                                                                </div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                            <label> <?= formatNumber($nilaiRpmMycBaru['jml_paket']) ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    <?= checkMorT($nilaiRpmMycBaru['nilai_kontrak'], true, 2); ?>
+                                                                </h5>
                                                             </div>
                                                         </div>
-                                                    </a>
-                                                <?php endif; ?>
+                                                    </div>
+                                                </a>
 
                                                 <?php if (count($listPaketRpmMycBaru) > 0) : ?>
                                                     <div class="border-single-tree-down"></div>
@@ -152,26 +138,19 @@
                                             </li>
 
                                             <li style="width: 33%">
-                                                <?php if ($nilaiRpmMycLanjutan['jml_paket'] <= 0) : ?>
-                                                    <div class="blocker-line-myc-1"></div>
-                                                    <div class="blocker-line-myc-2"></div>
-                                                <?php endif; ?>
-
-                                                <?php if ($nilaiRpmMycLanjutan['jml_paket'] > 0) : ?>
-                                                    <a href="#" class="w-100">
-                                                        <div class="tree-content">
-                                                            <div class="card card-body bg-tree-3">
-                                                                <h4 class="mb-0"><b> MYC Lanjutan </b></h4>
-                                                                <label> <?= formatNumber($nilaiRpmMycLanjutan['jml_paket']) ?> Paket</label>
-                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                    <h5 class="mb-0">
-                                                                        <?= checkMorT($nilaiRpmMycLanjutan['nilai_kontrak'], true, 2); ?>
-                                                                    </h5>
-                                                                </div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> MYC Lanjutan </b></h4>
+                                                            <label> <?= formatNumber($nilaiRpmMycLanjutan['jml_paket']) ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    <?= checkMorT($nilaiRpmMycLanjutan['nilai_kontrak'], true, 2); ?>
+                                                                </h5>
                                                             </div>
                                                         </div>
-                                                    </a>
-                                                <?php endif; ?>
+                                                    </div>
+                                                </a>
 
                                                 <?php if (count($listPaketRpmMycLanjutan) > 0) : ?>
                                                     <div class="border-single-tree-down"></div>
@@ -211,26 +190,19 @@
                                     <?php if ($nilaiSbsnSyc['jml_paket'] > 0 || $nilaiSbsnMycBaru['jml_paket'] > 0) : ?>
                                         <ul>
                                             <li style="width: 33%">
-                                                <?php if ($nilaiSbsnSyc['jml_paket'] <= 0) : ?>
-                                                    <div class="blocker-line-syc-1"></div>
-                                                    <div class="blocker-line-syc-2"></div>
-                                                <?php endif; ?>
-
-                                                <?php if ($nilaiSbsnSyc['jml_paket'] > 0) : ?>
-                                                    <a href="#" class="w-100">
-                                                        <div class="tree-content">
-                                                            <div class="card card-body bg-tree-3">
-                                                                <h4 class="mb-0"><b> SYC </b></h4>
-                                                                <label> <?= formatNumber($nilaiSbsnSyc['jml_paket']) ?> Paket</label>
-                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                    <h5 class="mb-0">
-                                                                        <?= checkMorT($nilaiSbsnSyc['nilai_kontrak'], true, 2); ?>
-                                                                    </h5>
-                                                                </div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> SYC </b></h4>
+                                                            <label> <?= formatNumber($nilaiSbsnSyc['jml_paket']) ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    <?= checkMorT($nilaiSbsnSyc['nilai_kontrak'], true, 2); ?>
+                                                                </h5>
                                                             </div>
                                                         </div>
-                                                    </a>
-                                                <?php endif; ?>
+                                                    </div>
+                                                </a>
 
                                                 <?php if (count($listPaketSbsnSyc) > 0) : ?>
                                                     <div class="border-single-tree-down"></div>
@@ -251,26 +223,19 @@
                                             </li>
 
                                             <li style="width: 33%">
-                                                <?php if ($nilaiSbsnMycBaru['jml_paket'] <= 0) : ?>
-                                                    <div class="blocker-line-myc-1"></div>
-                                                    <div class="blocker-line-myc-2"></div>
-                                                <?php endif; ?>
-
-                                                <?php if ($nilaiSbsnMycBaru['jml_paket'] > 0) : ?>
-                                                    <a href="#" class="w-100">
-                                                        <div class="tree-content">
-                                                            <div class="card card-body bg-tree-3">
-                                                                <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                                <label> <?= formatNumber($nilaiSbsnMycBaru['jml_paket']) ?> Paket</label>
-                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                    <h5 class="mb-0">
-                                                                        <?= checkMorT($nilaiSbsnMycBaru['nilai_kontrak'], true, 2); ?>
-                                                                    </h5>
-                                                                </div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                            <label> <?= formatNumber($nilaiSbsnMycBaru['jml_paket']) ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    <?= checkMorT($nilaiSbsnMycBaru['nilai_kontrak'], true, 2); ?>
+                                                                </h5>
                                                             </div>
                                                         </div>
-                                                    </a>
-                                                <?php endif; ?>
+                                                    </div>
+                                                </a>
 
                                                 <?php if (count($listPaketSbsnMycBaru) > 0) : ?>
                                                     <div class="border-single-tree-down"></div>
@@ -291,26 +256,19 @@
                                             </li>
 
                                             <li style="width: 33%">
-                                                <?php if ($nilaiSbsnMycLanjutan['jml_paket'] <= 0) : ?>
-                                                    <div class="blocker-line-myc-1"></div>
-                                                    <div class="blocker-line-myc-2"></div>
-                                                <?php endif; ?>
-
-                                                <?php if ($nilaiSbsnMycLanjutan['jml_paket'] > 0) : ?>
-                                                    <a href="#" class="w-100">
-                                                        <div class="tree-content">
-                                                            <div class="card card-body bg-tree-3">
-                                                                <h4 class="mb-0"><b> MYC Lanjutan </b></h4>
-                                                                <label> <?= formatNumber($nilaiSbsnMycLanjutan['jml_paket']) ?> Paket</label>
-                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                    <h5 class="mb-0">
-                                                                        <?= checkMorT($nilaiSbsnMycLanjutan['nilai_kontrak'], true, 2); ?>
-                                                                    </h5>
-                                                                </div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> MYC Lanjutan </b></h4>
+                                                            <label> <?= formatNumber($nilaiSbsnMycLanjutan['jml_paket']) ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    <?= checkMorT($nilaiSbsnMycLanjutan['nilai_kontrak'], true, 2); ?>
+                                                                </h5>
                                                             </div>
                                                         </div>
-                                                    </a>
-                                                <?php endif; ?>
+                                                    </div>
+                                                </a>
 
                                                 <?php if (count($listPaketSbsnMycLanjutan) > 0) : ?>
                                                     <div class="border-single-tree-down"></div>
@@ -350,26 +308,19 @@
                                     <?php if ($nilaiPhlnSyc['jml_paket'] > 0 || $nilaiPhlnMycBaru['jml_paket'] > 0) : ?>
                                         <ul>
                                             <li style="width: 33%">
-                                                <?php if ($nilaiPhlnSyc['jml_paket'] <= 0) : ?>
-                                                    <div class="blocker-line-syc-1"></div>
-                                                    <div class="blocker-line-syc-2"></div>
-                                                <?php endif; ?>
-
-                                                <?php if ($nilaiPhlnSyc['jml_paket'] > 0) : ?>
-                                                    <a href="#" class="w-100">
-                                                        <div class="tree-content">
-                                                            <div class="card card-body bg-tree-3">
-                                                                <h4 class="mb-0"><b> SYC </b></h4>
-                                                                <label> <?= formatNumber($nilaiPhlnSyc['jml_paket']) ?> Paket</label>
-                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                    <h5 class="mb-0">
-                                                                        <?= checkMorT($nilaiPhlnSyc['nilai_kontrak'], true, 2); ?>
-                                                                    </h5>
-                                                                </div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> SYC </b></h4>
+                                                            <label> <?= formatNumber($nilaiPhlnSyc['jml_paket']) ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    <?= checkMorT($nilaiPhlnSyc['nilai_kontrak'], true, 2); ?>
+                                                                </h5>
                                                             </div>
                                                         </div>
-                                                    </a>
-                                                <?php endif; ?>
+                                                    </div>
+                                                </a>
 
                                                 <?php if (count($listPaketPhlnSyc) > 0) : ?>
                                                     <div class="border-single-tree-down"></div>
@@ -390,26 +341,19 @@
                                             </li>
 
                                             <li style="width: 33%">
-                                                <?php if ($nilaiPhlnMycBaru['jml_paket'] <= 0) : ?>
-                                                    <div class="blocker-line-myc-1"></div>
-                                                    <div class="blocker-line-myc-2"></div>
-                                                <?php endif; ?>
-
-                                                <?php if ($nilaiPhlnMycBaru['jml_paket'] > 0) : ?>
-                                                    <a href="#" class="w-100">
-                                                        <div class="tree-content">
-                                                            <div class="card card-body bg-tree-3">
-                                                                <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                                <label> <?= formatNumber($nilaiPhlnMycBaru['jml_paket']) ?> Paket</label>
-                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                    <h5 class="mb-0">
-                                                                        <?= checkMorT($nilaiPhlnMycBaru['nilai_kontrak'], true, 2); ?>
-                                                                    </h5>
-                                                                </div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                            <label> <?= formatNumber($nilaiPhlnMycBaru['jml_paket']) ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    <?= checkMorT($nilaiPhlnMycBaru['nilai_kontrak'], true, 2); ?>
+                                                                </h5>
                                                             </div>
                                                         </div>
-                                                    </a>
-                                                <?php endif; ?>
+                                                    </div>
+                                                </a>
 
                                                 <?php if (count($listPaketPhlnMycBaru) > 0) : ?>
                                                     <div class="border-single-tree-down"></div>
@@ -430,26 +374,19 @@
                                             </li>
 
                                             <li style="width: 33%">
-                                                <?php if ($nilaiPhlnMycLanjutan['jml_paket'] <= 0) : ?>
-                                                    <div class="blocker-line-myc-1"></div>
-                                                    <div class="blocker-line-myc-2"></div>
-                                                <?php endif; ?>
-
-                                                <?php if ($nilaiPhlnMycLanjutan['jml_paket'] > 0) : ?>
-                                                    <a href="#" class="w-100">
-                                                        <div class="tree-content">
-                                                            <div class="card card-body bg-tree-3">
-                                                                <h4 class="mb-0"><b> MYC Lanjutan </b></h4>
-                                                                <label> <?= formatNumber($nilaiPhlnMycLanjutan['jml_paket']) ?> Paket</label>
-                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                    <h5 class="mb-0">
-                                                                        <?= checkMorT($nilaiPhlnMycLanjutan['nilai_kontrak'], true, 2); ?>
-                                                                    </h5>
-                                                                </div>
+                                                <a href="#" class="w-100">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-3">
+                                                            <h4 class="mb-0"><b> MYC Lanjutan </b></h4>
+                                                            <label> <?= formatNumber($nilaiPhlnMycLanjutan['jml_paket']) ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    <?= checkMorT($nilaiPhlnMycLanjutan['nilai_kontrak'], true, 2); ?>
+                                                                </h5>
                                                             </div>
                                                         </div>
-                                                    </a>
-                                                <?php endif; ?>
+                                                    </div>
+                                                </a>
 
                                                 <?php if (count($listPaketPhlnMycLanjutan) > 0) : ?>
                                                     <div class="border-single-tree-down"></div>
