@@ -153,6 +153,26 @@ $title = $title ?? '';
     <?php echo script_tag('js/scripts.bundle.js'); ?>
 
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        function capture(_element, _fileName) {
+            const captureElement = document.querySelector(_element)
+            html2canvas(captureElement)
+                .then(canvas => {
+                canvas.style.display = 'none'
+                document.body.appendChild(canvas)
+                return canvas
+                })
+                .then(canvas => {
+                const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
+                const a = document.createElement('a')
+                a.setAttribute('download', _fileName+'.png')
+                a.setAttribute('href', image)
+                a.click()
+                canvas.remove()
+                })
+        }
+    </script>
 
     <?php echo $this->renderSection('footer_js') ?>
 </body>

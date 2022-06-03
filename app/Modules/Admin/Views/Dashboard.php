@@ -19,6 +19,10 @@
             height: 420mm;
         }
 
+        .tableFixHead {
+            height: auto !important;
+        }
+
         .table-bordered thead td,
         .table-bordered thead th {
             padding: 8px !important;
@@ -1297,12 +1301,12 @@
         <div class="pagebreak"> </div>
         <!-- PROGRES  PROGRES KEUANGAN & FISIK PER KEGIATAN -->
         <div class="kt-portlet kt-portlet--tab">
-            <div class="kt-portlet__head">
+            <div class="kt-portlet__head" style="height: 100px;">
                 <div class="kt-portlet__head-label card-center">
                     <span class="kt-portlet__head-icon kt-hidden">
                         <i class="la la-gear"></i>
                     </span>
-                    <h3 class="kt-portlet__head-title">
+                    <h3 class="kt-portlet__head-title pt-4 mt-4">
                         <?php if ($key1 != "Semua Satker") { ?>
                             PROGRES KEUANGAN & FISIK - <?= strtoupper($key1) ?>
                         <?php } else { ?>

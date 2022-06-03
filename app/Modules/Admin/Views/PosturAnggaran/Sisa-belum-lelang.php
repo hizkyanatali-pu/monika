@@ -15,16 +15,17 @@
                 POSTUR PAKET BELUM LELANG TA <?= session("userData.tahun") ?>
             </h5>
             <span class="kt-subheader__separator kt-hidden"></span>
-
         </div>
-
+        <button class="btn btn-primary mt-3" onclick="capture('#diagram-section', 'Belum Lelang')">
+            <i class="fas fa-image"></i> Download Diagram
+        </button>
     </div>
 </div>
 
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid"">
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid" id="diagram-section">
     <div class=" kt-portlet">
     <div class="kt-portlet__body" style="padding:0px;">
 
@@ -98,7 +99,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($rpmSycList as $key => $daftarsyc) { ?>
                                                                     <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
@@ -135,7 +136,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($rpmMycList as $key => $daftarsyc) { ?>
                                                                     <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
@@ -192,7 +193,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($sbsnSycList as $key => $daftarsyc) { ?>
                                                                     <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
@@ -229,7 +230,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($sbsnMycList as $key => $daftarsyc) { ?>
                                                                     <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
@@ -286,7 +287,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($phlnSycList as $key => $daftarsyc) { ?>
                                                                     <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
@@ -323,7 +324,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($phlnMycList as $key => $daftarsyc) { ?>
                                                                     <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>

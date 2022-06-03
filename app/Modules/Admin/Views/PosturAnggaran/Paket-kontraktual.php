@@ -16,14 +16,16 @@
                 </select>
             </div>
         </div>
-
+        <button class="btn btn-primary mt-3" id="__download-diagram">
+            <i class="fas fa-image"></i> Download Diagram
+        </button>
     </div>
 </div>
 
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid"">
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid" id="diagram-section">
     <div class=" kt-portlet">
     <div class="kt-portlet__body" style="padding:0px;">
 
@@ -368,5 +370,10 @@
         $('.kt-section__content').addClass('d-none');
         $('#container_'+$(this).val()).removeClass('d-none');
     });
+
+    $(document).on('click', '#__download-diagram', function() {
+        let choosedTemplate = $('select[name=filter_paguAnggaran]').val();
+        capture('#diagram-section', 'Rencana Tender ' + choosedTemplate)
+    })
 </script>
 <?= $this->endSection() ?>

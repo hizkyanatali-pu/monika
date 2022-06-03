@@ -509,7 +509,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     color: white;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-2{
@@ -517,7 +517,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     color: black;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-3{
@@ -525,7 +525,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     color: black;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-4{
@@ -533,7 +533,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     color: black;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-yellow{
@@ -541,17 +541,17 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     color: black;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-footer{
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-black{
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
     color: white;
     border: 3px solid white;
     border-radius: 10px;
@@ -559,7 +559,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 }
 
 .bg-tree-grey{
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
     color: white;
     border: 3px solid white;
     border-radius: 10px;
@@ -567,7 +567,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 }
 
 .bg-tree-009fff{
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
     color: black;
     border: 3px solid white;
     border-radius: 10px;
@@ -575,7 +575,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 }
 
 .bg-tree-ffbc00{
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
     color: black;
     border: 3px solid white;
     border-radius: 10px;
@@ -713,7 +713,7 @@ border-bottom: 2px solid black;
     color: white;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-FCD964{
@@ -721,7 +721,7 @@ border-bottom: 2px solid black;
     color: black;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-C5E2B7{
@@ -729,7 +729,7 @@ border-bottom: 2px solid black;
     color: black;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-FEBF2C{
@@ -737,7 +737,7 @@ border-bottom: 2px solid black;
     color: black;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-F4B083{
@@ -745,7 +745,7 @@ border-bottom: 2px solid black;
     color: black;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .bg-tree-9EC2E7{
@@ -753,6 +753,6 @@ border-bottom: 2px solid black;
     color: black;
     border: 3px solid white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 /* POSTUR ANGGARAN */

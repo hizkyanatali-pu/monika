@@ -9,16 +9,17 @@
                 <?= $title; ?>
             </h5>
             <span class="kt-subheader__separator kt-hidden"></span>
-
         </div>
-
+        <button class="btn btn-primary mt-3" onclick="capture('#diagram-section', 'Alokasi Anggaran New')">
+            <i class="fas fa-image"></i> Download Diagram
+        </button>
     </div>
 </div>
 
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid"">
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid" id="diagram-section">
     <div class="kt-portlet">
         <div class="kt-portlet__body" style="padding:0px;">
 

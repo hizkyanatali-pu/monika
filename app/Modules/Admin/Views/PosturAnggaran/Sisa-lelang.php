@@ -15,28 +15,26 @@
                 POSTUR SISA LELANG DARI PAKET TERKONTRAK TA <?= session("userData.tahun") ?>
             </h5>
             <span class="kt-subheader__separator kt-hidden"></span>
-
         </div>
-
+        <button class="btn btn-primary mt-3" onclick="capture('#diagram-section', 'Sisa Lelang')">
+            <i class="fas fa-image"></i> Download Diagram
+        </button>
     </div>
 </div>
 
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid"">
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid"  id="diagram-section">
     <div class=" kt-portlet">
     <div class="kt-portlet__body" style="padding:0px;">
-
         <!--begin::Section-->
         <div class="kt-section  pb-4 pt-3">
-
             <div class="kt-section__content">
                 <!-- <div class="text-center mt-4">
                         <h4 class="text-dark"><b><?= $title; ?></b></h4>
                         <hr class="w-75 mb-0">
                     </div> -->
-
                 <div class="tree ml--105 pr-4">
                     <ul>
                         <li class="w-100">
@@ -75,12 +73,12 @@
                                                 <a href="#" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> SYC </b></h4>
+                                                            <h6 class="mb-0"><b> SYC </b></h6>
                                                             <label> <?= formatNumber($nilaiRpmSyc['jml_paket']) ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
+                                                                <h6 class="mb-0">
                                                                     <?= checkMorT($nilaiRpmSyc['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
+                                                                </h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -90,7 +88,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($listPaketRpmSyc as $key_listPaketRpmSyc => $data_listPaketRpmSyc) : ?>
                                                                     <p>
@@ -108,12 +106,12 @@
                                                 <a href="#" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                            <h6 class="mb-0"><b> MYC Baru </b></h6>
                                                             <label> <?= formatNumber($nilaiRpmMycBaru['jml_paket']) ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
+                                                                <h6 class="mb-0">
                                                                     <?= checkMorT($nilaiRpmMycBaru['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
+                                                                </h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -123,7 +121,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($listPaketRpmMycBaru as $key_listPaketRpmMycBaru => $data_listPaketRpmMycBaru) : ?>
                                                                     <p>
@@ -141,12 +139,12 @@
                                                 <a href="#" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> MYC Lanjutan </b></h4>
+                                                            <h6 class="mb-0"><b> MYC Lanjutan </b></h6>
                                                             <label> <?= formatNumber($nilaiRpmMycLanjutan['jml_paket']) ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
+                                                                <h6 class="mb-0">
                                                                     <?= checkMorT($nilaiRpmMycLanjutan['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
+                                                                </h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -156,7 +154,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($listPaketRpmMycLanjutan as $key_listPaketRpmMycLanjutan => $data_listPaketRpmMycLanjutan) : ?>
                                                                     <p>
@@ -193,12 +191,12 @@
                                                 <a href="#" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> SYC </b></h4>
+                                                            <h6 class="mb-0"><b> SYC </b></h6>
                                                             <label> <?= formatNumber($nilaiSbsnSyc['jml_paket']) ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
+                                                                <h6 class="mb-0">
                                                                     <?= checkMorT($nilaiSbsnSyc['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
+                                                                </h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -208,7 +206,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($listPaketSbsnSyc as $key_listPaketSbsnSyc => $data_listPaketSbsnSyc) : ?>
                                                                     <p>
@@ -226,12 +224,12 @@
                                                 <a href="#" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                            <h6 class="mb-0"><b> MYC Baru </b></h6>
                                                             <label> <?= formatNumber($nilaiSbsnMycBaru['jml_paket']) ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
+                                                                <h6 class="mb-0">
                                                                     <?= checkMorT($nilaiSbsnMycBaru['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
+                                                                </h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -241,7 +239,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($listPaketSbsnMycBaru as $key_listPaketSbsnMycBaru => $data_listPaketSbsnMycBaru) : ?>
                                                                     <p>
@@ -259,12 +257,12 @@
                                                 <a href="#" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> MYC Lanjutan </b></h4>
+                                                            <h6 class="mb-0"><b> MYC Lanjutan </b></h6>
                                                             <label> <?= formatNumber($nilaiSbsnMycLanjutan['jml_paket']) ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
+                                                                <h6 class="mb-0">
                                                                     <?= checkMorT($nilaiSbsnMycLanjutan['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
+                                                                </h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -274,7 +272,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($listPaketSbsnMycLanjutan as $key_listPaketSbsnMycLanjutan => $data_listPaketSbsnMycLanjutan) : ?>
                                                                     <p>
@@ -311,12 +309,12 @@
                                                 <a href="#" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> SYC </b></h4>
+                                                            <h6 class="mb-0"><b> SYC </b></h6>
                                                             <label> <?= formatNumber($nilaiPhlnSyc['jml_paket']) ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
+                                                                <h6 class="mb-0">
                                                                     <?= checkMorT($nilaiPhlnSyc['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
+                                                                </h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -326,7 +324,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($listPaketPhlnSyc as $key_listPaketPhlnSyc => $data_listPaketPhlnSyc) : ?>
                                                                     <p>
@@ -344,10 +342,10 @@
                                                 <a href="#" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                            <h6 class="mb-0"><b> MYC Baru </b></h6>
                                                             <label> <?= formatNumber($nilaiPhlnMycBaru['jml_paket']) ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
+                                                                <h6 class="mb-0">
                                                                     <?= checkMorT($nilaiPhlnMycBaru['nilai_kontrak'], true, 2); ?>
                                                                 </h5>
                                                             </div>
@@ -359,7 +357,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($listPaketPhlnMycBaru as $key_listPaketPhlnMycBaru => $data_listPaketPhlnMycBaru) : ?>
                                                                     <p>
@@ -377,12 +375,12 @@
                                                 <a href="#" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> MYC Lanjutan </b></h4>
+                                                            <h6 class="mb-0"><b> MYC Lanjutan </b></h6>
                                                             <label> <?= formatNumber($nilaiPhlnMycLanjutan['jml_paket']) ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
+                                                                <h6 class="mb-0">
                                                                     <?= checkMorT($nilaiPhlnMycLanjutan['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
+                                                                </h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -392,7 +390,7 @@
                                                     <div class="border-single-tree-down"></div>
                                                     <a href="#" class="w-100">
                                                         <div class="tree-content">
-                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($listPaketPhlnMycLanjutan as $key_listPaketPhlnMycLanjutan => $data_listPaketPhlnMycLanjutan) : ?>
                                                                     <p>
