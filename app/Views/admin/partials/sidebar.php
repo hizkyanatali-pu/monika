@@ -255,16 +255,65 @@ $request = \Config\Services::request();
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tarik Data Emon Sisa Lelang SDA</span>
                             </a>
                         </li>
+                    </ul>
+                </div>
+            </li>
 
+            <li 
+                class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'master-data' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" 
+                aria-haspopup="true" 
+                data-ktmenu-submenu-toggle="hover"
+            >
+                <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                    <i class="kt-menu__link-icon fas fa-database"></i>
+                    <span class="kt-menu__link-text">Master Data</span>
+                    <span class="kt-badge kt-badge--danger">N</span>
+                    <i class="kt-menu__ver-arrow la la-angle-right"></i>
+                </a>
+                <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+                    <ul class="kt-menu__subnav">
                         <li 
-                            class="kt-menu__item <?= ($request->uri->getSegment(1) == 'preferensi' && $request->uri->getSegment(2) == 'master-satker'  ? ' kt-menu__item--active' : '') ?>" 
+                            class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-satker'  ? ' kt-menu__item--active' : '') ?>" 
                             aria-haspopup="true"
                         >
-                            <a href="<?= site_url('preferensi/master-satker'); ?>" class="kt-menu__link ">
+                            <a href="<?= site_url('master-data/master-satker'); ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                     <span></span>
                                 </i>
-                                <span class="kt-menu__link-text">Master Data Satker</span>
+                                <span class="kt-menu__link-text">Satker</span>
+                            </a>
+                        </li>
+                        <li 
+                            class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-kegiatan'  ? ' kt-menu__item--active' : '') ?>" 
+                            aria-haspopup="true"
+                        >
+                            <a href="<?= site_url('master-data/master-kegiatan'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">Kegiatan</span>
+                            </a>
+                        </li>
+                        <li 
+                            class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-kro'  ? ' kt-menu__item--active' : '') ?>" 
+                            aria-haspopup="true"
+                        >
+                            <a href="<?= site_url('master-data/master-kro'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">KRO</span>
+                            </a>
+                        </li>
+                        <li 
+                            class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-ro'  ? ' kt-menu__item--active' : '') ?>" 
+                            aria-haspopup="true"
+                        >
+                            <a href="<?= site_url('master-data/master-ro'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">RO</span>
                             </a>
                         </li>
                     </ul>

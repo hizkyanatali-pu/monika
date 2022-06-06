@@ -1,4 +1,4 @@
-<?= $this->extend('admin/layouts/default') ?>
+123s<?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.css'); ?>
 
@@ -16,7 +16,7 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h5 class="kt-subheader__title">
-                Master Satker <?php echo $tahunAnggaran ?>
+                Master RO <?php echo $tahunAnggaran ?>
             </h5>
         </div>
 
@@ -45,10 +45,10 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Satker Id</th>
-                            <th>Balai Id</th>
-                            <th>Satker</th>
-                            <th>KD KPPN</th>
+                            <th>Kode Kegiatan</th>
+                            <th>Kode KRO</th>
+                            <th>Kode RO</th>
+                            <th>Nama</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,10 +58,10 @@
                         ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
-                                <td><?php echo $data->satkerid ?></td>
-                                <td><?php echo $data->balaiid ?></td>
-                                <td><?php echo $data->satker ?></td>
-                                <td><?php echo $data->kdkppn ?></td>
+                                <td><?php echo $data->kdgiat ?></td>
+                                <td><?php echo $data->kdkro ?></td>
+                                <td><?php echo $data->kdro ?></td>
+                                <td><?php echo $data->nmro ?></td>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
@@ -89,7 +89,7 @@
                     <p>Unduh data dalam bentul file excel</p>
                     <p>Pastikan anda tidak mengubah nama file apabila anada ingin mengupload kembali file tersebut</p>
                     <div>
-                        <a class="btn btn-default" href="<?php echo site_url('master-data/master-satker-export-excel') ?>">
+                        <a class="btn btn-default" href="<?php echo site_url('master-data/master-ro-export-excel') ?>">
                             <i class="fas fa-download"></i> Unduh Data
                         </a>
                     </div>
@@ -98,7 +98,7 @@
                 <div class="p-3">
                     <p>Unggah kembali file yang sudah anda kelola</p>
                     <form 
-                        action="<?php echo base_url('master-data/master-satker-import-excel') ?>" 
+                        action="<?php echo base_url('master-data/master-ro-import-excel') ?>" 
                         method="POST" 
                         enctype="multipart/form-data" 
                         class="dropzone"
@@ -127,7 +127,9 @@
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#table').DataTable()
+        $('#table').DataTable({
+            scrollX: true,
+        })
     })
     Dropzone.options.myDropzone = {
         init: function() {

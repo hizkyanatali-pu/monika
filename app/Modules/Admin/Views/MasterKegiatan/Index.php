@@ -1,4 +1,4 @@
-<?= $this->extend('admin/layouts/default') ?>
+123s<?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.css'); ?>
 
@@ -16,7 +16,7 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h5 class="kt-subheader__title">
-                Master Satker <?php echo $tahunAnggaran ?>
+                Master Kegiatan <?php echo $tahunAnggaran ?>
             </h5>
         </div>
 
@@ -45,10 +45,15 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Satker Id</th>
-                            <th>Balai Id</th>
-                            <th>Satker</th>
-                            <th>KD KPPN</th>
+                            <th>Kode</th>
+                            <th>Nama</th>
+                            <th>Kode Dept</th>
+                            <th>Kode Unit</th>
+                            <th>Kode Program</th>
+                            <th>Kode Fungsi</th>
+                            <th>Kode Sfung</th>
+                            <th>KDes2</th>
+                            <th>Kode Program Output</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,10 +63,15 @@
                         ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
-                                <td><?php echo $data->satkerid ?></td>
-                                <td><?php echo $data->balaiid ?></td>
-                                <td><?php echo $data->satker ?></td>
-                                <td><?php echo $data->kdkppn ?></td>
+                                <td><?php echo $data->kdgiat ?></td>
+                                <td><?php echo $data->nmgiat ?></td>
+                                <td><?php echo $data->kddept ?></td>
+                                <td><?php echo $data->kdunit ?></td>
+                                <td><?php echo $data->kdprogram ?></td>
+                                <td><?php echo $data->kdfungsi ?></td>
+                                <td><?php echo $data->kdsfung ?></td>
+                                <td><?php echo $data->kdes2 ?></td>
+                                <td><?php echo $data->kdprogout ?></td>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
@@ -89,7 +99,7 @@
                     <p>Unduh data dalam bentul file excel</p>
                     <p>Pastikan anda tidak mengubah nama file apabila anada ingin mengupload kembali file tersebut</p>
                     <div>
-                        <a class="btn btn-default" href="<?php echo site_url('master-data/master-satker-export-excel') ?>">
+                        <a class="btn btn-default" href="<?php echo site_url('master-data/master-kegiatan-export-excel') ?>">
                             <i class="fas fa-download"></i> Unduh Data
                         </a>
                     </div>
@@ -98,7 +108,7 @@
                 <div class="p-3">
                     <p>Unggah kembali file yang sudah anda kelola</p>
                     <form 
-                        action="<?php echo base_url('master-data/master-satker-import-excel') ?>" 
+                        action="<?php echo base_url('master-data/master-kegiatan-import-excel') ?>" 
                         method="POST" 
                         enctype="multipart/form-data" 
                         class="dropzone"

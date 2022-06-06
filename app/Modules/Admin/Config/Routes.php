@@ -107,10 +107,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('dari-sqlite', '\Modules\Admin\Controllers\Preferensi::index');
         $routes->get('tarik-data-emon/(:any)', '\Modules\Admin\Controllers\Importdata::index/$1');
         $routes->get('tarik-data-emon-sisa-lelang-sda', '\Modules\Admin\Controllers\SisaLelangSda::pageTarikData');
-        
-        $routes->get('master-satker', '\Modules\Admin\Controllers\MasterSatker::index');
-        $routes->get('master-satker-export-excel', '\Modules\Admin\Controllers\MasterSatker::exportDataToExcel');
-        $routes->post('master-satker-import-excel', '\Modules\Admin\Controllers\MasterSatker::importDataToExcel');
 
         //fitur tarik data dari api
         $routes->get('tarikdata', '\Modules\Admin\Controllers\Preferensi::tarikdata');
@@ -123,6 +119,24 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->post('usedb', '\Modules\Admin\Controllers\Preferensi::usedb');
         $routes->post('uploadsqlitenew', '\Modules\Admin\Controllers\Preferensi::uploadtoserver');
         $routes->get('DTlistdb', '\Modules\Admin\Controllers\Preferensi::DTlistdb');
+    });
+
+    $routes->group('master-data', ['namespace' => 'App\Controllers'], function ($routes) {
+        $routes->get('master-satker', '\Modules\Admin\Controllers\MasterSatker::index');
+        $routes->get('master-satker-export-excel', '\Modules\Admin\Controllers\MasterSatker::exportDataToExcel');
+        $routes->post('master-satker-import-excel', '\Modules\Admin\Controllers\MasterSatker::importDataToExcel');
+
+        $routes->get('master-kegiatan', '\Modules\Admin\Controllers\MasterKegiatan::index');
+        $routes->get('master-kegiatan-export-excel', '\Modules\Admin\Controllers\MasterKegiatan::exportDataToExcel');
+        $routes->post('master-kegiatan-import-excel', '\Modules\Admin\Controllers\MasterKegiatan::importDataToExcel');
+
+        $routes->get('master-kro', '\Modules\Admin\Controllers\MasterKro::index');
+        $routes->get('master-kro-export-excel', '\Modules\Admin\Controllers\MasterKro::exportDataToExcel');
+        $routes->post('master-kro-import-excel', '\Modules\Admin\Controllers\MasterKro::importDataToExcel');
+
+        $routes->get('master-ro', '\Modules\Admin\Controllers\MasterRo::index');
+        $routes->get('master-ro-export-excel', '\Modules\Admin\Controllers\MasterRo::exportDataToExcel');
+        $routes->post('master-ro-import-excel', '\Modules\Admin\Controllers\MasterRo::importDataToExcel');
     });
 
     $routes->group('posturanggaran', ['namespace' => 'App\Controllers'], function ($routes) {
