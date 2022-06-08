@@ -327,7 +327,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
     top: 0;
     right: 50%;
     border-top: 2px solid #696969;
-    width: 50%;
+    width: 51%;
     height: 20px;
 }
 
@@ -411,11 +411,11 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 .tree .li-down::after {
     content: '';
     position: absolute;
-    top: -20px;
+    top: -45px;
     left: -34%;
     border-top: 2px solid #696969;
-    width: 63%;
-    height: 20px;
+    width: 75%;
+    height: 60px;
     transform: rotate(270deg);
     display:block;
     z-index: 8;
@@ -472,6 +472,16 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 }
 .tree .li-down:nth-child(1)::before {
     border-left: 0 !important;
+}
+
+.have-line-bottom {
+    position: absolute;
+    bottom: -39px;
+    right: 50%;
+    border-right: 2px solid #696969;
+    width: 10px;
+    height: 40px;
+    z-index: 9;
 }
 
 /* END LI DOWN  */
@@ -675,7 +685,7 @@ ol.organizational-chart>li>ol>li>ol>li>ol>li>ol>li>div {
 .border-red-dashed{
     position: absolute;
     border-radius: 10px;
-    width: 95%;
+    width: calc(100vw - 170px) !important;
     height: 164px;
     border: 2px dashed red;
     top: 172px;

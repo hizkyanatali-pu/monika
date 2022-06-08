@@ -179,7 +179,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
             '_32_barangModalNonOperasional_persentase' => 0,
 
             '_321_tender'               => $query_treeRow3_tender->total,
-            '_321_tender_persentase'    => '-',
+            '_321_tender_persentase'    => '0',
             '_322_nonTender'            => 0,
             '_322_nonTender_persentase' => 0,
 

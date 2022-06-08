@@ -62,7 +62,7 @@
                                         </a>
                                     </li>
 
-                                    <li class="" style="width: 33%">
+                                    <li style="width: 33%">
                                         <a href="#" class="position-relative w-75" style="z-index: 10;">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-FCD964">
@@ -76,6 +76,7 @@
                                                 </div>
                                             </div>
                                         </a>
+                                        <div class="have-line-bottom"></d>
                                     </li>
                                     
                                     <li class="" style="width: 33%">
