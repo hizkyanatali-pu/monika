@@ -277,6 +277,7 @@ class CronJob extends \App\Controllers\BaseController
                     $satker_id = $this->db->insertID();
                 } else {
                     // Paket Pekerjaan
+                    $substrKode = substr($this->trimString($node->item(1)->nodeValue), 0, 18);
                     $paketInsert = [
                         'tarik_id'            => $tarik_id,
                         'satker_id'           => $satker_id,
@@ -288,7 +289,8 @@ class CronJob extends \App\Controllers\BaseController
                         'pagu_dipa_2022'      =>  str_replace(".", "", $this->trimString($node->item(6)->nodeValue)),
                         'nilai_kontrak_induk' =>  str_replace(".", "", $this->trimString($node->item(7)->nodeValue)),
                         'nilai_kontrak_anak'  =>  str_replace(".", "", $this->trimString($node->item(8)->nodeValue)),
-                        'sisa_lelang'         =>  str_replace(".", "", $this->trimString($node->item(9)->nodeValue))
+                        'sisa_lelang'         =>  str_replace(".", "", $this->trimString($node->item(9)->nodeValue)),
+                        'sumber_dana'         => $this->db->query("SELECT sumber_dana FROM monika_kontrak_2022 WHERE SUBSTRING_INDEX(kdpaket, '.', -5)='$substrKode' ORDER BY `sumber_dana` ASC LIMIT 1")->getFirstRow()->sumber_dana ?? 'RPM'
                     ];
 
                     $this->paketTable->insert($paketInsert);
