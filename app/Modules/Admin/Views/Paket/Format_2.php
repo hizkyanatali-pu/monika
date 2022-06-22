@@ -624,7 +624,7 @@ $currentDayOfMonth = date('j');
     });
 
     $(".pdf-report").click(function() {
-
+        
         let arr = [];
 
         if (!$("input[name=pagu_rpm]").prop("checked")) {
@@ -667,8 +667,11 @@ $currentDayOfMonth = date('j');
 
         //condition for report button
         if (report_open) {
-
-            $(this).attr("href", "<?= $id_report ?>?filter=" + arr.join(','))
+            <?php 
+                $linkPdf = $id_report;
+                if ($title == 'Semua Satker')  $linkPdf = '../'.$id_report;
+            ?>
+            $(this).attr("href", "<?= $linkPdf ?>?filter=" + arr.join(','))
             $(this).attr("target", "_blank")
         } else {
 

@@ -114,10 +114,10 @@ class PulldataModel extends Model
             // $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC, jml_persen_deviasi ASC LIMIT 10";
 
             //berdasarkan nominal
-            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC, ((sum(md.pagu_total)/100)*(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))) ASC  LIMIT 10";
+            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY ((sum(md.pagu_total)/100)*(((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))) ASC  LIMIT 10";
         } elseif ($datatag == "satkerdeviasiterbesar_persen") {
             $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, b.st, ";
-            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY stw DESC, jml_persen_deviasi ASC  LIMIT 10";
+            $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY jml_persen_deviasi ASC  LIMIT 10";
         }else {
             $f = "b.balaiid as id, b.balai as label, ";
             // $w = ($w ? ' WHERE ' : '') . $w . " ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
@@ -169,8 +169,9 @@ class PulldataModel extends Model
         if ($datatag == "satker100m") {
             // return $this->db->query("SELECT * FROM ( $q GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC ) md " . $w)->getResultArray();
             //order by deviasi dan nilai bawah rata rata
+            
             return $this->db->query("SELECT * FROM ( $q GROUP BY md.kdsatker  ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  DESC ) md " . $w)->getResultArray();
-        } else {
+        } else {            
             return $this->db->query($q . $w)->getResultArray();
         }
     }
