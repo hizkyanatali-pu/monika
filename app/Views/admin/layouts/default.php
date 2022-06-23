@@ -74,7 +74,13 @@ $title = $title ?? '';
 
             <!-- begin:: Aside -->
             <div class="kt-aside  kt-aside--fixed  kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop" id="kt_aside">
-                <?php echo $this->include('admin/partials/sidebar') ?>
+                <?php 
+                    $session = session();
+
+                    if (strpos($session->get('userData')['uid'], 'admin') !== false) echo $this->include('admin/partials/sidebar');
+                    if (strpos($session->get('userData')['uid'], 'satker') !== false) echo $this->include('admin/partials/sidebarSatker');
+                    if (strpos($session->get('userData')['uid'], 'balai') !== false) echo $this->include('admin/partials/sidebarBalai');
+                ?>
             </div>
             <!-- end:: Aside -->
 

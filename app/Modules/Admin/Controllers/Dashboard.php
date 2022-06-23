@@ -27,9 +27,6 @@ class Dashboard extends \App\Controllers\BaseController
 
     public function index()
     {
-
-
-
         $grupData = $this->rekapGroupData();
         $qdata = $this->TematikModel->getListRekap($grupData);
 

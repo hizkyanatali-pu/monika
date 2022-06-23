@@ -129,3 +129,5 @@ nb-configuration.xml
 /.phpunit.*.cache
 
 /.php-cs-fixer.php
+
+monika-sda.code-workspace
