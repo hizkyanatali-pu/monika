@@ -3,6 +3,7 @@
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.css'); ?>
 
 <style>
+    
     body.swal2-shown>[aria-hidden="true"] {
         filter: blur(10px);
     }

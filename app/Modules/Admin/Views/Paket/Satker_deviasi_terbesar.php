@@ -175,12 +175,12 @@ $currentDayOfMonth = date('j');
 
 
 
-                <?php 
-                    for ($i=0; $i < 2; $i++) { 
-                        $titleDescription = $i==0 ? 'Nominal Deviasi Terbesar' : 'Persentase Deviase Terbesar';
-                        $dataLoop = $i==0 ? $qdata : $qdata2;
+                <?php
+                for ($i = 0; $i < 2; $i++) {
+                    $titleDescription = $i == 0 ? 'Nominal Deviasi Terbesar' : 'Persentase Deviase Terbesar';
+                    $dataLoop = $i == 0 ? $qdata : $qdata2;
                 ?>
-                    <div style="height: 400px">
+                    <!-- <div style="height: 500px"> -->
                     <div class="clearfix mb-0">
                         <div class="float-left">
                             <h6>Progres Keuangan dan Fisik <?= $title; ?> (<?= $titleDescription ?>)</h6>
@@ -420,7 +420,8 @@ $currentDayOfMonth = date('j');
                             </table>
                         </div>
                     <?php } ?>
-                    </div>
+                    <!-- </div> -->
+
                 <?php } ?>
 
 
