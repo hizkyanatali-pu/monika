@@ -81,9 +81,13 @@ class SisaLelangSda extends \App\Controllers\BaseController
             'data_waktu'   => $headerStatus[1]
         ]);
         $tarik_id = $this->db->insertID();
+        $kdSatker = '';
 
         foreach ($entries as $entry) {
             $node = $xpath->query("td", $entry);
+            $nodeKode = $node->item(1)->nodeValue;
+
+            if (strlen($nodeKode) >= 6 && strlen($nodeKode) < 10) $kdSatker = $node->item(1)->nodeValue;
 
             if ($node->length == 8) {
                 // Satker
@@ -110,7 +114,7 @@ class SisaLelangSda extends \App\Controllers\BaseController
                     'nilai_kontrak_induk' => str_replace(".", "", $this->trimString($node->item(7)->nodeValue)),
                     'nilai_kontrak_anak'  => str_replace(".", "", $this->trimString($node->item(8)->nodeValue)),
                     'sisa_lelang'         => str_replace(".", "", $this->trimString($node->item(9)->nodeValue)),
-                    'sumber_dana'         => $this->db->query("SELECT sumber_dana FROM monika_kontrak_2022 WHERE SUBSTRING_INDEX(kdpaket, '.', -5)='$substrKode' ORDER BY `sumber_dana` ASC LIMIT 1")->getFirstRow()->sumber_dana ?? 'RPM'
+                    'sumber_dana'         => $this->db->query("SELECT sumber_dana FROM monika_kontrak_2022 WHERE SUBSTRING_INDEX(kdpaket, '.', -5)='$substrKode' AND kdsatker='$kdSatker' ORDER BY `sumber_dana` ASC LIMIT 1")->getFirstRow()->sumber_dana ?? 'RPM'
                 ];
 
                 $this->paketTable->insert($paketInsert);
