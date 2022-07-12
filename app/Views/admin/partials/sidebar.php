@@ -320,7 +320,19 @@ $request = \Config\Services::request();
                 </div>
             </li>
 
-            <li class="kt-menu__item " aria-haspopup="true"><a href="<?= site_url('pemaketan'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Progres Pemaketan</span></a></li>
+            <li class="kt-menu__item <?=($request->uri->getSegment(1) == 'pemaketan'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                <a href="<?= site_url('pemaketan'); ?>" class="kt-menu__link ">
+                    <i class="kt-menu__link-icon fas fa-chart-bar"></i>
+                    <span class="kt-menu__link-text">Progres Pemaketan</span>
+                </a>
+            </li>
+
+            <li class="kt-menu__item <?=($request->uri->getSegment(1) == 'bigdata'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                <a href="<?= site_url('bigdata'); ?>" class="kt-menu__link ">
+                    <i class="kt-menu__link-icon fas fa-table"></i>
+                    <span class="kt-menu__link-text">Big Data</span>
+                </a>
+            </li>
 
         </ul>
     </div>

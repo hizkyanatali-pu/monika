@@ -176,7 +176,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('cetak_rekap', '\Modules\Admin\Controllers\Tematik::cetakRekap');
             });
 
-
             $routes->group('sisa-lelang', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('ditjen-sda', '\Modules\Admin\Controllers\SisaLelangSda::index');
                 $routes->get('per-kategori', '\Modules\Admin\Controllers\SisaLelangSda::pagePerKategori');
@@ -191,6 +190,17 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
             $routes->get('maintenance', '\Modules\Admin\Controllers\Maintenance::index');
             $routes->get('pemaketan', '\Modules\Admin\Controllers\Pemaketan::index');
+            
+            $routes->group('bigdata', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->get('/', '\Modules\Admin\Controllers\BigData::index');
+                $routes->get('load-data', '\Modules\Admin\Controllers\BigData::loadData');
+
+                $routes->group('download', ['namespace' => 'App\Controllers'], function($routes) {
+                    $routes->get('/', '\Modules\Admin\Controllers\BigData::downloadExcelBigData');
+                    $routes->get('prepare', '\Modules\Admin\Controllers\BigData::prepareToDownload');
+                    $routes->post('set-temp-column', '\Modules\Admin\Controllers\BigData::setTempColumn');
+                });
+            });
         }
     }
 });

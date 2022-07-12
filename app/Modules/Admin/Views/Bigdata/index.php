@@ -1,0 +1,517 @@
+<?= $this->extend('admin/layouts/default') ?>
+
+<?= $this->section('content') ?>
+<!-- begin:: Subheader -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main w-100">
+            <div class="d-flex justify-content-between w-100">
+                <h5 class="kt-subheader__title">
+                    BIG DATA
+                </h5>
+                <?= csrf_field() ?>
+                
+                <div>
+                    <button class="btn btn-default" data-toggle="modal" data-target="#modalFilterData">
+                        <i class="fas fa-filter"></i> Kolom Tabel
+                    </button>
+                    <button class="btn btn-success" name="prepare-download-bigdata">
+                        <i class="fas fa-file-excel"></i> Download Excel
+                    </button>
+                </div>
+            </div>
+            <span class="kt-subheader__separator kt-hidden"></span>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- end:: Subheader -->
+
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+    <div class="kt-portlet">
+        <div class="kt-portlet__body p-0">
+            <div class="kt-section p-0 mb-0">
+                <div class="row p-0">
+                    <div class="col-md-12" style="display:inline-block; overflow-x:auto; height: 63vh;">
+                        <table 
+                            class="table table-bordered mb-0 table-striped _table-data" 
+                            id="_table-data"
+                            style="width: <?php echo $tableWidth ?>px; position: relative;"
+                        >
+                            <thead>
+                                <tr class=" text-center bg-purple">
+                                    <?php foreach ($column as $keyColumn => $dataColumn) : ?>
+                                        <th 
+                                            class="bg-purple <?php echo '_cell_'.$dataColumn['value'] ?>"
+                                            width="<?php echo $dataColumn['widthColumn'].'px' ?>"
+                                            style="position: sticky; top: 0;"
+                                        >
+                                            <?php echo $dataColumn['label'] ?>
+                                        </th>
+                                    <?php endforeach; ?>
+                                </tr>
+                            </thead>
+
+                            <tbody style="font-size: 12px">
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-center">
+                            <button class="__btn-load-more-data btn btn-sm btn-primary m-3">
+                                <i class="fas fa-sync"></i> Muat Data Lainnya
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12 d-flex justify-content-end" style="background-color: #F1EEE9">
+                        <div class="p-2">
+                            Menampilkan <strong class="_showed-data">-</strong> / <strong class="_total-data">-</strong> Data
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="d-none" id="_exported_table"></table>
+<!-- end:: Content -->
+
+
+<!-- Modal Filter Column -->
+<div class="modal fade" id="modalFilterData" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Kolom Tabel</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-check mb-3">
+                <input 
+                    name="filter-kolom-all"
+                    class="form-check-input" 
+                    type="checkbox" 
+                    value="*" 
+                    id="filter-all-column"
+                    checked
+                >
+                <label class="form-check-label" for="filter-all-column">
+                    <strong>Semua Kolom</strong>
+                </label>
+            </div>
+            <?php foreach ($column as $keyColumnFilter => $dataColumnFilter) : ?>
+                <?php if ($dataColumnFilter['value'] != 'no') : ?>
+                    <div class="form-check mt-2">
+                        <input 
+                            name="filter-kolom"
+                            class="form-check-input"
+                            type="checkbox" 
+                            value="<?php echo $dataColumnFilter['value'] ?>" 
+                            data-label="<?php echo $dataColumnFilter['label'] ?>"
+                            id="<?php echo 'filter_'.$dataColumnFilter['value'] ?>"
+                            checked
+                        >
+                        <label class="form-check-label" for="<?php echo 'filter_'.$dataColumnFilter['value'] ?>">
+                            <?php echo $dataColumnFilter['label'] ?>
+                        </label>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+        <div class="modal-footer">
+            <button type="button" name="act-filter" class="btn btn-primary">Terapkan</button>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal Filter Column -->
+
+
+<!-- Modal export data -->
+<div class="modal fade" id="modalDownloadData" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Download Big Data</h5>
+            </div>
+            <div class="modal-body p-0">
+                <ul class="list-group rounded-0 _list-downloaded">
+                    <li class="text-center p-3">
+                        <i class="fas fa-sync fa-spin"></i> Memuat File
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer d-none">
+                <button class="btn btn-success" data-dismiss="modal">
+                    <i class="fas fa-check"></i> Selesai
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal export data -->
+<?= $this->endSection() ?>
+
+
+
+
+
+<?= $this->section('footer_js') ?>
+<script>
+    var page = 0,
+        showedData = 0,
+        rowNumber = 1,
+        element_buttonLoadMore = $(".__btn-load-more-data"),
+        element_iconLoadMore = element_buttonLoadMore.find('i.fas')
+
+
+    
+    $(document).ready(function() {
+        getData()
+    })
+
+
+
+    $('input:checkbox[name=filter-kolom-all]').change(function() {
+        let checked = true
+        if (! this.checked) checked = false
+        $('input:checkbox[name=filter-kolom]').prop('checked', checked)
+    })
+
+
+
+    $('input:checkbox[name=filter-kolom]').change(function() {
+        let unchecked_checkboxFilterKolom = $('input:checkbox[name=filter-kolom]:not(:checked)')
+        
+        let checkedAll = true
+        if (unchecked_checkboxFilterKolom.length > 0)  checkedAll = false
+
+        $('input:checkbox[name=filter-kolom-all]').prop('checked', checkedAll)
+    })
+
+
+
+    $('button[name=act-filter]').click(function() {
+        let tableWidth = 0
+
+        $('input:checkbox[name=filter-kolom]').each((key, element) => {
+            let cellElement = $('._cell_'+element.value)
+            let headerCellElement = $('th._cell_'+element.value)
+
+            if ($(element).is(':checked')) {
+                cellElement.removeClass('d-none')
+                tableWidth += parseInt(headerCellElement.attr('width').replace('px', ''))
+            }
+            else {
+                cellElement.addClass('d-none')
+            }
+        })
+        
+        $('._table-data').css({'width': tableWidth+'px'})
+        $('#modalFilterData').modal('hide')
+    })
+
+
+
+    $('button[name=prepare-download-bigdata]').click(function() {
+        prepareDownloadBigData()
+
+        $('#modalDownloadData').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+    })
+
+
+    element_buttonLoadMore.on('click', () => {
+        getData()
+    })
+
+
+
+    function getData() {
+        $.ajax({
+            url: "<?php echo site_url('bigdata/load-data') ?>",
+            type: 'GET',
+            data: {
+                page: page
+            },
+            timeout: 2000,
+            beforeSend: () => {
+                element_iconLoadMore.addClass('fa-spin')
+            },
+            success: (res) => {
+                renderTableRow(res)
+                if (res.hasOwnProperty('totalData')) $('._total-data').text(res.totalData.total)
+                
+                showedData += res.data.length
+                $('._showed-data').text(showedData)
+
+                element_iconLoadMore.removeClass('fa-spin')
+                page++
+            },
+            fail: (xhr) => {
+                alert("Terjadi Kesalahan Pada Sistem");
+            }
+        })
+    }
+
+
+
+    function renderTableRow(_res) {
+        let tableRow = ''
+
+        _res.data.forEach((dataRow, keyRow) => {
+            let rowColumn = ''
+
+            _res.column.forEach((dataCol, keyCol) => {
+                let text = dataRow[dataCol.value]
+                if (dataCol.value == 'no') text = rowNumber++
+
+                rowColumn += `
+                    <td class="_cell_${dataCol.value}">
+                        ${text}
+                    </td>
+                `;
+            });
+
+            tableRow += `<tr>${rowColumn}</tr>`
+        });
+
+        $('#_table-data tbody').append(tableRow)
+    }
+
+
+
+    function prepareDownloadBigData() {
+        $('#modalDownloadData .modal-footer').addClass('d-none')
+
+        setTempColumn().then((res) => {
+            $.ajax({
+                url: "<?php echo site_url('bigdata/download/prepare') ?>",
+                type: 'get',
+                success: (res) => {
+                    let listDownload = ''
+                    for (let _index = 1; _index <= res.totalFile; _index++) {
+                        let listClassName = '_item-list-download-'+_index
+                        listDownload += `
+                            <li class="list-group-item d-flex justify-content-between ${listClassName}">
+                                <div>
+                                    <h6>Part ${_index}</h6>
+                                    <small>monika-bigdata-part-${_index}.xlsx</small>
+                                </div>
+                                <div class="d-flex align-items-center _icon-status">
+                                </div>
+                            </li>
+                        `
+                    }
+                    $('._list-downloaded').html(listDownload)
+
+                    downloadBigData({
+                        fileNumber: 1,
+                        totalFile: res.totalFile
+                    })
+                }
+            })
+        });
+    }
+
+
+
+    function downloadBigData(params = {
+        fileNumber: 0,
+        totalFile : 0
+    }) {
+        var element_list = $('._item-list-download-'+params.fileNumber),
+            element_iconStatus = element_list.find('._icon-status')
+
+        $.ajax({
+            type:'GET',
+            url:"<?php echo site_url('bigdata/download') ?>"+'?fileNumber='+params.fileNumber,
+            data: {},
+            dataType:'json',
+            beforeSend: () => {
+                element_list.addClass('active')
+                element_iconStatus.html('<i class="fas fa-sync fa-spin"></i>')
+            }
+        }).done(function(data){
+            var $a = $("<a>");
+            $a.attr("href",data.file);
+            $("body").append($a);
+            $a.attr("download","monika-bigdata-part-"+params.fileNumber+".xls");
+            $a[0].click();
+            $a.remove();
+
+            element_list.removeClass('active')
+            element_iconStatus.html('<i class="fas fa-check"></i>')
+            
+            if (params.fileNumber < params.totalFile) {
+                downloadBigData({
+                    fileNumber: params.fileNumber+1,
+                    totalFile: params.totalFile
+                })
+            }
+
+            if (params.fileNumber == params.totalFile) {
+                $('#modalDownloadData .modal-footer').removeClass('d-none')
+            }
+        });
+        
+        // if (params.fileNumber == 1) {
+            // element_list.addClass('active')
+            // element_iconStatus.html('<i class="fas fa-sync fa-spin"></i>')
+
+            // download("<?php echo site_url('bigdata/download') ?>"+'?fileNumber='+params.fileNumber);
+
+            // setTimeout(() => {
+            //     element_list.removeClass('active')
+            //     element_iconStatus.html('<i class="fas fa-check"></i>')
+                
+            //     if (params.fileNumber < params.totalFile) {
+            //         downloadBigData({
+            //             fileNumber: params.fileNumber+1,
+            //             totalFile: params.totalFile
+            //         })
+            //     }
+
+            //     if (params.fileNumber == params.totalFile) {
+            //         $('#modalDownloadData .modal-footer').removeClass('d-none')
+            //     }
+            // }, 5000);
+        // }
+
+
+        /*
+        $.ajax({
+            url: "<?php echo site_url('bigdata/download') ?>",
+            type: 'GET',
+            data: {
+                fileNumber: params.fileNumber
+            },
+            beforeSend: () => {
+                element_list.addClass('active')
+                element_iconStatus.html('<i class="fas fa-sync fa-spin"></i>')
+            },
+            success: (res) => {
+                element_list.removeClass('active')
+                element_iconStatus.html('<i class="fas fa-check"></i>')
+                
+                if (params.fileNumber < params.totalFile) {
+                    downloadBigData({
+                        fileNumber: params.fileNumber+1,
+                        totalFile: params.totalFile
+                    })
+                }
+
+                if (params.fileNumber == params.totalFile) {
+                    $('#modalDownloadData .modal-footer').removeClass('d-none')
+                }
+            }
+        })
+        */
+
+        // setTimeout(() => {
+        //     element_list.removeClass('active')
+        //     element_iconStatus.html('<i class="fas fa-check"></i>')
+            
+        //     if (params.fileNumber < params.totalFile) {
+        //         downloadBigData({
+        //             fileNumber: params.fileNumber+1,
+        //             totalFile: params.totalFile
+        //         })
+        //     }
+
+        //     if (params.fileNumber == params.totalFile) {
+        //         $('#modalDownloadData .modal-footer').removeClass('d-none')
+        //     }
+        // }, 500);
+    }
+
+
+
+    function setTempColumn() {
+        return new Promise((resolve, reject) => {
+            let column = []
+            $('input:checkbox[name=filter-kolom]').each((key, element) => {
+                if ($(element).is(':checked')) {
+                    column.push({
+                        label: $(element).data('label'),
+                        value: element.value
+                    });
+                }
+            })
+            let columnString = JSON.stringify(column)
+
+            $.ajax({
+                url : "<?php echo site_url('bigdata/download/set-temp-column') ?>",
+                type: "POST",
+                data: {
+                    csrf_test_name: $('input[name=csrf_test_name]').val(),
+                    columnString: columnString
+                },
+                success: (res) => {
+                    resolve(res)
+                },
+                fail: () => {
+                    alert("terjadi kesalahan pada sistem")
+                    reject();
+                }
+            })
+        })
+    }
+
+
+
+    function download(fileUrl) {
+        var a = document.createElement("a");
+        a.href = fileUrl;
+        a.click();
+    }
+
+
+
+    function exportTableToExcel(tableID, filename = ''){
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var exportedTable = document.getElementById('_exported_table')
+        
+        exportedTable.innerHTML = tableSelect.innerHTML
+        $("#_exported_table .d-none").remove()
+
+        
+        var tableHTML = exportedTable.outerHTML.replace(/ /g, '%20');
+        
+        
+        
+        // Specify file name
+        filename = filename?filename+'.xls':'excel_data.xls';
+        
+        // Create download link element
+        downloadLink = document.createElement("a");
+        
+        document.body.appendChild(downloadLink);
+        
+        if(navigator.msSaveOrOpenBlob){
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob( blob, filename);
+        }else{
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        
+            // Setting the file name
+            downloadLink.download = filename;
+            
+            //triggering the function
+            downloadLink.click();
+        }
+    }
+
+</script>
+<?= $this->endSection() ?>
