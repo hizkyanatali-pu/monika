@@ -201,6 +201,22 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->post('set-temp-column', '\Modules\Admin\Controllers\BigData::setTempColumn');
                 });
             });
+
+            $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->group('template', ['namespace' => 'App\Controllers'], function($routes) {
+                    $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::template');
+                    $routes->get('detail/(:any)', '\Modules\Admin\Controllers\Dokumenpk::show/$1');
+                    $routes->post('create', '\Modules\Admin\Controllers\Dokumenpk::createTemplate');
+                    $routes->post('update', '\Modules\Admin\Controllers\Dokumenpk::updateTemplate');
+                    $routes->post('delete', '\Modules\Admin\Controllers\Dokumenpk::removeTemplate');
+                });
+            });
+        }
+
+        elseif (strpos($session->get('userData')['uid'], 'satker') !== false) {
+            $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->get('/', '\Modules\Satker\Controllers\Dokumenpk::index');
+            });
         }
     }
 });

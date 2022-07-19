@@ -334,6 +334,33 @@ $request = \Config\Services::request();
                 </a>
             </li>
 
+            
+
+
+            <li class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'dokumenpk' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+                <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                    <i class="kt-menu__link-icon fas fa-book"></i>
+                    <span class="kt-menu__link-text">Dokumen PK</span>
+                    <i class="kt-menu__ver-arrow la la-angle-right"></i>
+                </a>
+
+                <div class="kt-menu__submenu ">
+                    <span class="kt-menu__arrow"></span>
+                    <ul class="kt-menu__subnav">
+                        <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'template'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <a href="<?= site_url('dokumenpk/template'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">
+                                    Template
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
         </ul>
     </div>
 </div>

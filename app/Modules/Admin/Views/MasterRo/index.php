@@ -1,4 +1,4 @@
-123s<?= $this->extend('admin/layouts/default') ?>
+<?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.css'); ?>
 
