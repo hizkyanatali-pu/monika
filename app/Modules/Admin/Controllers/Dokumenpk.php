@@ -80,7 +80,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         $templateID = $this->request->getPost('dataId');
 
-        /** template */
+        /* template */
         $this->dokumenPK->where('id', $templateID);
         $this->dokumenPK->update([
             'title'      => $this->request->getPost('title'),
@@ -90,13 +90,13 @@ class Dokumenpk extends \App\Controllers\BaseController
         /** end-of: template */
 
         
-        /** row */
+        /* row */
         $this->dokumenPK_row->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_row($this->request->getPost(), $templateID);
         /** end-of: row */
 
 
-        /** info */
+        /* info */
         $this->dokumenPK_info->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_info($this->request->getPost(), $templateID);
         /** end-of: info */
