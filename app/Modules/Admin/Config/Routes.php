@@ -214,6 +214,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         }
 
         elseif (strpos($session->get('userData')['uid'], 'satker') !== false) {
+            $routes->get('dashboard', '\Modules\Satker\Controllers\Dokumenpk::index');
             $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function($routes) {
                 $routes->get('/', '\Modules\Satker\Controllers\Dokumenpk::index');
                 $routes->get('get-template/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getTemplate/$1');
