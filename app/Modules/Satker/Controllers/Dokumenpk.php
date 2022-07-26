@@ -62,6 +62,31 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
+    public function dataDokumenSatker($_status) 
+    {
+        $dataDokumen = $this->dokumenSatker->select('
+            dokumenpk_satker.id,
+            dokumenpk_satker.template_id,
+            dokumenpk_satker.revision_master_dokumen_id,
+            dokumenpk_satker.revision_master_number,
+            dokumenpk_satker.status,
+            dokumenpk_satker.created_at,
+            dokumen_pk_template.title as dokumenTitle,
+            ku_user.nama as userCreatedName
+        ')
+        ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+        ->join('ku_user', 'dokumenpk_satker.user_created = ku_user.uid', 'left')
+        ->where('status', $_status)
+        ->orderBy('dokumenpk_satker.id', 'DESC')
+        ->get()->getResult();
+
+        return $this->respond([
+            'data' => $dataDokumen
+        ]);
+    }
+
+
+
     public function getTemplate($id)
     {
         return $this->respond([
@@ -69,13 +94,6 @@ class Dokumenpk extends \App\Controllers\BaseController
             'templateRow'  => $this->templateRow->where('template_id', $id)->get()->getResult(), 
             'templateInfo' => $this->templateInfo->where('template_id', $id)->get()->getResult()
         ]);
-    }
-
-
-
-    public function cetak()
-    {
-        echo 1;
     }
 
 

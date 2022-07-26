@@ -203,6 +203,16 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             });
 
             $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
+
+                $routes->group('satker', ['namespace' => 'App\Controllers'], function($routes) {
+                    $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::satker');
+
+                    $routes->get('get-data/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1');
+                    $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
+                    $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
+                });
+
                 $routes->group('template', ['namespace' => 'App\Controllers'], function($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::template');
                     $routes->get('detail/(:any)', '\Modules\Admin\Controllers\Dokumenpk::show/$1');
@@ -212,6 +222,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 });
             });
         }
+
+
+
+
 
         elseif (strpos($session->get('userData')['uid'], 'satker') !== false) {
             $routes->get('dashboard', '\Modules\Satker\Controllers\Dokumenpk::index');

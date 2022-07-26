@@ -18,6 +18,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->user = $session->get('userData');
         $this->db = \Config\Database::connect();
 
+        $this->dokumenSatker = $this->db->table('dokumenpk_satker');
+
         $this->dokumenPK               = $this->db->table('dokumen_pk_template');
         $this->dokumenPK_row           = $this->db->table('dokumen_pk_template_row');
         $this->dokumenPK_info          = $this->db->table('dokumen_pk_template_info');
@@ -27,7 +29,13 @@ class Dokumenpk extends \App\Controllers\BaseController
     }
 
 
-    
+    public function satker()
+    {
+        return view('Modules\Admin\Views\DokumenPK\satker.php');
+    }
+
+
+
     public function template()
     {
         return view('Modules\Admin\Views\DokumenPK\template.php', [
@@ -120,6 +128,29 @@ class Dokumenpk extends \App\Controllers\BaseController
         return $this->respond([
             'status' => true,
             'input' => $this->request->getPost('id')
+        ]);
+    }
+
+
+
+    public function changeStatus()
+    {
+        switch ($this->request->getPost('dokumenType')) {
+            case 'satker':
+                $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
+
+                $newStatus = $this->request->getPost('newStatus');
+                $updatedData = ['status' => $newStatus];
+                if ($newStatus == "tolak") $updatedData['revision_message'] = $this->request->getPost('message');
+
+                $this->dokumenSatker->update($updatedData);
+                break;
+        }
+
+        return $this->respond([
+            'status' => true,
+            'dataStatus' => 'setuju', //stuju||tolak
+            'input'  => $this->request->getPost()
         ]);
     }
 
