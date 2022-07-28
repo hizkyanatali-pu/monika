@@ -147,6 +147,7 @@
                 </button>
             </div>
             <div class="modal-body p-0">
+                <div class="container-revision-alert-cetak"></div>
                 <iframe 
                     width="100%"
                     style="height: 80vh"
@@ -442,7 +443,23 @@
                 $('#modal-cetak-dokumen-revisioned').modal('hide')
 
                 setTimeout(() => {
-                    element_modalPreviewCetakDokumen.find('iframe').attr('src', '<?php echo site_url('dokumen-perjanjian-kinerja.pdf') ?>')
+                    let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
+
+                    if (res.dokumen.revision_message != null) {
+                        element_iframePreviewDokumen.css({'height':'60vh'})
+                        $('.container-revision-alert-cetak').html(`
+                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                                <h5 class="alert-heading">Perlu Di Revisi !</h5>
+                                <p>${res.dokumen.revision_message}</p>
+                            </div>
+                        `)
+                    }
+                    else {
+                        element_iframePreviewDokumen.css({'height':'80vh'})
+                        $('.container-revision-alert-cetak').html('')
+                    }
+
+                    element_iframePreviewDokumen.attr('src', '<?php echo site_url('dokumen-perjanjian-kinerja.pdf') ?>')
                     element_modalPreviewCetakDokumen.modal('show')
 
                     if (_toConfirm) {

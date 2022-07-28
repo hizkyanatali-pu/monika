@@ -78,7 +78,14 @@ $title = $title ?? '';
                     $session = session();
 
                     if (strpos($session->get('userData')['uid'], 'admin') !== false) echo $this->include('admin/partials/sidebar');
-                    if (strpos($session->get('userData')['uid'], 'satker') !== false) echo $this->include('admin/partials/sidebarSatker');
+                    
+                    if (
+                        strpos($session->get('userData')['uid'], 'satker') !== false 
+                        || strtolower($session->get('userData')['idkelompok']) == 'satker'
+                    ) {
+                        echo $this->include('admin/partials/sidebarSatker');
+                    }
+
                     if (strpos($session->get('userData')['uid'], 'balai') !== false) echo $this->include('admin/partials/sidebarBalai');
                 ?>
             </div>

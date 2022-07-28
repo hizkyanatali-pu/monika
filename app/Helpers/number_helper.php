@@ -1,5 +1,13 @@
 <?php
 
+
+if (!function_exists('toRupiah')) {
+	function rupiahFormat($argNumber, $withRp = true, $desimal = 0)
+	{
+		return ($withRp ? 'Rp. ' : '') . number_format($argNumber, $desimal, ',', '.');
+	}
+}
+
 if (!function_exists('toTriliun')) {
 	function toTriliun($argNumber)
 	{

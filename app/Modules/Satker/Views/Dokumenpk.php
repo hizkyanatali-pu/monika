@@ -141,7 +141,7 @@
 
 
 
-<!-- Modal Cetak Dokumen Terevisi -->
+<!-- Modal Opsi Cetak Dokumen Terevisi -->
 <div class="modal fade" id="modal-cetak-dokumen-revisioned" tabindex="-1" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -152,7 +152,7 @@
         </div>
     </div>
 </div>
-<!-- end-of: Modal Cetak Dokumen Terevisi -->
+<!-- end-of: Modal Opsi Cetak Dokumen Terevisi -->
 
 
 
@@ -167,6 +167,7 @@
                 </button>
             </div>
             <div class="modal-body p-0">
+                <div class="container-revision-alert-cetak"></div>
                 <iframe 
                     width="100%"
                     style="height: 80vh"
@@ -308,6 +309,24 @@
                         elementInput_outcome.val(data.outcome_value)
                     })
 
+                    $('input[name=total-anggaran]').val(res.dokumen.total_anggaran)
+                    $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
+                    $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
+
+                    $('.title-ttd-pihak1').text('KEPALA ' + res.dokumen.pihak1_initial)
+                    $('.title-ttd-pihak2').text('KEPALA ' + res.dokumen.pihak2_initial)
+
+                    
+                    if (res.dokumen.revision_message != null) {
+                        $('.container-revision-alert').html(`
+                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                                <h5 class="alert-heading">Perlu Di Revisi !</h5>
+                                <p>${res.dokumen.revision_message}</p>
+                            </div>
+                        `)
+                    }
+            
+
                     render_prepare_btnSubmitToRevision({
                         dokumenID      : res.dokumen.id,
                         dokumenMasterID: res.dokumen.revision_master_dokumen_id ?? res.dokumen.id
@@ -384,7 +403,10 @@
         return {
             csrf_test_name: $('input[name=csrf_test_name]').val(),
             templateID    : element_btnSaveDokumen.data('template-id'),
-            rows          : rows
+            rows          : rows,
+            totalAnggaran : $('input[name=total-anggaran]').val(),
+            ttdPihak1     : $('input[name=ttd-pihak1]').val(),
+            ttdPihak2     : $('input[name=ttd-pihak2]').val()
         }
     }
 
@@ -410,7 +432,23 @@
                 $('#modal-cetak-dokumen-revisioned').modal('hide')
 
                 setTimeout(() => {
-                    element_modalPreviewCetakDokumen.find('iframe').attr('src', '<?php echo site_url('dokumen-perjanjian-kinerja.pdf') ?>')
+                    let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
+
+                    if (res.dokumen.revision_message != null) {
+                        element_iframePreviewDokumen.css({'height':'60vh'})
+                        $('.container-revision-alert-cetak').html(`
+                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                                <h5 class="alert-heading">Perlu Di Revisi !</h5>
+                                <p>${res.dokumen.revision_message}</p>
+                            </div>
+                        `)
+                    }
+                    else {
+                        element_iframePreviewDokumen.css({'height':'80vh'})
+                        $('.container-revision-alert-cetak').html('')
+                    }
+
+                    element_iframePreviewDokumen.attr('src', '<?php echo site_url('dokumen-perjanjian-kinerja.pdf') ?>')
                     element_modalPreviewCetakDokumen.modal('show')
                 }, 400)
             }
@@ -467,11 +505,12 @@
 
 
     function renderFormTemplate(_data) {
-        let template        = _data.template,
-            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow),
-            render_listInfo = renderFormTemplate_listInfo(_data.templateInfo)
-    
+        let template           = _data.template,
+            render_rowsForm    = renderFormTemplate_rowTable(_data.templateRow),
+            render_listInfo    = renderFormTemplate_listInfo(_data.templateInfo)
+            
         let render = `
+            <div class="container-revision-alert"></div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -493,15 +532,54 @@
                     ${ render_rowsForm }
                 </tbody>
             </table>
-            <div class="mt-4">
-                <h6>Keterangan</h6>
-                <div>${ template.keterangan }</div>
-            </div>
-            <div class="mt-5">
-                <h6>${ template.info_title }</h6>
-                <ul class="list-group">
-                    ${ render_listInfo }
-                </ul>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="mt-4">
+                        <h6>KETERNGAN</h6>
+                        <div>${ template.keterangan }</div>
+                    </div>
+                    <div class="mt-5">
+                        <h6>${ template.info_title }</h6>
+                        <ul class="list-group">
+                            ${ render_listInfo }
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group mt-4">
+                        <label>
+                            <strong>Total Anggaran</strong>
+                        </label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Rp. </span>
+                            </div>
+                            <input class="form-control" name="total-anggaran" placeholder="Nominal Total Anggaran" />
+                        </div>
+                    </div>
+                    <div class="form-group mt-4 pt-4">
+                        <label>
+                            <strong>Pihak Pertama</strong>
+                        </label>
+                        <div>
+                            <small class="title-ttd-pihak1">
+                                KEPALA ${_data.penandatangan.pihak1}
+                            </small>
+                        </div>
+                        <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" />
+                    </div>
+                    <div class="form-group mt-4 pt-2">
+                        <label>
+                            <strong>Pihak Kedua</strong>
+                        </label>
+                        <div>
+                            <small class="title-ttd-pihak2">
+                                KEPALA ${_data.penandatangan.pihak2}
+                            </small>
+                        </div>
+                        <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" />
+                    </div>
+                </div>
             </div>
         `
 

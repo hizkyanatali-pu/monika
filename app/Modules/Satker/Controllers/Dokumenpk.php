@@ -23,6 +23,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->templateRow     = $this->db->table('dokumen_pk_template_row');
         $this->templateInfo    = $this->db->table('dokumen_pk_template_info');
 
+        $this->satker = $this->db->table('m_satker');
+        $this->balai  = $this->db->table('m_balai');
+
         $this->dokumenStatus = [
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
             'setuju'   => ['message' => 'Telah di Setujui', 'color' => 'bg-success text-white'],
@@ -89,10 +92,22 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function getTemplate($id)
     {
+        $pihak1   = '';
+        $pihak2   = '';
+
+        if ($this->user['idkelompok'] == "SATKER") {
+            $pihak1    = $this->user['satker_nama'];
+            $pihak2    = $this->user['balai_nama'];
+        }
+
         return $this->respond([
-            'template'     => $this->templateDokumen->where('id', $id)->get()->getRow(),
-            'templateRow'  => $this->templateRow->where('template_id', $id)->get()->getResult(), 
-            'templateInfo' => $this->templateInfo->where('template_id', $id)->get()->getResult()
+            'template'      => $this->templateDokumen->where('id', $id)->get()->getRow(),
+            'templateRow'   => $this->templateRow->where('template_id', $id)->get()->getResult(),
+            'templateInfo'  => $this->templateInfo->where('template_id', $id)->get()->getResult(),
+            'penandatangan' => [
+                'pihak1' => $pihak1,
+                'pihak2' => $pihak2
+            ]
         ]);
     }
 
@@ -131,9 +146,20 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         /* dokumen */
         $inserted_dokumenSatker = [
-            'template_id' => $this->request->getPost('templateID'),
-            'user_created' => $this->userUID
+            'template_id'    => $this->request->getPost('templateID'),
+            'user_created'   => $this->userUID,
+            'total_anggaran' => $this->request->getPost('totalAnggaran')
         ];
+
+        if ($this->user['idkelompok'] == "SATKER") {
+            $inserted_dokumenSatker['pihak1_id']      = $this->user['satker_id'];
+            $inserted_dokumenSatker['pihak1_initial'] = $this->user['satker_nama'];
+            $inserted_dokumenSatker['pihak1_ttd']     = $this->request->getPost('ttdPihak1');
+            $inserted_dokumenSatker['pihak2_id']      = $this->user['balai_id'];
+            $inserted_dokumenSatker['pihak2_initial'] = $this->user['balai_nama'];
+            $inserted_dokumenSatker['pihak2_ttd']     = $this->request->getPost('ttdPihak2');
+        }        
+
 
         if ($this->request->getPost('revision_dokumen_id')) {
             $revision_dokumenID       = $this->request->getPost('revision_dokumen_id');

@@ -11,10 +11,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
     public function __construct()
     {
         helper('dbdinamic');
-        $session = session();
-        $this->user = $session->get('userData');
-        $this->userUID = $this->user['uid'];
-        $this->db = \Config\Database::connect();
+        $session           = session();
+        $this->user        = $session->get('userData');
+        $this->userUID     = $this->user['uid'];
+        $this->dokumenYear = $this->user['tahun'];
+        $this->db          = \Config\Database::connect();
 
         $this->dokumenSatker      = $this->db->table('dokumenpk_satker');
         $this->dokumenSatker_rows = $this->db->table('dokumenpk_satker_rows');
@@ -47,6 +48,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
         ->where('dokumenpk_satker.id', $_dokumenSatkerID)
         ->get()
         ->getRowArray();
+
+        if ($dataDokumen) $this->dokumenYear = date('Y', strtotime($dataDokumen['created_at']));
         
         $this->dokumenLoadedStatus = $dataDokumen['status'];
 
@@ -57,6 +60,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen);
 
         $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
+
+        return $this->respond([
+            'dokumen' => $dataDokumen
+        ]);
     }
 
 
@@ -80,9 +87,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $pdf->Image('Images/logo_pu_border.png', 143, 6, 16);
             $pdf->Ln(15);
 
-            $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN 2022';
-            $dokumenKopTitle2 = 'BALAI WILAYAH SUNGAI KALIMANTAN II PALANGKARAYA';
-            $dokumenKopTitle3 = 'DIREKTORAT JENDRAL SUMBER DAYA AIR';
+            $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
+            $dokumenKopTitle2 = $dataDokumen['pihak1_initial'];
+            $dokumenKopTitle3 = $dataDokumen['pihak2_initial'];
 
             $pdf->SetFont('Arial','B',14);
             $pdf->SetFillColor(255);
@@ -116,8 +123,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $pdf->Ln(4);
 
                 // Pihak Pertama
-                $this->pdf_renderIntroductionSection($pdf, 'Nama', 'FERRY SYAHRIZAL');
-                $this->pdf_renderIntroductionSection($pdf, 'Jabatan', 'Kepala Balai Wilayah Sungai Kalimantan II Palangkaraya');
+                $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak1_ttd']);
+                $this->pdf_renderIntroductionSection($pdf, 'Jabatan', 'KEPALA ' . $dataDokumen['pihak1_initial']);
 
                 // Text 2
                 $pdf->Ln(4);
@@ -126,8 +133,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $pdf->Ln(4);
 
                 // Pihak Kedua
-                $this->pdf_renderIntroductionSection($pdf, 'Nama', 'FERRY SYAHRIZAL');
-                $this->pdf_renderIntroductionSection($pdf, 'Jabatan', 'Kepala Balai Wilayah Sungai Kalimantan II Palangkaraya');
+                $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak2_ttd']);
+                $this->pdf_renderIntroductionSection($pdf, 'Jabatan', 'KEPALA ' . $dataDokumen['pihak2_initial']);
                 
                 // Text 3
                 $pdf->Ln(4);
@@ -143,19 +150,19 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                 // Text
                 $pdf->Ln(2);
-                $this->pdf_renderListIsiSection($pdf, '1.', "Pihak pertama pada tahun 2022 ini berjanji akan mewujudkan target kinerja yang seharusnya sesuai lampiran perjanjian ini, dalam rangka mencapai target kinerja jangka menengah seperti yang telah di tetapkan dalam dokumen perencanaan. Keberhasilan dan kegagalan pencapaian target kinerja tersebut menjadi tanggung jawab pihak pertama.");
+                $this->pdf_renderListIsiSection($pdf, '1.', "Pihak pertama pada tahun " . $this->dokumenYear . " ini berjanji akan mewujudkan target kinerja yang seharusnya sesuai lampiran perjanjian ini, dalam rangka mencapai target kinerja jangka menengah seperti yang telah di tetapkan dalam dokumen perencanaan. Keberhasilan dan kegagalan pencapaian target kinerja tersebut menjadi tanggung jawab pihak pertama.");
                 $pdf->Ln(2);
                 $this->pdf_renderListIsiSection($pdf, '2.', "Pihak kedua akan melakukan supervisi yang di perlukan serta akan melakukan evaluasi terhadap capaian kinerja dari perjanjian ini dan mengambil tindakan yang diperlukan dalam rangka pemberian penghargaan dan sanksi.");
-            
+
 
             /** TTD Section */
             $pdf->Ln(8);
             $this->pdf_renderSectionTtd($pdf, $this->sectionWidth, [
                 'person1Title' => 'Pihak Kedua',
-                'person1Name'  => 'JAROT WIDYOKO',
-                'person2Date'  => 'JAKARTA ,          Januari 2022',
+                'person1Name'  => $dataDokumen['pihak2_ttd'],
+                'person2Date'  => 'JAKARTA ,          ' . bulan(date('m', strtotime($dataDokumen['created_at']))) . ' ' . $this->dokumenYear,
                 'person2Title' => 'Pihak Pertama',
-                'person2Name'  => 'FERRY SYAHRIZAL',
+                'person2Name'  => $dataDokumen['pihak1_ttd'],
             ]);
     }
 
@@ -194,7 +201,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->AddPage('L', 'A4');
         $this->pdf_renderWatermarkKonsep($pdf);
 
-        $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', 'TARGET 2022'];
+        $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', 'TARGET '.$this->dokumenYear];
         $headerWidth = [
             200, 
             65
@@ -215,8 +222,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         /**  Dokumen KOP */        
-        $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN 2022';
-        $dokumenKopTitle2 = 'BALAI WILAYAH SUNGAI KALIMANTAN II PALANGKARAYA - DIREKTORAT JENDRAL SUMBER DAYA AIR';
+        $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
+        $dokumenKopTitle2 = $dataDokumen['pihak1_initial'] . ' - ' . $dataDokumen['pihak2_initial'];
 
         $pdf->SetFont('Arial','B',10);
         $pdf->SetFillColor(255);
@@ -321,7 +328,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             // anggaran title
             $pdf->SetFont($this->fontFamily, 'B', 8);
             $pdf->SetX(183);
-            $pdf->Cell(100, 7, 'Rp. 11.000.000.000', 0, 0, 'R');
+            $pdf->Cell(100, 7, rupiahFormat($dataDokumen['total_anggaran']), 0, 0, 'R');
 
             // info
             foreach ($dataDokumenInfo as $key_info => $data_info) {
@@ -335,11 +342,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
         /** TTD Section */
         $pdf->Ln(10);
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
-            'person1Title' => 'KEPALA BBWS/BWS XXX',
-            'person1Name'  => 'XXXX',
-            'person2Date'  => 'JAKARTA ,                                         2022',
-            'person2Title' => 'KEPALA SATKER BALAI',
-            'person2Name'  => 'XXXX',
+            'person1Title' => 'KEPALA ' . $dataDokumen['pihak2_initial'],
+            'person1Name'  => $dataDokumen['pihak2_ttd'],
+            'person2Date'  => 'JAKARTA ,          ' . bulan(date('m', strtotime($dataDokumen['created_at']))) . ' ' . $this->dokumenYear,
+            'person2Title' => 'KEPALA ' . $dataDokumen['pihak1_initial'],
+            'person2Name'  => $dataDokumen['pihak1_ttd'],
         ]);
     }
 

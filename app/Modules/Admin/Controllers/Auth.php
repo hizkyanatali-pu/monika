@@ -36,7 +36,6 @@ class Auth extends \App\Controllers\BaseController
 	public function attemptLogin()
 	{
 		// validate request
-		//print_r($this->request);
 		$rules = [
 			'idpengguna'		=> 'required',
 			'sandi' 	=> 'required|min_length[5]',
@@ -49,16 +48,19 @@ class Auth extends \App\Controllers\BaseController
 		}
 
 		// check credentials
-		$users = new UserModel();
-		$user = $users
-			->where('idpengguna', $this->request->getPost('idpengguna'))
-			->where('sandi', md5($this->request->getPost('sandi')))
-			->join('ku_user_group', 'ku_user_group.uid=ku_user.uid', 'left')
-			->first();
+		$users = new UserModel();		
+		$user = $users->select("
+			ku_user.*, ku_user_group.group_id
+		")
+		->where('idpengguna', $this->request->getPost('idpengguna'))
+		->where('sandi', md5($this->request->getPost('sandi')))
+		->join('ku_user_group', 'ku_user_group.uid=ku_user.uid', 'left')
+		->first();
 		//dd($user);
+
 		if (
 			is_null($user)
-			|| !$user['group_id']
+			//|| !$user['group_id']
 			//|| ! password_verify($this->request->getPost('sandi'), $user['sandi'])
 		) {
 			return redirect()->to('auth')->withInput()->with('error', 'ID Pengguna atau Sandi salah');
@@ -72,17 +74,17 @@ class Auth extends \App\Controllers\BaseController
 
 		$this->akses = new AksesModel();
 
-
 		// check db Active
 		$cekdb = new ImportdataSqliteModel();
 		$cekdb = $cekdb->getactiveDB();
 
-		// login OK, save user data to session
-		$this->session->set('isLoggedIn', true);
-		$this->session->set('userData', [
+
+		/** set userData session */
+		$setSession_userData = [
 			'uid' 			=> $user['uid'],
 			'nama' 			=> $user['nama'],
 			'idpengguna' 	=> $user['idpengguna'],
+			'idkelompok' 	=> $user['idkelompok'],
 			'telpon'        => $user['telpon'],
 			'email'         => $user['email'],
 			'balaiid'		=> $user['balaiid'],
@@ -93,13 +95,44 @@ class Auth extends \App\Controllers\BaseController
 			'unitgiat'		=> $this->akses->getunitgiat($user['uid']),
 			'dbuse'			=> $cekdb,
 			'tahun'			=> $this->request->getPost('tahun')
-		]);
+		];
+
+		if (
+			strpos($user['uid'], 'satker')
+			|| $user['idkelompok'] == 'SATKER'
+		) {
+			$dataSarker_n_Balai = $users->select("
+				m_satker.satkerid,
+				m_satker.satker,
+				m_balai.balaiid,
+				m_balai.balai
+			")
+			->where('idpengguna', $this->request->getPost('idpengguna'))
+			->where('sandi', md5($this->request->getPost('sandi')))
+			->join('ku_user_satker', 'ku_user.uid = ku_user_satker.uid_user', 'left')
+			->join('m_satker', 'ku_user_satker.satkerid = m_satker.satkerid', 'left')
+			->join('m_balai', 'm_satker.balaiid = m_balai.balaiid', 'left')
+			->first();
+
+			$setSession_userData['satker_id']   = $dataSarker_n_Balai['satkerid'];
+			$setSession_userData['satker_nama'] = $dataSarker_n_Balai['satker'];
+			$setSession_userData['balai_id']    = $dataSarker_n_Balai['balaiid'];
+			$setSession_userData['balai_nama']  = $dataSarker_n_Balai['balai'];
+		}
+		/** end-of: set userData session */
+
+
+		// login OK, save user data to session
+		$this->session->set('isLoggedIn', true);
+		$this->session->set('userData', $setSession_userData);
 		$log = new LogloginModel();
 		$log->save(array(
 			'idpengguna' => $user['idpengguna'],
 			'in_dt' => date('Y-m-d H:i:s'),
 			'ip' => $this->request->getIPAddress()
 		));
+
+
 		return redirect()->to('dashboard');
 	}
 
