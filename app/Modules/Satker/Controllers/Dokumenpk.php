@@ -53,10 +53,23 @@ class Dokumenpk extends \App\Controllers\BaseController
         ->where('status !=', 'revision')
         ->orderBy('dokumenpk_satker.id', 'DESC')
         ->get()->getResult();
+        
+        if (isset($this->user['satker_id'])) {
+            $dataTemplate = $this->templateDokumen->select('dokumen_pk_template.*')
+            ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
+            ->where('dokumen_pk_template_akses.rev_id', $this->user['satker_id'])
+            ->where('dokumen_pk_template_akses.rev_table', 'm_satker')
+            ->groupBy('dokumen_pk_template.id')
+            ->get()->getResult();
+        }
+        else {
+            $dataTemplate = $this->templateDokumen->get()->getResult();
+        }
+        
 
         return view('Modules\Satker\Views\Dokumenpk.php', [
             'sessionYear'     => $this->user['tahun'],
-            'templateDokumen' => $this->templateDokumen->get()->getResult(),
+            'templateDokumen' => $dataTemplate,
 
             'dataDokumen'   => $dataDokumen,
             'dokumenStatus' => $this->dokumenStatus

@@ -23,7 +23,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->dokumenPK               = $this->db->table('dokumen_pk_template');
         $this->dokumenPK_row           = $this->db->table('dokumen_pk_template_row');
         $this->dokumenPK_info          = $this->db->table('dokumen_pk_template_info');
+        $this->dokumenPK_akses         = $this->db->table('dokumen_pk_template_akses');
         $this->tempExportBigdataColumn = $this->db->table("temp_export_bigdata_column");
+        $this->tableSatker             = $this->db->table("m_satker");
 
         $this->request = \Config\Services::request();
     }
@@ -39,7 +41,8 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function template()
     {
         return view('Modules\Admin\Views\DokumenPK\template.php', [
-            'data' => $this->dokumenPK->where('deleted_at is NULL', NULL, false)->get()->getResult()
+            'data'      => $this->dokumenPK->where('deleted_at is NULL', NULL, false)->get()->getResult(),
+            'allSatker' => $this->tableSatker->whereNotIn('satker', ['', '1'])->get()->getResult()
         ]);
     }
 
@@ -50,7 +53,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         return $this->respond([
             'template' => $this->dokumenPK->where('id', $_id)->get()->getRow(),
             'rows'     => $this->dokumenPK_row->where('template_id', $_id)->get()->getResult(),
-            'info'     => $this->dokumenPK_info->where('template_id', $_id)->get()->getResult()
+            'info'     => $this->dokumenPK_info->where('template_id', $_id)->get()->getResult(),
+            'akses'    => $this->dokumenPK_akses->where('template_id', $_id)->get()->getResult()
         ], 200);
     }
 
@@ -76,6 +80,11 @@ class Dokumenpk extends \App\Controllers\BaseController
         /** info */
         $this->insertDokumenPK_info($this->request->getPost(), $templateId);
         /** end-of: info */
+
+
+        /** Akses */
+        $this->insertDokumenPK_akses($this->request->getPost(), $templateId, 'm_satker');
+        /** end-of: Akses */
 
         return $this->respond([
             'status' => true
@@ -108,6 +117,12 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->dokumenPK_info->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_info($this->request->getPost(), $templateID);
         /** end-of: info */
+
+
+        /** Akses */
+        $this->dokumenPK_akses->delete(['template_id' => $templateID]);
+        $this->insertDokumenPK_akses($this->request->getPost(), $templateID, 'm_satker');
+        /** end-of: Akses */
 
 
         return $this->respond([
@@ -191,5 +206,19 @@ class Dokumenpk extends \App\Controllers\BaseController
             ];
         }, $input['info_item']);
         $this->dokumenPK_info->insertBatch($info);
+    }
+
+
+
+    private function insertDokumenPK_akses($input, $templateID, $revTable)
+    {
+        $akses = array_map(function($arr) use ($templateID, $revTable) {
+            return [
+                'template_id' => $templateID,
+                'rev_id'      => $arr,
+                'rev_table'   => $revTable,
+            ];
+        }, $input['akses']);
+        $this->dokumenPK_akses->insertBatch($akses);
     }
 }

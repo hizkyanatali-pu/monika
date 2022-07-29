@@ -110,8 +110,9 @@
 <!-- end:: Content -->
 
 
+
 <!-- Modal Form -->
-<div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modalForm" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -123,7 +124,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="row _form-main">
                     <div class="col-md-7 pr-4">
                         <div class="form-group">
                             <strong for="judul-dokumen">Judul Dokumen</strong>
@@ -161,6 +162,11 @@
                     </div>
 
                     <div class="col-md-5 pl-4 border-left">
+                        <div class="mb-4">
+                            <button class="btn btn-sm btn-outline-primary __prepare-pilih-akses-dokumen">
+                                Pilih Akses Dokumen
+                            </button>
+                        </div>
                         <div class="form-group">
                             <strong for="keterangan-dokumen">Keterangan</strong>
                             <textarea 
@@ -194,6 +200,44 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="_form-pilih-akses-dokumen d-none">
+                    <div class="d-flex jextify-content-start">
+                        <button class="btn btn-sm btn-outline-danger __back-from-pilih-akses-dokumen">
+                            <i class="fas fa-chevron-left"></i> Kembali
+                        </button>
+                        <div class="ml-2 w-50">
+                            <input type="text" name="search-opsi-akses-satker" class="form-control" placeholder="Cari Satker">
+                        </div>
+                    </div>
+                    <div class="mt-4 border" style="height: 45vh; overflow: auto">
+                        <table class="table table-bordered">
+                            <thead style="position: sticky; top: 0;">
+                                <th class="bg-purple" width="30px">
+                                    <input type="checkbox" name="check-all-opsi-satker">
+                                </th>
+                                <th class="bg-purple">Nama Satker</th>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($allSatker as $keySatker => $dataSatker) : ?>
+                                    <tr class="_list-opsi-satker">
+                                        <td>
+                                            <input 
+                                                type="checkbox" 
+                                                name="check-list-opsi-satker" 
+                                                class="open-to-check"
+                                                value="<?php echo $dataSatker->satkerid ?>"
+                                            >
+                                        </td>
+                                        <td>
+                                            <label><?php echo $dataSatker->satker ?></label>
+                                        </td>
+                                    </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" name="save-document" class="btn btn-primary">
@@ -219,8 +263,16 @@
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script>
-    var element_formTable      = $('._table-form').find('tbody'),
-        element_tableInformasi = $('._table-informasi').find('tbody')
+    var timerUserTyping                        = '',
+        element_formTable                      = $('._table-form').find('tbody'),
+        element_tableInformasi                 = $('._table-informasi').find('tbody'),
+        element_modalForm                      = $('#modalForm')
+        element_modalFormFooter                = element_modalForm.find('.modal-footer')
+        element_buttonPreparePilihAksesDokumen = $('button.__prepare-pilih-akses-dokumen')
+        element_formMain                       = $('._form-main'),
+        element_formPilihAksesDokumen          = $('._form-pilih-akses-dokumen'),
+        element_checkAllOpsiAksesDokumen       = $('input[type=checkbox][name=check-all-opsi-satker]'),
+        element_checkboxOpsiAksesDokumenShowed = $('input.open-to-check[type=checkbox][name=check-list-opsi-satker]')
 
 
     $(document).ready(function () {
@@ -228,7 +280,7 @@
             scrollX: true
         })
 
-        $('#modalForm').on('hide.bs.modal', function() {
+        element_modalForm.on('hide.bs.modal', function() {
             setTimeout(() => {
                 $('input[name=csrf_test_name]').val('')
                 $('input[name=judul-dokumen]').val('')
@@ -237,9 +289,14 @@
 
                 element_formTable.empty()
                 element_tableInformasi.empty()
+                element_checkboxOpsiAksesDokumenShowed.prop('checked', false)
 
                 $('button[name=save-document]').removeClass('d-none')
                 $('button[name=update-document]').addClass('d-none')
+                
+                element_formMain.removeClass('d-none')
+                element_formPilihAksesDokumen.addClass('d-none')
+                element_modalFormFooter.removeClass('d-none')
             }, 400)
         })
     })
@@ -289,6 +346,64 @@
                 deleteDocument(dataID)
                 break;
         }
+    })
+
+
+
+    element_buttonPreparePilihAksesDokumen.on('click', function() {
+        element_formMain.addClass('d-none')
+        element_formPilihAksesDokumen.removeClass('d-none')
+        element_modalFormFooter.addClass('d-none')
+    })
+
+
+
+    $('button.__back-from-pilih-akses-dokumen').on('click', function() {
+        element_formPilihAksesDokumen.addClass('d-none')
+        element_formMain.removeClass('d-none')
+        element_modalFormFooter.removeClass('d-none')
+
+        if (element_checkboxOpsiAksesDokumenShowed.filter(':checked').length > 0) {
+            element_buttonPreparePilihAksesDokumen.html('<i class="fa fa-check"></i> Pilih Akses Dokumen')
+        }
+        else {
+            element_buttonPreparePilihAksesDokumen.find('i').remove()
+        }
+    })
+
+
+
+    $('input[name=search-opsi-akses-satker]').on('keyup', function() {
+        clearTimeout(timerUserTyping)
+        timerUserTyping = setTimeout(() => {
+            let searchInput = $(this).val();
+
+            $('._list-opsi-satker').each((key, element) => {
+                let listElement  = $(element),
+                    listText     = listElement.find('label').text(),
+                    listCheckbox = listElement.find('input[type=checkbox][name=check-list-opsi-satker]')
+                
+                if (listText.toLowerCase().includes(searchInput.toLowerCase())) {
+                    listElement.removeClass('d-none')
+                    listCheckbox.addClass('open-to-check')
+                }
+                else {
+                    listElement.addClass('d-none')
+                    listCheckbox.removeClass('open-to-check')
+                }
+            })
+
+            let checkboxShowedIsChecked = element_checkboxOpsiAksesDokumenShowed.not(':checked').length,
+                setPropCheckedAll       = checkboxShowedIsChecked > 0 ? false : true
+            
+            element_checkAllOpsiAksesDokumen.prop('checked', setPropCheckedAll)
+        }, 700)
+    })
+
+
+
+    element_checkAllOpsiAksesDokumen.on('change', function() {
+        $('input.open-to-check[type=checkbox][name=check-list-opsi-satker]').prop('checked', this.checked)
     })
 
 
@@ -399,7 +514,7 @@
 
         element_updateButton.attr('data-id', _dataID)
 
-        $('#modalForm').modal('show')
+        element_modalForm.modal('show')
 
         $.ajax({
             url: "<?php echo site_url('dokumenpk/template/detail/') ?>" + _dataID,
@@ -437,6 +552,10 @@
             form.append('info_item[]', data)
         })
 
+        element_checkboxOpsiAksesDokumenShowed.filter(':checked').each((key, element) => {
+            form.append('akses[]', $(element).val())
+        })
+
         return form
     }
 
@@ -445,6 +564,7 @@
     function set_formInputValue(_data) {
         element_formTable.empty()
         element_tableInformasi.empty()
+        element_checkboxOpsiAksesDokumenShowed.prop('checked', false)
 
         $('input[name=judul-dokumen]').val(_data.template.title)
         $('textarea[name=keterangan-dokumen]').val(_data.template.keterangan)
@@ -469,6 +589,11 @@
             element_tableInformasi.append(render_itemInformasi({
                 itemValue: data.info
             }))
+        });
+
+
+        _data.akses.forEach((data, key) => {
+            $('input.open-to-check[type=checkbox][name=check-list-opsi-satker][value='+data.rev_id+']').prop('checked', true)
         });
     }
 
