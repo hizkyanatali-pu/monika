@@ -197,8 +197,12 @@ class TematikModel extends Model
 
 
 
-	public function getListRekap($option)
+	public function getListRekap($option, $_filterDateStart = null, $_filterDateEnd = null)
 	{
+		$whereCondition_dateFilter = "";
+
+		if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " AND tgl_mulai >= '$_filterDateStart' AND  tgl_mulai <= '$_filterDateEnd'"; 
+
 		$listData = [];
 		foreach ($option as $key => $value) {
 			$strTematikCode = join(',', $value['tematikCode']);
@@ -241,6 +245,7 @@ class TematikModel extends Model
 					left join tematik_link tmtlink on pkt.kode=tmtlink.kode_ang
 				WHERE
 					tmtlink.kdtematik in ($strTematikCode)
+					$whereCondition_dateFilter
 				group by 
 				satker.grup
 	    	")->getResult();

@@ -175,6 +175,9 @@ class PulldataModel extends Model
             return $this->db->query($q . $w)->getResultArray();
         }
     }
+
+
+    
     function getSatker($w = '')
     {
         $this->akses = new AksesModel();
@@ -538,21 +541,18 @@ class PulldataModel extends Model
 
 
         $data = $this->db->query("
-        SELECT
-	tgiat.kdgiat,
-	tgiat.nmgiat,
-	(sum(real_total) / sum(pagu_total)) * 100 AS keu,
-	(sum(ufis) / sum(pagu_total)) * 100 AS fis
-FROM
-	tgiat
-LEFT JOIN monika_data_{$this->user['tahun']} md ON tgiat.kdgiat = md.kdgiat AND tgiat.tahun_anggaran = {$this->user['tahun']}
-WHERE
-tgiat.kdunit ='06'
-GROUP BY
-	tgiat.kdgiat
-
-
-    
+                    SELECT
+                tgiat.kdgiat,
+                tgiat.nmgiat,
+                (sum(real_total) / sum(pagu_total)) * 100 AS keu,
+                (sum(ufis) / sum(pagu_total)) * 100 AS fis
+            FROM
+                tgiat
+            LEFT JOIN monika_data_{$this->user['tahun']} md ON tgiat.kdgiat = md.kdgiat AND tgiat.tahun_anggaran = {$this->user['tahun']}
+            WHERE
+            tgiat.kdunit ='06'
+            GROUP BY
+                tgiat.kdgiat
         ")->getResult();
 
 

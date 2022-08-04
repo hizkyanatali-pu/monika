@@ -2,6 +2,7 @@
 
 namespace Modules\Admin\Controllers;
 
+use CodeIgniter\API\ResponseTrait;
 use Modules\Admin\Models\TematikModel;
 use Modules\Admin\Models\RekapUnorModel;
 use Modules\Admin\Models\PohonAnggaranModel;
@@ -11,6 +12,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Dashboard extends \App\Controllers\BaseController
 {
+    use ResponseTrait;
+
     public function __construct()
     {
         helper('dbdinamic');
@@ -23,18 +26,29 @@ class Dashboard extends \App\Controllers\BaseController
         $this->RekapUnorModel = new RekapUnorModel();
         $this->PohonAnggaran        = new PohonAnggaranModel();
         $this->PulldataModel        = new PulldataModel();
+
+        $this->request = \Config\Services::request();
     }
+
+
+
 
     public function index()
     {
+        $filterDateStart = $this->request->getGet('filter-date-start') ?? null;
+        $filterDateEnd   = $this->request->getGet('filter-date-end') ?? null;
+
+        // print_r($filterDateStart);
+        // exit;
+
         $grupData = $this->rekapGroupData();
-        $qdata = $this->TematikModel->getListRekap($grupData);
+        $qdata = $this->TematikModel->getListRekap($grupData, $filterDateStart, $filterDateEnd);
 
         //pohon terkontrak
-        $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"]);
-        $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"]);
-        $qbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"]);
-        $qpersiapankontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Persiapan kontrak"]);
+        $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"], $filterDateStart, $filterDateEnd);
+        $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"], $filterDateStart, $filterDateEnd);
+        $qbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"], $filterDateStart, $filterDateEnd);
+        $qpersiapankontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Persiapan kontrak"], $filterDateStart, $filterDateEnd);
 
 
         $rekapUnor = $this->RekapUnorModel->getRekapUnor();
@@ -49,8 +63,8 @@ class Dashboard extends \App\Controllers\BaseController
 
         //table perkegiatan
 
-        $belumlelangPerkegiatanRpmSyc =  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_rpm", 0, true);
-        $belumlelangPerkegiatanMyc =  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_total", "1,2,3");
+        $belumlelangPerkegiatanRpmSyc =  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_rpm", 0, true, $filterDateStart, $filterDateEnd);
+        $belumlelangPerkegiatanMyc =  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_total", "1,2,3", false, $filterDateStart, $filterDateEnd);
 
 
 
@@ -82,10 +96,17 @@ class Dashboard extends \App\Controllers\BaseController
             // belum lelang RPM syc
             'belum_lelang_rpm_syc' => $belumlelangPerkegiatanRpmSyc,
             'belum_lelang_myc' => $belumlelangPerkegiatanMyc,
-            'belum_lelang_phln_project_loan' =>  $this->PohonAnggaran->getDataBelumLelangPhlnMycProjectLoan("pagu_phln", "1,2,3"),
+            'belum_lelang_phln_project_loan' =>  $this->PohonAnggaran->getDataBelumLelangPhlnMycProjectLoan("pagu_phln", "1,2,3", false, $filterDateStart, $filterDateEnd),
 
 
-            'qdata' => ["bbws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS'"), "bws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS'"), "pusat" => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99'"), 'Balai Teknik' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"), 'dinas' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98'"), 'Semua Satker' => $this->PulldataModel->getBalaiPaket("satker10terendah")],
+            'qdata' => [
+                "bbws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS'"), 
+                "bws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS'"), 
+                "pusat" => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99'"), 
+                'Balai Teknik' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"), 
+                'dinas' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98'"), 
+                'Semua Satker' => $this->PulldataModel->getBalaiPaket("satker10terendah")
+            ],
 
 
 
@@ -93,28 +114,31 @@ class Dashboard extends \App\Controllers\BaseController
 
         // belum lelang 
 
-        $data['nilai_rpm'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "RPM");
-        $data['nilai_sbsn'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "SBSN");
-        $data['nilai_phln'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "PHLN");
+        $data['nilai_rpm'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "RPM", $filterDateStart, $filterDateEnd);
+        $data['nilai_sbsn'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "SBSN", $filterDateStart, $filterDateEnd);
+        $data['nilai_phln'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "PHLN", $filterDateStart, $filterDateEnd);
 
-        $data['rpmSyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "RPM");
-        $data['rpmMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "RPM");
+        $data['rpmSyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "RPM", $filterDateStart, $filterDateEnd);
+        $data['rpmMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "RPM", $filterDateStart, $filterDateEnd);
 
-        $data['phlnMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "PHLN");
+        $data['phlnMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "PHLN", $filterDateStart, $filterDateEnd);
 
 
-        $data['rpmSycList'] = $this->PohonAnggaran->getDataBelumLelangList([[0]], "RPM");
-        $data['rpmMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "RPM");
-        $data['phlnMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "PHLN");
+        $data['rpmSycList'] = $this->PohonAnggaran->getDataBelumLelangList([[0]], "RPM", $filterDateStart, $filterDateEnd);
+        $data['rpmMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "RPM", $filterDateStart, $filterDateEnd);
+        $data['phlnMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "PHLN", $filterDateStart, $filterDateEnd);
 
 
         //rencana tender
-        $data['tenderRpm'] =  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("RPM");
-        $data['tenderPhln'] =  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("PHLN");
+        $data['tenderRpm'] =  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("RPM", null, null, false, $filterDateStart, $filterDateEnd);
+        $data['tenderPhln'] =  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("PHLN", null, null, false, $filterDateStart, $filterDateEnd);
 
 
         return view('Modules\Admin\Views\Dashboard', $data);
     }
+
+
+
 
     // private function rekapGroupData()
     // {

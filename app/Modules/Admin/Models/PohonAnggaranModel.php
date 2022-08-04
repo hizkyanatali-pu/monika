@@ -17,7 +17,7 @@ class PohonAnggaranModel extends Model
         $this->user = $session->get('userData');
     }
 
-    public function getDataKontrak($w = [])
+    public function getDataKontrak($w = [], $_filterDateStart = null, $_filterDateEnd = null)
     {
         /*
             // $query = $this->table($this->table)
@@ -86,6 +86,10 @@ class PohonAnggaranModel extends Model
             $whereCondition .= " $preffixCondition kdjnskon IN ($implodeJenisKontrak) ";
         };
 
+        $whereCondition_dateFilter = "";
+        $whereCondition_dateFilter_andPrefix =  $whereCondition == " WHERE " ? '' : 'AND';
+        if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " $whereCondition_dateFilter_andPrefix (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) >= '$_filterDateStart' AND  (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) <= '$_filterDateEnd'";
+
         $db = \Config\Database::connect();
 
         $query = $db->query("SELECT 
@@ -93,7 +97,7 @@ class PohonAnggaranModel extends Model
             SUM(pfis) as nilai_kontrak  
         FROM 
             monika_kontrak_{$this->user['tahun']}  
-        $whereCondition ", $w);
+        $whereCondition $whereCondition_dateFilter", $w);
         $return =  $query->getRowArray();
         return $return;
     }
@@ -134,7 +138,7 @@ class PohonAnggaranModel extends Model
     }
 
 
-    public function getDataBelumLelangNilai($w = "", $nama_pagu = "")
+    public function getDataBelumLelangNilai($w = "", $nama_pagu = "", $_filterDateStart = null, $_filterDateEnd = null)
     {
         // dd($nama_pagu);
         // $query = $this->table($this->table)
@@ -195,11 +199,14 @@ class PohonAnggaranModel extends Model
         //         $w
         //     );
 
+        $whereCondition_dateFilter = "";
+        if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " AND (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) >= '$_filterDateStart' AND  (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) <= '$_filterDateEnd' ";
+
         $query =  $db->query("SELECT sum(pfis) AS nilai_kontrak,count(nmpaket) AS jml_paket
         FROM monika_kontrak_{$this->user['tahun']} 
         WHERE  status_tender = 'Belum Lelang'
         AND sumber_dana = '{$nama_pagu}'
-
+        $whereCondition_dateFilter
         AND kdjnskon IN ?
          ", $w);
 
@@ -209,7 +216,7 @@ class PohonAnggaranModel extends Model
     }
 
 
-    public function getDataBelumLelangList($w = "", $pagu)
+    public function getDataBelumLelangList($w = "", $pagu, $_filterDateStart = null, $_filterDateEnd = null)
     {
         // $query = $this->table($this->table)
         //     ->select("
@@ -263,10 +270,14 @@ class PohonAnggaranModel extends Model
         //         $w
         //     );
 
+        $whereCondition_dateFilter = "";
+        if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " AND (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) >= '$_filterDateStart' AND  (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) <= '$_filterDateEnd' ";
+
         $query =  $db->query("SELECT nmpaket
                 FROM monika_kontrak_{$this->user['tahun']} 
                 WHERE  status_tender = 'Belum Lelang'
                 AND sumber_dana = '{$pagu}'
+                $whereCondition_dateFilter
                 AND  kdjnskon IN ?  ORDER BY pfis DESC LIMIT 4", $w);
 
 
@@ -278,13 +289,17 @@ class PohonAnggaranModel extends Model
 
 
 
-    public function getDataBelumLelangPerKegiatan($sumber_dana, $kdjnskon, $where = false)
+    public function getDataBelumLelangPerKegiatan($sumber_dana, $kdjnskon, $where = false, $_filterDateStart = null, $_filterDateEnd = null)
     {
 
 
         $db = \Config\Database::connect();
 
         ($where != false ? $where = " AND monika_data_{$this->user['tahun']}.$sumber_dana != 0 AND monika_data_{$this->user['tahun']}.$sumber_dana IS NOT NULL" : $where = "");
+        
+        $whereCondition_dateFilter = "";
+        if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " AND (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) >= '$_filterDateStart' AND  (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) <= '$_filterDateEnd' ";
+
         $data = $db->query("
         
         SELECT
@@ -322,6 +337,7 @@ WHERE
         monika_kontrak_{$this->user['tahun']}.status_tender = 'Belum Lelang'
         AND monika_kontrak_{$this->user['tahun']}.kdjnskon IN ($kdjnskon)
     {$where}
+    {$whereCondition_dateFilter}
     GROUP BY
         monika_kontrak_{$this->user['tahun']}.kdgiat
         
@@ -338,13 +354,17 @@ WHERE
         }, $data);
     }
 
-    public function getDataBelumLelangPhlnMycProjectLoan($sumber_dana, $kdjnskon, $where = false)
+
+
+    public function getDataBelumLelangPhlnMycProjectLoan($sumber_dana, $kdjnskon, $where = false, $_filterDateStart = null, $_filterDateEnd = null)
     {
-
-
         $db = \Config\Database::connect();
 
         ($where != false ? $where = " AND monika_data_{$this->user['tahun']}.$sumber_dana != 0 AND monika_data_{$this->user['tahun']}.$sumber_dana IS NOT NULL" : $where = "");
+        
+        $whereCondition_dateFilter = "";
+        if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " AND (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) >= '$_filterDateStart' AND  (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) <= '$_filterDateEnd' ";
+        
         $data = $db->query("
         
         SELECT
@@ -388,6 +408,7 @@ WHERE
         monika_kontrak_{$this->user['tahun']}.status_tender = 'Belum Lelang'
         AND monika_kontrak_{$this->user['tahun']}.kdjnskon IN ($kdjnskon)
     {$where}
+    {$whereCondition_dateFilter}
     GROUP BY
         monika_paket_register_{$this->user['tahun']}.kode
         
@@ -405,7 +426,7 @@ WHERE
     }
 
 
-    public function getDataRencanaTenderBelumLelang($w = '', $_rangeMonthOperation = null, $_bulan = null, $full = false)
+    public function getDataRencanaTenderBelumLelang($w = '', $_rangeMonthOperation = null, $_bulan = null, $full = false, $_filterDateStart = null, $_filterDateEnd = null)
     {
         $whereMonthYear = "";
         if (!is_null($_bulan)) {
@@ -420,10 +441,14 @@ WHERE
             }
         }
 
+        $whereCondition_dateFilter = "";
+        if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " AND (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) >= '$_filterDateStart' AND  (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) <= '$_filterDateEnd'";
+
         $db = \Config\Database::connect();
         $query = $db->query("SELECT DATE_FORMAT(now(),'%m') ,MID(tgl_rencana_lelang,4,2),sum(pfis) as nilai_kontrak,count(nmpaket) AS jml_paket FROM monika_kontrak_{$this->user['tahun']}
         WHERE status_tender = 'Belum Lelang' 
         $whereMonthYear
+        $whereCondition_dateFilter
         AND sumber_dana = '{$w}'
         ");
 

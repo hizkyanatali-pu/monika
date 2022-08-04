@@ -43,7 +43,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $session = session();
     if ($session->get('userData')) {
         if (strpos($session->get('userData')['uid'], 'admin') !== false) {
-            $routes->add('dashboard', '\Modules\Admin\Controllers\Dashboard::index');
+            $routes->group('dashboard', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->add('/', '\Modules\Admin\Controllers\Dashboard::index');
+            });
+            
             $routes->add('excel', '\Modules\Admin\Controllers\Dashboard::Excel');
 
             $routes->group('pulldata', ['namespace' => 'App\Controllers'], function ($routes) {

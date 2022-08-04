@@ -90,11 +90,45 @@
 <!-- begin:: Subheader -->
 <div class="kt-subheader kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
-        <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">
-                Dashboard </h3>
-            <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__main d-flex justify-content-between w-100">
+            <div>
+                <h3 class="kt-subheader__title">
+                    Dashboard 
+                </h3>
+                <span class="kt-subheader__separator kt-hidden"></span>
+            </div>
+            <div class="d-flex">
+                <form action="<?php echo site_url('dashboard') ?>" method="GET">
+                    <div class="input-group mr-3">
+                        <input 
+                            type="date" 
+                            class="form-control"
+                            name="filter-date-start"
+                            value="<?php echo date('Y-01-01') ?>"
+                        >
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2">Sampai</span>
+                        </div>
+                        <div class="input-group-append">
+                            <input 
+                                type="date" 
+                                class="form-control"
+                                name="filter-date-end"
+                                value="<?php echo date('Y-m-d') ?>"
+                            >
+                        </div>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary" id="__terapkan-filter">
+                                Terapkan
+                            </button>
+                        </div>
+                    </div>
+                </form>
 
+                <button class="btn btn-sm btn-primary" onclick="window.print()">
+                    <i class="fas fa-print"></i>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -1492,12 +1526,16 @@
 
 <!-- end:: Content -->
 <?= $this->endSection() ?>
+
+
+
 <?= $this->section('footer_js') ?>
 <?php echo script_tag('plugins/flot-old/jquery.flot.js'); ?>
 <?php echo script_tag('plugins/flot-old/jquery.flot.time.min.js'); ?>
 
 
 <!-- CHART REKAP REKAP UNOR -->
+<?php echo view('Modules\Admin\Views\Dashboard\js\Dashboard'); ?>
 <?php echo view('Modules\Admin\Views\Dashboard\js\ChartRekapUnor'); ?>
 <?php echo view('Modules\Admin\Views\Dashboard\js\ChartProgresKeuFis'); ?>
 <?php echo view('Modules\Admin\Views\Dashboard\js\ChartPersumberDana'); ?>
