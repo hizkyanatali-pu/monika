@@ -13,7 +13,7 @@ class UserModel extends Model
 
 
 	protected $allowedFields = [
-		'uid', 'idpengguna', 'balaiid', 'sandi', 'email',
+		'uid', 'idpengguna', 'balaiid', 'satkerid', 'sandi', 'email',
 		'nama', 'nip', 'telpon', 'gambar','aktif','aksi','in_dt','in_user','group_id','idkelompok'
 	];
 

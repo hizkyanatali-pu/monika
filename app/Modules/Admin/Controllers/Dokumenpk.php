@@ -41,8 +41,9 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function template()
     {
         return view('Modules\Admin\Views\DokumenPK\template.php', [
-            'data'      => $this->dokumenPK->where('deleted_at is NULL', NULL, false)->get()->getResult(),
-            'allSatker' => $this->tableSatker->whereNotIn('satker', ['', '1'])->get()->getResult()
+            'data'        => $this->dokumenPK->where('deleted_at is NULL', NULL, false)->get()->getResult(),
+            'allSatker'   => $this->tableSatker->whereNotIn('satker', ['', '1'])->get()->getResult(),
+            'sessionYear' => $this->user['tahun']
         ]);
     }
 
@@ -62,11 +63,14 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function createTemplate()
     {
+        $input_dokumenType = $this->request->getPost('type');
+
         /** template */
         $this->dokumenPK->insert([
             'title'      => $this->request->getPost('title'),
             'keterangan' => $this->request->getPost('keterangan'),
-            'info_title' => $this->request->getPost('info_title')
+            'info_title' => $this->request->getPost('info_title'),
+            'type'       => $input_dokumenType
         ]);
         $templateId = $this->db->insertID();
         /** end-of: template */
@@ -83,7 +87,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
         /** Akses */
-        $this->insertDokumenPK_akses($this->request->getPost(), $templateId, 'm_satker');
+        $this->insertDokumenPK_akses($this->request->getPost(), $templateId, $input_dokumenType);
         /** end-of: Akses */
 
         return $this->respond([
@@ -95,14 +99,16 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function updateTemplate() 
     {
-        $templateID = $this->request->getPost('dataId');
+        $templateID        = $this->request->getPost('dataId');
+        $input_dokumenType = $this->request->getPost('type');
 
         /* template */
         $this->dokumenPK->where('id', $templateID);
         $this->dokumenPK->update([
             'title'      => $this->request->getPost('title'),
             'keterangan' => $this->request->getPost('keterangan'),
-            'info_title' => $this->request->getPost('info_title')
+            'info_title' => $this->request->getPost('info_title'),
+            'type'       => $input_dokumenType
         ]);
         /** end-of: template */
 
@@ -121,7 +127,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         /** Akses */
         $this->dokumenPK_akses->delete(['template_id' => $templateID]);
-        $this->insertDokumenPK_akses($this->request->getPost(), $templateID, 'm_satker');
+        $this->insertDokumenPK_akses($this->request->getPost(), $templateID, $input_dokumenType);
         /** end-of: Akses */
 
 
@@ -210,8 +216,19 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-    private function insertDokumenPK_akses($input, $templateID, $revTable)
+    private function insertDokumenPK_akses($input, $templateID, $inputDokumenType)
     {
+        $revTable = '';
+        switch ($inputDokumenType) {
+            case 'satker':
+                $revTable = 'm_satker';
+                break;
+            
+            case 'satker':
+                $revTable = 'm_balai';
+                break;
+        }
+
         $akses = array_map(function($arr) use ($templateID, $revTable) {
             return [
                 'template_id' => $templateID,

@@ -71,6 +71,7 @@
                         <tr class="text-center">
                             <th width="30px">No</th>
                             <th>Nama Dokumen</th>
+                            <th width="100px">Dokumen Untuk</th>
                             <th width="80px"></th>
                         </tr>
                     </thead>
@@ -82,6 +83,7 @@
                         <tr>
                             <td><?php echo $key+1 ?></td>
                             <td><?php echo $data->title ?></td>
+                            <td><?php echo $data->type ?></td>
                             <td>
                                 <button
                                     class="_actionRow btn btn-sm btn-default pt-2 pr-1 pb-2 pl-3"
@@ -126,7 +128,16 @@
             <div class="modal-body">
                 <div class="row _form-main">
                     <div class="col-md-7 pr-4">
-                        <div class="form-group">
+                        <div class="form-group mb-4">
+                            <strong for="judul-dokumen">Dokumen Untuk</strong>
+                            <select name="dokumen-type" class="form-control w-25">
+                                <option value="-" selected disabled>Pilih Opsi</option>
+                                <option value="satker">Satker</option>
+                                <option value="balai">Balai</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mt-4">
                             <strong for="judul-dokumen">Judul Dokumen</strong>
                             <input type="text" name="judul-dokumen" class="form-control" id="judul-dokumen" placeholder="Masukkan judul dokumen disini">
                         </div>
@@ -135,7 +146,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center bg-purple">SASARAN PROGRAM/SASARAN KEGIATAN/INDIKATOR</th>
-                                        <th class="text-center bg-purple" width="140px">TARGET 2021</th>
+                                        <th class="text-center bg-purple" width="140px">TARGET <?php echo $sessionYear ?></th>
                                         <th class="text-center bg-purple" width="140px">Outcome</th>
                                     </tr>
                                     <tr style="font-size: 10px">
@@ -273,6 +284,7 @@
         element_formPilihAksesDokumen          = $('._form-pilih-akses-dokumen'),
         element_checkAllOpsiAksesDokumen       = $('input[type=checkbox][name=check-all-opsi-satker]'),
         element_checkboxOpsiAksesDokumenShowed = $('input.open-to-check[type=checkbox][name=check-list-opsi-satker]')
+        element_selectDokumenType = $("select[name=dokumen-type]")
 
 
     $(document).ready(function () {
@@ -286,6 +298,11 @@
                 $('input[name=judul-dokumen]').val('')
                 $('textarea[name=keterangan-dokumen]').val('')
                 $('input[name=judul-informasi]').val('')
+
+                // reset select dokumen type
+                element_selectDokumenType.find("option[value='-']").removeAttr('disabled')
+                element_selectDokumenType.val('-').change()
+                element_selectDokumenType.find("option[value='-']").prop('disabled', 'disabled')
 
                 element_formTable.empty()
                 element_tableInformasi.empty()
@@ -410,7 +427,7 @@
 
     $('button[name=save-document]').click(function() {
         let form = get_formInputValue()
-
+        
         $.ajax({
             url: "<?php echo site_url('dokumenpk/template/create') ?>",
             type: 'POST',
@@ -537,6 +554,7 @@
         let form = new FormData()
 
         form.append('csrf_test_name', $('input[name=csrf_test_name]').val())
+        form.append('type', element_selectDokumenType.val())
         form.append('title', $('input[name=judul-dokumen]').val())
         form.append('keterangan', $('textarea[name=keterangan-dokumen]').val())
         form.append('info_title', $('input[name=judul-informasi]').val())
@@ -555,7 +573,7 @@
         element_checkboxOpsiAksesDokumenShowed.filter(':checked').each((key, element) => {
             form.append('akses[]', $(element).val())
         })
-
+        
         return form
     }
 
@@ -569,6 +587,7 @@
         $('input[name=judul-dokumen]').val(_data.template.title)
         $('textarea[name=keterangan-dokumen]').val(_data.template.keterangan)
         $('input[name=judul-informasi]').val(_data.template.info_title)
+        element_selectDokumenType.val(_data.template.type).change()
 
         _data.rows.forEach((data, key) => {
             if (data.type == "section_title") {

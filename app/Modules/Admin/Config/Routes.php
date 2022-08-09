@@ -19,7 +19,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->get('auth', '\Modules\Admin\Controllers\Auth::index', ['as' => 'auth']);
     $routes->post('auth', '\Modules\Admin\Controllers\Auth::attemptLogin');
     $routes->get('logout', '\Modules\Admin\Controllers\Auth::logout');
-    /*
+    
+    
     $routes->get('account', '\Modules\Admin\Controllers\Account::index', ['as' => 'account']);
     $routes->post('account', '\Modules\Admin\Controllers\Account::update');
 
@@ -37,7 +38,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('edit/(:segment)', '\Modules\Admin\Controllers\Usergroup::edit/$1');
         $routes->post('update', '\Modules\Admin\Controllers\Usergroup::update');
     });
-    */
+    
 
 
     $session = session();

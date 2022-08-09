@@ -5,14 +5,16 @@ namespace Modules\Admin\Controllers;
 use Modules\Admin\Models\UserModel;
 use Modules\Admin\Models\UsergroupsModel;
 use Modules\Admin\Models\BalaiModel;
+use Modules\Admin\Models\SatkerModel;
 
 class Users extends \App\Controllers\BaseController
 {
     public function __construct() {
 
-        $this->users        = new UserModel();
-        $this->usergroups   = new UsergroupsModel();
-        $this->balai   = new BalaiModel();
+        $this->users      = new UserModel();
+        $this->usergroups = new UsergroupsModel();
+        $this->balai      = new BalaiModel();
+        $this->satker     = new SatkerModel();
         
     }
     public function index(){
@@ -74,12 +76,16 @@ class Users extends \App\Controllers\BaseController
         }
     
     }
+
+
+
     public function create(){
         
         $data = array(
-            'title'=> 'Add User',
-            'usergroups'=> $this->usergroups->getUserGroups(),
-            'balai'=> $this->balai->get()->getResultArray()
+            'title'      => 'Add User',
+            'usergroups' => $this->usergroups->getUserGroups(),
+            'balai'      => $this->balai->get()->getResultArray(),
+            'satker'     => $this->satker->get()->getResultArray()
         );
         return view('Modules\Admin\Views\Users\UsersCreate', $data);
     }
@@ -102,17 +108,17 @@ class Users extends \App\Controllers\BaseController
         $check = $this->users->checkUid($this->request->getVar('idpengguna'));
 
         if(!$check){
-           
             $saved = $this->users->save([
-                'uid'               => $this->request->getVar('idpengguna'),
-                'nama' 				=> $this->request->getVar('nama'),
-                'idpengguna' 		=> $this->request->getVar('idpengguna'),
-                'email' 			=> $this->request->getVar('email'),
-                'sandi'			    => $this->request->getVar('sandi'),
-                'telpon'            => $this->request->getVar('telpon'),
-                'nip'               => $this->request->getVar('nip'),
-                'balaiid'           => $this->request->getVar('balaiid'),
-                'group_id'          => $this->request->getVar('group_id'),
+                'uid'        => $this->request->getVar('idpengguna'),
+                'nama'       => $this->request->getVar('nama'),
+                'idpengguna' => $this->request->getVar('idpengguna'),
+                'email'      => $this->request->getVar('email'),
+                'sandi'      => $this->request->getVar('sandi'),
+                'telpon'     => $this->request->getVar('telpon'),
+                'nip'        => $this->request->getVar('nip'),
+                'balaiid'    => $this->request->getVar('balaiid'),
+                'satkerid'   => $this->request->getVar('satkerid'),
+                'group_id'   => $this->request->getVar('group_id'),
             ]);
 
             if($saved)

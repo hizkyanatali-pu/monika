@@ -35,6 +35,8 @@ class Auth extends \App\Controllers\BaseController
 	 */
 	public function attemptLogin()
 	{
+		helper('string');
+
 		// validate request
 		$rules = [
 			'idpengguna'		=> 'required',
@@ -96,9 +98,10 @@ class Auth extends \App\Controllers\BaseController
 			'dbuse'			=> $cekdb,
 			'tahun'			=> $this->request->getPost('tahun')
 		];
-
+		
+		
 		if (
-			strpos($user['uid'], 'satker')
+			strContains($user['uid'], 'satker')
 			|| $user['idkelompok'] == 'SATKER'
 		) {
 			$dataSarker_n_Balai = $users->select("
@@ -118,10 +121,11 @@ class Auth extends \App\Controllers\BaseController
 			$setSession_userData['satker_nama'] = $dataSarker_n_Balai['satker'];
 			$setSession_userData['balai_id']    = $dataSarker_n_Balai['balaiid'];
 			$setSession_userData['balai_nama']  = $dataSarker_n_Balai['balai'];
+			$setSession_userData['user_type']    = 'satker';
 		}
 		/** end-of: set userData session */
 
-
+		
 		// login OK, save user data to session
 		$this->session->set('isLoggedIn', true);
 		$this->session->set('userData', $setSession_userData);

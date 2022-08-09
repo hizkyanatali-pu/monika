@@ -113,6 +113,18 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Satker</label>
+                                    <div class="col-6">
+                                        <select name="satkerid" class="form-control">
+                                            <option value="">--Pilih--</option>
+                                            <?php 
+                                                foreach($satker as $keySatker => $valueSatker): ?>
+                                                <option value="<?= $valueSatker['satkerid']?>" ><?= $valueSatker['satker']?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
                         </div>
                         
                     </div>
