@@ -55,21 +55,43 @@ class Dokumenpk extends \App\Controllers\BaseController
         ->orderBy('dokumenpk_satker.id', 'DESC')
         ->get()->getResult();
         
-        if (isset($this->user['satker_id'])) {
+        if (
+            isset($this->user['satker_id'])
+            || isset($this->user['balai_id'])
+        ) {
+            $template_type    = $this->user['user_type'];
+            $templae_revTable = '';
+            $template_revID   = '';
+
+            switch ($this->user['user_type']) {
+                case 'satker':
+                    $templae_revTable = 'm_satker';
+                    $template_revID   = $this->user['satker_id'];
+                    break;
+                
+                case 'balai':
+                    $templae_revTable = 'm_balai';
+                    $template_revID   = $this->user['balai_id'];
+                    break;
+            }
+
             $dataTemplate = $this->templateDokumen->select('dokumen_pk_template.*')
             ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
-            ->where('dokumen_pk_template.type', 'satker')
-            ->where('dokumen_pk_template_akses.rev_id', $this->user['satker_id'])
-            ->where('dokumen_pk_template_akses.rev_table', 'm_satker')
+            ->where('dokumen_pk_template_akses.rev_id', $template_revID)
+            ->where('dokumen_pk_template.type', $template_type)
+            ->where('dokumen_pk_template_akses.rev_table', $templae_revTable)
             ->groupBy('dokumen_pk_template.id')
             ->get()->getResult();
-        }
-        else {
-            if (isset($this->user['user_type'])) $this->templateDokumen->where('type', 'satker');
-            $dataTemplate = $this->templateDokumen->get()->getResult();
+            
+            if (!$dataTemplate) goto globalUserTemplate;
+            goto returnSection;
         }
         
-
+        globalUserTemplate:
+        if (isset($this->user['user_type'])) $this->templateDokumen->where('type', $this->user['user_type']);
+        $dataTemplate = $this->templateDokumen->get()->getResult();
+        
+        returnSection:
         return view('Modules\Satker\Views\Dokumenpk.php', [
             'sessionYear'     => $this->user['tahun'],
             'templateDokumen' => $dataTemplate,
@@ -164,17 +186,19 @@ class Dokumenpk extends \App\Controllers\BaseController
         $inserted_dokumenSatker = [
             'template_id'    => $this->request->getPost('templateID'),
             'user_created'   => $this->userUID,
-            'total_anggaran' => $this->request->getPost('totalAnggaran')
+            'total_anggaran' => $this->request->getPost('totalAnggaran'),
+            'pihak1_ttd'     => $this->request->getPost('ttdPihak1'),
+            'pihak2_ttd'     => $this->request->getPost('ttdPihak2')
         ];
-
-        if ($this->user['idkelompok'] == "SATKER") {
+       
+        if ($this->user['user_type'] == "satker") {
             $inserted_dokumenSatker['pihak1_id']      = $this->user['satker_id'];
             $inserted_dokumenSatker['pihak1_initial'] = $this->user['satker_nama'];
-            $inserted_dokumenSatker['pihak1_ttd']     = $this->request->getPost('ttdPihak1');
             $inserted_dokumenSatker['pihak2_id']      = $this->user['balai_id'];
             $inserted_dokumenSatker['pihak2_initial'] = $this->user['balai_nama'];
-            $inserted_dokumenSatker['pihak2_ttd']     = $this->request->getPost('ttdPihak2');
-        }        
+        }
+        elseif ($this->user['user_type'] == "balai") {
+        }
 
 
         if ($this->request->getPost('revision_dokumen_id')) {
@@ -201,7 +225,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         /** end-of: dokumen rows */
 
         return $this->respond([
-            'status' => true
+            'status' => true,
+            
         ]);
     }
 

@@ -226,5 +226,22 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 });
             });
         }
+
+
+
+        if (
+            strtolower($session->get('userData')['user_type']) == 'satker'
+            || strtolower($session->get('userData')['user_type']) == 'balai'
+        ) {
+            $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->get('/', '\Modules\Satker\Controllers\Dokumenpk::index');
+                $routes->get('get-template/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getTemplate/$1');
+                $routes->get('detail/(:any)', '\Modules\Satker\Controllers\Dokumenpk::show/$1');
+                $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
+                $routes->post('create', '\Modules\Satker\Controllers\Dokumenpk::create');
+
+                $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
+            });
+        }
     }
 });

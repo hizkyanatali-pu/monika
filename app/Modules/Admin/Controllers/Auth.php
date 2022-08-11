@@ -83,26 +83,28 @@ class Auth extends \App\Controllers\BaseController
 
 		/** set userData session */
 		$setSession_userData = [
-			'uid' 			=> $user['uid'],
-			'nama' 			=> $user['nama'],
-			'idpengguna' 	=> $user['idpengguna'],
-			'idkelompok' 	=> $user['idkelompok'],
-			'telpon'        => $user['telpon'],
-			'email'         => $user['email'],
-			'balaiid'		=> $user['balaiid'],
-			'group_id'		=> $user['group_id'],
-			'tblfilter'		=> $this->akses->gettblfilterid($user['idkelompok']),
-			'unitbalai'		=> $this->akses->getunitbalai($user['uid']),
-			'unitsatker'	=> $this->akses->getunitsatker($user['uid']),
-			'unitgiat'		=> $this->akses->getunitgiat($user['uid']),
-			'dbuse'			=> $cekdb,
-			'tahun'			=> $this->request->getPost('tahun')
+			'uid'        => $user['uid'],
+			'nama'       => $user['nama'],
+			'idpengguna' => $user['idpengguna'],
+			'idkelompok' => $user['idkelompok'],
+			'telpon'     => $user['telpon'],
+			'email'      => $user['email'],
+			'balaiid'    => $user['balaiid'],
+			'group_id'   => $user['group_id'],
+			'tblfilter'  => $this->akses->gettblfilterid($user['idkelompok']),
+			'unitbalai'  => $this->akses->getunitbalai($user['uid']),
+			'unitsatker' => $this->akses->getunitsatker($user['uid']),
+			'unitgiat'   => $this->akses->getunitgiat($user['uid']),
+			'dbuse'      => $cekdb,
+			'tahun'      => $this->request->getPost('tahun'),
+			'user_type'  => 'other'
 		];
 		
 		
 		if (
 			strContains($user['uid'], 'satker')
 			|| $user['idkelompok'] == 'SATKER'
+			|| ($user['balaiid'] != '' && $user['satkerid'] != '')
 		) {
 			$dataSarker_n_Balai = $users->select("
 				m_satker.satkerid,
@@ -122,9 +124,26 @@ class Auth extends \App\Controllers\BaseController
 			$setSession_userData['balai_id']    = $dataSarker_n_Balai['balaiid'];
 			$setSession_userData['balai_nama']  = $dataSarker_n_Balai['balai'];
 			$setSession_userData['user_type']    = 'satker';
+		}	
+
+		elseif (
+			strContains($user['uid'], 'balai')
+			|| $user['idkelompok'] == 'BALAI'
+			|| ($user['balaiid'] != '' && $user['satkerid'] == '')
+		) {
+			$dataBalai = $users->select("
+				m_balai.balaiid,
+				m_balai.balai
+			")
+			->where('uid', $user['uid'])
+			->join('m_balai', 'ku_user.balaiid = m_balai.balaiid', 'left')
+			->first();
+
+			$setSession_userData['balai_id']    = $dataBalai['balaiid'];
+			$setSession_userData['balai_nama']  = $dataBalai['balai'];
+			$setSession_userData['user_type']    = 'balai';
 		}
 		/** end-of: set userData session */
-
 		
 		// login OK, save user data to session
 		$this->session->set('isLoggedIn', true);
