@@ -103,7 +103,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-    public function dataDokumenSatker($_status) 
+    public function dataDokumenSatker($_status, $_dokumenType) 
     {
         $dataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
@@ -118,6 +118,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
         ->join('ku_user', 'dokumenpk_satker.user_created = ku_user.uid', 'left')
         ->where('status', $_status)
+        ->where('dokumenpk_satker.dokumen_type', $_dokumenType)
         ->orderBy('dokumenpk_satker.id', 'DESC')
         ->get()->getResult();
 
@@ -133,9 +134,12 @@ class Dokumenpk extends \App\Controllers\BaseController
         $pihak1   = '';
         $pihak2   = '';
 
-        if ($this->user['idkelompok'] == "SATKER") {
-            $pihak1    = $this->user['satker_nama'];
-            $pihak2    = $this->user['balai_nama'];
+        if ($this->user['user_type'] == "satker") {
+            $pihak1 = $this->user['satker_nama'];
+            $pihak2 = $this->user['balai_nama'];
+        }
+        elseif ($this->user['user_type'] == "balai") {
+            $pihak1 = $this->user['balai_nama'];
         }
 
         return $this->respond([
@@ -196,9 +200,15 @@ class Dokumenpk extends \App\Controllers\BaseController
             $inserted_dokumenSatker['pihak1_initial'] = $this->user['satker_nama'];
             $inserted_dokumenSatker['pihak2_id']      = $this->user['balai_id'];
             $inserted_dokumenSatker['pihak2_initial'] = $this->user['balai_nama'];
+            $inserted_dokumenSatker['dokumen_type']   = "satker";
         }
         elseif ($this->user['user_type'] == "balai") {
+            $inserted_dokumenSatker['pihak1_id']      = $this->user['balai_id'];
+            $inserted_dokumenSatker['pihak1_initial'] = $this->user['balai_nama'];
+            $inserted_dokumenSatker['dokumen_type']   = "balai";
         }
+
+        if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
 
 
         if ($this->request->getPost('revision_dokumen_id')) {

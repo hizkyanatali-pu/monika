@@ -212,10 +212,12 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->group('satker', ['namespace' => 'App\Controllers'], function($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::satker');
 
-                    $routes->get('get-data/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1');
+                    $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
                     $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
                     $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
                 });
+
+                $routes->get('balai', '\Modules\Admin\Controllers\Dokumenpk::balai');
 
                 $routes->group('template', ['namespace' => 'App\Controllers'], function($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::template');

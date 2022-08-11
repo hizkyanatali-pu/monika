@@ -33,7 +33,17 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function satker()
     {
-        return view('Modules\Admin\Views\DokumenPK\satker.php');
+        return view('Modules\Admin\Views\DokumenPK\satker.php', [
+            'dokumenType' => 'satker'
+        ]);
+    }
+
+
+    public function balai()
+    {
+        return view('Modules\Admin\Views\DokumenPK\satker.php', [
+            'dokumenType' => 'balai'
+        ]);
     }
 
 

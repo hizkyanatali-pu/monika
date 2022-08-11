@@ -350,7 +350,7 @@
 
     function getData(_status) {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status,
+            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>",
             type: 'GET',
             success: (res) => {
                 renderTableRow(_status, res.data)
