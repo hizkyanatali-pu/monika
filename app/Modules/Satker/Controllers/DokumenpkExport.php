@@ -106,11 +106,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetX((300 - $width_kopTitle2) / 2);
         $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
 
-        // Kop Title 2
+        // Kop Title 3
+        $kopTitle3 = $dataDokumen['dokumen_type'] != "satker" ? 'DIREKTORAT JENDERAL SUMBER DAYA AIR' : $dokumenKopTitle3;
         $pdf->SetFont('Arial', 'B', 12);
         $width_kopTitle3 = $pdf->GetStringWidth($dokumenKopTitle3) + 6;
         $pdf->SetX((300 - $width_kopTitle3) / 2);
-        $pdf->Cell($width_kopTitle3, 6, $dokumenKopTitle3, 0, 1, 'C');
+        $pdf->Cell($width_kopTitle3, 6, $kopTitle3, 0, 1, 'C');
 
         // Line break
         $pdf->Ln(6);
@@ -134,8 +135,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Ln(4);
 
         // Pihak Kedua
+        $prefixJabatanPihak2 = $dataDokumen['dokumen_type'] == 'satker' ? 'KEPALA ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak2_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', 'KEPALA ' . $dataDokumen['pihak2_initial']);
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $prefixJabatanPihak2 . $dataDokumen['pihak2_initial']);
 
         // Text 3
         $pdf->Ln(4);
@@ -224,7 +226,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         /**  Dokumen KOP */
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
-        $dokumenKopTitle2 = $dataDokumen['pihak1_initial'] . ' - ' . $dataDokumen['pihak2_initial'];
+
+        $divisiPihak2 = $dataDokumen['dokumen_type'] != "satker" ? 'DIREKTORAT JENDERAL SUMBER DAYA AIR' : $dataDokumen['pihak2_initial'];
+        $dokumenKopTitle2 = $dataDokumen['pihak1_initial'] . ' - ' . $divisiPihak2;
 
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetFillColor(255);
@@ -341,7 +345,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         /** TTD Section */
         $pdf->Ln(10);
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
-            'person1Title' => 'KEPALA ' . $dataDokumen['pihak2_initial'],
+            'person1Title' => $dataDokumen['pihak2_initial'],
             'person1Name'  => $dataDokumen['pihak2_ttd'],
             'person2Date'  => 'JAKARTA ,          ' . bulan(date('m', strtotime($dataDokumen['created_at']))) . ' ' . $this->dokumenYear,
             'person2Title' => 'KEPALA ' . $dataDokumen['pihak1_initial'],

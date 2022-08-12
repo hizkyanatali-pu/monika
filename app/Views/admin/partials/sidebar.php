@@ -357,6 +357,16 @@ $request = \Config\Services::request();
                                 </span>
                             </a>
                         </li>
+                        <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'balai'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <a href="<?= site_url('dokumenpk/balai'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">
+                                    Dokumen Balai
+                                </span>
+                            </a>
+                        </li>
                         <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'template'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                             <a href="<?= site_url('dokumenpk/template'); ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">

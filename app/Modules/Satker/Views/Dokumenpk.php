@@ -188,7 +188,7 @@
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script>
-    let element_modalForm                   = $('#modalForm'),
+    var element_modalForm                   = $('#modalForm'),
         element_modalDialog                 = element_modalForm.find('.modal-dialog'),
         element_modalFooter                 = element_modalForm.find('.modal-footer'),
         element_modalFormChooseTemplate     = element_modalForm.find('#choose-template'),
@@ -316,6 +316,10 @@
                     $('.title-ttd-pihak1').text('KEPALA ' + res.dokumen.pihak1_initial)
                     $('.title-ttd-pihak2').text('KEPALA ' + res.dokumen.pihak2_initial)
 
+                    if ($('input[name=ttd-pihak2-jabatan]').length) {
+                        $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
+                    }
+
                     
                     if (res.dokumen.revision_message != null) {
                         $('.container-revision-alert').html(`
@@ -400,14 +404,17 @@
             })
         })
 
-        return {
-            csrf_test_name: $('input[name=csrf_test_name]').val(),
-            templateID    : element_btnSaveDokumen.data('template-id'),
-            rows          : rows,
-            totalAnggaran : $('input[name=total-anggaran]').val(),
-            ttdPihak1     : $('input[name=ttd-pihak1]').val(),
-            ttdPihak2     : $('input[name=ttd-pihak2]').val()
+        let inputValue = {
+            csrf_test_name  : $('input[name=csrf_test_name]').val(),
+            templateID      : element_btnSaveDokumen.data('template-id'),
+            rows            : rows,
+            totalAnggaran   : $('input[name=total-anggaran]').val(),
+            ttdPihak1       : $('input[name=ttd-pihak1]').val(),
+            ttdPihak2       : $('input[name=ttd-pihak2]').val(),
         }
+        if ($('input[name=ttd-pihak2-jabatan]').length) inputValue.ttdPihak2Jabatan = $('input[name=ttd-pihak2-jabatan]').val()
+        console.log(inputValue)
+        return inputValue
     }
 
 
@@ -505,9 +512,10 @@
 
 
     function renderFormTemplate(_data) {
-        let template           = _data.template,
-            render_rowsForm    = renderFormTemplate_rowTable(_data.templateRow),
-            render_listInfo    = renderFormTemplate_listInfo(_data.templateInfo)
+        let template         = _data.template,
+            render_rowsForm  = renderFormTemplate_rowTable(_data.templateRow),
+            render_listInfo  = renderFormTemplate_listInfo(_data.templateInfo),
+            render_ttdPihak2 = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2)
             
         let render = `
             <div class="container-revision-alert"></div>
@@ -573,11 +581,8 @@
                             <strong>Pihak Kedua</strong>
                         </label>
                         <div>
-                            <small class="title-ttd-pihak2">
-                                KEPALA ${_data.penandatangan.pihak2}
-                            </small>
+                            ${render_ttdPihak2}
                         </div>
-                        <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" />
                     </div>
                 </div>
             </div>
@@ -659,6 +664,22 @@
         });
 
         return list
+    }
+
+
+
+    function renderFormTemplate_ttdPihak2(_dataPenandatanganPihak2) {
+        let renderJalabatan = '<div><small class="title-ttd-pihak2">KEPALA ${_dataPenandatanganPihak2}</small></div>'
+        if (_dataPenandatanganPihak2 == '') {
+            renderJalabatan = `
+                <input class="form-control" name="ttd-pihak2-jabatan" placeholder="Jabatan Penanda Tangan" />
+            `
+        }
+
+        return `
+            ${renderJalabatan}
+            <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" />
+        `
     }
 </script>
 <?= $this->endSection() ?>

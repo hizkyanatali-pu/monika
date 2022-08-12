@@ -45,7 +45,7 @@ class BigData extends \App\Controllers\BaseController
         ->get()
         ->getResultArray();
 
-        return view('Modules\Admin\Views\BigData\index.php', [
+        return view('Modules\Admin\Views\Bigdata\index.php', [
             'column'     => $column,
             'tableWidth' => array_sum(array_column($column, 'widthColumn')),
             'mainData'   => $data

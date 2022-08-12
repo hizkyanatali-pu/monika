@@ -50,7 +50,8 @@ class Auth extends \App\Controllers\BaseController
 		}
 
 		// check credentials
-		$users = new UserModel();		
+		$users = new UserModel();	
+
 		$user = $users->select("
 			ku_user.*, ku_user_group.group_id
 		")
@@ -114,10 +115,13 @@ class Auth extends \App\Controllers\BaseController
 			")
 			->where('idpengguna', $this->request->getPost('idpengguna'))
 			->where('sandi', md5($this->request->getPost('sandi')))
-			->join('ku_user_satker', 'ku_user.uid = ku_user_satker.uid_user', 'left')
-			->join('m_satker', 'ku_user_satker.satkerid = m_satker.satkerid', 'left')
-			->join('m_balai', 'm_satker.balaiid = m_balai.balaiid', 'left')
+			// ->join('ku_user_satker', 'ku_user.uid = ku_user_satker.uid_user', 'left')
+			// ->join('m_satker', 'ku_user_satker.satkerid = m_satker.satkerid', 'left')
+			// ->join('m_balai', 'm_satker.balaiid = m_balai.balaiid', 'left')
+			->join('m_satker', 'ku_user.satkerid = m_satker.satkerid', 'left')
+			->join('m_balai', 'ku_user.balaiid = m_balai.balaiid', 'left')
 			->first();
+			
 
 			$setSession_userData['satker_id']   = $dataSarker_n_Balai['satkerid'];
 			$setSession_userData['satker_nama'] = $dataSarker_n_Balai['satker'];
