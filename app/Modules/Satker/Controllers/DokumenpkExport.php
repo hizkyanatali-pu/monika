@@ -85,7 +85,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetTextColor(255, 192, 203);
 
         /**  Dokumen KOP */
-        $pdf->Image('images/logo_pu_border.png', 143, 6, 16);
+        $pdf->Image('Images/logo_pu_border.png', 143, 6, 16);
         $pdf->Ln(15);
 
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
@@ -390,7 +390,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
     private function pdf_renderWatermarkKonsep($pdf)
     {
         if ($this->dokumenLoadedStatus != "setuju") {
-            $pdf->Image('images/watermark_dokumen_konsep.png', 23, 80, 250);
+            $pdf->Image('Images/watermark_dokumen_konsep.png', 23, 80, 250);
         }
     }
 }
