@@ -30,7 +30,6 @@
                             
                             &nbsp;
                             <a href="<?= site_url('users'); ?>" class="btn btn-brand btn-elevate btn-icon-sm">
-                                
                                Back
                             </a>
                         </div>
@@ -118,9 +117,14 @@
                                     <div class="col-6">
                                         <select name="satkerid" class="form-control">
                                             <option value="">--Pilih--</option>
-                                            <?php 
-                                                foreach($satker as $keySatker => $valueSatker): ?>
-                                                <option value="<?= $valueSatker['satkerid']?>" ><?= $valueSatker['satker']?></option>
+                                            <?php foreach($satker as $keySatker => $valueSatker): ?>
+                                                <option 
+                                                    class="d-none _option-select-satker" 
+                                                    data-balai-id="<?= $valueSatker['balaiid'] ?>"
+                                                    value="<?= $valueSatker['satkerid']?>"
+                                                >
+                                                    <?= $valueSatker['satker']?>
+                                                </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -152,6 +156,9 @@
 <?= $this->endSection() ?>
 <?= $this->section('footer_js') ?>
     <script>
-        console.log('additional footer js')
+        $(document).on('change', 'select[name=balaiid]', function() {
+            $('._option-select-satker').addClass('d-none')
+            $('._option-select-satker[data-balai-id='+$(this).val()+']').removeClass('d-none')
+        })
     </script>
 <?= $this->endSection() ?>

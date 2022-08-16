@@ -32,11 +32,13 @@ class BigData extends \App\Controllers\BaseController
         $table  = 'monika_data_'.$this->user['tahun'];
         $data   = $this->monikaData->select("
             $table.*, 
+            m_satker.satker as nmsatker,
             tprogram.nmprogram,
             tgiat.nmgiat,
             toutput.nmoutput,
             tsoutput.nmro
         ")
+        ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
         ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
         ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
         ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
@@ -204,6 +206,7 @@ class BigData extends \App\Controllers\BaseController
 
         $select = "
             $table.*, 
+            m_satker.satker as nmsatker,
             tprogram.nmprogram,
             tgiat.nmgiat,
             toutput.nmoutput,
@@ -213,6 +216,7 @@ class BigData extends \App\Controllers\BaseController
         if ($_getTotal) $select = "count($table.kdpaket) as total";
 
         $data = $this->monikaData->select($select)
+        ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
         ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
         ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
         ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
@@ -237,6 +241,11 @@ class BigData extends \App\Controllers\BaseController
             [
                 'value'       => 'kdsatker',
                 'label'       => 'kode satker',
+                'widthColumn' => 80
+            ],
+            [
+                'value'       => 'nmsatker',
+                'label'       => 'nama satker',
                 'widthColumn' => 80
             ],
             [

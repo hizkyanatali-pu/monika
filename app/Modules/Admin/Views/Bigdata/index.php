@@ -274,7 +274,7 @@
 
                 rowColumn += `
                     <td class="_cell_${dataCol.value}">
-                        ${text}
+                        ${text ?? ''}
                     </td>
                 `;
             });

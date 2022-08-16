@@ -381,6 +381,13 @@ $request = \Config\Services::request();
                 </div>
             </li>
 
+            <li class="kt-menu__item <?=($request->uri->getSegment(1) == 'users'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                <a href="<?= site_url('users'); ?>" class="kt-menu__link ">
+                    <i class="kt-menu__link-icon fas fa-users"></i>
+                    <span class="kt-menu__link-text">Kelola Pengguna</span>
+                </a>
+            </li>
+
         </ul>
     </div>
 </div>
