@@ -1,6 +1,8 @@
 <?= $this->extend('admin/layouts/default') ?>
 
 <?= $this->section('content') ?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 <!-- begin:: Subheader -->
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
@@ -13,6 +15,9 @@
                 
                 <div>
                     <button class="btn btn-default" data-toggle="modal" data-target="#modalFilterData">
+                        <i class="fas fa-filter"></i> Filter Data
+                    </button>
+                    <button class="btn btn-default" data-toggle="modal" data-target="#modalFilterKolom">
                         <i class="fas fa-filter"></i> Kolom Tabel
                     </button>
                     <button class="btn btn-success" name="prepare-download-bigdata">
@@ -79,8 +84,74 @@
 <!-- end:: Content -->
 
 
-<!-- Modal Filter Column -->
+<!-- Modal Filter Data -->
 <div class="modal fade" id="modalFilterData" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Filter Data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Satker</label>
+                <select class="form-control select2" name="filter-satker">
+                    <option value="*">Semua</option>
+                    <?php foreach ($data['satker'] as $key => $value) : ?>
+                        <option value="<?php echo $value->id ?>"><?php echo $value->nama?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Program</label>
+                <select class="form-control select2" name="filter-program">
+                    <option value="*">Semua</option>
+                    <?php foreach ($data['program'] as $key => $value) : ?>
+                        <option value="<?php echo $value->id ?>"><?php echo $value->nama?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Kegiatan</label>
+                <select class="form-control select2" name="filter-kegiatan">
+                    <option value="*">Semua</option>
+                    <?php foreach ($data['kegiatan'] as $key => $value) : ?>
+                        <option value="<?php echo $value->id ?>"><?php echo $value->nama?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Output</label>
+                <select class="form-control select2" name="filter-output">
+                    <option value="*">Semua</option>
+                    <?php foreach ($data['output'] as $key => $value) : ?>
+                        <option value="<?php echo $value->id ?>"><?php echo $value->nama?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Suboutput</label>
+                <select class="form-control select2" name="filter-suboutput">
+                    <option value="*">Semua</option>
+                    <?php foreach ($data['suboutput'] as $key => $value) : ?>
+                        <option value="<?php echo $value->id ?>"><?php echo $value->nama?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" name="act-filter-data" class="btn btn-primary">Terapkan</button>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal Filter Column -->
+
+
+<!-- Modal Filter Column -->
+<div class="modal fade" id="modalFilterKolom" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
         <div class="modal-header">
@@ -161,6 +232,8 @@
 
 
 <?= $this->section('footer_js') ?>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
     var page = 0,
         showedData = 0,
@@ -172,6 +245,8 @@
     
     $(document).ready(function() {
         getData()
+
+        $('.select2').select2()
     })
 
 
@@ -212,7 +287,18 @@
         })
         
         $('._table-data').css({'width': tableWidth+'px'})
-        $('#modalFilterData').modal('hide')
+        $('#modalFilterKolom').modal('hide')
+    })
+
+
+
+    $(document).on('click', 'button[name=act-filter-data]', function() {
+        renderEmptyTable()
+        getData({
+            onBeforeSend: () => {
+                $('#modalFilterData').modal('hide')
+            }
+        })
     })
 
 
@@ -233,16 +319,21 @@
 
 
 
-    function getData() {
+    function getData(params = {
+        onBeforeSend: () => {},
+        onSuccess: () => {}
+    }) {
         $.ajax({
             url: "<?php echo site_url('bigdata/load-data') ?>",
             type: 'GET',
             data: {
-                page: page
+                page: page,
+                filter: getFilterDataValue()
             },
             timeout: 2000,
             beforeSend: () => {
                 element_iconLoadMore.addClass('fa-spin')
+                if (params.hasOwnProperty('onBeforeSend')) params.onBeforeSend()
             },
             success: (res) => {
                 renderTableRow(res)
@@ -253,11 +344,27 @@
 
                 element_iconLoadMore.removeClass('fa-spin')
                 page++
+
+                if (params.hasOwnProperty('onSuccess')) params.onSuccess()
             },
             fail: (xhr) => {
                 alert("Terjadi Kesalahan Pada Sistem");
             }
         })
+    }
+
+
+
+    function getFilterDataValue () {
+        let value = {}
+
+        if ($('select[name=filter-satker]').val() != '*') value.kdsatker = $('select[name=filter-satker]').val()
+        if ($('select[name=filter-program]').val() != '*') value.kdprogram = $('select[name=filter-program').val()
+        if ($('select[name=filter-kegiatan]').val() != '*') value.kdgiat = $('select[name=filter-kegiatan]').val()
+        if ($('select[name=filter-output]').val() != '*') value.kdoutput = $('select[name=filter-output]').val()
+        if ($('select[name=filter-suboutput]').val() != '*') value.kdsoutput = $('select[name=filter-suboutput]').val()
+
+        return value
     }
 
 
@@ -287,12 +394,22 @@
 
 
 
+    function renderEmptyTable()
+    {
+        $('#_table-data tbody').html('')
+    }
+
+
+
     function prepareDownloadBigData() {
         $('#modalDownloadData .modal-footer').addClass('d-none')
 
         setTempColumn().then((res) => {
             $.ajax({
                 url: "<?php echo site_url('bigdata/download/prepare') ?>",
+                data: {
+                    filter: getFilterDataValue()
+                },
                 type: 'get',
                 success: (res) => {
                     let listDownload = ''
@@ -332,7 +449,9 @@
         $.ajax({
             type:'GET',
             url:"<?php echo site_url('bigdata/download') ?>"+'?fileNumber='+params.fileNumber,
-            data: {},
+            data: {
+                filter: getFilterDataValue()
+            },
             dataType:'json',
             beforeSend: () => {
                 element_list.addClass('active')
@@ -360,75 +479,6 @@
                 $('#modalDownloadData .modal-footer').removeClass('d-none')
             }
         });
-        
-        // if (params.fileNumber == 1) {
-            // element_list.addClass('active')
-            // element_iconStatus.html('<i class="fas fa-sync fa-spin"></i>')
-
-            // download("<?php echo site_url('bigdata/download') ?>"+'?fileNumber='+params.fileNumber);
-
-            // setTimeout(() => {
-            //     element_list.removeClass('active')
-            //     element_iconStatus.html('<i class="fas fa-check"></i>')
-                
-            //     if (params.fileNumber < params.totalFile) {
-            //         downloadBigData({
-            //             fileNumber: params.fileNumber+1,
-            //             totalFile: params.totalFile
-            //         })
-            //     }
-
-            //     if (params.fileNumber == params.totalFile) {
-            //         $('#modalDownloadData .modal-footer').removeClass('d-none')
-            //     }
-            // }, 5000);
-        // }
-
-
-        /*
-        $.ajax({
-            url: "<?php echo site_url('bigdata/download') ?>",
-            type: 'GET',
-            data: {
-                fileNumber: params.fileNumber
-            },
-            beforeSend: () => {
-                element_list.addClass('active')
-                element_iconStatus.html('<i class="fas fa-sync fa-spin"></i>')
-            },
-            success: (res) => {
-                element_list.removeClass('active')
-                element_iconStatus.html('<i class="fas fa-check"></i>')
-                
-                if (params.fileNumber < params.totalFile) {
-                    downloadBigData({
-                        fileNumber: params.fileNumber+1,
-                        totalFile: params.totalFile
-                    })
-                }
-
-                if (params.fileNumber == params.totalFile) {
-                    $('#modalDownloadData .modal-footer').removeClass('d-none')
-                }
-            }
-        })
-        */
-
-        // setTimeout(() => {
-        //     element_list.removeClass('active')
-        //     element_iconStatus.html('<i class="fas fa-check"></i>')
-            
-        //     if (params.fileNumber < params.totalFile) {
-        //         downloadBigData({
-        //             fileNumber: params.fileNumber+1,
-        //             totalFile: params.totalFile
-        //         })
-        //     }
-
-        //     if (params.fileNumber == params.totalFile) {
-        //         $('#modalDownloadData .modal-footer').removeClass('d-none')
-        //     }
-        // }, 500);
     }
 
 

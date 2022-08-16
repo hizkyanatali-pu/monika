@@ -589,6 +589,14 @@
         `
 
         $('#make-dokumen').html(render)
+
+        setInputFilter($(".__inputTemplateRow-target"), function(value) {
+            return /^-?\d*$/.test(value); 
+        }, "Data harus berupa angka");
+
+        setInputFilter($(".__inputTemplateRow-outcome"), function(value) {
+            return /^-?\d*$/.test(value); 
+        }, "Data harus berupa angka");
     }
 
 

@@ -14,12 +14,17 @@ class BigData extends \App\Controllers\BaseController
     public function __construct()
     {
         helper('dbdinamic');
-        $session = session();
-        $this->user = $session->get('userData');
-        $this->db = \Config\Database::connect();
-        $this->monikaData = $this->db->table('monika_data_'.$this->user['tahun']);
+        $session                       = session();
+        $this->user                    = $session->get('userData');
+        $this->db                      = \Config\Database::connect();
+        $this->monikaData              = $this->db->table('monika_data_'.$this->user['tahun']);
+        $this->satker                  = $this->db->table('m_satker');
+        $this->program                 = $this->db->table('tprogram');
+        $this->kegiatan                = $this->db->table('tgiat');
+        $this->output                  = $this->db->table('toutput');
+        $this->suboutput               = $this->db->table('tsoutput');
         $this->tempExportBigdataColumn = $this->db->table("temp_export_bigdata_column");
-        $this->request = \Config\Services::request();
+        $this->request                 = \Config\Services::request();
     }
 
 
@@ -50,7 +55,14 @@ class BigData extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\BigData\index.php', [
             'column'     => $column,
             'tableWidth' => array_sum(array_column($column, 'widthColumn')),
-            'mainData'   => $data
+            'mainData'   => $data,
+            'data' => [
+                'satker'    => $this->satker->select('satkerid as id, satker as nama')->get()->getResult(),
+                'program'   => $this->program->select('kdprogram as id, nmprogram as nama')->get()->getResult(),
+                'kegiatan'  => $this->kegiatan->select('kdgiat as id, nmgiat as nama')->get()->getResult(),
+                'output'    => $this->output->select('kdoutput as id, nmoutput as nama')->get()->getResult(),
+                'suboutput' => $this->suboutput->select('kdro as id, nmro as nama')->get()->getResult(),
+            ] 
         ]);
     }
 
@@ -59,14 +71,15 @@ class BigData extends \App\Controllers\BaseController
     public function loadData() {
         $limitData  = 100;
         $offsetData = $this->request->getGet('page') * $limitData;
+        $filterData = $this->request->getGet('filter');
 
         $result = [
             'input'  => $this->request->getGet(),
             'column' => $this->tableColumn(),
-            'data'   => $this->getData($limitData, $offsetData)
+            'data'   => $this->getData($filterData, $limitData, $offsetData)
         ];
 
-        if ($offsetData == 0) $result['totalData'] = $this->getData(null, null, true);
+        if ($offsetData == 0) $result['totalData'] = $this->getData($filterData, null, null, true);
 
         return $this->respond($result, 200);
     }
@@ -76,6 +89,7 @@ class BigData extends \App\Controllers\BaseController
     public function downloadExcelBigData() {
         $limitData = 1000;
         $offsetData = ($this->request->getGet('fileNumber') - 1) * $limitData;
+        $filterData = $this->request->getGet('filter');
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -111,7 +125,7 @@ class BigData extends \App\Controllers\BaseController
         $sheet->getStyle('A1:'.$cellHeaderEnd.'1')->applyFromArray($styleArray);
 
 
-        $mainData = $this->getData($limitData, $offsetData);
+        $mainData = $this->getData($filterData, $limitData, $offsetData);
         foreach ($mainData as $key => $data) {
             $row = $key+2;
             $sheet->setCellValue('A'.$row, ($key+1)+$offsetData);
@@ -162,8 +176,10 @@ class BigData extends \App\Controllers\BaseController
 
 
     public function prepareToDownload() {
+        $filterData = $this->request->getGet('filter');
+
         return $this->respond([
-            'totalFile' => ceil($this->getData(null, null, true)['total'] / 1000)
+            'totalFile' => ceil($this->getData($filterData, null, null, true)['total'] / 1000)
         ], 200);
     }
 
@@ -199,7 +215,7 @@ class BigData extends \App\Controllers\BaseController
 
 
 
-    private function getData($_limitData=null, $_offsetData=null, $_getTotal = false) 
+    private function getData($_filterData = [], $_limitData=null, $_offsetData=null, $_getTotal = false) 
     {
         $tahun = $this->user['tahun'];
         $table = 'monika_data_'.$this->user['tahun'];
@@ -222,6 +238,12 @@ class BigData extends \App\Controllers\BaseController
         ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
         ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left');
         
+        if (is_array($_filterData)) {
+            foreach ($_filterData as $key => $value) {
+                $data->where($table.'.'.$key, $value);
+            }
+        }
+
         if (!empty($_limitData)) $data->limit($_limitData, $_offsetData);
         
         if ($_getTotal) return $data->get()->getRowArray();
