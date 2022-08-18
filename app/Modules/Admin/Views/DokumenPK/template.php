@@ -510,10 +510,9 @@
         $.ajax({
             url: '<?php echo site_url('dokumenpk/template/update') ?>',
             type: 'POST',
-            data: {  [csrfName]: csrfHash},
             processData: false,
             contentType: false,
-            cahce: false,
+            cache: false,
             data: form,
             success: (res) => {
                 if (res.status) {
