@@ -217,10 +217,31 @@
                         <button class="btn btn-sm btn-outline-danger __back-from-pilih-akses-dokumen">
                             <i class="fas fa-chevron-left"></i> Kembali
                         </button>
-                        <div class="ml-2 w-50">
-                            <input type="text" name="search-opsi-akses-satker" class="form-control" placeholder="Cari Satker">
-                        </div>
                     </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                <div class="ml-2 mt-3 w-50">
+                                    <label>Cari By Balai </label>
+                                    <select name="search-opsi-akses-satker" class="form-control">
+                                    <option value=" " selected>Pilih Satker Dalam Balai</option>
+                                    <?php foreach ($allBalai as $keyBalai => $dataBalai) : ?>
+                                        <option value="<?= $dataBalai->balaiid ?>"> <?= $dataBalai->balai ?></option>
+                                    <?php endforeach ?>
+                                    </select>
+                                    <!-- <input type="text" name="search-opsi-akses-satker" class="form-control" placeholder="Cari Satker"> -->
+                                </div>
+                                </div>
+                                <div class="col-md-6">
+                                    
+                                        <div class="ml-2 mt-3 w-100">
+                                            <label>Cari</label>
+                                            <input type="text" name="search-opsi-akses-satker_text" class="form-control" placeholder="Cari Satker">
+                                        </div>
+
+                                  
+                                </div>
+                           
+                            </div>
                     <div class="mt-4 border" style="height: 45vh; overflow: auto">
                         <table class="table table-bordered">
                             <thead style="position: sticky; top: 0;">
@@ -238,6 +259,7 @@
                                                 name="check-list-opsi-satker" 
                                                 class="open-to-check"
                                                 value="<?php echo $dataSatker->satkerid ?>"
+                                                data-balaiid="<?= $dataSatker->balaiid ?>"
                                             >
                                         </td>
                                         <td>
@@ -284,7 +306,9 @@
         element_formPilihAksesDokumen          = $('._form-pilih-akses-dokumen'),
         element_checkAllOpsiAksesDokumen       = $('input[type=checkbox][name=check-all-opsi-satker]'),
         element_checkboxOpsiAksesDokumenShowed = $('input.open-to-check[type=checkbox][name=check-list-opsi-satker]')
-        element_selectDokumenType = $("select[name=dokumen-type]")
+        element_selectDokumenType = $("select[name=dokumen-type]"),
+        csrfName = '<?= csrf_token() ?>',
+        csrfHash = '<?= csrf_hash() ?>'
 
 
     $(document).ready(function () {
@@ -390,7 +414,34 @@
 
 
 
-    $('input[name=search-opsi-akses-satker]').on('keyup', function() {
+    $('select[name=search-opsi-akses-satker]').on('change', function() {
+        clearTimeout(timerUserTyping)
+        timerUserTyping = setTimeout(() => {
+            let searchInput = $(this).val();
+
+            $('._list-opsi-satker').each((key, element) => {
+                let listElement  = $(element),
+                listText     = listElement.find('label').text(),
+                listCheckbox = listElement.find('input[type=checkbox][name=check-list-opsi-satker]')
+                
+                if (listCheckbox.data("balaiid") == searchInput || searchInput == " ") {
+                    listElement.removeClass('d-none')
+                    listCheckbox.addClass('open-to-check')
+                }
+                else {
+                    listElement.addClass('d-none')
+                    listCheckbox.removeClass('open-to-check')
+                }
+            })
+
+            let checkboxShowedIsChecked = element_checkboxOpsiAksesDokumenShowed.not(':checked').length,
+                setPropCheckedAll       = checkboxShowedIsChecked > 0 ? false : true
+            
+            element_checkAllOpsiAksesDokumen.prop('checked', setPropCheckedAll)
+        }, 700)
+    })
+
+    $('input[name=search-opsi-akses-satker_text]').on('keyup', function() {
         clearTimeout(timerUserTyping)
         timerUserTyping = setTimeout(() => {
             let searchInput = $(this).val();
@@ -459,6 +510,7 @@
         $.ajax({
             url: '<?php echo site_url('dokumenpk/template/update') ?>',
             type: 'POST',
+            data: {  [csrfName]: csrfHash},
             processData: false,
             contentType: false,
             cahce: false,

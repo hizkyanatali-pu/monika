@@ -26,6 +26,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->dokumenPK_akses         = $this->db->table('dokumen_pk_template_akses');
         $this->tempExportBigdataColumn = $this->db->table("temp_export_bigdata_column");
         $this->tableSatker             = $this->db->table("m_satker");
+        $this->tableBalai             = $this->db->table("m_balai");
+
 
         $this->request = \Config\Services::request();
     }
@@ -53,6 +55,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\DokumenPK\template.php', [
             'data'        => $this->dokumenPK->where('deleted_at is NULL', NULL, false)->get()->getResult(),
             'allSatker'   => $this->tableSatker->whereNotIn('satker', ['', '1'])->get()->getResult(),
+            'allBalai'   => $this->tableBalai->get()->getResult(),
+
             'sessionYear' => $this->user['tahun']
         ]);
     }
