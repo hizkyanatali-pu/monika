@@ -57,7 +57,11 @@
                                 
                                 <?php if ($data->revision_master_number) : ?>
                                     <div>
-                                        <span class="badge badge-sm bg-warning text-white">
+                                        <span 
+                                            class="badge badge-sm bg-warning text-white __cetak-dokumen"
+                                            data-dokumen-master-id="<?php echo $dokumenMasterID ?>"
+                                            data-number-revisioned="<?php echo $data->revision_master_number ?>"
+                                        >
                                             Revisi Ke <?php echo $data->revision_master_number ?>
                                         </span>
                                     </div>
@@ -92,6 +96,7 @@
                                     class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary'?>"
                                     data-dokumen-master-id="<?php echo $dokumenMasterID ?>"
                                     data-number-revisioned="<?php echo $data->revision_master_number ?>"
+                                    data-select-top="true"
                                 >
                                     <i class="fas fa-print"></i> Cetak
                                 </button>
@@ -369,32 +374,37 @@
                 type: 'GET',
                 success: (res) => {
                     let list = ''
-                    res.dokumenList.forEach((data, key) => {
-                        let listTitle      = 'Dokumen Awal',
-                            activeClass    = '',
-                            activeSubTitle = ''
+                    if ($(this).data('select-top')) { 
+                        cetakDokumen(res.dokumenList[0].id)
+                    }
+                    else {
+                        res.dokumenList.forEach((data, key) => {
+                            let listTitle      = 'Dokumen Awal',
+                                activeClass    = '',
+                                activeSubTitle = ''
 
-                        if (data.revision_master_number) listTitle = 'Revisi #' + data.revision_master_number
-                        if (data.status == 'setuju') {
-                            activeClass    = 'active bg-success border-success'
-                            activeSubTitle = '<div><small>Telah di setujui</small></div>'
-                        }
-                        
-                        list += `
-                            <button 
-                                class="list-group-item list-group-item-action ${activeClass}"
-                                onclick="cetakDokumen(${data.id})"
-                            >
-                                ${listTitle}
-                                ${activeSubTitle}
-                            </button>
-                        `
-                    })
+                            if (data.revision_master_number) listTitle = 'Revisi #' + data.revision_master_number
+                            if (data.status == 'setuju') {
+                                activeClass    = 'active bg-success border-success'
+                                activeSubTitle = '<div><small>Telah di setujui</small></div>'
+                            }
+                            
+                            list += `
+                                <button 
+                                    class="list-group-item list-group-item-action ${activeClass}"
+                                    onclick="cetakDokumen(${data.id})"
+                                >
+                                    ${listTitle}
+                                    ${activeSubTitle}
+                                </button>
+                            `
+                        })
 
-                    $('#modal-cetak-dokumen-revisioned').find('.list-group').html(list)
+                        $('#modal-cetak-dokumen-revisioned').find('.list-group').html(list)
+                        $('#modal-cetak-dokumen-revisioned').modal('show')  
+                    }
                 }
             })
-            $('#modal-cetak-dokumen-revisioned').modal('show')  
         }
         else {
             cetakDokumen(dokumenMasterID)
