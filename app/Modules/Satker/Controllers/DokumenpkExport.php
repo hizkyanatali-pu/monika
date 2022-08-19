@@ -51,6 +51,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
             ->getRowArray();
 
         if ($dataDokumen) $this->dokumenYear = date('Y', strtotime($dataDokumen['created_at']));
+        
+        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen['status'], $dataDokumen['revision_master_number']);
 
         $this->dokumenLoadedStatus = $dataDokumen['status'];
 
@@ -79,7 +81,6 @@ class DokumenpkExport extends \App\Controllers\BaseController
     private function pdf_pageDokumenOpening($pdf, $dataDokumen)
     {
         $pdf->AddPage('L', 'A4');
-        $this->pdf_renderWatermarkKonsep($pdf);
 
         $pdf->SetFont('Arial', 'B', 50);
         $pdf->SetTextColor(255, 192, 203);
@@ -205,7 +206,6 @@ class DokumenpkExport extends \App\Controllers\BaseController
     private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen)
     {
         $pdf->AddPage('L', 'A4');
-        $this->pdf_renderWatermarkKonsep($pdf);
 
         $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', 'TARGET ' . $this->dokumenYear];
         $headerWidth = [
@@ -394,10 +394,31 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
 
-    private function pdf_renderWatermarkKonsep($pdf)
+    private function pdf_renderWatermarkKonsep($pdf, $_dokumenStatus, $_revisionNumber)
     {
-        if ($this->dokumenLoadedStatus != "setuju") {
-            $pdf->Image('images/watermark_dokumen_konsep.png', 23, 80, 250);
+        if ($_dokumenStatus != "setuju") {
+            switch ($_dokumenStatus) {
+                case 'revision':
+                    $pdf->watermarkText = 'R E V I S I';
+
+                    if (! is_null($_revisionNumber)) {
+                        $pdf->watermarkSubText = 'Ke - ' . $_revisionNumber;
+                        $pdf->watermarkSubTextOffsetLeft = 133;
+                    }
+                    else {
+                        $pdf->watermarkSubText = 'Dokumen Awal';
+                    }
+
+                    $pdf->watermarkOffsetLeft = 80;
+                    break;
+                
+                default:
+                    $pdf->watermarkText = 'K O N S E P';
+                    $pdf->watermarkOffsetLeft = 70;
+                    break;
+            }
+            
+            // $pdf->Image('images/watermark_dokumen_konsep.png', 23, 80, 250);
         }
     }
 }
@@ -411,10 +432,17 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 class PDF extends FPDF
 {
-    protected $B = 0;
-    protected $I = 0;
-    protected $U = 0;
-    protected $HREF = '';
+    protected $B                   = 0;
+    protected $I                   = 0;
+    protected $U                   = 0;
+    protected $HREF                = '';
+
+    var $angle               = 0;
+
+    public $watermarkText              = '';
+    public $watermarkSubText           = '';
+    public $watermarkOffsetLeft        = 70;
+    public $watermarkSubTextOffsetLeft = 95;
 
     function WriteHTML($html)
     {
@@ -494,5 +522,45 @@ class PDF extends FPDF
         $this->Write(5,$txt,$URL);
         $this->SetStyle('U',false);
         $this->SetTextColor(0);
+    }
+
+
+    function Header()
+    {
+        //Put the watermark
+        $this->SetFont('Arial','B',80);
+        $this->SetTextColor(255, 192, 203);
+        $this->RotatedText($this->watermarkOffsetLeft, 110, $this->watermarkText, 0);
+
+        $this->SetFont('Arial','B',40);
+        $this->RotatedText($this->watermarkSubTextOffsetLeft, 130, $this->watermarkSubText, 0);
+    }
+    
+    function RotatedText($x, $y, $txt, $angle)
+    {
+        //Text rotated around its origin
+        $this->Rotate($angle,$x,$y);
+        $this->Text($x,$y,$txt);
+        $this->Rotate(0);
+    }
+
+    function Rotate($angle,$x=-1,$y=-1)
+    {
+        if($x==-1)
+            $x=$this->x;
+        if($y==-1)
+            $y=$this->y;
+        if($this->angle!=0)
+            $this->_out('Q');
+        $this->angle=$angle;
+        if($angle!=0)
+        {
+            $angle*=M_PI/180;
+            $c=cos($angle);
+            $s=sin($angle);
+            $cx=$x*$this->k;
+            $cy=($this->h-$y)*$this->k;
+            $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm',$c,$s,-$s,$c,$cx,$cy,-$cx,-$cy));
+        }
     }
 }
