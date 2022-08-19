@@ -330,7 +330,7 @@
                 page: page,
                 filter: getFilterDataValue()
             },
-            timeout: 2000,
+            // timeout: 2000,
             beforeSend: () => {
                 element_iconLoadMore.addClass('fa-spin')
                 if (params.hasOwnProperty('onBeforeSend')) params.onBeforeSend()
