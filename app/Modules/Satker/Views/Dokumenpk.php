@@ -211,6 +211,13 @@
             scrollX: true
         })
 
+        $('#modalForm').on('show.bs.modal', function () {
+            let elements_optionListDokumen = $('.__buat-dokumen-pilih-template')
+            if (elements_optionListDokumen.length == 1) {
+                elements_optionListDokumen.eq(0).trigger('click')
+            }
+        })
+
         $('#modalForm').on('hidden.bs.modal', function () {
             prepareForm_reset();
         })
