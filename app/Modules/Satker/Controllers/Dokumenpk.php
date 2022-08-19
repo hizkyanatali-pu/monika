@@ -46,6 +46,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.revision_master_dokumen_id,
             dokumenpk_satker.revision_master_number,
             dokumenpk_satker.status,
+            dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
             dokumen_pk_template.title as dokumenTitle
         ')
@@ -111,6 +112,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.revision_master_dokumen_id,
             dokumenpk_satker.revision_master_number,
             dokumenpk_satker.status,
+            dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
             dokumen_pk_template.title as dokumenTitle,
             ku_user.nama as userCreatedName
@@ -122,8 +124,22 @@ class Dokumenpk extends \App\Controllers\BaseController
         ->orderBy('dokumenpk_satker.id', 'DESC')
         ->get()->getResult();
 
+        $returnDaata = array_map(function($arr) {
+            return [
+                'id'                         => $arr->id,
+                'template_id'                => $arr->template_id,
+                'revision_master_dokumen_id' => $arr->revision_master_dokumen_id,
+                'revision_master_number'     => $arr->revision_master_number,
+                'status'                     => $arr->status,
+                'change_status_at'           => $arr->change_status_at != null ? date_indo($arr->change_status_at) : '',
+                'created_at'                 => $arr->created_at != null ? date_indo($arr->created_at) : '',
+                'dokumenTitle'               => $arr->dokumenTitle,
+                'userCreatedName'            => $arr->userCreatedName,
+            ];
+        }, $dataDokumen);
+
         return $this->respond([
-            'data' => $dataDokumen
+            'data' => $returnDaata
         ]);
     }
 

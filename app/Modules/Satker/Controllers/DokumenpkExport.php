@@ -43,7 +43,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     public function pdf($_dokumenSatkerID)
     {
-        $pdf = new FPDF();
+        $pdf = new PDF();
 
         $dataDokumen = $this->dokumenSatker->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
             ->where('dokumenpk_satker.id', $_dokumenSatkerID)
@@ -131,7 +131,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Text 2
         $pdf->Ln(4);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
-        $pdf->MultiCell($this->sectionWidth, 5, "Selanjutnya disebut PIHAK PERTAMA", 0, 'J');
+        // $pdf->MultiCell($this->sectionWidth, 5, "Selanjutnya disebut PIHAK PERTAMA", 0, 'J');
+        $pdf->MultiCell($this->sectionWidth, 5, $pdf->WriteHTML("Selanjutnya disebut <b>PIHAK PERTAMA</b>"), 0, 'J');
         $pdf->Ln(4);
 
         // Pihak Kedua
@@ -142,20 +143,21 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Text 3
         $pdf->Ln(4);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
-        $pdf->MultiCell($this->sectionWidth, 5, "Selaku atasan langsung pihak pertama. selanjutnya disebut PIHAK KEDUA", 0, 'J');
+        $pdf->MultiCell($this->sectionWidth, 5, $pdf->WriteHTML("Selaku atasan langsung <b>PIHAK PERTAMA</b>. selanjutnya disebut <b>PIHAK KEDUA</b>"), 0, 'J');
         $pdf->Ln(5);
 
 
         /** Isi */
         // title
         $pdf->SetX((297 - $this->sectionWidth) / 2);
-        $pdf->MultiCell($this->sectionWidth, 5, "PIHAK PERTAMA dan PIHAK KEDUA sepakat untuk membuat Perjanjian Kinerja dengan ketentuan sebagai berikut :", 0, 'J');
+        $pdf->MultiCell($this->sectionWidth, 5, $pdf->WriteHTML("<b>PIHAK PERTAMA</b> dan <b>PIHAK KEDUA</b> sepakat untuk membuat Perjanjian Kinerja dengan ketentuan sebagai berikut :"), 0, 'J');
+
 
         // Text
         $pdf->Ln(2);
-        $this->pdf_renderListIsiSection($pdf, '1.', "Pihak pertama pada tahun " . $this->dokumenYear . " ini berjanji akan mewujudkan target kinerja yang seharusnya sesuai lampiran perjanjian ini, dalam rangka mencapai target kinerja jangka menengah seperti yang telah di tetapkan dalam dokumen perencanaan. Keberhasilan dan kegagalan pencapaian target kinerja tersebut menjadi tanggung jawab pihak pertama.");
+        $this->pdf_renderListIsiSection($pdf, '1.', "<b>Pihak pertama</b> pada tahun " . $this->dokumenYear . " ini berjanji akan mewujudkan target kinerja yang seharusnya sesuai lampiran perjanjian ini, dalam rangka mencapai target kinerja jangka menengah seperti yang telah di tetapkan dalam dokumen perencanaan. Keberhasilan dan kegagalan pencapaian target kinerja tersebut menjadi tanggung jawab <b>pihak pertama</b>.");
         $pdf->Ln(2);
-        $this->pdf_renderListIsiSection($pdf, '2.', "Pihak kedua akan melakukan supervisi yang di perlukan serta akan melakukan evaluasi terhadap capaian kinerja dari perjanjian ini dan mengambil tindakan yang diperlukan dalam rangka pemberian penghargaan dan sanksi.");
+        $this->pdf_renderListIsiSection($pdf, '2.', "<b>Pihak kedua</b> akan melakukan supervisi yang di perlukan serta akan melakukan evaluasi terhadap capaian kinerja dari perjanjian ini dan mengambil tindakan yang diperlukan dalam rangka pemberian penghargaan dan sanksi.");
 
 
         /** TTD Section */
@@ -189,7 +191,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
     {
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->Cell(7, 5, $_listNo, 0);
-        $pdf->MultiCell($this->sectionWidth - 7, 5, $_listContent, 0);
+        $pdf->SetLeftMargin(25);
+        $pdf->MultiCell($this->sectionWidth - 7, 5, $pdf->WriteHTML($_listContent), 0);
     }
 
 
@@ -396,5 +399,100 @@ class DokumenpkExport extends \App\Controllers\BaseController
         if ($this->dokumenLoadedStatus != "setuju") {
             $pdf->Image('images/watermark_dokumen_konsep.png', 23, 80, 250);
         }
+    }
+}
+
+
+
+
+
+
+
+
+class PDF extends FPDF
+{
+    protected $B = 0;
+    protected $I = 0;
+    protected $U = 0;
+    protected $HREF = '';
+
+    function WriteHTML($html)
+    {
+        // HTML parser
+        $html = str_replace("\n",' ',$html);
+        $a = preg_split('/<(.*)>/U',$html,-1,PREG_SPLIT_DELIM_CAPTURE);
+        foreach($a as $i=>$e)
+        {
+            if($i%2==0)
+            {
+                // Text
+                if($this->HREF)
+                    $this->PutLink($this->HREF,$e);
+                else
+                    $this->Write(5,$e);
+            }
+            else
+            {
+                // Tag
+                if($e[0]=='/')
+                    $this->CloseTag(strtoupper(substr($e,1)));
+                else
+                {
+                    // Extract attributes
+                    $a2 = explode(' ',$e);
+                    $tag = strtoupper(array_shift($a2));
+                    $attr = array();
+                    foreach($a2 as $v)
+                    {
+                        if(preg_match('/([^=]*)=["\']?([^"\']*)/',$v,$a3))
+                            $attr[strtoupper($a3[1])] = $a3[2];
+                    }
+                    $this->OpenTag($tag,$attr);
+                }
+            }
+        }
+    }
+
+    function OpenTag($tag, $attr)
+    {
+        // Opening tag
+        if($tag=='B' || $tag=='I' || $tag=='U')
+            $this->SetStyle($tag,true);
+        if($tag=='A')
+            $this->HREF = $attr['HREF'];
+        if($tag=='BR')
+            $this->Ln(5);
+    }
+
+    function CloseTag($tag)
+    {
+        // Closing tag
+        if($tag=='B' || $tag=='I' || $tag=='U')
+            $this->SetStyle($tag,false);
+        if($tag=='A')
+            $this->HREF = '';
+    }
+
+    function SetStyle($tag, $enable)
+    {
+        // Modify style and select corresponding font
+        $this->$tag += ($enable ? 1 : -1);
+        $style = '';
+        foreach(array('B', 'I', 'U') as $s)
+        {
+            if($this->$s>0)
+                $style .= $s;
+        }
+        $this->SetFont('',$style);
+    }
+
+    function PutLink($URL, $txt)
+    {
+        // Put a hyperlink
+        $this->SetTextColor(0,0,255);
+        $this->SetStyle('U',true);
+        $this->Write(5,$txt,$URL);
+        $this->SetStyle('U',false);
+        $this->SetTextColor(0);
     }
 }

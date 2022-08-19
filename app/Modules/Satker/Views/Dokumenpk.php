@@ -9,7 +9,7 @@
         <div class="kt-subheader__main w-100">
             <div class="d-flex justify-content-between w-100">
                 <h3 class="kt-subheader__title">
-                    Dokumen PK 
+                    Input Perjanjian Kinerja
                 </h3>
                 <?= csrf_field() ?>
                 
@@ -39,7 +39,8 @@
                     <tr>
                         <th width="100px">No. Dokumen</td>
                         <th>Dokumen</td>
-                        <th width="250px">Dibuat</th>
+                        <th width="150px">Dibuat</th>
+                        <th width="150px">Disetujui / Ditolak</th>
                         <th width="250px">Status</th>
                         <th width="70px"></th>
                     </tr>
@@ -62,7 +63,12 @@
                                     </div>
                                 <?php endif; ?>
                             </td>
-                            <td><?php echo $data->created_at ?></td>
+                            <td>
+                                <?php echo date_indo($data->created_at) ?>
+                            </td>
+                            <td>
+                                <?php echo $data->change_status_at != null ? date_indo($data->change_status_at) : '' ?>
+                            </td>
                             <td class="pr-0">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="badge badge-pill px-3 font-weight-bold <?php echo $dokumenStatus[$data->status]['color'] ?>">

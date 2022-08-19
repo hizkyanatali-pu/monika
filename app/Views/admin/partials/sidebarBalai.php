@@ -41,7 +41,7 @@ $request = \Config\Services::request();
             >
                 <a href="<?= site_url('dokumenpk'); ?>" class="kt-menu__link ">
                     <i class="kt-menu__link-icon fas fa-book"></i>
-                    <span class="kt-menu__link-text">Dokumen</span> 
+                    <span class="kt-menu__link-text">Input Perjanjian Kinerja</span> 
                 </a>
             </li>
         </ul>

@@ -171,7 +171,10 @@ class Dokumenpk extends \App\Controllers\BaseController
                 $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
 
                 $newStatus = $this->request->getPost('newStatus');
-                $updatedData = ['status' => $newStatus];
+                $updatedData = [
+                    'status'           => $newStatus,
+                    'change_status_at' => date("Y-m-d H:i:s")
+                ];
                 if ($newStatus == "tolak") $updatedData['revision_message'] = $this->request->getPost('message');
 
                 $this->dokumenSatker->update($updatedData);

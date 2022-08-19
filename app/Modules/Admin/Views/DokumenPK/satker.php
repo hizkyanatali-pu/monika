@@ -73,7 +73,7 @@
                         <tr class="text-center">
                             <th width="25px">No</th>
                             <th>Dokumen</th>
-                            <th width="250px">Tanggal</th>
+                            <th width="120px">Dibuat</th>
                             <th width="120px"></th>
                         </tr>
                     </thead>
@@ -94,7 +94,8 @@
                         <tr class="text-center">
                             <th width="30px">No</th>
                             <th>Dokumen</th>
-                            <th width="250px">Tanggal</th>
+                            <th width="120px">Dibuat</th>
+                            <th width="120px">Disetujui</th>
                             <th width="120px"></th>
                         </tr>
                     </thead>
@@ -115,7 +116,8 @@
                         <tr class="text-center">
                             <th width="30px">No</th>
                             <th>Dokumen</th>
-                            <th width="250px">Tanggal</th>
+                            <th width="120px">Dibuat</th>
+                            <th width="120px">Di Tolak</th>
                             <th width="120px"></th>
                         </tr>
                     </thead>
@@ -379,7 +381,9 @@
         }
 
         _data.forEach((data, index) => {
-            let render_badgeRevisi = ''
+            let render_badgeRevisi = '',
+                render_columnChangeStatusAt = ''
+            
             if (data.revision_master_number) {
                 render_badgeRevisi = `
                     <button 
@@ -391,6 +395,8 @@
                     </button>
                 `
             }
+
+            if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>`
 
             const tr = $(`
                 <tr id="_dokumen-row-${data.id}">
@@ -404,6 +410,7 @@
                         </div>
                     </td>
                     <td>${data.created_at}</td>
+                    ${render_columnChangeStatusAt}
                     <td>
                         <button 
                             class="btn btn-sm btn-outline-primary __preview-dokumen"
