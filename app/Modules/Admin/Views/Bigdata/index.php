@@ -294,6 +294,8 @@
 
     $(document).on('click', 'button[name=act-filter-data]', function() {
         renderEmptyTable()
+        page = 0
+        rowNumber = 1
         getData({
             onBeforeSend: () => {
                 $('#modalFilterData').modal('hide')
