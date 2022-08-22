@@ -653,6 +653,7 @@
                                         type="text" 
                                         class="form-control __inputTemplateRow-target" 
                                         placeholder="Masukkan Nilai"
+                                        value="0"
                                         data-row-id="${ data.id }"
                                     >
                                     <div class="input-group-append">
@@ -666,6 +667,7 @@
                                         type="text" 
                                         class="form-control __inputTemplateRow-outcome" 
                                         placeholder="Masukkan Nilai"
+                                        value="0"
                                         data-row-id="${ data.id }"
                                     >
                                     <div class="input-group-append">

@@ -85,15 +85,19 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetFont('Arial', 'B', 50);
         $pdf->SetTextColor(255, 192, 203);
 
+        $pdf->SetLineWidth(4);
+        $pdf->SetDrawColor(3, 106, 138);
+        $pdf->Rect(8, 8, 282, 192, 'D');
+
         /**  Dokumen KOP */
-        $pdf->Image('images/logo_pu_border.png', 143, 6, 16);
-        $pdf->Ln(15);
+        $pdf->Image('images/logo_pu_border.png', 143, 14, 12);
+        $pdf->Ln(17);
 
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
         $dokumenKopTitle2 = $dataDokumen['pihak1_initial'];
         $dokumenKopTitle3 = $dataDokumen['pihak2_initial'];
 
-        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->SetFont('Arial', 'B', 12);
         $pdf->SetFillColor(255);
         $pdf->SetTextColor(0);
         // Kop Title 1
@@ -119,10 +123,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         /**  Dokumen Pengenalan Pihak */
-        $pdf->SetFont('Arial', '', 12);
+        $pdf->SetFont('Arial', '', 11);
         // Text
         $pdf->SetX((297 - $this->sectionWidth) / 2);
-        $pdf->MultiCell($this->sectionWidth, 5, "Dalam rangka mewujudkan manajemen pemerintahan yang efektif, transparan, dan akuntabel serta berorientasi pada hasil, kami yang bertandatangan di bawah ini:", 0, 'J');
+        $pdf->MultiCell($this->sectionWidth, 4, "Dalam rangka mewujudkan manajemen pemerintahan yang efektif, transparan, dan akuntabel serta berorientasi pada hasil, kami yang bertandatangan di bawah ini:", 0, 'J');
         $pdf->Ln(4);
 
         // Pihak Pertama
@@ -133,7 +137,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Ln(4);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         // $pdf->MultiCell($this->sectionWidth, 5, "Selanjutnya disebut PIHAK PERTAMA", 0, 'J');
-        $pdf->MultiCell($this->sectionWidth, 5, $pdf->WriteHTML("Selanjutnya disebut <b>PIHAK PERTAMA</b>"), 0, 'J');
+        $pdf->MultiCell($this->sectionWidth, 4, $pdf->WriteHTML("Selanjutnya disebut <b>PIHAK PERTAMA</b>"), 0, 'J');
         $pdf->Ln(4);
 
         // Pihak Kedua
@@ -176,7 +180,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_renderIntroductionSection($pdf, $_title, $_introduction)
     {
-        $pdf->SetFont('Arial', '', 12);
+        $pdf->SetFont('Arial', '', 11);
         $pdf->SetX((350 - $this->sectionWidth) / 2);
         $pdf->Cell(35, 5, $_title, 0);
         $pdf->SetX((420 - $this->sectionWidth) / 2);
@@ -248,7 +252,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         // Line break
         $pdf->Ln(6);
+        
 
+        $pdf->SetLineWidth(0.01);
+        $pdf->SetDrawColor(0, 0, 0);
 
 
         /** Table */

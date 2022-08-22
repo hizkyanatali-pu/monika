@@ -376,11 +376,13 @@
             let rowColumn = ''
 
             _res.column.forEach((dataCol, keyCol) => {
-                let text = dataRow[dataCol.value]
+                let text = dataRow[dataCol.value],
+                    colAlign = dataCol.align ?? 'left'
+
                 if (dataCol.value == 'no') text = rowNumber++
 
                 rowColumn += `
-                    <td class="_cell_${dataCol.value}">
+                    <td class="text-${colAlign} _cell_${dataCol.value}">
                         ${text ?? ''}
                     </td>
                 `;

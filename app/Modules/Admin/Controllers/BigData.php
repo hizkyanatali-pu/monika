@@ -258,7 +258,8 @@ class BigData extends \App\Controllers\BaseController
             [
                 'value'       => 'no',
                 'label'       => 'No. ',
-                'widthColumn' => 80
+                'widthColumn' => 80,
+                'align'       => 'center'
             ],
             [
                 'value'       => 'kdsatker',
@@ -334,72 +335,86 @@ class BigData extends \App\Controllers\BaseController
             [
                 'value'       => 'pagu_51',
                 'label'       => 'pagu 51',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'pagu_52',
                 'label'       => 'pagu 52',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'pagu_53',
                 'label'       => 'pagu 53',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'pagu_rpm',
                 'label'       => 'pagu rpm',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'pagu_sbsn',
                 'label'       => 'pagu sbsn',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'pagu_phln',
                 'label'       => 'pagu phln',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'pagu_total',
                 'label'       => 'pagu total',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'real_51',
                 'label'       => 'realisasi 51',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'real_52',
                 'label'       => 'realisasi 52',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'real_53',
                 'label'       => 'realisasi 53',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'real_rpm',
                 'label'       => 'realisasi rpm',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'real_sbsn',
                 'label'       => 'realisasi sbsn',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'real_phln',
                 'label'       => 'realisasi phln',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'real_total',
                 'label'       => 'realisasi total',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'progres_keuangan',
@@ -689,12 +704,14 @@ class BigData extends \App\Controllers\BaseController
             [
                 'value'       => 'ufis',
                 'label'       => 'uang fisik',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'pfis',
                 'label'       => 'progres fisik',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'       => 'right'
             ],
             [
                 'value'       => 'prognosis',
