@@ -127,7 +127,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Text
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->MultiCell($this->sectionWidth, 4, "Dalam rangka mewujudkan manajemen pemerintahan yang efektif, transparan, dan akuntabel serta berorientasi pada hasil, kami yang bertandatangan di bawah ini:", 0, 'J');
-        $pdf->Ln(4);
+        $pdf->Ln(2);
 
         // Pihak Pertama
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak1_ttd']);
@@ -138,7 +138,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         // $pdf->MultiCell($this->sectionWidth, 5, "Selanjutnya disebut PIHAK PERTAMA", 0, 'J');
         $pdf->MultiCell($this->sectionWidth, 4, $pdf->WriteHTML("Selanjutnya disebut <b>PIHAK PERTAMA</b>"), 0, 'J');
-        $pdf->Ln(4);
+        $pdf->Ln(2);
 
         // Pihak Kedua
         $prefixJabatanPihak2 = $dataDokumen['dokumen_type'] == 'satker' ? 'KEPALA ' : '';
@@ -180,8 +180,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_renderIntroductionSection($pdf, $_title, $_introduction)
     {
-        $pdf->SetFont('Arial', '', 11);
-        $pdf->SetX((350 - $this->sectionWidth) / 2);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->SetX((330 - $this->sectionWidth) / 2);
         $pdf->Cell(35, 5, $_title, 0);
         $pdf->SetX((420 - $this->sectionWidth) / 2);
         $pdf->Cell(5, 5, ':', 0);
@@ -384,8 +384,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell(134, 4, $_ttd['person2Date'], 0, 0, 'C');
         $pdf->Ln();
         $pdf->SetFont($this->fontFamily, 'B', 9);
-        $pdf->SetX(149);
-        $pdf->Cell(134, 4, $_ttd['person2Title'], 0, 0, 'C');
+        $pdf->SetX(167);
+        $pdf->MultiCell(100, 5, $_ttd['person2Title'], 0, 'C');
         $pdf->Ln(20);
 
         // td 1
@@ -409,7 +409,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     $pdf->watermarkText = 'R E V I S I';
 
                     if (! is_null($_revisionNumber)) {
-                        $pdf->watermarkSubText = 'Ke - ' . $_revisionNumber;
+                        $pdf->watermarkSubText = $_revisionNumber > 1 ? 'Ke - ' . $_revisionNumber : '';
                         $pdf->watermarkSubTextOffsetLeft = 133;
                     }
                     else {
