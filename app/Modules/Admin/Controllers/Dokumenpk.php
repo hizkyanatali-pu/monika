@@ -22,11 +22,14 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $this->dokumenPK               = $this->db->table('dokumen_pk_template');
         $this->dokumenPK_row           = $this->db->table('dokumen_pk_template_row');
+        $this->dokumenPK_kegiatan      = $this->db->table('dokumen_pk_template_kegiatan');
         $this->dokumenPK_info          = $this->db->table('dokumen_pk_template_info');
         $this->dokumenPK_akses         = $this->db->table('dokumen_pk_template_akses');
         $this->tempExportBigdataColumn = $this->db->table("temp_export_bigdata_column");
         $this->tableSatker             = $this->db->table("m_satker");
-        $this->tableBalai             = $this->db->table("m_balai");
+        $this->tableBalai              = $this->db->table("m_balai");
+        $this->tableKegiatan           = $this->db->table("tgiat");
+        $this->tableProgram            = $this->db->table("tprogram");
 
 
         $this->request = \Config\Services::request();
@@ -55,8 +58,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\DokumenPK\template.php', [
             'data'        => $this->dokumenPK->where('deleted_at is NULL', NULL, false)->get()->getResult(),
             'allSatker'   => $this->tableSatker->whereNotIn('satker', ['', '1'])->get()->getResult(),
-            'allBalai'   => $this->tableBalai->get()->getResult(),
-
+            'allBalai'    => $this->tableBalai->get()->getResult(),
+            'allKegiatan' => $this->tableKegiatan->get()->getResult(),
+            'allProgram'  => $this->tableProgram->get()->getResult(),
             'sessionYear' => $this->user['tahun']
         ]);
     }
@@ -68,6 +72,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         return $this->respond([
             'template' => $this->dokumenPK->where('id', $_id)->get()->getRow(),
             'rows'     => $this->dokumenPK_row->where('template_id', $_id)->get()->getResult(),
+            'kegiatan' => $this->dokumenPK_kegiatan->where('template_id', $_id)->get()->getResult(),
             'info'     => $this->dokumenPK_info->where('template_id', $_id)->get()->getResult(),
             'akses'    => $this->dokumenPK_akses->where('template_id', $_id)->get()->getResult()
         ], 200);
@@ -78,13 +83,14 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function createTemplate()
     {
         $input_dokumenType = $this->request->getPost('type');
-
+        
         /** template */
         $this->dokumenPK->insert([
-            'title'      => $this->request->getPost('title'),
-            'keterangan' => $this->request->getPost('keterangan'),
-            'info_title' => $this->request->getPost('info_title'),
-            'type'       => $input_dokumenType
+            'title'              => $this->request->getPost('title'),
+            'keterangan'         => $this->request->getPost('keterangan'),
+            'kegiatan_table_ref' => $this->request->getPost('kegiatan_table_ref'),
+            'info_title'         => 'KEGIATAN', //$this->request->getPost('info_title'),
+            'type'               => $input_dokumenType
         ]);
         $templateId = $this->db->insertID();
         /** end-of: template */
@@ -93,6 +99,11 @@ class Dokumenpk extends \App\Controllers\BaseController
         /** row */
         $this->insertDokumenPK_row($this->request->getPost(), $templateId);
         /** end-of: row */
+
+
+        /** kegiatan */
+        $this->insertDokumenPK_kegiatan($this->request->getPost(), $templateId);
+        /** end-of: kegiatan */
 
 
         /** info */
@@ -119,10 +130,11 @@ class Dokumenpk extends \App\Controllers\BaseController
         /* template */
         $this->dokumenPK->where('id', $templateID);
         $this->dokumenPK->update([
-            'title'      => $this->request->getPost('title'),
-            'keterangan' => $this->request->getPost('keterangan'),
-            'info_title' => $this->request->getPost('info_title'),
-            'type'       => $input_dokumenType
+            'title'              => $this->request->getPost('title'),
+            'keterangan'         => $this->request->getPost('keterangan'),
+            'kegiatan_table_ref' => $this->request->getPost('kegiatan_table_ref'),
+            'info_title'         => 'KEGIATAN', //$this->request->getPost('info_title'),
+            'type'               => $input_dokumenType
         ]);
         /** end-of: template */
 
@@ -133,9 +145,15 @@ class Dokumenpk extends \App\Controllers\BaseController
         /** end-of: row */
 
 
+        /* kegiatan */
+        $this->dokumenPK_kegiatan->delete(['template_id' => $templateID]);
+        $this->insertDokumenPK_kegiatan($this->request->getPost(), $templateID);
+        /** end-of: kegiatan */
+
+
         /* info */
-        $this->dokumenPK_info->delete(['template_id' => $templateID]);
-        $this->insertDokumenPK_info($this->request->getPost(), $templateID);
+        // $this->dokumenPK_info->delete(['template_id' => $templateID]);
+        // $this->insertDokumenPK_info($this->request->getPost(), $templateID);
         /** end-of: info */
 
 
@@ -220,8 +238,25 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
+    private function insertDokumenPK_kegiatan($input, $templateID)
+    {
+        $records = [];
+        foreach ($input['kegiatan_id'] as $key => $data) {
+            array_push($records, [
+                'template_id' => $templateID,
+                'id'          => $data,
+                'nama'        => $input['kegiatan_nama'][$key],
+                'table'       => $input['kegiatan_rev'][$key]
+            ]);
+        }
+        $this->dokumenPK_kegiatan->insertBatch($records);
+    }
+
+
+
     private function insertDokumenPK_info($input, $templateID)
     {
+        /*
         $info = array_map(function($arr) use ($templateID) {
             return [
                 'template_id' => $templateID,
@@ -229,6 +264,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             ];
         }, $input['info_item']);
         $this->dokumenPK_info->insertBatch($info);
+        */
     }
 
 

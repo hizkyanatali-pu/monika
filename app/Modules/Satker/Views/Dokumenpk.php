@@ -2,6 +2,17 @@
 
 <?= $this->section('content') ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.css'); ?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    td.disabled {
+        background: #a8a8a8;
+    }
+
+    td.disabled input[readonly],
+    td.disabled span {
+        background: #a8a8a8;
+    }
+</style>
 
 <!-- Subheader -->
 <div class="kt-subheader kt-grid__item" id="kt_subheader">
@@ -198,6 +209,7 @@
 <?= $this->section('footer_js') ?>
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     var element_modalForm                   = $('#modalForm'),
         element_modalDialog                 = element_modalForm.find('.modal-dialog'),
@@ -259,8 +271,63 @@
 
 
 
+    $(document).on('click', 'input:checkbox[name=form-checkall-row]', function(){
+        let rowChild = $('input:checkbox[name=form-check-row]').parents('tr').find('td')
+
+        $('input:checkbox[name=form-check-row]').prop('checked', this.checked);
+        
+        if (! this.checked)  {
+            rowChild.addClass('disabled')
+        }
+        else {
+            rowChild.removeClass('disabled')
+        }
+    });
+
+
+
+    $(document).on('change', 'input:checkbox[name=form-check-row]', function(){
+        let element_checkAll      = $('input:checkbox[name=form-checkall-row]'),
+            isAllChecked          = false,
+            element_parentsColumn = $(this).parents('tr').find('td')
+
+        if (! $(this).is(':checked')) {
+            element_parentsColumn.addClass('disabled')
+            element_parentsColumn.find('input').attr('readonly', 'readonly')
+        }
+        else  {
+            element_parentsColumn.removeClass('disabled')
+            
+            element_parentsColumn.find('input').removeAttr('readonly')
+        }
+
+        if ($('input:checkbox[name=form-check-row]:checked').length == $('input:checkbox[name=form-check-row]').length) {
+           isAllChecked = true
+        }
+
+        element_checkAll.prop('checked', isAllChecked)
+    });
+
+
+
+    let timerInput
+    $(document).on('keyup', 'input[name=kegiatan-anggaran]', function() {
+        clearTimeout(timerInput)
+
+        timerInput = setTimeout(() => {
+            let totalAnggaran = 0
+            $('input[name=kegiatan-anggaran]').each((key, element) => {
+                totalAnggaran += parseInt($(element).val())
+            })
+            $('input[name=total-anggaran]').val(totalAnggaran)
+        }, 1200);
+    })
+
+
+
     element_btnSaveDokumen.on('click', function() {
         let formData = getFormValue();
+        console.log(formData)
 
         if ($(this).attr('data-dokumen-id')) {
             formData['revision_dokumen_id']        = $(this).data('dokumen-id')
@@ -325,6 +392,8 @@
 
                         elementInput_target.val(data.target_value)
                         elementInput_outcome.val(data.outcome_value)
+                        
+                        if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
                     })
 
                     $('input[name=total-anggaran]').val(res.dokumen.total_anggaran)
@@ -414,29 +483,41 @@
 
 
     function getFormValue() {
-        let rows = []
+        let rows     = [],
+            kegiatan = []
 
         $('.__inputTemplateRow-target').each((key, element) => {
             let elementInput_target  = $(element),
-                elementInput_outcome = $('.__inputTemplateRow-outcome').eq(key)
+                elementInput_outcome = $('.__inputTemplateRow-outcome').eq(key),
+                element_checkRow     = $('input:checkbox[name=form-check-row]').eq(key)
 
             rows.push({
-                id     : elementInput_target.data('row-id'),
-                target : elementInput_target.val(),
-                outcome: elementInput_outcome.val()
+                id       : elementInput_target.data('row-id'),
+                target   : elementInput_target.val(),
+                outcome  : elementInput_outcome.val(),
+                isChecked: element_checkRow.is(':checked') ? '1': '0'
+            })
+        })
+
+        $('.__table-kegiatan').find('tbody').find('tr').each((key, element) => {
+            kegiatan.push({
+                id      : $(element).data('kegiatan-id'),
+                nama    : $(element).data('kegiatan-nama'),
+                anggaran: $(element).find('input[name=kegiatan-anggaran]').val()
             })
         })
 
         let inputValue = {
-            csrf_test_name  : $('input[name=csrf_test_name]').val(),
-            templateID      : element_btnSaveDokumen.data('template-id'),
-            rows            : rows,
-            totalAnggaran   : $('input[name=total-anggaran]').val(),
-            ttdPihak1       : $('input[name=ttd-pihak1]').val(),
-            ttdPihak2       : $('input[name=ttd-pihak2]').val(),
+            csrf_test_name: $('input[name=csrf_test_name]').val(),
+            templateID    : element_btnSaveDokumen.data('template-id'),
+            rows          : rows,
+            kegiatan      : kegiatan,
+            totalAnggaran : $('input[name=total-anggaran]').val(),
+            ttdPihak1     : $('input[name=ttd-pihak1]').val(),
+            ttdPihak2     : $('input[name=ttd-pihak2]').val(),
         }
         if ($('input[name=ttd-pihak2-jabatan]').length) inputValue.ttdPihak2Jabatan = $('input[name=ttd-pihak2-jabatan]').val()
-        console.log(inputValue)
+        
         return inputValue
     }
 
@@ -535,17 +616,18 @@
 
 
     function renderFormTemplate(_data) {
-        let template         = _data.template,
-            render_rowsForm  = renderFormTemplate_rowTable(_data.templateRow),
-            render_listInfo  = renderFormTemplate_listInfo(_data.templateInfo),
-            render_ttdPihak2 = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2)
+        let template               = _data.template,
+            render_rowsForm        = renderFormTemplate_rowTable(_data.templateRow),
+            render_rowKegiatan     = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
+            render_listInfo        = renderFormTemplate_listInfo(_data.templateInfo),
+            render_ttdPihak2       = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2)
             
         let render = `
             <div class="container-revision-alert"></div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <td class="text-center" colspan="2">Sasaran Program / Sasaran Kegiatan / Indikator</td>
+                        <td class="text-center" colspan="3">Sasaran Program / Sasaran Kegiatan / Indikator</td>
                         <td class="text-center" style="width: 250px">
                             Target <?php echo $sessionYear ?>
                         </td>
@@ -554,6 +636,9 @@
                         </td>
                     </tr>
                     <tr style="font-size:10px">
+                        <td class="text-center p-2 align-middle">
+                            <input type="checkbox" name="form-checkall-row" checked />
+                        </td>
                         <td class="text-center p-2" colspan="2">(1)</td>
                         <td class="text-center p-2">(2)</td>
                         <td class="text-center p-2">(3)</td>
@@ -571,9 +656,22 @@
                     </div>
                     <div class="mt-5">
                         <h6>${ template.info_title }</h6>
+                        <!--
                         <ul class="list-group">
                             ${ render_listInfo }
                         </ul>
+                        -->
+                        <table class="table table-striped border __table-kegiatan">
+                            <thead>
+                                <tr>
+                                    <th>Nama Kegiatan</th>
+                                    <th width="250px">Anggaran</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${render_rowKegiatan}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -585,7 +683,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Rp. </span>
                             </div>
-                            <input class="form-control" name="total-anggaran" placeholder="Nominal Total Anggaran" />
+                            <input class="form-control" name="total-anggaran" placeholder="Nominal Total Anggaran" readonly/>
                         </div>
                     </div>
                     <div class="form-group mt-4 pt-4">
@@ -620,6 +718,8 @@
         setInputFilter($(".__inputTemplateRow-outcome"), function(value) {
             return /^-?\d*$/.test(value); 
         }, "Data harus berupa angka");
+
+        $('select.select2').select2();
     }
 
 
@@ -634,7 +734,7 @@
                     rowNumber = 1
                     rows += `
                         <tr>
-                            <td><strong>SK</strong></td>
+                            <td colspan="2"><strong>SK</strong></td>
                             <td colspan="3">
                                 <strong>${ data.title }</strong>
                             </td>
@@ -645,6 +745,9 @@
                 case 'form':
                     rows += `
                         <tr>
+                            <td class="text-center align-middle">
+                                <input type="checkbox" name="form-check-row" checked />
+                            </td>
                             <td class="align-middle">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title }</td>
                             <td>
@@ -686,6 +789,34 @@
 
 
 
+    function renderFormTemplate_rowKegiatan(_data) {
+        let list  = ''
+        _data.forEach((data, key) => {
+            list += `
+                <tr
+                    data-kegiatan-id="${data.id}"
+                    data-kegiatan-nama="${data.nama}"
+                >
+                    <td class="align-middle">
+                        ${data.nama}
+                    </td>
+                    <td class="align-middle">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Rp. </span>
+                            </div>
+                            <input class="form-control" name="kegiatan-anggaran" value="0" placeholder="Nominal Anggaran">
+                        </div>
+                    </td>
+                </tr>
+            `
+        });
+
+        return list
+    }
+    
+
+    
     function renderFormTemplate_listInfo(_data) {
         let list = ''
         _data.forEach((data, key) => {
@@ -702,7 +833,7 @@
 
 
     function renderFormTemplate_ttdPihak2(_dataPenandatanganPihak2) {
-        let renderJalabatan = '<div><small class="title-ttd-pihak2">KEPALA ${_dataPenandatanganPihak2}</small></div>'
+        let renderJalabatan = `<div><small class="title-ttd-pihak2">KEPALA ${_dataPenandatanganPihak2}</small></div>`
         if (_dataPenandatanganPihak2 == '') {
             renderJalabatan = `
                 <input class="form-control" name="ttd-pihak2-jabatan" placeholder="Jabatan Penanda Tangan" />

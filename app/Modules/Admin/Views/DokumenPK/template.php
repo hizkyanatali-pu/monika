@@ -2,6 +2,7 @@
 
 <?= $this->section('content') ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.css'); ?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .paginate_button.page-item {
         padding: 0px !important;
@@ -188,7 +189,60 @@
                                 placeholder="Masukkan keterangan dokumen"
                             ></textarea>
                         </div>
-                        <div class="w-75">
+
+                        <div class="mt-4 pt-4">
+                            <h5>Kegiatan</h5>
+                            <div class="mt-3">
+                                <small>Pilih data yang akan di gunakan</small>
+                                <select class="form-control w-50 mt-2" name="kegiatan-used-data">
+                                    <option value="" selected disabled>Pilih Data Digunakan</option>
+                                    <option value="tgiat">Kegiatan</option>
+                                    <option value="tprogram">Program</option>
+                                </select>
+
+                                <table class="table table-striped border mt-4 d-none __table-kegiatan">
+                                    <thead>
+                                        <tr>
+                                            <th class="bg-purple text-white">
+                                                Nama <label class="_table-kegiatan-title-section">Kegiatan</label>
+                                            </th>
+                                            <th class="bg-purple text-white" width="60px"></th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="_container-select-kegiatan d-none">
+                                                    <select class="select2" name="kegiatan" style="width: 400px">
+                                                        <?php foreach ($allKegiatan as $key => $dataKegiatan) : ?>
+                                                            <option value="<?php echo $dataKegiatan->kdgiat ?>"><?php echo $dataKegiatan->nmgiat ?></option>
+                                                        <?php endforeach ?>
+                                                    </select>
+                                                </div>
+                                                <div class="_container-select-program d-none">
+                                                    <select class="select2" name="program" style="width: 400px">
+                                                        <?php foreach ($allProgram as $key => $dataProgram) : ?>
+                                                            <option value="<?php echo $dataProgram->kdprogram ?>"  class="d-none" data-jebret="123"><?php echo $dataProgram->nmprogram ?></option>
+                                                        <?php endforeach ?>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="text-right">
+                                                <button name="add-temp-kegiatan" class="btn btn-sm btn-primary pl-3 pr-2 mt-1">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>2</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="w-75 d-none">
                             <table class="table table-bordered _table-informasi">
                                 <thead>
                                     <tr>
@@ -295,6 +349,7 @@
 <?= $this->section('footer_js') ?>
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     var timerUserTyping                        = '',
         element_formTable                      = $('._table-form').find('tbody'),
@@ -306,15 +361,18 @@
         element_formPilihAksesDokumen          = $('._form-pilih-akses-dokumen'),
         element_checkAllOpsiAksesDokumen       = $('input[type=checkbox][name=check-all-opsi-satker]'),
         element_checkboxOpsiAksesDokumenShowed = $('input.open-to-check[type=checkbox][name=check-list-opsi-satker]')
-        element_selectDokumenType = $("select[name=dokumen-type]"),
-        csrfName = '<?= csrf_token() ?>',
-        csrfHash = '<?= csrf_hash() ?>'
+        element_selectDokumenType              = $("select[name=dokumen-type]"),
+        element_tableKegiatan                  = $(".__table-kegiatan"),
+        csrfName                               = '<?= csrf_token() ?>',
+        csrfHash                               = '<?= csrf_hash() ?>'
 
 
     $(document).ready(function () {
         $('#table').DataTable({
             scrollX: true
         })
+
+        $('select.select2').select2();
 
         element_modalForm.on('hide.bs.modal', function() {
             setTimeout(() => {
@@ -441,6 +499,8 @@
         }, 700)
     })
 
+
+
     $('input[name=search-opsi-akses-satker_text]').on('keyup', function() {
         clearTimeout(timerUserTyping)
         timerUserTyping = setTimeout(() => {
@@ -472,6 +532,45 @@
 
     element_checkAllOpsiAksesDokumen.on('change', function() {
         $('input.open-to-check[type=checkbox][name=check-list-opsi-satker]').prop('checked', this.checked)
+    })
+
+
+
+    $(document).on('change', 'select[name=kegiatan-used-data]', function() {
+        element_tableKegiatan.removeClass('d-none')
+
+        switch ($(this).val()) {
+            case 'tgiat':
+                $('._container-select-kegiatan').removeClass('d-none')
+                $('._container-select-program').addClass('d-none')
+                break;
+            
+            case 'tprogram':
+                $('._container-select-program').removeClass('d-none')
+                $('._container-select-kegiatan').addClass('d-none')
+                break;
+        }
+
+        $('._table-kegiatan-title-section').text($(this).find('option:selected').text())
+        element_tableKegiatan.find('tbody').empty()
+    })
+
+
+
+    $(document).on('click', 'button[name=add-temp-kegiatan]', function() {
+        let selectName             = $('select[name=kegiatan-used-data]').val() == 'tgiat' ? 'kegiatan' : 'program',
+            element_selectKegiatan = $('select[name='+selectName+']')
+
+        render_rowTableKegiatan(params = {
+            idKegiatan  : element_selectKegiatan.val(),
+            namaKegiatan: element_selectKegiatan.find('option:selected').text(),
+        })
+    })
+
+
+
+    $(document).on('click', 'button[name=remove-temp-kegiatan]', function() {
+        $(this).parents('tr').remove()
     })
 
 
@@ -608,6 +707,7 @@
         form.append('type', element_selectDokumenType.val())
         form.append('title', $('input[name=judul-dokumen]').val())
         form.append('keterangan', $('textarea[name=keterangan-dokumen]').val())
+        form.append('kegiatan_table_ref', $('select[name=kegiatan-used-data]').val())
         form.append('info_title', $('input[name=judul-informasi]').val())
 
         tableForm_to_array().forEach((data, key) => {
@@ -615,6 +715,12 @@
             form.append('formTable_targetSatuan[]', data.target_satuan)
             form.append('formTable_outcomeSatuan[]', data.outcome_satuan)
             form.append('formTable_type[]', data.type)
+        })
+
+        tableKegiatan_to_array().forEach((data, key) => {
+            form.append('kegiatan_id[]', data.id)
+            form.append('kegiatan_nama[]', data.nama)
+            form.append('kegiatan_rev[]', data.rev)
         })
 
         itemInformasi_to_array().forEach((data, key) => {
@@ -634,9 +740,10 @@
         element_formTable.empty()
         element_tableInformasi.empty()
         element_checkboxOpsiAksesDokumenShowed.prop('checked', false)
-
+        
         $('input[name=judul-dokumen]').val(_data.template.title)
         $('textarea[name=keterangan-dokumen]').val(_data.template.keterangan)
+        $('select[name=kegiatan-used-data]').val(_data.template.kegiatan_table_ref).trigger("change")
         $('input[name=judul-informasi]').val(_data.template.info_title)
         element_selectDokumenType.val(_data.template.type).change()
 
@@ -653,6 +760,13 @@
                     outcomeSatuan: data.outcome_satuan
                 }))
             }
+        })
+
+        _data.kegiatan.forEach((data, key) => {
+            render_rowTableKegiatan({
+                idKegiatan  : data.id,
+                namaKegiatan: data.nama
+            })
         })
 
         _data.info.forEach((data, key) => {
@@ -698,6 +812,22 @@
         })
         
         return tempArrayForm
+    }
+
+
+
+    function tableKegiatan_to_array() {
+        let tempArray = []
+
+        element_tableKegiatan.find('tbody').find('tr').each((key, element) => {
+            tempArray.push({
+                id  : $(element).data('kegiatan-id'),
+                nama: $(element).data('kegiatan-nama'),
+                rev : $('select[name=kegiatan-used-data]').val()
+            })
+        })
+
+        return tempArray
     }
 
     
@@ -779,6 +909,34 @@
                 </td>
             </tr>
         `
+    }
+
+
+
+    
+
+
+
+    function render_rowTableKegiatan(params = {
+        idKegiatan  : '',
+        namaKegiatan: ''
+    })
+    {
+        $('.__table-kegiatan').find('tbody').append(`
+            <tr 
+                data-kegiatan-id="${params.idKegiatan}"
+                data-kegiatan-nama="${params.namaKegiatan}"
+            >
+                <td class="align-middle">
+                    ${params.namaKegiatan}
+                </td>
+                <td class="text-right align-middle">
+                    <button class="btn btn-sm btn-outline-danger pl-3 pr-2" name="remove-temp-kegiatan">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `)
     }
 </script>
 <?= $this->endSection() ?>

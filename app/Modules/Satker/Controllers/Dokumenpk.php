@@ -17,15 +17,18 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->userUID = $this->user['uid'];
         $this->db = \Config\Database::connect();
 
-        $this->dokumenSatker      = $this->db->table('dokumenpk_satker');
-        $this->dokumenSatker_rows = $this->db->table('dokumenpk_satker_rows');
+        $this->dokumenSatker          = $this->db->table('dokumenpk_satker');
+        $this->dokumenSatker_rows     = $this->db->table('dokumenpk_satker_rows');
+        $this->dokumenSatker_kegiatan = $this->db->table('dokumenpk_satker_kegiatan');
 
-        $this->templateDokumen = $this->db->table('dokumen_pk_template');
-        $this->templateRow     = $this->db->table('dokumen_pk_template_row');
-        $this->templateInfo    = $this->db->table('dokumen_pk_template_info');
+        $this->templateDokumen  = $this->db->table('dokumen_pk_template');
+        $this->templateRow      = $this->db->table('dokumen_pk_template_row');
+        $this->templateKegiatan = $this->db->table('dokumen_pk_template_kegiatan');
+        $this->templateInfo     = $this->db->table('dokumen_pk_template_info');
 
-        $this->satker = $this->db->table('m_satker');
-        $this->balai  = $this->db->table('m_balai');
+        $this->satker   = $this->db->table('m_satker');
+        $this->balai    = $this->db->table('m_balai');
+        $this->kegiatan = $this->db->table('tgiat');
 
         $this->dokumenStatus = [
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
@@ -159,10 +162,12 @@ class Dokumenpk extends \App\Controllers\BaseController
         }
 
         return $this->respond([
-            'template'      => $this->templateDokumen->where('id', $id)->get()->getRow(),
-            'templateRow'   => $this->templateRow->where('template_id', $id)->get()->getResult(),
-            'templateInfo'  => $this->templateInfo->where('template_id', $id)->get()->getResult(),
-            'penandatangan' => [
+            'template'         => $this->templateDokumen->where('id', $id)->get()->getRow(),
+            'templateRow'      => $this->templateRow->where('template_id', $id)->get()->getResult(),
+            'templateKegiatan' => $this->templateKegiatan->where('template_id', $id)->get()->getResult(),
+            'templateInfo'     => $this->templateInfo->where('template_id', $id)->get()->getResult(),
+            'kegiatan'         => $this->kegiatan->get()->getResult(),
+            'penandatangan'    => [
                 'pihak1' => $pihak1,
                 'pihak2' => $pihak2
             ]
@@ -250,9 +255,12 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->insertDokumenSatker_rows($this->request->getPost(), $dokumenID);
         /** end-of: dokumen rows */
 
+        /** dokumen kegiatan */
+        $this->insertDokumenSatker_kegiatan($this->request->getPost(), $dokumenID);
+        /** end-of: dokumen kegiatan */
+
         return $this->respond([
             'status' => true,
-            
         ]);
     }
 
@@ -270,8 +278,24 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'template_row_id' => $arr['id'],
                 'target_value'    => $arr['target'],
                 'outcome_value'   => $arr['outcome'],
+                'is_checked'      => $arr['isChecked']
             ];
         }, $input['rows']);
         $this->dokumenSatker_rows->insertBatch($rows);
+    }
+
+
+
+    private function insertDokumenSatker_kegiatan($input, $_dokumenID)
+    {
+        $records = array_map(function($arr) use ($_dokumenID) {
+            return [
+                'dokumen_id' => $_dokumenID,
+                'id'         => $arr['id'],
+                'nama'       => $arr['nama'],
+                'anggaran'   => $arr['anggaran']
+            ];
+        }, $input['kegiatan']);
+        $this->dokumenSatker_kegiatan->insertBatch($records);
     }
 }

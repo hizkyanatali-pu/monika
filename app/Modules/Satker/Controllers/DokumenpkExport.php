@@ -18,8 +18,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->dokumenYear = $this->user['tahun'];
         $this->db          = \Config\Database::connect();
 
-        $this->dokumenSatker      = $this->db->table('dokumenpk_satker');
-        $this->dokumenSatker_rows = $this->db->table('dokumenpk_satker_rows');
+        $this->dokumenSatker          = $this->db->table('dokumenpk_satker');
+        $this->dokumenSatker_rows     = $this->db->table('dokumenpk_satker_rows');
+        $this->dokumenSatker_kegiatan = $this->db->table('dokumenpk_satker_kegiatan');
 
         $this->templateDokumen = $this->db->table('dokumen_pk_template');
         $this->templateRow     = $this->db->table('dokumen_pk_template_row');
@@ -217,7 +218,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
             65
         ];
 
-        $dataDokumenInfo = $this->templateInfo->where('template_id', $dataDokumen['template_id'])->get()->getResultArray();
+        $dataDokumenKegiatan = $this->dokumenSatker_kegiatan->where('dokumen_id', $_dokumenSatkerID)->get()->getResultArray();
+        $dataDokumenInfo     = $this->templateInfo->where('template_id', $dataDokumen['template_id'])->get()->getResultArray();
 
         $tableData = $this->templateRow
             ->where('template_id', $dataDokumen['template_id'])
@@ -280,21 +282,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $rowNUmber = 0;
         foreach ($tableData as $key => $data) {
             $celTableDataFill = $this->dokumenLoadedStatus == 'setuju' ? true : false;
-
-            if ($data['type'] == 'form') {
-                $pdf->SetFillColor(255);
-                $width_cellTitle = $tableDataWidth[1];
-                $rowNUmber++;
-            } else {
-                $pdf->SetFillColor(233);
-                $width_cellTitle = 245;
-                $rowNUmber = 'SK';
-            }
-
-
-            $pdf->SetX((300 - array_sum($tableDataWidth)) / 2);
-            $pdf->Cell($tableDataWidth[0], 6, $rowNUmber, 'T,B,L', 0, 'C', $celTableDataFill);
-            $pdf->Cell($width_cellTitle, 6, $data['title'], 'T,R,B', 0, 'L', $celTableDataFill);
+            $data_targetValue = [];
 
             if ($data['type'] == 'form') {
                 $data_targetValue = $this->dokumenSatker_rows->where('dokumen_id', $_dokumenSatkerID)
@@ -302,12 +290,32 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     ->get()
                     ->getRowArray();
 
-                $pdf->Cell($tableDataWidth[2], 6, $data_targetValue['target_value'] . ' ' . $data['target_satuan'], 1, 0, 'C', $celTableDataFill);
+                $pdf->SetFillColor(255);
+                $width_cellTitle = $tableDataWidth[1];
+
+                if ($data_targetValue['is_checked'] == '1') $rowNUmber++;
+            } else {
+                $data_targetValue['is_checked'] = '1';
+
+                $pdf->SetFillColor(233);
+                $width_cellTitle = 245;
+                $rowNUmber = 'SK';
+            }
+
+
+            $pdf->SetX((300 - array_sum($tableDataWidth)) / 2);
+            if ($data_targetValue['is_checked'] == '1') {
+                $pdf->Cell($tableDataWidth[0], 6, $rowNUmber, 'T,B,L', 0, 'C', $celTableDataFill);
+                $pdf->Cell($width_cellTitle, 6, $data['title'], 'T,R,B', 0, 'L', $celTableDataFill);
+            }
+
+            if ($data['type'] == 'form') {
+                if ($data_targetValue['is_checked'] == '1')  $pdf->Cell($tableDataWidth[2], 6, $data_targetValue['target_value'] . ' ' . $data['target_satuan'], 1, 0, 'C', $celTableDataFill);
             } else {
                 $rowNUmber = 0;
             }
 
-            $pdf->Ln();
+            if ($data_targetValue['is_checked'] == '1') $pdf->Ln();
         }
         $pdf->Ln(1);
 
@@ -343,13 +351,21 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetX(183);
         $pdf->Cell(100, 7, rupiahFormat($dataDokumen['total_anggaran']), 0, 0, 'R');
 
-        // info
-        foreach ($dataDokumenInfo as $key_info => $data_info) {
+        // kegiatan
+        foreach ($dataDokumenKegiatan as $key_kegiatan => $data_kegiatan) {
             $pdf->SetFont($this->fontFamily, '', 8);
             $pdf->SetX((310 - array_sum($tableDataWidth)) / 2);
-            $pdf->Cell(100, 7, $data_info['info'], 0, 0, 'L');
+            $pdf->Cell(100, 7, $data_kegiatan['nama'], 0, 0, 'L');
             $pdf->Ln(4);
         }
+
+        // info
+        // foreach ($dataDokumenInfo as $key_info => $data_info) {
+        //     $pdf->SetFont($this->fontFamily, '', 8);
+        //     $pdf->SetX((310 - array_sum($tableDataWidth)) / 2);
+        //     $pdf->Cell(100, 7, $data_info['info'], 0, 0, 'L');
+        //     $pdf->Ln(4);
+        // }
 
 
         /** TTD Section */
