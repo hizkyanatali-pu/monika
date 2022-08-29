@@ -224,6 +224,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('detail/(:any)', '\Modules\Admin\Controllers\Dokumenpk::show/$1');
                     $routes->post('create', '\Modules\Admin\Controllers\Dokumenpk::createTemplate');
                     $routes->post('update', '\Modules\Admin\Controllers\Dokumenpk::updateTemplate');
+                    $routes->post('update-status', '\Modules\Admin\Controllers\Dokumenpk::updateTemplateStatus');
                     $routes->post('delete', '\Modules\Admin\Controllers\Dokumenpk::removeTemplate');
                 });
             });

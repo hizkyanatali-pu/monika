@@ -26,9 +26,8 @@
                 
                 <div>
                     <button 
-                        class="btn btn-primary" 
-                        data-toggle="modal"
-                        data-target="#modalForm"
+                        class="btn btn-primary __opsi-template"
+                        data-available="<?php echo $templateAvailable ?>"
                     >
                         <i class="fas fa-plus"></i> Buat Dokumen
                     </button>
@@ -228,16 +227,27 @@
             scrollX: true
         })
 
-        $('#modalForm').on('show.bs.modal', function () {
+        $('#modalForm').on('hidden.bs.modal', function () {
+            prepareForm_reset();
+        })
+    })
+    
+    
+    
+    $(document).on('click', '.__opsi-template', function() {
+        if ($(this).data('available') == true) {
+            $('#modalForm').modal('show')
             let elements_optionListDokumen = $('.__buat-dokumen-pilih-template')
             if (elements_optionListDokumen.length == 1) {
                 elements_optionListDokumen.eq(0).trigger('click')
             }
-        })
-
-        $('#modalForm').on('hidden.bs.modal', function () {
-            prepareForm_reset();
-        })
+        }else {
+            Swal.fire(
+            'Template Tidak Tersedia',
+            'Tidak ada template yang dapat di akses oleh akun anda',
+            'warning'
+            )
+        }
     })
 
 

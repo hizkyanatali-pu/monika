@@ -55,7 +55,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ')
         ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
         ->where('user_created', $this->userUID)
-        ->where('status !=', 'revision')
+        ->where('dokumenpk_satker.status !=', 'revision')
         ->orderBy('dokumenpk_satker.id', 'DESC')
         ->get()->getResult();
         
@@ -81,24 +81,26 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             $dataTemplate = $this->templateDokumen->select('dokumen_pk_template.*')
             ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
+            ->where('dokumen_pk_template.status', '1')
             ->where('dokumen_pk_template_akses.rev_id', $template_revID)
             ->where('dokumen_pk_template.type', $template_type)
             ->where('dokumen_pk_template_akses.rev_table', $templae_revTable)
             ->groupBy('dokumen_pk_template.id')
             ->get()->getResult();
             
-            if (!$dataTemplate) goto globalUserTemplate;
+            if (!$dataTemplate) $dataTemplate = [];
             goto returnSection;
         }
         
         globalUserTemplate:
         if (isset($this->user['user_type'])) $this->templateDokumen->where('type', $this->user['user_type']);
-        $dataTemplate = $this->templateDokumen->get()->getResult();
+        $dataTemplate = $this->templateDokumen->where('dokumen_pk_template.status', '1')->get()->getResult();
         
         returnSection:
         return view('Modules\Satker\Views\Dokumenpk.php', [
-            'sessionYear'     => $this->user['tahun'],
-            'templateDokumen' => $dataTemplate,
+            'sessionYear'       => $this->user['tahun'] ,
+            'templateDokumen'   => $dataTemplate,
+            'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
 
             'dataDokumen'   => $dataDokumen,
             'dokumenStatus' => $this->dokumenStatus
@@ -122,7 +124,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         ')
         ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
         ->join('ku_user', 'dokumenpk_satker.user_created = ku_user.uid', 'left')
-        ->where('status', $_status)
+        ->where('dokumen_pk_template.status', '1')
+        ->where('dokumenpk_satker.status', $_status)
         ->where('dokumenpk_satker.dokumen_type', $_dokumenType)
         ->orderBy('dokumenpk_satker.id', 'DESC')
         ->get()->getResult();

@@ -168,6 +168,21 @@ class Dokumenpk extends \App\Controllers\BaseController
             'input'  => $this->request->getPost()
         ], 200);
     }
+    
+    
+    
+    public function updateTemplateStatus()
+    {
+        $this->dokumenPK->where('id', $this->request->getPost('dataId'));
+        $this->dokumenPK->update([
+            'status' => $this->request->getPost('newStatus')
+        ]);
+
+        return $this->respond([
+            'status' => true,
+            'input'  => $this->request->getPost()
+        ], 200);
+    }
 
 
 
