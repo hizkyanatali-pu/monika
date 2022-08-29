@@ -833,7 +833,9 @@
 
 
     function renderFormTemplate_ttdPihak2(_dataPenandatanganPihak2) {
-        let renderJalabatan = `<div><small class="title-ttd-pihak2">KEPALA ${_dataPenandatanganPihak2}</small></div>`
+        let prefixJabatanPenandatangan = _dataPenandatanganPihak2.includes('KEPALA') ? '' : 'KEPALA',
+            renderJalabatan = `<div><small class="title-ttd-pihak2">${prefixJabatanPenandatangan + ' ' + _dataPenandatanganPihak2}</small></div>`
+
         if (_dataPenandatanganPihak2 == '') {
             renderJalabatan = `
                 <input class="form-control" name="ttd-pihak2-jabatan" placeholder="Jabatan Penanda Tangan" />

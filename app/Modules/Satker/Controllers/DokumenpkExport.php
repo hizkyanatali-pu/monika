@@ -142,9 +142,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Ln(2);
 
         // Pihak Kedua
-        $prefixJabatanPihak2 = $dataDokumen['dokumen_type'] == 'satker' ? 'KEPALA ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak2_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $prefixJabatanPihak2 . $dataDokumen['pihak2_initial']);
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $dataDokumen['pihak2_initial']);
 
         // Text 3
         $pdf->Ln(4);
