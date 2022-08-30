@@ -92,19 +92,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="example-text-input" class="col-3 col-form-label">Balai *</label>
-                                    <div class="col-6">
-                                        <select name="balaiid"  class="form-control">
-                                        <option>--Pilih--</option>
-                                        <?php 
-                                                foreach($balai as $key => $mbalai): ?>
-                                                <option value="<?= $mbalai['balaiid']?>" <?= ($user['balaiid']===$mbalai['balaiid']) ? 'selected="selected"':'';?> ><?= $mbalai['balai']?></option>
-                                            <?php endforeach; ?>
-                                           
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
                                     <label for="group-input" class="col-3 col-form-label">Group *</label>
                                     <div class="col-6">
                                         <select name="group_id" class="form-control" id="group-input">
@@ -123,6 +110,42 @@
                                             <option>--Pilih--</option>
                                             <option value="1" <?= ($user['aktif']==='1') ? 'selected="selected"':'';?> >Aktif</option>
                                             <option value="0" <?= ($user['aktif']==='0') ? 'selected="selected"':'';?> >Tidak Aktif</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Balai *</label>
+                                    <div class="col-6">
+                                        <select name="balaiid"  class="form-control">
+                                        <option>--Pilih--</option>
+                                        <?php 
+                                                foreach($balai as $key => $mbalai): ?>
+                                                <option value="<?= $mbalai['balaiid']?>" <?= ($user['balaiid']===$mbalai['balaiid']) ? 'selected="selected"':'';?> >
+                                                    <?= $mbalai['balai']?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                           
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-3 col-form-label">Satker</label>
+                                    <div class="col-6">
+                                        <select name="satkerid" class="form-control">
+                                            <option value="">--Pilih--</option>
+                                            <?php foreach($satker as $keySatker => $valueSatker): ?>
+                                                <option 
+                                                    class="
+                                                        <?php if ($user['balaiid'] != $valueSatker['balaiid']) echo 'd-none' ?>
+                                                        _option-select-satker
+                                                    " 
+                                                    data-balai-id="<?= $valueSatker['balaiid'] ?>"
+                                                    value="<?= $valueSatker['satkerid']?>"
+                                                    <?php if ($user['satkerid'] == $valueSatker['satkerid']) : ?> selected="selected" <?php endif; ?>
+                                                >
+                                                    <?= $valueSatker['satker']?>
+                                                </option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
@@ -154,5 +177,12 @@
 <?= $this->section('footer_js') ?>
     <script>
         console.log('additional footer js')
+
+
+
+        $(document).on('change', 'select[name=balaiid]', function() {
+            $('._option-select-satker').addClass('d-none')
+            $('._option-select-satker[data-balai-id='+$(this).val()+']').removeClass('d-none')
+        })
     </script>
 <?= $this->endSection() ?>

@@ -33,7 +33,8 @@ class Users extends \App\Controllers\BaseController
             'title'=> 'Edit User',
             'user'=> $this->users->getUsers($slug),
             'usergroups'=> $this->usergroups->getUserGroups(),
-            'balai'=> $this->balai->get()->getResultArray()
+            'balai'=> $this->balai->get()->getResultArray(),
+            'satker'     => $this->satker->get()->getResultArray()
         );
         if (empty($data['user'])) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the users item: ' . $slug);
@@ -67,6 +68,7 @@ class Users extends \App\Controllers\BaseController
             'telpon'            => $this->request->getVar('telpon'),
             'nip'               => $this->request->getVar('nip'),
             'balaiid'           => $this->request->getVar('balaiid'),
+            'satkerid'           => $this->request->getVar('satkerid'),
             'group_id'           => $this->request->getVar('group_id'),
         ])->update();
 
