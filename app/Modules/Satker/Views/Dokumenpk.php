@@ -336,28 +336,29 @@
 
 
     element_btnSaveDokumen.on('click', function() {
-        let formData = getFormValue();
-        console.log(formData)
+        if (saveDokumenValidation()) {
+            let formData = getFormValue();
 
-        if ($(this).attr('data-dokumen-id')) {
-            formData['revision_dokumen_id']        = $(this).data('dokumen-id')
-            formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
-        }
-        
-        $.ajax({
-            url: "<?php echo site_url('dokumenpk/create') ?>",
-            type: 'POST',
-            data: formData,
-            success: (res) => {
-                if (res.status) {
-                    location.reload()
-                }
-            },
-            fail: (xhr) => {
-                alert('Terjadi kesalahan pada sistem')
-                console.log(xhr)
+            if ($(this).attr('data-dokumen-id')) {
+                formData['revision_dokumen_id']        = $(this).data('dokumen-id')
+                formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
             }
-        })
+            
+            $.ajax({
+                url: "<?php echo site_url('dokumenpk/create') ?>",
+                type: 'POST',
+                data: formData,
+                success: (res) => {
+                    if (res.status) {
+                        location.reload()
+                    }
+                },
+                fail: (xhr) => {
+                    alert('Terjadi kesalahan pada sistem')
+                    console.log(xhr)
+                }
+            })
+        }
     })
 
 
@@ -529,6 +530,30 @@
         if ($('input[name=ttd-pihak2-jabatan]').length) inputValue.ttdPihak2Jabatan = $('input[name=ttd-pihak2-jabatan]').val()
         
         return inputValue
+    }
+    
+    
+    
+    function  saveDokumenValidation() {
+        if ($('input[name=ttd-pihak1]').val() == '') {
+            Swal.fire(
+                'Peringatan',
+                'Penandatangan pihak pertama belum terisi',
+                'warning'
+            )
+            return false
+        }
+
+        if ($('input[name=ttd-pihak2]').val() == '') {
+            Swal.fire(
+                'Peringatan',
+                'Penandatangan pihak kedua belum terisi',
+                'warning'
+            )
+            return false
+        }
+
+        return true
     }
 
 
@@ -705,7 +730,7 @@
                                 KEPALA ${_data.penandatangan.pihak1}
                             </small>
                         </div>
-                        <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" />
+                        <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required />
                     </div>
                     <div class="form-group mt-4 pt-2">
                         <label>
