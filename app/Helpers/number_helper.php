@@ -4,7 +4,8 @@
 if (!function_exists('toRupiah')) {
 	function rupiahFormat($argNumber, $withRp = true, $desimal = 0)
 	{
-		return ($withRp ? 'Rp. ' : '') . number_format($argNumber, $desimal, ',', '.');
+		$number = ($argNumber > 0) ? number_format($argNumber, $desimal, ',', '.') : 0;
+		return ($withRp ? 'Rp. ' : '') . $number;
 	}
 }
 
