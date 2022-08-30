@@ -293,13 +293,10 @@
                                 </div>
                                 </div>
                                 <div class="col-md-6">
-                                    
                                         <div class="ml-2 mt-3 w-100">
                                             <label>Cari</label>
                                             <input type="text" name="search-opsi-akses-satker_text" class="form-control" placeholder="Cari Satker">
                                         </div>
-
-                                  
                                 </div>
                            
                             </div>
@@ -324,7 +321,9 @@
                                             >
                                         </td>
                                         <td>
-                                            <label><?php echo $dataSatker->satker ?></label>
+                                            <label>
+                                                <?php echo $dataSatker->satker ?>
+                                            </label>
                                         </td>
                                     </tr>
                                 <?php endforeach ?>
@@ -403,6 +402,8 @@
                 element_formMain.removeClass('d-none')
                 element_formPilihAksesDokumen.addClass('d-none')
                 element_modalFormFooter.removeClass('d-none')
+
+                location.reload()
             }, 400)
         })
     })
@@ -583,56 +584,61 @@
 
 
     $('button[name=save-document]').click(function() {
-        let form = get_formInputValue()
-        
-        $.ajax({
-            url: "<?php echo site_url('dokumenpk/template/create') ?>",
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            cache: false,
-            data: form,
-            success: (res) => {
-                if (res.status) {
-                    location.reload()
-                }
-                else {
+        if (formValidation()) {
+            let form = get_formInputValue()
+            
+            $.ajax({
+                url: "<?php echo site_url('dokumenpk/template/create') ?>",
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                cache: false,
+                data: form,
+                success: (res) => {
+                    if (res.status) {
+                        location.reload()
+                    }
+                    else {
+                        alert('Terjadi kesalahan pada sistem')
+                    }
+                },
+                fail: (xhr) => {
                     alert('Terjadi kesalahan pada sistem')
+                    console.log(xhr)
                 }
-            },
-            fail: (xhr) => {
-                alert('Terjadi kesalahan pada sistem')
-                console.log(xhr)
-            }
-        })
+            })
+        }
     })
 
 
 
     $('button[name=update-document]').click(function() {
-        let form = get_formInputValue()
-        form.append('dataId', $(this).data('id'))
+        console.log($('input[name=csrf_test_name]').val())
+        if (formValidation()) {
+            let form = get_formInputValue()
+            form.append('dataId', $(this).data('id'))
 
-        $.ajax({
-            url: '<?php echo site_url('dokumenpk/template/update') ?>',
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            cache: false,
-            data: form,
-            success: (res) => {
-                if (res.status) {
-                    location.reload()
-                }
-                else {
+            $.ajax({
+                url: '<?php echo site_url('dokumenpk/template/update') ?>',
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                cache: false,
+                data: form,
+                success: (res) => {
+                    if (res.status) {
+                        location.reload()
+                    }
+                    else {
+                        alert('Terjadi kesalahan pada sistem')
+                    }
+                },
+                fail: (xhr) => {
                     alert('Terjadi kesalahan pada sistem')
+                    console.log(xhr)
                 }
-            },
-            fail: (xhr) => {
-                alert('Terjadi kesalahan pada sistem')
-                console.log(xhr)
-            }
-        })
+            })
+        }
     })
     
     
@@ -770,6 +776,21 @@
         })
         
         return form
+    }
+    
+    
+    
+    function formValidation() {
+        if (tableKegiatan_to_array().length <= 0) {
+            Swal.fire(
+                'Peringatan',
+                'Kegiatan belum di pilih',
+                'warning'
+            )
+            return false
+        }
+
+        return true
     }
 
 

@@ -19,6 +19,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->get('auth', '\Modules\Admin\Controllers\Auth::index', ['as' => 'auth']);
     $routes->post('auth', '\Modules\Admin\Controllers\Auth::attemptLogin');
     $routes->get('logout', '\Modules\Admin\Controllers\Auth::logout');
+
+    $routes->get('csrf-update', '\Modules\Admin\Controllers\Csrf::index');
     
     
     $routes->get('account', '\Modules\Admin\Controllers\Account::index', ['as' => 'account']);
