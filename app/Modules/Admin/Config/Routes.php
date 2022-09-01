@@ -200,6 +200,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             $routes->group('bigdata', ['namespace' => 'App\Controllers'], function($routes) {
                 $routes->get('/', '\Modules\Admin\Controllers\BigData::index');
                 $routes->get('load-data', '\Modules\Admin\Controllers\BigData::loadData');
+                $routes->get('filter-select-lookup', '\Modules\Admin\Controllers\BigData::filterSelectLookup');
 
                 $routes->group('download', ['namespace' => 'App\Controllers'], function($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\BigData::downloadExcelBigData');

@@ -83,6 +83,30 @@ class BigData extends \App\Controllers\BaseController
 
         return $this->respond($result, 200);
     }
+    
+    
+    
+    public function filterSelectLookup ()
+    {
+        $input  = $this->request->getGet();
+        $result = [];
+        
+        switch ($input['childTarget']) {
+            case 'kegiatan':
+                $result = $this->kegiatan->select('kdgiat as id, nmgiat as nama')->where('kdprogram', $input['parentValue'])->get()->getResult();
+                break;
+            
+            case 'output':
+                $result = $this->output->select('kdoutput as id, nmoutput as nama')->where('kdgiat', $input['parentValue'])->get()->getResult();
+                break;
+            
+            case 'suboutput':
+                $result = $this->suboutput->select('kdro as id, nmro as nama')->where('kdgiat', $input['kdgiat'])->where('kdkro', $input['parentValue'])->get()->getResult();
+                break;
+        }
+
+        return $this->respond($result, 200);
+    }
 
 
 

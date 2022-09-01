@@ -116,16 +116,13 @@
             <div class="form-group">
                 <label for="exampleInputEmail1">Kegiatan</label>
                 <select class="form-control select2" name="filter-kegiatan">
-                    <option value="*">Semua</option>
-                    <?php foreach ($data['kegiatan'] as $key => $value) : ?>
-                        <option value="<?php echo $value->id ?>"><?php echo $value->nama?></option>
-                    <?php endforeach; ?>
+                    <option value="*">Pilih Program Lebih Dahulu</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Output</label>
                 <select class="form-control select2" name="filter-output">
-                    <option value="*">Semua</option>
+                    <option value="*">Pilih Kegiatan Lebih Dahulu</option>
                     <?php foreach ($data['output'] as $key => $value) : ?>
                         <option value="<?php echo $value->id ?>"><?php echo $value->nama?></option>
                     <?php endforeach; ?>
@@ -134,7 +131,7 @@
             <div class="form-group">
                 <label for="exampleInputEmail1">Suboutput</label>
                 <select class="form-control select2" name="filter-suboutput">
-                    <option value="*">Semua</option>
+                    <option value="*">Pilih Output Lebih Dahulu</option>
                     <?php foreach ($data['suboutput'] as $key => $value) : ?>
                         <option value="<?php echo $value->id ?>"><?php echo $value->nama?></option>
                     <?php endforeach; ?>
@@ -247,6 +244,49 @@
         getData()
 
         $('.select2').select2()
+    })
+    
+    
+    
+    $(document).on('change', 'select[name=filter-program]', function() {
+        getFilterData_selectLookUp ({
+            parentInitial: 'Program',
+            data         : {
+                parentValue: $(this).val()
+            },
+            childInitial : 'Kegiatan',
+            childTarget  : 'kegiatan',
+            childElement : 'select[name=filter-kegiatan]'
+        })
+    })
+    
+    
+    
+    $(document).on('change', 'select[name=filter-kegiatan]', function() {
+        getFilterData_selectLookUp ({
+            parentInitial: 'Kegiatan',
+            data         : {
+                parentValue: $(this).val()
+            },
+            childInitial : 'Output',
+            childTarget  : 'output',
+            childElement : 'select[name=filter-output]'
+        })
+    })
+    
+    
+    
+    $(document).on('change', 'select[name=filter-output]', function() {
+        getFilterData_selectLookUp ({
+            parentInitial: 'Output',
+            data         : {
+                parentValue: $(this).val(),
+                kdgiat     : $('select[name=filter-kegiatan]').val()
+            },
+            childInitial : 'Sub Output',
+            childTarget  : 'suboutput',
+            childElement : 'select[name=filter-suboutput]'
+        })
     })
 
 
@@ -367,6 +407,50 @@
         if ($('select[name=filter-suboutput]').val() != '*') value.kdsoutput = $('select[name=filter-suboutput]').val()
 
         return value
+    }
+    
+    
+    
+    function getFilterData_selectLookUp (params = {
+        parentInitial: '',
+        parentValue  : '',
+        childInitial : '',
+        childTarget  : '',
+        childElement : ''
+    }) {
+        let sendData = params.data
+
+        sendData.childTarget = params.childTarget
+
+        $.ajax({
+            type: 'GET',
+            url: "<?php echo site_url('bigdata/filter-select-lookup') ?>",
+            data: sendData,
+            success: (res) => {
+                $(params.childElement).empty();
+
+                if (sendData.parentValue != '*') {
+                    res.forEach((data, key) => {
+                        let newOption = new Option(data.nama, data.id, true, true);
+                        $(params.childElement).append(newOption);
+                    });
+
+                    let newOption
+                    if (res.length > 0) {
+                        newOption = new Option('Semua', '*', true, true)
+                    }
+                    else {
+                        newOption = new Option(params.childInitial + ' tidak di temukan', '*', true, true)
+                    }
+                    
+                    $(params.childElement).prepend(newOption).trigger('change')
+                }
+                else {
+                    newOption = new Option('Pilih '+params.parentInitial+' Lebih Dahulu', '*', true, true)
+                    $(params.childElement).prepend(newOption).trigger('change')
+                }
+            }
+        })
     }
 
 
