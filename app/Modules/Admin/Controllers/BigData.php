@@ -111,9 +111,10 @@ class BigData extends \App\Controllers\BaseController
 
 
     public function downloadExcelBigData() {
-        $limitData = 1000;
-        $offsetData = ($this->request->getGet('fileNumber') - 1) * $limitData;
-        $filterData = $this->request->getGet('filter');
+        $limitData    = 1000;
+        $offsetData   = ($this->request->getGet('fileNumber') - 1) * $limitData;
+        $filterData   = $this->request->getGet('filter');
+        $masterColumn = $this->tableColumn();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -156,7 +157,15 @@ class BigData extends \App\Controllers\BaseController
 
             foreach ($columnHeader as $kelCell => $dataCell) {
                 $cellIndex = $kelCell+2;
-                $sheet->setCellValueByColumnAndRow($cellIndex, $row, $data[$dataCell['name']]);
+                $cellText = $data[$dataCell['name']];
+
+                $masterColumnKey  = array_search($dataCell['name'], array_column($masterColumn, 'value'));
+                $masterColumnCell = $masterColumn[$masterColumnKey];
+                $masterColumn_isNumberFormat = array_key_exists('isNumberFormat', $masterColumnCell) ? $masterColumnCell['isNumberFormat'] : false;
+
+                if ($masterColumn_isNumberFormat) $cellText = rupiahFormat($cellText, false);
+
+                $sheet->setCellValueByColumnAndRow($cellIndex, $row, $cellText);
             }
         }
 
@@ -357,88 +366,102 @@ class BigData extends \App\Controllers\BaseController
                 'widthColumn' => 450
             ],
             [
-                'value'       => 'pagu_51',
-                'label'       => 'pagu 51',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'pagu_51',
+                'label'          => 'pagu 51',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'pagu_52',
-                'label'       => 'pagu 52',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'pagu_52',
+                'label'          => 'pagu 52',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'pagu_53',
-                'label'       => 'pagu 53',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'pagu_53',
+                'label'          => 'pagu 53',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'pagu_rpm',
-                'label'       => 'pagu rpm',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'pagu_rpm',
+                'label'          => 'pagu rpm',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'pagu_sbsn',
-                'label'       => 'pagu sbsn',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'pagu_sbsn',
+                'label'          => 'pagu sbsn',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'pagu_phln',
-                'label'       => 'pagu phln',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'pagu_phln',
+                'label'          => 'pagu phln',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'pagu_total',
-                'label'       => 'pagu total',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'pagu_total',
+                'label'          => 'pagu total',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'real_51',
-                'label'       => 'realisasi 51',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'real_51',
+                'label'          => 'realisasi 51',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'real_52',
-                'label'       => 'realisasi 52',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'real_52',
+                'label'          => 'realisasi 52',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'real_53',
-                'label'       => 'realisasi 53',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'real_53',
+                'label'          => 'realisasi 53',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'real_rpm',
-                'label'       => 'realisasi rpm',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'real_rpm',
+                'label'          => 'realisasi rpm',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'real_sbsn',
-                'label'       => 'realisasi sbsn',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'real_sbsn',
+                'label'          => 'realisasi sbsn',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'real_phln',
-                'label'       => 'realisasi phln',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'real_phln',
+                'label'          => 'realisasi phln',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'real_total',
-                'label'       => 'realisasi total',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'real_total',
+                'label'          => 'realisasi total',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
                 'value'       => 'progres_keuangan',
@@ -726,16 +749,18 @@ class BigData extends \App\Controllers\BaseController
                 'widthColumn' => 150
             ],
             [
-                'value'       => 'ufis',
-                'label'       => 'uang fisik',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'ufis',
+                'label'          => 'uang fisik',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
-                'value'       => 'pfis',
-                'label'       => 'progres fisik',
-                'widthColumn' => 150,
-                'align'       => 'right'
+                'value'          => 'pfis',
+                'label'          => 'progres fisik',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ],
             [
                 'value'       => 'prognosis',

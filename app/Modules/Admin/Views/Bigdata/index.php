@@ -465,6 +465,10 @@
                 let text = dataRow[dataCol.value],
                     colAlign = dataCol.align ?? 'left'
 
+                    if (dataCol.hasOwnProperty('isNumberFormat')) {
+                        if (dataCol.isNumberFormat) text = formatRupiah(text, '')
+                    }
+
                 if (dataCol.value == 'no') text = rowNumber++
 
                 rowColumn += `
@@ -650,6 +654,5 @@
             downloadLink.click();
         }
     }
-
 </script>
 <?= $this->endSection() ?>
