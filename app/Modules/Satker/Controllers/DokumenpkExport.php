@@ -391,7 +391,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // title ttd 1
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX((300 - $_sectionWidth) / 2);
-        $pdf->Cell(125, 4, $_ttd['person1Title'], 0, 0, 'C');
+        $pdf->Cell(125, 13.7, $_ttd['person1Title'], 0, 0, 'C');
 
         // title ttd 2
         $pdf->SetFont($this->fontFamily, 'B', 9);
