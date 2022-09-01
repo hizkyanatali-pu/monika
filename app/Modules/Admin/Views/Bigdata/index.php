@@ -50,7 +50,7 @@
                                 <tr class=" text-center bg-purple">
                                     <?php foreach ($column as $keyColumn => $dataColumn) : ?>
                                         <th 
-                                            class="bg-purple <?php echo '_cell_'.$dataColumn['value'] ?>"
+                                            class="bg-purple <?php if ($dataColumn['value'] != 'no') echo 'd-none' ?> <?php echo '_cell_'.$dataColumn['value'] ?>"
                                             width="<?php echo $dataColumn['widthColumn'].'px' ?>"
                                             style="position: sticky; top: 0;"
                                         >
@@ -181,7 +181,7 @@
                             value="<?php echo $dataColumnFilter['value'] ?>" 
                             data-label="<?php echo $dataColumnFilter['label'] ?>"
                             id="<?php echo 'filter_'.$dataColumnFilter['value'] ?>"
-                            checked
+                            <?php if (in_array($dataColumnFilter['value'], $defaultColumn))  echo 'checked' ?>
                         >
                         <label class="form-check-label" for="<?php echo 'filter_'.$dataColumnFilter['value'] ?>">
                             <?php echo $dataColumnFilter['label'] ?>
@@ -241,6 +241,7 @@
 
     
     $(document).ready(function() {
+        $('button[name=act-filter]').trigger('click')
         getData()
 
         $('.select2').select2()
@@ -388,6 +389,8 @@
                 page++
 
                 if (params.hasOwnProperty('onSuccess')) params.onSuccess()
+
+                $('button[name=act-filter]').trigger('click')
             },
             fail: (xhr) => {
                 alert("Terjadi Kesalahan Pada Sistem");

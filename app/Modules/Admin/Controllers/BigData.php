@@ -53,10 +53,56 @@ class BigData extends \App\Controllers\BaseController
         ->getResultArray();
 
         return view('Modules\Admin\Views\Bigdata\index.php', [
-            'column'     => $column,
-            'tableWidth' => array_sum(array_column($column, 'widthColumn')),
-            'mainData'   => $data,
-            'data' => [
+            'column'        => $column,
+            'defaultColumn' => [
+                'nmbalai',
+                'nmsatker',
+                'kdpaket',
+                'nmpaket',
+                'pagu_51',
+                'pagu_52',
+                'pagu_53',
+                'pagu_rpm',
+                'pagu_sbsn',
+                'pagu_phln',
+                'pagu_total',
+                'real_51',
+                'real_52',
+                'real_53',
+                'real_rpm',
+                'real_sbsn',
+                'real_phln',
+                'real_total',
+                'progres_keuangan',
+                'progres_fisik',
+                'progres_keu_jan',
+                'progres_keu_feb',
+                'progres_keu_mar',
+                'progres_keu_apr',
+                'progres_keu_mei',
+                'progres_keu_jun',
+                'progres_keu_jul',
+                'progres_keu_agu',
+                'progres_keu_sep',
+                'progres_keu_okt',
+                'progres_keu_nov',
+                'progres_keu_des',
+                'progres_fisik_jan',
+                'progres_fisik_feb',
+                'progres_fisik_mar',
+                'progres_fisik_apr',
+                'progres_fisik_mei',
+                'progres_fisik_jun',
+                'progres_fisik_jul',
+                'progres_fisik_agu',
+                'progres_fisik_sep',
+                'progres_fisik_okt',
+                'progres_fisik_nov',
+                'progres_fisik_des'
+            ],
+            'tableWidth'    => array_sum(array_column($column, 'widthColumn')),
+            'mainData'      => $data,
+            'data'          => [
                 'satker'    => $this->satker->select('satkerid as id, satker as nama')->get()->getResult(),
                 'program'   => $this->program->select('kdprogram as id, nmprogram as nama')->get()->getResult(),
                 'kegiatan'  => $this->kegiatan->select('kdgiat as id, nmgiat as nama')->get()->getResult(),
@@ -256,6 +302,8 @@ class BigData extends \App\Controllers\BaseController
         $select = "
             $table.*, 
             m_satker.satker as nmsatker,
+            m_balai.balaiid as balai_id,
+            m_balai.balai as nmbalai,
             tprogram.nmprogram,
             tgiat.nmgiat,
             toutput.nmoutput,
@@ -266,6 +314,7 @@ class BigData extends \App\Controllers\BaseController
 
         $data = $this->monikaData->select($select)
         ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
+        ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
         ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
         ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
         ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
@@ -295,6 +344,16 @@ class BigData extends \App\Controllers\BaseController
                 'align'       => 'center'
             ],
             [
+                'value'       => 'balai_id',
+                'label'       => 'kode balai',
+                'widthColumn' => 80
+            ],
+            [
+                'value'       => 'nmbalai',
+                'label'       => 'nama balai',
+                'widthColumn' => 220
+            ],
+            [
                 'value'       => 'kdsatker',
                 'label'       => 'kode satker',
                 'widthColumn' => 80
@@ -302,7 +361,7 @@ class BigData extends \App\Controllers\BaseController
             [
                 'value'       => 'nmsatker',
                 'label'       => 'nama satker',
-                'widthColumn' => 80
+                'widthColumn' => 220
             ],
             [
                 'value'       => 'kdprogram',
