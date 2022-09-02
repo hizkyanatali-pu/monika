@@ -55,13 +55,15 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function template()
     {
+        $sessionYear = $this->user['tahun'];
+
         return view('Modules\Admin\Views\DokumenPK\template.php', [
             'data'        => $this->dokumenPK->where('deleted_at is NULL', NULL, false)->get()->getResult(),
             'allSatker'   => $this->tableSatker->whereNotIn('satker', ['', '1'])->get()->getResult(),
             'allBalai'    => $this->tableBalai->get()->getResult(),
-            'allKegiatan' => $this->tableKegiatan->get()->getResult(),
+            'allKegiatan' => $this->tableKegiatan->where('tahun_anggaran', $sessionYear)->get()->getResult(),
             'allProgram'  => $this->tableProgram->get()->getResult(),
-            'sessionYear' => $this->user['tahun']
+            'sessionYear' => $sessionYear
         ]);
     }
 
