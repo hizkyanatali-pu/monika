@@ -297,7 +297,7 @@ class BigData extends \App\Controllers\BaseController
     private function getData($_filterData = [], $_limitData=null, $_offsetData=null, $_getTotal = false) 
     {
         $tahun = $this->user['tahun'];
-        $table = 'monika_data_'.$this->user['tahun'];
+        $table = 'monika_data_'.$tahun;
 
         $select = "
             $table.*, 
@@ -307,7 +307,9 @@ class BigData extends \App\Controllers\BaseController
             tprogram.nmprogram,
             tgiat.nmgiat,
             toutput.nmoutput,
-            tsoutput.nmro
+            tsoutput.nmro,
+            tkabkota.nmkabkota,
+            tlokasi.nmlokasi
         ";
 
         if ($_getTotal) $select = "count($table.kdpaket) as total";
@@ -318,8 +320,10 @@ class BigData extends \App\Controllers\BaseController
         ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
         ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
         ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
-        ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left');
-        
+        ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left')
+        ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
+        ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
+
         if (is_array($_filterData)) {
             foreach ($_filterData as $key => $value) {
                 $data->where($table.'.'.$key, $value);
@@ -778,8 +782,18 @@ class BigData extends \App\Controllers\BaseController
                 'widthColumn' => 150
             ],
             [
+                'value'       => 'nmkabkota',
+                'label'       => 'nama kabupaten/kota',
+                'widthColumn' => 150
+            ],
+            [
                 'value'       => 'kdlokasi',
                 'label'       => 'kode lokasi',
+                'widthColumn' => 150
+            ],
+            [
+                'value'       => 'nmlokasi',
+                'label'       => 'nama lokasi',
                 'widthColumn' => 150
             ],
             [
