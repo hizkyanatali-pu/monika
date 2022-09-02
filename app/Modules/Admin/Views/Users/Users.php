@@ -1,5 +1,7 @@
 <?= $this->extend('admin/layouts/default') ?>
 <?= $this->section('content') ?>
+    <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.css'); ?>
+
     <!-- begin:: Subheader -->
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-container  kt-container--fluid ">
@@ -45,8 +47,8 @@
                     <?= view('admin/partials/notifications') ?>
                     </div>
                     <div class="kt-section__content">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
+                        <div>
+                            <table class="table table-bordered" id="table">
                                 <thead>
                                     <tr>
                                         <!-- <th>#</th> -->
@@ -90,7 +92,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <?= $pager->links() ?>
+                        <?php //echo $pager->links() ?>
                     </div>
                 </div>
 
@@ -104,7 +106,13 @@
     <!-- end:: Content -->
 <?= $this->endSection() ?>
 <?= $this->section('footer_js') ?>
+    <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
+    <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
     <script>
-        console.log('additional footer js')
+        $(document).ready(function() {
+            $('#table').DataTable({
+                scrollX: true
+            })
+        })
     </script>
 <?= $this->endSection() ?>

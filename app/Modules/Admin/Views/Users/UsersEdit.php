@@ -176,7 +176,11 @@
 <?= $this->endSection() ?>
 <?= $this->section('footer_js') ?>
     <script>
-        console.log('additional footer js')
+        $(document).ready(function() {
+            $('#table').DataTable({
+                scrollX: true
+            })
+        })
 
 
 

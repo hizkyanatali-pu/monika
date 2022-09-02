@@ -20,7 +20,8 @@ class Users extends \App\Controllers\BaseController
     public function index(){
         $data = array(
             'title'=> 'Dashboard',
-            'users' => $this->users->paginate(10),
+            // 'users' => $this->users->paginate(10),
+            'users' => $this->users->get()->getResultArray(),
             'pager' => $this->users->pager
         );
        
