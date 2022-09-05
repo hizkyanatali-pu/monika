@@ -23,12 +23,9 @@
                     Input Perjanjian Kinerja
                 </h3>
                 <?= csrf_field() ?>
-                
+
                 <div>
-                    <button 
-                        class="btn btn-primary __opsi-template"
-                        data-available="<?php echo $templateAvailable ?>"
-                    >
+                    <button class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>">
                         <i class="fas fa-plus"></i> Buat Dokumen
                     </button>
                 </div>
@@ -49,29 +46,25 @@
                     <tr>
                         <th width="100px">No. Dokumen</td>
                         <th>Dokumen</td>
-                        <th width="150px">Dibuat</th>
-                        <th width="150px">Disetujui / Ditolak</th>
+                        <th width="150px">Tanggal Kirim</th>
+                        <th width="150px">Tanggal Disetujui / Ditolak</th>
                         <th width="250px">Status</th>
                         <th width="70px"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
-                        foreach ($dataDokumen as $key => $data) : 
-                            $dokumenMasterID = $data->revision_master_dokumen_id ?? $data->id;
+                    <?php
+                    foreach ($dataDokumen as $key => $data) :
+                        $dokumenMasterID = $data->revision_master_dokumen_id ?? $data->id;
                     ?>
                         <tr>
                             <td><?php echo $dokumenMasterID ?></td>
                             <td>
                                 <?php echo $data->dokumenTitle ?>
-                                
+
                                 <?php if ($data->revision_master_number) : ?>
                                     <div>
-                                        <span 
-                                            class="badge badge-sm bg-warning text-white __cetak-dokumen"
-                                            data-dokumen-master-id="<?php echo $dokumenMasterID ?>"
-                                            data-number-revisioned="<?php echo $data->revision_master_number ?>"
-                                        >
+                                        <span class="badge badge-sm bg-warning text-white __cetak-dokumen" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>">
                                             Revisi Ke <?php echo $data->revision_master_number ?>
                                         </span>
                                     </div>
@@ -88,26 +81,17 @@
                                     <span class="badge badge-pill px-3 font-weight-bold <?php echo $dokumenStatus[$data->status]['color'] ?>">
                                         <?php echo $dokumenStatus[$data->status]['message'] ?>
                                     </span>
-                                    
+
 
                                     <?php if ($data->status == 'tolak') : ?>
-                                        <button 
-                                            class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen"
-                                            data-id="<?php echo $data->id ?>"
-                                            data-template-id="<?php echo $data->template_id ?>"
-                                        >
+                                        <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
                                             <i class="fas fa-edit"></i> Revisi
                                         </button>
                                     <?php endif; ?>
                                 </div>
                             </td>
                             <td>
-                                <button 
-                                    class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary'?>"
-                                    data-dokumen-master-id="<?php echo $dokumenMasterID ?>"
-                                    data-number-revisioned="<?php echo $data->revision_master_number ?>"
-                                    data-select-top="true"
-                                >
+                                <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true">
                                     <i class="fas fa-print"></i> Cetak
                                 </button>
                             </td>
@@ -140,11 +124,7 @@
             <div class="modal-body p-0">
                 <div class="list-group" id="choose-template">
                     <?php foreach ($templateDokumen as $keyTemplate => $dataTemplate) : ?>
-                        <a 
-                            class="list-group-item list-group-item-action __buat-dokumen-pilih-template"
-                            href="javascript:void(0)" 
-                            data-id="<?php echo $dataTemplate->id ?>"
-                        >
+                        <a class="list-group-item list-group-item-action __buat-dokumen-pilih-template" href="javascript:void(0)" data-id="<?php echo $dataTemplate->id ?>">
                             <?php echo $dataTemplate->title ?>
                         </a>
                     <?php endforeach ?>
@@ -189,11 +169,7 @@
             </div>
             <div class="modal-body p-0">
                 <div class="container-revision-alert-cetak"></div>
-                <iframe 
-                    width="100%"
-                    style="height: 80vh"
-                    frameborder="0"
-                ></iframe>
+                <iframe width="100%" style="height: 80vh" frameborder="0"></iframe>
             </div>
         </div>
     </div>
@@ -210,15 +186,15 @@
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    var element_modalForm                   = $('#modalForm'),
-        element_modalDialog                 = element_modalForm.find('.modal-dialog'),
-        element_modalFooter                 = element_modalForm.find('.modal-footer'),
-        element_modalFormChooseTemplate     = element_modalForm.find('#choose-template'),
-        element_modalFormMakeDokumen        = element_modalForm.find('#make-dokumen'),
-        element_modalFormTitle              = element_modalForm.find('.modal-title'),
+    var element_modalForm = $('#modalForm'),
+        element_modalDialog = element_modalForm.find('.modal-dialog'),
+        element_modalFooter = element_modalForm.find('.modal-footer'),
+        element_modalFormChooseTemplate = element_modalForm.find('#choose-template'),
+        element_modalFormMakeDokumen = element_modalForm.find('#make-dokumen'),
+        element_modalFormTitle = element_modalForm.find('.modal-title'),
         element_modalFormBackChooseTemplate = element_modalForm.find('.__back-pilih-dokumen'),
-        element_modalPreviewCetakDokumen    = $('#modal-preview-cetak'),
-        element_btnSaveDokumen              = $('.__save-dokumen')
+        element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
+        element_btnSaveDokumen = $('.__save-dokumen')
 
 
     $(document).ready(function() {
@@ -227,13 +203,13 @@
             scrollX: true
         })
 
-        $('#modalForm').on('hidden.bs.modal', function () {
+        $('#modalForm').on('hidden.bs.modal', function() {
             prepareForm_reset();
         })
     })
-    
-    
-    
+
+
+
     $(document).on('click', '.__opsi-template', function() {
         if ($(this).data('available') == true) {
             $('#modalForm').modal('show')
@@ -241,11 +217,11 @@
             if (elements_optionListDokumen.length == 1) {
                 elements_optionListDokumen.eq(0).trigger('click')
             }
-        }else {
+        } else {
             Swal.fire(
-            'Template Tidak Tersedia',
-            'Tidak ada template yang dapat di akses oleh akun anda',
-            'warning'
+                'Template Tidak Tersedia',
+                'Tidak ada template yang dapat di akses oleh akun anda',
+                'warning'
             )
         }
     })
@@ -254,16 +230,16 @@
 
     $(document).on('click', '.__buat-dokumen-pilih-template', function() {
         let dataID = $(this).data('id')
-        
+
         $.ajax({
             url: "<?php echo site_url('dokumenpk/get-template/') ?>" + dataID,
             type: 'GET',
             data: {},
             success: (res) => {
                 preapreForm_afterChooseTemplate({
-                    templateId   : dataID,
+                    templateId: dataID,
                     templateTitle: $(this).text(),
-                    data         : res
+                    data: res
                 })
             },
             fail: (xhr) => {
@@ -281,38 +257,36 @@
 
 
 
-    $(document).on('click', 'input:checkbox[name=form-checkall-row]', function(){
+    $(document).on('click', 'input:checkbox[name=form-checkall-row]', function() {
         let rowChild = $('input:checkbox[name=form-check-row]').parents('tr').find('td')
 
         $('input:checkbox[name=form-check-row]').prop('checked', this.checked);
-        
-        if (! this.checked)  {
+
+        if (!this.checked) {
             rowChild.addClass('disabled')
-        }
-        else {
+        } else {
             rowChild.removeClass('disabled')
         }
     });
 
 
 
-    $(document).on('change', 'input:checkbox[name=form-check-row]', function(){
-        let element_checkAll      = $('input:checkbox[name=form-checkall-row]'),
-            isAllChecked          = false,
+    $(document).on('change', 'input:checkbox[name=form-check-row]', function() {
+        let element_checkAll = $('input:checkbox[name=form-checkall-row]'),
+            isAllChecked = false,
             element_parentsColumn = $(this).parents('tr').find('td')
 
-        if (! $(this).is(':checked')) {
+        if (!$(this).is(':checked')) {
             element_parentsColumn.addClass('disabled')
             element_parentsColumn.find('input').attr('readonly', 'readonly')
-        }
-        else  {
+        } else {
             element_parentsColumn.removeClass('disabled')
-            
+
             element_parentsColumn.find('input').removeAttr('readonly')
         }
 
         if ($('input:checkbox[name=form-check-row]:checked').length == $('input:checkbox[name=form-check-row]').length) {
-           isAllChecked = true
+            isAllChecked = true
         }
 
         element_checkAll.prop('checked', isAllChecked)
@@ -340,10 +314,10 @@
             let formData = getFormValue();
 
             if ($(this).attr('data-dokumen-id')) {
-                formData['revision_dokumen_id']        = $(this).data('dokumen-id')
+                formData['revision_dokumen_id'] = $(this).data('dokumen-id')
                 formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
             }
-            
+
             $.ajax({
                 url: "<?php echo site_url('dokumenpk/create') ?>",
                 type: 'POST',
@@ -364,7 +338,7 @@
 
 
     $(document).on('click', '.__prepare-revisi-dokumen', function() {
-        let dataID     = $(this).data('id'),
+        let dataID = $(this).data('id'),
             templateID = $(this).data('template-id')
 
         const promiseGetTemplate = new Promise((resolve, reject) => {
@@ -373,8 +347,8 @@
                 type: 'GET',
                 success: (res) => {
                     preapreForm_afterChooseTemplate({
-                        templateId   : templateID,
-                        data         : res
+                        templateId: templateID,
+                        data: res
                     })
 
                     element_modalFormTitle.html(`
@@ -398,12 +372,12 @@
                 type: 'GET',
                 success: (res) => {
                     res.rows.forEach((data, key) => {
-                        let elementInput_target  = $('.__inputTemplateRow-target[data-row-id='+data.template_row_id+']'),
-                            elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id='+data.template_row_id+']')
+                        let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
+                            elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
                         elementInput_target.val(data.target_value)
                         elementInput_outcome.val(data.outcome_value)
-                        
+
                         if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
                     })
 
@@ -418,7 +392,7 @@
                         $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
                     }
 
-                    
+
                     if (res.dokumen.revision_message != null) {
                         $('.container-revision-alert').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
@@ -427,10 +401,10 @@
                             </div>
                         `)
                     }
-            
+
 
                     render_prepare_btnSubmitToRevision({
-                        dokumenID      : res.dokumen.id,
+                        dokumenID: res.dokumen.id,
                         dokumenMasterID: res.dokumen.revision_master_dokumen_id ?? res.dokumen.id
                     });
                     $('#modalForm').modal('show')
@@ -440,7 +414,7 @@
                     console.log(xhr)
                 }
             })
-        })        
+        })
     })
 
 
@@ -454,21 +428,20 @@
                 type: 'GET',
                 success: (res) => {
                     let list = ''
-                    if ($(this).data('select-top')) { 
+                    if ($(this).data('select-top')) {
                         cetakDokumen(res.dokumenList[0].id)
-                    }
-                    else {
+                    } else {
                         res.dokumenList.forEach((data, key) => {
-                            let listTitle      = 'Dokumen Awal',
-                                activeClass    = '',
+                            let listTitle = 'Dokumen Awal',
+                                activeClass = '',
                                 activeSubTitle = ''
 
                             if (data.revision_master_number) listTitle = 'Revisi #' + data.revision_master_number
                             if (data.status == 'setuju') {
-                                activeClass    = 'active bg-success border-success'
+                                activeClass = 'active bg-success border-success'
                                 activeSubTitle = '<div><small>Telah di setujui</small></div>'
                             }
-                            
+
                             list += `
                                 <button 
                                     class="list-group-item list-group-item-action ${activeClass}"
@@ -481,12 +454,11 @@
                         })
 
                         $('#modal-cetak-dokumen-revisioned').find('.list-group').html(list)
-                        $('#modal-cetak-dokumen-revisioned').modal('show')  
+                        $('#modal-cetak-dokumen-revisioned').modal('show')
                     }
                 }
             })
-        }
-        else {
+        } else {
             cetakDokumen(dokumenMasterID)
         }
     })
@@ -494,53 +466,52 @@
 
 
     function getFormValue() {
-        let rows     = [],
+        let rows = [],
             kegiatan = []
 
         $('.__inputTemplateRow-target').each((key, element) => {
-            let elementInput_target  = $(element),
+            let elementInput_target = $(element),
                 elementInput_outcome = $('.__inputTemplateRow-outcome').eq(key),
-                element_checkRow     = $('input:checkbox[name=form-check-row]').eq(key)
+                element_checkRow = $('input:checkbox[name=form-check-row]').eq(key)
 
             rows.push({
-                id       : elementInput_target.data('row-id'),
-                target   : elementInput_target.val(),
-                outcome  : elementInput_outcome.val(),
-                isChecked: element_checkRow.is(':checked') ? '1': '0'
+                id: elementInput_target.data('row-id'),
+                target: elementInput_target.val(),
+                outcome: elementInput_outcome.val(),
+                isChecked: element_checkRow.is(':checked') ? '1' : '0'
             })
         })
 
         $('.__table-kegiatan').find('tbody').find('tr').each((key, element) => {
             kegiatan.push({
-                id      : $(element).data('kegiatan-id'),
-                nama    : $(element).data('kegiatan-nama'),
+                id: $(element).data('kegiatan-id'),
+                nama: $(element).data('kegiatan-nama'),
                 anggaran: $(element).find('input[name=kegiatan-anggaran]').val()
             })
         })
 
         let inputValue = {
             csrf_test_name: $('input[name=csrf_test_name]').val(),
-            templateID    : element_btnSaveDokumen.data('template-id'),
-            rows          : rows,
-            kegiatan      : kegiatan,
-            totalAnggaran : $('input[name=total-anggaran]').val(),
-            ttdPihak1     : $('input[name=ttd-pihak1]').val(),
-            ttdPihak2     : $('input[name=ttd-pihak2]').val(),
+            templateID: element_btnSaveDokumen.data('template-id'),
+            rows: rows,
+            kegiatan: kegiatan,
+            totalAnggaran: $('input[name=total-anggaran]').val(),
+            ttdPihak1: $('input[name=ttd-pihak1]').val(),
+            ttdPihak2: $('input[name=ttd-pihak2]').val(),
         }
         if ($('input[name=ttd-pihak2-jabatan]').length) inputValue.ttdPihak2Jabatan = $('input[name=ttd-pihak2-jabatan]').val()
-        
+
         return inputValue
     }
-    
-    
-    
+
+
+
     function saveDokumenValidation() {
         let checkInputKegiatanAnggatan = true
         $('input[name=kegiatan-anggaran]').each((index, element) => {
             if ($(element).val() > 0 && checkInputKegiatanAnggatan == true) {
                 checkInputKegiatanAnggatan = true
-            }
-            else {
+            } else {
                 checkInputKegiatanAnggatan = false
             }
         })
@@ -552,7 +523,7 @@
             )
             return false
         }
-        
+
         if ($('input[name=ttd-pihak1]').val() == '') {
             Swal.fire(
                 'Peringatan',
@@ -599,16 +570,19 @@
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
 
                     if (res.dokumen.revision_message != null) {
-                        element_iframePreviewDokumen.css({'height':'60vh'})
+                        element_iframePreviewDokumen.css({
+                            'height': '60vh'
+                        })
                         $('.container-revision-alert-cetak').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                                 <h5 class="alert-heading">Perlu Di Revisi !</h5>
                                 <p>${res.dokumen.revision_message}</p>
                             </div>
                         `)
-                    }
-                    else {
-                        element_iframePreviewDokumen.css({'height':'80vh'})
+                    } else {
+                        element_iframePreviewDokumen.css({
+                            'height': '80vh'
+                        })
                         $('.container-revision-alert-cetak').html('')
                     }
 
@@ -669,12 +643,12 @@
 
 
     function renderFormTemplate(_data) {
-        let template               = _data.template,
-            render_rowsForm        = renderFormTemplate_rowTable(_data.templateRow),
-            render_rowKegiatan     = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
-            render_listInfo        = renderFormTemplate_listInfo(_data.templateInfo),
-            render_ttdPihak2       = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2)
-            
+        let template = _data.template,
+            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow),
+            render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
+            render_listInfo = renderFormTemplate_listInfo(_data.templateInfo),
+            render_ttdPihak2 = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2)
+
         let render = `
             <div class="container-revision-alert"></div>
             <table class="table table-bordered">
@@ -765,11 +739,11 @@
         $('#make-dokumen').html(render)
 
         setInputFilter($(".__inputTemplateRow-target"), function(value) {
-            return /^-?\d*$/.test(value); 
+            return /^-?\d*$/.test(value);
         }, "Data harus berupa angka");
 
         setInputFilter($(".__inputTemplateRow-outcome"), function(value) {
-            return /^-?\d*$/.test(value); 
+            return /^-?\d*$/.test(value);
         }, "Data harus berupa angka");
 
         $('select.select2').select2();
@@ -794,7 +768,7 @@
                         </tr>
                     `
                     break;
-                
+
                 case 'form':
                     rows += `
                         <tr>
@@ -836,14 +810,14 @@
                     break;
             }
         });
-        
+
         return rows
     }
 
 
 
     function renderFormTemplate_rowKegiatan(_data) {
-        let list  = ''
+        let list = ''
         _data.forEach((data, key) => {
             list += `
                 <tr
@@ -867,9 +841,9 @@
 
         return list
     }
-    
 
-    
+
+
     function renderFormTemplate_listInfo(_data) {
         let list = ''
         _data.forEach((data, key) => {

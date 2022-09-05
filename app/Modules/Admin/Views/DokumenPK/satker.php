@@ -12,11 +12,11 @@
     }
 
     ._remove-row-item {
-        width: 20px; 
-        height: 20px; 
-        position: absolute; 
-        right: -12.9px; 
-        top: 18px; 
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        right: -12.9px;
+        top: 18px;
         padding: 0px 0px 19px 6px !important
     }
 
@@ -60,20 +60,17 @@
         <li class="flex-sm-fill text-sm-center nav-item">
             <a class="nav-link" id="pills-three-tab" data-toggle="pill" href="#pills-three" role="tab" aria-controls="pills-three" aria-selected="false">Di Tolak</a>
         </li>
-    </ul>    
+    </ul>
 
     <div class="kt-portlet" style="margin-top: -5px">
         <div class="kt-portlet__body tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-one" role="tabpanel" aria-labelledby="pills-one-tab">
-                <table 
-                    class="table table-bordered" 
-                    id="table-hold"
-                >
+                <table class="table table-bordered" id="table-hold">
                     <thead>
                         <tr class="text-center">
                             <th width="25px">No</th>
                             <th>Dokumen</th>
-                            <th width="120px">Dibuat</th>
+                            <th width="120px">Tanggal Kirim</th>
                             <th width="120px"></th>
                         </tr>
                     </thead>
@@ -86,10 +83,7 @@
 
 
             <div class="tab-pane fade" id="pills-two" role="tabpanel" aria-labelledby="pills-two-tab">
-                <table 
-                    class="table table-bordered" 
-                    id="table-setuju"
-                >
+                <table class="table table-bordered" id="table-setuju">
                     <thead>
                         <tr class="text-center">
                             <th width="30px">No</th>
@@ -108,10 +102,7 @@
 
 
             <div class="tab-pane fade" id="pills-three" role="tabpanel" aria-labelledby="pills-three-tab">
-                <table 
-                    class="table table-bordered" 
-                    id="table-tolak"
-                >
+                <table class="table table-bordered" id="table-tolak">
                     <thead>
                         <tr class="text-center">
                             <th width="30px">No</th>
@@ -150,11 +141,7 @@
             </div>
             <div class="modal-body p-0">
                 <div class="container-revision-alert-cetak"></div>
-                <iframe 
-                    width="100%"
-                    style="height: 80vh"
-                    frameborder="0"
-                ></iframe>
+                <iframe width="100%" style="height: 80vh" frameborder="0"></iframe>
             </div>
             <div class="modal-footer p-0">
             </div>
@@ -189,22 +176,22 @@
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script>
-    var element_tableHold                = '',
-        element_tableSetuju              = '',
-        element_tableTolak               = '',
+    var element_tableHold = '',
+        element_tableSetuju = '',
+        element_tableTolak = '',
         element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
-        element_modalListRevision        = $('#modal-cetak-dokumen-revisioned'),
-        element_formTable                = $('._table-form').find('tbody'),
-        element_tableInformasi           = $('._table-informasi').find('tbody')
+        element_modalListRevision = $('#modal-cetak-dokumen-revisioned'),
+        element_formTable = $('._table-form').find('tbody'),
+        element_tableInformasi = $('._table-informasi').find('tbody')
 
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         setTimeout(() => {
             element_tableHold = $('#table-hold').DataTable({
                 scrollX: true
             })
             getData('hold');
-        },300)
+        }, 300)
     })
 
 
@@ -217,7 +204,7 @@
                 })
             }
             getData('setuju');
-        },300)
+        }, 300)
     })
 
     $('#pills-three-tab').on('click', () => {
@@ -228,7 +215,7 @@
                 })
             }
             getData('tolak');
-        },300)
+        }, 300)
     })
 
 
@@ -251,18 +238,18 @@
             success: (res) => {
                 let list = ''
                 res.dokumenList.forEach((data, key) => {
-                    let listTitle      = 'Dokumen Awal',
-                        activeClass    = '',
+                    let listTitle = 'Dokumen Awal',
+                        activeClass = '',
                         activeSubTitle = '',
                         buttonData_toConfirm = false
 
                     if (data.revision_master_number) listTitle = 'Revisi #' + data.revision_master_number
                     if (data.status == 'setuju') {
-                        activeClass    = 'active bg-success border-success'
+                        activeClass = 'active bg-success border-success'
                         activeSubTitle = '<div><small>Telah di setujui</small></div>'
                     }
                     if (key == 0 && data.status == 'hold') buttonData_toConfirm = true
-                    
+
                     list += `
                         <button 
                             class="list-group-item list-group-item-action ${activeClass} __preview-dokumen"
@@ -278,7 +265,7 @@
                 element_modalListRevision.find('.list-group').html(list)
             }
         })
-        element_modalListRevision.modal('show')  
+        element_modalListRevision.modal('show')
     })
 
 
@@ -299,10 +286,10 @@
                     type: "POST",
                     data: {
                         csrf_test_name: $('input[name=csrf_test_name]').val(),
-                        dokumenType   : 'satker',
-                        dataID        : dataID,
-                        message       : $('textarea[name=pesan-tolak-dokumen]').val(),
-                        newStatus     : 'tolak'
+                        dokumenType: 'satker',
+                        dataID: dataID,
+                        message: $('textarea[name=pesan-tolak-dokumen]').val(),
+                        newStatus: 'tolak'
                     },
                     success: (res) => {
                         return res
@@ -314,9 +301,9 @@
                 element_modalPreviewCetakDokumen.modal('hide')
 
                 element_tableHold
-                .row($('#_dokumen-row-'+dataID))
-                .remove()
-                .draw();
+                    .row($('#_dokumen-row-' + dataID))
+                    .remove()
+                    .draw();
             }
         })
     })
@@ -328,19 +315,19 @@
         $.ajax({
             url: "<?php echo site_url('dokumenpk/change-status') ?>",
             type: "POST",
-            data: { 
+            data: {
                 csrf_test_name: $('input[name=csrf_test_name]').val(),
-                dokumenType   : 'satker',
-                dataID        : dataID,
-                newStatus     : 'setuju'
+                dokumenType: 'satker',
+                dataID: dataID,
+                newStatus: 'setuju'
             },
             success: (res) => {
                 element_modalPreviewCetakDokumen.modal('hide')
 
                 element_tableHold
-                .row($('#_dokumen-row-'+dataID))
-                .remove()
-                .draw();
+                    .row($('#_dokumen-row-' + dataID))
+                    .remove()
+                    .draw();
             }
         })
     })
@@ -383,7 +370,7 @@
         _data.forEach((data, index) => {
             let render_badgeRevisi = '',
                 render_columnChangeStatusAt = ''
-            
+
             if (data.revision_master_number) {
                 render_badgeRevisi = `
                     <button 
@@ -423,7 +410,7 @@
                     </td>
                 </tr>
             `);
-            
+
             switch (_status) {
                 case 'hold':
                     element_tableHold.row.add(tr).draw()
@@ -453,16 +440,19 @@
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
 
                     if (res.dokumen.revision_message != null) {
-                        element_iframePreviewDokumen.css({'height':'60vh'})
+                        element_iframePreviewDokumen.css({
+                            'height': '60vh'
+                        })
                         $('.container-revision-alert-cetak').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                                 <h5 class="alert-heading">Perlu Di Revisi !</h5>
                                 <p>${res.dokumen.revision_message}</p>
                             </div>
                         `)
-                    }
-                    else {
-                        element_iframePreviewDokumen.css({'height':'80vh'})
+                    } else {
+                        element_iframePreviewDokumen.css({
+                            'height': '80vh'
+                        })
                         $('.container-revision-alert-cetak').html('')
                     }
 
@@ -481,8 +471,7 @@
                                 </button>
                             </div>
                         `)
-                    }
-                    else {
+                    } else {
                         element_modalPreviewCetakDokumen.find('.modal-footer').empty()
                     }
                 }, 400)
