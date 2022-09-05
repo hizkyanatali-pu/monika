@@ -534,7 +534,25 @@
     
     
     
-    function  saveDokumenValidation() {
+    function saveDokumenValidation() {
+        let checkInputKegiatanAnggatan = true
+        $('input[name=kegiatan-anggaran]').each((index, element) => {
+            if ($(element).val() > 0 && checkInputKegiatanAnggatan == true) {
+                checkInputKegiatanAnggatan = true
+            }
+            else {
+                checkInputKegiatanAnggatan = false
+            }
+        })
+        if (checkInputKegiatanAnggatan == false) {
+            Swal.fire(
+                'Peringatan',
+                'Terdapat angaran untuk kegiatan yang belum terisi',
+                'warning'
+            )
+            return false
+        }
+        
         if ($('input[name=ttd-pihak1]').val() == '') {
             Swal.fire(
                 'Peringatan',
