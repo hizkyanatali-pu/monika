@@ -198,7 +198,7 @@
                         </div>
 
                         <div class="mt-4 pt-4">
-                            <h5>Kegiatan</h5>
+                            <h5>Program / Kegiatan</h5>
                             <div class="mt-3">
                                 <small>Pilih data yang akan di gunakan</small>
                                 <select class="form-control w-50 mt-2" name="kegiatan-used-data">
@@ -281,7 +281,7 @@
                     </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                <div class="ml-2 mt-3 w-50">
+                                <div class="ml-2 mt-3 w-50 _container-satker-select-balai">
                                     <label>Cari By Balai </label>
                                     <select name="search-opsi-akses-satker" class="form-control">
                                     <option value=" " selected>Pilih Satker Dalam Balai</option>
@@ -306,11 +306,11 @@
                                 <th class="bg-purple" width="30px">
                                     <input type="checkbox" name="check-all-opsi-satker">
                                 </th>
-                                <th class="bg-purple">Nama Satker</th>
+                                <th class="bg-purple">Nama Satker/Balai</th>
                             </thead>
                             <tbody>
                                 <?php foreach ($allSatker as $keySatker => $dataSatker) : ?>
-                                    <tr class="_list-opsi-satker">
+                                    <tr class="_list-opsi-satker _list-satker">
                                         <td>
                                             <input 
                                                 type="checkbox" 
@@ -323,6 +323,23 @@
                                         <td>
                                             <label>
                                                 <?php echo $dataSatker->satker ?>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                <?php endforeach ?>
+                                <?php foreach ($allBalai as $keyBalai => $dataBalai) : ?>
+                                    <tr class="_list-opsi-satker _list-opsi-balai">
+                                        <td>
+                                            <input 
+                                                type="checkbox" 
+                                                name="check-list-opsi-satker" 
+                                                class="open-to-check"
+                                                value="<?php echo $dataBalai->balaiid ?>"
+                                            >
+                                        </td>
+                                        <td>
+                                            <label>
+                                                <?php echo $dataBalai->balai ?>
                                             </label>
                                         </td>
                                     </tr>
@@ -406,6 +423,12 @@
                 location.reload()
             }, 400)
         })
+    })
+
+
+
+    $(document).on('change', 'select[name=dokumen-type]', function() {
+        setOpsiHakAkses()
     })
 
 
@@ -504,6 +527,8 @@
                 setPropCheckedAll       = checkboxShowedIsChecked > 0 ? false : true
             
             element_checkAllOpsiAksesDokumen.prop('checked', setPropCheckedAll)
+
+            setOpsiHakAkses('balai')
         }, 700)
     })
 
@@ -533,6 +558,10 @@
                 setPropCheckedAll       = checkboxShowedIsChecked > 0 ? false : true
             
             element_checkAllOpsiAksesDokumen.prop('checked', setPropCheckedAll)
+
+            let hakAksesOpsiParam = $('select[name=dokumen-type]').val() == 'balai' ? 'satker' : 'balai'
+            console.log(hakAksesOpsiParam);
+            setOpsiHakAkses(hakAksesOpsiParam)
         }, 700)
     })
 
@@ -968,6 +997,24 @@
                 </td>
             </tr>
         `
+    }
+    
+    
+    
+    function setOpsiHakAkses(type = 'all') {
+        switch ($('select[name=dokumen-type]').val()) {
+            case 'satker':
+                if (type == 'all') $('._container-satker-select-balai').removeClass('d-none');
+                if (type == 'all' || type == 'satker') $('._list-opsi-satker._list-satker').removeClass('d-none');
+                if (type == 'all' || type == 'balai') $('._list-opsi-balai').addClass('d-none');
+                break;
+
+            case 'balai':
+                if (type == 'all') $('._container-satker-select-balai').addClass('d-none');
+                if (type == 'all' || type == 'satker') $('._list-opsi-satker._list-satker').addClass('d-none');
+                if (type == 'all' || type == 'balai') $('._list-opsi-balai').removeClass('d-none');
+                break;
+        }
     }
 
 

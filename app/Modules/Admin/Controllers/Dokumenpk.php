@@ -294,7 +294,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 $revTable = 'm_satker';
                 break;
             
-            case 'satker':
+            case 'balai':
                 $revTable = 'm_balai';
                 break;
         }
