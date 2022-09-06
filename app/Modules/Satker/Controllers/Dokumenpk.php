@@ -279,8 +279,8 @@ class Dokumenpk extends \App\Controllers\BaseController
             return [
                 'dokumen_id'      => $_dokumenID,
                 'template_row_id' => $arr['id'],
-                'target_value'    => $arr['target'],
-                'outcome_value'   => $arr['outcome'],
+                'target_value'    => str_replace(',', '.', $arr['target']),
+                'outcome_value'   => str_replace(',', '.', $arr['outcome']),
                 'is_checked'      => $arr['isChecked']
             ];
         }, $input['rows']);

@@ -738,14 +738,6 @@
 
         $('#make-dokumen').html(render)
 
-        setInputFilter($(".__inputTemplateRow-target"), function(value) {
-            return /^-?\d*$/.test(value);
-        }, "Data harus berupa angka");
-
-        setInputFilter($(".__inputTemplateRow-outcome"), function(value) {
-            return /^-?\d*$/.test(value);
-        }, "Data harus berupa angka");
-
         $('select.select2').select2();
     }
 
@@ -785,6 +777,7 @@
                                         placeholder="Masukkan Nilai"
                                         value="0"
                                         data-row-id="${ data.id }"
+                                        onkeypress="return isNumberKey(this, event);"
                                     >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
@@ -799,6 +792,7 @@
                                         placeholder="Masukkan Nilai"
                                         value="0"
                                         data-row-id="${ data.id }"
+                                        onkeypress="return isNumberKey(this, event);"
                                     >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>

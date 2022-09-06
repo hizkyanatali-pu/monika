@@ -185,15 +185,17 @@ $title = $title ?? '';
             // ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout"].forEach(function(event) {
                 textbox.on('keyup', function(e) {
                     if (inputFilter(this.value)) {
+                        alert(1)
                         // Accepted value
                         if (["keydown","mousedown","focusout"].indexOf(e.type) >= 0){
-                        this.classList.remove("input-error");
-                        this.setCustomValidity("");
+                            this.classList.remove("input-error");
+                            this.setCustomValidity("");
                         }
                         this.oldValue = this.value;
                         this.oldSelectionStart = this.selectionStart;
                         this.oldSelectionEnd = this.selectionEnd;
                     } else if (this.hasOwnProperty("oldValue")) {
+                        alert(2)
                         // Rejected value - restore the previous one
                         this.classList.add("input-error");
                         this.setCustomValidity(errMsg);
@@ -206,6 +208,28 @@ $title = $title ?? '';
                     }
                 });
             // });
+        }
+
+        function isNumberKey(txt, evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode == 46 || charCode == 44) {
+                if (txt.value.indexOf('.') === -1 && txt.value.indexOf(',') === -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                let offsetComma = txt.value.indexOf('.') === -1 ? txt.value.indexOf(',') : txt.value.indexOf('.')
+                
+                if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                    return false;
+                }
+
+                if ((txt.value.length - offsetComma) > 3) {
+                    return false
+                }
+            }
+            return true;
         }
 
         /* Fungsi formatRupiah */
