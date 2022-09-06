@@ -75,6 +75,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('satker_terendah', '\Modules\Admin\Controllers\Pulldata::satker_terendah');
                 $routes->get('satker_tertinggi', '\Modules\Admin\Controllers\Pulldata::satker_tertinggi');
                 $routes->get('satker_deviasi_terbesar', '\Modules\Admin\Controllers\Pulldata::satker_deviasi_terbesar');
+                $routes->get('progres_per_provinsi', '\Modules\Admin\Controllers\Pulldata::progresPerProvinsi');
 
                 $routes->get('emon-sisa-lelang-sda', '\Modules\Admin\Controllers\SisaLelangSda::tarikDataEmonSisaLelangSda');
 

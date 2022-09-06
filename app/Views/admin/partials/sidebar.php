@@ -69,6 +69,13 @@ $request = \Config\Services::request();
                                                     ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satker_tertinggi'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satker_tertinggi'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Tertinggi</span></a></li>
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'satker_deviasi_terbesar'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('pulldata/satker_deviasi_terbesar'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Satker Deviasi Terbesar</span></a></li>
+
+                        <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'pulldata' && $request->uri->getSegment(2) == 'progres_per_provinsi'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <a href="<?= site_url('pulldata/progres_per_provinsi'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                <span class="kt-menu__link-text">Progress Per Provinsi</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>

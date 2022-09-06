@@ -30,7 +30,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
             'setuju'   => ['message' => 'Telah di Setujui', 'color' => 'bg-success text-white'],
             'tolak'    => ['message' => 'Di Tolak', 'color' => 'bg-danger text-white'],
-            'revision' => ['message' => 'Telah Di Revisi', 'color' => 'bg-dark text-white']
+            'revision' => ['message' => 'Telah Di Koreksi', 'color' => 'bg-dark text-white']
         ];
         $this->request = \Config\services::request();
 
@@ -421,7 +421,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         if ($_dokumenStatus != "setuju") {
             switch ($_dokumenStatus) {
                 case 'revision':
-                    $pdf->watermarkText = 'R E V I S I';
+                    $pdf->watermarkText = 'K O R E K S I';
 
                     if (! is_null($_revisionNumber)) {
                         $pdf->watermarkSubText = $_revisionNumber > 1 ? 'Ke - ' . $_revisionNumber : '';

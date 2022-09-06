@@ -62,10 +62,13 @@
                             <td>
                                 <?php echo $data->dokumenTitle ?>
 
-                                <?php if ($data->revision_master_number) : ?>
+                                <?php if ($data->revision_master_number || $data->is_revision_same_year) : 
+                                    $badgeText  = ($data->is_revision_same_year) ? 'Revisi' : 'Koreksi Ke ' . $data->revision_number;
+                                    $badgeColor = ($data->is_revision_same_year) ? 'bg-danger' : 'bg-warning'
+                                ?>
                                     <div>
-                                        <span class="badge badge-sm bg-warning text-white __cetak-dokumen" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>">
-                                            Revisi Ke <?php echo $data->revision_master_number ?>
+                                        <span class="badge badge-sm <?php echo $badgeColor ?> text-white __cetak-dokumen" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>">
+                                            <?php echo $badgeText ?>
                                         </span>
                                     </div>
                                 <?php endif; ?>
@@ -85,7 +88,7 @@
 
                                     <?php if ($data->status == 'tolak') : ?>
                                         <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
-                                            <i class="fas fa-edit"></i> Revisi
+                                            <i class="fas fa-edit"></i> Koreksi
                                         </button>
                                     <?php endif; ?>
                                 </div>
@@ -239,7 +242,8 @@
                 preapreForm_afterChooseTemplate({
                     templateId: dataID,
                     templateTitle: $(this).text(),
-                    data: res
+                    data: res,
+                    target: 'create'
                 })
             },
             fail: (xhr) => {
@@ -348,11 +352,12 @@
                 success: (res) => {
                     preapreForm_afterChooseTemplate({
                         templateId: templateID,
-                        data: res
+                        data      : res,
+                        target    : 'koreksi'
                     })
 
                     element_modalFormTitle.html(`
-                        <h6>Revisi Dokumen</h6>
+                        <h6>Koreksi Dokumen</h6>
                         <small>${ res.template.title }</small>
                     `)
 
@@ -396,7 +401,7 @@
                     if (res.dokumen.revision_message != null) {
                         $('.container-revision-alert').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Perlu Di Revisi !</h5>
+                                <h5 class="alert-heading">Perlu Di Koreksi !</h5>
                                 <p>${res.dokumen.revision_message}</p>
                             </div>
                         `)
@@ -436,10 +441,16 @@
                                 activeClass = '',
                                 activeSubTitle = ''
 
-                            if (data.revision_master_number) listTitle = 'Revisi #' + data.revision_master_number
+                            if (data.revision_master_number) listTitle = 'Koreksi #' + data.revision_number
+
                             if (data.status == 'setuju') {
                                 activeClass = 'active bg-success border-success'
                                 activeSubTitle = '<div><small>Telah di setujui</small></div>'
+                            }
+
+                            if (data.is_revision_same_year == '1') {
+                                listTitle = 'Revisi'
+                                activeClass = 'active bg-danger border-danger'
                             }
 
                             list += `
@@ -491,13 +502,14 @@
         })
 
         let inputValue = {
-            csrf_test_name: $('input[name=csrf_test_name]').val(),
-            templateID: element_btnSaveDokumen.data('template-id'),
-            rows: rows,
-            kegiatan: kegiatan,
-            totalAnggaran: $('input[name=total-anggaran]').val(),
-            ttdPihak1: $('input[name=ttd-pihak1]').val(),
-            ttdPihak2: $('input[name=ttd-pihak2]').val(),
+            csrf_test_name  : $('input[name=csrf_test_name]').val(),
+            revisionSameYear: $('input[name=revision_same_year]').val(),
+            templateID      : element_btnSaveDokumen.data('template-id'),
+            rows            : rows,
+            kegiatan        : kegiatan,
+            totalAnggaran   : $('input[name=total-anggaran]').val(),
+            ttdPihak1       : $('input[name=ttd-pihak1]').val(),
+            ttdPihak2       : $('input[name=ttd-pihak2]').val(),
         }
         if ($('input[name=ttd-pihak2-jabatan]').length) inputValue.ttdPihak2Jabatan = $('input[name=ttd-pihak2-jabatan]').val()
 
@@ -575,7 +587,7 @@
                         })
                         $('.container-revision-alert-cetak').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Perlu Di Revisi !</h5>
+                                <h5 class="alert-heading">Perlu Di Koreksi !</h5>
                                 <p>${res.dokumen.revision_message}</p>
                             </div>
                         `)
@@ -596,9 +608,10 @@
 
 
     function preapreForm_afterChooseTemplate(params = {
-        templateId: '',
+        templateId   : '',
         templateTitle: '',
-        data: {}
+        data         : {},
+        target       : ''
     }) {
         element_btnSaveDokumen.attr('data-template-id', params.templateId)
         element_modalDialog.addClass('modal-xl')
@@ -613,21 +626,26 @@
                 <small>${params.templateTitle}</small>
             `)
         }
-
-        renderFormTemplate(params.data)
+        
+        renderFormTemplate(params.data, params.target)
     }
 
 
 
     function render_prepare_btnSubmitToRevision(params = {
         dokumenID: '',
-        dokumenMasterID: ''
+        dokumenMasterID: '',
+        buttonType: '',
+        buttonText: ''
     }) {
+        let buttonType = params.hasOwnProperty('buttonType') ? 'btn-'+params.buttonType : 'btn-danger',
+            buttonText = params.hasOwnProperty('buttonText') ? params.buttonText : 'Simpan Koreksi'
+
         element_btnSaveDokumen.attr('data-dokumen-id', params.dokumenID)
         element_btnSaveDokumen.attr('data-dokumen-master-id', params.dokumenMasterID)
 
-        element_btnSaveDokumen.addClass('btn-danger')
-        element_btnSaveDokumen.text('Simpan Revisi')
+        element_btnSaveDokumen.addClass(buttonType)
+        element_btnSaveDokumen.text(buttonText)
     }
 
 
@@ -637,20 +655,45 @@
         element_btnSaveDokumen.removeAttr('data-dokumen-master-id')
 
         element_btnSaveDokumen.removeClass('btn-danger')
+        element_btnSaveDokumen.removeClass('btn-warning')
         element_btnSaveDokumen.text('Simpan Dokumen')
     }
 
 
 
-    function renderFormTemplate(_data) {
-        let template = _data.template,
-            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow),
-            render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
-            render_listInfo = renderFormTemplate_listInfo(_data.templateInfo),
-            render_ttdPihak2 = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2)
+    function renderFormTemplate(_data, _target) {
+        let template                          = _data.template,
+            render_rowsForm                   = renderFormTemplate_rowTable(_data.templateRow),
+            render_rowKegiatan                = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
+            render_listInfo                   = renderFormTemplate_listInfo(_data.templateInfo),
+            render_ttdPihak2                  = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2),
+            render_warningDokumenYearRevisoin = '',
+            inputValue_revisionSameYear       = 0
+        
+        if (_target == 'create' && _data.dokumenExistSameYear != null) {
+            render_warningDokumenYearRevisoin = `
+                <div class="bg-warning text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                    <h5 class="alert-heading">Peringatan</h5>
+                    <p>membuat dokumen baru akan merevisi dokumen yang telah anda buat sebelumnya</p>
+                </div>
+            `
+            inputValue_revisionSameYear = 1
+
+            render_prepare_btnSubmitToRevision({
+                dokumenID      : _data.dokumenExistSameYear.last_dokumen_id,
+                dokumenMasterID: _data.dokumenExistSameYear.revision_master_dokumen_id,
+                buttonType     : 'warning',
+                buttonText     : 'Buat Revisi'
+            });
+        }
 
         let render = `
-            <div class="container-revision-alert"></div>
+            <input type="hidden" name="revision_same_year" value="${inputValue_revisionSameYear}" />
+
+            <div class="container-revision-alert">
+                ${render_warningDokumenYearRevisoin}
+            </div>
+
             <table class="table table-bordered">
                 <thead>
                     <tr>

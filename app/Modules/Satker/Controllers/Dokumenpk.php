@@ -48,7 +48,9 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.template_id,
             dokumenpk_satker.revision_master_dokumen_id,
             dokumenpk_satker.revision_master_number,
+            dokumenpk_satker.revision_number,
             dokumenpk_satker.status,
+            dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
             dokumen_pk_template.title as dokumenTitle
@@ -116,7 +118,9 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.template_id,
             dokumenpk_satker.revision_master_dokumen_id,
             dokumenpk_satker.revision_master_number,
+            dokumenpk_satker.revision_number,
             dokumenpk_satker.status,
+            dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
             dokumen_pk_template.title as dokumenTitle,
@@ -136,7 +140,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'template_id'                => $arr->template_id,
                 'revision_master_dokumen_id' => $arr->revision_master_dokumen_id,
                 'revision_master_number'     => $arr->revision_master_number,
+                'revision_number'            => $arr->revision_number,
                 'status'                     => $arr->status,
+                'is_revision_same_year'      => $arr->is_revision_same_year,
                 'change_status_at'           => $arr->change_status_at != null ? date_indo($arr->change_status_at) : '',
                 'created_at'                 => $arr->created_at != null ? date_indo($arr->created_at) : '',
                 'dokumenTitle'               => $arr->dokumenTitle,
@@ -164,13 +170,22 @@ class Dokumenpk extends \App\Controllers\BaseController
             $pihak1 = $this->user['balai_nama'];
         }
 
+        $dokumenExistSameYear = $this->dokumenSatker->select("
+            id as last_dokumen_id,
+            revision_master_dokumen_id
+        ")->where([
+            'template_id'  => $id,
+            'user_created' => $this->user['uid']
+        ])->where("YEAR(created_at) = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
+
         return $this->respond([
-            'template'         => $this->templateDokumen->where('id', $id)->get()->getRow(),
-            'templateRow'      => $this->templateRow->where('template_id', $id)->get()->getResult(),
-            'templateKegiatan' => $this->templateKegiatan->where('template_id', $id)->get()->getResult(),
-            'templateInfo'     => $this->templateInfo->where('template_id', $id)->get()->getResult(),
-            'kegiatan'         => $this->kegiatan->get()->getResult(),
-            'penandatangan'    => [
+            'dokumenExistSameYear' => $dokumenExistSameYear,
+            'template'             => $this->templateDokumen->where('id', $id)->get()->getRow(),
+            'templateRow'          => $this->templateRow->where('template_id', $id)->get()->getResult(),
+            'templateKegiatan'     => $this->templateKegiatan->where('template_id', $id)->get()->getResult(),
+            'templateInfo'         => $this->templateInfo->where('template_id', $id)->get()->getResult(),
+            'kegiatan'             => $this->kegiatan->get()->getResult(),
+            'penandatangan'        => [
                 'pihak1' => $pihak1,
                 'pihak2' => $pihak2
             ]
@@ -194,7 +209,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dokumenList = $this->dokumenSatker->select('
             id,
             revision_master_number,
-            status
+            revision_number,
+            status,
+            is_revision_same_year
         ')
         ->where('revision_master_dokumen_id', $id)
         ->orWhere('id', $id)
@@ -212,11 +229,12 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         /* dokumen */
         $inserted_dokumenSatker = [
-            'template_id'    => $this->request->getPost('templateID'),
-            'user_created'   => $this->userUID,
-            'total_anggaran' => $this->request->getPost('totalAnggaran'),
-            'pihak1_ttd'     => $this->request->getPost('ttdPihak1'),
-            'pihak2_ttd'     => $this->request->getPost('ttdPihak2')
+            'template_id'           => $this->request->getPost('templateID'),
+            'user_created'          => $this->userUID,
+            'total_anggaran'        => $this->request->getPost('totalAnggaran'),
+            'pihak1_ttd'            => $this->request->getPost('ttdPihak1'),
+            'pihak2_ttd'            => $this->request->getPost('ttdPihak2'),
+            'is_revision_same_year' => $this->request->getPost('revisionSameYear')
         ];
        
         if ($this->user['user_type'] == "satker") {
@@ -241,7 +259,26 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             $inserted_dokumenSatker['revision_dokumen_id']        = $revision_dokumenID;
             $inserted_dokumenSatker['revision_master_dokumen_id'] = $revision_dokumenMasterID;
-            $inserted_dokumenSatker['revision_master_number']     = $this->dokumenSatker->selectCount('id')->where('revision_master_dokumen_id', $revision_dokumenMasterID)->orWhere('id', $revision_dokumenMasterID)->get()->getFirstRow()->id;
+
+            $inserted_dokumenSatker['revision_master_number'] = $this->dokumenSatker->selectCount('id')->where('revision_master_dokumen_id', $revision_dokumenMasterID)->orWhere('id', $revision_dokumenMasterID)->get()->getFirstRow()->id;
+
+            if ($this->request->getPost('revisionSameYear') == '1') {
+                $inserted_dokumenSatker['revision_same_year_number'] = $this->dokumenSatker->select('revision_same_year_number')->groupStart()
+                    ->where('revision_master_dokumen_id', $revision_dokumenMasterID)
+                    ->orWhere('id', $revision_dokumenMasterID)
+                ->groupEnd()
+                ->where('is_revision_same_year', '1')
+                ->orderBy('id', 'DESC')
+                ->get()->getFirstRow()->revision_same_year_number + 1;
+
+                $inserted_dokumenSatker['revision_number'] = '0';
+            }
+            else {
+                $inserted_dokumenSatker['revision_number'] = $this->dokumenSatker->select('revision_number')->where('revision_master_dokumen_id', $revision_dokumenMasterID)
+                ->orWhere('id', $revision_dokumenMasterID)
+                ->orderBy('id', 'DESC')
+                ->get()->getFirstRow()->revision_number + 1;
+            }
 
             $this->dokumenSatker->update([
                 'status' => 'revision'

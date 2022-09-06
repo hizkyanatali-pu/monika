@@ -365,6 +365,34 @@ class Pulldata extends \App\Controllers\BaseController
         ];
         return view('Modules\Admin\Views\Paket\Satker_deviasi_terbesar', $data);
     }
+    
+    
+    
+    public function progresPerProvinsi()
+    {
+        $kdgiat =  "md.tahun = " . session('userData.tahun');
+        $data = array(
+            'title'            => 'Progres Per Provinsi',
+            'posisi'           => ['<i class="fa fa-home"></i>'],
+            'idk'              => 'all',
+            'label'            => 'Semua Satker',
+            'nextlink'         => 'paket',
+            'qdata'            => $this->PulldataModel->getBalaiPaket("satker", $kdgiat),
+            'kegiatan'         => $this->PulldataModel->getKegiatan(),
+            'slug'             => 'all',
+            'rekap'            => 'semuasatker',
+            'id_report'        => 'cetak_semua_satker',
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
+        );
+        return view('Modules\Admin\Views\Paket\Format_2', $data);
+        // return view('Modules\Admin\Views\Paket\Progres_per_provinsi', []);
+    }
+    
+    
+    
+    
+    
     //pindah ya!
     // function simpandata(){
     //     $this->akses->goakses('add', $this->InModul);

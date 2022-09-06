@@ -243,10 +243,14 @@
                         activeSubTitle = '',
                         buttonData_toConfirm = false
 
-                    if (data.revision_master_number) listTitle = 'Revisi #' + data.revision_master_number
+                    if (data.revision_master_number) listTitle = 'Koreksi #' + data.revision_number
                     if (data.status == 'setuju') {
                         activeClass = 'active bg-success border-success'
                         activeSubTitle = '<div><small>Telah di setujui</small></div>'
+                    }
+                    if (data.is_revision_same_year == '1') {
+                        listTitle = 'Revisi'
+                        activeClass = 'active bg-danger border-danger'
                     }
                     if (key == 0 && data.status == 'hold') buttonData_toConfirm = true
 
@@ -372,13 +376,16 @@
                 render_columnChangeStatusAt = ''
 
             if (data.revision_master_number) {
+                let badgeText  = data.is_revision_same_year == '1' ? 'Revisi' : 'Koreksi Ke ' + data.revision_number,
+                    badgeColor = data.is_revision_same_year == '1' ? 'bg-danger' : 'bg-warning'
+
                 render_badgeRevisi = `
                     <button 
-                        class="badge badge-sm bg-warning text-white __open-list-revisioned"
+                        class="badge badge-sm ${badgeColor} text-white __open-list-revisioned"
                         data-dokumen-master-id="${data.revision_master_dokumen_id}"
                         style="border: none"
                     >
-                        Revisi Ke ${data.revision_master_number}
+                        ${badgeText}
                     </button>
                 `
             }
@@ -445,7 +452,7 @@
                         })
                         $('.container-revision-alert-cetak').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Perlu Di Revisi !</h5>
+                                <h5 class="alert-heading">Perlu Di Koreksi !</h5>
                                 <p>${res.dokumen.revision_message}</p>
                             </div>
                         `)
