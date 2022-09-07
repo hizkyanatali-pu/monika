@@ -316,6 +316,7 @@
     element_btnSaveDokumen.on('click', function() {
         if (saveDokumenValidation()) {
             let formData = getFormValue();
+            console.log(formData)
 
             if ($(this).attr('data-dokumen-id')) {
                 formData['revision_dokumen_id'] = $(this).data('dokumen-id')
@@ -509,7 +510,12 @@
             kegiatan        : kegiatan,
             totalAnggaran   : $('input[name=total-anggaran]').val(),
             ttdPihak1       : $('input[name=ttd-pihak1]').val(),
+            ttdPihak1_isPlt : $('input:checkbox[name=ttd-pihak1-plt]').is(':checked') ? '1': '0',
             ttdPihak2       : $('input[name=ttd-pihak2]').val(),
+            ttdPihak2_isPlt : $('input:checkbox[name=ttd-pihak2-plt]').is(':checked') ? '1': '0',
+            kota            : $('select[name=created-kota]').val(),
+            bulan           : $('select[name=created-bulan]').val(),
+            tahun           : $('select[name=created-tahun]').val()
         }
         if ($('input[name=ttd-pihak2-jabatan]').length) inputValue.ttdPihak2Jabatan = $('input[name=ttd-pihak2-jabatan]').val()
 
@@ -667,6 +673,9 @@
             render_rowKegiatan                = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
             render_listInfo                   = renderFormTemplate_listInfo(_data.templateInfo),
             render_ttdPihak2                  = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2),
+            render_opsiKota                   = renderFormTemplate_opsiKota(_data.kota),
+            render_opsiBulan                  = renderFormTemplate_opsiBulan(_data.bulan),
+            render_opsiTahun                  = renderFormTemplate_opsiTahun(_data.tahun),
             render_warningDokumenYearRevisoin = '',
             inputValue_revisionSameYear       = 0
         
@@ -724,7 +733,7 @@
                         <h6>KETERNGAN</h6>
                         <div>${ template.keterangan }</div>
                     </div>
-                    <div class="mt-5">
+                    <div class="mt-5 mb-5">
                         <h6>${ template.info_title }</h6>
                         <!--
                         <ul class="list-group">
@@ -743,6 +752,33 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="mt-4 pt-4">
+                        <h6 class="mb-4">Dokumen Dibuat Di</h6>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Kota</label>
+                            <div class="col-sm-5">
+                                <select class="form-control select2" name="created-kota">
+                                    ${render_opsiKota}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Bulan</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="created-bulan">
+                                    ${render_opsiBulan}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Tahun</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="created-tahun">
+                                    ${render_opsiTahun}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group mt-4">
@@ -757,9 +793,17 @@
                         </div>
                     </div>
                     <div class="form-group mt-4 pt-4">
-                        <label>
-                            <strong>Pihak Pertama</strong>
-                        </label>
+                        <div class="d-flex justify-content-between">
+                            <label>
+                                <strong>Pihak Pertama</strong>
+                            </label>
+                            <div class="form-check">
+                                <input class="form-check-input" name="ttd-pihak1-plt" type="checkbox" value="1" id="ttdPihak1Plt">
+                                <label class="form-check-label" for="ttdPihak1Plt">
+                                    Plt.
+                                </label>
+                            </div>
+                        </div>
                         <div>
                             <small class="title-ttd-pihak1">
                                 KEPALA ${_data.penandatangan.pihak1}
@@ -768,9 +812,17 @@
                         <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required />
                     </div>
                     <div class="form-group mt-4 pt-2">
-                        <label>
-                            <strong>Pihak Kedua</strong>
-                        </label>
+                        <div class="d-flex justify-content-between">
+                            <label>
+                                <strong>Pihak Kedua</strong>
+                            </label>
+                            <div class="form-check">
+                                <input class="form-check-input" name="ttd-pihak2-plt" type="checkbox" value="1" id="ttdPihak2Plt">
+                                <label class="form-check-label" for="ttdPihak2Plt">
+                                    Plt.
+                                </label>
+                            </div>
+                        </div>
                         <div>
                             ${render_ttdPihak2}
                         </div>
@@ -910,6 +962,42 @@
             ${renderJalabatan}
             <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" />
         `
+    }
+    
+    
+    
+    function renderFormTemplate_opsiKota(_dataKota) {
+        let renderOptions = ''
+
+        _dataKota.forEach((data, key) => {
+            renderOptions += `<option value='${data.kdlokasi + '-' + data.kdkabkota}'>${data.nmkabkota}</option>`
+        });
+
+        return renderOptions
+    }
+    
+    
+    
+    function renderFormTemplate_opsiBulan(_data) {
+        let renderOptions = ''
+
+        _data.forEach((data, key) => {
+            renderOptions += `<option value='${key+1}'>${data}</option>`
+        });
+
+        return renderOptions
+    }
+    
+    
+    
+    function renderFormTemplate_opsiTahun(_data) {
+        let renderOptions = ''
+
+        for (let iTahun = _data; iTahun <= (parseInt(_data)+3); iTahun++) {
+            renderOptions += `<option>${iTahun}</option>`
+        }
+
+        return renderOptions
     }
 </script>
 <?= $this->endSection() ?>

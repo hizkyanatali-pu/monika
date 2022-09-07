@@ -12,11 +12,14 @@ class DokumenpkExport extends \App\Controllers\BaseController
     public function __construct()
     {
         helper('dbdinamic');
-        $session           = session();
-        $this->user        = $session->get('userData');
-        $this->userUID     = $this->user['uid'];
-        $this->dokumenYear = $this->user['tahun'];
-        $this->db          = \Config\Database::connect();
+        $session             = session();
+        $this->user          = $session->get('userData');
+        $this->userUID       = $this->user['uid'];
+        $this->dokumenYear   = $this->user['tahun'];
+        $this->dokumenLokasi = 'JAKARTA';
+        $this->dokumenBulan  = '';
+        $this->bulan         = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        $this->db            = \Config\Database::connect();
 
         $this->dokumenSatker          = $this->db->table('dokumenpk_satker');
         $this->dokumenSatker_rows     = $this->db->table('dokumenpk_satker_rows');
@@ -47,11 +50,25 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf = new PDF();
 
         $dataDokumen = $this->dokumenSatker->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+            ->join('tkabkota', "(SUBSTRING_INDEX(dokumenpk_satker.kota, '-', 1) = tkabkota.kdlokasi AND SUBSTRING_INDEX(dokumenpk_satker.kota, '-', -1) = tkabkota.kdkabkota)", 'left')
             ->where('dokumenpk_satker.id', $_dokumenSatkerID)
             ->get()
             ->getRowArray();
 
-        if ($dataDokumen) $this->dokumenYear = date('Y', strtotime($dataDokumen['created_at']));
+        if ($dataDokumen) {
+            $this->dokumenBulan = bulan(date('m', strtotime($dataDokumen['created_at'])));
+
+            if ($dataDokumen['tahun'] != '') {
+                $this->dokumenYear = $dataDokumen['tahun'];
+            }
+            else {
+                $this->dokumenYear = date('Y', strtotime($dataDokumen['created_at']));
+            }
+            
+            if ($dataDokumen['kota'] != '') $this->dokumenLokasi = $dataDokumen['nmkabkota'];
+
+            if ($dataDokumen['bulan'] != '') $this->dokumenBulan = $this->bulan[$dataDokumen['bulan'] - 1];
+        }
         
         $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen['status'], $dataDokumen['revision_master_number']);
 
@@ -131,8 +148,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Ln(2);
 
         // Pihak Pertama
+        $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak1_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', 'KEPALA ' . $dataDokumen['pihak1_initial']);
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . 'KEPALA ' . $dataDokumen['pihak1_initial']);
 
         // Text 2
         $pdf->Ln(4);
@@ -142,8 +160,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Ln(2);
 
         // Pihak Kedua
+        $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak2_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $dataDokumen['pihak2_initial']);
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial']);
 
         // Text 3
         $pdf->Ln(4);
@@ -170,7 +189,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_renderSectionTtd($pdf, $this->sectionWidth, [
             'person1Title' => 'Pihak Kedua',
             'person1Name'  => $dataDokumen['pihak2_ttd'],
-            'person2Date'  => 'JAKARTA ,          ' . bulan(date('m', strtotime($dataDokumen['created_at']))) . ' ' . $this->dokumenYear,
+            'person2Date'  => $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear,
             'person2Title' => 'Pihak Pertama',
             'person2Name'  => $dataDokumen['pihak1_ttd'],
         ]);
@@ -369,11 +388,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         /** TTD Section */
         $pdf->Ln(10);
+        $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
+        $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';    
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
-            'person1Title' => $dataDokumen['pihak2_initial'],
+            'person1Title' => $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial'],
             'person1Name'  => $dataDokumen['pihak2_ttd'],
-            'person2Date'  => 'JAKARTA ,          ' . bulan(date('m', strtotime($dataDokumen['created_at']))) . ' ' . $this->dokumenYear,
-            'person2Title' => 'KEPALA ' . $dataDokumen['pihak1_initial'],
+            'person2Date'  => $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear,
+            'person2Title' => $jabatanPihak1_isPlt . 'KEPALA ' . $dataDokumen['pihak1_initial'],
             'person2Name'  => $dataDokumen['pihak1_ttd'],
         ]);
     }

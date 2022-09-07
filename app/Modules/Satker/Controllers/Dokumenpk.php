@@ -30,6 +30,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->balai    = $this->db->table('m_balai');
         $this->kegiatan = $this->db->table('tgiat');
 
+        $this->kota = $this->db->table('tkabkota');
+
         $this->dokumenStatus = [
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
             'setuju'   => ['message' => 'Telah di Setujui', 'color' => 'bg-success text-white'],
@@ -172,7 +174,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $dokumenExistSameYear = $this->dokumenSatker->select("
             id as last_dokumen_id,
-            revision_master_dokumen_id
+            IFNULL (revision_master_dokumen_id, id) AS revision_master_dokumen_id
         ")->where([
             'template_id'  => $id,
             'user_created' => $this->user['uid']
@@ -188,7 +190,10 @@ class Dokumenpk extends \App\Controllers\BaseController
             'penandatangan'        => [
                 'pihak1' => $pihak1,
                 'pihak2' => $pihak2
-            ]
+            ],
+            'kota'  => $this->kota->get()->getResult(),
+            'bulan' => ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+            'tahun' => $this->user['tahun']
         ]);
     }
 
@@ -233,8 +238,13 @@ class Dokumenpk extends \App\Controllers\BaseController
             'user_created'          => $this->userUID,
             'total_anggaran'        => $this->request->getPost('totalAnggaran'),
             'pihak1_ttd'            => $this->request->getPost('ttdPihak1'),
+            'pihak1_is_plt'         => $this->request->getPost('ttdPihak1_isPlt'),
             'pihak2_ttd'            => $this->request->getPost('ttdPihak2'),
-            'is_revision_same_year' => $this->request->getPost('revisionSameYear')
+            'pihak2_is_plt'         => $this->request->getPost('ttdPihak2_isPlt'),
+            'is_revision_same_year' => $this->request->getPost('revisionSameYear'),
+            'kota'                  => $this->request->getPost('kota'),
+            'bulan'                 => $this->request->getPost('bulan'),
+            'tahun'                 => $this->request->getPost('tahun')
         ];
        
         if ($this->user['user_type'] == "satker") {
@@ -263,14 +273,15 @@ class Dokumenpk extends \App\Controllers\BaseController
             $inserted_dokumenSatker['revision_master_number'] = $this->dokumenSatker->selectCount('id')->where('revision_master_dokumen_id', $revision_dokumenMasterID)->orWhere('id', $revision_dokumenMasterID)->get()->getFirstRow()->id;
 
             if ($this->request->getPost('revisionSameYear') == '1') {
-                $inserted_dokumenSatker['revision_same_year_number'] = $this->dokumenSatker->select('revision_same_year_number')->groupStart()
+                $lastRevisionSameYearNumber = $this->dokumenSatker->select('revision_same_year_number')->groupStart()
                     ->where('revision_master_dokumen_id', $revision_dokumenMasterID)
                     ->orWhere('id', $revision_dokumenMasterID)
                 ->groupEnd()
                 ->where('is_revision_same_year', '1')
                 ->orderBy('id', 'DESC')
-                ->get()->getFirstRow()->revision_same_year_number + 1;
-
+                ->get()->getFirstRow();
+                
+                $inserted_dokumenSatker['revision_same_year_number'] = $lastRevisionSameYearNumber ? $lastRevisionSameYearNumber->revision_same_year_number + 1 : 1;
                 $inserted_dokumenSatker['revision_number'] = '0';
             }
             else {
