@@ -810,6 +810,15 @@
     
     
     function formValidation() {
+        if (element_checkboxOpsiAksesDokumenShowed.filter(':checked').length <= 0) {
+            Swal.fire(
+                'Peringatan',
+                'Hak akses template belum di sesuaikan',
+                'warning'
+            )
+            return false
+        }
+
         if (tableKegiatan_to_array().length <= 0) {
             Swal.fire(
                 'Peringatan',
