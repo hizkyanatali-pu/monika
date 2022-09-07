@@ -73,7 +73,7 @@
                             <th width="30px">No</th>
                             <th>Nama Dokumen</th>
                             <th width="100px">Dokumen Untuk</th>
-                            <th width="100px">Keterangan</th>
+                            <!-- <th width="100px">Keterangan</th> n-->
                             <th width="80px"></th>
                         </tr>
                     </thead>
@@ -86,12 +86,12 @@
                             <td><?php echo $key+1 ?></td>
                             <td><?php echo $data->title ?></td>
                             <td><?php echo $data->type ?></td>
-                            <td>
+                            <!-- <td>
                                 <select name="status-template" class="form-control" data-id="<?php echo $data->id ?>">
                                     <option value="1" <?php if ($data->status == '1') { ?> selected <?php } ?> >On Going</option>
                                     <option value="0" <?php if ($data->status == '0') { ?> selected <?php } ?> >Selesai</option>
                                 </select>
-                            </td>
+                            </td> -->
                             <td>
                                 <button
                                     class="_actionRow btn btn-sm btn-default pt-2 pr-1 pb-2 pl-3"
@@ -672,34 +672,34 @@
     
     
     
-    $(document).on('change', 'select[name=status-template]', function() {
-        let form = new FormData()
+    // $(document).on('change', 'select[name=status-template]', function() {
+    //     let form = new FormData()
 
-        form.append('csrf_test_name', $('input[name=csrf_test_name]').val())
-        form.append('dataId', $(this).data('id'))
-        form.append('newStatus', $(this).val())
+    //     form.append('csrf_test_name', $('input[name=csrf_test_name]').val())
+    //     form.append('dataId', $(this).data('id'))
+    //     form.append('newStatus', $(this).val())
 
-        $.ajax({
-            url: '<?php echo site_url('dokumenpk/template/update-status') ?>',
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            cache: false,
-            data: form,
-            success: (res) => {
-                if (res.status) {
-                    location.reload()
-                }
-                else {
-                    alert('Terjadi kesalahan pada sistem')
-                }
-            },
-            fail: (xhr) => {
-                alert('Terjadi kesalahan pada sistem')
-                console.log(xhr)
-            }
-        })
-    })
+    //     $.ajax({
+    //         url: '<?php echo site_url('dokumenpk/template/update-status') ?>',
+    //         type: 'POST',
+    //         processData: false,
+    //         contentType: false,
+    //         cache: false,
+    //         data: form,
+    //         success: (res) => {
+    //             if (res.status) {
+    //                 location.reload()
+    //             }
+    //             else {
+    //                 alert('Terjadi kesalahan pada sistem')
+    //             }
+    //         },
+    //         fail: (xhr) => {
+    //             alert('Terjadi kesalahan pada sistem')
+    //             console.log(xhr)
+    //         }
+    //     })
+    // })
 
 
 
