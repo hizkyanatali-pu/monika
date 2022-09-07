@@ -202,8 +202,9 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function show($id)
     {
         return $this->respond([
-            'dokumen' => $this->dokumenSatker->where('id', $id)->get()->getRow(),
-            'rows'    => $this->dokumenSatker_rows->where('dokumen_id', $id)->get()->getResult()
+            'dokumen'  => $this->dokumenSatker->where('id', $id)->get()->getRow(),
+            'rows'     => $this->dokumenSatker_rows->where('dokumen_id', $id)->get()->getResult(),
+            'kegiatan' => $this->dokumenSatker_kegiatan->where('dokumen_id', $id)->get()->getResult()
         ]);
     }
 

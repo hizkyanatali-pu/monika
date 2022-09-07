@@ -387,6 +387,11 @@
                         if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
                     })
 
+                    res.kegiatan.forEach((data, key) => {
+                        let elementInput_target = $('tr[data-kegiatan-id='+data.id+']').find('input[name=kegiatan-anggaran]')
+                        elementInput_target.val(data.anggaran)
+                    })
+
                     $('input[name=total-anggaran]').val(res.dokumen.total_anggaran)
                     $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
                     $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
@@ -398,6 +403,12 @@
                         $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
                     }
 
+                    if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
+                    if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
+                    
+                    $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
+                    $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
+                    $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
 
                     if (res.dokumen.revision_message != null) {
                         $('.container-revision-alert').html(`
@@ -921,7 +932,12 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Rp. </span>
                             </div>
-                            <input class="form-control" name="kegiatan-anggaran" value="0" placeholder="Nominal Anggaran">
+                            <input 
+                                class="form-control" 
+                                name="kegiatan-anggaran" 
+                                value="0" 
+                                placeholder="Nominal Anggaran"
+                            >
                         </div>
                     </td>
                 </tr>
