@@ -231,6 +231,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->post('update-status', '\Modules\Admin\Controllers\Dokumenpk::updateTemplateStatus');
                     $routes->post('delete', '\Modules\Admin\Controllers\Dokumenpk::removeTemplate');
                 });
+
+                $routes->group('template-balai', ['namespace' => 'App\Controllers'], function($routes) {
+                    $routes->get('/', '\Modules\Admin\Controllers\DokumenpkBalai::template');
+                });
             });
         }
 

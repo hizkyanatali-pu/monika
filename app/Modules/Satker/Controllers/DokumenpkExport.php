@@ -111,8 +111,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Image('images/logo_pu_border.png', 143, 14, 12);
         $pdf->Ln(17);
 
+        $dokumenKopTitle2_prefix = $dataDokumen['dokumen_type'] == "satker" ? 'SATUAN KERJA' : '';
+
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
-        $dokumenKopTitle2 = $dataDokumen['pihak1_initial'];
+        $dokumenKopTitle2 = $dokumenKopTitle2_prefix . $dataDokumen['pihak1_initial'];
         $dokumenKopTitle3 = $dataDokumen['pihak2_initial'];
 
         $pdf->SetFont('Arial', 'B', 12);
@@ -124,14 +126,14 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
         // Kop Title 2
-        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->SetFont('Arial', 'B', 10);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
         $pdf->SetX((300 - $width_kopTitle2) / 2);
         $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
 
         // Kop Title 3
         $kopTitle3 = $dataDokumen['dokumen_type'] != "satker" ? 'DIREKTORAT JENDERAL SUMBER DAYA AIR' : $dokumenKopTitle3;
-        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->SetFont('Arial', 'B', 10);
         $width_kopTitle3 = $pdf->GetStringWidth($dokumenKopTitle3) + 6;
         $pdf->SetX((300 - $width_kopTitle3) / 2);
         $pdf->Cell($width_kopTitle3, 6, $kopTitle3, 0, 1, 'C');
@@ -202,10 +204,16 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetFont('Arial', '', 10);
         $pdf->SetX((330 - $this->sectionWidth) / 2);
         $pdf->Cell(35, 5, $_title, 0);
-        $pdf->SetX((420 - $this->sectionWidth) / 2);
+
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->SetX((360 - $this->sectionWidth) / 2);
         $pdf->Cell(5, 5, ':', 0);
-        $pdf->SetX((430 - $this->sectionWidth) / 2);
+
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->SetX((370 - $this->sectionWidth) / 2);
         $pdf->Cell(150, 5, $_introduction, 0);
+
+        $pdf->SetFont('Arial', '', 10);
         $pdf->Ln(7);
     }
 
@@ -266,9 +274,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
         // Kop Title 2
+        $pdf->SetFont('Arial', 'B', 9);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
         $pdf->SetX((300 - $width_kopTitle2) / 2);
         $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 10);
 
         // Line break
         $pdf->Ln(6);
