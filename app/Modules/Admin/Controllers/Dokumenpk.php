@@ -301,7 +301,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     private function insertDokumenPK_akses($input, $templateID, $inputDokumenType)
     {
-        $revTable = '';
+        $revTable = 'm_balai';
         switch ($inputDokumenType) {
             case 'satker':
                 $revTable = 'm_satker';
