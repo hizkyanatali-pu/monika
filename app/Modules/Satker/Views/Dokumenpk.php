@@ -881,7 +881,7 @@
                                         type="text" 
                                         class="form-control __inputTemplateRow-target" 
                                         placeholder="Masukkan Nilai"
-                                        value="0"
+                                        value="${ data.targetDefualtValue }"
                                         data-row-id="${ data.id }"
                                         onkeypress="return isNumberKey(this, event);"
                                     >
