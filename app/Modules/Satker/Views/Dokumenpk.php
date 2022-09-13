@@ -1009,8 +1009,13 @@
     function renderFormTemplate_opsiTahun(_data) {
         let renderOptions = ''
 
-        for (let iTahun = _data; iTahun <= (parseInt(_data)+3); iTahun++) {
+        for (let iTahun = (parseInt(_data)-3); iTahun < _data; iTahun++) {
             renderOptions += `<option>${iTahun}</option>`
+        }
+
+        for (let iTahun = _data; iTahun <= (parseInt(_data)+3); iTahun++) {
+            let selected = iTahun == _data ? 'selected=selected' : ''
+            renderOptions += `<option ${selected}>${iTahun}</option>`
         }
 
         return renderOptions

@@ -22,6 +22,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $this->dokumenPK               = $this->db->table('dokumen_pk_template');
         $this->dokumenPK_row           = $this->db->table('dokumen_pk_template_row');
+        $this->dokumenPk_rowRumus      = $this->db->table('dokumen_pk_template_rowrumus');
         $this->dokumenPK_kegiatan      = $this->db->table('dokumen_pk_template_kegiatan');
         $this->dokumenPK_info          = $this->db->table('dokumen_pk_template_info');
         $this->dokumenPK_akses         = $this->db->table('dokumen_pk_template_akses');
@@ -58,7 +59,11 @@ class Dokumenpk extends \App\Controllers\BaseController
         $sessionYear = $this->user['tahun'];
 
         return view('Modules\Admin\Views\DokumenPK\template.php', [
-            'data'        => $this->dokumenPK->where('deleted_at is NULL', NULL, false)->get()->getResult(),
+            'data'        => $this->dokumenPK->groupStart()
+                                ->where('type', 'satker')
+                                ->orWhere('type', 'balai')
+                            ->groupEnd()
+                            ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
             'allSatker'   => $this->tableSatker->whereNotIn('satker', ['', '1'])->get()->getResult(),
             'allBalai'    => $this->tableBalai->get()->getResult(),
             'allKegiatan' => $this->tableKegiatan->where('tahun_anggaran', $sessionYear)->get()->getResult(),
@@ -73,7 +78,8 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         return $this->respond([
             'template' => $this->dokumenPK->where('id', $_id)->get()->getRow(),
-            'rows'     => $this->dokumenPK_row->where('template_id', $_id)->get()->getResult(),
+            'rows'     => $this->dokumenPK_row->select('dokumen_pk_template_row.*, (SELECT COUNT(dokumen_pk_template_rowrumus.rowId) FROM dokumen_pk_template_rowrumus WHERE dokumen_pk_template_rowrumus.rowId=dokumen_pk_template_row.id) as rumusJml')->where('template_id', $_id)->get()->getResult(),
+            'rowRumus' => $this->dokumenPk_rowRumus->where('template_id', $_id)->get()->getResult(),
             'kegiatan' => $this->dokumenPK_kegiatan->where('template_id', $_id)->get()->getResult(),
             'info'     => $this->dokumenPK_info->where('template_id', $_id)->get()->getResult(),
             'akses'    => $this->dokumenPK_akses->where('template_id', $_id)->get()->getResult()
@@ -143,6 +149,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         
         /* row */
         $this->dokumenPK_row->delete(['template_id' => $templateID]);
+        $this->dokumenPk_rowRumus->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_row($this->request->getPost(), $templateID);
         /** end-of: row */
 
@@ -241,14 +248,20 @@ class Dokumenpk extends \App\Controllers\BaseController
         $rows = [];
         $rowsNumber = 1;
         foreach ($input['formTable_title'] as $key_rowTitle => $data_rowTitle) {
+            $rowId = $templateID . $rowsNumber++;
+
             array_push($rows, [
-                'id'             => $templateID . $rowsNumber++,
+                'id'             => $rowId,
                 'template_id'    => $templateID,
                 'title'          => $data_rowTitle,
                 'target_satuan'  => $input['formTable_targetSatuan'][$key_rowTitle],
                 'outcome_satuan' => $input['formTable_outcomeSatuan'][$key_rowTitle],
                 'type'           => $input['formTable_type'][$key_rowTitle]
             ]);
+
+            if ($input['formTable_rumus'][$key_rowTitle]) {
+                $this->insertDokumenPK_rowRumus(explode(',', $input['formTable_rumus'][$key_rowTitle]), $rowId, $templateID);
+            }
         }
         $this->dokumenPK_row->insertBatch($rows);
     }
@@ -307,5 +320,26 @@ class Dokumenpk extends \App\Controllers\BaseController
             ];
         }, $input['akses']);
         $this->dokumenPK_akses->insertBatch($akses);
+    }
+    
+    
+    
+    
+    
+    
+    
+    private function insertDokumenPK_rowRumus($inputRumus, $rowId, $templateId)
+    {
+        $rumus = [];
+
+        foreach ($inputRumus as $key => $data) {
+            array_push($rumus, [
+                'template_id' => $templateId,
+                'rowId'       => $rowId,
+                'rumus'       => $data
+            ]);
+        }
+
+        $this->dokumenPk_rowRumus->insertBatch($rumus);
     }
 }

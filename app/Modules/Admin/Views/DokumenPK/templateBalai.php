@@ -50,7 +50,7 @@
         <div class="kt-subheader__main w-100">
             <div class="d-flex justify-content-between w-100">
                 <h5 class="kt-subheader__title">
-                    Template Dokumen
+                    Template Dokumen Balai
                 </h5>
                 <?= csrf_field() ?>
                 
@@ -138,7 +138,7 @@
 <!-- Modal Form -->
 <div class="modal fade" id="modalForm" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content" style="width: 93vw !important">
+        <div class="modal-content"  style="width: 93vw !important">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">
                     <i class="fas fa-file mr-3"></i> Buat Template Dokumen
@@ -150,15 +150,6 @@
             <div class="modal-body">
                 <div class="row _form-main">
                     <div class="col-md-8 pr-4">
-                        <div class="form-group mb-4 d-none">
-                            <strong for="judul-dokumen">Dokumen Untuk</strong>
-                            <select name="dokumen-type" class="form-control w-25">
-                                <option value="-" disabled>Pilih Opsi</option>
-                                <option value="satker" selected>Satker</option>
-                                <option value="balai">Balai</option>
-                            </select>
-                        </div>
-
                         <div class="form-group mt-4">
                             <strong for="judul-dokumen">Judul Dokumen</strong>
                             <input type="text" name="judul-dokumen" class="form-control" id="judul-dokumen" placeholder="Masukkan judul dokumen disini">
@@ -202,28 +193,11 @@
                                 Pilih Akses Dokumen
                             </button>
                         </div>
-                        <div class="form-group">
-                            <strong for="keterangan-dokumen">Keterangan</strong>
-                            <textarea 
-                                class="form-control"
-                                name="keterangan-dokumen" 
-                                id="keterangan-dokumen"
-                                rows="2" 
-                                placeholder="Masukkan keterangan dokumen"
-                            ></textarea>
-                        </div>
-
                         <div class="mt-4 pt-4">
-                            <h5>Program / Kegiatan</h5>
+                            <h5>Program</h5>
                             <div class="mt-3">
                                 <small>Pilih data yang akan di gunakan</small>
-                                <select class="form-control w-50 mt-2" name="kegiatan-used-data">
-                                    <option value="" selected disabled>Pilih Data Digunakan</option>
-                                    <option value="tgiat">Kegiatan</option>
-                                    <option value="tprogram">Program</option>
-                                </select>
-
-                                <table class="table table-striped border mt-4 d-none __table-kegiatan">
+                                <table class="table table-striped border mt-4 __table-kegiatan">
                                     <thead>
                                         <tr>
                                             <th class="bg-purple text-white">
@@ -233,17 +207,12 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <div class="_container-select-kegiatan d-none">
-                                                    <select class="select2" name="kegiatan" style="width: 400px">
-                                                        <?php foreach ($allKegiatan as $key => $dataKegiatan) : ?>
-                                                            <option value="<?php echo $dataKegiatan->kdgiat ?>"><?php echo $dataKegiatan->nmgiat ?></option>
-                                                        <?php endforeach ?>
-                                                    </select>
-                                                </div>
-                                                <div class="_container-select-program d-none">
+                                                <div class="_container-select-program">
                                                     <select class="select2" name="program" style="width: 400px">
                                                         <?php foreach ($allProgram as $key => $dataProgram) : ?>
-                                                            <option value="<?php echo $dataProgram->kdprogram ?>"  class="d-none" data-jebret="123"><?php echo $dataProgram->nmprogram ?></option>
+                                                            <option value="<?php echo $dataProgram->kdprogram ?>" >
+                                                                <?php echo $dataProgram->nmprogram ?>
+                                                            </option>
                                                         <?php endforeach ?>
                                                     </select>
                                                 </div>
@@ -256,34 +225,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>2</td>
-                                        </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-
-                        <div class="w-75 d-none">
-                            <table class="table table-bordered _table-informasi">
-                                <thead>
-                                    <tr>
-                                        <th class="bg-purple">Informasi</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="bg-secondary">
-                                            <input type="text" name="judul-informasi" class="form-control _judul-informasi" placeholder="Judul Informasi" />
-                                        </td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                            <div class="d-flex justify-content-end"  style="margin-top: -14px">
-                                <button class="btn btn-sm btn-secondary pr-2 _add-item-informasi">
-                                    <i class="fas fa-plus"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -295,54 +238,23 @@
                             <i class="fas fa-chevron-left"></i> Kembali
                         </button>
                     </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                <div class="ml-2 mt-3 w-50 _container-satker-select-balai">
-                                    <label>Cari By Balai </label>
-                                    <select name="search-opsi-akses-satker" class="form-control">
-                                    <option value=" " selected>Pilih Satker Dalam Balai</option>
-                                    <?php foreach ($allBalai as $keyBalai => $dataBalai) : ?>
-                                        <option value="<?= $dataBalai->balaiid ?>"> <?= $dataBalai->balai ?></option>
-                                    <?php endforeach ?>
-                                    </select>
-                                    <!-- <input type="text" name="search-opsi-akses-satker" class="form-control" placeholder="Cari Satker"> -->
+                    <div class="row">
+                        <div class="col-md-6">
+                                <div class="ml-2 mt-3 w-100">
+                                    <label>Cari</label>
+                                    <input type="text" name="search-opsi-akses-satker_text" class="form-control" placeholder="Cari Satker">
                                 </div>
-                                </div>
-                                <div class="col-md-6">
-                                        <div class="ml-2 mt-3 w-100">
-                                            <label>Cari</label>
-                                            <input type="text" name="search-opsi-akses-satker_text" class="form-control" placeholder="Cari Satker">
-                                        </div>
-                                </div>
-                           
-                            </div>
+                        </div>
+                    </div>
                     <div class="mt-4 border" style="height: 45vh; overflow: auto">
                         <table class="table table-bordered">
                             <thead style="position: sticky; top: 0;">
                                 <th class="bg-purple" width="30px">
                                     <input type="checkbox" name="check-all-opsi-satker">
                                 </th>
-                                <th class="bg-purple">Nama Satker</th>
+                                <th class="bg-purple">Nama Balai</th>
                             </thead>
                             <tbody>
-                                <?php foreach ($allSatker as $keySatker => $dataSatker) : ?>
-                                    <tr class="_list-opsi-satker _list-satker">
-                                        <td>
-                                            <input 
-                                                type="checkbox" 
-                                                name="check-list-opsi-satker" 
-                                                class="open-to-check"
-                                                value="<?php echo $dataSatker->satkerid ?>"
-                                                data-balaiid="<?= $dataSatker->balaiid ?>"
-                                            >
-                                        </td>
-                                        <td>
-                                            <label>
-                                                <?php echo $dataSatker->satker ?>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                <?php endforeach ?>
                                 <?php foreach ($allBalai as $keyBalai => $dataBalai) : ?>
                                     <tr class="_list-opsi-satker _list-opsi-balai">
                                         <td>
@@ -392,7 +304,6 @@
 <script>
     var timerUserTyping                        = '',
         element_formTable                      = $('._table-form').find('tbody'),
-        element_tableInformasi                 = $('._table-informasi').find('tbody'),
         element_modalForm                      = $('#modalForm')
         element_modalFormFooter                = element_modalForm.find('.modal-footer')
         element_buttonPreparePilihAksesDokumen = $('button.__prepare-pilih-akses-dokumen')
@@ -400,7 +311,6 @@
         element_formPilihAksesDokumen          = $('._form-pilih-akses-dokumen'),
         element_checkAllOpsiAksesDokumen       = $('input[type=checkbox][name=check-all-opsi-satker]'),
         element_checkboxOpsiAksesDokumenShowed = $('input.open-to-check[type=checkbox][name=check-list-opsi-satker]')
-        element_selectDokumenType              = $("select[name=dokumen-type]"),
         element_tableKegiatan                  = $(".__table-kegiatan"),
         csrfName                               = '<?= csrf_token() ?>',
         csrfHash                               = '<?= csrf_hash() ?>'
@@ -417,16 +327,8 @@
             setTimeout(() => {
                 $('input[name=csrf_test_name]').val('')
                 $('input[name=judul-dokumen]').val('')
-                $('textarea[name=keterangan-dokumen]').val('')
-                $('input[name=judul-informasi]').val('')
-
-                // reset select dokumen type
-                element_selectDokumenType.find("option[value='satker']").removeAttr('disabled')
-                element_selectDokumenType.val('satker').change()
-                element_selectDokumenType.find("option[value='satker']").prop('disabled', 'disabled')
 
                 element_formTable.empty()
-                element_tableInformasi.empty()
                 element_checkboxOpsiAksesDokumenShowed.prop('checked', false)
 
                 $('button[name=save-document]').removeClass('d-none')
@@ -436,19 +338,9 @@
                 element_formPilihAksesDokumen.addClass('d-none')
                 element_modalFormFooter.removeClass('d-none')
 
-                $('._container-satker-select-balai').removeClass('d-none');
-                $('._list-opsi-satker._list-satker').removeClass('d-none');
-                $('._list-opsi-balai').addClass('d-none');
-
                 location.reload()
             }, 400)
         })
-    })
-
-
-
-    $(document).on('change', 'select[name=dokumen-type]', function() {
-        setOpsiHakAkses()
     })
 
 
@@ -467,12 +359,6 @@
         }
         
         element_formTable.append(row)
-    })
-
-
-
-    $('._add-item-informasi').click(function() {
-        element_tableInformasi.append(render_itemInformasi())
     })
 
 
@@ -547,8 +433,6 @@
                 setPropCheckedAll       = checkboxShowedIsChecked > 0 ? false : true
             
             element_checkAllOpsiAksesDokumen.prop('checked', setPropCheckedAll)
-
-            setOpsiHakAkses('balai')
         }, 700)
     })
 
@@ -578,10 +462,6 @@
                 setPropCheckedAll       = checkboxShowedIsChecked > 0 ? false : true
             
             element_checkAllOpsiAksesDokumen.prop('checked', setPropCheckedAll)
-
-            let hakAksesOpsiParam = $('select[name=dokumen-type]').val() == 'balai' ? 'satker' : 'balai'
-            console.log(hakAksesOpsiParam);
-            setOpsiHakAkses(hakAksesOpsiParam)
         }, 700)
     })
 
@@ -593,29 +473,8 @@
 
 
 
-    $(document).on('change', 'select[name=kegiatan-used-data]', function() {
-        element_tableKegiatan.removeClass('d-none')
-
-        switch ($(this).val()) {
-            case 'tgiat':
-                $('._container-select-kegiatan').removeClass('d-none')
-                $('._container-select-program').addClass('d-none')
-                break;
-            
-            case 'tprogram':
-                $('._container-select-program').removeClass('d-none')
-                $('._container-select-kegiatan').addClass('d-none')
-                break;
-        }
-
-        $('._table-kegiatan-title-section').text($(this).find('option:selected').text())
-        element_tableKegiatan.find('tbody').empty()
-    })
-
-
-
     $(document).on('click', 'button[name=add-temp-kegiatan]', function() {
-        let selectName             = $('select[name=kegiatan-used-data]').val() == 'tgiat' ? 'kegiatan' : 'program',
+        let selectName             = 'program',
             element_selectKegiatan = $('select[name='+selectName+']')
 
         render_rowTableKegiatan(params = {
@@ -629,13 +488,26 @@
     $(document).on('click', 'button[name=remove-temp-kegiatan]', function() {
         $(this).parents('tr').remove()
     })
+    
+    
+    
+    $(document).on('click', '.__tambah_row-form-rumus-item', function() {
+        render_rowForm_addRumus($(this).parents('td.rumus'))
+    })
+    
+    
+    
+    $(document).on('click', '.__remove-row-form-rumus-item', function() {
+        $(this).parent('._item-row-form-rumus').remove()
+    })
 
 
 
     $('button[name=save-document]').click(function() {
         if (formValidation()) {
             let form = get_formInputValue()
-            
+            // console.log(Object.fromEntries(form))
+
             $.ajax({
                 url: "<?php echo site_url('dokumenpk/template/create') ?>",
                 type: 'POST',
@@ -689,37 +561,6 @@
             })
         }
     })
-    
-    
-    
-    // $(document).on('change', 'select[name=status-template]', function() {
-    //     let form = new FormData()
-
-    //     form.append('csrf_test_name', $('input[name=csrf_test_name]').val())
-    //     form.append('dataId', $(this).data('id'))
-    //     form.append('newStatus', $(this).val())
-
-    //     $.ajax({
-    //         url: '<?php echo site_url('dokumenpk/template/update-status') ?>',
-    //         type: 'POST',
-    //         processData: false,
-    //         contentType: false,
-    //         cache: false,
-    //         data: form,
-    //         success: (res) => {
-    //             if (res.status) {
-    //                 location.reload()
-    //             }
-    //             else {
-    //                 alert('Terjadi kesalahan pada sistem')
-    //             }
-    //         },
-    //         fail: (xhr) => {
-    //             alert('Terjadi kesalahan pada sistem')
-    //             console.log(xhr)
-    //         }
-    //     })
-    // })
 
 
 
@@ -797,11 +638,11 @@
         let form = new FormData()
 
         form.append('csrf_test_name', $('input[name=csrf_test_name]').val())
-        form.append('type', element_selectDokumenType.val())
+        form.append('type', 'master-balai')
         form.append('title', $('input[name=judul-dokumen]').val())
-        form.append('keterangan', $('textarea[name=keterangan-dokumen]').val())
-        form.append('kegiatan_table_ref', $('select[name=kegiatan-used-data]').val())
-        form.append('info_title', $('input[name=judul-informasi]').val())
+        form.append('keterangan', '')
+        form.append('kegiatan_table_ref', 'tprogram')
+        form.append('info_title', 'PROGRAM')
 
         tableForm_to_array().forEach((data, key) => {
             form.append('formTable_title[]', data.title)
@@ -815,10 +656,6 @@
             form.append('kegiatan_id[]', data.id)
             form.append('kegiatan_nama[]', data.nama)
             form.append('kegiatan_rev[]', data.rev)
-        })
-
-        itemInformasi_to_array().forEach((data, key) => {
-            form.append('info_item[]', data)
         })
 
         element_checkboxOpsiAksesDokumenShowed.filter(':checked').each((key, element) => {
@@ -856,14 +693,9 @@
 
     function set_formInputValue(_data) {
         element_formTable.empty()
-        element_tableInformasi.empty()
         element_checkboxOpsiAksesDokumenShowed.prop('checked', false)
         
         $('input[name=judul-dokumen]').val(_data.template.title)
-        $('textarea[name=keterangan-dokumen]').val(_data.template.keterangan)
-        $('select[name=kegiatan-used-data]').val(_data.template.kegiatan_table_ref).trigger("change")
-        $('input[name=judul-informasi]').val(_data.template.info_title)
-        element_selectDokumenType.val(_data.template.type).change()
 
         let indexDataRumus = 0
         _data.rows.forEach((data, key) => {
@@ -876,12 +708,20 @@
                 element_formTable.append(render_rowForm({
                     namaItem     : data.title,
                     targetSatuan : data.target_satuan,
-                    outcomeSatuan: data.outcome_satuan
+                    outcomeSatuan: data.outcome_satuan,
+                    rumudJml     : data.rumusJml
                 }))
                 
                 if (parseInt(data.rumusJml) > 0) {
                     $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
                     indexDataRumus++
+                    
+                    for (let index = 1; index < parseInt(data.rumusJml); index++) {
+                        $('.__tambah_row-form-rumus-item:last').trigger('click')
+                        
+                        $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
+                        indexDataRumus++
+                    }
                 }
             }
         })
@@ -892,12 +732,6 @@
                 namaKegiatan: data.nama
             })
         })
-
-        _data.info.forEach((data, key) => {
-            element_tableInformasi.append(render_itemInformasi({
-                itemValue: data.info
-            }))
-        });
 
 
         _data.akses.forEach((data, key) => {
@@ -914,7 +748,7 @@
             let title          = '',
                 target_satuan  = '',
                 outcome_satuan = '',
-                rumus          = [],
+                rumus          = []
                 type           = ''
 
             if ($(element).hasClass('_title-section')) {
@@ -953,23 +787,11 @@
             tempArray.push({
                 id  : $(element).data('kegiatan-id'),
                 nama: $(element).data('kegiatan-nama'),
-                rev : $('select[name=kegiatan-used-data]').val()
+                rev : 'program'
             })
         })
 
         return tempArray
-    }
-
-    
-
-    function itemInformasi_to_array() {
-        let tempArrayForm = []
-
-        element_tableInformasi.find('tr').each((key, element) => {
-            tempArrayForm.push($(element).find('._item-informasi').val())
-        })
-
-        return tempArrayForm
     }
 
 
@@ -1021,25 +843,10 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-danger rounded-circle _remove-row-item">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </td>
-            </tr>
-        `
-    }
+                    <div class="text-center mt-2">
+                        <a href="javascript:void(0)" class="__tambah_row-form-rumus-item">Tambah item</a>
+                    </div>
 
-
-
-    function render_itemInformasi(params = {
-        itemValue: ''
-    }) {
-        let itemValue = params.hasOwnProperty('itemValue') ? params.itemValue : ''
-
-        return `
-            <tr>
-                <td style="position: relative">
-                    <input type="text" class="form-control _item-informasi" placeholder="Item Informasi" value="${itemValue}" />
                     <button class="btn btn-danger rounded-circle _remove-row-item">
                         <i class="fas fa-times"></i>
                     </button>
@@ -1050,20 +857,16 @@
     
     
     
-    function setOpsiHakAkses(type = 'all') {
-        switch ($('select[name=dokumen-type]').val()) {
-            case 'satker':
-                if (type == 'all') $('._container-satker-select-balai').removeClass('d-none');
-                if (type == 'all' || type == 'satker') $('._list-opsi-satker._list-satker').removeClass('d-none');
-                if (type == 'all' || type == 'balai') $('._list-opsi-balai').addClass('d-none');
-                break;
-
-            case 'balai':
-                if (type == 'all') $('._container-satker-select-balai').addClass('d-none');
-                if (type == 'all' || type == 'satker') $('._list-opsi-satker._list-satker').addClass('d-none');
-                if (type == 'all' || type == 'balai') $('._list-opsi-balai').removeClass('d-none');
-                break;
-        }
+    function render_rowForm_addRumus(_parentElement) {
+        _parentElement.find('._container-row-form-rumus').append(`
+            <div class="text-center _item-row-form-rumus" style="position: relative">
+                <span class="badge badge-secondary"><i class="fas fa-plus"></i></span>
+                <input type="text" class="form-control _rumus" placeholder="Tulis Rumus" value="">
+                <button class="btn btn-dark rounded-circle __remove-row-form-rumus-item">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `)
     }
 
 
