@@ -741,7 +741,7 @@
             <div class="row">
                 <div class="col-md-7">
                     <div class="mt-4">
-                        <h6>KETERNGAN</h6>
+                        <h6>${ template.keterangan != '' ? 'KETERANGAN' : '' }</h6>
                         <div>${ template.keterangan }</div>
                     </div>
                     <div class="mt-5 mb-5">

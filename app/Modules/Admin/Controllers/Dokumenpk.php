@@ -97,7 +97,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'title'              => $this->request->getPost('title'),
             'keterangan'         => $this->request->getPost('keterangan'),
             'kegiatan_table_ref' => $this->request->getPost('kegiatan_table_ref'),
-            'info_title'         => 'KEGIATAN', //$this->request->getPost('info_title'),
+            'info_title'         => $this->request->getPost('info_title'),
             'type'               => $input_dokumenType
         ]);
         $templateId = $this->db->insertID();
@@ -141,7 +141,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'title'              => $this->request->getPost('title'),
             'keterangan'         => $this->request->getPost('keterangan'),
             'kegiatan_table_ref' => $this->request->getPost('kegiatan_table_ref'),
-            'info_title'         => 'KEGIATAN', //$this->request->getPost('info_title'),
+            'info_title'         => $this->request->getPost('info_title'),
             'type'               => $input_dokumenType
         ]);
         /** end-of: template */

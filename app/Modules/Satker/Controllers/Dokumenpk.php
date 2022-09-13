@@ -91,6 +91,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->where('dokumen_pk_template_akses.rev_id', $template_revID)
             ->where('dokumen_pk_template.type', $template_type)
             ->where('dokumen_pk_template_akses.rev_table', $templae_revTable)
+            ->where("deleted_at is null")
             ->groupBy('dokumen_pk_template.id')
             ->get()->getResult();
             
@@ -100,7 +101,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         
         globalUserTemplate:
         if (isset($this->user['user_type'])) $this->templateDokumen->where('type', $this->user['user_type']);
-        $dataTemplate = $this->templateDokumen->where('dokumen_pk_template.status', '1')->get()->getResult();
+        $dataTemplate = $this->templateDokumen->where('dokumen_pk_template.status', '1')->where("deleted_at is null")->get()->getResult();
         
         returnSection:
         return view('Modules\Satker\Views\Dokumenpk.php', [

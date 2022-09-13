@@ -715,7 +715,7 @@
                 if (parseInt(data.rumusJml) > 0) {
                     $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
                     indexDataRumus++
-                    
+
                     for (let index = 1; index < parseInt(data.rumusJml); index++) {
                         $('.__tambah_row-form-rumus-item:last').trigger('click')
                         

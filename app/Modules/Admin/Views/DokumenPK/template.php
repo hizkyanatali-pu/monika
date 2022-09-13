@@ -801,7 +801,8 @@
         form.append('title', $('input[name=judul-dokumen]').val())
         form.append('keterangan', $('textarea[name=keterangan-dokumen]').val())
         form.append('kegiatan_table_ref', $('select[name=kegiatan-used-data]').val())
-        form.append('info_title', $('input[name=judul-informasi]').val())
+        form.append('info_title', 'KEGIATAN')
+        // form.append('info_title', $('input[name=judul-informasi]').val())
 
         tableForm_to_array().forEach((data, key) => {
             form.append('formTable_title[]', data.title)
