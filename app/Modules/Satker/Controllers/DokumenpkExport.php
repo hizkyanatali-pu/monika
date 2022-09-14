@@ -49,11 +49,17 @@ class DokumenpkExport extends \App\Controllers\BaseController
     {
         $pdf = new PDF();
 
-        $dataDokumen = $this->dokumenSatker->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
-            ->join('tkabkota', "(SUBSTRING_INDEX(dokumenpk_satker.kota, '-', 1) = tkabkota.kdlokasi AND SUBSTRING_INDEX(dokumenpk_satker.kota, '-', -1) = tkabkota.kdkabkota)", 'left')
-            ->where('dokumenpk_satker.id', $_dokumenSatkerID)
-            ->get()
-            ->getRowArray();
+        $dataDokumen = $this->dokumenSatker->select('
+            dokumenpk_satker.*,
+            tkabkota.*,
+            dokumen_pk_template.keterangan,
+            dokumen_pk_template.info_title
+        ')
+        ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+        ->join('tkabkota', "(SUBSTRING_INDEX(dokumenpk_satker.kota, '-', 1) = tkabkota.kdlokasi AND SUBSTRING_INDEX(dokumenpk_satker.kota, '-', -1) = tkabkota.kdkabkota)", 'left')
+        ->where('dokumenpk_satker.id', $_dokumenSatkerID)
+        ->get()
+        ->getRowArray();
 
         if ($dataDokumen) {
             $this->dokumenBulan = bulan(date('m', strtotime($dataDokumen['created_at'])));
@@ -69,8 +75,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
             if ($dataDokumen['bulan'] != '') $this->dokumenBulan = $this->bulan[$dataDokumen['bulan'] - 1];
         }
-        
-        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen['status'], $dataDokumen['revision_master_number']);
+        $watermaskRevisi       = $dataDokumen['is_revision_same_year'] == '1' ? 'revision-same-year' : $dataDokumen['status'];
+        $watermarkRevisiNumber = $dataDokumen['is_revision_same_year'] == '1' ? $dataDokumen['revision_same_year_number'] : $dataDokumen['revision_number'];
+        $this->pdf_renderWatermarkKonsep($pdf, $watermaskRevisi, $watermarkRevisiNumber);
 
         $this->dokumenLoadedStatus = $dataDokumen['status'];
 
@@ -260,6 +267,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         /**  Dokumen KOP */
+        $pdf->Ln(6);
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
 
         $divisiPihak2 = $dataDokumen['dokumen_type'] != "satker" ? 'DIREKTORAT JENDERAL SUMBER DAYA AIR' : $dataDokumen['pihak2_initial'];
@@ -455,22 +463,55 @@ class DokumenpkExport extends \App\Controllers\BaseController
         if ($_dokumenStatus != "setuju") {
             switch ($_dokumenStatus) {
                 case 'revision':
-                    $pdf->watermarkText = 'K O R E K S I';
-
+                    $subtitle = '';
                     if (! is_null($_revisionNumber)) {
-                        $pdf->watermarkSubText = $_revisionNumber > 1 ? 'Ke - ' . $_revisionNumber : '';
+                        $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
                         $pdf->watermarkSubTextOffsetLeft = 133;
                     }
                     else {
-                        $pdf->watermarkSubText = 'Dokumen Awal';
+                        // $subtitle = ' - Dokumen Awal';
                     }
 
-                    $pdf->watermarkOffsetLeft = 80;
+                    $pdf->watermarkText = 'KOREKSI' . $subtitle;
+                    if ($subtitle == '') {
+                        $pdf->watermarkOffsetLeft        = 257;
+                        $pdf->watermarkBorder_width      = 30;
+                        $pdf->watermarkBorder_offsetLeft = 254;
+                    } else {
+                        $pdf->watermarkOffsetLeft        = 243;
+                        $pdf->watermarkBorder_width      = 46;
+                        $pdf->watermarkBorder_offsetLeft = 240;
+                    }
+                    break;
+
+                case 'revision-same-year':
+                    $subtitle = '';
+                    if (! is_null($_revisionNumber)) {
+                        $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
+                        $pdf->watermarkSubTextOffsetLeft = 133;
+                    }
+                    else {
+                        // $subtitle = ' - Dokumen Awal';
+                    }
+
+                    $pdf->watermarkText = 'REVISI' . $subtitle;
+                    if ($subtitle == '') {
+                        $pdf->watermarkOffsetLeft        = 260;
+                        $pdf->watermarkBorder_width      = 28;
+                        $pdf->watermarkBorder_offsetLeft = 255;
+                    } else {
+                        $pdf->watermarkOffsetLeft        = 250;
+                        $pdf->watermarkBorder_width      = 39;
+                        $pdf->watermarkBorder_offsetLeft = 247;
+                    }
                     break;
                 
                 default:
-                    $pdf->watermarkText = 'K O N S E P';
-                    $pdf->watermarkOffsetLeft = 70;
+                    $pdf->watermarkText = 'KONSEP';
+                    // $pdf->watermarkOffsetLeft = 70;
+                    $pdf->watermarkOffsetLeft        = 259;
+                    $pdf->watermarkBorder_width      = 28;
+                    $pdf->watermarkBorder_offsetLeft = 256;
                     break;
             }
             
@@ -499,6 +540,8 @@ class PDF extends FPDF
     public $watermarkSubText           = '';
     public $watermarkOffsetLeft        = 70;
     public $watermarkSubTextOffsetLeft = 95;
+    public $watermarkBorder_width      = 0;
+    public $watermarkBorder_offsetLeft = 0;
 
     function WriteHTML($html)
     {
@@ -583,10 +626,17 @@ class PDF extends FPDF
 
     function Header()
     {
+        $this->SetLineWidth(1);
+        $this->SetDrawColor(220,20,60);
+        $this->Rect($this->watermarkBorder_offsetLeft, 13, $this->watermarkBorder_width, 10, 'D');
+
         //Put the watermark
-        $this->SetFont('Arial','B',80);
-        $this->SetTextColor(255, 192, 203);
-        $this->RotatedText($this->watermarkOffsetLeft, 110, $this->watermarkText, 0);
+        $this->SetFont('Arial','B',15);
+        // $this->SetTextColor(255, 192, 203);
+        //$this->RotatedText($this->watermarkOffsetLeft, 110, $this->watermarkText, 0);
+        $this->SetTextColor(220,20,60);
+        $this->RotatedText($this->watermarkOffsetLeft, 20, $this->watermarkText, 0);
+        
 
         $this->SetFont('Arial','B',40);
         $this->RotatedText($this->watermarkSubTextOffsetLeft, 130, $this->watermarkSubText, 0);

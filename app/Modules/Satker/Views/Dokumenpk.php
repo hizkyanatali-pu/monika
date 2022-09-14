@@ -314,43 +314,45 @@
     
     
     $(document).on('change', 'select[name=created-tahun]', function() {
-        $.ajax({
-            url: "<?php echo site_url('dokumenpk/check-dokumen-same-year-exist/') ?>" + $(this).val() + '/' + $(this).data('template-id'),
-            type: 'GET',
-            data: {},
-            success: (res) => {
-                render_warningDokumenYearRevisoin = ''
-                inputValue_revisionSameYear = 0
+        if ($(this).data('action-target') == 'create') {
+            $.ajax({
+                url: "<?php echo site_url('dokumenpk/check-dokumen-same-year-exist/') ?>" + $(this).val() + '/' + $(this).data('template-id'),
+                type: 'GET',
+                data: {},
+                success: (res) => {
+                    render_warningDokumenYearRevisoin = ''
+                    inputValue_revisionSameYear = 0
 
-                if (res.dokumenExistSameYear != null) {
-                    inputValue_revisionSameYear = 1
-                    render_warningDokumenYearRevisoin = `
-                        <div class="bg-warning text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                            <h5 class="alert-heading">Peringatan</h5>
-                            <p>membuat dokumen baru akan merevisi dokumen yang telah anda buat sebelumnya</p>
-                        </div>
-                    `
+                    if (res.dokumenExistSameYear != null) {
+                        inputValue_revisionSameYear = 1
+                        render_warningDokumenYearRevisoin = `
+                            <div class="bg-warning text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                                <h5 class="alert-heading">Peringatan</h5>
+                                <p>membuat dokumen baru akan merevisi dokumen yang telah anda buat sebelumnya</p>
+                            </div>
+                        `
 
-                    render_prepare_btnSubmitToRevision({
-                        dokumenID      : res.dokumenExistSameYear.last_dokumen_id,
-                        dokumenMasterID: res.dokumenExistSameYear.revision_master_dokumen_id,
-                        buttonType     : 'warning',
-                        buttonText     : 'Buat Revisi'
-                    });
+                        render_prepare_btnSubmitToRevision({
+                            dokumenID      : res.dokumenExistSameYear.last_dokumen_id,
+                            dokumenMasterID: res.dokumenExistSameYear.revision_master_dokumen_id,
+                            buttonType     : 'warning',
+                            buttonText     : 'Buat Revisi'
+                        });
+                    }
+                    else {
+                        render_reset_btnSubmitToRevision()
+                    }
+
+                    $('input[name=revision_same_year]').val(inputValue_revisionSameYear)
+                    $('.container-revision-alert').html(render_warningDokumenYearRevisoin)
+                    $('.container-revision-alert-bottom').html(render_warningDokumenYearRevisoin)
+                },
+                fail: (xhr) => {
+                    alert("Terjadi kesalahan pada sistem")
+                    console.log(xhr)
                 }
-                else {
-                    render_reset_btnSubmitToRevision()
-                }
-
-                $('input[name=revision_same_year]').val(inputValue_revisionSameYear)
-                $('.container-revision-alert').html(render_warningDokumenYearRevisoin)
-                $('.container-revision-alert-bottom').html(render_warningDokumenYearRevisoin)
-            },
-            fail: (xhr) => {
-                alert("Terjadi kesalahan pada sistem")
-                console.log(xhr)
-            }
-        })
+            })
+        }
     })
 
 
@@ -826,7 +828,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Tahun</label>
                             <div class="col-sm-5">
-                                <select class="form-control" name="created-tahun" data-template-id="${template.id}">
+                                <select class="form-control" name="created-tahun" data-template-id="${template.id}" data-action-target="${_target}">
                                     ${render_opsiTahun}
                                 </select>
                             </div>
