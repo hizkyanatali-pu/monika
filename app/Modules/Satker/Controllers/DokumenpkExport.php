@@ -349,17 +349,19 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         /** Keterangan Section */
-        // keterangan title
-        $pdf->SetFont($this->fontFamily, 'B', 9);
-        $pdf->SetX((297 - array_sum($tableDataWidth)) / 2);
-        $pdf->Cell(100, 7, 'KETERANGAN', 0, 0, 'L');
-        $pdf->Ln(5);
+        if ($dataDokumen['keterangan'] != '') {
+            // keterangan title
+            $pdf->SetFont($this->fontFamily, 'B', 9);
+            $pdf->SetX((297 - array_sum($tableDataWidth)) / 2);
+            $pdf->Cell(100, 7, 'KETERANGAN', 0, 0, 'L');
+            $pdf->Ln(5);
 
-        // keterangan
-        $pdf->SetFont($this->fontFamily, 'B', 8);
-        $pdf->SetX((297 - array_sum($tableDataWidth)) / 2);
-        $pdf->Cell(100, 7, $dataDokumen['keterangan'], 0, 0, 'L');
-        $pdf->Ln(8);
+            // keterangan
+            $pdf->SetFont($this->fontFamily, 'B', 8);
+            $pdf->SetX((297 - array_sum($tableDataWidth)) / 2);
+            $pdf->Cell(100, 7, $dataDokumen['keterangan'], 0, 0, 'L');
+            $pdf->Ln(8);
+        }
 
 
         /** Info & Anggaran Section */
@@ -383,7 +385,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         foreach ($dataDokumenKegiatan as $key_kegiatan => $data_kegiatan) {
             $pdf->SetFont($this->fontFamily, '', 8);
             $pdf->SetX((310 - array_sum($tableDataWidth)) / 2);
-            $pdf->Cell(100, 7, $data_kegiatan['nama'], 0, 0, 'L');
+            $pdf->Cell(100, 7, ltrim($data_kegiatan['nama']), 0, 0, 'L');
             $pdf->Ln(4);
         }
 

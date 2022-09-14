@@ -181,7 +181,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ")->where([
             'template_id'  => $id,
             'user_created' => $this->user['uid']
-        ])->where("YEAR(created_at) = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
+        ])->where("tahun = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
 
         $templateRows = array_map(function($arr) {
             $targetDefualtValue = 0;
@@ -220,6 +220,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'targetDefualtValue' => $targetDefualtValue
             ];
         }, $this->templateRow->where('template_id', $id)->get()->getResult());
+        
         return $this->respond([
             'dokumenExistSameYear' => $dokumenExistSameYear,
             'template'             => $this->templateDokumen->where('id', $id)->get()->getRow(),
@@ -234,6 +235,23 @@ class Dokumenpk extends \App\Controllers\BaseController
             'kota'  => $this->kota->get()->getResult(),
             'bulan' => ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
             'tahun' => $this->user['tahun']
+        ]);
+    }
+    
+    
+    
+    public function checkDocumentSameYearExist($_createdYear, $_templateId)
+    {
+        $dokumenExistSameYear = $this->dokumenSatker->select("
+            id as last_dokumen_id,
+            IFNULL (revision_master_dokumen_id, id) AS revision_master_dokumen_id
+        ")->where([
+            'template_id'  => $_templateId,
+            'user_created' => $this->user['uid']
+        ])->where("tahun = '$_createdYear'")->orderBy('id', 'desc')->get()->getRow();
+
+        return $this->respond([
+            'dokumenExistSameYear' => $dokumenExistSameYear
         ]);
     }
 
