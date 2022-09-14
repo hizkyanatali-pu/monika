@@ -904,9 +904,10 @@
             switch (data.type) {
                 case 'section_title':
                     rowNumber = 1
+                    console.log(data)
                     rows += `
                         <tr>
-                            <td colspan="2"><strong>SK</strong></td>
+                            <td colspan="2"><strong>${ data.prefix_title ?? '-' }</strong></td>
                             <td colspan="3">
                                 <strong>${ data.title }</strong>
                             </td>

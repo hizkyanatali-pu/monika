@@ -253,6 +253,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             array_push($rows, [
                 'id'             => $rowId,
                 'template_id'    => $templateID,
+                'prefix_title'   => $input['formTable_prefixTitle'][$key_rowTitle],
                 'title'          => $data_rowTitle,
                 'target_satuan'  => $input['formTable_targetSatuan'][$key_rowTitle],
                 'outcome_satuan' => $input['formTable_outcomeSatuan'][$key_rowTitle],

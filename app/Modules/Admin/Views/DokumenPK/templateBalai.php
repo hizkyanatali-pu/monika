@@ -645,6 +645,7 @@
         form.append('info_title', 'PROGRAM')
 
         tableForm_to_array().forEach((data, key) => {
+            form.append('formTable_prefixTitle[]', data.prefixTitle)
             form.append('formTable_title[]', data.title)
             form.append('formTable_targetSatuan[]', data.target_satuan)
             form.append('formTable_outcomeSatuan[]', data.outcome_satuan)
@@ -701,6 +702,7 @@
         _data.rows.forEach((data, key) => {
             if (data.type == "section_title") {
                 element_formTable.append(render_rowTitleSection({
+                    prefixTitleSection: data.prefix_title,
                     titleSection: data.title
                 }))
             }
@@ -745,13 +747,15 @@
         let tempArrayForm = []
 
         element_formTable.find('tr').each((key, element) => {
-            let title          = '',
+            let prefixTitle    = '',
+                title          = '',
                 target_satuan  = '',
                 outcome_satuan = '',
                 rumus          = []
                 type           = ''
 
             if ($(element).hasClass('_title-section')) {
+                prefixTitle = $(element).find('select[name=prefix-title-section]').val()
                 title = $(element).find('._title-section').val()
                 type  = 'section_title'
             }
@@ -767,6 +771,7 @@
             }
 
             tempArrayForm.push({
+                prefixTitle   : prefixTitle,
                 title         : title,
                 target_satuan : target_satuan,
                 outcome_satuan: outcome_satuan,
@@ -797,14 +802,23 @@
 
 
     function render_rowTitleSection(params = {
+        prefixTitleSection: '',
         titleSection: ''
     }) {
-        let titleSection = params.hasOwnProperty('titleSection') ? params.titleSection : ''
+        let titleSection       = params.hasOwnProperty('titleSection') ? params.titleSection : '',
+            prefixTitleSection = params.hasOwnProperty('prefixTitleSection') ? params.prefixTitleSection : ''
 
         return `
             <tr class="_title-section">
                 <td colspan="4" class="bg-secondary" style="position: relative">
-                    <input type="text" class="form-control _title-section" placeholder="Masukkan title section" value="${titleSection}">
+                    <div class="d-flex justify-content-start">
+                        <select class="form-control" style="width: 80px" name="prefix-title-section">
+                            <option value="SK" ${prefixTitleSection=='SK' ? 'selected="selected"' : ''}>SK</option>
+                            <option value="SP" ${prefixTitleSection=='SP' ? 'selected="selected"' : ''}>SP</option>
+                            <option value="IKSP" ${prefixTitleSection=='IKSP' ? 'selected="selected"' : ''}>IKSP</option>
+                        </select>
+                        <input type="text" class="form-control _title-section" placeholder="Masukkan title section" value="${titleSection}">
+                    </div>
                     
                     <button class="btn btn-danger rounded-circle _remove-row-item">
                         <i class="fas fa-times"></i>

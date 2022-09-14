@@ -213,6 +213,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             return [
                 'id'                 => $arr->id,
                 'template_id'        => $arr->template_id,
+                'prefix_title'       => $arr->prefix_title,
                 'title'              => $arr->title,
                 'target_satuan'      => $arr->target_satuan,
                 'outcome_satuan'     => $arr->outcome_satuan,
