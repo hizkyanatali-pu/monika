@@ -109,7 +109,7 @@
 
             <!--begin::Section-->
             <div class="kt-section">
-                
+
                 <div class="input-group select2-bootstrap-prepend">
                     <h3 class="mb-0 mt-1">Daftar Tabel :</h3>
                     <div class="w-25 pl-3">
@@ -122,6 +122,9 @@
                                 if ($tables == 'paket') {
                                     echo "<option value='$tables'>$tables</option>";
                                 }
+                                if ($tables == 'tematik_link') {
+                                    echo "<option value='$tables'>$tables</option>";
+                                }
                             }
                             ?>
                         </select>
@@ -130,7 +133,7 @@
                         <button type="button" class="btn btn-success" id="tampilkantabel"><i class="fas fa-check text-light"></i> Tampilkan</button>
                     </span>
                 </div>
-                
+
                 <div class="mt-4">
                     <div class="example-tools justify-content-center">
                         <span class="example-toggle" data-toggle="tooltip" title="" data-original-title="View code"></span>
@@ -144,13 +147,13 @@
                 <!-- <div class="card-footer">
                     <button type="button" class="btn btn-success mr-2" id="importsql">Import Ke SQL</button>
                 </div> -->
-            
+
                 <table style="width:100%" id="tbl-emon" class="table table-bordered table-responsive dataTable no-footer">
                     <thead>
                         <!-- <tr>
                             <th>No</th>
                         </tr> -->
-            
+
                         <!-- <tr>
                             <th>No</th>
                             <?php
@@ -160,13 +163,13 @@
                             ?>
                         </tr> -->
                     </thead>
-            
-            
+
+
                     </thead>
                     <tbody>
                     </tbody>
-            
-            
+
+
                 </table>
 
             </div>
