@@ -465,7 +465,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 case 'revision':
                     $subtitle = '';
                     if (! is_null($_revisionNumber)) {
-                        $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
+                        // $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
                         $pdf->watermarkSubTextOffsetLeft = 133;
                     }
                     else {
@@ -487,7 +487,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 case 'revision-same-year':
                     $subtitle = '';
                     if (! is_null($_revisionNumber)) {
-                        $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
+                        // $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
                         $pdf->watermarkSubTextOffsetLeft = 133;
                     }
                     else {
@@ -626,20 +626,22 @@ class PDF extends FPDF
 
     function Header()
     {
-        $this->SetLineWidth(1);
-        $this->SetDrawColor(220,20,60);
-        $this->Rect($this->watermarkBorder_offsetLeft, 13, $this->watermarkBorder_width, 10, 'D');
+        if ( $this->PageNo() == 1 ) {
+            $this->SetLineWidth(1);
+            $this->SetDrawColor(220,20,60);
+            $this->Rect($this->watermarkBorder_offsetLeft, 13, $this->watermarkBorder_width, 10, 'D');
 
-        //Put the watermark
-        $this->SetFont('Arial','B',15);
-        // $this->SetTextColor(255, 192, 203);
-        //$this->RotatedText($this->watermarkOffsetLeft, 110, $this->watermarkText, 0);
-        $this->SetTextColor(220,20,60);
-        $this->RotatedText($this->watermarkOffsetLeft, 20, $this->watermarkText, 0);
-        
+            //Put the watermark
+            $this->SetFont('Arial','B',15);
+            // $this->SetTextColor(255, 192, 203);
+            //$this->RotatedText($this->watermarkOffsetLeft, 110, $this->watermarkText, 0);
+            $this->SetTextColor(220,20,60);
+            $this->RotatedText($this->watermarkOffsetLeft, 20, $this->watermarkText, 0);
+            
 
-        $this->SetFont('Arial','B',40);
-        $this->RotatedText($this->watermarkSubTextOffsetLeft, 130, $this->watermarkSubText, 0);
+            $this->SetFont('Arial','B',40);
+            $this->RotatedText($this->watermarkSubTextOffsetLeft, 130, $this->watermarkSubText, 0);
+        }
     }
     
     function RotatedText($x, $y, $txt, $angle)

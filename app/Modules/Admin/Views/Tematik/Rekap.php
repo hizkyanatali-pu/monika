@@ -107,8 +107,16 @@
 
                         <tbody id="tbody-utama">
                             <?php
-                            $no = 1;
+                            $no             = 1;
+                            $totalPagu      = 0;
+                            $totalRealisasi = 0;
+                            $totalKeu       = 0;
+                            $totalFis       = 0;
                             foreach ($data as $key => $value) :
+                                $totalPagu      += $value['totalPagu'];
+                                $totalRealisasi += $value['totalRealisasi'];
+                                $totalKeu       += $value['totalProgKeu'];
+                                $totalFis       += $value['totalProgFis'];
                             ?>
                                 <tr>
                                     <td class="tdprogram"><?php echo $no++ ?></td>
@@ -134,6 +142,17 @@
                                 <?php endforeach ?>
                             <?php endforeach ?>
                         </tbody>
+
+                        <tfoor>
+                            <tr>
+                                <th colspan="2">TOTAL</th>
+                                <th><?php echo toMilyar($totalPagu, false) ?></th>
+                                <th><?php echo toMilyar($totalRealisasi, false) ?></th>
+                                <th><?php echo onlyTwoDecimal($totalKeu) ?></th>
+                                <th><?php echo onlyTwoDecimal($totalFis) ?></th>
+                                <th>&nbsp</th>
+                            </tr>
+                        </tfoor>
                     </table>
                 </div>
 

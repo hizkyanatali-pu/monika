@@ -86,16 +86,38 @@
             <tbody>
                 <?php 
                     $no = 1;
+                    $totalVol            = 0;
+                    $totalPaguRpm        = 0;
+                    $totalPaguPhln       = 0;
+                    $totalPaguTotal      = 0;
+                    $totalRealisasiRpm   = 0;
+                    $totalRealisasiPhln  = 0;
+                    $totalRealisasiTotal = 0;
+                    $totalKeu            = 0;
+                    $totalFis            = 0;
                     foreach($data as $key => $value) : 
                 ?>
                     <tr>
                         <td colspan="18"><?php echo $value->satker ?></td>
                     </tr>
-                    <?php foreach ($value->paketList as $key => $value) : ?>
+                    <?php 
+                        foreach ($value->paketList as $key => $value) : 
+                            $vol = str_replace(',', '.', $value->vol);
+
+                            $totalVol            += $vol;
+                            $totalPaguRpm        += $value->pagu_rpm;
+                            $totalPaguPhln       += $value->pagu_phln;
+                            $totalPaguTotal      += $value->pagu_total;
+                            $totalRealisasiRpm   += $value->realisasi_rpm;
+                            $totalRealisasiPhln  += $value->realisasi_phln;
+                            $totalRealisasiTotal += $value->realisasi_total;
+                            $totalKeu            += $value->persen_keu;
+                            $totalFis            += $value->persen_fi;
+                    ?>
                         <tr>
                             <td><?php echo $no++ ?></td>
                             <td colspan="6" ><?php echo $value->nmpaket ?></td>
-                            <td><?php echo onlyTwoDecimal($value->vol) ?></td>
+                            <td><?php echo onlyTwoDecimal($vol) ?></td>
                             <td><?php echo $value->satuan ?></td>
                             <td><?php echo $value->lokasi ?></td>
                             <td><?php echo toRupiah($value->pagu_rpm, false) ?></td>
@@ -110,6 +132,22 @@
                     <?php endforeach ?>
                 <?php endforeach ?>
             </tbody>
+
+            <tfoot>
+                <tr>
+                    <th colspan="7">TOTAL</th>
+                    <th><?php echo $totalVol ?></th>
+                    <th colspan="2">&nbsp</th>
+                    <th><?php echo toRupiah($totalPaguRpm, false) ?></th>
+                    <th><?php echo toRupiah($totalPaguPhln, false) ?></th>
+                    <th><?php echo toRupiah($totalPaguTotal, false) ?></th>
+                    <th><?php echo toRupiah($totalRealisasiRpm, false) ?></th>
+                    <th><?php echo toRupiah($totalRealisasiPhln, false) ?></th>
+                    <th><?php echo toRupiah($totalRealisasiTotal, false) ?></th>
+                    <th><?php echo onlyTwoDecimal($totalKeu) ?></th>
+                    <th><?php echo onlyTwoDecimal($totalFis) ?></th>
+                </tr>
+            </tfoot>
         </table>
     </body>
 </html>

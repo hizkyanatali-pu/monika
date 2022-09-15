@@ -56,16 +56,38 @@ $filter = explode(",", $data_filter);
     <tbody id="tbody-utama">
         <?php 
             $no = 1;
+            $totalVol            = 0;
+            $totalPaguRpm        = 0;
+            $totalPaguPhln       = 0;
+            $totalPaguTotal      = 0;
+            $totalRealisasiRpm   = 0;
+            $totalRealisasiPhln  = 0;
+            $totalRealisasiTotal = 0;
+            $totalKeu            = 0;
+            $totalFis            = 0;
             foreach($data as $key => $value) : 
         ?>
             <tr>
                 <td colspan="13" class="tdprogram"><?php echo $value->satker ?></td>
             </tr>
-            <?php foreach ($value->paketList as $key => $value) : ?>
+            <?php 
+                foreach ($value->paketList as $key => $value) : 
+                    $vol = str_replace(',', '.', $value->vol);
+
+                    $totalVol            += $vol;
+                    $totalPaguRpm        += $value->pagu_rpm;
+                    $totalPaguPhln       += $value->pagu_phln;
+                    $totalPaguTotal      += $value->pagu_total;
+                    $totalRealisasiRpm   += $value->realisasi_rpm;
+                    $totalRealisasiPhln  += $value->realisasi_phln;
+                    $totalRealisasiTotal += $value->realisasi_total;
+                    $totalKeu            += $value->persen_keu;
+                    $totalFis            += $value->persen_fi;
+            ?>
                 <tr>
                     <td><?php echo $no++ ?></td>
                     <td class="col-satker"><?php echo $value->nmpaket ?></td>
-                    <td class="col-target_vol"><?php echo onlyTwoDecimal($value->vol) ?></td>
+                    <td class="col-target_vol"><?php echo ($vol) ?></td>
                     <td class="col-target_satuan"><?php echo $value->satuan ?></td>
                     <td class="col-lokasi"><?php echo $value->lokasi ?></td>
                     <td class="col-pagu_rpm"><?php echo toRupiah($value->pagu_rpm, false) ?></td>
@@ -80,6 +102,22 @@ $filter = explode(",", $data_filter);
             <?php endforeach ?>
         <?php endforeach ?>
     </tbody>
+
+    <tfoot>
+        <tr>
+            <th colspan="2">TOTAL</th>
+            <th><?php echo $totalVol ?></th>
+            <th colspan="2">&nbsp</th>
+            <th><?php echo toRupiah($totalPaguRpm, false) ?></th>
+            <th><?php echo toRupiah($totalPaguPhln, false) ?></th>
+            <th><?php echo toRupiah($totalPaguTotal, false) ?></th>
+            <th><?php echo toRupiah($totalRealisasiRpm, false) ?></th>
+            <th><?php echo toRupiah($totalRealisasiPhln, false) ?></th>
+            <th><?php echo toRupiah($totalRealisasiTotal, false) ?></th>
+            <th><?php echo onlyTwoDecimal($totalKeu) ?></th>
+            <th><?php echo onlyTwoDecimal($totalFis) ?></th>
+        </tr>
+    </tfoot>
 </table>
 
 <?php echo script_tag('js/jquery.js'); ?>
