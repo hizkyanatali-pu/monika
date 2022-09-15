@@ -63,6 +63,10 @@
                             <tbody style="font-size: 12px">
                             </tbody>
                         </table>
+                        <div class="_warning-message-data-not-found text-center pt-3 d-none">
+                            <h3>Data Tidak Di Temukan</h3>
+                            <small>Periksa kembali filter data yang anda atur</small>
+                        </div>
                         <div class="d-flex justify-content-center">
                             <button class="__btn-load-more-data btn btn-sm btn-primary m-3">
                                 <i class="fas fa-sync"></i> Muat Data Lainnya
@@ -232,11 +236,12 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
-    var page = 0,
-        showedData = 0,
-        rowNumber = 1,
-        element_buttonLoadMore = $(".__btn-load-more-data"),
-        element_iconLoadMore = element_buttonLoadMore.find('i.fas')
+    var page                             = 0,
+        showedData                       = 0,
+        rowNumber                        = 1,
+        element_buttonLoadMore           = $(".__btn-load-more-data"),
+        element_iconLoadMore             = element_buttonLoadMore.find('i.fas'),
+        element_tableWarningDataNotFound = $("._warning-message-data-not-found")
 
 
     
@@ -366,6 +371,9 @@
         onBeforeSend: () => {},
         onSuccess: () => {}
     }) {
+        element_tableWarningDataNotFound.addClass('d-none')
+        element_buttonLoadMore.removeClass('d-none')
+
         $.ajax({
             url: "<?php echo site_url('bigdata/load-data') ?>",
             type: 'GET',
@@ -379,18 +387,24 @@
                 if (params.hasOwnProperty('onBeforeSend')) params.onBeforeSend()
             },
             success: (res) => {
-                renderTableRow(res)
-                if (res.hasOwnProperty('totalData')) $('._total-data').text(res.totalData.total)
-                
-                showedData += res.data.length
-                $('._showed-data').text(showedData)
+                if (res.data.length > 0) {
+                    renderTableRow(res)
+                    if (res.hasOwnProperty('totalData')) $('._total-data').text(res.totalData.total)
+                    
+                    showedData += res.data.length
+                    $('._showed-data').text(showedData)
 
-                element_iconLoadMore.removeClass('fa-spin')
-                page++
+                    element_iconLoadMore.removeClass('fa-spin')
+                    page++
 
-                if (params.hasOwnProperty('onSuccess')) params.onSuccess()
+                    if (params.hasOwnProperty('onSuccess')) params.onSuccess()
 
-                $('button[name=act-filter]').trigger('click')
+                    $('button[name=act-filter]').trigger('click')
+                }
+                else {
+                    element_tableWarningDataNotFound.removeClass('d-none')
+                    element_buttonLoadMore.addClass('d-none')
+                }
             },
             fail: (xhr) => {
                 alert("Terjadi Kesalahan Pada Sistem");
