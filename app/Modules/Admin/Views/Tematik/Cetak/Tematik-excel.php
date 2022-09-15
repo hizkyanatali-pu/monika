@@ -78,12 +78,24 @@
             <tbody>
                 <?php 
                     $no = 1;
+                    $totalVol       = 0;
+                    $totalPagu      = 0;
+                    $totalRealisasi = 0;
+                    $totalKeu       = 0;
+                    $totalFis       = 0;
                     foreach($data as $key => $value) : 
                 ?>
                     <tr>
                         <td colspan="16"><?php echo $value->satker ?></td>
                     </tr>
-                    <?php foreach ($value->paketList as $key => $value) : ?>
+                    <?php 
+                        foreach ($value->paketList as $key => $value) : 
+                            $totalVol       += $value->vol;
+                            $totalPagu      += $value->pagu;
+                            $totalRealisasi += $value->realisasi;
+                            $totalKeu       += $value->persen_keu;
+                            $totalFis       += $value->persen_fis; 
+                    ?>
                         <tr>
                             <td><?php echo $no++ ?></td>
                             <td colspan="6"><?php echo $value->nmpaket ?></td>
@@ -100,6 +112,18 @@
                     <?php endforeach ?>
                 <?php endforeach ?>
             </tbody>
+
+            <tfoot>
+                <tr>
+                    <th colspan="7">TOTAL</th>
+                    <th><?php echo $totalVol ?></th>
+                    <th colspan="4">&nbsp</th>
+                    <th><?php echo toRupiah($totalPagu, false) ?></th>
+                    <th><?php echo toRupiah($totalRealisasi, false) ?></th>
+                    <th><?php echo onlyTwoDecimal($totalKeu) ?></th>
+                    <th><?php echo onlyTwoDecimal($totalFis) ?></th>
+                </tr>
+            </tfoot>
         </table>
     </body>
 </html>

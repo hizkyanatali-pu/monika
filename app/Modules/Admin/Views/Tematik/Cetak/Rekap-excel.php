@@ -70,13 +70,21 @@
             <tbody>
                 <?php 
                     $no = 1;
+                    $totalPagu      = 0;
+                    $totalRealisasi = 0;
+                    $totalKeu       = 0;
+                    $totalFis       = 0;
                     foreach($data as $key => $value): 
+                        $totalPagu      += $value['totalPagu'];
+                        $totalRealisasi += $value['totalRealisasi'];
+                        $totalKeu       += $value['totalProgKeu'];
+                        $totalFis       += $value['totalProgFis'];
                 ?>
                     <tr>
                         <td><?php echo $no++ ?></td>
                         <td colspan="6"><?php echo $value['title'] ?></td>
-                        <td><?php echo toRupiah($value['totalPagu'], false) ?></td>
-                        <td><?php echo toRupiah($value['totalRealisasi'], false) ?></td>
+                        <td><?php echo toMilyar($value['totalPagu'], false) ?></td>
+                        <td><?php echo toMilyar($value['totalRealisasi'], false) ?></td>
                         <td><?php echo onlyTwoDecimal($value['totalProgKeu']) ?></td>
                         <td><?php echo onlyTwoDecimal($value['totalProgFis']) ?></td>
                         <td colspan="8"></td>
@@ -85,8 +93,8 @@
                         <tr>
                             <td></td>
                             <td colspan="6"><?php echo $value2->tematik ?></td>
-                            <td><?php echo toRupiah($value2->pagu, false) ?></td>
-                            <td><?php echo toRupiah($value2->realisasi, false) ?></td>
+                            <td><?php echo toMilyar($value2->pagu, false) ?></td>
+                            <td><?php echo toMilyar($value2->realisasi, false) ?></td>
                             <td><?php echo onlyTwoDecimal($value2->prog_keu) ?></td>
                             <td><?php echo onlyTwoDecimal($value2->prog_fis) ?></td>
                             <td colspan="8"><?php echo $value2->ket ?></td>
@@ -94,6 +102,17 @@
                     <?php endforeach ?>
                 <?php endforeach ?>
             </tbody>
+
+            <tfoor>
+                <tr>
+                    <th colspan="7">TOTAL</th>
+                    <th><?php echo toMilyar($totalPagu, false) ?></th>
+                    <th><?php echo toMilyar($totalRealisasi, false) ?></th>
+                    <th><?php echo onlyTwoDecimal($totalKeu) ?></th>
+                    <th><?php echo onlyTwoDecimal($totalFis) ?></th>
+                    <th colspan="8">&nbsp</th>
+                </tr>
+            </tfoor>
         </table>
     </body>
 </html>

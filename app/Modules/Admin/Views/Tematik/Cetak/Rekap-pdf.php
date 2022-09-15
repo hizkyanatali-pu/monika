@@ -47,13 +47,21 @@ $filter = explode(",", $data_filter);
     <tbody id="tbody-utama">
         <?php 
             $no = 1;
+            $totalPagu      = 0;
+            $totalRealisasi = 0;
+            $totalKeu       = 0;
+            $totalFis       = 0;
             foreach($data as $key => $value): 
+                $totalPagu      += $value['totalPagu'];
+                $totalRealisasi += $value['totalRealisasi'];
+                $totalKeu       += $value['totalProgKeu'];
+                $totalFis       += $value['totalProgFis'];
         ?>
             <tr>
                 <td class="tdprogram"><?php echo $no++ ?></td>
                 <td class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
-                <td class="col-pagu tdprogram"><?php echo toRupiah($value['totalPagu'], false) ?></td>
-                <td class="col-realisasi tdprogram"><?php echo toRupiah($value['totalRealisasi'], false) ?></td>
+                <td class="col-pagu tdprogram"><?php echo toMilyar($value['totalPagu'], false) ?></td>
+                <td class="col-realisasi tdprogram"><?php echo toMilyar($value['totalRealisasi'], false) ?></td>
                 <td class="col-progres_keu tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?></td>
                 <td class="col-progres_fis tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?></td>
                 <td class="col-keterangan tdprogram"></td>
@@ -62,8 +70,8 @@ $filter = explode(",", $data_filter);
                 <tr>
                     <td></td>
                     <td class="col-tematik"><?php echo $value2->tematik ?></td>
-                    <td class="col-pagu"><?php echo toRupiah($value2->pagu, false) ?></td>
-                    <td class="col-realisasi"><?php echo toRupiah($value2->realisasi, false) ?></td>
+                    <td class="col-pagu"><?php echo toMilyar($value2->pagu, false) ?></td>
+                    <td class="col-realisasi"><?php echo toMilyar($value2->realisasi, false) ?></td>
                     <td class="col-progres_keu"><?php echo onlyTwoDecimal($value2->prog_keu) ?></td>
                     <td class="col-progres_fis"><?php echo onlyTwoDecimal($value2->prog_fis) ?></td>
                     <td class="col-keterangan"><?php echo $value2->ket ?></td>
@@ -73,6 +81,17 @@ $filter = explode(",", $data_filter);
             <?php endforeach ?>
         <?php endforeach ?>
     </tbody>
+
+    <tfoor>
+        <tr>
+            <th colspan="2">TOTAL</th>
+            <th><?php echo toMilyar($totalPagu, false) ?></th>
+            <th><?php echo toMilyar($totalRealisasi, false) ?></th>
+            <th><?php echo onlyTwoDecimal($totalKeu) ?></th>
+            <th><?php echo onlyTwoDecimal($totalFis) ?></th>
+            <th>&nbsp</th>
+        </tr>
+    </tfoor>
 </table>
 
 <?php echo script_tag('js/jquery.js'); ?>

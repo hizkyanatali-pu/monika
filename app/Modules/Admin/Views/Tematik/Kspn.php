@@ -190,7 +190,16 @@
 
                         <tbody id="tbody-utama">
                             <?php
-                            $no = 1;
+                            $no                  = 1;
+                            $totalVol            = 0;
+                            $totalPaguRpm        = 0;
+                            $totalPaguPhln       = 0;
+                            $totalPaguTotal      = 0;
+                            $totalRealisasiRpm   = 0;
+                            $totalRealisasiPhln  = 0;
+                            $totalRealisasiTotal = 0;
+                            $totalKeu            = 0;
+                            $totalFis            = 0;
                             if (empty($data)) {
                                 echo "<tr><td colspan='13' class='text-center'>Tidak Ada Data</td></tr>
                                 
@@ -201,7 +210,18 @@
                                 <tr>
                                     <td colspan="13" class="tdprogram"><?php echo $value->satker ?></td>
                                 </tr>
-                                <?php foreach ($value->paketList as $key => $value) : ?>
+                                <?php 
+                                    foreach ($value->paketList as $key => $value) : 
+                                        $totalVol            += str_replace(',', '.', $value->vol);
+                                        $totalPaguRpm        += $value->pagu_rpm;
+                                        $totalPaguPhln       += $value->pagu_phln;
+                                        $totalPaguTotal      += $value->pagu_total;
+                                        $totalRealisasiRpm   += $value->realisasi_rpm;
+                                        $totalRealisasiPhln  += $value->realisasi_phln;
+                                        $totalRealisasiTotal += $value->realisasi_total;
+                                        $totalKeu            += $value->persen_keu;
+                                        $totalFis            += $value->persen_fi;
+                                ?>
                                     <tr>
                                         <td><?php echo $no++ ?></td>
                                         <td class="col-satker"><?php echo $value->nmpaket ?></td>
@@ -220,6 +240,22 @@
                                 <?php endforeach ?>
                             <?php endforeach ?>
                         </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <th colspan="2">TOTAL</th>
+                                <th><?php echo $totalVol ?></th>
+                                <th colspan="2">&nbsp</th>
+                                <th><?php echo toRupiah($totalPaguRpm, false) ?></th>
+                                <th><?php echo toRupiah($totalPaguPhln, false) ?></th>
+                                <th><?php echo toRupiah($totalPaguTotal, false) ?></th>
+                                <th><?php echo toRupiah($totalRealisasiRpm, false) ?></th>
+                                <th><?php echo toRupiah($totalRealisasiPhln, false) ?></th>
+                                <th><?php echo toRupiah($totalRealisasiTotal, false) ?></th>
+                                <th><?php echo onlyTwoDecimal($totalKeu) ?></th>
+                                <th><?php echo onlyTwoDecimal($totalFis) ?></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
 
