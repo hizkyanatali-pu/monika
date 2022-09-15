@@ -465,7 +465,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 case 'revision':
                     $subtitle = '';
                     if (! is_null($_revisionNumber)) {
-                        $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
+                        // $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
                         $pdf->watermarkSubTextOffsetLeft = 133;
                     }
                     else {
