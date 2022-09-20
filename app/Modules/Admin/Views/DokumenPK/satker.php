@@ -88,8 +88,8 @@
                         <tr class="text-center">
                             <th width="30px">No</th>
                             <th>Dokumen</th>
-                            <th width="120px">Dibuat</th>
-                            <th width="120px">Disetujui</th>
+                            <th width="120px">Tanggal Kirim</th>
+                            <th width="120px">Tanggal disetujui</th>
                             <th width="120px"></th>
                         </tr>
                     </thead>
@@ -107,8 +107,8 @@
                         <tr class="text-center">
                             <th width="30px">No</th>
                             <th>Dokumen</th>
-                            <th width="120px">Dibuat</th>
-                            <th width="120px">Di Tolak</th>
+                            <th width="120px">Tanggal Kirim</th>
+                            <th width="120px">Tanggal Ditolak</th>
                             <th width="120px"></th>
                         </tr>
                     </thead>
@@ -376,7 +376,7 @@
                 render_columnChangeStatusAt = ''
 
             if (data.revision_master_number) {
-                let badgeText  = data.is_revision_same_year == '1' ? 'Revisi' : 'Koreksi Ke ' + data.revision_number,
+                let badgeText = data.is_revision_same_year == '1' ? 'Revisi' : 'Koreksi Ke ' + data.revision_number,
                     badgeColor = data.is_revision_same_year == '1' ? 'bg-danger' : 'bg-warning'
 
                 render_badgeRevisi = `
