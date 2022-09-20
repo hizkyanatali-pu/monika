@@ -131,7 +131,8 @@ class PulldataModel extends Model
         $get_month_str = $this->bln(0)[$prev_month];
 
         // REPLACE(FORMAT(sum(md.pagu_rpm),0),',','.')
-        $q = "SELECT $f count(*) as jml_paket,
+        $q = "SELECT kdlokasi,
+        $f count(*) as jml_paket,
         sum(md.pagu_rpm) as jml_pagu_rpm,
         sum(md.pagu_sbsn) as jml_pagu_sbsn,
         sum(md.pagu_phln) as jml_pagu_phln,

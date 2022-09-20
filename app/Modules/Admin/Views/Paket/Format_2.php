@@ -276,8 +276,10 @@ $currentDayOfMonth = date('j');
                         <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
                         <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a>
                         <?PHP if (!in_array($rekap, array("satkerpagu100m"))) : ?>
-                            <a target="_blank" href="<?php echo site_url('pulldata/rekap/paket') . "?idk=" . $idk . "&label=" . $label . "&label2=&idks=" . (!empty($idk) ? $idk : 'all') . "&rekap=" . $rekap; ?>" class="btn btn-info btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap <?= ($rekap == "unitkerja" ? "SDA" : $rekap); ?></a>
-                            <a target="_blank" href="<?php echo site_url('pulldata/rekap/paket') . "?idk=" . $idk . "&label=" . $label . "&label2=&idks=" . (!empty($idk) ? $idk : 'all') . "&rekap=" . $rekap; ?>&format=db" class="btn btn-info btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap <?= ($rekap == "unitkerja" ? "SDA" : $rekap); ?> - DB</a>
+                            <?php if ($title != 'Progres Per Provinsi') { ?>
+                                <a target="_blank" href="<?php echo site_url('pulldata/rekap/paket') . "?idk=" . $idk . "&label=" . $label . "&label2=&idks=" . (!empty($idk) ? $idk : 'all') . "&rekap=" . $rekap; ?>" class="btn btn-info btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap <?= ($rekap == "unitkerja" ? "SDA" : $rekap); ?></a>
+                                <a target="_blank" href="<?php echo site_url('pulldata/rekap/paket') . "?idk=" . $idk . "&label=" . $label . "&label2=&idks=" . (!empty($idk) ? $idk : 'all') . "&rekap=" . $rekap; ?>&format=db" class="btn btn-info btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap <?= ($rekap == "unitkerja" ? "SDA" : $rekap); ?> - DB</a>
+                            <?php } ?>
                         <?PHP endif; ?>
                         <b>*Dalam Ribuan</b>
                     </div>
@@ -317,15 +319,15 @@ $currentDayOfMonth = date('j');
                                 <!-- <th colspan="2">&nbsp;</th> -->
                                 <th class="unit_kerja">&nbsp;</th>
                                 <th class="paket">&nbsp;</th>
-                                <?= ($title == 'Semua Satker' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
-                                <th class="pagu-main" colspan="<?= ($title == 'Semua Satker' ? "4" : "5") ?>">Pagu (Rp)</th>
-                                <?= ($title == 'Semua Satker' ?    ' <th class="pagu-main" colspan="4">Realisasi (Rp)</th>' : '') ?>
+                                <?= ($title == 'Semua Satker' || $title == 'Progres Per Provinsi' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
+                                <th class="pagu-main" colspan="<?= ($title == 'Semua Satker' || $title == 'Progres Per Provinsi' ? "4" : "5") ?>">Pagu (Rp)</th>
+                                <?= ($title == 'Semua Satker' || $title == 'Progres Per Provinsi' ?    ' <th class="pagu-main" colspan="4">Realisasi (Rp)</th>' : '') ?>
                                 <th class="progres" colspan="2">Progres (%)</th>
                                 <th class="deviasi" colspan="2">Deviasi</th>
                             </tr>
                             <tr class="text-center">
                                 <th class="unit_kerja"><?= $title; ?></th>
-                                <?= ($title == 'Semua Satker' ?    '<th class="satker_">Satker</th>' : '') ?>
+                                <?= ($title == 'Semua Satker'  || $title == 'Progres Per Provinsi' ?    '<th class="satker_">Satker</th>' : '') ?>
                                 <th class="tdNilai paket">Jml&nbsp;Paket
                                     <!-- <br /><small title="Pagu SDA">Total SDA <i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-right"></i></small> -->
                                 </th>
@@ -347,7 +349,7 @@ $currentDayOfMonth = date('j');
 
                                 <?php
 
-                                if ($title == 'Semua Satker') { ?>
+                                if ($title == 'Semua Satker' || $title == 'Progres Per Provinsi') { ?>
 
                                     <th class="tdNilai pagu_rpm pagu">RPM
                                         <?php /* <br /><small title="Pagu SDA"><?= number_format($qdata[0]['pagusda_pagu_rpm'] / 1000, 0, ',', '.'); ?></small> */ ?>
@@ -413,11 +415,11 @@ $currentDayOfMonth = date('j');
                                 foreach ($qdata as $key => $data) : ?>
 
                                     <!-- balai -->
-                                    <tr class="stw<?= $data['stw']; ?>">
+                                    <tr class="stw<?= $data['stw']; ?>  <?php if (array_key_exists('is_subheader', $data)) echo 'bg-secondary font-weight-bold' ?>">
                                         <td class="tdKodeLabel col-unit_kerja">
                                             <a class="card-link text-dark" href="<?php echo site_url('pulldata/' . $nextlink . '/' . ($idk ? $idk . '/' : '') . $data['id']); ?>/<?php echo $label; ?>/<?php echo $data['label']; ?>"><?php echo $data['label']; ?></a>
                                         </td>
-                                        <?= ($title == 'Semua Satker' ? '<td class="tdNilai text-center col-paket">' . $data['st'] . '</td>' : '') ?>
+                                        <?= ($title == 'Semua Satker' || $title == 'Progres Per Provinsi' ? '<td class="tdNilai text-center col-paket">' . $data['st'] . '</td>' : '') ?>
                                         <td class="tdNilai text-center col-paket"><?php echo $data['jml_paket']; ?></td>
 
                                         <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_pagu_rpm'] / 1000, 0, ',', '.'); ?></td>
@@ -425,7 +427,7 @@ $currentDayOfMonth = date('j');
                                         <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_pagu_phln'] / 1000, 0, ',', '.'); ?></td>
                                         <td class="tdNilai text-right col-pagu_total"><?php echo number_format($data['jml_pagu_total'] / 1000, 0, ',', '.'); ?></td>
 
-                                        <?php if ($title == 'Semua Satker') { ?>
+                                        <?php if ($title == 'Semua Satker' || $title == 'Progres Per Provinsi') { ?>
                                             <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($data['jml_real_rpm'] / 1000, 0, ',', '.'); ?></td>
                                             <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($data['jml_real_sbsn'] / 1000, 0, ',', '.'); ?></td>
                                             <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($data['jml_real_phln'] / 1000, 0, ',', '.'); ?></td>
@@ -468,14 +470,14 @@ $currentDayOfMonth = date('j');
                                 <?php endforeach; ?>
                                 <tr style="background-color:#ccb3ff; border:2px solid #ccc;">
                                     <td class="text-center">TOTAL</td>
-                                    <?= ($title == 'Semua Satker' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
+                                    <?= ($title == 'Semua Satker' || $title == 'Progres Per Provinsi' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
                                     <td class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_pagu_rpm / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_pagu_sbsn / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_pagu_phln / 1000, 0, ',', '.'); ?></td>
                                     <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_pagu_total / 1000, 0, ',', '.'); ?></td>
 
-                                    <?php if ($title == 'Semua Satker') {  ?>
+                                    <?php if ($title == 'Semua Satker' || $title == 'Progres Per Provinsi') {  ?>
                                         <!-- <td class="text-right"><?php echo number_format($total_paket, 0, ',', '.'); ?></td> -->
                                         <td class="tdNilai text-right col-pagu_rpm"><?php echo number_format($total_real_rpm / 1000, 0, ',', '.'); ?></td>
                                         <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
@@ -669,7 +671,7 @@ $currentDayOfMonth = date('j');
         if (report_open) {
             <?php 
                 $linkPdf = $id_report;
-                if ($title == 'Semua Satker')  $linkPdf = '../'.$id_report;
+                if ($title == 'Semua Satker' || $title == 'Progres Per Provinsi')  $linkPdf = '../'.$id_report;
             ?>
             $(this).attr("href", "<?= $linkPdf ?>?filter=" + arr.join(','))
             $(this).attr("target", "_blank")
