@@ -35,7 +35,7 @@
         <div class="kt-subheader__main w-100">
             <div class="d-flex justify-content-between w-100">
                 <h5 class="kt-subheader__title">
-                    Dokumen Satker
+                    <?php echo $pageTitle ?? 'Dokumen PK' ?>
                 </h5>
                 <?= csrf_field() ?>
             </div>

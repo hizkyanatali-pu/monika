@@ -50,7 +50,7 @@
         <div class="kt-subheader__main w-100">
             <div class="d-flex justify-content-between w-100">
                 <h5 class="kt-subheader__title">
-                    Template Dokumen Balai
+                    Template Perjanjian Kinerja - Balai
                 </h5>
                 <?= csrf_field() ?>
                 

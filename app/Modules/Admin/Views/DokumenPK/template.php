@@ -50,7 +50,7 @@
         <div class="kt-subheader__main w-100">
             <div class="d-flex justify-content-between w-100">
                 <h5 class="kt-subheader__title">
-                    Template Dokumen
+                    <?php echo $pageTitle ?? 'Template Dokumen' ?>
                 </h5>
                 <?= csrf_field() ?>
                 
@@ -150,12 +150,14 @@
             <div class="modal-body">
                 <div class="row _form-main">
                     <div class="col-md-8 pr-4">
-                        <div class="form-group mb-4 d-none">
+                        <div class="form-group mb-4">
                             <strong for="judul-dokumen">Dokumen Untuk</strong>
                             <select name="dokumen-type" class="form-control w-25">
-                                <option value="-" disabled>Pilih Opsi</option>
-                                <option value="satker" selected>Satker</option>
-                                <option value="balai">Balai</option>
+                                <option value="-" >Pilih Opsi</option>
+                                <option value="satker" <?php if ($defaultType == 'satker') echo 'selected' ?> >Satker</option>
+                                <option value="balai" <?php if ($defaultType == 'balai') echo 'selected' ?> >Balai</option>
+                                <option value="eselon2" <?php if ($defaultType == 'eselon2') echo 'selected' ?> >Eselon 2</option>
+                                <option value="eselon1" <?php if ($defaultType == 'eselon1') echo 'selected' ?> >Eselon 1</option>
                             </select>
                         </div>
 

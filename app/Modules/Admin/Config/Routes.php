@@ -222,6 +222,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 });
 
                 $routes->get('balai', '\Modules\Admin\Controllers\Dokumenpk::balai');
+                $routes->get('eselon2', '\Modules\Admin\Controllers\Dokumenpk::eselon2');
+                $routes->get('eselon1', '\Modules\Admin\Controllers\Dokumenpk::eselon1');
 
                 $routes->group('template', ['namespace' => 'App\Controllers'], function($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::template');
@@ -234,6 +236,14 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
                 $routes->group('template-balai', ['namespace' => 'App\Controllers'], function($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\DokumenpkBalai::template');
+                });
+
+                $routes->group('template-eselon2', ['namespace' => 'App\Controllers'], function($routes) {
+                    $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::templateEselon2');
+                });
+
+                $routes->group('template-eselon1', ['namespace' => 'App\Controllers'], function($routes) {
+                    $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::templateEselon1');
                 });
             });
         }

@@ -40,6 +40,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function satker()
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
+            'pageTitle' => 'Dokumen Penjanjian Kinerja - Satker',
             'dokumenType' => 'satker'
         ]);
     }
@@ -48,7 +49,26 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function balai()
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
+            'pageTitle' => 'Dokumen Penjanjian Kinerja - Balai',
             'dokumenType' => 'balai'
+        ]);
+    }
+
+
+    public function eselon2()
+    {
+        return view('Modules\Admin\Views\DokumenPK\satker.php', [
+            'pageTitle' => 'Dokumen Penjanjian Kinerja - Eselon 2',
+            'dokumenType' => 'eselon2'
+        ]);
+    }
+
+
+    public function eselon1()
+    {
+        return view('Modules\Admin\Views\DokumenPK\satker.php', [
+            'pageTitle' => 'Dokumen Penjanjian Kinerja - Eselon1',
+            'dokumenType' => 'eselon1'
         ]);
     }
 
@@ -56,18 +76,59 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function template()
     {
+        return $this->pageTemplate([
+            'pageTitle' => 'Template Perjanjian Kinerja - Satker',
+            'data' => $this->dokumenPK->groupStart()
+                            ->where('type', 'satker')
+                            ->orWhere('type', 'balai')
+                        ->groupEnd()
+                        ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
+            'defaultType' => 'satker'
+        ]);
+    }
+    
+    
+    
+    public function templateEselon2()
+    {
+        return $this->pageTemplate([
+            'pageTitle' => 'Template Perjanjian Kinerja - Eselon 2',
+            'data' => $this->dokumenPK->where('type', 'eselon2')
+                        ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
+            'defaultType' => 'eselon2'
+        ]);
+    }
+    
+    
+    
+    public function templateEselon1()
+    {
+        return $this->pageTemplate([
+            'pageTitle' => 'Template Perjanjian Kinerja - Eselon 1',
+            'data' => $this->dokumenPK->where('type', 'eselon1')
+                        ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
+            'defaultType' => 'eselon1'
+        ]);
+    }
+    
+    
+    
+    private function pageTemplate($params = [
+        'pageTitle' => '',
+        'data' => [],
+        'defaultType' => 'datker'
+    ])
+    {
         $sessionYear = $this->user['tahun'];
 
         return view('Modules\Admin\Views\DokumenPK\template.php', [
-            'data'        => $this->dokumenPK->groupStart()
-                                ->where('type', 'satker')
-                                ->orWhere('type', 'balai')
-                            ->groupEnd()
-                            ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
+            'pageTitle'   => $params['pageTitle'],
+            'data'        => $params['data'],
             'allSatker'   => $this->tableSatker->whereNotIn('satker', ['', '1'])->get()->getResult(),
             'allBalai'    => $this->tableBalai->get()->getResult(),
             'allKegiatan' => $this->tableKegiatan->where('tahun_anggaran', $sessionYear)->get()->getResult(),
             'allProgram'  => $this->tableProgram->get()->getResult(),
+            'defaultType' => $params['defaultType'],
             'sessionYear' => $sessionYear
         ]);
     }

@@ -347,52 +347,150 @@ $request = \Config\Services::request();
             <li class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'dokumenpk' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                 <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                     <i class="kt-menu__link-icon fas fa-book"></i>
-                    <span class="kt-menu__link-text">Dokumen PK</span>
+                    <span class="kt-menu__link-text">Dokumen Perjanjian Kinerja</span>
                     <i class="kt-menu__ver-arrow la la-angle-right"></i>
                 </a>
 
                 <div class="kt-menu__submenu ">
                     <span class="kt-menu__arrow"></span>
+
                     <ul class="kt-menu__subnav">
-                        <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'satker'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                            <a href="<?= site_url('dokumenpk/satker'); ?>" class="kt-menu__link ">
-                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="kt-menu__link-text">
-                                    Dokumen Satker
-                                </span>
+                        <li 
+                            class="
+                                kt-menu__item  kt-menu__item--submenu 
+                                <?= (
+                                    $request->uri->getSegment(1) == 'dokumenpk' && 
+                                    (
+                                        $request->uri->getSegment(2) == 'satker' || 
+                                        $request->uri->getSegment(2) == 'balai' || 
+                                        $request->uri->getSegment(2) == 'eselon2' || 
+                                        $request->uri->getSegment(2) == 'eselon1'
+                                    ) ? ' kt-menu__item--open kt-menu__item--here' : ''
+                                ) ?>
+                            " 
+                            aria-haspopup="true" 
+                            data-ktmenu-submenu-toggle="hover"
+                        >
+                            <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                                <i class="kt-menu__link-icon fas fa-book"></i>
+                                <span class="kt-menu__link-text">Perjanjian Kinerja</span>
+                                <i class="kt-menu__ver-arrow la la-angle-right"></i>
                             </a>
+
+                            <div class="kt-menu__submenu ">
+                                <span class="kt-menu__arrow"></span>
+                                <ul class="kt-menu__subnav">
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'satker'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('dokumenpk/satker'); ?>" class="kt-menu__link ">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="kt-menu__link-text">
+                                                Satker
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'balai'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('dokumenpk/balai'); ?>" class="kt-menu__link ">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="kt-menu__link-text">
+                                                Balai
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'eselon2'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('dokumenpk/eselon2'); ?>" class="kt-menu__link ">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="kt-menu__link-text">
+                                                Eselon 2
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'eselon1'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('dokumenpk/eselon1'); ?>" class="kt-menu__link ">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="kt-menu__link-text">
+                                                Eselon 1
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
-                        <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'balai'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                            <a href="<?= site_url('dokumenpk/balai'); ?>" class="kt-menu__link ">
-                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="kt-menu__link-text">
-                                    Dokumen Balai
-                                </span>
+
+
+                        <li 
+                            class="kt-menu__item  kt-menu__item--submenu 
+                                <?= (
+                                    $request->uri->getSegment(1) == 'dokumenpk' && 
+                                    (
+                                        $request->uri->getSegment(2) == 'template' || 
+                                        $request->uri->getSegment(2) == 'template-balai' || 
+                                        $request->uri->getSegment(2) == 'template-eselon2' || 
+                                        $request->uri->getSegment(2) == 'template-eselon1'
+                                    ) ? ' kt-menu__item--open kt-menu__item--here' : ''
+                                ) ?>
+                            " 
+                            aria-haspopup="true" 
+                            data-ktmenu-submenu-toggle="hover"
+                        >
+                            <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                                <i class="kt-menu__link-icon fas fa-book"></i>
+                                <span class="kt-menu__link-text">Template Perjanjian</span>
+                                <i class="kt-menu__ver-arrow la la-angle-right"></i>
                             </a>
-                        </li>
-                        <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'template'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                            <a href="<?= site_url('dokumenpk/template'); ?>" class="kt-menu__link ">
-                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="kt-menu__link-text">
-                                    Template Satker
-                                </span>
-                            </a>
-                        </li>
-                        <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'template-balai'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                            <a href="<?= site_url('dokumenpk/template-balai'); ?>" class="kt-menu__link ">
-                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="kt-menu__link-text">
-                                    Template Balai
-                                </span>
-                            </a>
+
+                            <div class="kt-menu__submenu ">
+                                <span class="kt-menu__arrow"></span>
+                                <ul class="kt-menu__subnav">
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'template'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('dokumenpk/template'); ?>" class="kt-menu__link ">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="kt-menu__link-text">
+                                                Satker
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'template-balai'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('dokumenpk/template-balai'); ?>" class="kt-menu__link ">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="kt-menu__link-text">
+                                                Balai
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'template-eselon2'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('dokumenpk/template-eselon2'); ?>" class="kt-menu__link ">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="kt-menu__link-text">
+                                                Eselon 2
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'template-eselon1'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('dokumenpk/template-eselon1'); ?>" class="kt-menu__link ">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="kt-menu__link-text">
+                                                Eselon 1
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                     </ul>
                 </div>
