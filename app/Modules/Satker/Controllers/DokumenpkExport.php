@@ -15,6 +15,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $session             = session();
         $this->user          = $session->get('userData');
         $this->userUID       = $this->user['uid'];
+        $this->userType      = $this->user['user_type'];
         $this->dokumenYear   = $this->user['tahun'];
         $this->dokumenLokasi = 'JAKARTA';
         $this->dokumenBulan  = '';
@@ -85,7 +86,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_pageDokumenOpening($pdf, $dataDokumen);
 
         /** Dokumen Detail */
-        $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen);
+        $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'target');
+
+        /** Dokumen Detail 2 */
+        if ($this->userType == 'balai') $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome');
 
         $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
 
@@ -241,11 +245,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
 
-    private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen)
+    private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType)
     {
         $pdf->AddPage('L', 'A4');
 
-        $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', 'TARGET ' . $this->dokumenYear];
+        $headerTarget = $_detailDokumenType == 'target' ? 'TARGET ' : 'OUTCOME '; 
+        $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', $headerTarget . $this->dokumenYear];
         $headerWidth = [
             200,
             65
@@ -346,7 +351,22 @@ class DokumenpkExport extends \App\Controllers\BaseController
             }
 
             if ($data['type'] == 'form') {
-                if ($data_targetValue['is_checked'] == '1')  $pdf->Cell($tableDataWidth[2], 6, $data_targetValue['target_value'] . ' ' . $data['target_satuan'], 1, 0, 'C', $celTableDataFill);
+                $targetValue = '';
+                switch ($_detailDokumenType) {
+                    case 'target':
+                        $targetValue = $data_targetValue['target_value'] . ' ' . $data['target_satuan'];
+                        break;
+                    
+                    case 'outcome':
+                        $targetValue = $data_targetValue['outcome_value'] . ' ' . $data['outcome_satuan'];
+                        break;
+
+                    default:
+                        $targetValue ='';
+                        break;
+                }
+
+                if ($data_targetValue['is_checked'] == '1')  $pdf->Cell($tableDataWidth[2], 6, $targetValue, 1, 0, 'C', $celTableDataFill);
             } else {
                 $rowNUmber = 0;
             }
