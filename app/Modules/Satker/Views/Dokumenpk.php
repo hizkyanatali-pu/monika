@@ -855,7 +855,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" name="ttd-pihak1-plt" type="checkbox" value="1" id="ttdPihak1Plt">
                                 <label class="form-check-label" for="ttdPihak1Plt">
-                                    Plt.
+                                    Plt. (Dipilih Jika Pejabat Plt)
                                 </label>
                             </div>
                         </div>
@@ -874,7 +874,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" name="ttd-pihak2-plt" type="checkbox" value="1" id="ttdPihak2Plt">
                                 <label class="form-check-label" for="ttdPihak2Plt">
-                                    Plt.
+                                    Plt. (Dipilih Jika Pejabat Plt)
                                 </label>
                             </div>
                         </div>
