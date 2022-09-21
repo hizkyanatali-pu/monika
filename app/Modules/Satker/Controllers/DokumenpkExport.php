@@ -628,14 +628,20 @@ class PDF extends FPDF
     {
         if ( $this->PageNo() == 1 ) {
             $this->SetLineWidth(1);
-            $this->SetDrawColor(220,20,60);
-            $this->Rect($this->watermarkBorder_offsetLeft, 13, $this->watermarkBorder_width, 10, 'D');
+            // border merah
+            // $this->SetDrawColor(220,20,60);
+            // $this->Rect($this->watermarkBorder_offsetLeft, 13, $this->watermarkBorder_width, 10, 'D');
+
+            //bg hitam
+            $this->SetDrawColor(0,0,0);
+            $this->Rect($this->watermarkBorder_offsetLeft, 13, $this->watermarkBorder_width, 10, 'F');
 
             //Put the watermark
             $this->SetFont('Arial','B',15);
             // $this->SetTextColor(255, 192, 203);
             //$this->RotatedText($this->watermarkOffsetLeft, 110, $this->watermarkText, 0);
-            $this->SetTextColor(220,20,60);
+            // $this->SetTextColor(220,20,60); //text merah
+            $this->SetTextColor(255,255,255); //text putih
             $this->RotatedText($this->watermarkOffsetLeft, 20, $this->watermarkText, 0);
             
 
