@@ -89,7 +89,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'target');
 
         /** Dokumen Detail 2 */
-        if ($this->userType == 'balai') $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome');
+        // if ($this->userType == 'balai') $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome');
 
         $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
 
