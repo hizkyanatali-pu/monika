@@ -66,6 +66,7 @@ writable/debugbar/*
 writable/**/*.db
 writable/**/*.sqlite
 writable/emon/*
+public/dokumen-perjanjian-kinerja.pdf
 
 php_errors.log
 
