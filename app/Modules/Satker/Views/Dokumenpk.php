@@ -944,7 +944,7 @@
                                         type="text" 
                                         class="form-control __inputTemplateRow-outcome" 
                                         placeholder="Masukkan Nilai"
-                                        value="0"
+                                        value=""
                                         data-row-id="${ data.id }"
                                         onkeypress="return isNumberKey(this, event);"
                                     >

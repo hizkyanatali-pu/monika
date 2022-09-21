@@ -184,11 +184,11 @@ class Dokumenpk extends \App\Controllers\BaseController
         ])->where("tahun = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
 
         $templateRows = array_map(function($arr) {
-            $targetDefualtValue = 0;
+            $targetDefualtValue = '';
 
             if ($this->user['user_type'] == "balai") {
                 $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
-
+                
                 foreach($templateRowRumus as $key => $data) {
                     $targetRumusOutcome = $this->dokumenSatker->select(
                         'dokumenpk_satker_rows.outcome_value'
@@ -205,8 +205,10 @@ class Dokumenpk extends \App\Controllers\BaseController
                     foreach ($targetRumusOutcome as $keyOutcome => $dataOutcome) {
                         $outcomeRumus += $dataOutcome ? $dataOutcome->outcome_value : 0;
                     }
+
+                    if ($targetDefualtValue == '' && $outcomeRumus > 0) $targetDefualtValue = 0;
                     
-                    $targetDefualtValue += $outcomeRumus;
+                    if ($outcomeRumus > 0) $targetDefualtValue += $outcomeRumus;
                 }
             }
 
