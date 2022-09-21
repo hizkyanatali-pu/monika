@@ -368,6 +368,14 @@ class Dokumenpk extends \App\Controllers\BaseController
             case 'satker':
                 $revTable = 'm_satker';
                 break;
+
+            case 'eselon2':
+                $revTable = 'm_satker';
+                break;
+
+            case 'eselon1':
+                $revTable = 'm_satker';
+                break;
             
             case 'balai':
                 $revTable = 'm_balai';

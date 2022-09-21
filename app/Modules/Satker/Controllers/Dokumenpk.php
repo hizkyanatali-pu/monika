@@ -89,13 +89,14 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
             ->where('dokumen_pk_template.status', '1')
             ->where('dokumen_pk_template_akses.rev_id', $template_revID)
-            ->where('dokumen_pk_template.type', $template_type)
+            // ->where('dokumen_pk_template.type', $template_type)
             ->where('dokumen_pk_template_akses.rev_table', $templae_revTable)
             ->where("deleted_at is null")
             ->groupBy('dokumen_pk_template.id')
             ->get()->getResult();
             
             if (!$dataTemplate) $dataTemplate = [];
+            
             goto returnSection;
         }
         
