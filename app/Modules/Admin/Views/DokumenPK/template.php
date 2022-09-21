@@ -150,7 +150,7 @@
             <div class="modal-body">
                 <div class="row _form-main">
                     <div class="col-md-8 pr-4">
-                        <div class="form-group mb-4">
+                        <div class="form-group mb-4 d-none">
                             <strong for="judul-dokumen">Dokumen Untuk</strong>
                             <select name="dokumen-type" class="form-control w-25">
                                 <option value="-" >Pilih Opsi</option>

@@ -118,7 +118,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Image('images/logo_pu_border.png', 143, 14, 12);
         $pdf->Ln(17);
 
-        $dokumenKopTitle2_prefix = $dataDokumen['dokumen_type'] == "satker" ? 'SATUAN KERJA' : '';
+        $dokumenKopTitle2_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
 
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
         $dokumenKopTitle2 = $dokumenKopTitle2_prefix . $dataDokumen['pihak1_initial'];
@@ -410,7 +410,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Ln(10);
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';    
-        $dokumenKopTitle1_prefix = $dataDokumen['dokumen_type'] == "satker" ? 'SATUAN KERJA' : '';
+        $dokumenKopTitle1_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
             'person1Title' => $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial'],
             'person1Name'  => $dataDokumen['pihak2_ttd'],
