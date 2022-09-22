@@ -72,7 +72,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $this->dokumenYear = date('Y', strtotime($dataDokumen['created_at']));
             }
             
-            if ($dataDokumen['kota'] != '') $this->dokumenLokasi = $dataDokumen['nmkabkota'];
+            if ($dataDokumen['kota_nama'] != '') {
+                $this->dokumenLokasi = $dataDokumen['kota_nama'];
+            }
+            else {
+                if ($dataDokumen['kota'] != '') $this->dokumenLokasi = $dataDokumen['nmkabkota'];
+            }
 
             if ($dataDokumen['bulan'] != '') $this->dokumenBulan = $this->bulan[$dataDokumen['bulan'] - 1];
         }

@@ -117,7 +117,10 @@
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td>
+                            <td class="d-flex justify-content-start">
+                                <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
+                                    <i class="fas fa-eye"></i> Lihat
+                                </button>
                                 <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true">
                                     <i class="fas fa-print"></i> Cetak
                                 </button>
@@ -417,26 +420,149 @@
 
 
     $(document).on('click', '.__prepare-revisi-dokumen', function() {
-        let dataID = $(this).data('id'),
-            templateID = $(this).data('template-id')
+        prepareRevisiDocument({
+            dataId: $(this).data('id'),
+            templateId: $(this).data('template-id'),
+            beforeModalMount: (res) => {
+                render_prepare_btnSubmitToRevision({
+                    dokumenID: res.dokumen.id,
+                    dokumenMasterID: res.dokumen.revision_master_dokumen_id ?? res.dokumen.id
+                });
+            }
+        })
 
+        // let dataID = $(this).data('id'),
+        //     templateID = $(this).data('template-id')
+
+        // const promiseGetTemplate = new Promise((resolve, reject) => {
+        //     $.ajax({
+        //         url: "<?php echo site_url('dokumenpk/get-template/') ?>" + templateID,
+        //         type: 'GET',
+        //         success: (res) => {
+        //             preapreForm_afterChooseTemplate({
+        //                 templateId: templateID,
+        //                 data      : res,
+        //                 target    : 'koreksi'
+        //             })
+
+        //             element_modalFormTitle.html(`
+        //                 <h6>Koreksi Dokumen</h6>
+        //                 <small>${ res.template.title }</small>
+        //             `)
+
+        //             resolve(dataID)
+        //         },
+        //         fail: (xhr) => {
+        //             alert("Terjadi kesalahan pada sistem")
+        //             console.log(xhr)
+        //             reject(then)
+        //         }
+        //     })
+        // })
+
+        // promiseGetTemplate.then((res) => {
+        //     $.ajax({
+        //         url: "<?php echo site_url('dokumenpk/detail/') ?>" + res,
+        //         type: 'GET',
+        //         success: (res) => {
+        //             res.rows.forEach((data, key) => {
+        //                 let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
+        //                     elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
+
+        //                 elementInput_target.val(data.target_value)
+        //                 elementInput_outcome.val(data.outcome_value)
+
+        //                 if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
+        //             })
+
+        //             res.kegiatan.forEach((data, key) => {
+        //                 let elementInput_target = $('tr[data-kegiatan-id='+data.id+']').find('input[name=kegiatan-anggaran]')
+        //                 elementInput_target.val(data.anggaran)
+        //             })
+
+        //             $('input[name=total-anggaran]').val(res.dokumen.total_anggaran)
+        //             $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
+        //             $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
+
+        //             $('.title-ttd-pihak1').text('KEPALA ' + res.dokumen.pihak1_initial)
+        //             $('.title-ttd-pihak2').text('KEPALA ' + res.dokumen.pihak2_initial)
+
+        //             if ($('input[name=ttd-pihak2-jabatan]').length) {
+        //                 $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
+        //             }
+
+        //             if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
+        //             if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
+                    
+        //             $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
+        //             $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
+        //             $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
+
+        //             if (res.dokumen.revision_message != null) {
+        //                 $('.container-revision-alert').html(`
+        //                     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+        //                         <h5 class="alert-heading">Perlu Di Koreksi !</h5>
+        //                         <p>${res.dokumen.revision_message}</p>
+        //                     </div>
+        //                 `)
+        //             }
+
+
+        //             render_prepare_btnSubmitToRevision({
+        //                 dokumenID: res.dokumen.id,
+        //                 dokumenMasterID: res.dokumen.revision_master_dokumen_id ?? res.dokumen.id
+        //             });
+        //             $('#modalForm').modal('show')
+        //         },
+        //         fail: (xhr) => {
+        //             alert("Terjadi kesalahan pada sistem")
+        //             console.log(xhr)
+        //         }
+        //     })
+        // })
+    })
+    
+    
+    
+    $(document).on('click', '.__lihat-dokumen', function() {
+        prepareRevisiDocument({
+            dataId: $(this).data('id'),
+            templateId: $(this).data('template-id'),
+            beforeModalMount: () => {
+                $('#modalForm').find('.container-revision-alert').addClass('d-none')
+                $('#modalForm').find('input').attr('disabled', 'disabled')
+                $('#modalForm').find('select').attr('disabled', 'disabled')
+                $('#modalForm').find('.modal-footer').addClass('d-none')
+            }
+        })
+    })
+
+
+    function prepareRevisiDocument(params = {
+        dataId: '',
+        templateId: '',
+        beforeModalMount: () => {}
+    }) {
         const promiseGetTemplate = new Promise((resolve, reject) => {
+            var templateId = params.templateId,
+                dataId     = params.dataId
+
             $.ajax({
-                url: "<?php echo site_url('dokumenpk/get-template/') ?>" + templateID,
+                url: "<?php echo site_url('dokumenpk/get-template/') ?>" + templateId,
                 type: 'GET',
                 success: (res) => {
                     preapreForm_afterChooseTemplate({
-                        templateId: templateID,
+                        templateId: templateId,
                         data      : res,
                         target    : 'koreksi'
                     })
 
                     element_modalFormTitle.html(`
-                        <h6>Koreksi Dokumen</h6>
+                        <h6>Lihat Dokumen</h6>
                         <small>${ res.template.title }</small>
                     `)
 
-                    resolve(dataID)
+                    resolve(dataId)
                 },
                 fail: (xhr) => {
                     alert("Terjadi kesalahan pada sistem")
@@ -481,6 +607,7 @@
                     if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
                     
                     $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
+                    $('input[name=created-kota-nama]').val(res.dokumen.kota_nama)
                     $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
                     $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
 
@@ -493,11 +620,8 @@
                         `)
                     }
 
+                    params.beforeModalMount(res)
 
-                    render_prepare_btnSubmitToRevision({
-                        dokumenID: res.dokumen.id,
-                        dokumenMasterID: res.dokumen.revision_master_dokumen_id ?? res.dokumen.id
-                    });
                     $('#modalForm').modal('show')
                 },
                 fail: (xhr) => {
@@ -506,7 +630,7 @@
                 }
             })
         })
-    })
+    }
 
 
 
@@ -599,6 +723,7 @@
             ttdPihak2       : $('input[name=ttd-pihak2]').val(),
             ttdPihak2_isPlt : $('input:checkbox[name=ttd-pihak2-plt]').is(':checked') ? '1': '0',
             kota            : $('select[name=created-kota]').val(),
+            kotaNama        : $('input[name=created-kota-nama]').val(),
             bulan           : $('select[name=created-bulan]').val(),
             tahun           : $('select[name=created-tahun]').val()
         }
@@ -651,6 +776,10 @@
 
 
     function prepareForm_reset() {
+        $('#modalForm').find('input').removeAttr('disabled')
+        $('#modalForm').find('select').removeAttr('disabled')
+        $('#modalForm').find('.modal-footer').removeClass('d-none')
+
         element_modalDialog.removeClass('modal-xl')
         element_modalFooter.addClass('d-none')
         element_modalFormMakeDokumen.addClass('d-none')
@@ -754,10 +883,11 @@
 
     function renderFormTemplate(_data, _target) {
         let template                          = _data.template,
+            templateExtraData                 = _data.templateExtraData,
             render_rowsForm                   = renderFormTemplate_rowTable(_data.templateRow, _data.template.type),
             render_rowKegiatan                = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
             render_listInfo                   = renderFormTemplate_listInfo(_data.templateInfo),
-            render_ttdPihak2                  = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2),
+            render_ttdPihak2                  = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2, templateExtraData.jabatanPihak2),
             render_opsiKota                   = renderFormTemplate_opsiKota(_data.kota),
             render_opsiBulan                  = renderFormTemplate_opsiBulan(_data.bulan),
             render_opsiTahun                  = renderFormTemplate_opsiTahun(_data.tahun),
@@ -848,12 +978,18 @@
                     </div>
                     <div class="mt-4 pt-4">
                         <h6 class="mb-4">Dokumen Dibuat Di</h6>
+                        <div class="form-group row d-none">
+                            <label class="col-sm-2 col-form-label">Kota</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="created-kota">
+                                    ${render_opsiKota}
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Kota</label>
                             <div class="col-sm-5">
-                                <select class="form-control select2" name="created-kota">
-                                    ${render_opsiKota}
-                                </select>
+                                <input class="form-control" name="created-kota-nama" value="${ templateExtraData.kotaNama }" readonly />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -930,7 +1066,7 @@
 
         $('#make-dokumen').html(render)
 
-        $('select.select2').select2();
+        // $('select.select2').select2();
     }
 
 
@@ -1062,13 +1198,13 @@
 
 
 
-    function renderFormTemplate_ttdPihak2(_dataPenandatanganPihak2) {
+    function renderFormTemplate_ttdPihak2(_dataPenandatanganPihak2, _inputDefaultValue) {
         let prefixJabatanPenandatangan = '', //_dataPenandatanganPihak2.includes('KEPALA') ? '' : 'KEPALA',
             renderJalabatan = `<div><small class="title-ttd-pihak2">${prefixJabatanPenandatangan + ' ' + _dataPenandatanganPihak2}</small></div>`
 
         if (_dataPenandatanganPihak2 == '') {
             renderJalabatan = `
-                <input class="form-control" name="ttd-pihak2-jabatan" placeholder="Jabatan Penanda Tangan" />
+                <input class="form-control" name="ttd-pihak2-jabatan" placeholder="Jabatan Penanda Tangan"  value="${ _inputDefaultValue }" />
             `
         }
 

@@ -212,15 +212,24 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function getTemplate($id)
     {
-        $pihak1   = '';
-        $pihak2   = '';
+        $pihak1        = '';
+        $pihak2        = '';
+        $kotaNama      = '';
+        $jabatanPihak2 = '';
 
         if ($this->user['user_type'] == "satker") {
             $pihak1 = $this->user['satker_nama'];
             $pihak2 = $this->user['balai_nama'];
+
+            $dataSatker = $this->satker->select("kota_penanda_tangan")->where('satkerid', $this->user['satker_id'])->get()->getRow();
+            $kotaNama = $dataSatker->kota_penanda_tangan;
         }
         elseif ($this->user['user_type'] == "balai") {
             $pihak1 = $this->user['balai_nama'];
+
+            $dataBalai = $this->balai->select("jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('balaiid', $this->user['balai_id'])->get()->getRow();
+            $kotaNama = $dataBalai->kota_penanda_tangan;
+            $jabatanPihak2 = $dataBalai->jabatan_penanda_tangan_pihak_2;
         }
 
         $dokumenExistSameYear = $this->dokumenSatker->select("
@@ -285,7 +294,11 @@ class Dokumenpk extends \App\Controllers\BaseController
             ],
             'kota'  => $this->kota->get()->getResult(),
             'bulan' => ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-            'tahun' => $this->user['tahun']
+            'tahun' => $this->user['tahun'],
+            'templateExtraData' => [
+                'kotaNama'      => $kotaNama,
+                'jabatanPihak2' => $jabatanPihak2
+            ]
         ]);
     }
     
@@ -343,6 +356,8 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function create()
     {
         /* dokumen */
+        $dataTemplateDokumen = $this->templateDokumen->select('type')->where('id', $this->request->getPost('templateID'))->get()->getRow();
+        
         $inserted_dokumenSatker = [
             'template_id'           => $this->request->getPost('templateID'),
             'user_created'          => $this->userUID,
@@ -353,6 +368,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'pihak2_is_plt'         => $this->request->getPost('ttdPihak2_isPlt'),
             'is_revision_same_year' => $this->request->getPost('revisionSameYear'),
             'kota'                  => $this->request->getPost('kota'),
+            'kota_nama'             => $this->request->getPost('kotaNama'),
             'bulan'                 => $this->request->getPost('bulan'),
             'tahun'                 => $this->request->getPost('tahun')
         ];
@@ -362,7 +378,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $inserted_dokumenSatker['pihak1_initial'] = $this->user['satker_nama'];
             $inserted_dokumenSatker['pihak2_id']      = $this->user['balai_id'];
             $inserted_dokumenSatker['pihak2_initial'] = $this->user['balai_nama'];
-            $inserted_dokumenSatker['dokumen_type']   = "satker";
+            $inserted_dokumenSatker['dokumen_type']   = $dataTemplateDokumen->type;
             $inserted_dokumenSatker['balaiid']        = $this->user['balai_id'];;
             $inserted_dokumenSatker['satkerid']       = $this->user['satker_id'];
         }
