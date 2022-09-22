@@ -83,7 +83,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                             ->orWhere('type', 'balai')
                         ->groupEnd()
                         ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
-            'defaultType' => 'satker'
+            'defaultType' => 'satker',
         ]);
     }
     

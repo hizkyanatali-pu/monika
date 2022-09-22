@@ -160,14 +160,14 @@
                                     <tr>
                                         <th class="text-center bg-purple">SASARAN PROGRAM/SASARAN KEGIATAN/INDIKATOR</th>
                                         <th class="text-center bg-purple" width="140px">TARGET <?php echo $sessionYear ?></th>
-                                        <th class="text-center bg-purple" width="140px">Outcome</th>
+                                        <th class="text-center bg-purple d-none" width="140px">Outcome</th>
                                         <th class="text-center bg-purple" width="140px">Rumus</th>
                                     </tr>
                                     <tr style="font-size: 10px">
                                         <th class="text-center p-2">(1)</th>
                                         <th class="text-center p-2">(2)</th>
                                         <th class="text-center p-2">(3)</th>
-                                        <th class="text-center p-2">(4)</th>
+                                        <th class="text-center p-2 d-none">(4)</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -810,7 +810,7 @@
 
         return `
             <tr class="_title-section">
-                <td colspan="4" class="bg-secondary" style="position: relative">
+                <td colspan="3" class="bg-secondary" style="position: relative">
                     <div class="d-flex justify-content-start">
                         <select class="form-control" style="width: 80px" name="prefix-title-section">
                             <option value="SK" ${prefixTitleSection=='SK' ? 'selected="selected"' : ''}>SK</option>
@@ -847,7 +847,7 @@
                 <td>
                     <input type="text" class="form-control _target-satuan" placeholder="Satuan" value="${targetSatuan}">
                 </td>
-                <td style="position: relative">
+                <td class="d-none" style="position: relative">
                     <input type="text" class="form-control _outcome-satuan" placeholder="Satuan" value="${outcomeSatuan}">
                 </td>
                 <td class="rumus" style="position: relative">

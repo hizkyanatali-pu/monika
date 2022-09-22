@@ -724,7 +724,7 @@
 
     function renderFormTemplate(_data, _target) {
         let template                          = _data.template,
-            render_rowsForm                   = renderFormTemplate_rowTable(_data.templateRow),
+            render_rowsForm                   = renderFormTemplate_rowTable(_data.templateRow, _data.template.type),
             render_rowKegiatan                = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
             render_listInfo                   = renderFormTemplate_listInfo(_data.templateInfo),
             render_ttdPihak2                  = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2),
@@ -732,7 +732,8 @@
             render_opsiBulan                  = renderFormTemplate_opsiBulan(_data.bulan),
             render_opsiTahun                  = renderFormTemplate_opsiTahun(_data.tahun),
             render_warningDokumenYearRevisoin = '',
-            inputValue_revisionSameYear       = 0
+            inputValue_revisionSameYear       = 0,
+            classDNoneOutcome                 = ''
         
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
             render_warningDokumenYearRevisoin = `
@@ -751,6 +752,14 @@
             });
         }
 
+        if (
+            _data.template.type == 'eselon1'
+            || _data.template.type == 'eselon2'
+            || _data.template.type == 'master-balai'
+        ) {
+            classDNoneOutcome = 'd-none'
+        }
+
         let render = `
             <input type="hidden" name="revision_same_year" value="${inputValue_revisionSameYear}" />
 
@@ -765,7 +774,7 @@
                         <td class="text-center" style="width: 250px">
                             Target <?php echo $sessionYear ?>
                         </td>
-                        <td class="text-center" style="width: 250px">
+                        <td class="text-center ${classDNoneOutcome}" style="width: 250px">
                             Outcome
                         </td>
                     </tr>
@@ -775,7 +784,7 @@
                         </td>
                         <td class="text-center p-2" colspan="2">(1)</td>
                         <td class="text-center p-2">(2)</td>
-                        <td class="text-center p-2">(3)</td>
+                        <td class="text-center p-2 ${classDNoneOutcome}">(3)</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -896,19 +905,30 @@
 
 
 
-    function renderFormTemplate_rowTable(_data) {
-        let rows = '',
-            rowNumber = 1
+    function renderFormTemplate_rowTable(_data, _templateType) {
+        let rows                = '',
+            rowNumber           = 1,
+            colspanSectionTitle = 3,
+            classDNoneOutcome   = ''
+
+        if (
+            _templateType == 'eselon1'
+            || _templateType == 'eselon2' 
+            || _templateType == 'master-balai'
+        ) {
+            colspanSectionTitle = 2
+            classDNoneOutcome = 'd-none'
+        }
 
         _data.forEach((data, key) => {
             switch (data.type) {
                 case 'section_title':
                     rowNumber = 1
-                    console.log(data)
+                    
                     rows += `
                         <tr>
                             <td colspan="2"><strong>${ data.prefix_title ?? '-' }</strong></td>
-                            <td colspan="3">
+                            <td colspan="${colspanSectionTitle}">
                                 <strong>${ data.title }</strong>
                             </td>
                         </tr>
@@ -918,10 +938,10 @@
                 case 'form':
                     rows += `
                         <tr>
-                            <td class="text-center align-middle">
+                            <td class="text-center align-middle" width="50px">
                                 <input type="checkbox" name="form-check-row" checked />
                             </td>
-                            <td class="align-middle">${ rowNumber++ }</td>
+                            <td class="align-middle" width="50px">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title }</td>
                             <td>
                                 <div class="input-group">
@@ -938,7 +958,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td class="${classDNoneOutcome}">
                                 <div class="input-group">
                                     <input 
                                         type="text" 
