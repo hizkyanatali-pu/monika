@@ -109,6 +109,53 @@ class Dokumenpk extends \App\Controllers\BaseController
             'sessionYear'       => $this->user['tahun'] ,
             'templateDokumen'   => $dataTemplate,
             'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
+            'isCanCreated'      => true,
+
+            'dataDokumen'   => $dataDokumen,
+            'dokumenStatus' => $this->dokumenStatus
+        ]);
+    }
+
+
+
+    public function balaiSatker($_satkerId) {
+        $queryDataDokumen = $this->dokumenSatker->select('
+            dokumenpk_satker.id,
+            dokumenpk_satker.template_id,
+            dokumenpk_satker.revision_master_dokumen_id,
+            dokumenpk_satker.revision_master_number,
+            dokumenpk_satker.revision_number,
+            dokumenpk_satker.status,
+            dokumenpk_satker.is_revision_same_year,
+            dokumenpk_satker.change_status_at,
+            dokumenpk_satker.created_at,
+            dokumen_pk_template.title as dokumenTitle,
+            ku_user.nama as userCreatedName
+        ')
+        ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+        ->join('ku_user', 'dokumenpk_satker.user_created=ku_user.uid', 'left')
+        ->where('dokumenpk_satker.status !=', 'revision')
+        ->orderBy('dokumenpk_satker.id', 'DESC');
+        
+        if ($_satkerId == 'all') {
+            $queryDataDokumen->where('dokumenpk_satker.balaiid', $this->user['balaiid']);
+        }
+        else {
+            $queryDataDokumen->where('dokumenpk_satker.satkerid', $_satkerId);
+        }
+
+        $dataDokumen = $queryDataDokumen->get()->getResult();
+
+        return view('Modules\Satker\Views\Dokumenpk.php', [
+            'pageTitle' => 'Perjanjian Kinerja Satker',
+
+            'sessionYear'       => $this->user['tahun'],
+            'templateDokumen'   => [],
+            'templateAvailable' => false,
+            'isCanCreated'      => false,
+
+            'filterSatker'          => $this->satker->where('balaiid', $this->user['balaiid'])->get()->getResult(),
+            'filterSatker_selected' => $_satkerId,
 
             'dataDokumen'   => $dataDokumen,
             'dokumenStatus' => $this->dokumenStatus

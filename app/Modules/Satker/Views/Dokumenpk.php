@@ -19,15 +19,31 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main w-100">
             <div class="d-flex justify-content-between w-100">
-                <h3 class="kt-subheader__title">
-                    Input Perjanjian Kinerja
-                </h3>
-                <?= csrf_field() ?>
+                <div class="d-flex justify-content-start">
+                    <h3 class="kt-subheader__title" style="width: 280px">
+                        <?php echo $pageTitle ?? 'Input Perjanjian Kinerja' ?>
+                    </h3>
+
+                    <?php if (isset($filterSatker)) { ?>
+                        <select name="filter-satker" class="form-control">
+                            <option value="all">SEMUA SATKER</option>
+                            <?php foreach ($filterSatker as $key => $data) { ?>
+                                <option value="<?php echo $data->satkerid ?>" <?php if($data->satkerid == $filterSatker_selected) echo 'selected' ?> >
+                                    <?php echo $data->satker ?>
+                                </option>
+                            <?php  } ?>
+                        </select>
+                    <?php } ?>
+
+                    <?= csrf_field() ?>
+                </div>
 
                 <div>
+                    <?php if ($isCanCreated) { ?>
                     <button class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>">
                         <i class="fas fa-plus"></i> Buat Dokumen
                     </button>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -58,7 +74,9 @@
                         $dokumenMasterID = $data->revision_master_dokumen_id ?? $data->id;
                     ?>
                         <tr>
-                            <td><?php echo $dokumenMasterID ?></td>
+                            <td>
+                                <?php echo $dokumenMasterID ?>
+                            </td>
                             <td>
                                 <?php echo $data->dokumenTitle ?>
 
@@ -72,6 +90,12 @@
                                         </span>
                                     </div>
                                 <?php endif; ?>
+
+                                <?php if (property_exists($data, 'userCreatedName')) { ?>
+                                    <div class="mt-2">
+                                        Di buat oleh : <strong><?php echo $data->userCreatedName ?></strong>
+                                    </div>
+                                <?php } ?>
                             </td>
                             <td>
                                 <?php echo date_indo($data->created_at) ?>
@@ -209,6 +233,12 @@
         $('#modalForm').on('hidden.bs.modal', function() {
             prepareForm_reset();
         })
+    })
+    
+    
+    
+    $(document).on('change', 'select[name=filter-satker]', function() {
+        window.location.href = "<?php echo base_url('dokumenpk-balai-satker') ?>/" + $(this).val()
     })
 
 

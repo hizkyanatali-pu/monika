@@ -264,6 +264,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
                 $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
             });
+
+            
+            $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Satker\Controllers\Dokumenpk::balaiSatker/$1');  
         }
     }
 });

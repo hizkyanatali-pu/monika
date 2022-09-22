@@ -44,6 +44,15 @@ $request = \Config\Services::request();
                     <span class="kt-menu__link-text">Input Perjanjian Kinerja</span> 
                 </a>
             </li>
+            <li 
+                class="kt-menu__item <?=($request->uri->getSegment(1) == 'dokumenpk-balai-satker' ? ' kt-menu__item--active' : '') ?>" 
+                aria-haspopup="true"
+            >
+                <a href="<?= site_url('dokumenpk-balai-satker/all'); ?>" class="kt-menu__link ">
+                    <i class="kt-menu__link-icon fas fa-book"></i>
+                    <span class="kt-menu__link-text">Perjanjian Kinerja Satker</span> 
+                </a>
+            </li>
         </ul>
     </div>
 </div>
