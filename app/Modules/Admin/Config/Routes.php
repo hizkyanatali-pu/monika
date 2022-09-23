@@ -253,6 +253,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         if (
             strtolower($session->get('userData')['user_type']) == 'satker'
             || strtolower($session->get('userData')['user_type']) == 'balai'
+            || strpos($session->get('userData')['uid'], 'admin') !== false
         ) {
             $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function($routes) {
                 $routes->get('/', '\Modules\Satker\Controllers\Dokumenpk::index');

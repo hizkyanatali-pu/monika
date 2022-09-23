@@ -152,6 +152,36 @@
 
 
 
+
+<!-- Modal Form Detail -->
+<div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex">
+                    <button type="button" class="btn btn-default pr-2 d-none __back-pilih-dokumen">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <h5 class="modal-title pt-2 pl-2">Pilih Dokumen</h5>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="p-4 d-none" id="make-dokumen">
+                </div>
+            </div>
+            <div class="modal-footer d-none">
+                <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal Form Detail -->
+
+
+
 <!-- Modal Cetak Dokumen Terevisi -->
 <div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -175,6 +205,7 @@
 <?= $this->section('footer_js') ?>
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
+<?php echo $this->include('jspages/dokumenpk') ?>
 <script>
     var element_tableHold = '',
         element_tableSetuju = '',
@@ -391,7 +422,7 @@
             }
 
             if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>`
-
+           
             const tr = $(`
                 <tr id="_dokumen-row-${data.id}">
                     <td class="text-center">${ index+1 }</td>
@@ -407,12 +438,21 @@
                     ${render_columnChangeStatusAt}
                     <td>
                         <button 
+                            class="btn btn-sm btn-outline-secondary __lihat-dokumen"
+                            data-id="${data.id}"
+                            data-template-id="${data.template_id}"
+                            data-to-confirm="${buttonData_toConfirm}"
+                        >
+                            <i class="fas fa-eye"></i><br/>
+                            Lihat
+                        </button>
+                        <button 
                             class="btn btn-sm btn-outline-primary __preview-dokumen"
                             data-id="${data.id}"
                             data-to-confirm="${buttonData_toConfirm}"
                         >
-                            <i class="fas fa-file"></i>
-                            Lihat Dokumen
+                            <i class="fas fa-print"></i><br/>
+                            Cetak
                         </button>
                     </td>
                 </tr>

@@ -40,6 +40,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function satker()
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
+            'sessionYear'       => $this->user['tahun'] ,
             'pageTitle' => 'Dokumen Penjanjian Kinerja - Satker',
             'dokumenType' => 'satker'
         ]);
@@ -49,6 +50,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function balai()
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
+            'sessionYear'       => $this->user['tahun'] ,
             'pageTitle' => 'Dokumen Penjanjian Kinerja - Balai',
             'dokumenType' => 'balai'
         ]);
@@ -58,6 +60,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function eselon2()
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
+            'sessionYear'       => $this->user['tahun'] ,
             'pageTitle' => 'Dokumen Penjanjian Kinerja - Eselon 2',
             'dokumenType' => 'eselon2'
         ]);
