@@ -119,11 +119,29 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataTemplate = $this->templateDokumen->where('dokumen_pk_template.status', '1')->where("deleted_at is null")->get()->getResult();
         
         returnSection:
+        $valudasiCreatedDokumen = true;
+        $balai_checklistSatker = [];
+
+        if ($this->user['user_type'] == 'balai') {
+            $balai_checklistSatker = $this->satker->select("
+                m_satker.satker,
+                (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun=DATE_FORMAT(NOW(), '%Y') and status='setuju' ) as iscreatedPK
+            ")
+            ->notLike('satker', 'BALAI')
+            ->where('balaiid', $this->user['balaiid'])->get()->getResult();
+
+            $totalSatkerIsCreated = count(array_filter($balai_checklistSatker, function($arr) { return $arr->iscreatedPK > 0; }));
+            if (count($balai_checklistSatker) != $totalSatkerIsCreated) $valudasiCreatedDokumen = false;
+        }
+
         return view('Modules\Satker\Views\Dokumenpk.php', [
             'sessionYear'       => $this->user['tahun'] ,
             'templateDokumen'   => $dataTemplate,
             'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
             'isCanCreated'      => true,
+
+            'valudasiCreatedDokumen' => $valudasiCreatedDokumen,
+            'balaiChecklistSatker'   => $balai_checklistSatker,
 
             'dataDokumen'   => $dataDokumen,
             'dokumenStatus' => $this->dokumenStatus
@@ -169,7 +187,10 @@ class Dokumenpk extends \App\Controllers\BaseController
             'templateAvailable' => false,
             'isCanCreated'      => false,
 
-            'filterSatker'          => $this->satker->where('balaiid', $this->user['balaiid'])->get()->getResult(),
+            'valudasiCreatedDokumen' => false,
+            'balaiChecklistSatker'   => [],
+
+            'filterSatker'          => $this->satker->notLike('satker', 'BALAI')->where('balaiid', $this->user['balaiid'])->get()->getResult(),
             'filterSatker_selected' => $_satkerId,
 
             'dataDokumen'   => $dataDokumen,
@@ -253,7 +274,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         ")->where([
             'template_id'  => $id,
             'user_created' => $this->user['uid']
-        ])->where("tahun = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
+        ])
+        ->where("status != ", 'revision')
+        ->where("tahun = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
 
         $templateRows = array_map(function($arr) {
             $targetDefualtValue = '';
@@ -327,7 +350,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         ")->where([
             'template_id'  => $_templateId,
             'user_created' => $this->user['uid']
-        ])->where("tahun = '$_createdYear'")->orderBy('id', 'desc')->get()->getRow();
+        ])
+        ->where("status != ", 'revision')
+        ->where("tahun = '$_createdYear'")->orderBy('id', 'desc')->get()->getRow();
 
         return $this->respond([
             'dokumenExistSameYear' => $dokumenExistSameYear

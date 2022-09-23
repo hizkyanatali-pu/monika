@@ -139,33 +139,51 @@
 <!-- Modal Form -->
 <div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="d-flex">
-                    <button type="button" class="btn btn-default pr-2 d-none __back-pilih-dokumen">
-                        <i class="fas fa-chevron-left"></i>
+        <?php if ($valudasiCreatedDokumen) { ?>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="d-flex">
+                        <button type="button" class="btn btn-default pr-2 d-none __back-pilih-dokumen">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h5 class="modal-title pt-2 pl-2">Pilih Dokumen</h5>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
-                    <h5 class="modal-title pt-2 pl-2">Pilih Dokumen</h5>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body p-0">
-                <div class="list-group" id="choose-template">
-                    <?php foreach ($templateDokumen as $keyTemplate => $dataTemplate) : ?>
-                        <a class="list-group-item list-group-item-action __buat-dokumen-pilih-template" href="javascript:void(0)" data-id="<?php echo $dataTemplate->id ?>">
-                            <?php echo $dataTemplate->title ?>
-                        </a>
-                    <?php endforeach ?>
+                <div class="modal-body p-0">
+                    <div class="list-group" id="choose-template">
+                        <?php foreach ($templateDokumen as $keyTemplate => $dataTemplate) : ?>
+                            <a class="list-group-item list-group-item-action __buat-dokumen-pilih-template" href="javascript:void(0)" data-id="<?php echo $dataTemplate->id ?>">
+                                <?php echo $dataTemplate->title ?>
+                            </a>
+                        <?php endforeach ?>
+                    </div>
+                    <div class="p-4 d-none" id="make-dokumen">
+                    </div>
                 </div>
-                <div class="p-4 d-none" id="make-dokumen">
+                <div class="modal-footer d-none">
+                    <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
                 </div>
             </div>
-            <div class="modal-footer d-none">
-                <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
+        <?php } else { ?>
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <div class="list-group" id="choose-template">
+                        <?php foreach ($balaiChecklistSatker as $keyChecklistBalai => $dataChecklistBalai) : ?>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <label><?php echo $dataChecklistBalai->satker ?></label>
+                                
+                                <?php if ($dataChecklistBalai->iscreatedPK > 0) { ?>
+                                    <i class="fas fa-check mt-2"></i>
+                                <?php } ?>
+                            </li>
+                        <?php endforeach ?>
+                    </div>
+                </div>
             </div>
-        </div>
+        <?php } ?>
     </div>
 </div>
 <!-- end-of: Modal Form -->
