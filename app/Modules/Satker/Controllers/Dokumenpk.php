@@ -46,7 +46,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function index()
     {
-        $dataDokumen = $this->dokumenSatker->select('
+        $query_dataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
             dokumenpk_satker.template_id,
             dokumenpk_satker.revision_master_dokumen_id,
@@ -59,11 +59,25 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumen_pk_template.title as dokumenTitle
         ')
         ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
-        ->where('user_created', $this->userUID)
+        // ->where('user_created', $this->userUID)
         ->where('dokumenpk_satker.status !=', 'revision')
-        ->orderBy('dokumenpk_satker.id', 'DESC')
-        ->get()->getResult();
+        ->orderBy('dokumenpk_satker.id', 'DESC');
         
+        if ($this->user['user_type'] == 'satker') {
+            $query_dataDokumen->where('satkerid', $this->user['satker_id'])
+            ->groupStart()
+                ->where('dokumen_type', 'satker')
+                ->orWhere('dokumen_type', 'eselon2')
+                ->orWhere('dokumen_type', 'eselon1')
+            ->groupEnd();
+        }
+        elseif ($this->user['user_type'] == 'balai') {
+            $query_dataDokumen->where('balaiid', $this->user['balai_id'])
+            ->where('dokumen_type', 'balai');
+        }
+        $dataDokumen = $query_dataDokumen->get()->getResult();
+        
+
         if (
             isset($this->user['satker_id'])
             || isset($this->user['balai_id'])
