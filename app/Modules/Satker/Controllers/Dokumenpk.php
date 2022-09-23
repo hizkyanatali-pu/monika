@@ -149,6 +149,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
         ->join('ku_user', 'dokumenpk_satker.user_created=ku_user.uid', 'left')
         ->where('dokumenpk_satker.status !=', 'revision')
+        ->where('dokumenpk_satker.dokumen_type', 'satker')
         ->orderBy('dokumenpk_satker.id', 'DESC');
         
         if ($_satkerId == 'all') {
