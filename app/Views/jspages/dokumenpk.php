@@ -988,7 +988,8 @@
 
         if (_dataPenandatanganPihak2 == '') {
             renderJalabatan = `
-                <input class="form-control" name="ttd-pihak2-jabatan" placeholder="Jabatan Penanda Tangan"  value="${ _inputDefaultValue }" />
+                <div><small>${_inputDefaultValue}</small></div>
+                <input class="form-control d-none" name="ttd-pihak2-jabatan" placeholder="Jabatan Penanda Tangan"  value="${ _inputDefaultValue }" />
             `
         }
 
