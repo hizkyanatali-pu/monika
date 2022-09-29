@@ -31,6 +31,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->tableBalai              = $this->db->table("m_balai");
         $this->tableKegiatan           = $this->db->table("tgiat");
         $this->tableProgram            = $this->db->table("tprogram");
+        $this->templateDokumen         = $this->db->table('dokumen_pk_template');
 
 
         $this->request = \Config\Services::request();
@@ -40,9 +41,10 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function satker()
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
-            'sessionYear'       => $this->user['tahun'] ,
-            'pageTitle' => 'Dokumen Penjanjian Kinerja - Satker',
-            'dokumenType' => 'satker'
+            'sessionYear'              => $this->user['tahun'],
+            'pageTitle'                => 'Dokumen Penjanjian Kinerja - Satker',
+            'dokumenType'              => 'satker',
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->get()->getResult())
         ]);
     }
 
@@ -50,9 +52,10 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function balai()
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
-            'sessionYear'       => $this->user['tahun'] ,
-            'pageTitle' => 'Dokumen Penjanjian Kinerja - Balai',
-            'dokumenType' => 'balai'
+            'sessionYear'              => $this->user['tahun'],
+            'pageTitle'                => 'Dokumen Penjanjian Kinerja - Balai',
+            'dokumenType'              => 'balai',
+            'createDokumen_userOption' => json_encode($this->tableBalai->select("balaiid as id, balai as title")->get()->getResult())
         ]);
     }
 
@@ -60,9 +63,10 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function eselon2()
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
-            'sessionYear'       => $this->user['tahun'] ,
-            'pageTitle' => 'Dokumen Penjanjian Kinerja - Eselon 2',
-            'dokumenType' => 'eselon2'
+            'sessionYear'              => $this->user['tahun'],
+            'pageTitle'                => 'Dokumen Penjanjian Kinerja - Eselon 2',
+            'dokumenType'              => 'eselon2',
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->get()->getResult())
         ]);
     }
 
@@ -71,7 +75,70 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'pageTitle' => 'Dokumen Penjanjian Kinerja - Eselon1',
-            'dokumenType' => 'eselon1'
+            'dokumenType' => 'eselon1',
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->get()->getResult())
+        ]);
+    }
+
+
+    public function getListTemplateBuatDokumen($userType, $userId)
+    {
+        $template_type    = $userType;
+        $templae_revTable = '';
+        $template_revID   = $userId;
+
+        switch ($userType) {
+            case 'satker':
+                $templae_revTable = 'm_satker';
+                $dataSatker = $this->tableSatker->join('m_balai', 'm_satker.balaiid=m_satker.balaiid', 'left')->where('satkerid', $userId)->get()->getRow();
+                $this->session->set('createDokumenByAdmin', [
+                    'byAdmin_user_type'   => 'satker',
+                    'byAdmin_satker_nama' => $dataSatker->satker,
+                    'byAdmin_balai_nama'  => $dataSatker->balai,
+                    'byAdmin_satker_id'   => $dataSatker->satkerid,
+                    'byAdmin_balai_id'    => $dataSatker->balaiid
+                ]);
+                break;
+            
+            case 'balai':
+                $template_type    = 'master-balai';
+                $templae_revTable = 'm_balai';
+
+                $dataBalai = $this->tableBalai->where('balaiid', $userId)->get()->getRow();
+                $this->session->set('createDokumenByAdmin', [
+                    'byAdmin_user_type'  => 'balai',
+                    'byAdmin_balai_id'   => $dataBalai->balaiid,
+                    'byAdmin_balai_nama' => $dataBalai->balai
+                ]);
+                break;
+        }
+
+        $dataTemplate = $this->templateDokumen->select('dokumen_pk_template.*')
+        ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
+        ->where('dokumen_pk_template.status', '1')
+        ->where('dokumen_pk_template_akses.rev_id', $template_revID)
+        // ->where('dokumen_pk_template.type', $template_type)
+        ->where('dokumen_pk_template_akses.rev_table', $templae_revTable)
+        ->where("deleted_at is null")
+        ->groupBy('dokumen_pk_template.id')
+        ->get()->getResult();
+        
+        if (!$dataTemplate) {   
+            $dataTemplate = [];
+            goto globalUserTemplate;
+        }
+
+        goto returnSection;
+
+        globalUserTemplate:
+        if (isset($this->user['user_type'])) $this->templateDokumen->where('type', $this->user['user_type']);
+        $dataTemplate = $this->templateDokumen->where('dokumen_pk_template.status', '1')->where("deleted_at is null")->get()->getResult();
+
+
+        returnSection:
+        return $this->respond([
+            'templateDokumen'   => $dataTemplate,
+            'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false'
         ]);
     }
 

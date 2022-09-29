@@ -2,6 +2,8 @@
 
 <?= $this->section('content') ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.css'); ?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 <style>
     .paginate_button.page-item {
         padding: 0px !important;
@@ -27,6 +29,10 @@
     ._remove-row-item .fas {
         font-size: 10px
     }
+
+    .select2-dropdown {
+        z-index: 1061;
+    }
 </style>
 
 <!-- begin:: Subheader -->
@@ -34,15 +40,23 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main w-100">
             <div class="d-flex justify-content-between w-100">
-                <h5 class="kt-subheader__title">
-                    <?php echo $pageTitle ?? 'Dokumen PK' ?>
-                </h5>
-                <?= csrf_field() ?>
+                <div class="d-flex justify-content-start">
+                    <h5 class="kt-subheader__title">
+                        <?php echo $pageTitle ?? 'Dokumen PK' ?>
+                    </h5>
+                    <?= csrf_field() ?>
+                </div>
+                <div>
+                    <button class="btn btn-primary __admin-create-dokumen-opsi-users">
+                        <i class="fas fa-plus"></i> Buat Dokumen
+                    </button>
+                    <button class="btn btn-primary __opsi-template">
+                        <i class="fas fa-plus"></i> Buat Dokumen
+                    </button>
+                </div>
             </div>
             <span class="kt-subheader__separator kt-hidden"></span>
-
         </div>
-
     </div>
 </div>
 
@@ -169,6 +183,13 @@
                 </button>
             </div>
             <div class="modal-body p-0">
+                <div class="list-group" id="choose-template">
+                    <?php /* foreach ($templateDokumen as $keyTemplate => $dataTemplate) : ?>
+                        <a class="list-group-item list-group-item-action __buat-dokumen-pilih-template" href="javascript:void(0)" data-id="<?php echo $dataTemplate->id ?>">
+                            <?php echo $dataTemplate->title ?>
+                        </a>
+                    <?php endforeach */ ?>
+                </div>
                 <div class="p-4 d-none" id="make-dokumen">
                 </div>
             </div>
@@ -205,7 +226,9 @@
 <?= $this->section('footer_js') ?>
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <?php echo $this->include('jspages/dokumenpk') ?>
+
 <script>
     var element_tableHold = '',
         element_tableSetuju = '',
@@ -247,6 +270,71 @@
             }
             getData('tolak');
         }, 300)
+    })
+
+
+
+    $(document).on('click', '.__admin-create-dokumen-opsi-users', function() {
+        let optionData = <?php echo $createDokumen_userOption ?>,
+            selectOpntionList = ''
+
+        optionData.forEach((data, index) => {
+            selectOpntionList += `
+                <option value="${data.id}">${data.title}</option>
+            `
+        });
+
+        let html = `
+            <select class="select2" name="states[]"> 
+                ${selectOpntionList}
+            </select>
+        `
+
+        Swal.fire({
+            title: 'Pilih Satker Untuk Membuat Dokumen',
+            html: html,
+            showCancelButton: true,
+            confirmButtonText: 'Pilih',
+            showLoaderOnConfirm: true,
+            onOpen: function () {
+                $('.select2').select2({
+                    width: '100%',
+                    placeholder: "Seleziona",
+                });
+            },
+            preConfirm: () => {
+                return $('.select2').val()
+            }
+         }).then((result) => {
+            if (result.value != undefined) {
+                let userType = "<?php echo $dokumenType ?>"=="balai" ? "balai" : "satker"
+                
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/get-list-template-buat-dokumen') ?>" + "/" + userType + "/" + result.value,
+                    type: 'GET',
+                    success: (res) => {
+                        let renderListTemplate = ''
+
+                        res.templateDokumen.forEach((data, index) => {
+                            renderListTemplate += `
+                                <a 
+                                    class="list-group-item list-group-item-action __buat-dokumen-pilih-template" 
+                                    href="javascript:void(0)" 
+                                    data-id="${data.id}"
+                                >
+                                    ${data.title}
+                                </a>
+                            `
+                        });
+                        $('#choose-template').html(renderListTemplate)
+
+                        $('.__opsi-template').attr('data-available', res.templateAvailable)
+                        $('.__opsi-template').trigger('click')
+                    }
+                })
+                
+            }
+        })
     })
 
 

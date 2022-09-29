@@ -564,6 +564,8 @@
         $('#modalForm').find('select').removeAttr('disabled')
         $('#modalForm').find('.modal-footer').removeClass('d-none')
 
+        $('.container-revision-alert-bottom').html('')
+
         element_modalDialog.removeClass('modal-xl')
         element_modalFooter.addClass('d-none')
         element_modalFormMakeDokumen.addClass('d-none')
@@ -632,6 +634,33 @@
         }
         
         renderFormTemplate(params.data, params.target)
+
+        if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
+            // $('#modalForm').find('.container-revision-alert').addClass('d-none')
+            $('#modalForm').find('input').attr('disabled', 'disabled')
+            $('#modalForm').find('select').attr('disabled', 'disabled')
+            $('#modalForm').find('.modal-footer').addClass('d-none')
+
+            let renderCheckListSatkerBalai = ''
+            params.data.balaiValidasiSatker.balaiChecklistSatker.forEach((data, index) => {
+                let renderCheck = ''
+                if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check mt-2"></i>'
+
+                renderCheckListSatkerBalai += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        <label>${ data.satker }</label>
+                        ${renderCheck}
+                    </li>
+                `
+            });
+
+            $('.container-revision-alert-bottom').html(`
+                <h6 class="mb-4 mt-4">Daftar satker yang telah membuat dokumen</h6>
+                <div class="list-group">
+                    ${renderCheckListSatkerBalai}
+                </div>
+            `)
+        }
     }
 
 

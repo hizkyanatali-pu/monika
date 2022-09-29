@@ -12,7 +12,6 @@ class PohonAnggaranModel extends Model
     protected $allowedFields = array('tahun', 'kdsatker', 'kdprogram', 'kdgiat', 'kdoutput', 'kdsoutput', 'kdkmpnen', 'kdskmpnen', 'kdpaket', 'kdls', 'nmpaket', 'kdpengadaan', 'kdkategori', 'kdjnskon', 'rkn_nama', 'rkn_npwp', 'nomor_kontrak', 'nilai_kontrak', 'tanggal_kontrak', 'tgl_spmk', 'waktu', 'status_tender');
     public function __construct()
     {
-
         $session = session();
         $this->user = $session->get('userData');
     }
@@ -216,7 +215,7 @@ class PohonAnggaranModel extends Model
     }
 
 
-    public function getDataBelumLelangList($w = "", $pagu, $_filterDateStart = null, $_filterDateEnd = null)
+    public function getDataBelumLelangList($w = "", $pagu = "", $_filterDateStart = null, $_filterDateEnd = null)
     {
         // $query = $this->table($this->table)
         //     ->select("

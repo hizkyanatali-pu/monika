@@ -139,7 +139,6 @@
 <!-- Modal Form -->
 <div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
-        <?php if ($valudasiCreatedDokumen) { ?>
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="d-flex">
@@ -162,28 +161,26 @@
                     </div>
                     <div class="p-4 d-none" id="make-dokumen">
                     </div>
+
+                    
+                    <?php /*if (! $valudasiCreatedDokumen) { ?>
+                        <div class="list-group" id="choose-template">
+                            <?php foreach ($balaiChecklistSatker as $keyChecklistBalai => $dataChecklistBalai) : ?>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <label><?php echo $dataChecklistBalai->satker ?></label>
+                                    
+                                    <?php if ($dataChecklistBalai->iscreatedPK > 0) { ?>
+                                        <i class="fas fa-check mt-2"></i>
+                                    <?php } ?>
+                                </li>
+                            <?php endforeach ?>
+                        </div>
+                    <?php }*/ ?>
                 </div>
                 <div class="modal-footer d-none">
                     <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
                 </div>
             </div>
-        <?php } else { ?>
-            <div class="modal-content">
-                <div class="modal-body p-0">
-                    <div class="list-group" id="choose-template">
-                        <?php foreach ($balaiChecklistSatker as $keyChecklistBalai => $dataChecklistBalai) : ?>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <label><?php echo $dataChecklistBalai->satker ?></label>
-                                
-                                <?php if ($dataChecklistBalai->iscreatedPK > 0) { ?>
-                                    <i class="fas fa-check mt-2"></i>
-                                <?php } ?>
-                            </li>
-                        <?php endforeach ?>
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
     </div>
 </div>
 <!-- end-of: Modal Form -->

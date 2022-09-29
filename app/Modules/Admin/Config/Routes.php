@@ -215,7 +215,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
                 $routes->group('satker', ['namespace' => 'App\Controllers'], function($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::satker');
-
+                    
                     $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
                     $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
                     $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
@@ -224,6 +224,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('balai', '\Modules\Admin\Controllers\Dokumenpk::balai');
                 $routes->get('eselon2', '\Modules\Admin\Controllers\Dokumenpk::eselon2');
                 $routes->get('eselon1', '\Modules\Admin\Controllers\Dokumenpk::eselon1');
+                $routes->get('get-list-template-buat-dokumen/(:any)/(:any)', '\Modules\Admin\Controllers\Dokumenpk::getListTemplateBuatDokumen/$1/$2');
 
                 $routes->group('template', ['namespace' => 'App\Controllers'], function($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::template');

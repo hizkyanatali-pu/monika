@@ -11,6 +11,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     public function __construct()
     {
+        error_reporting(0);
         helper('dbdinamic');
         $session             = session();
         $this->user          = $session->get('userData');
@@ -186,7 +187,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Ln(4);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->MultiCell($this->sectionWidth, 5, $pdf->WriteHTML("Selaku atasan langsung <b>PIHAK PERTAMA</b>. selanjutnya disebut <b>PIHAK KEDUA</b>"), 0, 'J');
-        $pdf->Ln(5);
+        $pdf->Ln(3);
 
 
         /** Isi */
