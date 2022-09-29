@@ -190,6 +190,7 @@
                                     </a>
 
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item _add-form-row" data-type="full_title">Full Title</a>
                                         <a class="dropdown-item _add-form-row" data-type="section_title">Section Title</a>
                                         <a class="dropdown-item _add-form-row" data-type="form">Baris Form</a>
                                     </div>
@@ -459,6 +460,10 @@
         let row = ''
 
         switch ($(this).data('type')) {
+            case 'full_title':
+                row = render_rowFullTitleSection()
+                break;
+
             case 'section_title':
                 row = render_rowTitleSection()
                 break;
@@ -872,10 +877,17 @@
         let indexDataRumus = 0
         _data.rows.forEach((data, key) => {
             if (data.type == "section_title") {
-                element_formTable.append(render_rowTitleSection({
-                    prefixTitleSection: data.prefix_title,
-                    titleSection: data.title
-                }))
+                if (data.prefix_title == 'full') {
+                    element_formTable.append(render_rowFullTitleSection({
+                        titleSection: data.title
+                    }))
+                }
+                else {
+                    element_formTable.append(render_rowTitleSection({
+                        prefixTitleSection: data.prefix_title,
+                        titleSection: data.title
+                    }))
+                }
             }
             else {
                 element_formTable.append(render_rowForm({
@@ -979,6 +991,30 @@
         })
 
         return tempArrayForm
+    }
+
+
+
+    function render_rowFullTitleSection(params = {
+        titleSection      : ''
+    }) {
+        let titleSection       = params.hasOwnProperty('titleSection') ? params.titleSection : ''
+
+        return `
+            <tr class="_title-section">
+                <td colspan="3" class="bg-secondary" style="position: relative">
+                    <div class="d-flex justify-content-start">
+                        <select class="form-control d-none" style="width: 80px" name="prefix-title-section">
+                            <option value="full" selected="selected">full</option>
+                        </select>
+                        <input type="text" class="form-control _title-section" placeholder="Masukkan full title section" value="${titleSection}">
+                    </div>
+                    <button class="btn btn-danger rounded-circle _remove-row-item">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </td>
+            </tr>
+        `
     }
 
 

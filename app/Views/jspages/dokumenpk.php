@@ -904,14 +904,26 @@
                 case 'section_title':
                     rowNumber = 1
                     
-                    rows += `
-                        <tr>
-                            <td colspan="2"><strong>${ data.prefix_title ?? '-' }</strong></td>
-                            <td colspan="${colspanSectionTitle}">
-                                <strong>${ data.title }</strong>
-                            </td>
-                        </tr>
-                    `
+                    if (data.prefix_title == 'full') {
+                        rows += `
+                            <tr>
+                                <td colspan="${colspanSectionTitle + 2}">
+                                    <strong>${ data.title }</strong>
+                                </td>
+                            </tr>
+                        `
+                    }
+                    else {
+                        rows += `
+                            <tr>
+                                <td colspan="2"><strong>${ data.prefix_title ?? '-' }</strong></td>
+                                <td colspan="${colspanSectionTitle}">
+                                    <strong>${ data.title }</strong>
+                                </td>
+                            </tr>
+                        `
+                    }
+                    
                     break;
 
                 case 'form':

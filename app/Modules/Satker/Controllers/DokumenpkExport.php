@@ -346,7 +346,15 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                 $pdf->SetFillColor(233);
                 $width_cellTitle = 245;
-                $rowNUmber = $data['prefix_title'] ?? '-';
+
+                if ($data['prefix_title'] == 'full') {
+                    $rowNUmber = $data['title'];
+                    $data['title'] = '';
+                }
+                else {
+                    $rowNUmber = $data['prefix_title'] ?? '-';
+                }
+                
             }
 
 
