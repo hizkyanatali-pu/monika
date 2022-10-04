@@ -28,7 +28,7 @@
 
                 <div class="kt-section__content">
                     
-                    <div class="border-red-dashed" style="width: 90%; margin-left: 100px; margin-top: 100px;"></div>
+                    <div class="border-red-dashed" style="width: 58% !important; margin-left: 35vw; margin-top: 100px;"></div>
 
                     <div class="tree tree-program">
                         <ul>

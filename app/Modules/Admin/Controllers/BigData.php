@@ -62,9 +62,11 @@ class BigData extends \App\Controllers\BaseController
                 'pagu_rpm',
                 'pagu_sbsn',
                 'pagu_phln',
+                'pagu_total',
                 'real_rpm',
                 'real_sbsn',
                 'real_phln',
+                'real_total',
                 'progres_keuangan',
                 'progres_fisik'
             ],
