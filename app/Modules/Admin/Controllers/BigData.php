@@ -85,7 +85,7 @@ class BigData extends \App\Controllers\BaseController
 
 
     public function loadData() {
-        $limitData  = 100;
+        $limitData  = 10;
         $offsetData = $this->request->getGet('page') * $limitData;
         $filterData = $this->request->getGet('filter');
 
@@ -294,9 +294,19 @@ class BigData extends \App\Controllers\BaseController
         ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
         ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
 
+        switch ($_filterData['opsiData']) {
+            case '1':
+                $data->where('blokir', '0');
+                break;
+            
+            case '2':
+                $data->where('blokir', '1');
+                break;
+        }
+
         if (is_array($_filterData)) {
             foreach ($_filterData as $key => $value) {
-                $data->where($table.'.'.$key, $value);
+                if ($key != 'opsiData') $data->where($table.'.'.$key, $value);
             }
         }
 

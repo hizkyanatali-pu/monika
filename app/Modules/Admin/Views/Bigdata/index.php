@@ -100,6 +100,14 @@
         </div>
         <div class="modal-body">
             <div class="form-group">
+                <label for="exampleInputEmail1">Opsi Data</label>
+                <select class="form-control select2" name="filter-opsi-data">
+                    <option value="0" selected>Data Aktif & Di Blokir</option>
+                    <option value="1">Hanya Data Aktif</option>
+                    <option value="2">Hanya Data Di Blokir</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="exampleInputEmail1">Satker</label>
                 <select class="form-control select2" name="filter-satker">
                     <option value="*">Semua</option>
@@ -417,6 +425,7 @@
     function getFilterDataValue () {
         let value = {}
 
+        value.opsiData = $('select[name=filter-opsi-data]').val()
         if ($('select[name=filter-satker]').val() != '*') value.kdsatker = $('select[name=filter-satker]').val()
         if ($('select[name=filter-program]').val() != '*') value.kdprogram = $('select[name=filter-program').val()
         if ($('select[name=filter-kegiatan]').val() != '*') value.kdgiat = $('select[name=filter-kegiatan]').val()
