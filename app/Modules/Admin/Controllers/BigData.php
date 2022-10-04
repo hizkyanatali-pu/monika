@@ -85,7 +85,7 @@ class BigData extends \App\Controllers\BaseController
 
 
     public function loadData() {
-        $limitData  = 10;
+        $limitData  = 6;
         $offsetData = $this->request->getGet('page') * $limitData;
         $filterData = $this->request->getGet('filter');
 

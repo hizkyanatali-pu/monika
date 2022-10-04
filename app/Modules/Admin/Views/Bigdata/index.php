@@ -102,9 +102,9 @@
             <div class="form-group">
                 <label for="exampleInputEmail1">Opsi Data</label>
                 <select class="form-control select2" name="filter-opsi-data">
-                    <option value="0" selected>Data Aktif & Di Blokir</option>
+                    <option value="0">Data Aktif & Di Blokir</option>
                     <option value="1">Hanya Data Aktif</option>
-                    <option value="2">Hanya Data Di Blokir</option>
+                    <option value="2" selected>Hanya Data Di Blokir</option>
                 </select>
             </div>
             <div class="form-group">
@@ -408,6 +408,8 @@
                     if (params.hasOwnProperty('onSuccess')) params.onSuccess()
 
                     $('button[name=act-filter]').trigger('click')
+
+                    if ($('._total-data').text() == $('._showed-data').text())element_buttonLoadMore.addClass('d-none')
                 }
                 else {
                     element_tableWarningDataNotFound.removeClass('d-none')
