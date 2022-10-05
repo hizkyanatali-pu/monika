@@ -734,6 +734,7 @@
         }
 
         let render = `
+            <input type="text" data-inputmask="'mask': '99-9999999'" />
             <input type="hidden" name="revision_same_year" value="${inputValue_revisionSameYear}" />
 
             <div class="container-revision-alert">
@@ -880,6 +881,9 @@
         $('#make-dokumen').html(render)
 
         // $('select.select2').select2();
+        
+        $(":input").inputmask();
+        alert()
     }
 
 
@@ -957,7 +961,6 @@
                                         placeholder="Masukkan Nilai"
                                         value=""
                                         data-row-id="${ data.id }"
-                                        onkeypress="return isNumberKey(this, event);"
                                     >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>

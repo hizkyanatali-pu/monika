@@ -85,7 +85,7 @@ class BigData extends \App\Controllers\BaseController
 
 
     public function loadData() {
-        $limitData  = 6;
+        $limitData  = 1000;
         $offsetData = $this->request->getGet('page') * $limitData;
         $filterData = $this->request->getGet('filter');
 
@@ -300,7 +300,7 @@ class BigData extends \App\Controllers\BaseController
                 break;
             
             case '2':
-                $data->where('blokir', '1');
+                $data->where('blokir >', '0');
                 break;
         }
 
