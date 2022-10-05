@@ -654,6 +654,13 @@
                 `
             });
 
+            $('.container-revision-alert').append(`
+                <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                    <h5 class="alert-heading">Informasi</h5>
+                    <p>Pembuatan dokumen perjanjian kinerja bisa di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. List satker dapat dilihat pda bagian bawah form</p>
+                </div>
+            `)
+
             $('.container-revision-alert-bottom').html(`
                 <h6 class="mb-4 mt-4">Daftar satker yang telah membuat dokumen</h6>
                 <div class="list-group">
@@ -734,7 +741,7 @@
         }
 
         let render = `
-            <input type="text" data-inputmask="'mask': '99-9999999'" />
+            <input type="hidden" data-inputmask="'mask': '99-9999999'" />
             <input type="hidden" name="revision_same_year" value="${inputValue_revisionSameYear}" />
 
             <div class="container-revision-alert">
@@ -883,7 +890,6 @@
         // $('select.select2').select2();
         
         $(":input").inputmask();
-        alert()
     }
 
 
