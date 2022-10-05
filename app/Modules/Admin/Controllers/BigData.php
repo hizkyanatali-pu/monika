@@ -820,6 +820,11 @@ class BigData extends \App\Controllers\BaseController
                 'label'       => 'prognosis',
                 'widthColumn' => 150
             ],
+            [
+                'value'       => 'blokir',
+                'label'       => 'blokir',
+                'widthColumn' => 150
+            ]
         ];
     }
 }

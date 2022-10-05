@@ -104,7 +104,7 @@
                 <select class="form-control select2" name="filter-opsi-data">
                     <option value="0" selected>Semua Data</option>
                     <!-- <option value="1">Hanya Data Aktif</option> -->
-                    <option value="2">Di Blokir</option>
+                    <option value="2">Hanya Data Di Blokir</option>
                 </select>
             </div>
             <div class="form-group">
