@@ -50,7 +50,7 @@
                     <button class="btn btn-primary __admin-create-dokumen-opsi-users">
                         <i class="fas fa-plus"></i> Buat Dokumen
                     </button>
-                    <button class="btn btn-primary __opsi-template">
+                    <button class="btn btn-primary __opsi-template d-none">
                         <i class="fas fa-plus"></i> Buat Dokumen
                     </button>
                 </div>
