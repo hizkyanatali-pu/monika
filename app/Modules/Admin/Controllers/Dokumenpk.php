@@ -44,7 +44,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'sessionYear'              => $this->user['tahun'],
             'pageTitle'                => 'Dokumen Penjanjian Kinerja - Satker',
             'dokumenType'              => 'satker',
-            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->get()->getResult())
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'satker')->get()->getResult())
         ]);
     }
 
@@ -55,7 +55,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'sessionYear'              => $this->user['tahun'],
             'pageTitle'                => 'Dokumen Penjanjian Kinerja - Balai',
             'dokumenType'              => 'balai',
-            'createDokumen_userOption' => json_encode($this->tableBalai->select("balaiid as id, balai as title")->get()->getResult())
+            'createDokumen_userOption' => json_encode($this->tableBalai->select("balaiid as id, balai as title")->where('kota_penanda_tangan !=', '')->get()->getResult())
         ]);
     }
 
@@ -66,7 +66,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'sessionYear'              => $this->user['tahun'],
             'pageTitle'                => 'Dokumen Penjanjian Kinerja - Eselon 2',
             'dokumenType'              => 'eselon2',
-            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->get()->getResult())
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon2')->get()->getResult())
         ]);
     }
 
@@ -74,9 +74,10 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function eselon1()
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
+            'sessionYear'              => $this->user['tahun'],
             'pageTitle' => 'Dokumen Penjanjian Kinerja - Eselon1',
             'dokumenType' => 'eselon1',
-            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->get()->getResult())
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon1')->get()->getResult())
         ]);
     }
 
