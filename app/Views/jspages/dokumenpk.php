@@ -93,16 +93,16 @@
 
 
     $(document).on('change', 'input:checkbox[name=form-check-row]', function() {
-        let element_checkAll = $('input:checkbox[name=form-checkall-row]'),
-            isAllChecked = false,
+        let element_checkAll      = $('input:checkbox[name=form-checkall-row]'),
+            isAllChecked          = false,
             element_parentsColumn = $(this).parents('tr').find('td')
 
         if (!$(this).is(':checked')) {
             element_parentsColumn.addClass('disabled')
             element_parentsColumn.find('input').attr('readonly', 'readonly')
+            element_parentsColumn.find('input').val('')
         } else {
             element_parentsColumn.removeClass('disabled')
-
             element_parentsColumn.find('input').removeAttr('readonly')
         }
 
@@ -175,6 +175,8 @@
 
 
     element_btnSaveDokumen.on('click', function() {
+        saveDokumenValidation()
+        /*
         if (saveDokumenValidation()) {
             let formData = getFormValue();
             console.log(formData)
@@ -199,6 +201,7 @@
                 }
             })
         }
+        */
     })
 
 
@@ -519,7 +522,38 @@
 
 
     function saveDokumenValidation() {
-        let checkInputKegiatanAnggatan = true
+        let checkInputKegiatanAnggatan = true,
+            checkInputTarget = true,
+            checkInputOutcome = true
+
+        $('.__inputTemplateRow-target').each((index, element) => {
+            let element_rowParent = $(element).parents('tr').find('td'),
+                checlist          = element_rowParent.find('input:checkbox[name=form-check-row]').is(':checked')
+            
+            if (checlist) {
+                if ($(element).val() != '' && checkInputTarget == true) {
+                    checkInputTarget = true
+                } else {
+                    checkInputTarget = false
+                }
+            }
+        })
+
+        $('.__inputTemplateRow-outcome').each((index, element) => {
+            let element_rowParent = $(element).parents('tr').find('td'),
+                checlist          = element_rowParent.find('input:checkbox[name=form-check-row]').is(':checked')
+            
+            if (checlist) {
+                if (!$(element).parents('td').hasClass('d-none')) {
+                    if ($(element).val() != '' && checkInputOutcome == true) {
+                        checkInputOutcome = true
+                    } else {
+                        checkInputOutcome = false
+                    }
+                }
+            }
+        })
+
         $('input[name=kegiatan-anggaran]').each((index, element) => {
             if ($(element).val() > 0 && checkInputKegiatanAnggatan == true) {
                 checkInputKegiatanAnggatan = true
@@ -527,6 +561,25 @@
                 checkInputKegiatanAnggatan = false
             }
         })
+
+        if (checkInputTarget == false) {
+            Swal.fire(
+                'Peringatan',
+                'Terdapat target yang belum terisi',
+                'warning'
+            )
+            return false
+        }
+
+        if (checkInputOutcome == false) {
+            Swal.fire(
+                'Peringatan',
+                'Terdapat outcome yang belum terisi',
+                'warning'
+            )
+            return false
+        }
+
         if (checkInputKegiatanAnggatan == false) {
             Swal.fire(
                 'Peringatan',
