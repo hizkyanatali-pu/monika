@@ -543,8 +543,9 @@
                         listDownload += `
                             <li class="list-group-item d-flex justify-content-between ${listClassName}">
                                 <div>
-                                    <h6>Part ${_index}</h6>
-                                    <small>monika-bigdata-part-${_index}.xlsx</small>
+                                    <!-- <h6>Part ${_index}</h6> -->
+                                    <!-- <small>monika-bigdata-part-${_index}.xlsx</small> -->
+                                    <h6>Download Big Data</h6>
                                 </div>
                                 <div class="d-flex align-items-center _icon-status">
                                 </div>

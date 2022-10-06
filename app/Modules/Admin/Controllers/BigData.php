@@ -127,8 +127,10 @@ class BigData extends \App\Controllers\BaseController
 
 
     public function downloadExcelBigData() {
-        $limitData    = 1000;
-        $offsetData   = ($this->request->getGet('fileNumber') - 1) * $limitData;
+        // $limitData    = 1000;
+        // $offsetData   = ($this->request->getGet('fileNumber') - 1) * $limitData;
+        $limitData    = null;
+        $offsetData   = $this->request->getGet('fileNumber') - 1;
         $filterData   = $this->request->getGet('filter');
         $masterColumn = $this->tableColumn();
 
@@ -204,7 +206,9 @@ class BigData extends \App\Controllers\BaseController
         ob_start();
         $writer = new Xlsx($spreadsheet);
         // $filename = $this->user['tahun'].'-Data Kegiatan-'.date('Y-m-d-His');
-        $filename = 'monika-bigdata-part-' . $this->request->getGet('fileNumber');
+
+        // $filename = 'monika-bigdata-part-' . $this->request->getGet('fileNumber');
+        $filename = 'monika-bigdata-'.date('Y-m-d-His');
 
         // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         // header('Content-Disposition: attachment;filename=' . $filename . '.xlsx');
@@ -228,7 +232,7 @@ class BigData extends \App\Controllers\BaseController
         $filterData = $this->request->getGet('filter');
 
         return $this->respond([
-            'totalFile' => ceil($this->getData($filterData, null, null, true)['total'] / 1000)
+            'totalFile' => 1 //ceil($this->getData($filterData, null, null, true)['total'] / 1000)
         ], 200);
     }
 
@@ -821,9 +825,11 @@ class BigData extends \App\Controllers\BaseController
                 'widthColumn' => 150
             ],
             [
-                'value'       => 'blokir',
-                'label'       => 'blokir',
-                'widthColumn' => 150
+                'value'          => 'blokir',
+                'label'          => 'blokir',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
             ]
         ];
     }
