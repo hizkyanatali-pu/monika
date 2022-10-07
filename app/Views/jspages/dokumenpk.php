@@ -794,7 +794,6 @@
         }
 
         let render = `
-            <input type="hidden" data-inputmask="'mask': '99-9999999'" />
             <input type="hidden" name="revision_same_year" value="${inputValue_revisionSameYear}" />
 
             <div class="container-revision-alert">
@@ -941,8 +940,6 @@
         $('#make-dokumen').html(render)
 
         // $('select.select2').select2();
-        
-        $(":input").inputmask();
     }
 
 
