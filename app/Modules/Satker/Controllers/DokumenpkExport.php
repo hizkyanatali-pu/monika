@@ -169,7 +169,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Pertama
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak1_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . 'KEPALA ' . $dataDokumen['pihak1_initial']);
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $prefixKepala_pihah1 . $dataDokumen['pihak1_initial']);
 
         // Text 2
         $pdf->Ln(4);
@@ -443,13 +443,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
         /** TTD Section */
         $pdf->Ln(10);
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
-        $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';    
+        $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
         $dokumenKopTitle1_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
             'person1Title' => $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial'],
             'person1Name'  => $dataDokumen['pihak2_ttd'],
             'person2Date'  => $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear,
-            'person2Title' => $jabatanPihak1_isPlt . 'KEPALA ' . $dokumenKopTitle1_prefix . $dataDokumen['pihak1_initial'],
+            'person2Title' => $jabatanPihak1_isPlt . $dokumenKopTitle1_prefix . $dataDokumen['pihak1_initial'],
             'person2Name'  => $dataDokumen['pihak1_ttd'],
         ]);
     }

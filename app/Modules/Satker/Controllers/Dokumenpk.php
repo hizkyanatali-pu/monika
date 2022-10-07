@@ -251,16 +251,16 @@ class Dokumenpk extends \App\Controllers\BaseController
         $jabatanPihak2 = '';
 
         if ($session_userType == "satker") {
-            $pihak1 = $session_satkerNama;
-            $pihak2 = $session_balaiNama;
+            $dataSatker = $this->satker->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('satkerid', $session_satkerId)->get()->getRow();
 
-            $dataSatker = $this->satker->select("kota_penanda_tangan")->where('satkerid', $session_satkerId)->get()->getRow();
+            $pihak1 = $dataSatker->jabatan_penanda_tangan_pihak_1;
+            $pihak2 = $dataSatker->jabatan_penanda_tangan_pihak_2;
             $kotaNama = $dataSatker->kota_penanda_tangan;
         }
         elseif ($session_userType == "balai") {
-            $pihak1 = $session_balaiNama;
+            $dataBalai = $this->balai->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('balaiid', $session_balaiId)->get()->getRow();
 
-            $dataBalai = $this->balai->select("jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('balaiid', $session_balaiId)->get()->getRow();
+            $pihak1 = $dataBalai->jabatan_penanda_tangan_pihak_1;
             $kotaNama = $dataBalai->kota_penanda_tangan;
             $jabatanPihak2 = $dataBalai->jabatan_penanda_tangan_pihak_2;
         }
@@ -448,17 +448,21 @@ class Dokumenpk extends \App\Controllers\BaseController
         ];
        
         if ($session_userType == "satker") {
+            $dataSatker = $this->satker->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('satkerid', $session_satkerId)->get()->getRow();
+
             $inserted_dokumenSatker['pihak1_id']      = $session_satkerId;
-            $inserted_dokumenSatker['pihak1_initial'] = $session_satkerNama;
+            $inserted_dokumenSatker['pihak1_initial'] = $dataSatker->jabatan_penanda_tangan_pihak_1;
             $inserted_dokumenSatker['pihak2_id']      = $session_balaiId;
-            $inserted_dokumenSatker['pihak2_initial'] = $session_balaiNama;
+            $inserted_dokumenSatker['pihak2_initial'] = $dataSatker->jabatan_penanda_tangan_pihak_2;
             $inserted_dokumenSatker['dokumen_type']   = $dataTemplateDokumen->type;
             $inserted_dokumenSatker['balaiid']        = $session_balaiId;
             $inserted_dokumenSatker['satkerid']       = $session_satkerId;
         }
         elseif ($session_userType == "balai") {
+            $dataBalai = $this->balai->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('balaiid', $session_balaiId)->get()->getRow();
+
             $inserted_dokumenSatker['pihak1_id']      = $session_balaiId;
-            $inserted_dokumenSatker['pihak1_initial'] = $session_balaiNama;
+            $inserted_dokumenSatker['pihak1_initial'] = $dataBalai->jabatan_penanda_tangan_pihak_1;
             $inserted_dokumenSatker['dokumen_type']   = "balai";
             $inserted_dokumenSatker['balaiid']        = $session_balaiId;
         }

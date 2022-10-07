@@ -183,8 +183,6 @@
 
 
     element_btnSaveDokumen.on('click', function() {
-        saveDokumenValidation()
-        /*
         if (saveDokumenValidation()) {
             let formData = getFormValue();
             console.log(formData)
@@ -209,7 +207,6 @@
                 }
             })
         }
-        */
     })
 
 
@@ -391,8 +388,8 @@
                     $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
                     $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
 
-                    $('.title-ttd-pihak1').text('KEPALA ' + res.dokumen.pihak1_initial)
-                    $('.title-ttd-pihak2').text('KEPALA ' + res.dokumen.pihak2_initial)
+                    $('.title-ttd-pihak1').text(res.dokumen.pihak1_initial)
+                    $('.title-ttd-pihak2').text(res.dokumen.pihak2_initial)
 
                     if ($('input[name=ttd-pihak2-jabatan]').length) {
                         $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
@@ -917,7 +914,7 @@
                         </div>
                         <div>
                             <small class="title-ttd-pihak1">
-                                KEPALA ${_data.penandatangan.pihak1}
+                                ${_data.penandatangan.pihak1}
                             </small>
                         </div>
                         <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required />
