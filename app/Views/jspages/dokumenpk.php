@@ -1,6 +1,7 @@
 
 <script>
-    var element_modalForm = $('#modalForm'),
+    var date = new Date(),
+        element_modalForm = $('#modalForm'),
         element_modalDialog = element_modalForm.find('.modal-dialog'),
         element_modalFooter = element_modalForm.find('.modal-footer'),
         element_modalFormChooseTemplate = element_modalForm.find('#choose-template'),
@@ -131,6 +132,13 @@
     
     
     $(document).on('change', 'select[name=created-tahun]', function() {
+        if ($(this).val() == date.getFullYear()) {
+            $('._option-month-to-hide').addClass('d-none')
+        }
+        else {
+            $('._option-month-to-hide').removeClass('d-none')
+        }
+
         if ($(this).data('action-target') == 'create') {
             $.ajax({
                 url: "<?php echo site_url('dokumenpk/check-dokumen-same-year-exist/') ?>" + $(this).val() + '/' + $(this).data('template-id'),
@@ -1117,7 +1125,14 @@
         let renderOptions = ''
 
         _data.forEach((data, key) => {
-            renderOptions += `<option value='${key+1}'>${data}</option>`
+            let isSelected = key == date.getMonth() ? 'selected' : ''
+                monthToHide = key > date.getMonth() ? '_option-month-to-hide d-none' : ''
+            
+            renderOptions += `
+                <option class="${monthToHide}" value='${key+1}' ${isSelected}>
+                    ${data}
+                </option>
+            `
         });
 
         return renderOptions
