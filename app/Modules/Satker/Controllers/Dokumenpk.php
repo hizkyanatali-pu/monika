@@ -155,20 +155,37 @@ class Dokumenpk extends \App\Controllers\BaseController
         
         if ($_satkerId == 'all') {
             $queryDataDokumen->where('dokumenpk_satker.balaiid', $this->user['balaiid']);
+
+            $dataTemplate = [];
+            $isCanCreated = false;
         }
         else {
             $queryDataDokumen->where('dokumenpk_satker.satkerid', $_satkerId);
+
+            $dataTemplate = $this->templateDokumen->select('dokumen_pk_template.*')
+            ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
+            ->where('dokumen_pk_template.status', '1')
+            ->where('dokumen_pk_template_akses.rev_id', $_satkerId)
+            // ->where('dokumen_pk_template.type', $template_type)
+            ->where('dokumen_pk_template_akses.rev_table', 'm_satker')
+            ->where("deleted_at is null")
+            ->groupBy('dokumen_pk_template.id')
+            ->get()->getResult();
+
+            $isCanCreated = true;
         }
 
         $dataDokumen = $queryDataDokumen->get()->getResult();
+
+        
 
         return view('Modules\Satker\Views\Dokumenpk.php', [
             'pageTitle' => 'Perjanjian Kinerja Satker',
 
             'sessionYear'       => $this->user['tahun'],
-            'templateDokumen'   => [],
-            'templateAvailable' => false,
-            'isCanCreated'      => false,
+            'templateDokumen'   => $dataTemplate,
+            'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
+            'isCanCreated'      => $isCanCreated,
 
             'filterSatker'          => $this->satker->notLike('satker', 'BALAI')->where('balaiid', $this->user['balaiid'])->get()->getResult(),
             'filterSatker_selected' => $_satkerId,

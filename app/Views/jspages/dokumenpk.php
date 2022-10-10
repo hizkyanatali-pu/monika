@@ -712,19 +712,21 @@
                 `
             });
 
-            $('.container-revision-alert').append(`
-                <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                    <h5 class="alert-heading">Informasi</h5>
-                    <p>Pembuatan dokumen perjanjian kinerja bisa di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. List satker dapat dilihat pda bagian bawah form</p>
-                </div>
-            `)
+            if (params.data.template.type != 'satker') {
+                $('.container-revision-alert').append(`
+                    <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                        <h5 class="alert-heading">Informasi</h5>
+                        <p>Pembuatan dokumen perjanjian kinerja bisa di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. List satker dapat dilihat pda bagian bawah form</p>
+                    </div>
+                `)
 
-            $('.container-revision-alert-bottom').html(`
-                <h6 class="mb-4 mt-4">Daftar satker yang telah membuat dokumen</h6>
-                <div class="list-group">
-                    ${renderCheckListSatkerBalai}
-                </div>
-            `)
+                $('.container-revision-alert-bottom').html(`
+                    <h6 class="mb-4 mt-4">Daftar satker yang telah membuat dokumen</h6>
+                    <div class="list-group">
+                        ${renderCheckListSatkerBalai}
+                    </div>
+                `)
+            } 
         }
     }
 
