@@ -214,21 +214,30 @@ $title = $title ?? '';
             var charCode = (evt.which) ? evt.which : evt.keyCode;
             if (charCode == 46 || charCode == 44) {
                 if (txt.value.indexOf('.') === -1 && txt.value.indexOf(',') === -1) {
+                    console.log(1)
                     return true;
                 } else {
+                    console.log(2)
                     return false;
                 }
             } else {
                 let offsetComma = txt.value.indexOf('.') === -1 ? txt.value.indexOf(',') : txt.value.indexOf('.')
                 
                 if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                    console.log(3)
                     return false;
                 }
 
                 if ((txt.value.length - offsetComma) > 3) {
-                    return false
+                    if (offsetComma > 0) {
+                        return false;
+                    }
+                    else {
+                        return true
+                    }
                 }
             }
+            
             return true;
         }
 
