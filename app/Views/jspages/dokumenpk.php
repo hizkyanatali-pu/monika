@@ -712,7 +712,7 @@
                 `
             });
 
-            if (params.data.template.type != 'satker') {
+            if (params.data.template.type == 'master-balai' || params.data.template.type == 'balai') {
                 $('.container-revision-alert').append(`
                     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                         <h5 class="alert-heading">Informasi</h5>
