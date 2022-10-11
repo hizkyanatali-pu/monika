@@ -191,7 +191,9 @@ class Dokumenpk extends \App\Controllers\BaseController
             'filterSatker_selected' => $_satkerId,
 
             'dataDokumen'   => $dataDokumen,
-            'dokumenStatus' => $this->dokumenStatus
+            'dokumenStatus' => $this->dokumenStatus,
+
+            'balaiCreateForSatker' =>  $_satkerId
         ]);
     }
 
@@ -312,7 +314,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                     $outcomeRumus = 0;
                     foreach ($targetRumusOutcome as $keyOutcome => $dataOutcome) {
-                        $outcomeRumus += $dataOutcome ? $dataOutcome->outcome_value : 0;
+                        $outcomeRumus += $dataOutcome ? ($dataOutcome->outcome_value != '' ? $dataOutcome->outcome_value : 0) : 0;
                     }
 
                     if ($targetDefualtValue == '' && $outcomeRumus > 0) $targetDefualtValue = 0;
@@ -429,14 +431,16 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function create()
     {
-        if ($this->user['user_type'] == 'other') {
-            $createByAdmin = $this->session->get('createDokumenByAdmin');
+        $createByAdmin = $this->session->get('createDokumenByAdmin');
 
+        if ($this->user['user_type'] == 'other' || isset($createByAdmin)) {
             $session_userType   = $createByAdmin['byAdmin_user_type'];
             $session_satkerNama = $createByAdmin['byAdmin_satker_nama'] ?? null;
             $session_balaiNama  = $createByAdmin['byAdmin_balai_nama'] ?? null;
             $session_satkerId   = $createByAdmin['byAdmin_satker_id'] ?? null;
             $session_balaiId    = $createByAdmin['byAdmin_balai_id'] ?? null;
+
+            $this->session->remove('createDokumenByAdmin');
         }
         else {
             $session_userType   = $this->user['user_type'];

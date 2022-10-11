@@ -40,7 +40,14 @@
 
                 <div>
                     <?php if ($isCanCreated) { ?>
-                    <button class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>">
+                    <button 
+                        class="btn btn-primary __opsi-template" 
+                        data-available="<?php echo $templateAvailable ?>"
+
+                        <?php if (isset($balaiCreateForSatker)) { ?>
+                            data-balai-create-satker="<?php echo $balaiCreateForSatker ?>"
+                        <?php } ?>
+                    >
                         <i class="fas fa-plus"></i> Buat Dokumen
                     </button>
                     <?php } ?>

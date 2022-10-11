@@ -33,10 +33,38 @@
 
     $(document).on('click', '.__opsi-template', function() {
         if ($(this).data('available') == true) {
-            $('#modalForm').modal('show')
-            let elements_optionListDokumen = $('.__buat-dokumen-pilih-template')
-            if (elements_optionListDokumen.length == 1) {
-                elements_optionListDokumen.eq(0).trigger('click')
+            if ($(this).data('balai-create-satker') == undefined) {
+                $('#modalForm').modal('show')
+                let elements_optionListDokumen = $('.__buat-dokumen-pilih-template')
+                if (elements_optionListDokumen.length == 1) {
+                    elements_optionListDokumen.eq(0).trigger('click')
+                }
+            }
+            else {
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/get-list-template-buat-dokumen') ?>" + "/satker/" + $(this).data('balai-create-satker'),
+                    type: 'GET',
+                    success: (res) => {
+                        let renderListTemplate = ''
+
+                        res.templateDokumen.forEach((data, index) => {
+                            renderListTemplate += `
+                                <a 
+                                    class="list-group-item list-group-item-action __buat-dokumen-pilih-template" 
+                                    href="javascript:void(0)" 
+                                    data-id="${data.id}"
+                                >
+                                    ${data.title}
+                                </a>
+                            `
+                        });
+                        $('#choose-template').html(renderListTemplate)
+
+                        $('.__opsi-template').attr('data-available', res.templateAvailable)
+
+                        $('#modalForm').modal('show')
+                    }
+                })
             }
         } else {
             Swal.fire(
@@ -695,9 +723,12 @@
 
         if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
             // $('#modalForm').find('.container-revision-alert').addClass('d-none')
-            $('#modalForm').find('input').attr('disabled', 'disabled')
-            $('#modalForm').find('select').attr('disabled', 'disabled')
-            $('#modalForm').find('.modal-footer').addClass('d-none')
+
+            if (params.data.template.type == 'master-balai' || params.data.template.type == 'balai') {
+                $('#modalForm').find('input').attr('disabled', 'disabled')
+                $('#modalForm').find('select').attr('disabled', 'disabled')
+                $('#modalForm').find('.modal-footer').addClass('d-none')
+            }
 
             let renderCheckListSatkerBalai = ''
             params.data.balaiValidasiSatker.balaiChecklistSatker.forEach((data, index) => {
