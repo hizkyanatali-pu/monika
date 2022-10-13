@@ -636,6 +636,19 @@
     $(document).on('click', 'button[name=remove-temp-kegiatan]', function() {
         $(this).parents('tr').remove()
     })
+    
+    
+    
+    $(document).on('click', '.__tambah_row-form-rumus-item', function() {
+        render_rowForm_addRumus($(this).parents('td.rumus'))
+    })
+    
+    
+    
+    $(document).on('click', '.__remove-row-form-rumus-item', function() {
+        $(this).parent('._item-row-form-rumus').remove()
+    })
+
 
 
 
@@ -899,6 +912,15 @@
                 if (parseInt(data.rumusJml) > 0) {
                     $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
                     indexDataRumus++
+
+                    for (let index = 1; index < parseInt(data.rumusJml); index++) {
+                        $('.__tambah_row-form-rumus-item:last').trigger('click')
+                        
+                        $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
+                        indexDataRumus++
+                    }
+                    // $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
+                    // indexDataRumus++
                 }
             }
         })
@@ -1074,12 +1096,30 @@
                         </div>
                     </div>
 
+                    <div class="text-center mt-2">
+                        <a href="javascript:void(0)" class="__tambah_row-form-rumus-item">Tambah item</a>
+                    </div>
+
                     <button class="btn btn-danger rounded-circle _remove-row-item">
                         <i class="fas fa-times"></i>
                     </button>
                 </td>
             </tr>
         `
+    }
+    
+    
+    
+    function render_rowForm_addRumus(_parentElement) {
+        _parentElement.find('._container-row-form-rumus').append(`
+            <div class="text-center _item-row-form-rumus" style="position: relative">
+                <span class="badge badge-secondary"><i class="fas fa-plus"></i></span>
+                <input type="text" class="form-control _rumus" placeholder="Tulis Rumus" value="">
+                <button class="btn btn-dark rounded-circle __remove-row-form-rumus-item">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `)
     }
 
 

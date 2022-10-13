@@ -294,7 +294,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         ->where("status != ", 'revision')
         ->where("tahun = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
 
-        $templateRows = array_map(function($arr) use ($session_userType, $session_balaiId) {
+        $templateDokumen = $this->templateDokumen->where('id', $id)->get()->getRow();
+
+        $templateRows = array_map(function($arr) use ($session_userType, $session_balaiId, $templateDokumen) {
             $targetDefualtValue = '';
 
             if ($session_userType == "balai") {
@@ -321,6 +323,66 @@ class Dokumenpk extends \App\Controllers\BaseController
                     
                     if ($outcomeRumus > 0) $targetDefualtValue += $outcomeRumus;
                 }
+            }
+
+            if ($templateDokumen->type == 'eselon1') {
+                $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResultArray();
+                
+                $rumusRow         = implode(',', array_column($templateRowRumus, 'rumus'));
+                $rumusPersenBalai = false;
+
+                if (strpos($rumusRow, '%balai')) {
+                    $rumusPersenBalai = true;
+                    $rumusRow = str_replace(',%balai', '', $rumusRow);
+                }
+                
+                $targetBalaiRow = $this->dokumenSatker->select('
+                    dokumenpk_satker.id,
+                    dokumenpk_satker.template_id,
+                    dokumenpk_satker_rows.target_value,
+                    (
+                        SELECT 
+                            group_concat(rumus) 
+                        FROM 
+                            dokumen_pk_template_rowrumus 
+                        WHERE 
+                            dokumenpk_satker.template_id = dokumen_pk_template_rowrumus.template_id 
+                            AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus.rowId
+                    ) as rumus
+                ')
+                ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                ->where('dokumenpk_satker.status', 'setuju')
+                ->where('dokumenpk_satker_rows.is_checked', '1')
+                ->where('dokumenpk_satker.pihak2_initial', 'DIREKTUR JENDERAL SUMBER DAYA AIR')
+                ->where("
+                    (
+                        SELECT 
+                            group_concat(rumus) 
+                        FROM 
+                            dokumen_pk_template_rowrumus 
+                        WHERE 
+                            dokumenpk_satker.template_id = dokumen_pk_template_rowrumus.template_id 
+                            AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus.rowId
+                    ) = '$rumusRow'
+                ")
+                ->get()->getResult();
+                // print_r($targetBalaiRow);
+                // print_r($rumusRow);
+
+                $targetRumus = 0;
+                foreach ($targetBalaiRow as $key => $value) {
+                    $targetRumus += $value ? ($value->target_value != '' ? $value->target_value : 0) : 0;
+                }
+
+                if ($targetDefualtValue == '' && $targetRumus > 0) $targetDefualtValue = 0;
+                
+                if ($rumusPersenBalai) {
+                    $jumlahBalai = $this->balai->where('kota_penanda_tangan !=', '')->countAllResults();
+                    $targetRumus = round($targetRumus / $jumlahBalai, 3);
+                    $rumusPersenBalai = false;
+                }
+
+                if ($targetRumus > 0) $targetDefualtValue += $targetRumus;
             }
 
             return [
@@ -353,7 +415,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         
         return $this->respond([
             'dokumenExistSameYear' => $dokumenExistSameYear,
-            'template'             => $this->templateDokumen->where('id', $id)->get()->getRow(),
+            'template'             => $templateDokumen,
             'templateRow'          => $templateRows,
             'templateKegiatan'     => $this->templateKegiatan->where('template_id', $id)->get()->getResult(),
             'templateInfo'         => $this->templateInfo->where('template_id', $id)->get()->getResult(),
