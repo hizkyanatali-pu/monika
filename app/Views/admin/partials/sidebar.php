@@ -279,7 +279,7 @@ $request = \Config\Services::request();
                                 </i>
                                 <span class="kt-menu__link-text">Satker</span>
                             </a> -->
-                            <a href="/maintenance_page.html" class="kt-menu__link ">
+                            <a href="/maintenance_page.php" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                     <span></span>
                                 </i>
