@@ -1,4 +1,3 @@
-
 <script>
     var date = new Date(),
         element_modalForm = $('#modalForm'),
@@ -22,9 +21,9 @@
             prepareForm_reset();
         })
     })
-    
-    
-    
+
+
+
     $(document).on('change', 'select[name=filter-satker]', function() {
         window.location.href = "<?php echo base_url('dokumenpk-balai-satker') ?>/" + $(this).val()
     })
@@ -39,8 +38,7 @@
                 if (elements_optionListDokumen.length == 1) {
                     elements_optionListDokumen.eq(0).trigger('click')
                 }
-            }
-            else {
+            } else {
                 $.ajax({
                     url: "<?php echo site_url('dokumenpk/get-list-template-buat-dokumen') ?>" + "/satker/" + $(this).data('balai-create-satker'),
                     type: 'GET',
@@ -122,8 +120,8 @@
 
 
     $(document).on('change', 'input:checkbox[name=form-check-row]', function() {
-        let element_checkAll      = $('input:checkbox[name=form-checkall-row]'),
-            isAllChecked          = false,
+        let element_checkAll = $('input:checkbox[name=form-checkall-row]'),
+            isAllChecked = false,
             element_parentsColumn = $(this).parents('tr').find('td')
 
         if (!$(this).is(':checked')) {
@@ -149,21 +147,21 @@
         clearTimeout(timerInput)
 
         timerInput = setTimeout(() => {
-            let totalAnggaran = 0
+            let totalAnggaran = 0;
             $('input[name=kegiatan-anggaran]').each((key, element) => {
-                totalAnggaran += parseInt($(element).val())
+
+                totalAnggaran += parseFloat($(element).val().replaceAll(".", '').replaceAll(',', '.'))
             })
-            $('input[name=total-anggaran]').val(totalAnggaran)
-        }, 1200);
+            $('input[name=total-anggaran]').val(formatRupiah(totalAnggaran.toString().replaceAll('.', ',')))
+        }, 500);
     })
-    
-    
-    
+
+
+
     $(document).on('change', 'select[name=created-tahun]', function() {
         if ($(this).val() == date.getFullYear()) {
             $('._option-month-to-hide').addClass('d-none')
-        }
-        else {
+        } else {
             $('._option-month-to-hide').removeClass('d-none')
         }
 
@@ -186,13 +184,12 @@
                         `
 
                         render_prepare_btnSubmitToRevision({
-                            dokumenID      : res.dokumenExistSameYear.last_dokumen_id,
+                            dokumenID: res.dokumenExistSameYear.last_dokumen_id,
                             dokumenMasterID: res.dokumenExistSameYear.revision_master_dokumen_id,
-                            buttonType     : 'warning',
-                            buttonText     : 'Buat Revisi'
+                            buttonType: 'warning',
+                            buttonText: 'Buat Revisi'
                         });
-                    }
-                    else {
+                    } else {
                         render_reset_btnSubmitToRevision()
                     }
 
@@ -313,7 +310,7 @@
 
         //             if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
         //             if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
-                    
+
         //             $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
         //             $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
         //             $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
@@ -341,9 +338,9 @@
         //     })
         // })
     })
-    
-    
-    
+
+
+
     $(document).on('click', '.__lihat-dokumen', function() {
         prepareRevisiDocument({
             dataId: $(this).data('id'),
@@ -365,7 +362,7 @@
     }) {
         const promiseGetTemplate = new Promise((resolve, reject) => {
             var templateId = params.templateId,
-                dataId     = params.dataId
+                dataId = params.dataId
 
             $.ajax({
                 url: "<?php echo site_url('dokumenpk/get-template/') ?>" + templateId,
@@ -373,8 +370,8 @@
                 success: (res) => {
                     preapreForm_afterChooseTemplate({
                         templateId: templateId,
-                        data      : res,
-                        target    : 'koreksi'
+                        data: res,
+                        target: 'koreksi'
                     })
 
                     element_modalFormTitle.html(`
@@ -408,11 +405,11 @@
                     })
 
                     res.kegiatan.forEach((data, key) => {
-                        let elementInput_target = $('tr[data-kegiatan-id='+data.id+']').find('input[name=kegiatan-anggaran]')
-                        elementInput_target.val(data.anggaran)
+                        let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
+                        elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
                     })
 
-                    $('input[name=total-anggaran]').val(res.dokumen.total_anggaran)
+                    $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
                     $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
                     $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
 
@@ -425,7 +422,7 @@
 
                     if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
                     if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
-                    
+
                     $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
                     $('input[name=created-kota-nama]').val(res.dokumen.kota_nama)
                     $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
@@ -532,20 +529,20 @@
         })
 
         let inputValue = {
-            csrf_test_name  : $('input[name=csrf_test_name]').val(),
+            csrf_test_name: $('input[name=csrf_test_name]').val(),
             revisionSameYear: $('input[name=revision_same_year]').val(),
-            templateID      : element_btnSaveDokumen.data('template-id'),
-            rows            : rows,
-            kegiatan        : kegiatan,
-            totalAnggaran   : $('input[name=total-anggaran]').val(),
-            ttdPihak1       : $('input[name=ttd-pihak1]').val(),
-            ttdPihak1_isPlt : $('input:checkbox[name=ttd-pihak1-plt]').is(':checked') ? '1': '0',
-            ttdPihak2       : $('input[name=ttd-pihak2]').val(),
-            ttdPihak2_isPlt : $('input:checkbox[name=ttd-pihak2-plt]').is(':checked') ? '1': '0',
-            kota            : $('select[name=created-kota]').val(),
-            kotaNama        : $('input[name=created-kota-nama]').val(),
-            bulan           : $('select[name=created-bulan]').val(),
-            tahun           : $('select[name=created-tahun]').val()
+            templateID: element_btnSaveDokumen.data('template-id'),
+            rows: rows,
+            kegiatan: kegiatan,
+            totalAnggaran: $('input[name=total-anggaran]').val(),
+            ttdPihak1: $('input[name=ttd-pihak1]').val(),
+            ttdPihak1_isPlt: $('input:checkbox[name=ttd-pihak1-plt]').is(':checked') ? '1' : '0',
+            ttdPihak2: $('input[name=ttd-pihak2]').val(),
+            ttdPihak2_isPlt: $('input:checkbox[name=ttd-pihak2-plt]').is(':checked') ? '1' : '0',
+            kota: $('select[name=created-kota]').val(),
+            kotaNama: $('input[name=created-kota-nama]').val(),
+            bulan: $('select[name=created-bulan]').val(),
+            tahun: $('select[name=created-tahun]').val()
         }
         if ($('input[name=ttd-pihak2-jabatan]').length) inputValue.ttdPihak2Jabatan = $('input[name=ttd-pihak2-jabatan]').val()
 
@@ -561,8 +558,8 @@
 
         $('.__inputTemplateRow-target').each((index, element) => {
             let element_rowParent = $(element).parents('tr').find('td'),
-                checlist          = element_rowParent.find('input:checkbox[name=form-check-row]').is(':checked')
-            
+                checlist = element_rowParent.find('input:checkbox[name=form-check-row]').is(':checked')
+
             if (checlist) {
                 if ($(element).val() != '' && checkInputTarget == true) {
                     checkInputTarget = true
@@ -574,8 +571,8 @@
 
         $('.__inputTemplateRow-outcome').each((index, element) => {
             let element_rowParent = $(element).parents('tr').find('td'),
-                checlist          = element_rowParent.find('input:checkbox[name=form-check-row]').is(':checked')
-            
+                checlist = element_rowParent.find('input:checkbox[name=form-check-row]').is(':checked')
+
             if (checlist) {
                 if (!$(element).parents('td').hasClass('d-none')) {
                     if ($(element).val() != '' && checkInputOutcome == true) {
@@ -588,7 +585,8 @@
         })
 
         $('input[name=kegiatan-anggaran]').each((index, element) => {
-            if ($(element).val() > 0 && checkInputKegiatanAnggatan == true) {
+
+            if ($(element).val().replaceAll(".", '').replaceAll(',', '.') > 0 && checkInputKegiatanAnggatan == true) {
                 checkInputKegiatanAnggatan = true
             } else {
                 checkInputKegiatanAnggatan = false
@@ -700,10 +698,10 @@
 
 
     function preapreForm_afterChooseTemplate(params = {
-        templateId   : '',
+        templateId: '',
         templateTitle: '',
-        data         : {},
-        target       : ''
+        data: {},
+        target: ''
     }) {
         element_btnSaveDokumen.attr('data-template-id', params.templateId)
         element_modalDialog.addClass('modal-xl')
@@ -718,7 +716,7 @@
                 <small>${params.templateTitle}</small>
             `)
         }
-        
+
         renderFormTemplate(params.data, params.target)
 
         if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
@@ -757,7 +755,7 @@
                         ${renderCheckListSatkerBalai}
                     </div>
                 `)
-            } 
+            }
         }
     }
 
@@ -769,7 +767,7 @@
         buttonType: '',
         buttonText: ''
     }) {
-        let buttonType = params.hasOwnProperty('buttonType') ? 'btn-'+params.buttonType : 'btn-danger',
+        let buttonType = params.hasOwnProperty('buttonType') ? 'btn-' + params.buttonType : 'btn-danger',
             buttonText = params.hasOwnProperty('buttonText') ? params.buttonText : 'Simpan Koreksi'
 
         element_btnSaveDokumen.attr('data-dokumen-id', params.dokumenID)
@@ -793,19 +791,19 @@
 
 
     function renderFormTemplate(_data, _target) {
-        let template                          = _data.template,
-            templateExtraData                 = _data.templateExtraData,
-            render_rowsForm                   = renderFormTemplate_rowTable(_data.templateRow, _data.template.type),
-            render_rowKegiatan                = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
-            render_listInfo                   = renderFormTemplate_listInfo(_data.templateInfo),
-            render_ttdPihak2                  = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2, templateExtraData.jabatanPihak2),
-            render_opsiKota                   = renderFormTemplate_opsiKota(_data.kota),
-            render_opsiBulan                  = renderFormTemplate_opsiBulan(_data.bulan),
-            render_opsiTahun                  = renderFormTemplate_opsiTahun(_data.tahun),
+        let template = _data.template,
+            templateExtraData = _data.templateExtraData,
+            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type),
+            render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
+            render_listInfo = renderFormTemplate_listInfo(_data.templateInfo),
+            render_ttdPihak2 = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2, templateExtraData.jabatanPihak2),
+            render_opsiKota = renderFormTemplate_opsiKota(_data.kota),
+            render_opsiBulan = renderFormTemplate_opsiBulan(_data.bulan),
+            render_opsiTahun = renderFormTemplate_opsiTahun(_data.tahun),
             render_warningDokumenYearRevisoin = '',
-            inputValue_revisionSameYear       = 0,
-            classDNoneOutcome                 = ''
-        
+            inputValue_revisionSameYear = 0,
+            classDNoneOutcome = ''
+
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
             render_warningDokumenYearRevisoin = `
                 <div class="bg-warning text-white pt-3 pr-3 pb-1 pl-3" role="alert">
@@ -816,17 +814,17 @@
             inputValue_revisionSameYear = 1
 
             render_prepare_btnSubmitToRevision({
-                dokumenID      : _data.dokumenExistSameYear.last_dokumen_id,
+                dokumenID: _data.dokumenExistSameYear.last_dokumen_id,
                 dokumenMasterID: _data.dokumenExistSameYear.revision_master_dokumen_id,
-                buttonType     : 'warning',
-                buttonText     : 'Buat Revisi'
+                buttonType: 'warning',
+                buttonText: 'Buat Revisi'
             });
         }
 
         if (
-            _data.template.type == 'eselon1'
-            || _data.template.type == 'eselon2'
-            || _data.template.type == 'master-balai'
+            _data.template.type == 'eselon1' ||
+            _data.template.type == 'eselon2' ||
+            _data.template.type == 'master-balai'
         ) {
             classDNoneOutcome = 'd-none'
         }
@@ -884,9 +882,19 @@
                             </thead>
                             <tbody>
                                 ${render_rowKegiatan}
+                                <tr>
+                                <td class="align-middle"> <strong>Total Anggaran</strong></td>
+                                <td class="align-middle"> <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Rp. </span>
+                            </div>
+                            <input type="text" class="form-control" style="background: #F7F8FA" name="total-anggaran" placeholder="Nominal Total Anggaran" readonly/>
+                        </div></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
+                    
                     <div class="mt-4 pt-4">
                         <h6 class="mb-4">Dokumen Dibuat Di</h6>
                         <div class="form-group row d-none">
@@ -900,7 +908,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Kota</label>
                             <div class="col-sm-5">
-                                <input class="form-control" name="created-kota-nama" value="${ templateExtraData.kotaNama }" readonly />
+                                <input class="form-control"  style="background: #F7F8FA" name="created-kota-nama" value="${ templateExtraData.kotaNama }" readonly />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -922,17 +930,7 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div class="form-group mt-4">
-                        <label>
-                            <strong>Total Anggaran</strong>
-                        </label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Rp. </span>
-                            </div>
-                            <input class="form-control" name="total-anggaran" placeholder="Nominal Total Anggaran" readonly/>
-                        </div>
-                    </div>
+                   
                     <div class="form-group mt-4 pt-4">
                         <div class="d-flex justify-content-between">
                             <label>
@@ -983,15 +981,15 @@
 
 
     function renderFormTemplate_rowTable(_data, _templateType) {
-        let rows                = '',
-            rowNumber           = 1,
+        let rows = '',
+            rowNumber = 1,
             colspanSectionTitle = 3,
-            classDNoneOutcome   = ''
+            classDNoneOutcome = ''
 
         if (
-            _templateType == 'eselon1'
-            || _templateType == 'eselon2' 
-            || _templateType == 'master-balai'
+            _templateType == 'eselon1' ||
+            _templateType == 'eselon2' ||
+            _templateType == 'master-balai'
         ) {
             colspanSectionTitle = 2
             classDNoneOutcome = 'd-none'
@@ -1001,7 +999,7 @@
             switch (data.type) {
                 case 'section_title':
                     rowNumber = 1
-                    
+
                     if (data.prefix_title == 'full') {
                         rows += `
                             <tr>
@@ -1010,8 +1008,7 @@
                                 </td>
                             </tr>
                         `
-                    }
-                    else {
+                    } else {
                         rows += `
                             <tr>
                                 <td colspan="2"><strong>${ data.prefix_title ?? '-' }</strong></td>
@@ -1021,7 +1018,7 @@
                             </tr>
                         `
                     }
-                    
+
                     break;
 
                 case 'form':
@@ -1055,6 +1052,7 @@
                                         placeholder="Masukkan Nilai"
                                         value=""
                                         data-row-id="${ data.id }"
+                                        onkeypress="return isNumberKey(this, event);"
                                     >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>
@@ -1092,7 +1090,8 @@
                                 class="form-control" 
                                 name="kegiatan-anggaran" 
                                 value="0" 
-                                placeholder="Nominal Anggaran"
+                                placeholder="Nominal Anggaran" 
+                                onkeyup="return this.value = formatRupiah(this.value, '')"
                             >
                         </div>
                     </td>
@@ -1136,9 +1135,9 @@
             <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" />
         `
     }
-    
-    
-    
+
+
+
     function renderFormTemplate_opsiKota(_dataKota) {
         let renderOptions = ''
 
@@ -1148,16 +1147,16 @@
 
         return renderOptions
     }
-    
-    
-    
+
+
+
     function renderFormTemplate_opsiBulan(_data) {
         let renderOptions = ''
 
         _data.forEach((data, key) => {
             let isSelected = key == date.getMonth() ? 'selected' : ''
-                monthToHide = key > date.getMonth() ? '_option-month-to-hide d-none' : ''
-            
+            monthToHide = key > date.getMonth() ? '_option-month-to-hide d-none' : ''
+
             renderOptions += `
                 <option class="${monthToHide}" value='${key+1}' ${isSelected}>
                     ${data}
@@ -1167,13 +1166,13 @@
 
         return renderOptions
     }
-    
-    
-    
+
+
+
     function renderFormTemplate_opsiTahun(_data) {
         let renderOptions = ''
 
-        for (let iTahun = (parseInt(_data)-3); iTahun <= _data; iTahun++) {
+        for (let iTahun = (parseInt(_data) + 1); iTahun <= (parseInt(_data) + 1); iTahun++) {
             let isSelected = iTahun == date.getFullYear() ? 'selected' : ''
 
             renderOptions += `<option ${isSelected}>${iTahun}</option>`
