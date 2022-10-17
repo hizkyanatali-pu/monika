@@ -91,9 +91,9 @@ $request = \Config\Services::request();
 
                         <li class="kt-menu__item <?=
                                                     ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'pagu-per-program'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('posturanggaran/pagu-per-program'); ?>" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pagu Per Program</span></a></li>
-                        
-                        
-                        <li class="kt-menu__item <?=($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'alokasi-anggaran-new'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+
+
+                        <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'posturanggaran' && $request->uri->getSegment(2) == 'alokasi-anggaran-new'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                             <a href="<?= site_url('posturanggaran/alokasi-anggaran-new'); ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                                 <span class="kt-menu__link-text">
@@ -213,13 +213,10 @@ $request = \Config\Services::request();
                 </div>
             </li>
 
-            <li 
-                class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'blokir' ? ' kt-menu__item--active' : '') ?>" 
-                aria-haspopup="true"
-            >
+            <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'blokir' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                 <a href="<?= site_url('blokir'); ?>" class="kt-menu__link ">
                     <i class="kt-menu__link-icon fas fa-ban"></i>
-                    <span class="kt-menu__link-text">Blokir</span> 
+                    <span class="kt-menu__link-text">Blokir</span>
                     <span class="kt-badge kt-badge--danger">N</span>
                 </a>
             </li>
@@ -266,11 +263,7 @@ $request = \Config\Services::request();
                 </div>
             </li>
 
-            <li 
-                class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'master-data' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" 
-                aria-haspopup="true" 
-                data-ktmenu-submenu-toggle="hover"
-            >
+            <li class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'master-data' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                 <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                     <i class="kt-menu__link-icon fas fa-database"></i>
                     <span class="kt-menu__link-text">Master Data</span>
@@ -279,21 +272,21 @@ $request = \Config\Services::request();
                 </a>
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                     <ul class="kt-menu__subnav">
-                        <li 
-                            class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-satker'  ? ' kt-menu__item--active' : '') ?>" 
-                            aria-haspopup="true"
-                        >
-                            <a href="<?= site_url('master-data/master-satker'); ?>" class="kt-menu__link ">
+                        <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-satker'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <!-- <a href="<?= site_url('master-data/master-satker'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">Satker</span>
+                            </a> -->
+                            <a href="/maintenance_page.php" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                     <span></span>
                                 </i>
                                 <span class="kt-menu__link-text">Satker</span>
                             </a>
                         </li>
-                        <li 
-                            class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-kegiatan'  ? ' kt-menu__item--active' : '') ?>" 
-                            aria-haspopup="true"
-                        >
+                        <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-kegiatan'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                             <a href="<?= site_url('master-data/master-kegiatan'); ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                     <span></span>
@@ -301,10 +294,7 @@ $request = \Config\Services::request();
                                 <span class="kt-menu__link-text">Kegiatan</span>
                             </a>
                         </li>
-                        <li 
-                            class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-kro'  ? ' kt-menu__item--active' : '') ?>" 
-                            aria-haspopup="true"
-                        >
+                        <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-kro'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                             <a href="<?= site_url('master-data/master-kro'); ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                     <span></span>
@@ -312,10 +302,7 @@ $request = \Config\Services::request();
                                 <span class="kt-menu__link-text">KRO</span>
                             </a>
                         </li>
-                        <li 
-                            class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-ro'  ? ' kt-menu__item--active' : '') ?>" 
-                            aria-haspopup="true"
-                        >
+                        <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-ro'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                             <a href="<?= site_url('master-data/master-ro'); ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                     <span></span>
@@ -327,21 +314,21 @@ $request = \Config\Services::request();
                 </div>
             </li>
 
-            <li class="kt-menu__item <?=($request->uri->getSegment(1) == 'pemaketan'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+            <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'pemaketan'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                 <a href="<?= site_url('pemaketan'); ?>" class="kt-menu__link ">
                     <i class="kt-menu__link-icon fas fa-chart-bar"></i>
                     <span class="kt-menu__link-text">Progres Pemaketan</span>
                 </a>
             </li>
 
-            <li class="kt-menu__item <?=($request->uri->getSegment(1) == 'bigdata'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+            <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'bigdata'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                 <a href="<?= site_url('bigdata'); ?>" class="kt-menu__link ">
                     <i class="kt-menu__link-icon fas fa-table"></i>
                     <span class="kt-menu__link-text">Big Data</span>
                 </a>
             </li>
 
-            
+
 
 
             <li class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'dokumenpk' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
@@ -355,22 +342,16 @@ $request = \Config\Services::request();
                     <span class="kt-menu__arrow"></span>
 
                     <ul class="kt-menu__subnav">
-                        <li 
-                            class="
+                        <li class="
                                 kt-menu__item  kt-menu__item--submenu 
-                                <?= (
-                                    $request->uri->getSegment(1) == 'dokumenpk' && 
-                                    (
-                                        $request->uri->getSegment(2) == 'satker' || 
-                                        $request->uri->getSegment(2) == 'balai' || 
-                                        $request->uri->getSegment(2) == 'eselon2' || 
+                                <?= ($request->uri->getSegment(1) == 'dokumenpk' &&
+                                    ($request->uri->getSegment(2) == 'satker' ||
+                                        $request->uri->getSegment(2) == 'balai' ||
+                                        $request->uri->getSegment(2) == 'eselon2' ||
                                         $request->uri->getSegment(2) == 'eselon1'
                                     ) ? ' kt-menu__item--open kt-menu__item--here' : ''
                                 ) ?>
-                            " 
-                            aria-haspopup="true" 
-                            data-ktmenu-submenu-toggle="hover"
-                        >
+                            " aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                             <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                                 <i class="kt-menu__link-icon fas fa-book"></i>
                                 <span class="kt-menu__link-text">Perjanjian Kinerja</span>
@@ -425,21 +406,15 @@ $request = \Config\Services::request();
                         </li>
 
 
-                        <li 
-                            class="kt-menu__item  kt-menu__item--submenu 
-                                <?= (
-                                    $request->uri->getSegment(1) == 'dokumenpk' && 
-                                    (
-                                        $request->uri->getSegment(2) == 'template' || 
-                                        $request->uri->getSegment(2) == 'template-balai' || 
-                                        $request->uri->getSegment(2) == 'template-eselon2' || 
+                        <li class="kt-menu__item  kt-menu__item--submenu 
+                                <?= ($request->uri->getSegment(1) == 'dokumenpk' &&
+                                    ($request->uri->getSegment(2) == 'template' ||
+                                        $request->uri->getSegment(2) == 'template-balai' ||
+                                        $request->uri->getSegment(2) == 'template-eselon2' ||
                                         $request->uri->getSegment(2) == 'template-eselon1'
                                     ) ? ' kt-menu__item--open kt-menu__item--here' : ''
                                 ) ?>
-                            " 
-                            aria-haspopup="true" 
-                            data-ktmenu-submenu-toggle="hover"
-                        >
+                            " aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                             <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                                 <i class="kt-menu__link-icon fas fa-book"></i>
                                 <span class="kt-menu__link-text">Template Perjanjian</span>
@@ -496,7 +471,7 @@ $request = \Config\Services::request();
                 </div>
             </li>
 
-            <li class="kt-menu__item <?=($request->uri->getSegment(1) == 'users'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+            <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'users'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                 <a href="<?= site_url('users'); ?>" class="kt-menu__link ">
                     <i class="kt-menu__link-icon fas fa-users"></i>
                     <span class="kt-menu__link-text">Kelola Pengguna</span>

@@ -58,25 +58,24 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.created_at,
             dokumen_pk_template.title as dokumenTitle
         ')
-        ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
-        // ->where('user_created', $this->userUID)
-        ->where('dokumenpk_satker.status !=', 'revision')
-        ->orderBy('dokumenpk_satker.id', 'DESC');
-        
+            ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+            // ->where('user_created', $this->userUID)
+            ->where('dokumenpk_satker.status !=', 'revision')
+            ->orderBy('dokumenpk_satker.id', 'DESC');
+
         if ($this->user['user_type'] == 'satker') {
             $query_dataDokumen->where('satkerid', $this->user['satker_id'])
-            ->groupStart()
+                ->groupStart()
                 ->where('dokumen_type', 'satker')
                 ->orWhere('dokumen_type', 'eselon2')
                 ->orWhere('dokumen_type', 'eselon1')
-            ->groupEnd();
-        }
-        elseif ($this->user['user_type'] == 'balai') {
+                ->groupEnd();
+        } elseif ($this->user['user_type'] == 'balai') {
             $query_dataDokumen->where('balaiid', $this->user['balai_id'])
-            ->where('dokumen_type', 'balai');
+                ->where('dokumen_type', 'balai');
         }
         $dataDokumen = $query_dataDokumen->get()->getResult();
-        
+
 
         if (
             isset($this->user['satker_id'])
@@ -91,7 +90,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     $templae_revTable = 'm_satker';
                     $template_revID   = $this->user['satker_id'];
                     break;
-                
+
                 case 'balai':
                     $template_type    = 'master-balai';
                     $templae_revTable = 'm_balai';
@@ -100,28 +99,28 @@ class Dokumenpk extends \App\Controllers\BaseController
             }
 
             $dataTemplate = $this->templateDokumen->select('dokumen_pk_template.*')
-            ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
-            ->where('dokumen_pk_template.status', '1')
-            ->where('dokumen_pk_template_akses.rev_id', $template_revID)
-            // ->where('dokumen_pk_template.type', $template_type)
-            ->where('dokumen_pk_template_akses.rev_table', $templae_revTable)
-            ->where("deleted_at is null")
-            ->groupBy('dokumen_pk_template.id')
-            ->get()->getResult();
-            
+                ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
+                ->where('dokumen_pk_template.status', '1')
+                ->where('dokumen_pk_template_akses.rev_id', $template_revID)
+                // ->where('dokumen_pk_template.type', $template_type)
+                ->where('dokumen_pk_template_akses.rev_table', $templae_revTable)
+                ->where("deleted_at is null")
+                ->groupBy('dokumen_pk_template.id')
+                ->get()->getResult();
+
             if (!$dataTemplate) $dataTemplate = [];
-            
+
             goto returnSection;
         }
-        
+
         globalUserTemplate:
         if (isset($this->user['user_type'])) $this->templateDokumen->where('type', $this->user['user_type']);
         $dataTemplate = $this->templateDokumen->where('dokumen_pk_template.status', '1')->where("deleted_at is null")->get()->getResult();
-        
+
         returnSection:
 
         return view('Modules\Satker\Views\Dokumenpk.php', [
-            'sessionYear'       => $this->user['tahun'] ,
+            'sessionYear'       => $this->user['tahun'],
             'templateDokumen'   => $dataTemplate,
             'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
             'isCanCreated'      => true,
@@ -133,7 +132,8 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-    public function balaiSatker($_satkerId) {
+    public function balaiSatker($_satkerId)
+    {
         $queryDataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
             dokumenpk_satker.template_id,
@@ -147,37 +147,36 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumen_pk_template.title as dokumenTitle,
             ku_user.nama as userCreatedName
         ')
-        ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
-        ->join('ku_user', 'dokumenpk_satker.user_created=ku_user.uid', 'left')
-        ->where('dokumenpk_satker.status !=', 'revision')
-        ->where('dokumenpk_satker.dokumen_type', 'satker')
-        ->orderBy('dokumenpk_satker.id', 'DESC');
-        
+            ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+            ->join('ku_user', 'dokumenpk_satker.user_created=ku_user.uid', 'left')
+            ->where('dokumenpk_satker.status !=', 'revision')
+            ->where('dokumenpk_satker.dokumen_type', 'satker')
+            ->orderBy('dokumenpk_satker.id', 'DESC');
+
         if ($_satkerId == 'all') {
             $queryDataDokumen->where('dokumenpk_satker.balaiid', $this->user['balaiid']);
 
             $dataTemplate = [];
             $isCanCreated = false;
-        }
-        else {
+        } else {
             $queryDataDokumen->where('dokumenpk_satker.satkerid', $_satkerId);
 
             $dataTemplate = $this->templateDokumen->select('dokumen_pk_template.*')
-            ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
-            ->where('dokumen_pk_template.status', '1')
-            ->where('dokumen_pk_template_akses.rev_id', $_satkerId)
-            // ->where('dokumen_pk_template.type', $template_type)
-            ->where('dokumen_pk_template_akses.rev_table', 'm_satker')
-            ->where("deleted_at is null")
-            ->groupBy('dokumen_pk_template.id')
-            ->get()->getResult();
+                ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
+                ->where('dokumen_pk_template.status', '1')
+                ->where('dokumen_pk_template_akses.rev_id', $_satkerId)
+                // ->where('dokumen_pk_template.type', $template_type)
+                ->where('dokumen_pk_template_akses.rev_table', 'm_satker')
+                ->where("deleted_at is null")
+                ->groupBy('dokumen_pk_template.id')
+                ->get()->getResult();
 
             $isCanCreated = true;
         }
 
         $dataDokumen = $queryDataDokumen->get()->getResult();
 
-        
+
 
         return view('Modules\Satker\Views\Dokumenpk.php', [
             'pageTitle' => 'Perjanjian Kinerja Satker',
@@ -199,7 +198,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-    public function dataDokumenSatker($_status, $_dokumenType) 
+    public function dataDokumenSatker($_status, $_dokumenType)
     {
         $dataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
@@ -214,15 +213,15 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumen_pk_template.title as dokumenTitle,
             ku_user.nama as userCreatedName
         ')
-        ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
-        ->join('ku_user', 'dokumenpk_satker.user_created = ku_user.uid', 'left')
-        ->where('dokumen_pk_template.status', '1')
-        ->where('dokumenpk_satker.status', $_status)
-        ->where('dokumenpk_satker.dokumen_type', $_dokumenType)
-        ->orderBy('dokumenpk_satker.id', 'DESC')
-        ->get()->getResult();
+            ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+            ->join('ku_user', 'dokumenpk_satker.user_created = ku_user.uid', 'left')
+            ->where('dokumen_pk_template.status', '1')
+            ->where('dokumenpk_satker.status', $_status)
+            ->where('dokumenpk_satker.dokumen_type', $_dokumenType)
+            ->orderBy('dokumenpk_satker.id', 'DESC')
+            ->get()->getResult();
 
-        $returnDaata = array_map(function($arr) {
+        $returnDaata = array_map(function ($arr) {
             return [
                 'id'                         => $arr->id,
                 'template_id'                => $arr->template_id,
@@ -255,8 +254,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $session_balaiNama  = $createByAdmin['byAdmin_balai_nama'] ?? null;
             $session_satkerId   = $createByAdmin['byAdmin_satker_id'] ?? null;
             $session_balaiId    = $createByAdmin['byAdmin_balai_id'] ?? null;
-        }
-        else {
+        } else {
             $session_userType   = $this->user['user_type'];
             $session_satkerNama = $this->user['satker_nama'] ?? null;
             $session_balaiNama  = $this->user['balai_nama'] ?? null;
@@ -275,8 +273,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $pihak1 = $dataSatker->jabatan_penanda_tangan_pihak_1;
             $pihak2 = $dataSatker->jabatan_penanda_tangan_pihak_2;
             $kotaNama = $dataSatker->kota_penanda_tangan;
-        }
-        elseif ($session_userType == "balai") {
+        } elseif ($session_userType == "balai") {
             $dataBalai = $this->balai->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('balaiid', $session_balaiId)->get()->getRow();
 
             $pihak1 = $dataBalai->jabatan_penanda_tangan_pihak_1;
@@ -291,28 +288,28 @@ class Dokumenpk extends \App\Controllers\BaseController
             'template_id'  => $id,
             'user_created' => $this->user['uid']
         ])
-        ->where("status != ", 'revision')
-        ->where("tahun = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
+            ->where("status != ", 'revision')
+            ->where("tahun = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
 
         $templateDokumen = $this->templateDokumen->where('id', $id)->get()->getRow();
 
-        $templateRows = array_map(function($arr) use ($session_userType, $session_balaiId, $templateDokumen) {
+        $templateRows = array_map(function ($arr) use ($session_userType, $session_balaiId, $templateDokumen) {
             $targetDefualtValue = '';
 
             if ($session_userType == "balai") {
                 $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
-                
-                foreach($templateRowRumus as $key => $data) {
+
+                foreach ($templateRowRumus as $key => $data) {
                     $targetRumusOutcome = $this->dokumenSatker->select(
                         'dokumenpk_satker_rows.outcome_value'
                     )
-                    ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
-                    ->join('dokumen_pk_template_rowrumus', "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus.template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus.rowId)", 'left')
-                    ->where('dokumen_pk_template_rowrumus.rumus', $data->rumus)
-                    ->where('dokumenpk_satker.balaiid', $session_balaiId)
-                    ->where('dokumenpk_satker.status', 'setuju')
-                    ->where('dokumenpk_satker_rows.is_checked', '1')
-                    ->get()->getResult();
+                        ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                        ->join('dokumen_pk_template_rowrumus', "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus.template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus.rowId)", 'left')
+                        ->where('dokumen_pk_template_rowrumus.rumus', $data->rumus)
+                        ->where('dokumenpk_satker.balaiid', $session_balaiId)
+                        ->where('dokumenpk_satker.status', 'setuju')
+                        ->where('dokumenpk_satker_rows.is_checked', '1')
+                        ->get()->getResult();
 
                     $outcomeRumus = 0;
                     foreach ($targetRumusOutcome as $keyOutcome => $dataOutcome) {
@@ -320,14 +317,14 @@ class Dokumenpk extends \App\Controllers\BaseController
                     }
 
                     if ($targetDefualtValue == '' && $outcomeRumus > 0) $targetDefualtValue = 0;
-                    
+
                     if ($outcomeRumus > 0) $targetDefualtValue += $outcomeRumus;
                 }
             }
 
             if ($templateDokumen->type == 'eselon1') {
                 $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResultArray();
-                
+
                 $rumusRow         = implode(',', array_column($templateRowRumus, 'rumus'));
                 $rumusPersenBalai = false;
 
@@ -335,7 +332,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     $rumusPersenBalai = true;
                     $rumusRow = str_replace(',%balai', '', $rumusRow);
                 }
-                
+
                 $targetBalaiRow = $this->dokumenSatker->select('
                     dokumenpk_satker.id,
                     dokumenpk_satker.template_id,
@@ -350,11 +347,11 @@ class Dokumenpk extends \App\Controllers\BaseController
                             AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus.rowId
                     ) as rumus
                 ')
-                ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
-                ->where('dokumenpk_satker.status', 'setuju')
-                ->where('dokumenpk_satker_rows.is_checked', '1')
-                ->where('dokumenpk_satker.pihak2_initial', 'DIREKTUR JENDERAL SUMBER DAYA AIR')
-                ->where("
+                    ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                    ->where('dokumenpk_satker.status', 'setuju')
+                    ->where('dokumenpk_satker_rows.is_checked', '1')
+                    ->where('dokumenpk_satker.pihak2_initial', 'DIREKTUR JENDERAL SUMBER DAYA AIR')
+                    ->where("
                     (
                         SELECT 
                             group_concat(rumus) 
@@ -365,7 +362,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                             AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus.rowId
                     ) = '$rumusRow'
                 ")
-                ->get()->getResult();
+                    ->get()->getResult();
                 // print_r($targetBalaiRow);
                 // print_r($rumusRow);
 
@@ -375,7 +372,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 }
 
                 if ($targetDefualtValue == '' && $targetRumus > 0) $targetDefualtValue = 0;
-                
+
                 if ($rumusPersenBalai) {
                     $jumlahBalai = $this->balai->where('kota_penanda_tangan !=', '')->countAllResults();
                     $targetRumus = round($targetRumus / $jumlahBalai, 3);
@@ -397,7 +394,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             ];
         }, $this->templateRow->where('template_id', $id)->get()->getResult());
 
-        
+
         $valudasiCreatedDokumen = true;
         $balai_checklistSatker = [];
         if ($session_userType == 'balai') {
@@ -405,14 +402,16 @@ class Dokumenpk extends \App\Controllers\BaseController
                 m_satker.satker,
                 (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun=DATE_FORMAT(NOW(), '%Y') and status='setuju' ) as iscreatedPK
             ")
-            ->notLike('satker', 'BALAI')
-            ->where('balaiid', $session_balaiId)->get()->getResult();
+                ->notLike('satker', 'BALAI')
+                ->where('balaiid', $session_balaiId)->get()->getResult();
 
-            $totalSatkerIsCreated = count(array_filter($balai_checklistSatker, function($arr) { return $arr->iscreatedPK > 0; }));
+            $totalSatkerIsCreated = count(array_filter($balai_checklistSatker, function ($arr) {
+                return $arr->iscreatedPK > 0;
+            }));
             if (count($balai_checklistSatker) != $totalSatkerIsCreated) $valudasiCreatedDokumen = false;
         }
 
-        
+
         return $this->respond([
             'dokumenExistSameYear' => $dokumenExistSameYear,
             'template'             => $templateDokumen,
@@ -437,9 +436,9 @@ class Dokumenpk extends \App\Controllers\BaseController
             ]
         ]);
     }
-    
-    
-    
+
+
+
     public function checkDocumentSameYearExist($_createdYear, $_templateId)
     {
         $dokumenExistSameYear = $this->dokumenSatker->select("
@@ -449,8 +448,8 @@ class Dokumenpk extends \App\Controllers\BaseController
             'template_id'  => $_templateId,
             'user_created' => $this->user['uid']
         ])
-        ->where("status != ", 'revision')
-        ->where("tahun = '$_createdYear'")->orderBy('id', 'desc')->get()->getRow();
+            ->where("status != ", 'revision')
+            ->where("tahun = '$_createdYear'")->orderBy('id', 'desc')->get()->getRow();
 
         return $this->respond([
             'dokumenExistSameYear' => $dokumenExistSameYear
@@ -479,10 +478,10 @@ class Dokumenpk extends \App\Controllers\BaseController
             status,
             is_revision_same_year
         ')
-        ->where('revision_master_dokumen_id', $id)
-        ->orWhere('id', $id)
-        ->orderBy('id', 'DESC')
-        ->get()->getResult();
+            ->where('revision_master_dokumen_id', $id)
+            ->orWhere('id', $id)
+            ->orderBy('id', 'DESC')
+            ->get()->getResult();
 
         return $this->respond([
             'dokumenList' => $dokumenList
@@ -494,6 +493,11 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function create()
     {
         $createByAdmin = $this->session->get('createDokumenByAdmin');
+        $replacements = [
+            "." => "",
+            "," => ".",
+        ];
+
 
         if ($this->user['user_type'] == 'other' || isset($createByAdmin)) {
             $session_userType   = $createByAdmin['byAdmin_user_type'];
@@ -503,8 +507,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $session_balaiId    = $createByAdmin['byAdmin_balai_id'] ?? null;
 
             $this->session->remove('createDokumenByAdmin');
-        }
-        else {
+        } else {
             $session_userType   = $this->user['user_type'];
             $session_satkerNama = $this->user['satker_nama'] ?? null;
             $session_balaiNama  = $this->user['balai_nama'] ?? null;
@@ -514,11 +517,11 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         /* dokumen */
         $dataTemplateDokumen = $this->templateDokumen->select('type')->where('id', $this->request->getPost('templateID'))->get()->getRow();
-        
+
         $inserted_dokumenSatker = [
             'template_id'           => $this->request->getPost('templateID'),
             'user_created'          => $this->userUID,
-            'total_anggaran'        => $this->request->getPost('totalAnggaran'),
+            'total_anggaran'        => strtr($this->request->getPost('totalAnggaran'), $replacements),
             'pihak1_ttd'            => $this->request->getPost('ttdPihak1'),
             'pihak1_is_plt'         => $this->request->getPost('ttdPihak1_isPlt'),
             'pihak2_ttd'            => $this->request->getPost('ttdPihak2'),
@@ -529,7 +532,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'bulan'                 => $this->request->getPost('bulan'),
             'tahun'                 => $this->request->getPost('tahun')
         ];
-       
+
         if ($session_userType == "satker") {
             $dataSatker = $this->satker->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('satkerid', $session_satkerId)->get()->getRow();
 
@@ -540,8 +543,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $inserted_dokumenSatker['dokumen_type']   = $dataTemplateDokumen->type;
             $inserted_dokumenSatker['balaiid']        = $session_balaiId;
             $inserted_dokumenSatker['satkerid']       = $session_satkerId;
-        }
-        elseif ($session_userType == "balai") {
+        } elseif ($session_userType == "balai") {
             $dataBalai = $this->balai->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('balaiid', $session_balaiId)->get()->getRow();
 
             $inserted_dokumenSatker['pihak1_id']      = $session_balaiId;
@@ -566,21 +568,20 @@ class Dokumenpk extends \App\Controllers\BaseController
                 $lastRevisionSameYearNumber = $this->dokumenSatker->select('revision_same_year_number')->groupStart()
                     ->where('revision_master_dokumen_id', $revision_dokumenMasterID)
                     ->orWhere('id', $revision_dokumenMasterID)
-                ->groupEnd()
-                ->where('is_revision_same_year', '1')
-                ->orderBy('id', 'DESC')
-                ->get()->getFirstRow();
-                
+                    ->groupEnd()
+                    ->where('is_revision_same_year', '1')
+                    ->orderBy('id', 'DESC')
+                    ->get()->getFirstRow();
+
                 $inserted_dokumenSatker['revision_same_year_number'] = $lastRevisionSameYearNumber ? $lastRevisionSameYearNumber->revision_same_year_number + 1 : 1;
                 $inserted_dokumenSatker['revision_number'] = '0';
-            }
-            else {
+            } else {
                 $inserted_dokumenSatker['revision_number'] = $this->dokumenSatker->select('revision_number')->where('revision_master_dokumen_id', $revision_dokumenMasterID)
-                ->orWhere('id', $revision_dokumenMasterID)
-                ->orderBy('id', 'DESC')
-                ->get()->getFirstRow()->revision_number + 1;
+                    ->orWhere('id', $revision_dokumenMasterID)
+                    ->orderBy('id', 'DESC')
+                    ->get()->getFirstRow()->revision_number + 1;
             }
-            
+
             $this->dokumenSatker->update([
                 'status' => 'revision'
             ], [
@@ -611,9 +612,9 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-    private function insertDokumenSatker_rows($input, $_dokumenID) 
+    private function insertDokumenSatker_rows($input, $_dokumenID)
     {
-        $rows = array_map(function($arr) use ($_dokumenID) {
+        $rows = array_map(function ($arr) use ($_dokumenID) {
             return [
                 'dokumen_id'      => $_dokumenID,
                 'template_row_id' => $arr['id'],
@@ -629,12 +630,16 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     private function insertDokumenSatker_kegiatan($input, $_dokumenID)
     {
-        $records = array_map(function($arr) use ($_dokumenID) {
+
+        $records = array_map(function ($arr) use ($_dokumenID) {
             return [
                 'dokumen_id' => $_dokumenID,
                 'id'         => $arr['id'],
                 'nama'       => $arr['nama'],
-                'anggaran'   => $arr['anggaran']
+                'anggaran'   => strtr($arr['anggaran'], [
+                    "." => "",
+                    "," => ".",
+                ])
             ];
         }, $input['kegiatan']);
         $this->dokumenSatker_kegiatan->insertBatch($records);

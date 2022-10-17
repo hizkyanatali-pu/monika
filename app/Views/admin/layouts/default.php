@@ -74,14 +74,14 @@ $title = $title ?? '';
 
             <!-- begin:: Aside -->
             <div class="kt-aside  kt-aside--fixed  kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop" id="kt_aside">
-                <?php 
-                    $session = session();
+                <?php
+                $session = session();
 
-                    if (strpos($session->get('userData')['uid'], 'admin') !== false) echo $this->include('admin/partials/sidebar');
-                    
-                    if (strtolower($session->get('userData')['user_type']) == 'satker') echo $this->include('admin/partials/sidebarSatker');
+                if (strpos($session->get('userData')['uid'], 'admin') !== false) echo $this->include('admin/partials/sidebar');
 
-                    if (strtolower($session->get('userData')['user_type']) == 'balai') echo $this->include('admin/partials/sidebarBalai');
+                if (strtolower($session->get('userData')['user_type']) == 'satker') echo $this->include('admin/partials/sidebarSatker');
+
+                if (strtolower($session->get('userData')['user_type']) == 'balai') echo $this->include('admin/partials/sidebarBalai');
                 ?>
             </div>
             <!-- end:: Aside -->
@@ -167,77 +167,78 @@ $title = $title ?? '';
             const captureElement = document.querySelector(_element)
             html2canvas(captureElement)
                 .then(canvas => {
-                canvas.style.display = 'none'
-                document.body.appendChild(canvas)
-                return canvas
+                    canvas.style.display = 'none'
+                    document.body.appendChild(canvas)
+                    return canvas
                 })
                 .then(canvas => {
-                const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
-                const a = document.createElement('a')
-                a.setAttribute('download', _fileName+'.png')
-                a.setAttribute('href', image)
-                a.click()
-                canvas.remove()
+                    const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
+                    const a = document.createElement('a')
+                    a.setAttribute('download', _fileName + '.png')
+                    a.setAttribute('href', image)
+                    a.click()
+                    canvas.remove()
                 })
         }
 
         function setInputFilter(textbox, inputFilter, errMsg) {
             // ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout"].forEach(function(event) {
-                textbox.on('keyup', function(e) {
-                    if (inputFilter(this.value)) {
-                        alert(1)
-                        // Accepted value
-                        if (["keydown","mousedown","focusout"].indexOf(e.type) >= 0){
-                            this.classList.remove("input-error");
-                            this.setCustomValidity("");
-                        }
-                        this.oldValue = this.value;
-                        this.oldSelectionStart = this.selectionStart;
-                        this.oldSelectionEnd = this.selectionEnd;
-                    } else if (this.hasOwnProperty("oldValue")) {
-                        alert(2)
-                        // Rejected value - restore the previous one
-                        this.classList.add("input-error");
-                        this.setCustomValidity(errMsg);
-                        this.reportValidity();
-                        this.value = this.oldValue;
-                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-                    } else {
-                        // Rejected value - nothing to restore
-                        this.value = "";
+            textbox.on('keyup', function(e) {
+                if (inputFilter(this.value)) {
+                    alert(1)
+                    // Accepted value
+                    if (["keydown", "mousedown", "focusout"].indexOf(e.type) >= 0) {
+                        this.classList.remove("input-error");
+                        this.setCustomValidity("");
                     }
-                });
+                    this.oldValue = this.value;
+                    this.oldSelectionStart = this.selectionStart;
+                    this.oldSelectionEnd = this.selectionEnd;
+                } else if (this.hasOwnProperty("oldValue")) {
+                    alert(2)
+                    // Rejected value - restore the previous one
+                    this.classList.add("input-error");
+                    this.setCustomValidity(errMsg);
+                    this.reportValidity();
+                    this.value = this.oldValue;
+                    this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                } else {
+                    // Rejected value - nothing to restore
+                    this.value = "";
+                }
+            });
             // });
         }
 
         function isNumberKey(txt, evt) {
             var charCode = (evt.which) ? evt.which : evt.keyCode;
-            if (charCode == 46 || charCode == 44) {
+            // if (charCode == 46 || charCode == 44) {           
+            if (charCode == 44) {
                 if (txt.value.indexOf('.') === -1 && txt.value.indexOf(',') === -1) {
-                    console.log(1)
                     return true;
                 } else {
-                    console.log(2)
+
                     return false;
                 }
             } else {
-                let offsetComma = txt.value.indexOf('.') === -1 ? txt.value.indexOf(',') : txt.value.indexOf('.')
-                
+                // let offsetComma = txt.value.indexOf('.') === -1 ? txt.value.indexOf(',') : txt.value.indexOf('.')
+                let offsetComma = txt.value.indexOf(',');
+
+
                 if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-                    console.log(3)
+
                     return false;
                 }
 
                 if ((txt.value.length - offsetComma) > 3) {
                     if (offsetComma > 0) {
                         return false;
-                    }
-                    else {
+                    } else {
                         return true
                     }
                 }
             }
-            
+
             return true;
         }
 

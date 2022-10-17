@@ -52,8 +52,10 @@ class CronJob extends \App\Controllers\BaseController
                 $regex = preg_replace('/\s+/', ' ', $data);
                 $regex = preg_replace('/"+"/', '"', $regex);
                 $regex = preg_replace('/:+",+"/', ':"","', $regex);
+                $regex = preg_replace('/"0",/', '0,', $regex);
+                $regex = preg_replace('/:"},/', ': "null"},', $regex);
 
-                $fno =  array('tahun', 'kdsatker', 'kdprogram', 'kdgiat', 'kdoutput', 'kdsoutput', 'kdkmpnen', 'kdskmpnen', 'kdpaket', 'kdls', 'nmpaket', 'kdpengadaan', 'kdkategori', 'kdjnskon', 'rkn_nama', 'rkn_npwp', 'nomor_kontrak', 'nilai_kontrak', 'tanggal_kontrak', 'tgl_spmk', 'waktu', 'status_tender', 'tgl_rencana_lelang', 'jadwal_pengumuman', 'jadwal_pemenang', 'jadwal_kontrak', 'jadwal_tgl_kontrak', 'status_sipbj', 'ufis', 'pfis', 'sumber_dana');
+                $fno =  array('tahun', 'kdsatker', 'kdprogram', 'kdgiat', 'kdoutput', 'kdsoutput', 'kdkmpnen', 'kdskmpnen', 'kdpaket', 'kdls', 'nmpaket', 'kdpengadaan', 'kdkategori', 'kdjnskon', 'rkn_nama', 'rkn_npwp', 'nomor_kontrak', 'nilai_kontrak', 'tanggal_kontrak', 'tgl_spmk', 'waktu', 'status_tender', 'tgl_rencana_lelang', 'jadwal_pengumuman', 'jadwal_pemenang', 'jadwal_kontrak', 'jadwal_tgl_kontrak', 'status_sipbj', 'ufis', 'pfis', 'sumber_dana', 'blokir');
                 $tabel = "monika_kontrak_" . date("Y");
             } else if ($type == 'paket_register') {
                 $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket_register?thang=" . date("Y"));
@@ -79,7 +81,7 @@ class CronJob extends \App\Controllers\BaseController
 
             $pull_get_file =  $this->ImportdataModel->getDok(["type" => $type], "no_order_by")->get()->getRowArray();
             $namefile = (isset($pull_get_file['nmfile']) ? $pull_get_file['nmfile'] : '');
-            $namefilesql = (isset($pull_get_file['sqlfile_nm']) ? $pull_get_file['sqlfile_nm'] : '');
+            $namefilesql = (isset($pull_get_file['sqlfile_nm']) ? $pull_get_file['sqlfile_nm'] : 'file not found');
 
             $pullcount = $this->ImportdataModel->getDok(["type" => $type, "tahunanggaran" => date("Y")], "no_order_by")->countAllResults();
 
@@ -91,8 +93,10 @@ class CronJob extends \App\Controllers\BaseController
 
                 $query = $this->ImportdataModel->deleteFiles(["nmfile" => $namefile, "type" => $type]);
 
-                unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
-                unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
+                if (file_exists($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql)) {
+                    unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
+                    unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
+                }
             }
 
 
