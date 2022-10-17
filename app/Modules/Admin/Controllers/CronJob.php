@@ -93,8 +93,10 @@ class CronJob extends \App\Controllers\BaseController
 
                 $query = $this->ImportdataModel->deleteFiles(["nmfile" => $namefile, "type" => $type]);
 
-                unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
-                unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
+                if (file_exists($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql)) {
+                    unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
+                    unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
+                }
             }
 
 
