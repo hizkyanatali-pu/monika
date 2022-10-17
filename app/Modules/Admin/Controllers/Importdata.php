@@ -118,6 +118,10 @@ class Importdata extends \App\Controllers\BaseController
             $regex = preg_replace('/\s+/', ' ', $data);
             $regex = preg_replace('/"+"/', '"', $regex);
             $regex = preg_replace('/:+",+"/', ':"","', $regex);
+            $regex = preg_replace('/"0",/', '0,', $regex);
+            $regex = preg_replace('/:"},/', ': "null"},', $regex);
+            // $regex = preg_replace('/"",/', '"NULL",', $regex);
+            // $regex = preg_replace('/"",/', '"', $regex);
         } else if ($type == 'paket_register') {
             $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket_register?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_paket_register_' . $tahunAnggaran;
@@ -250,12 +254,13 @@ class Importdata extends \App\Controllers\BaseController
                         if ($line != "") $data .= ($data ? ',' : '') . $line . "}";
                     }
                     $data = str_replace(array(",}"), array("}"), $data);
+
                     $qdata = [];
                     if ($data != '') {
                         $qdata = json_decode("[$data]", true);
                     }
 
-                    // dd($qdata);
+                    // dd($data);
 
                     if (count($qdata) > 0) {
                         $ii = 0;

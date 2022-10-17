@@ -52,6 +52,8 @@ class CronJob extends \App\Controllers\BaseController
                 $regex = preg_replace('/\s+/', ' ', $data);
                 $regex = preg_replace('/"+"/', '"', $regex);
                 $regex = preg_replace('/:+",+"/', ':"","', $regex);
+                $regex = preg_replace('/"0",/', '0,', $regex);
+                $regex = preg_replace('/:"},/', ': "null"},', $regex);
 
                 $fno =  array('tahun', 'kdsatker', 'kdprogram', 'kdgiat', 'kdoutput', 'kdsoutput', 'kdkmpnen', 'kdskmpnen', 'kdpaket', 'kdls', 'nmpaket', 'kdpengadaan', 'kdkategori', 'kdjnskon', 'rkn_nama', 'rkn_npwp', 'nomor_kontrak', 'nilai_kontrak', 'tanggal_kontrak', 'tgl_spmk', 'waktu', 'status_tender', 'tgl_rencana_lelang', 'jadwal_pengumuman', 'jadwal_pemenang', 'jadwal_kontrak', 'jadwal_tgl_kontrak', 'status_sipbj', 'ufis', 'pfis', 'sumber_dana', 'blokir');
                 $tabel = "monika_kontrak_" . date("Y");
