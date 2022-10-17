@@ -130,9 +130,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         $dokumenKopTitle2_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
 
+        $dokumenKopTitle2 = str_replace('KEPALA', '', $dokumenKopTitle2_prefix . $dataDokumen['pihak1_initial']);
+        $dokumenKopTitle3 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
-        $dokumenKopTitle2 = $dokumenKopTitle2_prefix . $dataDokumen['pihak1_initial'];
-        $dokumenKopTitle3 = $dataDokumen['pihak2_initial'];
+        $dokumenKopTitle2 = $dokumenKopTitle2;
+        $dokumenKopTitle3 = $dokumenKopTitle3;
 
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->SetFillColor(255);
