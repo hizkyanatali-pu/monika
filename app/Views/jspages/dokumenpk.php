@@ -1089,7 +1089,7 @@
                             <input 
                                 class="form-control" 
                                 name="kegiatan-anggaran" 
-                                value="0" 
+                                value="" 
                                 placeholder="Nominal Anggaran" 
                                 onkeyup="return this.value = formatRupiah(this.value, '')"
                             >
