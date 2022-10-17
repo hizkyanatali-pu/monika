@@ -153,7 +153,7 @@
                 totalAnggaran += parseFloat($(element).val().replaceAll(".", '').replaceAll(',', '.'))
             })
             $('input[name=total-anggaran]').val(formatRupiah(totalAnggaran.toString().replaceAll('.', ',')))
-        }, 500);
+        }, 100);
     })
 
 
@@ -888,7 +888,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Rp. </span>
                             </div>
-                            <input type="text" class="form-control" style="background: #F7F8FA" name="total-anggaran" placeholder="Nominal Total Anggaran" readonly/>
+                            <input type="text" class="form-control" style="background: #F7F8FA;text-align: right;" name="total-anggaran" placeholder="Nominal Total Anggaran" readonly/>
                         </div></td>
                                 </tr>
                             </tbody>
@@ -1090,7 +1090,8 @@
                                 class="form-control" 
                                 name="kegiatan-anggaran" 
                                 value="" 
-                                placeholder="Nominal Anggaran" 
+                                placeholder="Nominal Anggaran"
+                                style = "text-align: right;" 
                                 onkeyup="return this.value = formatRupiah(this.value, '')"
                             >
                         </div>
