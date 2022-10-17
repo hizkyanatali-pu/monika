@@ -81,7 +81,7 @@ class CronJob extends \App\Controllers\BaseController
 
             $pull_get_file =  $this->ImportdataModel->getDok(["type" => $type], "no_order_by")->get()->getRowArray();
             $namefile = (isset($pull_get_file['nmfile']) ? $pull_get_file['nmfile'] : '');
-            $namefilesql = (isset($pull_get_file['sqlfile_nm']) ? $pull_get_file['sqlfile_nm'] : '');
+            $namefilesql = (isset($pull_get_file['sqlfile_nm']) ? $pull_get_file['sqlfile_nm'] : 'file not found');
 
             $pullcount = $this->ImportdataModel->getDok(["type" => $type, "tahunanggaran" => date("Y")], "no_order_by")->countAllResults();
 
