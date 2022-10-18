@@ -753,7 +753,7 @@
                     element_modalPreviewCetakDokumen.modal('show')
                     
                     if (_toConfirm) {
-                        if (res.dokumen.status != 'setuju') {
+                        if (res.dokumen.status != 'setuju' && res.dokumen.status != 'tolak') {
                             element_modalPreviewCetakDokumen.find('.modal-footer').html(`
                                 <div class="p-2">
                                     <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
