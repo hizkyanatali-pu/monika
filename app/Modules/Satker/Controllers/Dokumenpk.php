@@ -188,7 +188,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'isCanCreated'      => $isCanCreated,
             'isCanConfirm'      => true,
 
-            'filterSatker'          => $this->satker->notLike('satker', 'BALAI')->where('balaiid', $this->user['balaiid'])->get()->getResult(),
+            'filterSatker'          => $this->satker->where('balaiid', $this->user['balaiid'])->get()->getResult(),
             'filterSatker_selected' => $_satkerId,
 
             'dataDokumen'   => $dataDokumen,
@@ -404,7 +404,6 @@ class Dokumenpk extends \App\Controllers\BaseController
                 m_satker.satker,
                 (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun=DATE_FORMAT(NOW(), '%Y') and status='setuju' ) as iscreatedPK
             ")
-                ->notLike('satker', 'BALAI')
                 ->where('balaiid', $session_balaiId)->get()->getResult();
 
             $totalSatkerIsCreated = count(array_filter($balai_checklistSatker, function ($arr) {
