@@ -223,6 +223,10 @@
                 <div class="container-revision-alert-cetak"></div>
                 <iframe width="100%" style="height: 80vh" frameborder="0"></iframe>
             </div>
+            
+            <?php if ($isCanConfirm) { ?>
+                <div class="modal-footer p-0"></div>
+            <?php } ?>
         </div>
     </div>
 </div>

@@ -124,6 +124,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'templateDokumen'   => $dataTemplate,
             'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
             'isCanCreated'      => true,
+            'isCanConfirm'      => false,
 
             'dataDokumen'   => $dataDokumen,
             'dokumenStatus' => $this->dokumenStatus
@@ -185,6 +186,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'templateDokumen'   => $dataTemplate,
             'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
             'isCanCreated'      => $isCanCreated,
+            'isCanConfirm'      => true,
 
             'filterSatker'          => $this->satker->notLike('satker', 'BALAI')->where('balaiid', $this->user['balaiid'])->get()->getResult(),
             'filterSatker_selected' => $_satkerId,

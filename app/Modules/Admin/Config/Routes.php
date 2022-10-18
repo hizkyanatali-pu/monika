@@ -266,6 +266,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
                 $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
                 $routes->get('get-list-template-buat-dokumen/(:any)/(:any)', '\Modules\Admin\Controllers\Dokumenpk::getListTemplateBuatDokumen/$1/$2');
+
+                $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
             });
 
             

@@ -10,7 +10,6 @@
         element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
         element_btnSaveDokumen = $('.__save-dokumen')
 
-
     $(document).ready(function() {
         $('#table').DataTable({
             ordering: false,
@@ -20,6 +19,10 @@
         $('#modalForm').on('hidden.bs.modal', function() {
             prepareForm_reset();
         })
+        
+        $('#modal-preview-cetak').on('shown.bs.modal', function() {
+            $(document).off('focusin.modal');
+        });
     })
 
 
@@ -461,7 +464,7 @@
                 success: (res) => {
                     let list = ''
                     if ($(this).data('select-top')) {
-                        cetakDokumen(res.dokumenList[0].id)
+                        cetakDokumen(res.dokumenList[0].id, true)
                     } else {
                         res.dokumenList.forEach((data, key) => {
                             let listTitle = 'Dokumen Awal',
@@ -483,7 +486,7 @@
                             list += `
                                 <button 
                                     class="list-group-item list-group-item-action ${activeClass}"
-                                    onclick="cetakDokumen(${data.id})"
+                                    onclick="cetakDokumen(${data.id}, true)"
                                 >
                                     ${listTitle}
                                     ${activeSubTitle}
@@ -497,8 +500,66 @@
                 }
             })
         } else {
-            cetakDokumen(dokumenMasterID)
+            cetakDokumen(dokumenMasterID, true)
         }
+    })
+
+
+
+    
+
+
+
+    $(document).on('click', '.__tolak-dokumen', function() {
+        let dataID = $(this).data('id')
+
+        Swal.fire({
+            title: "Kenapa dokumen ini di tolak?",
+            html: `<textarea class="form-control" name="pesan-tolak-dokumen" rows="10" placeholder="Tulis pesan untuk pembuat dokumen"></textarea>`,
+            confirmButtonText: "Kirim, dan Tolak Dokumen",
+            cancelButtonText: "Batal",
+            showLoaderOnConfirm: true,
+            showCancelButton: true,
+            preConfirm: () => {
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/change-status') ?>",
+                    type: "POST",
+                    data: {
+                        csrf_test_name: $('input[name=csrf_test_name]').val(),
+                        dokumenType: 'satker',
+                        dataID: dataID,
+                        message: $('textarea[name=pesan-tolak-dokumen]').val(),
+                        newStatus: 'tolak'
+                    },
+                    success: (res) => {
+                        return res
+                    }
+                })
+            }
+        }).then((res) => {
+            if (res.value) {
+                location.reload()
+            }
+        })
+    })
+
+
+
+    $(document).on('click', '.__setujui-dokumen', function() {
+        let dataID = $(this).data('id')
+        $.ajax({
+            url: "<?php echo site_url('dokumenpk/change-status') ?>",
+            type: "POST",
+            data: {
+                csrf_test_name: $('input[name=csrf_test_name]').val(),
+                dokumenType: 'satker',
+                dataID: dataID,
+                newStatus: 'setuju'
+            },
+            success: (res) => {
+                location.reload()
+            }
+        })
     })
 
 
@@ -661,13 +722,13 @@
 
 
 
-    function cetakDokumen(_dokumenID) {
+    function cetakDokumen(_dokumenID, _toConfirm) {
         $.ajax({
             url: "<?php echo site_url('dokumenpk/export-pdf/') ?>" + _dokumenID,
             type: 'GET',
             success: (res) => {
                 $('#modal-cetak-dokumen-revisioned').modal('hide')
-
+                
                 setTimeout(() => {
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
 
@@ -690,6 +751,26 @@
 
                     element_iframePreviewDokumen.attr('src', '<?php echo site_url('dokumen-perjanjian-kinerja.pdf') ?>')
                     element_modalPreviewCetakDokumen.modal('show')
+                    
+                    if (_toConfirm) {
+                        if (res.dokumen.status != 'setuju') {
+                            element_modalPreviewCetakDokumen.find('.modal-footer').html(`
+                                <div class="p-2">
+                                    <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+                                        <i class="fa fa-ban"></i> Tolak
+                                    </button>
+
+                                    <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+                                        <i class="fa fa-check"></i> Setujui
+                                    </button>
+                                </div>
+                            `)
+                        } else {
+                            element_modalPreviewCetakDokumen.find('.modal-footer').empty()
+                        }
+                    } else {
+                        element_modalPreviewCetakDokumen.find('.modal-footer').empty()
+                    }
                 }, 400)
             }
         })

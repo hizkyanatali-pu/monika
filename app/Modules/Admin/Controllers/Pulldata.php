@@ -431,7 +431,7 @@ class Pulldata extends \App\Controllers\BaseController
             'qdata'            => $pageData,
             'kegiatan'         => $this->PulldataModel->getKegiatan(),
             'slug'             => '',
-            'rekap'            => 'semuasatker',
+            'rekap'            => 'progress_per_profinsi',
             'id_report'        => 'cetak_semua_satker',
             'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
             'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
@@ -610,6 +610,10 @@ class Pulldata extends \App\Controllers\BaseController
         //     'qdata'=> $this->PulldataModel->getPaket("md.kdsatker='$satkerid'")
         // );
         // return view('Modules\Admin\Views\Paket\Format_3', $data);
+
+        if ($pg == 'progress_per_profinsi') {
+            $pgview = 'Rekap-progress-per-provinsi';
+        }
 
         header("Content-type: application/vnd.ms-excel");
         header("Content-disposition: attachment; filename=" . $fileName . ".xls");
