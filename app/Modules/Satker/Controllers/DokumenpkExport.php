@@ -3,8 +3,15 @@
 namespace Modules\Satker\Controllers;
 
 use CodeIgniter\API\ResponseTrait;
-use App\Libraries\FPDF;
-
+use App\Libraries\FPDF_PROTEC as FPDF;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
 class DokumenpkExport extends \App\Controllers\BaseController
 {
     use ResponseTrait;
@@ -49,6 +56,37 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     public function pdf($_dokumenSatkerID)
     {
+        //qrcode
+        $writer = new PngWriter();
+
+        $qrcodeSite = base_url()."/api/showpdf/tampilkan/".$_dokumenSatkerID."?preview=true";
+
+        // Create QR code
+        $qrCode = QrCode::create($qrcodeSite)
+            ->setEncoding(new Encoding('UTF-8'))
+            ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
+            ->setSize(200)
+            ->setMargin(10)
+            ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->setForegroundColor(new Color(0, 0, 0))
+            ->setBackgroundColor(new Color(255, 255, 255));
+
+        // Create generic logo
+        $logo = Logo::create(FCPATH .'logo.png')
+            ->setResizeToWidth(50);
+
+        // // Create generic label
+        // $label = Label::create('PUPR')
+        //     ->setTextColor(new Color(255, 0, 0));
+
+        $result = $writer->write($qrCode, $logo);
+        
+        $qrcode = $result->getDataUri();
+        // echo '<img src="'.$dataUri.'" alt="PUPR">';exit;
+
+
+
+        //generate pdf
         $pdf = new PDF();
 
         $dataDokumen = $this->dokumenSatker->select('
@@ -90,17 +128,30 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_pageDokumenOpening($pdf, $dataDokumen);
 
         /** Dokumen Detail */
-        $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'target');
+        $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'target','');
 
         /** Dokumen Detail 2 */
         // if ($this->userType == 'balai') $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome');
-        $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome');
+        $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome',$qrcode);
+        
+        $pdf->SetProtection(array('print'));
 
-        $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
+        if($_GET['preview']){
+            $pdf->Output('I', 'dokumen-perjanjian-kinerja.pdf'); exit;
+         
+        }else{
 
-        return $this->respond([
-            'dokumen' => $dataDokumen
-        ]);
+            $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf'); 
+            return $this->respond([
+                'dokumen' => $dataDokumen
+            ]);
+        };
+       
+
+
+    
+
+        
     }
 
 
@@ -262,7 +313,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
 
-    private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType)
+    private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType,$qrcode)
     {
         $pdf->AddPage('L', 'A4');
 
@@ -287,6 +338,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
             65
         ];
 
+        // print_r($qrcode);exit;
+        if($qrcode){
+
+            $pdf->Image($qrcode, 280, 2, 15, 15,"PNG");
+        }
 
         /**  Dokumen KOP */
         $pdf->Ln(6);
