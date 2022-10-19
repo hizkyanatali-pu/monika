@@ -213,6 +213,15 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function($routes) {
                 $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
 
+                $routes->group('arsip', ['namespace' => 'App\Controllers'], function($routes) {
+                    $routes->get('/', '\Modules\Admin\Controllers\DokumenpkArsip::arsip');
+
+                    $routes->get('get-data/(:any)/(:any)', '\Modules\Admin\Controllers\DokumenpkArsip::getDataArsip/$1/$2');
+                    $routes->post('arsipkan', '\Modules\Admin\Controllers\DokumenpkArsip::arsipkanDokumen');
+                    $routes->post('restore', '\Modules\Admin\Controllers\DokumenpkArsip::restoreArsip');
+                    $routes->post('delete-permanent', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanent');
+                });
+
                 $routes->group('satker', ['namespace' => 'App\Controllers'], function($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::satker');
                     
