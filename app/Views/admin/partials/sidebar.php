@@ -348,7 +348,8 @@ $request = \Config\Services::request();
                                     ($request->uri->getSegment(2) == 'satker' ||
                                         $request->uri->getSegment(2) == 'balai' ||
                                         $request->uri->getSegment(2) == 'eselon2' ||
-                                        $request->uri->getSegment(2) == 'eselon1'
+                                        $request->uri->getSegment(2) == 'eselon1' ||
+                                        $request->uri->getSegment(2) == 'arsip'
                                     ) ? ' kt-menu__item--open kt-menu__item--here' : ''
                                 ) ?>
                             " aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
@@ -398,6 +399,16 @@ $request = \Config\Services::request();
                                             </i>
                                             <span class="kt-menu__link-text">
                                                 Eselon 1
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'arsip'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('dokumenpk/arsip'); ?>" class="kt-menu__link">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="kt-menu__link-text">
+                                                Arsip
                                             </span>
                                         </a>
                                     </li>

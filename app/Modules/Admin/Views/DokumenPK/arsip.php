@@ -1,5 +1,7 @@
 <?= $this->extend('admin/layouts/default') ?>
 
+
+
 <?= $this->section('content') ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.css'); ?>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -41,26 +43,28 @@
         <div class="kt-subheader__main w-100">
             <div class="d-flex justify-content-between w-100">
                 <div class="d-flex justify-content-start">
-                    <h5 class="kt-subheader__title">
-                        <?php echo $pageTitle ?? 'Dokumen PK' ?>
-                    </h5>
+                    <h3 class="kt-subheader__title" style="width: 430px">
+                        ARSIP PERJANJIAN KINERJA
+                    </h3>
+                    
+                    <select name="filter-jenis-dokumen" class="form-control">
+                        <option value="all">SEMUA</option>
+                        <option value="satker">SATKER</option>
+                        <option value="balai">BALAI</option>
+                        <option value="eselon2">ESELON 2</option>
+                        <option value="eselon1">ESELON 1</option>
+                    </select>
+
                     <?= csrf_field() ?>
-                </div>
-                <div>
-                    <button class="btn btn-primary __admin-create-dokumen-opsi-users">
-                        <i class="fas fa-plus"></i> Buat Dokumen
-                    </button>
-                    <button class="btn btn-primary __opsi-template d-none">
-                        <i class="fas fa-plus"></i> Buat Dokumen
-                    </button>
                 </div>
             </div>
             <span class="kt-subheader__separator kt-hidden"></span>
         </div>
     </div>
 </div>
-
 <!-- end:: Subheader -->
+
+
 
 <!-- begin:: Content -->
 <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
@@ -85,7 +89,7 @@
                             <th width="25px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
-                            <th width="190px"></th>
+                            <th width="225px"></th>
                         </tr>
                     </thead>
 
@@ -104,7 +108,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal disetujui</th>
-                            <th width="190px"></th>
+                            <th width="225px"></th>
                         </tr>
                     </thead>
 
@@ -123,7 +127,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal Ditolak</th>
-                            <th width="190px"></th>
+                            <th width="225px"></th>
                         </tr>
                     </thead>
 
@@ -139,10 +143,6 @@
 
 
 
-
-
-
-
 <!-- Modal Preview Cetak Dokumen -->
 <div class="modal fade" id="modal-preview-cetak" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
@@ -154,69 +154,12 @@
                 </button>
             </div>
             <div class="modal-body p-0">
-                <div class="container-revision-alert-cetak"></div>
                 <iframe width="100%" style="height: 80vh" frameborder="0"></iframe>
-            </div>
-            <div class="modal-footer p-0">
             </div>
         </div>
     </div>
 </div>
 <!-- end-of: Modal Preview Cetak Dokumen -->
-
-
-
-
-<!-- Modal Form Detail -->
-<div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="d-flex">
-                    <button type="button" class="btn btn-default pr-2 d-none __back-pilih-dokumen">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <h5 class="modal-title pt-2 pl-2">Pilih Dokumen</h5>
-                </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body p-0">
-                <div class="list-group" id="choose-template">
-                    <?php /* foreach ($templateDokumen as $keyTemplate => $dataTemplate) : ?>
-                        <a class="list-group-item list-group-item-action __buat-dokumen-pilih-template" href="javascript:void(0)" data-id="<?php echo $dataTemplate->id ?>">
-                            <?php echo $dataTemplate->title ?>
-                        </a>
-                    <?php endforeach */ ?>
-                </div>
-                <div class="p-4 d-none" id="make-dokumen">
-                </div>
-            </div>
-            <div class="modal-footer d-none">
-                <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end-of: Modal Form Detail -->
-
-
-
-<!-- Modal Cetak Dokumen Terevisi -->
-<div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body p-0">
-                <div class="list-group">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end-of: Modal Cetak Dokumen Terevisi -->
-
-
 <?= $this->endSection() ?>
 
 
@@ -227,16 +170,13 @@
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<?php echo $this->include('jspages/dokumenpk') ?>
 
 <script>
     var element_tableHold = '',
         element_tableSetuju = '',
         element_tableTolak = '',
-        element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
-        element_modalListRevision = $('#modal-cetak-dokumen-revisioned'),
-        element_formTable = $('._table-form').find('tbody'),
-        element_tableInformasi = $('._table-informasi').find('tbody')
+        element_modalPreviewCetakDokumen = $('#modal-preview-cetak')
+
 
 
     $(document).ready(function() {
@@ -248,7 +188,16 @@
         }, 300)
     })
 
-
+    $('#pills-one-tab').on('click', () => {
+        setTimeout(() => {
+            if (element_tableSetuju == '') {
+                element_tableSetuju = $('#table-setuju').DataTable({
+                    scrollX: true
+                })
+            }
+            getData('hold');
+        }, 300)
+    })
 
     $('#pills-two-tab').on('click', () => {
         setTimeout(() => {
@@ -272,69 +221,8 @@
         }, 300)
     })
 
-
-
-    $(document).on('click', '.__admin-create-dokumen-opsi-users', function() {
-        let optionData = <?php echo $createDokumen_userOption ?>,
-            selectOpntionList = ''
-
-        optionData.forEach((data, index) => {
-            selectOpntionList += `
-                <option value="${data.id}">${data.title}</option>
-            `
-        });
-
-        let html = `
-            <select class="select2" name="states[]"> 
-                ${selectOpntionList}
-            </select>
-        `
-
-        Swal.fire({
-            title: 'Pilih Satker Untuk Membuat Dokumen',
-            html: html,
-            showCancelButton: true,
-            confirmButtonText: 'Pilih',
-            showLoaderOnConfirm: true,
-            onOpen: function () {
-                $('.select2').select2({
-                    width: '100%',
-                    placeholder: "Seleziona",
-                });
-            },
-            preConfirm: () => {
-                return $('.select2').val()
-            }
-         }).then((result) => {
-            if (result.value != undefined) {
-                let userType = "<?php echo $dokumenType ?>"=="balai" ? "balai" : "satker"
-                
-                $.ajax({
-                    url: "<?php echo site_url('dokumenpk/get-list-template-buat-dokumen') ?>" + "/" + userType + "/" + result.value,
-                    type: 'GET',
-                    success: (res) => {
-                        let renderListTemplate = ''
-
-                        res.templateDokumen.forEach((data, index) => {
-                            renderListTemplate += `
-                                <a 
-                                    class="list-group-item list-group-item-action __buat-dokumen-pilih-template" 
-                                    href="javascript:void(0)" 
-                                    data-id="${data.id}"
-                                >
-                                    ${data.title}
-                                </a>
-                            `
-                        });
-                        $('#choose-template').html(renderListTemplate)
-
-                        $('.__opsi-template').attr('data-available', res.templateAvailable)
-                        $('.__opsi-template').trigger('click')
-                    }
-                })
-                
-            }
-        })
+    $(document).on('change', 'select[name=filter-jenis-dokumen]', function() {
+        $('#pills-one-tab').trigger('click')
     })
 
 
@@ -348,20 +236,19 @@
     
     
     
-    $(document).on('click', '.__arsipkan-dokumen', function() {
+    $(document).on('click', '.__reStore', function() {
         Swal.fire({
-            title: 'Arsipkan Dokumen Perjanjian Kinerja',
-            text: "Apakah anda yakin mengarsipkan dokumen ini ?",
-            icon: 'warning',
+            title: 'Restore Dokumen',
+            text: "Kembalikan dokumen ini ?",
             showCancelButton: true,
-            confirmButtonColor: '#d33',
+            confirmButtonColor: '#0abb87',
             cancelButtonColor: '#000',
-            confirmButtonText: 'Ya, Arsipkan',
+            confirmButtonText: 'Ya, Restore',
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "<?php echo site_url('dokumenpk/arsip/arsipkan') ?>",
+                    url: "<?php echo site_url('dokumenpk/arsip/restore') ?>",
                     type: 'POST',
                     data: {
                         csrf_test_name: $('input[name=csrf_test_name]').val(),
@@ -370,7 +257,44 @@
                     success: (res) => {
                         Swal.fire(
                             'Berhasil',
-                            'Dokumen telah di arsipkan',
+                            'Dokumen telah di kembalikan',
+                            'success'
+                        )
+
+                        setTimeout(() => {
+                            location.reload()
+                        }, 1500)
+                    }
+                })
+            }
+        })
+    })
+    
+    
+    
+    $(document).on('click', '.__deletePermanen', function() {
+        Swal.fire({
+            title: 'Hapus Permanen',
+            text: "Dokumen akan di hapus secara permanen dan tidak dapat di kembalikan lagi",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#000',
+            confirmButtonText: 'Ya, Hapus Permanen',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/arsip/delete-permanent') ?>",
+                    type: 'POST',
+                    data: {
+                        csrf_test_name: $('input[name=csrf_test_name]').val(),
+                        id: $(this).data('id')
+                    },
+                    success: (res) => {
+                        Swal.fire(
+                            'Berhasil',
+                            'Dokumen telah di hapus secara permanent',
                             'success'
                         )
 
@@ -385,121 +309,9 @@
 
 
 
-    $(document).on('click', '.__open-list-revisioned', function() {
-        let dokumenMasterID = $(this).data('dokumen-master-id')
-
-        $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-list-revisioned/') ?>" + dokumenMasterID,
-            type: 'GET',
-            success: (res) => {
-                let list = ''
-                res.dokumenList.forEach((data, key) => {
-                    let listTitle = 'Dokumen Awal',
-                        activeClass = '',
-                        activeSubTitle = '',
-                        buttonData_toConfirm = false
-
-                    if (data.revision_master_number) listTitle = 'Koreksi #' + data.revision_number
-                    if (data.status == 'setuju') {
-                        activeClass = 'active bg-success border-success'
-                        activeSubTitle = '<div><small>Telah di setujui</small></div>'
-                    }
-                    if (data.is_revision_same_year == '1') {
-                        listTitle = 'Revisi'
-                        activeClass = 'active bg-danger border-danger'
-                    }
-                    if (key == 0 && data.status == 'hold') buttonData_toConfirm = true
-
-                    list += `
-                        <button 
-                            class="list-group-item list-group-item-action ${activeClass} __preview-dokumen"
-                            data-id="${data.id}"
-                            data-to-confirm="${buttonData_toConfirm}"
-                        >
-                            ${listTitle}
-                            ${activeSubTitle}
-                        </button>
-                    `
-                })
-
-                element_modalListRevision.find('.list-group').html(list)
-            }
-        })
-        element_modalListRevision.modal('show')
-    })
-
-
-
-    $(document).on('click', '.__tolak-dokumen', function() {
-        let dataID = $(this).data('id')
-
-        Swal.fire({
-            title: "Kenapa dokumen ini di tolak?",
-            html: `<textarea class="form-control" name="pesan-tolak-dokumen" rows="10" placeholder="Tulis pesan untuk pembuat dokumen"></textarea>`,
-            confirmButtonText: "Kirim, dan Tolak Dokumen",
-            cancelButtonText: "Batal",
-            showLoaderOnConfirm: true,
-            showCancelButton: true,
-            preConfirm: () => {
-                $.ajax({
-                    url: "<?php echo site_url('dokumenpk/change-status') ?>",
-                    type: "POST",
-                    data: {
-                        csrf_test_name: $('input[name=csrf_test_name]').val(),
-                        dokumenType: 'satker',
-                        dataID: dataID,
-                        message: $('textarea[name=pesan-tolak-dokumen]').val(),
-                        newStatus: 'tolak'
-                    },
-                    success: (res) => {
-                        return res
-                    }
-                })
-            }
-        }).then((res) => {
-            if (res.value) {
-                element_modalPreviewCetakDokumen.modal('hide')
-
-                element_tableHold
-                    .row($('#_dokumen-row-' + dataID))
-                    .remove()
-                    .draw();
-            }
-        })
-    })
-
-
-
-    $(document).on('click', '.__setujui-dokumen', function() {
-        let dataID = $(this).data('id')
-        $.ajax({
-            url: "<?php echo site_url('dokumenpk/change-status') ?>",
-            type: "POST",
-            data: {
-                csrf_test_name: $('input[name=csrf_test_name]').val(),
-                dokumenType: 'satker',
-                dataID: dataID,
-                newStatus: 'setuju'
-            },
-            success: (res) => {
-                element_modalPreviewCetakDokumen.modal('hide')
-
-                element_tableHold
-                    .row($('#_dokumen-row-' + dataID))
-                    .remove()
-                    .draw();
-            }
-        })
-    })
-
-
-
-
-
-
     function getData(_status) {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>",
+            url: "<?php echo site_url('dokumenpk/arsip/get-data/') ?>" + _status + '/' + $("select[name=filter-jenis-dokumen]").val(),
             type: 'GET',
             success: (res) => {
                 renderTableRow(_status, res.data)
@@ -547,7 +359,7 @@
             }
 
             if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>`
-           
+        
             const tr = $(`
                 <tr id="_dokumen-row-${data.id}">
                     <td class="text-center">${ index+1 }</td>
@@ -563,16 +375,7 @@
                     ${render_columnChangeStatusAt}
                     <td>
                         <button 
-                            class="btn btn-sm btn-outline-secondary __lihat-dokumen"
-                            data-id="${data.id}"
-                            data-template-id="${data.template_id}"
-                            data-to-confirm="${buttonData_toConfirm}"
-                        >
-                            <i class="fas fa-eye"></i><br/>
-                            Lihat
-                        </button>
-                        <button 
-                            class="btn btn-sm btn-outline-primary __preview-dokumen"
+                            class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
                             data-id="${data.id}"
                             data-to-confirm="${buttonData_toConfirm}"
                         >
@@ -580,11 +383,18 @@
                             Cetak
                         </button>
                         <button 
-                            class="btn btn-sm btn-outline-danger __arsipkan-dokumen"
+                            class="btn btn-sm btn-outline-success __reStore"
+                            data-id="${data.id}"
+                        >
+                            <i class="fas fa-sync-alt"></i><br/>
+                            Restore
+                        </button>
+                        <button 
+                            class="btn btn-sm btn-outline-danger __deletePermanen"
                             data-id="${data.id}"
                         >
                             <i class="fas fa-trash"></i><br/>
-                            Arsipkan
+                            Hapus
                         </button>
                     </td>
                 </tr>
@@ -637,22 +447,6 @@
 
                     element_iframePreviewDokumen.attr('src', '<?php echo site_url('dokumen-perjanjian-kinerja.pdf') ?>')
                     element_modalPreviewCetakDokumen.modal('show')
-
-                    if (_toConfirm) {
-                        element_modalPreviewCetakDokumen.find('.modal-footer').html(`
-                            <div class="p-2">
-                                <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
-                                    <i class="fa fa-ban"></i> Tolak
-                                </button>
-
-                                <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
-                                    <i class="fa fa-check"></i> Setujui
-                                </button>
-                            </div>
-                        `)
-                    } else {
-                        element_modalPreviewCetakDokumen.find('.modal-footer').empty()
-                    }
                 }, 400)
             }
         })

@@ -75,11 +75,12 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
-            'pageTitle' => 'Dokumen Penjanjian Kinerja - Eselon1',
-            'dokumenType' => 'eselon1',
+            'pageTitle'                => 'Dokumen Penjanjian Kinerja - Eselon1',
+            'dokumenType'              => 'eselon1',
             'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon1')->get()->getResult())
         ]);
     }
+
 
 
     public function getListTemplateBuatDokumen($userType, $userId)
