@@ -13,6 +13,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             $routes->get('get-data-rencana-tender/(:any)', '\Modules\Admin\Controllers\Api\RencanaTender::getData_rencanaTender/$1');
         });
         $routes->get('cron-tarik-data-sisa-lelang', '\Modules\Admin\Controllers\CronJob::tarikDataEmonSisaLelangSda/$1');
+        //check dokument PK
+        $routes->get('showpdf/tampilkan/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
     });
 
 
