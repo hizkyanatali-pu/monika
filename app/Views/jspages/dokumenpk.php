@@ -503,10 +503,33 @@
             cetakDokumen(dokumenMasterID, true)
         }
     })
-
-
-
     
+    
+    
+    $(document).on('click', '.__list-satker-telah-membuat-dokumen', function() {
+        $('#modalSatkerListCreated').modal('show')
+        $.ajax({
+            url: "<?php echo site_url('dokumenpk/list-satker-balai') ?>",
+            type: 'GET',
+            success: (res) => {
+                let renderList = ''
+
+                res.data.forEach(data => {
+                    let renderCheck = ''
+                    
+                    if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check"></i>'
+                    renderList += `
+                        <li class="list-group-item d-flex justify-content-between">
+                            <lable>${data.satker}</lable>
+                            ${renderCheck}
+                        </li>
+                    `
+                });
+                
+                $('#modalSatkerListCreated').find('.list-group').html(renderList)
+            }
+        })
+    })
 
 
 

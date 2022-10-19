@@ -39,17 +39,32 @@
                 </div>
 
                 <div>
-                    <?php if ($isCanCreated) { ?>
-                    <button 
-                        class="btn btn-primary __opsi-template" 
-                        data-available="<?php echo $templateAvailable ?>"
+                    <?php if (isset($listSatkerCreateCokumen)) { ?>
+                        <?php if ($listSatkerCreateCokumen == true) { ?>
+                            <button 
+                                class="btn btn-info __list-satker-telah-membuat-dokumen" 
+                                data-available="<?php echo $templateAvailable ?>"
 
-                        <?php if (isset($balaiCreateForSatker)) { ?>
-                            data-balai-create-satker="<?php echo $balaiCreateForSatker ?>"
+                                <?php if (isset($balaiCreateForSatker)) { ?>
+                                    data-balai-create-satker="<?php echo $balaiCreateForSatker ?>"
+                                <?php } ?>
+                            >
+                                <i class="fas fa-list"></i> Daftar Satker Membuat Dokumen
+                            </button>
                         <?php } ?>
-                    >
-                        <i class="fas fa-plus"></i> Buat Dokumen
-                    </button>
+                    <?php } ?>
+
+                    <?php if ($isCanCreated) { ?>
+                        <button 
+                            class="btn btn-primary __opsi-template" 
+                            data-available="<?php echo $templateAvailable ?>"
+
+                            <?php if (isset($balaiCreateForSatker)) { ?>
+                                data-balai-create-satker="<?php echo $balaiCreateForSatker ?>"
+                            <?php } ?>
+                        >
+                            <i class="fas fa-plus"></i> Buat Dokumen
+                        </button>
                     <?php } ?>
                 </div>
             </div>
@@ -231,6 +246,27 @@
     </div>
 </div>
 <!-- end-of: Modal Preview Cetak Dokumen -->
+
+
+
+<!-- Modal satker list created -->
+<div class="modal fade" id="modalSatkerListCreated" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Daftar Satker Membuat Dokumen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <ul class="list-group">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal satker list created -->
 <?= $this->endSection() ?>
 
 

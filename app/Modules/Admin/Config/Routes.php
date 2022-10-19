@@ -277,6 +277,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('get-list-template-buat-dokumen/(:any)/(:any)', '\Modules\Admin\Controllers\Dokumenpk::getListTemplateBuatDokumen/$1/$2');
 
                 $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
+
+                $routes->get('list-satker-balai', '\Modules\Satker\Controllers\Dokumenpk::listSatkerBalai');
             });
 
             

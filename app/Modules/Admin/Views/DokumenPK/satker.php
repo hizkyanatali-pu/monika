@@ -65,6 +65,12 @@
 <!-- begin:: Content -->
 <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
     <ul class="nav nav-pills mb-3 flex-column flex-sm-row" id="pills-tab" role="tablist">
+        <?php if (isset($dataBelumInput)) { ?>
+            <li class="flex-sm-fill text-sm-center nav-item">
+                <a class="nav-link" id="belum-input-tab" data-toggle="pill" href="#belum-input" role="tab" aria-controls="belum-input" aria-selected="true">Belum Input</a>
+            </li>
+        <?php } ?>
+
         <li class="flex-sm-fill text-sm-center nav-item">
             <a class="nav-link active" id="pills-one-tab" data-toggle="pill" href="#pills-one" role="tab" aria-controls="pills-one" aria-selected="true">Menunggu Persetujuan</a>
         </li>
@@ -78,6 +84,30 @@
 
     <div class="kt-portlet" style="margin-top: -5px">
         <div class="kt-portlet__body tab-content" id="pills-tabContent">
+            <?php if (isset($dataBelumInput)) { ?>
+                <div class="tab-pane fade show" id="belum-input" role="tabpanel" aria-labelledby="belum-input-tab">
+                    <table class="table table-bordered" id="table-belum-input">
+                        <thead>
+                            <tr class="text-center">
+                                <th width="25px">No</th>
+                                <th><?php echo ucfirst($dokumenType) ?></th>
+                            </tr>
+                        </thead>
+
+                        <tbody style="font-size: 12px">
+                            <?php foreach ($dataBelumInput as $key_belumInput => $value_belumInput) { ?>
+                                <tr>
+                                    <td><?php echo $key_belumInput+1 ?></td>
+                                    <td><?php echo $value_belumInput['nama'] ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php } ?>
+
+
+
             <div class="tab-pane fade show active" id="pills-one" role="tabpanel" aria-labelledby="pills-one-tab">
                 <table class="table table-bordered" id="table-hold">
                     <thead>
@@ -230,13 +260,14 @@
 <?php echo $this->include('jspages/dokumenpk') ?>
 
 <script>
-    var element_tableHold = '',
-        element_tableSetuju = '',
-        element_tableTolak = '',
+    var element_tableHold                = '',
+        element_tableSetuju              = '',
+        element_tableTolak               = '',
+        element_tableBelumInput          = '',
         element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
-        element_modalListRevision = $('#modal-cetak-dokumen-revisioned'),
-        element_formTable = $('._table-form').find('tbody'),
-        element_tableInformasi = $('._table-informasi').find('tbody')
+        element_modalListRevision        = $('#modal-cetak-dokumen-revisioned'),
+        element_formTable                = $('._table-form').find('tbody'),
+        element_tableInformasi           = $('._table-informasi').find('tbody')
 
 
     $(document).ready(function() {
@@ -245,6 +276,18 @@
                 scrollX: true
             })
             getData('hold');
+        }, 300)
+    })
+
+
+
+    $('#belum-input-tab').on('click', () => {
+        setTimeout(() => {
+            if (element_tableBelumInput == '') {
+                element_tableBelumInput = $('#table-belum-input').DataTable({
+                    scrollX: true
+                });
+            }
         }, 300)
     })
 

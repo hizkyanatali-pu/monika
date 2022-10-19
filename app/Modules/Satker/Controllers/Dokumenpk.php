@@ -46,6 +46,8 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function index()
     {
+        $listSatkerCreateCokumen = false;
+
         $query_dataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
             dokumenpk_satker.template_id,
@@ -95,6 +97,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     $template_type    = 'master-balai';
                     $templae_revTable = 'm_balai';
                     $template_revID   = $this->user['balai_id'];
+                    $listSatkerCreateCokumen = true;
                     break;
             }
 
@@ -125,6 +128,8 @@ class Dokumenpk extends \App\Controllers\BaseController
             'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
             'isCanCreated'      => true,
             'isCanConfirm'      => false,
+            
+            'listSatkerCreateCokumen' => $listSatkerCreateCokumen,
 
             'dataDokumen'   => $dataDokumen,
             'dokumenStatus' => $this->dokumenStatus
@@ -182,11 +187,12 @@ class Dokumenpk extends \App\Controllers\BaseController
         return view('Modules\Satker\Views\Dokumenpk.php', [
             'pageTitle' => 'Perjanjian Kinerja Satker',
 
-            'sessionYear'       => $this->user['tahun'],
-            'templateDokumen'   => $dataTemplate,
-            'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
-            'isCanCreated'      => $isCanCreated,
-            'isCanConfirm'      => true,
+            'sessionYear'             => $this->user['tahun'],
+            'templateDokumen'         => $dataTemplate,
+            'templateAvailable'       => count($dataTemplate) > 0 ? 'true' : 'false',
+            'isCanCreated'            => $isCanCreated,
+            'isCanConfirm'            => true,
+            'listSatkerCreateCokumen' => true,
 
             'filterSatker'          => $this->satker->where('balaiid', $this->user['balaiid'])->get()->getResult(),
             'filterSatker_selected' => $_satkerId,
@@ -242,6 +248,31 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         return $this->respond([
             'data' => $returnDaata
+        ]);
+    }
+    
+    
+    
+    public function listSatkerBalai()
+    {
+        if ($this->user['user_type'] == 'other') {
+            $createByAdmin = $this->session->get('createDokumenByAdmin');
+
+            $session_balaiId    = $createByAdmin['byAdmin_balai_id'] ?? null;
+        } else {
+            $session_balaiId    = $this->user['balai_id'] ?? null;
+        }
+
+        $balai_checklistSatker = [];
+        $balai_checklistSatker = $this->satker->select("
+            m_satker.satker,
+            (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun=DATE_FORMAT(NOW(), '%Y') and status='setuju' ) as iscreatedPK
+        ")
+         ->where('balaiid', $session_balaiId)->get()->getResult();
+        
+
+        return $this->respond([
+            'data' => $balai_checklistSatker
         ]);
     }
 

@@ -33,6 +33,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->tableProgram            = $this->db->table("tprogram");
         $this->templateDokumen         = $this->db->table('dokumen_pk_template');
 
+        $this->satker   = $this->db->table('m_satker');
+        $this->balai    = $this->db->table('m_balai');
 
         $this->request = \Config\Services::request();
     }
@@ -40,10 +42,23 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function satker()
     {
+        $dataBelumInput = $this->satker->select("
+            m_satker.satker
+        ")
+        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun=DATE_FORMAT(NOW(), '%Y') and status='setuju') < 1")
+        ->get()->getResult();
+
+        $dataBelumInput = array_map(function ($arr) {
+            return [
+                'nama' => $arr->satker
+            ];
+        }, $dataBelumInput);
+
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
             'pageTitle'                => 'Dokumen Penjanjian Kinerja - Satker',
             'dokumenType'              => 'satker',
+            'dataBelumInput'           => $dataBelumInput,
             'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'satker')->get()->getResult())
         ]);
     }
@@ -51,10 +66,23 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function balai()
     {
+        $dataBelumInput = $this->balai->select("
+            balai
+        ")
+        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='balai' and balaiid=m_balai.balaiid and tahun=DATE_FORMAT(NOW(), '%Y') and status='setuju') < 1")
+        ->get()->getResult();
+
+        $dataBelumInput = array_map(function ($arr) {
+            return [
+                'nama' => $arr->balai
+            ];
+        }, $dataBelumInput);
+
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
             'pageTitle'                => 'Dokumen Penjanjian Kinerja - Balai',
             'dokumenType'              => 'balai',
+            'dataBelumInput'           => $dataBelumInput,
             'createDokumen_userOption' => json_encode($this->tableBalai->select("balaiid as id, balai as title")->where('kota_penanda_tangan !=', '')->get()->getResult())
         ]);
     }
