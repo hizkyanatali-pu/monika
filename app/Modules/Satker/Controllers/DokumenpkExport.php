@@ -136,8 +136,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
         
         $pdf->SetProtection(array('print'));
 
+
+
         if($_GET['preview']){
-            $pdf->Output('I', 'dokumen-perjanjian-kinerja.pdf'); exit;
+            $nm_file = str_replace('KEPALA', '', $dataDokumen['pihak1_initial']). " - ". str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+            $pdf->Output('I', $nm_file.'.pdf'); exit;
          
         }else{
 
