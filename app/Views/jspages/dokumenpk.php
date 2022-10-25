@@ -26,6 +26,7 @@
         $('#modal-preview-cetak').on('shown.bs.modal', function() {
             $(document).off('focusin.modal');
         });
+
     })
 
 
@@ -98,7 +99,7 @@
             },
             fail: (xhr) => {
                 alert("Terjadi kesalahan pada sistem")
-                console.log(xhr)
+          
             }
         })
     })
@@ -162,7 +163,7 @@
         }, 100);
     })
 
-
+    
 
     $(document).on('change', 'select[name=created-tahun]', function() {
         if ($(this).val() == date.getFullYear()) {
@@ -177,6 +178,9 @@
                 type: 'GET',
                 data: {},
                 success: (res) => {
+                    console.log($(this).val() + " " + $(this).data('template-id'))
+                    console.log(res)
+
                     render_warningDokumenYearRevisoin = ''
                     inputValue_revisionSameYear = 0
 
@@ -213,10 +217,11 @@
 
 
 
+
     element_btnSaveDokumen.on('click', function() {
         if (saveDokumenValidation()) {
             let formData = getFormValue();
-            console.log(formData)
+            
 
             if ($(this).attr('data-dokumen-id')) {
                 formData['revision_dokumen_id'] = $(this).data('dokumen-id')
@@ -560,7 +565,6 @@
             type: 'GET',
             success: (res) => {
                 let renderList = ''
-
                 res.data.forEach(data => {
                     let renderCheck = ''
                     
@@ -867,8 +871,9 @@
                 <small>${params.templateTitle}</small>
             `)
         }
-
+        
         renderFormTemplate(params.data, params.target)
+        $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
 
         if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
             // $('#modalForm').find('.container-revision-alert').addClass('d-none')
@@ -882,6 +887,7 @@
             let renderCheckListSatkerBalai = ''
             params.data.balaiValidasiSatker.balaiChecklistSatker.forEach((data, index) => {
                 let renderCheck = ''
+               
                 if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check mt-2"></i>'
 
                 renderCheckListSatkerBalai += `
@@ -896,7 +902,7 @@
                 $('.container-revision-alert').append(`
                     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                         <h5 class="alert-heading">Informasi</h5>
-                        <p>Pembuatan dokumen perjanjian kinerja bisa di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. List satker dapat dilihat pda bagian bawah form</p>
+                        <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
                     </div>
                 `)
 
@@ -954,7 +960,6 @@
             render_warningDokumenYearRevisoin = '',
             inputValue_revisionSameYear = 0,
             classDNoneOutcome = ''
-
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
             render_warningDokumenYearRevisoin = `
                 <div class="bg-warning text-white pt-3 pr-3 pb-1 pl-3" role="alert">
@@ -1307,7 +1312,9 @@
 
         _data.forEach((data, key) => {
             let isSelected = key == date.getMonth() ? 'selected' : ''
-            monthToHide = key > date.getMonth() ? '_option-month-to-hide d-none' : ''
+            // monthToHide = key > date.getMonth() ? '_option-month-to-hide d-none' : ''
+            monthToHide = '';
+
 
             renderOptions += `
                 <option class="${monthToHide}" value='${key+1}' ${isSelected}>
@@ -1324,7 +1331,7 @@
     function renderFormTemplate_opsiTahun(_data) {
         let renderOptions = ''
 
-        for (let iTahun = (parseInt(_data) + 1); iTahun <= (parseInt(_data) + 1); iTahun++) {
+        for (let iTahun = (parseInt(_data)); iTahun <= (parseInt(_data)); iTahun++) {
             let isSelected = iTahun == date.getFullYear() ? 'selected' : ''
 
             renderOptions += `<option ${isSelected}>${iTahun}</option>`

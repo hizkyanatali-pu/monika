@@ -55,9 +55,9 @@
 										<i class="text-white fas fa-calendar"></i>
 									</div>
 									<select class="form-control" name="tahun">
-										<?php for ($date = 2021; $date <= date("Y"); $date++) {
+										<?php for ($date = 2021; $date <= date("Y")+1; $date++) {
 										?>
-											<option value="<?= $date ?>" selected="<?= date('Y') ?>"><?= $date ?></option>
+											<option value="<?= $date ?>" <?=($date == date("Y"))?'selected':'';?>><?= $date ?></option>
 										<?php } ?>
 									</select>
 								</div>

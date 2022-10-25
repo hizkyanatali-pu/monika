@@ -19,9 +19,9 @@ class Dashboard extends \App\Controllers\BaseController
         helper('dbdinamic');
         $session = session();
         $this->user = $session->get('userData');
+        $this->db_mysql = \Config\Database::connect();
         $dbcustom = switch_db($this->user['dbuse']);
         $this->db = \Config\Database::connect($dbcustom);
-
         $this->TematikModel = new TematikModel();
         $this->RekapUnorModel = new RekapUnorModel();
         $this->PohonAnggaran        = new PohonAnggaranModel();
@@ -35,6 +35,43 @@ class Dashboard extends \App\Controllers\BaseController
 
     public function index()
     {
+
+        //cek jika tabel yang berkaitan dengan api emon kosong 
+        
+       $check_empty_table_paket = $this->db_mysql->query("SELECT * FROM monika_data_{$this->user['tahun']}")->getNumRows();
+       $check_empty_table_kontrak = $this->db_mysql->query("SELECT * FROM monika_kontrak_{$this->user['tahun']}")->getNumRows();
+       $check_empty_table_rekap_unor = $this->db_mysql->query("SELECT * FROM monika_rekap_unor_{$this->user['tahun']}")->getNumRows();
+       $check_empty_table_paket_register = $this->db_mysql->query("SELECT * FROM monika_paket_register_{$this->user['tahun']}")->getNumRows();
+
+
+
+       if( $check_empty_table_paket < 1){
+
+        return redirect()->to(site_url("preferensi/tarik-data-emon/paket"));
+
+       }
+
+       if( $check_empty_table_kontrak < 1){
+
+        return redirect()->to(site_url("preferensi/tarik-data-emon/kontrak"));
+
+       }
+
+       if( $check_empty_table_rekap_unor < 1){
+
+        return redirect()->to(site_url("preferensi/tarik-data-emon/rekap_unor"));
+
+       }
+
+       if( $check_empty_table_paket_register < 1){
+
+        return redirect()->to(site_url("preferensi/tarik-data-emon/paket_register"));
+
+       }
+
+       // end
+
+
         $filterDateStart = $this->request->getGet('filter-date-start') ?? null;
         $filterDateEnd   = $this->request->getGet('filter-date-end') ?? null;
 

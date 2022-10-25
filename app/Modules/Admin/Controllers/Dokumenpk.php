@@ -45,7 +45,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataBelumInput = $this->satker->select("
             m_satker.satker
         ")
-        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun=DATE_FORMAT(NOW(), '%Y') and status='setuju') < 1")
+        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']} and status='setuju') < 1")
         ->get()->getResult();
 
         $dataBelumInput = array_map(function ($arr) {
@@ -69,7 +69,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataBelumInput = $this->balai->select("
             balai
         ")
-        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='balai' and balaiid=m_balai.balaiid and tahun=DATE_FORMAT(NOW(), '%Y') and status='setuju') < 1")
+        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='balai' and balaiid=m_balai.balaiid and tahun={$this->user['tahun']} and status='setuju') < 1 AND kota_penanda_tangan != ''")
         ->get()->getResult();
 
         $dataBelumInput = array_map(function ($arr) {
@@ -120,7 +120,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         switch ($userType) {
             case 'satker':
                 $templae_revTable = 'm_satker';
-                $dataSatker = $this->tableSatker->join('m_balai', 'm_satker.balaiid=m_satker.balaiid', 'left')->where('satkerid', $userId)->get()->getRow();
+                $dataSatker = $this->tableSatker->join('m_balai', 'm_satker.balaiid=m_balai.balaiid', 'left')->where('satkerid', $userId)->get()->getRow();
                 $this->session->set('createDokumenByAdmin', [
                     'byAdmin_user_type'   => 'satker',
                     'byAdmin_satker_nama' => $dataSatker->satker,

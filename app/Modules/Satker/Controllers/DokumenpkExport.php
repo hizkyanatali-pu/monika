@@ -76,7 +76,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             ->setResizeToWidth(50);
 
         // // Create generic label
-        // $label = Label::create('PUPR')
+        // $label = Label::create($qrcodeSite)
         //     ->setTextColor(new Color(255, 0, 0));
 
         $result = $writer->write($qrCode, $logo);
@@ -139,7 +139,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         if($_GET['preview']){
-            $nm_file = str_replace('KEPALA', '', $dataDokumen['pihak1_initial']). " - ". str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+            $nm_file = "PK ".str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])). " - ". str_replace(array('DIREKTUR', 'DIREKTORAT'),array("MENTERI","KEMENTERIAN"), str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
             $pdf->Output('I', $nm_file.'.pdf'); exit;
          
         }else{
@@ -192,8 +192,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // $dokumenKopTitle2_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
 
         // $dokumenKopTitle2 = str_replace('KEPALA', '', $dokumenKopTitle2_prefix . $dataDokumen['pihak1_initial']);
-        $dokumenKopTitle2 = str_replace('KEPALA', '', $dataDokumen['pihak1_initial']);
+        $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial']));
+
         $dokumenKopTitle3 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+        $dokumenKopTitle3 = str_replace('MENTERI', 'KEMENTERIAN',$dokumenKopTitle3);
+
+        
 
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
         $dokumenKopTitle2 = $dokumenKopTitle2;
@@ -214,7 +218,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
 
         // Kop Title 3
-        $kopTitle3 = $dataDokumen['dokumen_type'] != "satker" ? 'DIREKTORAT JENDERAL SUMBER DAYA AIR' : $dokumenKopTitle3;
+        $kopTitle3 = $dokumenKopTitle3;
         $pdf->SetFont('Times', 'B', 13);
         $width_kopTitle3 = $pdf->GetStringWidth($dokumenKopTitle3) + 6;
         $pdf->SetX((300 - $width_kopTitle3) / 2);
@@ -318,8 +322,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType,$qrcode)
     {
+        $pdf->SetMargins(0,2,0,0);
         $pdf->AddPage('L', 'A4');
-
+        $pdf->SetAutoPageBreak(false);
         $headerTarget = $_detailDokumenType == 'target' ? 'TARGET ' : 'OUTCOME ';
         $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', $headerTarget . $this->dokumenYear];
         $headerWidth = [
@@ -344,16 +349,16 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // print_r($qrcode);exit;
         if($qrcode){
 
-            $pdf->Image($qrcode, 280, 2, 15, 15,"PNG");
+            $pdf->Image($qrcode, 282, 195, 15, 15,"PNG");
         }
 
         /**  Dokumen KOP */
-        $pdf->Ln(6);
+        // $pdf->Ln();
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
 
-        $divisiPihak2 = $dataDokumen['dokumen_type'] != "satker" ? 'DIREKTORAT JENDERAL SUMBER DAYA AIR' : str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
-
-        $dokumenKopTitle2 = str_replace('KEPALA', '', $dataDokumen['pihak1_initial']) . ' - ' . $divisiPihak2;
+        $divisiPihak2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+        $divisiPihak2 = str_replace('MENTERI','KEMENTERIAN',$divisiPihak2);
+        $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
 
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetFillColor(255);
@@ -399,7 +404,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetFont($this->fontFamily, '', 8);
         $rowNUmber = 0;
         foreach ($tableData as $key => $data) {
-            $celTableDataFill = $this->dokumenLoadedStatus == 'setuju' ? true : false;
+            // $celTableDataFill = $this->dokumenLoadedStatus == 'setuju' ? true : false;
+            $celTableDataFill = true;
             $data_targetValue = [];
 
             if ($data['type'] == 'form') {
@@ -419,8 +425,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $width_cellTitle = 245;
 
                 if ($data['prefix_title'] == 'full') {
-                    $rowNUmber = $data['title'];
-                    $data['title'] = '';
+                    $rowNUmber = '';
+                    // $data['title'] = '';
                 } else {
                     $rowNUmber = $data['prefix_title'] ?? '-';
                 }
