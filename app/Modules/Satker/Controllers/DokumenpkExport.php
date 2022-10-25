@@ -76,7 +76,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             ->setResizeToWidth(50);
 
         // // Create generic label
-        // $label = Label::create('PUPR')
+        // $label = Label::create($qrcodeSite)
         //     ->setTextColor(new Color(255, 0, 0));
 
         $result = $writer->write($qrCode, $logo);
@@ -139,7 +139,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         if($_GET['preview']){
-            $nm_file = str_replace('KEPALA', '', $dataDokumen['pihak1_initial']). " - ". str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+            $nm_file = "PK ".str_replace('KEPALA', '', $dataDokumen['pihak1_initial']). " - ". str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
             $pdf->Output('I', $nm_file.'.pdf'); exit;
          
         }else{
