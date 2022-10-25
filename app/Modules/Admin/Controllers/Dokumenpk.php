@@ -59,7 +59,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'pageTitle'                => 'Dokumen Penjanjian Kinerja - Satker',
             'dokumenType'              => 'satker',
             'dataBelumInput'           => $dataBelumInput,
-            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'satker')->get()->getResult())
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'satker')->where("tahun",$this->user['tahun'])->get()->getResult())
         ]);
     }
 
@@ -83,7 +83,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'pageTitle'                => 'Dokumen Penjanjian Kinerja - Balai',
             'dokumenType'              => 'balai',
             'dataBelumInput'           => $dataBelumInput,
-            'createDokumen_userOption' => json_encode($this->tableBalai->select("balaiid as id, balai as title")->where('kota_penanda_tangan !=', '')->get()->getResult())
+            'createDokumen_userOption' => json_encode($this->tableBalai->select("balaiid as id, balai as title")->where('kota_penanda_tangan !=', '')->where("tahun",$this->user['tahun'])->get()->getResult())
         ]);
     }
 
@@ -94,7 +94,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'sessionYear'              => $this->user['tahun'],
             'pageTitle'                => 'Dokumen Penjanjian Kinerja - Eselon 2',
             'dokumenType'              => 'eselon2',
-            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon2')->get()->getResult())
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon2')->where("tahun",$this->user['tahun'])->get()->getResult())
         ]);
     }
 
@@ -105,7 +105,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'sessionYear'              => $this->user['tahun'],
             'pageTitle'                => 'Dokumen Penjanjian Kinerja - Eselon1',
             'dokumenType'              => 'eselon1',
-            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon1')->get()->getResult())
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon1')->where("tahun",$this->user['tahun'])->get()->getResult())
         ]);
     }
 
