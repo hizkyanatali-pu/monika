@@ -345,6 +345,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         ->where('dokumen_pk_template_rowrumus.rumus', $data->rumus)
                         ->where('dokumenpk_satker.balaiid', $session_balaiId)
                         ->where('dokumenpk_satker.status', 'setuju')
+                        ->where('dokumenpk_satker.tahun', $this->user['tahun'])
                         ->where('dokumenpk_satker_rows.is_checked', '1')
                         ->get()->getResult();
 
@@ -386,6 +387,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ')
                     ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
                     ->where('dokumenpk_satker.status', 'setuju')
+                    ->where('dokumenpk_satker.tahun', $this->user['tahun'])
                     ->where('dokumenpk_satker_rows.is_checked', '1')
                     ->where('dokumenpk_satker.pihak2_initial', 'DIREKTUR JENDERAL SUMBER DAYA AIR')
                     ->where("
