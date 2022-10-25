@@ -120,7 +120,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         switch ($userType) {
             case 'satker':
                 $templae_revTable = 'm_satker';
-                $dataSatker = $this->tableSatker->join('m_balai', 'm_satker.balaiid=m_satker.balaiid', 'left')->where('satkerid', $userId)->get()->getRow();
+                $dataSatker = $this->tableSatker->join('m_balai', 'm_satker.balaiid=m_balai.balaiid', 'left')->where('satkerid', $userId)->get()->getRow();
                 $this->session->set('createDokumenByAdmin', [
                     'byAdmin_user_type'   => 'satker',
                     'byAdmin_satker_nama' => $dataSatker->satker,

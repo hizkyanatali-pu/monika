@@ -269,7 +269,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $balai_checklistSatker = [];
         $balai_checklistSatker = $this->satker->select("
             m_satker.satker,
-            (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun=DATE_FORMAT(NOW(), '%Y') and status='setuju' ) as iscreatedPK
+            (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status='setuju' ) as iscreatedPK
         ")
          ->where('balaiid', $session_balaiId)->get()->getResult();
         
@@ -437,7 +437,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         if ($session_userType == 'balai') {
             $balai_checklistSatker = $this->satker->select("
                 m_satker.satker,
-                (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun=DATE_FORMAT(NOW(), '%Y') and status='setuju' ) as iscreatedPK
+                (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status='setuju' ) as iscreatedPK
             ")
                 ->where('balaiid', $session_balaiId)->get()->getResult();
 
@@ -534,6 +534,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             "," => ".",
         ];
 
+        // print_r($createByAdmin);exit;
 
         if ($this->user['user_type'] == 'other' || isset($createByAdmin)) {
             $session_userType   = $createByAdmin['byAdmin_user_type'];
@@ -550,6 +551,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $session_satkerId   = $this->user['satker_id'] ?? null;
             $session_balaiId    = $this->user['balai_id'] ?? null;
         }
+
 
         /* dokumen */
         $dataTemplateDokumen = $this->templateDokumen->select('type')->where('id', $this->request->getPost('templateID'))->get()->getRow();

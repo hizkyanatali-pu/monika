@@ -513,7 +513,6 @@
             type: 'GET',
             success: (res) => {
                 let renderList = ''
-
                 res.data.forEach(data => {
                     let renderCheck = ''
                     
@@ -835,6 +834,8 @@
             let renderCheckListSatkerBalai = ''
             params.data.balaiValidasiSatker.balaiChecklistSatker.forEach((data, index) => {
                 let renderCheck = ''
+                console.log(data.iscreatedPK)
+
                 if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check mt-2"></i>'
 
                 renderCheckListSatkerBalai += `
