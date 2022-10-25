@@ -229,6 +229,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->where('dokumenpk_satker.status', $_status)
             ->where('dokumenpk_satker.dokumen_type', $_dokumenType)
             ->where("dokumenpk_satker.deleted_at is null")
+            ->where("dokumenpk_satker.tahun",$this->user['tahun'])
             ->orderBy('dokumenpk_satker.id', 'DESC')
             ->get()->getResult();
 
