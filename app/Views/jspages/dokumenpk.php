@@ -1260,7 +1260,9 @@
 
         _data.forEach((data, key) => {
             let isSelected = key == date.getMonth() ? 'selected' : ''
-            monthToHide = key > date.getMonth() ? '_option-month-to-hide d-none' : ''
+            // monthToHide = key > date.getMonth() ? '_option-month-to-hide d-none' : ''
+            monthToHide = '';
+
 
             renderOptions += `
                 <option class="${monthToHide}" value='${key+1}' ${isSelected}>
