@@ -57,7 +57,7 @@
 									<select class="form-control" name="tahun">
 										<?php for ($date = 2021; $date <= date("Y")+1; $date++) {
 										?>
-											<option value="<?= $date ?>" <?=($date=='2023')?'selected':'';?>><?= $date ?></option>
+											<option value="<?= $date ?>" <?=($date == date("Y"))?'selected':'';?>><?= $date ?></option>
 										<?php } ?>
 									</select>
 								</div>
