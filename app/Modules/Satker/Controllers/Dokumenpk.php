@@ -242,7 +242,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'revision_number'            => $arr->revision_number,
                 'status'                     => $arr->status,
                 'is_revision_same_year'      => $arr->is_revision_same_year,
-                'change_status_at'           => $arr->change_status_at != null ? date_indo($arr->change_status_at) : '',
+                'change_status_at'           => $arr->status != 'hold' ? date_indo($arr->change_status_at) : '-',
                 'created_at'                 => $arr->created_at != null ? date_indo($arr->created_at) : '',
                 'dokumenTitle'               => $arr->dokumenTitle,
                 'userCreatedName'            => $arr->userCreatedName,
@@ -479,13 +479,28 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function checkDocumentSameYearExist($_createdYear, $_templateId)
     {
+
+        if ($this->user['user_type'] == 'other') {
+            $createByAdmin = $this->session->get('createDokumenByAdmin');
+
+            $session_userType   = $createByAdmin['byAdmin_user_type'] ?? null;
+            $session_satkerNama = $createByAdmin['byAdmin_satker_nama'] ?? null;
+            $session_balaiNama  = $createByAdmin['byAdmin_balai_nama'] ?? null;
+            $session_satkerId   = $createByAdmin['byAdmin_satker_id'] ?? null;
+            $session_balaiId    = $createByAdmin['byAdmin_balai_id'] ?? null;
+        } else {
+            $session_userType   = $this->user['user_type'];
+            $session_satkerNama = $this->user['satker_nama'] ?? null;
+            $session_balaiNama  = $this->user['balai_nama'] ?? null;
+            $session_satkerId   = $this->user['satker_id'] ?? null;
+            $session_balaiId    = $this->user['balai_id'] ?? null;
+        }
+
         $dokumenExistSameYear = $this->dokumenSatker->select("
             id as last_dokumen_id,
             IFNULL (revision_master_dokumen_id, id) AS revision_master_dokumen_id
-        ")->where([
-            'template_id'  => $_templateId,
-            'user_created' => $this->user['uid']
-        ])
+        ")->where('template_id' ,$_templateId)
+            ->where('satkerid',$session_satkerId)
             ->where("status != ", 'revision')
             ->where("tahun = '$_createdYear'")->orderBy('id', 'desc')->get()->getRow();
 

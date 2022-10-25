@@ -123,7 +123,7 @@
                                 <?php echo date_indo($data->created_at) ?>
                             </td>
                             <td>
-                                <?php echo $data->change_status_at != null ? date_indo($data->change_status_at) : '' ?>
+                                <?php echo $data->status != "hold" ? date_indo($data->change_status_at) : '-' ?>
                             </td>
                             <td class="pr-0">
                                 <div class="d-flex justify-content-between align-items-center">
