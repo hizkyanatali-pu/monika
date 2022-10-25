@@ -1277,7 +1277,7 @@
     function renderFormTemplate_opsiTahun(_data) {
         let renderOptions = ''
 
-        for (let iTahun = (parseInt(_data) + 1); iTahun <= (parseInt(_data) + 1); iTahun++) {
+        for (let iTahun = (parseInt(_data)); iTahun <= (parseInt(_data)); iTahun++) {
             let isSelected = iTahun == date.getFullYear() ? 'selected' : ''
 
             renderOptions += `<option ${isSelected}>${iTahun}</option>`
