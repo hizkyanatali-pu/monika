@@ -11,7 +11,8 @@
         "twbs/bootstrap": "4.4.0",
         "hermawan/codeigniter4-datatables": "^0.3.0",
         "rogervila/array-diff-multidimensional": "^2.0",
-        "phpoffice/phpspreadsheet": "^1.23"
+        "phpoffice/phpspreadsheet": "^1.23",
+        "endroid/qr-code": "^4.6"
     },
     "require-dev": {
         "mikey179/vfsstream": "1.6.*",

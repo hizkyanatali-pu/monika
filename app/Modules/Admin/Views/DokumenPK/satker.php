@@ -115,7 +115,7 @@
                             <th width="25px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
-                            <th width="190px"></th>
+                            <th width="280px"></th>
                         </tr>
                     </thead>
 
@@ -134,7 +134,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal disetujui</th>
-                            <th width="190px"></th>
+                            <th width="280px"></th>
                         </tr>
                     </thead>
 
@@ -153,7 +153,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal Ditolak</th>
-                            <th width="190px"></th>
+                            <th width="280px"></th>
                         </tr>
                     </thead>
 
@@ -225,6 +225,7 @@
             </div>
             <div class="modal-footer d-none">
                 <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
+                <button type="button" class="btn btn-success __save-update-dokumen d-none">Simpan Dokumen</button>
             </div>
         </div>
     </div>
@@ -615,12 +616,20 @@
                             Lihat
                         </button>
                         <button 
-                            class="btn btn-sm btn-outline-primary __preview-dokumen"
+                            class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
                             data-id="${data.id}"
                             data-to-confirm="${buttonData_toConfirm}"
                         >
                             <i class="fas fa-print"></i><br/>
                             Cetak
+                        </button>
+                        <button 
+                            class="btn btn-sm btn-outline-success __edit-dokumen"
+                            data-id="${data.id}"
+                            data-template-id="${data.template_id}"
+                        >
+                            <i class="fas fa-edit"></i><br/>
+                            Edit
                         </button>
                         <button 
                             class="btn btn-sm btn-outline-danger __arsipkan-dokumen"

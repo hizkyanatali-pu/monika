@@ -638,6 +638,56 @@ class Dokumenpk extends \App\Controllers\BaseController
             'status' => true,
         ]);
     }
+    
+    
+    
+    public function edit()
+    {
+        $dokumenID = $this->request->getPost('id');
+
+        $replacements = [
+            "." => "",
+            "," => ".",
+        ];
+
+
+        /* dokumen */
+        $inserted_dokumenSatker = [
+            'template_id'           => $this->request->getPost('templateID'),
+            'total_anggaran'        => strtr($this->request->getPost('totalAnggaran'), $replacements),
+            'pihak1_ttd'            => $this->request->getPost('ttdPihak1'),
+            'pihak1_is_plt'         => $this->request->getPost('ttdPihak1_isPlt'),
+            'pihak2_ttd'            => $this->request->getPost('ttdPihak2'),
+            'pihak2_is_plt'         => $this->request->getPost('ttdPihak2_isPlt'),
+            'kota'                  => $this->request->getPost('kota'),
+            'kota_nama'             => $this->request->getPost('kotaNama'),
+            'bulan'                 => $this->request->getPost('bulan'),
+            'tahun'                 => $this->request->getPost('tahun')
+        ];
+
+        if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
+
+        $this->dokumenSatker->where('id', $dokumenID);
+        $this->dokumenSatker->update($inserted_dokumenSatker);
+        /** end-of: dokumen */
+        
+
+        /* dokumen rows */
+        $this->dokumenSatker_rows->where('dokumen_id', $dokumenID);
+        $this->dokumenSatker_rows->delete();
+        $this->insertDokumenSatker_rows($this->request->getPost(), $dokumenID);
+        /** end-of: dokumen rows */
+
+        /** dokumen kegiatan */
+        $this->dokumenSatker_kegiatan->where('dokumen_id', $dokumenID);
+        $this->dokumenSatker_kegiatan->delete();
+        $this->insertDokumenSatker_kegiatan($this->request->getPost(), $dokumenID);
+        /** end-of: dokumen kegiatan */
+
+        return $this->respond([
+            'status' => true
+        ]);
+    }
 
 
 
@@ -663,7 +713,6 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     private function insertDokumenSatker_kegiatan($input, $_dokumenID)
     {
-
         $records = array_map(function ($arr) use ($_dokumenID) {
             return [
                 'dokumen_id' => $_dokumenID,

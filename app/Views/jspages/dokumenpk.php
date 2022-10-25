@@ -8,7 +8,8 @@
         element_modalFormTitle = element_modalForm.find('.modal-title'),
         element_modalFormBackChooseTemplate = element_modalForm.find('.__back-pilih-dokumen'),
         element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
-        element_btnSaveDokumen = $('.__save-dokumen')
+        element_btnSaveDokumen = $('.__save-dokumen'),
+        element_btnSaveEditDokumen = $('.__save-update-dokumen')
 
     $(document).ready(function() {
         $('#table').DataTable({
@@ -17,7 +18,9 @@
         })
 
         $('#modalForm').on('hidden.bs.modal', function() {
-            prepareForm_reset();
+            $('.__save-dokumen').removeClass('d-none')
+            $('.__save-update-dokumen').addClass('d-none')
+            prepareForm_reset()
         })
         
         $('#modal-preview-cetak').on('shown.bs.modal', function() {
@@ -239,6 +242,32 @@
 
 
 
+    element_btnSaveEditDokumen.on('click', function() {
+        if (saveDokumenValidation()) {
+            let formData = getFormValue(),
+                dataId = $(this).data('id')
+
+            formData['id'] = $(this).data('id')
+            
+            $.ajax({
+                url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
+                type: 'POST',
+                data: formData,
+                success: (res) => {
+                    if (res.status) {
+                        location.reload()
+                    }
+                },
+                fail: (xhr) => {
+                    alert('Terjadi kesalahan pada sistem')
+                    console.log(xhr)
+                }
+            })            
+        }
+    })
+
+
+
     $(document).on('click', '.__prepare-revisi-dokumen', function() {
         prepareRevisiDocument({
             dataId: $(this).data('id'),
@@ -358,6 +387,24 @@
     })
 
 
+
+    $(document).on('click', '.__edit-dokumen', function() {
+        let documentId = $(this).data('id')
+
+        prepareRevisiDocument({
+            dataId: documentId,
+            templateId: $(this).data('template-id'),
+            beforeModalMount: () => {
+                element_btnSaveEditDokumen.data('id', documentId);
+                $('.__save-dokumen').addClass('d-none')
+                $('.__save-update-dokumen').removeClass('d-none')
+                $('#modalForm').find('.container-revision-alert').addClass('d-none')
+            }
+        })
+    })
+
+
+    
     function prepareRevisiDocument(params = {
         dataId: '',
         templateId: '',
