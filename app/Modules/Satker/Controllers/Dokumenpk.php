@@ -64,7 +64,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             // ->where('user_created', $this->userUID)
             ->where('dokumenpk_satker.status !=', 'revision')
             ->where("dokumenpk_satker.deleted_at is null")
-            ->where("dokumenpk_satker.tahun,$this->user['tahun'] ")
+            ->where("dokumenpk_satker.tahun",$this->user['tahun'] )
             ->orderBy('dokumenpk_satker.id', 'DESC');
 
         if ($this->user['user_type'] == 'satker') {
