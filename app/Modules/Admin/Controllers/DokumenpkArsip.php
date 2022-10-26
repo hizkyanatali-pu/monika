@@ -22,16 +22,16 @@ class DokumenpkArsip extends \App\Controllers\BaseController
 
         $this->request = \Config\Services::request();
     }
-    
-    
-    
+
+
+
     public function arsip()
     {
-        return view('Modules\Admin\Views\DokumenPK\arsip.php');
+        return view('Modules\Admin\Views\DokumenPK\arsip.php', ['title' => "Perjanjian Kinerja Arsip"]);
     }
-    
-    
-    
+
+
+
     public function getDataArsip($_status, $_dokumenType)
     {
         $dataDokumen = $this->dokumenSatker->select('
@@ -71,7 +71,7 @@ class DokumenpkArsip extends \App\Controllers\BaseController
                 'created_at'                 => $arr->created_at != null ? date_indo($arr->created_at) : '',
                 'dokumenTitle'               => $arr->dokumenTitle,
                 'userCreatedName'            => $arr->userCreatedName,
-                'satkerid'                   => $arr->satkerid ?? $arr->balaiid,
+                'satkerid'                   => instansi_name($arr->satkerid ?? $arr->balaiid)->nama_instansi,
             ];
         }, $dataDokumen->get()->getResult());
 
@@ -80,9 +80,9 @@ class DokumenpkArsip extends \App\Controllers\BaseController
             'status' => $_status
         ]);
     }
-    
-    
-    
+
+
+
     public function arsipkanDokumen()
     {
         $this->dokumenSatker->where('id', $this->request->getPost('id'));
@@ -94,9 +94,9 @@ class DokumenpkArsip extends \App\Controllers\BaseController
             'status' => true
         ]);
     }
-    
-    
-    
+
+
+
     public function restoreArsip()
     {
         $this->dokumenSatker->where('id', $this->request->getPost('id'));
@@ -108,9 +108,9 @@ class DokumenpkArsip extends \App\Controllers\BaseController
             'status' => true
         ]);
     }
-    
-    
-    
+
+
+
     public function deletePermanent()
     {
         $dokumenId = $this->request->getPost('id');

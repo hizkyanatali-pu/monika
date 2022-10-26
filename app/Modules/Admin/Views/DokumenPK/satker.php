@@ -84,6 +84,9 @@
 
     <div class="kt-portlet" style="margin-top: -5px">
         <div class="kt-portlet__body tab-content" id="pills-tabContent">
+            <!-- <button class="btn btn-icon btn-warning">
+           <i class="fas fa-sync-alt"></i>
+                                </button> -->
             <?php if (isset($dataBelumInput)) { ?>
                 <div class="tab-pane fade show" id="belum-input" role="tabpanel" aria-labelledby="belum-input-tab">
                     <table class="table table-bordered" id="table-belum-input">
@@ -97,7 +100,7 @@
                         <tbody style="font-size: 12px">
                             <?php foreach ($dataBelumInput as $key_belumInput => $value_belumInput) { ?>
                                 <tr>
-                                    <td><?php echo $key_belumInput+1 ?></td>
+                                    <td><?php echo $key_belumInput + 1 ?></td>
                                     <td><?php echo $value_belumInput['nama'] ?></td>
                                 </tr>
                             <?php } ?>
@@ -105,6 +108,7 @@
                     </table>
                 </div>
             <?php } ?>
+
 
 
 
@@ -261,14 +265,14 @@
 <?php echo $this->include('jspages/dokumenpk') ?>
 
 <script>
-    var element_tableHold                = '',
-        element_tableSetuju              = '',
-        element_tableTolak               = '',
-        element_tableBelumInput          = '',
+    var element_tableHold = '',
+        element_tableSetuju = '',
+        element_tableTolak = '',
+        element_tableBelumInput = '',
         element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
-        element_modalListRevision        = $('#modal-cetak-dokumen-revisioned'),
-        element_formTable                = $('._table-form').find('tbody'),
-        element_tableInformasi           = $('._table-informasi').find('tbody')
+        element_modalListRevision = $('#modal-cetak-dokumen-revisioned'),
+        element_formTable = $('._table-form').find('tbody'),
+        element_tableInformasi = $('._table-informasi').find('tbody')
 
 
     $(document).ready(function() {
@@ -340,7 +344,7 @@
             showCancelButton: true,
             confirmButtonText: 'Pilih',
             showLoaderOnConfirm: true,
-            onOpen: function () {
+            onOpen: function() {
                 $('.select2').select2({
                     width: '100%',
                     placeholder: "Seleziona",
@@ -349,10 +353,10 @@
             preConfirm: () => {
                 return $('.select2').val()
             }
-         }).then((result) => {
+        }).then((result) => {
             if (result.value != undefined) {
-                let userType = "<?php echo $dokumenType ?>"=="balai" ? "balai" : "satker"
-                
+                let userType = "<?php echo $dokumenType ?>" == "balai" ? "balai" : "satker"
+
                 $.ajax({
                     url: "<?php echo site_url('dokumenpk/get-list-template-buat-dokumen') ?>" + "/" + userType + "/" + result.value,
                     type: 'GET',
@@ -376,7 +380,7 @@
                         $('.__opsi-template').trigger('click')
                     }
                 })
-                
+
             }
         })
     })
@@ -389,9 +393,9 @@
             $(this).data('to-confirm')
         )
     })
-    
-    
-    
+
+
+
     $(document).on('click', '.__arsipkan-dokumen', function() {
         Swal.fire({
             title: 'Arsipkan Dokumen Perjanjian Kinerja',
@@ -591,7 +595,7 @@
             }
 
             if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>`
-           
+
             const tr = $(`
                 <tr id="_dokumen-row-${data.id}">
                     <td class="text-center">${ index+1 }</td>
