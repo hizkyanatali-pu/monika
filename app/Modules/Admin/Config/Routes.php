@@ -213,6 +213,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             });
 
             $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->get('dashboard', '\Modules\Admin\Controllers\Dokumenpk::dashboard');
+
                 $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
 
                 $routes->group('arsip', ['namespace' => 'App\Controllers'], function($routes) {

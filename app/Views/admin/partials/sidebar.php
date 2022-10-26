@@ -342,6 +342,24 @@ $request = \Config\Services::request();
                     <span class="kt-menu__arrow"></span>
 
                     <ul class="kt-menu__subnav">
+                        <li 
+                            class="kt-menu__item 
+                            <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'dashboard'  ? ' kt-menu__item--active' : '') ?>" 
+                            aria-haspopup="true"
+                        >
+                            <a 
+                                href="<?= site_url('dokumenpk/dashboard'); ?>" 
+                                class="kt-menu__link "
+                            >
+                            <i class="kt-menu__link-icon fas fa-chart-bar"></i>
+                                <span class="kt-menu__link-text">
+                                    Dashboard
+                                </span>
+                            </a>
+                        </li>
+                        
+
+
                         <li class="
                                 kt-menu__item  kt-menu__item--submenu 
                                 <?= ($request->uri->getSegment(1) == 'dokumenpk' &&
