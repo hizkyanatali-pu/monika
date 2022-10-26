@@ -87,7 +87,7 @@
                         <th width="150px">Tanggal Kirim</th>
                         <th width="150px">Tanggal Disetujui / Ditolak</th>
                         <th width="250px">Status</th>
-                        <th width="70px"></th>
+                        <th width="70px">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -100,7 +100,7 @@
                                 <?php echo $dokumenMasterID ?>
                             </td>
                             <td>
-                                <?php echo $data->dokumenTitle ?>
+                                <?php echo "PERJANJIAN KINERJA ".$data->dokumenTitle ?>
 
                                 <?php if ($data->revision_master_number || $data->is_revision_same_year) : 
                                     $badgeText  = ($data->is_revision_same_year) ? 'Revisi' : 'Koreksi Ke ' . $data->revision_number;
@@ -115,7 +115,9 @@
 
                                 <?php if (property_exists($data, 'userCreatedName')) { ?>
                                     <div class="mt-2">
+                                        Instansi : <strong><?php echo instansi_name($data->satkerid)->nama_instansi ?></strong><br>
                                         Di buat oleh : <strong><?php echo $data->userCreatedName ?></strong>
+
                                     </div>
                                 <?php } ?>
                             </td>

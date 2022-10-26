@@ -92,7 +92,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
-            'pageTitle'                => 'Dokumen Penjanjian Kinerja - Satker',
+            'title'                => 'Dokumen Penjanjian Kinerja - Satker',
             'dokumenType'              => 'satker',
             'dataBelumInput'           => $dataBelumInput,
             'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'satker')->get()->getResult())
@@ -116,7 +116,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
-            'pageTitle'                => 'Dokumen Penjanjian Kinerja - Balai',
+            'title'                => 'Dokumen Penjanjian Kinerja - Balai',
             'dokumenType'              => 'balai',
             'dataBelumInput'           => $dataBelumInput,
             'createDokumen_userOption' => json_encode($this->tableBalai->select("balaiid as id, balai as title")->where('kota_penanda_tangan !=', '')->get()->getResult())
@@ -128,7 +128,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
-            'pageTitle'                => 'Dokumen Penjanjian Kinerja - Eselon 2',
+            'title'                => 'Dokumen Penjanjian Kinerja - Eselon 2',
             'dokumenType'              => 'eselon2',
             'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon2')->get()->getResult())
         ]);
@@ -139,7 +139,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
-            'pageTitle'                => 'Dokumen Penjanjian Kinerja - Eselon1',
+            'title'                => 'Dokumen Penjanjian Kinerja - Eselon1',
             'dokumenType'              => 'eselon1',
             'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon1')->get()->getResult())
         ]);
@@ -213,7 +213,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function template()
     {
         return $this->pageTemplate([
-            'pageTitle' => 'Template Perjanjian Kinerja - Satker',
+            'title' => 'Template Perjanjian Kinerja - Satker',
             'data' => $this->dokumenPK->groupStart()
                             ->where('type', 'satker')
                             ->orWhere('type', 'balai')
@@ -228,7 +228,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function templateEselon2()
     {
         return $this->pageTemplate([
-            'pageTitle' => 'Template Perjanjian Kinerja - Eselon 2',
+            'title' => 'Template Perjanjian Kinerja - Eselon 2',
             'data' => $this->dokumenPK->where('type', 'eselon2')
                         ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
             'defaultType' => 'eselon2'
@@ -240,7 +240,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function templateEselon1()
     {
         return $this->pageTemplate([
-            'pageTitle' => 'Template Perjanjian Kinerja - Eselon 1',
+            'title' => 'Template Perjanjian Kinerja - Eselon 1',
             'data' => $this->dokumenPK->where('type', 'eselon1')
                         ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
             'defaultType' => 'eselon1'
@@ -250,7 +250,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     
     
     private function pageTemplate($params = [
-        'pageTitle' => '',
+        'title' => '',
         'data' => [],
         'defaultType' => 'datker'
     ])
@@ -258,7 +258,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $sessionYear = $this->user['tahun'];
 
         return view('Modules\Admin\Views\DokumenPK\template.php', [
-            'pageTitle'   => $params['pageTitle'],
+            'title'   => $params['title'],
             'data'        => $params['data'],
             'allSatker'   => $this->tableSatker->whereNotIn('satker', ['', '1'])->get()->getResult(),
             'allBalai'    => $this->tableBalai->get()->getResult(),

@@ -368,6 +368,7 @@
                         ${render_badgeRevisi}
 
                         <div class="mt-2">
+                            Instansi : <strong>${data.satkerid}</strong><br>
                             Di buat oleh : <strong>${data.userCreatedName}</strong>
                         </div>
                     </td>

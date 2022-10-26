@@ -118,7 +118,7 @@ class PulldataModel extends Model
         } elseif ($datatag == "satkerdeviasiterbesar_persen") {
             $f .= ($f ? ',' : '') . "s.satkerid as id, CONCAT_WS(' ', s.satkerid, s.satker) as label, b.st, ";
             $w = ($w ? ' WHERE ' : '') . $w . " GROUP BY md.kdsatker ORDER BY jml_persen_deviasi ASC  LIMIT 10";
-        }else {
+        } else {
             $f = "b.balaiid as id, b.balai as label, ";
             // $w = ($w ? ' WHERE ' : '') . $w . " ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC";
             // order by deviasi
@@ -170,15 +170,15 @@ class PulldataModel extends Model
         if ($datatag == "satker100m") {
             // return $this->db->query("SELECT * FROM ( $q GROUP BY md.kdsatker ORDER BY ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) DESC, ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) DESC ) md " . $w)->getResultArray();
             //order by deviasi dan nilai bawah rata rata
-            
+
             return $this->db->query("SELECT * FROM ( $q GROUP BY md.kdsatker  ORDER BY stw DESC,((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)  DESC ) md " . $w)->getResultArray();
-        } else {            
+        } else {
             return $this->db->query($q . $w)->getResultArray();
         }
     }
 
 
-    
+
     function getSatker($w = '')
     {
         $this->akses = new AksesModel();
@@ -366,19 +366,19 @@ class PulldataModel extends Model
             (object)[
                 'title' => 'RPM',
                 'progresKeu' => round($dataProgresKeu[0]->rpm, 2),
-                'progresFis' => round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->rpm, 2),
+                'progresFis' => round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->rpm, 2)/100,
                 'totalPagu' =>  $dataTotalPagu[0]->rpm
             ],
             (object)[
                 'title' => 'SBSN',
                 'progresKeu' =>  round($dataProgresKeu[0]->sbsn, 2),
-                'progresFis' =>  round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->sbsn, 2),
+                'progresFis' =>  round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->sbsn, 2)/100,
                 'totalPagu' =>  $dataTotalPagu[0]->sbsn, 2
             ],
             (object)[
                 'title' => 'PHLN',
                 'progresKeu' =>  round($dataProgresKeu[0]->phln, 2),
-                'progresFis' =>  round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->phln, 2),
+                'progresFis' =>  round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->phln, 2)/100,
                 'totalPagu' =>  $dataTotalPagu[0]->phln
             ]
         ];

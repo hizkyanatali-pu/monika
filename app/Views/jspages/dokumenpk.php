@@ -22,7 +22,7 @@
             $('.__save-update-dokumen').addClass('d-none')
             prepareForm_reset()
         })
-        
+
         $('#modal-preview-cetak').on('shown.bs.modal', function() {
             $(document).off('focusin.modal');
         });
@@ -99,7 +99,7 @@
             },
             fail: (xhr) => {
                 alert("Terjadi kesalahan pada sistem")
-          
+
             }
         })
     })
@@ -163,7 +163,7 @@
         }, 100);
     })
 
-    
+
 
     $(document).on('change', 'select[name=created-tahun]', function() {
         if ($(this).val() == date.getFullYear()) {
@@ -178,8 +178,6 @@
                 type: 'GET',
                 data: {},
                 success: (res) => {
-                    console.log($(this).val() + " " + $(this).data('template-id'))
-                    console.log(res)
 
                     render_warningDokumenYearRevisoin = ''
                     inputValue_revisionSameYear = 0
@@ -200,6 +198,15 @@
                             buttonText: 'Buat Revisi'
                         });
                     } else {
+                        if (res.dokumen_type == 'master-balai' || res.dokumen_type == 'balai') {
+
+                            render_warningDokumenYearRevisoin = `
+                        <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                        <h5 class="alert-heading">Informasi</h5>
+                        <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
+                    </div>
+                        `
+                        }
                         render_reset_btnSubmitToRevision()
                     }
 
@@ -221,7 +228,7 @@
     element_btnSaveDokumen.on('click', function() {
         if (saveDokumenValidation()) {
             let formData = getFormValue();
-            
+
 
             if ($(this).attr('data-dokumen-id')) {
                 formData['revision_dokumen_id'] = $(this).data('dokumen-id')
@@ -253,7 +260,7 @@
                 dataId = $(this).data('id')
 
             formData['id'] = $(this).data('id')
-            
+
             $.ajax({
                 url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
                 type: 'POST',
@@ -267,7 +274,7 @@
                     alert('Terjadi kesalahan pada sistem')
                     console.log(xhr)
                 }
-            })            
+            })
         }
     })
 
@@ -409,7 +416,7 @@
     })
 
 
-    
+
     function prepareRevisiDocument(params = {
         dataId: '',
         templateId: '',
@@ -555,9 +562,9 @@
             cetakDokumen(dokumenMasterID, true)
         }
     })
-    
-    
-    
+
+
+
     $(document).on('click', '.__list-satker-telah-membuat-dokumen', function() {
         $('#modalSatkerListCreated').modal('show')
         $.ajax({
@@ -567,7 +574,7 @@
                 let renderList = ''
                 res.data.forEach(data => {
                     let renderCheck = ''
-                    
+
                     if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check"></i>'
                     renderList += `
                         <li class="list-group-item d-flex justify-content-between">
@@ -576,7 +583,7 @@
                         </li>
                     `
                 });
-                
+
                 $('#modalSatkerListCreated').find('.list-group').html(renderList)
             }
         })
@@ -802,7 +809,7 @@
             type: 'GET',
             success: (res) => {
                 $('#modal-cetak-dokumen-revisioned').modal('hide')
-                
+
                 setTimeout(() => {
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
 
@@ -825,7 +832,7 @@
 
                     element_iframePreviewDokumen.attr('src', '<?php echo site_url('dokumen-perjanjian-kinerja.pdf') ?>')
                     element_modalPreviewCetakDokumen.modal('show')
-                    
+
                     if (_toConfirm) {
                         if (res.dokumen.status != 'setuju' && res.dokumen.status != 'tolak') {
                             element_modalPreviewCetakDokumen.find('.modal-footer').html(`
@@ -871,7 +878,7 @@
                 <small>${params.templateTitle}</small>
             `)
         }
-        
+
         renderFormTemplate(params.data, params.target)
         $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
 
@@ -887,7 +894,7 @@
             let renderCheckListSatkerBalai = ''
             params.data.balaiValidasiSatker.balaiChecklistSatker.forEach((data, index) => {
                 let renderCheck = ''
-               
+
                 if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check mt-2"></i>'
 
                 renderCheckListSatkerBalai += `
@@ -897,6 +904,7 @@
                     </li>
                 `
             });
+
 
             if (params.data.template.type == 'master-balai' || params.data.template.type == 'balai') {
                 $('.container-revision-alert').append(`
@@ -976,6 +984,8 @@
                 buttonText: 'Buat Revisi'
             });
         }
+
+
 
         if (
             _data.template.type == 'eselon1' ||
