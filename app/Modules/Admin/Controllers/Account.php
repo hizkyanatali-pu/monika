@@ -9,7 +9,7 @@ class Account extends \App\Controllers\BaseController
     public function index()
     {
         $data = array(
-            'title'=> 'Dashboard'
+            'title'=> 'Kelola Pengguna'
         );
         return view('Modules\Admin\Views\Account', [
 			'userData' => $this->session->userData

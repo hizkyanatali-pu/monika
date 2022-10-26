@@ -125,6 +125,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         returnSection:
 
         return view('Modules\Satker\Views\Dokumenpk.php', [
+            'title'             => "Perjanjian Kinerja Balai",
             'sessionYear'       => $this->user['tahun'],
             'templateDokumen'   => $dataTemplate,
             'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
@@ -152,6 +153,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
+            dokumenpk_satker.satkerid,
             dokumen_pk_template.title as dokumenTitle,
             ku_user.nama as userCreatedName
         ')
@@ -221,7 +223,10 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
             dokumen_pk_template.title as dokumenTitle,
-            ku_user.nama as userCreatedName
+            ku_user.nama as userCreatedName,
+            dokumenpk_satker.satkerid,
+            dokumenpk_satker.balaiid
+            
         ')
             ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
             ->join('ku_user', 'dokumenpk_satker.user_created = ku_user.uid', 'left')
@@ -246,6 +251,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'created_at'                 => $arr->created_at != null ? date_indo($arr->created_at) : '',
                 'dokumenTitle'               => $arr->dokumenTitle,
                 'userCreatedName'            => $arr->userCreatedName,
+                'satkerid'                   => instansi_name($arr->satkerid ?? $arr->balaiid)->nama_instansi,
+
             ];
         }, $dataDokumen);
 

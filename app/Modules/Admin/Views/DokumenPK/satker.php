@@ -115,7 +115,7 @@
                             <th width="25px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
-                            <th width="280px"></th>
+                            <th width="280px">Aksi</th>
                         </tr>
                     </thead>
 
@@ -134,7 +134,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal disetujui</th>
-                            <th width="280px"></th>
+                            <th width="280px">Aksi</th>
                         </tr>
                     </thead>
 
@@ -153,7 +153,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal Ditolak</th>
-                            <th width="280px"></th>
+                            <th width="280px">Aksi</th>
                         </tr>
                     </thead>
 
@@ -596,11 +596,13 @@
                 <tr id="_dokumen-row-${data.id}">
                     <td class="text-center">${ index+1 }</td>
                     <td>
-                        ${data.dokumenTitle}
+                        PERJANJIAN KINERJA ${data.dokumenTitle}
                         ${render_badgeRevisi}
 
                         <div class="mt-2">
-                            Di buat oleh : <strong>${data.userCreatedName}</strong>
+                        Instansi : <strong>${data.satkerid}</strong><br>
+                        Di buat oleh : <strong>${data.userCreatedName}</strong>
+
                         </div>
                     </td>
                     <td>${data.created_at}</td>
