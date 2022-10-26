@@ -187,7 +187,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
         return view('Modules\Satker\Views\Dokumenpk.php', [
-            'pageTitle' => 'Perjanjian Kinerja Satker',
+            'title' => 'Perjanjian Kinerja Satker',
 
             'sessionYear'             => $this->user['tahun'],
             'templateDokumen'         => $dataTemplate,
