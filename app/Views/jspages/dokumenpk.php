@@ -198,15 +198,15 @@
                             buttonText: 'Buat Revisi'
                         });
                     } else {
+                        if (res.dokumen_type == 'master-balai' || res.dokumen_type == 'balai') {
 
-                        render_warningDokumenYearRevisoin = `
+                            render_warningDokumenYearRevisoin = `
                         <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                            <h5 class="alert-heading">Informasi</h5>
-                            <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
-                        </div>
+                        <h5 class="alert-heading">Informasi</h5>
+                        <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
+                    </div>
                         `
-
-
+                        }
                         render_reset_btnSubmitToRevision()
                     }
 
@@ -906,21 +906,21 @@
             });
 
 
-            // if (params.data.template.type == 'master-balai' || params.data.template.type == 'balai') {
-            //     $('.container-revision-alert').append(`
-            //         <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-            //             <h5 class="alert-heading">Informasi</h5>
-            //             <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
-            //         </div>
-            //     `)
+            if (params.data.template.type == 'master-balai' || params.data.template.type == 'balai') {
+                $('.container-revision-alert').append(`
+                    <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                        <h5 class="alert-heading">Informasi</h5>
+                        <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
+                    </div>
+                `)
 
-            //     $('.container-revision-alert-bottom').html(`
-            //         <h6 class="mb-4 mt-4">Daftar satker yang telah membuat dokumen</h6>
-            //         <div class="list-group">
-            //             ${renderCheckListSatkerBalai}
-            //         </div>
-            //     `)
-            // }
+                $('.container-revision-alert-bottom').html(`
+                    <h6 class="mb-4 mt-4">Daftar satker yang telah membuat dokumen</h6>
+                    <div class="list-group">
+                        ${renderCheckListSatkerBalai}
+                    </div>
+                `)
+            }
         }
     }
 
@@ -984,6 +984,8 @@
                 buttonText: 'Buat Revisi'
             });
         }
+
+
 
         if (
             _data.template.type == 'eselon1' ||

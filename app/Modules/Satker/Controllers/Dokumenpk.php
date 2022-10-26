@@ -513,8 +513,12 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->where("status != ", 'revision')
             ->where("tahun = '$_createdYear'")->orderBy('id', 'desc')->get()->getRow();
 
+        $dokumentType = $this->templateDokumen->select("type")->where('id', $_templateId)->get()->getRow();
+
+
         return $this->respond([
-            'dokumenExistSameYear' => $dokumenExistSameYear
+            'dokumenExistSameYear' => $dokumenExistSameYear,
+            'dokumen_type' => $dokumentType->type
         ]);
     }
 
