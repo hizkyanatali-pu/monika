@@ -46,7 +46,7 @@
                     <h3 class="kt-subheader__title" style="width: 430px">
                         ARSIP PERJANJIAN KINERJA
                     </h3>
-                    
+
                     <select name="filter-jenis-dokumen" class="form-control">
                         <option value="all">SEMUA</option>
                         <option value="satker">SATKER</option>
@@ -89,7 +89,7 @@
                             <th width="25px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
-                            <th width="225px"></th>
+                            <th width="225px">Aksi</th>
                         </tr>
                     </thead>
 
@@ -108,7 +108,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal disetujui</th>
-                            <th width="225px"></th>
+                            <th width="225px">Aksi</th>
                         </tr>
                     </thead>
 
@@ -127,7 +127,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal Ditolak</th>
-                            <th width="225px"></th>
+                            <th width="225px">Aksi</th>
                         </tr>
                     </thead>
 
@@ -233,9 +233,9 @@
             $(this).data('to-confirm')
         )
     })
-    
-    
-    
+
+
+
     $(document).on('click', '.__reStore', function() {
         Swal.fire({
             title: 'Restore Dokumen',
@@ -269,9 +269,9 @@
             }
         })
     })
-    
-    
-    
+
+
+
     $(document).on('click', '.__deletePermanen', function() {
         Swal.fire({
             title: 'Hapus Permanen',
@@ -359,7 +359,7 @@
             }
 
             if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>`
-        
+
             const tr = $(`
                 <tr id="_dokumen-row-${data.id}">
                     <td class="text-center">${ index+1 }</td>
