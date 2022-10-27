@@ -47,6 +47,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function index()
     {
         $listSatkerCreateCokumen = false;
+        $this->session->remove('createDokumenByBalai');
 
         $query_dataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
@@ -143,6 +144,9 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function balaiSatker($_satkerId)
     {
+        $setSession_userData['byBalai_user_type']    = 'upt-balai';
+        $this->session->set('createDokumenByBalai', $setSession_userData);
+
         $queryDataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
             dokumenpk_satker.template_id,
@@ -276,6 +280,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $balai_checklistSatker = [];
         $balai_checklistSatker = $this->satker->select("
             m_satker.satker,
+            (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju' ) as iscreatedPKBeforeAcc,
             (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status='setuju' ) as iscreatedPK
         ")
             ->where('balaiid', $session_balaiId)->get()->getResult();
@@ -290,7 +295,8 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function getTemplate($id)
     {
-        if ($this->user['user_type'] == 'other') {
+        $checkCreateFromBalai = $this->session->get('createDokumenByBalai');
+        if ($this->user['user_type'] == 'other' || isset($checkCreateFromBalai)) {
             $createByAdmin = $this->session->get('createDokumenByAdmin');
 
             $session_userType   = $createByAdmin['byAdmin_user_type'] ?? null;
@@ -487,8 +493,9 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function checkDocumentSameYearExist($_createdYear, $_templateId)
     {
+        $checkCreateFromBalai = $this->session->get('createDokumenByBalai');
 
-        if ($this->user['user_type'] == 'other') {
+        if ($this->user['user_type'] == 'other' || isset($checkCreateFromBalai)) {
             $createByAdmin = $this->session->get('createDokumenByAdmin');
 
             $session_userType   = $createByAdmin['byAdmin_user_type'] ?? null;

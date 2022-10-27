@@ -45,6 +45,7 @@
                 if (elements_optionListDokumen.length == 1) {
                     elements_optionListDokumen.eq(0).trigger('click')
                 }
+
             } else {
                 $.ajax({
                     url: "<?php echo site_url('dokumenpk/get-list-template-buat-dokumen') ?>" + "/satker/" + $(this).data('balai-create-satker'),
@@ -68,6 +69,11 @@
                         $('.__opsi-template').attr('data-available', res.templateAvailable)
 
                         $('#modalForm').modal('show')
+
+                        let elements_optionListDokumen = $('.__buat-dokumen-pilih-template')
+                        if (elements_optionListDokumen.length == 1) {
+                            elements_optionListDokumen.eq(0).trigger('click')
+                        }
                     }
                 })
             }
@@ -575,10 +581,14 @@
                 res.data.forEach(data => {
                     let renderCheck = ''
 
-                    if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check"></i>'
+                    if (data.iscreatedPK > 0) {
+                        renderCheck = '<i class="fas fa-check"></i>'
+                    } else if (data.iscreatedPKBeforeAcc > 0) {
+                        renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold bg-secondary"> Menunggu Verifikasi </span> <div > ';
+                    }
                     renderList += `
                         <li class="list-group-item d-flex justify-content-between">
-                            <lable>${data.satker}</lable>
+                            <label>${data.satker}</label>
                             ${renderCheck}
                         </li>
                     `
