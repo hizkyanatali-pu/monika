@@ -83,9 +83,14 @@
     <div class="kt-portlet" style="margin-top: -5px">
         <div class="kt-portlet__body tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-one" role="tabpanel" aria-labelledby="pills-one-tab">
+                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="hold">
+                    <i class="fas fa-trash"></i> Hapus Permanen Data Terchecklist
+                </button>
+
                 <table class="table table-bordered" id="table-hold">
                     <thead>
                         <tr class="text-center">
+                            <th width="15px"></th>
                             <th width="25px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
@@ -101,6 +106,10 @@
 
 
             <div class="tab-pane fade" id="pills-two" role="tabpanel" aria-labelledby="pills-two-tab">
+                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="setuju">
+                    <i class="fas fa-trash"></i> Hapus Permanen Data Terchecklist
+                </button>
+
                 <table class="table table-bordered" id="table-setuju">
                     <thead>
                         <tr class="text-center">
@@ -120,6 +129,10 @@
 
 
             <div class="tab-pane fade" id="pills-three" role="tabpanel" aria-labelledby="pills-three-tab">
+                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="tolak">
+                    <i class="fas fa-trash"></i> Hapus Permanen Data Terchecklist
+                </button>
+
                 <table class="table table-bordered" id="table-tolak">
                     <thead>
                         <tr class="text-center">
@@ -306,6 +319,62 @@
             }
         })
     })
+    
+    
+    
+    $(document).on('click', '.__deletePermanenMultiple', function() {
+        let tempCheck = [],
+            checklist = $('input[type=checkbox][name=checklist-multiple-delete][data-status='+$(this).data('target')+']:checked')
+
+        checklist.each((index, element) => {
+            tempCheck.push($(element).val())
+        })
+
+        if (tempCheck.length > 0) {
+            Swal.fire({
+                title: 'Hapus Permanen',
+                text: "Apakah anda yakin menghapus permanen semua data yang telah di pilih",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#000',
+                confirmButtonText: 'Ya, Hapus Permanen',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: "<?php echo site_url('dokumenpk/arsip/delete-permanent-multiple') ?>",
+                        type: 'POST',
+                        data: {
+                            csrf_test_name: $('input[name=csrf_test_name]').val(),
+                            id: tempCheck
+                        },
+                        success: (res) => {
+                            Swal.fire(
+                                'Berhasil',
+                                'Dokumen telah di hapus secara permanent',
+                                'success'
+                            )
+
+                            setTimeout(() => {
+                                location.reload()
+                            }, 1500)
+                        }
+                    })
+                }
+            })
+        }
+        else {
+            Swal.fire({
+                title: 'Oops',
+                text: "anda belum memilih data untuk di hapus",
+                type: "warning",
+                showCancelButton: false,
+                confirmButtonColor: '#000',
+                confirmButtonText: 'OK'
+            })
+        }
+    })
 
 
 
@@ -362,6 +431,9 @@
 
             const tr = $(`
                 <tr id="_dokumen-row-${data.id}">
+                    <td class="text-center">
+                        <input type="checkbox" name="checklist-multiple-delete" value="${data.id}" data-status="${data.status}" />
+                    </td>
                     <td class="text-center">${ index+1 }</td>
                     <td>
                         ${data.dokumenTitle}

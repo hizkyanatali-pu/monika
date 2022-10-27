@@ -59,6 +59,7 @@ class DokumenpkArsip extends \App\Controllers\BaseController
         if ($_dokumenType != 'all') $dataDokumen->where('dokumenpk_satker.dokumen_type', $_dokumenType);
 
         $returnDaata = array_map(function ($arr) {
+            
             return [
                 'id'                         => $arr->id,
                 'template_id'                => $arr->template_id,
@@ -71,7 +72,7 @@ class DokumenpkArsip extends \App\Controllers\BaseController
                 'created_at'                 => $arr->created_at != null ? date_indo($arr->created_at) : '',
                 'dokumenTitle'               => $arr->dokumenTitle,
                 'userCreatedName'            => $arr->userCreatedName,
-                'satkerid'                   => instansi_name($arr->satkerid ?? $arr->balaiid)->nama_instansi,
+                'satkerid'                   => instansi_name($arr->satkerid ?? $arr->balaiid)->nama_instansi
             ];
         }, $dataDokumen->get()->getResult());
 
@@ -118,6 +119,21 @@ class DokumenpkArsip extends \App\Controllers\BaseController
         $this->dokumenSatker->delete(['id' => $dokumenId]);
         $this->dokumenSatker_kegiatan->delete(['dokumen_id' => $dokumenId]);
         $this->dokumenSatker_rows->delete(['dokumen_id' => $dokumenId]);
+
+        return $this->respond([
+            'status' => true
+        ]);
+    }
+    
+    
+    
+    public function deletePermanentMultiple()
+    {
+        foreach ($this->request->getPost('id') as $key => $value) {
+            $this->dokumenSatker->delete(['id' => $value]);
+            $this->dokumenSatker_kegiatan->delete(['dokumen_id' => $value]);
+            $this->dokumenSatker_rows->delete(['dokumen_id' => $value]);
+        }
 
         return $this->respond([
             'status' => true

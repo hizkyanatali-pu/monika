@@ -224,6 +224,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->post('arsipkan', '\Modules\Admin\Controllers\DokumenpkArsip::arsipkanDokumen');
                     $routes->post('restore', '\Modules\Admin\Controllers\DokumenpkArsip::restoreArsip');
                     $routes->post('delete-permanent', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanent');
+                    $routes->post('delete-permanent-multiple', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanentMultiple');
                 });
 
                 $routes->group('satker', ['namespace' => 'App\Controllers'], function($routes) {
