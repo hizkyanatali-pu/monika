@@ -87,6 +87,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('simpandata', '\Modules\Admin\Controllers\Pulldata::simpandata');
 
                 $routes->get('rekap/(:any)', '\Modules\Admin\Controllers\Pulldata::rekap/$1');
+                $routes->get('rekap-progreskeu-progres-per-provinsi/(:any)', '\Modules\Admin\Controllers\Pulldata::rekapProgressPerProvinsi/$1');
 
                 //cetak laporan pdf progres keuangan & fisik
                 $routes->get('cetak_ditjen_sda', '\Modules\Admin\Controllers\Pulldata::cetak_ditjensda');

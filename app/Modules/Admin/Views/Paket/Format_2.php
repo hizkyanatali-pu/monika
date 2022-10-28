@@ -273,14 +273,19 @@ $currentDayOfMonth = date('j');
                         </div>
                     </div>
                     <div class="float-right">
-                        <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
-                        <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a>
-                        <?PHP if (!in_array($rekap, array("satkerpagu100m"))) : ?>
-                            <?php if ($title != 'Progres Per Provinsi') { ?>
-                                <a target="_blank" href="<?php echo site_url('pulldata/rekap/paket') . "?idk=" . $idk . "&label=" . $label . "&label2=&idks=" . (!empty($idk) ? $idk : 'all') . "&rekap=" . $rekap; ?>" class="btn btn-info btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap <?= ($rekap == "unitkerja" ? "SDA" : $rekap); ?></a>
-                                <a target="_blank" href="<?php echo site_url('pulldata/rekap/paket') . "?idk=" . $idk . "&label=" . $label . "&label2=&idks=" . (!empty($idk) ? $idk : 'all') . "&rekap=" . $rekap; ?>&format=db" class="btn btn-info btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap <?= ($rekap == "unitkerja" ? "SDA" : $rekap); ?> - DB</a>
-                            <?php } ?>
-                        <?PHP endif; ?>
+                        <?php if($title == "Progres Per Provinsi") :  ?>
+                            <a target="_blank" href="<?php echo site_url('pulldata/rekap-progreskeu-progres-per-provinsi/pdf'); ?>" class="btn btn-warning btn-sm text-white"><i class="fa fa-file-pdf"></i>PDF</a>
+                            <a target="_blank" href="<?php echo site_url('pulldata/rekap-progreskeu-progres-per-provinsi/excel'); ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a>
+                        <?php else : ?>
+                            <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
+                            <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a>
+                            <?PHP if (!in_array($rekap, array("satkerpagu100m"))) : ?>
+                                <?php if ($title != 'Progres Per Provinsi') { ?>
+                                    <a target="_blank" href="<?php echo site_url('pulldata/rekap/paket') . "?idk=" . $idk . "&label=" . $label . "&label2=&idks=" . (!empty($idk) ? $idk : 'all') . "&rekap=" . $rekap; ?>" class="btn btn-info btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap <?= ($rekap == "unitkerja" ? "SDA" : $rekap); ?></a>
+                                    <a target="_blank" href="<?php echo site_url('pulldata/rekap/paket') . "?idk=" . $idk . "&label=" . $label . "&label2=&idks=" . (!empty($idk) ? $idk : 'all') . "&rekap=" . $rekap; ?>&format=db" class="btn btn-info btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap <?= ($rekap == "unitkerja" ? "SDA" : $rekap); ?> - DB</a>
+                                <?php } ?>
+                            <?PHP endif; ?>
+                        <?php endif; ?>
                         <b>*Dalam Ribuan</b>
                     </div>
                 </div>

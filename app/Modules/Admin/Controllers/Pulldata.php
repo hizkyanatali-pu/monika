@@ -623,4 +623,73 @@ class Pulldata extends \App\Controllers\BaseController
 
         return view("Modules\Admin\Views\Paket\Rekap\\$pgview", $data);
     }
+
+
+
+
+    public function rekapProgressPerProvinsi($target)
+    {
+        if ($target == 'excel') {
+            header("Content-type: application/vnd.ms-excel");
+            header("Content-disposition: attachment; filename=Rekap-progress-per-provinsi.xls");
+            header("Pragma: no-cache");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("Expires: 0");
+        }
+        
+        $pageData = [];
+        $dataProvinsi = $this->tableProvinsi->get()->getResult();
+        foreach ($dataProvinsi as $key => $data) {
+            $provinsiKey = count($pageData);
+            array_push($pageData, [
+                'stw'                  => '1',
+                'id'                   => $data->kdlokasi,
+                'label'                => $data->nmlokasi . " - " . count($pageData),
+                'st'                   => '',
+                'jml_paket'            => 0,
+                'jml_pagu_rpm'         => 0,
+                'jml_pagu_sbsn'        => 0,
+                'jml_pagu_phln'        => 0,
+                'jml_pagu_total'       => 0,
+                'jml_real_rpm'         => 0,
+                'jml_real_sbsn'        => 0,
+                'jml_real_phln'        => 0,
+                'jml_real_total'       => 0,
+                'jml_progres_keuangan' => 0,
+                'jml_progres_fisik'    => 0,
+                'jml_persen_deviasi'   => 0,
+                'jml_nilai_deviasi'    => 0,
+                'is_subheader'         => '1'
+            ]);
+
+            $dataPaket = $this->PulldataModel->getBalaiPaket(
+                "satker", 
+                "md.tahun= " . session('userData.tahun') . " AND kdlokasi= " . $data->kdlokasi
+            );
+            foreach ($dataPaket as $keyPaket => $dataPaket) {
+                array_push($pageData, $dataPaket);
+
+                $pageData[$provinsiKey]['jml_paket']            += $dataPaket['jml_paket'];
+                $pageData[$provinsiKey]['jml_pagu_rpm']         += $dataPaket['jml_pagu_rpm'];
+                $pageData[$provinsiKey]['jml_pagu_sbsn']        += $dataPaket['jml_pagu_sbsn'];
+                $pageData[$provinsiKey]['jml_pagu_phln']        += $dataPaket['jml_pagu_phln'];
+                $pageData[$provinsiKey]['jml_pagu_total']       += $dataPaket['jml_pagu_total'];
+                $pageData[$provinsiKey]['jml_real_rpm']         += $dataPaket['jml_real_rpm'];
+                $pageData[$provinsiKey]['jml_real_sbsn']        += $dataPaket['jml_real_sbsn'];
+                $pageData[$provinsiKey]['jml_real_phln']        += $dataPaket['jml_real_phln'];
+                $pageData[$provinsiKey]['jml_real_total']       += $dataPaket['jml_real_total'];
+                $pageData[$provinsiKey]['jml_progres_keuangan'] += $dataPaket['jml_progres_keuangan'];
+                $pageData[$provinsiKey]['jml_progres_fisik']    += $dataPaket['jml_progres_fisik'];
+                $pageData[$provinsiKey]['jml_persen_deviasi']   += $dataPaket['jml_persen_deviasi'];
+                $pageData[$provinsiKey]['jml_nilai_deviasi']    += $dataPaket['jml_nilai_deviasi'];
+            }
+        }
+
+        return view("Modules\Admin\Views\Paket\Rekap\Rekap-progress-per-provinsi", [
+            'qdata'                    => $pageData,
+            'pagusda_progres_keuangan' => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'pagusda_progres_fisik'    => $this->RekapUnorModel->getProgresSda('progres_fisik'),
+            'dokumen_target'           => $target
+        ]);
+    }
 }

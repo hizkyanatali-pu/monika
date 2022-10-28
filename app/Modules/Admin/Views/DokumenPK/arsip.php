@@ -90,7 +90,9 @@
                 <table class="table table-bordered" id="table-hold">
                     <thead>
                         <tr class="text-center">
-                            <th width="15px"></th>
+                            <th width="15px">
+                                <input type="checkbox" name="checkall" data-status="hold" />
+                            </th>
                             <th width="25px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
@@ -113,6 +115,9 @@
                 <table class="table table-bordered" id="table-setuju">
                     <thead>
                         <tr class="text-center">
+                            <th width="15px">
+                                <input type="checkbox" name="checkall" data-status="setuju" />
+                            </th>
                             <th width="30px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
@@ -136,6 +141,9 @@
                 <table class="table table-bordered" id="table-tolak">
                     <thead>
                         <tr class="text-center">
+                            <th width="15px">
+                                <input type="checkbox" name="checkall" data-status="tolak" />
+                            </th>
                             <th width="30px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
@@ -375,6 +383,20 @@
             })
         }
     })
+    
+    
+    
+    $(document).on('click', 'input:checkbox[name=checkall]', function() {
+        let rowChild = $('input:checkbox[name=checklist-multiple-delete]').parents('tr').find('td')
+
+        $('input:checkbox[name=checklist-multiple-delete]').prop('checked', this.checked);
+
+        if (!this.checked) {
+            rowChild.addClass('disabled')
+        } else {
+            rowChild.removeClass('disabled')
+        }
+    });
 
 
 
