@@ -273,18 +273,18 @@ $request = \Config\Services::request();
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                     <ul class="kt-menu__subnav">
                         <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-satker'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                            <!-- <a href="<?= site_url('master-data/master-satker'); ?>" class="kt-menu__link ">
-                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="kt-menu__link-text">Satker</span>
-                            </a> -->
-                            <a href="/maintenance_page.php" class="kt-menu__link ">
+                            <a href="<?= site_url('master-data/master-satker'); ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                     <span></span>
                                 </i>
                                 <span class="kt-menu__link-text">Satker</span>
                             </a>
+                            <!-- <a href="/maintenance_page.php" class="kt-menu__link ">
+                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="kt-menu__link-text">Satker</span>
+                            </a> -->
                         </li>
                         <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'master-data' && $request->uri->getSegment(2) == 'master-kegiatan'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                             <a href="<?= site_url('master-data/master-kegiatan'); ?>" class="kt-menu__link ">

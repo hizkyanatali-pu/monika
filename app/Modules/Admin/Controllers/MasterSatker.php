@@ -37,6 +37,10 @@ class MasterSatker extends \App\Controllers\BaseController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
         $sheet->getRowDimension('2')->setRowHeight(30);
 
         $styleArray = [
@@ -51,8 +55,8 @@ class MasterSatker extends \App\Controllers\BaseController
             ]
         ];
 
-        $sheet->getStyle('A2:D2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('000000');
-        $sheet->getStyle('A2:D2')->applyFromArray($styleArray);
+        $sheet->getStyle('A2:H2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('000000');
+        $sheet->getStyle('A2:H2')->applyFromArray($styleArray);
 
         $sheet->setCellValue('A1', 'Tahun');
         $sheet->setCellValue('B1', $this->user['tahun']);
@@ -61,6 +65,10 @@ class MasterSatker extends \App\Controllers\BaseController
         $sheet->setCellValue('B2', 'Balai ID');
         $sheet->setCellValue('C2', 'Sarket');
         $sheet->setCellValue('D2', 'KD KPPN');
+        $sheet->setCellValue('E2', 'Jabatan Penanda Tangan Pihak 1');
+        $sheet->setCellValue('F2', 'Jabatan Penanda Tangan Pihak 2');
+        $sheet->setCellValue('G2', 'Kota Penanda Tangan');
+        $sheet->setCellValue('H2', 'Grup Jabatan');
 
         $dataSatker = $this->mSatker->getWhere(['tahun' => $this->user['tahun']])->getResult();
         foreach ($dataSatker as $key => $data) :
@@ -69,6 +77,10 @@ class MasterSatker extends \App\Controllers\BaseController
             $sheet->setCellValue('B'.$row, $data->balaiid);
             $sheet->setCellValue('C'.$row, $data->satker);
             $sheet->setCellValue('D'.$row, $data->kdkppn);
+            $sheet->setCellValue('E'.$row, $data->jabatan_penanda_tangan_pihak_1);
+            $sheet->setCellValue('F'.$row, $data->jabatan_penanda_tangan_pihak_2);
+            $sheet->setCellValue('G'.$row, $data->kota_penanda_tangan);
+            $sheet->setCellValue('H'.$row, $data->grup_jabatan);
         endforeach;
 
         $writer = new Xlsx($spreadsheet);
@@ -99,11 +111,15 @@ class MasterSatker extends \App\Controllers\BaseController
         foreach ($rows as $key => $data) :
             if ($key > 1) {
                 array_push($tempInsert, [
-                    'satkerid' => $data[0],
-                    'balaiid'  => $data[1],
-                    'satker'   => $data[2],
-                    'kdkppn'   => $data[3],
-                    'tahun'    => $inputTahun
+                    'satkerid'                       => $data[0],
+                    'balaiid'                        => $data[1],
+                    'satker'                         => $data[2],
+                    'kdkppn'                         => $data[3],
+                    'tahun'                          => $inputTahun,
+                    'jabatan_penanda_tangan_pihak_1' => $data[4],
+                    'jabatan_penanda_tangan_pihak_2' => $data[5],
+                    'kota_penanda_tangan'            => $data[6],
+                    'grup_jabatan'                   => $data[7]
                 ]);
             }
         endforeach;
