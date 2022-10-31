@@ -1052,7 +1052,7 @@
                         <table class="table table-striped border __table-kegiatan">
                             <thead>
                                 <tr>
-                                    <th>Nama Kegiatan</th>
+                                    <th>Nama ${ capitalizeFirstLetter(template.info_title) }</th>
                                     <th width="250px">Anggaran</th>
                                 </tr>
                             </thead>
@@ -1363,5 +1363,11 @@
         // }
 
         return renderOptions
+    }
+
+
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     }
 </script>
