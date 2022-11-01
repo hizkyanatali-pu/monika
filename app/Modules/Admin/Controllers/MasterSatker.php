@@ -26,7 +26,7 @@ class MasterSatker extends \App\Controllers\BaseController
     {
         return view('Modules\Admin\Views\MasterSatker\index.php', [
             'tahunAnggaran' => $this->user['tahun'] ,
-            'mainData'      => $this->mSatker->getWhere(['tahun' => $this->user['tahun']])->getResult()
+            'mainData'      => $this->mSatker->join('m_balai', 'm_satker.balaiid=m_balai.balaiid', 'left')->getWhere(['m_satker.tahun' => $this->user['tahun']])->getResult()
         ]);
     }
 

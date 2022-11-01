@@ -46,7 +46,7 @@
                         <tr>
                             <th>No</th>
                             <th>Satker Id</th>
-                            <th>Balai Id</th>
+                            <th>Balai</th>
                             <th>Satker</th>
                             <th>KD KPPN</th>
                         </tr>
@@ -59,7 +59,7 @@
                             <tr>
                                 <td><?php echo $no++ ?></td>
                                 <td><?php echo $data->satkerid ?></td>
-                                <td><?php echo $data->balaiid ?></td>
+                                <td><?php echo $data->balai ?></td>
                                 <td><?php echo $data->satker ?></td>
                                 <td><?php echo $data->kdkppn ?></td>
                             </tr>
