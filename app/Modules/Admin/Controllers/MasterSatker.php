@@ -16,6 +16,7 @@ class MasterSatker extends \App\Controllers\BaseController
         $this->db = \Config\Database::connect();
 
         $this->mSatker = $this->db->table('m_satker');
+        $this->mBalai = $this->db->table('m_balai');
         // $this->satkerTable = $this->db->table('emon_tarik_sisalelang_sda_satker');
         // $this->paketTable = $this->db->table('emon_tarik_sisalelang_sda_paketpekerjaan');
     }
@@ -82,6 +83,33 @@ class MasterSatker extends \App\Controllers\BaseController
             $sheet->setCellValue('G'.$row, $data->kota_penanda_tangan);
             $sheet->setCellValue('H'.$row, $data->grup_jabatan);
         endforeach;
+
+
+
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(1);
+        $sheet2 = $spreadsheet->getActiveSheet();
+        $sheet2->setTitle('Balai');
+
+        $sheet2->getColumnDimension('A')->setAutoSize(true);
+        $sheet2->getColumnDimension('B')->setAutoSize(true);
+        $sheet2->getRowDimension('1')->setRowHeight(30);
+
+        $sheet2->getStyle('A1:B1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('000000');
+        $sheet2->getStyle('A1:B1')->applyFromArray($styleArray);
+
+        $sheet2->setCellValue('A1', 'Balai ID');
+        $sheet2->setCellValue('B1', 'Balai Nama');
+
+        $dataSatker = $this->mBalai->get()->getResult();
+        foreach ($dataSatker as $key => $data) :
+            $row = $key+2;
+            $sheet2->setCellValue('A'.$row, $data->balaiid);
+            $sheet2->setCellValue('B'.$row, $data->balai);
+        endforeach;
+
+        
+        $spreadsheet->setActiveSheetIndex(0);
 
         $writer = new Xlsx($spreadsheet);
         $filename = $this->user['tahun'].'-Data Satker-'.date('Y-m-d-His');
