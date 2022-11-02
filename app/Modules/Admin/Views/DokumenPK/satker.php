@@ -47,7 +47,12 @@
                     <?= csrf_field() ?>
                 </div>
                 <div>
-                    123
+                    <?php if ($dokumenType == 'eselon1') { ?>
+                        <a href="<?php echo site_url('dokumenpk/eselon1/export-rekap-excel'); ?>" target="_blank" class="btn btn-success mr-4">
+                            <i class="fas fa-file"></i> Rekap
+                        </a>
+                    <?php } ?>
+
                     <button class="btn btn-primary __admin-create-dokumen-opsi-users">
                         <i class="fas fa-plus"></i> Buat Dokumen
                     </button>

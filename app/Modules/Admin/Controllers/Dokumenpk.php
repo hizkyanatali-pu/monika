@@ -45,21 +45,50 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         $jumlahTotal = $this->dokumenPK_akses->countAllResults();
 
-        $menungguKonfirmasi_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='hold'")->countAllResults();
-        $menungguKonfirmasi_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='hold'")->countAllResults();
+        $menungguKonfirmasi_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
+        ->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='hold' AND dokumenpk_satker.tahun='".$this->user['tahun']."'")
+        ->countAllResults();
+
+        $menungguKonfirmasi_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')
+        ->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='hold' AND dokumenpk_satker.tahun='".$this->user['tahun']."'")
+        ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+        ->countAllResults();
+
         $menungguKonfirmasi_jumlah = $menungguKonfirmasi_satker + $menungguKonfirmasi_balai;
         $menungguKonfirmasi_persentase = ($menungguKonfirmasi_jumlah / $jumlahTotal) * 100;
 
-        $terverifikasi_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='setuju'")->countAllResults();
-        $terverifikasi_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='setuju'")->countAllResults();
+
+
+        $terverifikasi_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
+        ->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='setuju' AND dokumenpk_satker.tahun='".$this->user['tahun']."'")
+        ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+        ->countAllResults();
+
+        $terverifikasi_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')
+        ->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='setuju' AND dokumenpk_satker.tahun='".$this->user['tahun']."'")
+        ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+        ->countAllResults();
+
         $terverifikasi_jumlah = $terverifikasi_satker + $terverifikasi_balai;
         $terverifikasi_persentase = ($terverifikasi_jumlah / $jumlahTotal) * 100;
 
-        $ditolak_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='tolak'")->countAllResults();
-        $ditolak_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='tolak'")->countAllResults();
+
+
+        $ditolak_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
+        ->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='tolak' AND dokumenpk_satker.tahun='".$this->user['tahun']."'")
+        ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+        ->countAllResults();
+
+        $ditolak_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')
+        ->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='tolak' AND dokumenpk_satker.tahun='".$this->user['tahun']."'")
+        ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+        ->countAllResults();
+
         $ditolak_jumlah = $ditolak_satker + $ditolak_balai;
         $ditolak_persentase = ($ditolak_jumlah / $jumlahTotal) * 100;
 
+
+        
         $belumMenginputkan_jumlah = $jumlahTotal - ($menungguKonfirmasi_jumlah + $terverifikasi_jumlah + $ditolak_jumlah);
         $belumMenginputkan_persentase = ($belumMenginputkan_jumlah / $jumlahTotal) * 100;
 
@@ -547,5 +576,15 @@ class Dokumenpk extends \App\Controllers\BaseController
         }
 
         $this->dokumenPk_rowRumus->insertBatch($rumus);
+    }
+    
+    
+    
+    
+    
+    
+    public function eselon1_export_rekap_excel()
+    {
+        echo "International";
     }
 }
