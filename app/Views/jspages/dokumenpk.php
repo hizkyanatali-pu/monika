@@ -1198,6 +1198,51 @@
                     break;
 
                 case 'form':
+                    let renderInputTarget = ''
+                    if (_templateType == 'master-balai') {
+                        renderInputTarget = `
+                            <div class="d-flex" style="width: 400px">
+                                <div class="input-group mr-3">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" style="width: 80px">${ data.targetDefualtValue }</span>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">${ data.target_satuan }</span>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <input 
+                                        type="text" 
+                                        class="form-control __inputTemplateRow-target" 
+                                        placeholder="Masukkan Nilai"
+                                        data-row-id="${ data.id }"
+                                        onkeypress="return isNumberKey(this, event);"
+                                    >
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">${ data.target_satuan }</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                    }
+                    else {
+                        renderInputTarget = `
+                            <div class="input-group">
+                                <input 
+                                    type="text" 
+                                    class="form-control __inputTemplateRow-target" 
+                                    placeholder="Masukkan Nilai"
+                                    value="${ data.targetDefualtValue }"
+                                    data-row-id="${ data.id }"
+                                    onkeypress="return isNumberKey(this, event);"
+                                >
+                                <div class="input-group-append">
+                                    <span class="input-group-text">${ data.target_satuan }</span>
+                                </div>
+                            </div>
+                        `
+                    }
+
                     rows += `
                         <tr>
                             <td class="text-center align-middle" width="50px">
@@ -1206,19 +1251,7 @@
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title }</td>
                             <td>
-                                <div class="input-group">
-                                    <input 
-                                        type="text" 
-                                        class="form-control __inputTemplateRow-target" 
-                                        placeholder="Masukkan Nilai"
-                                        value="${ data.targetDefualtValue }"
-                                        data-row-id="${ data.id }"
-                                        onkeypress="return isNumberKey(this, event);"
-                                    >
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">${ data.target_satuan }</span>
-                                    </div>
-                                </div>
+                                ${renderInputTarget}
                             </td>
                             <td class="${classDNoneOutcome}">
                                 <div class="input-group">
