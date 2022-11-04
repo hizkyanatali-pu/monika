@@ -585,6 +585,12 @@ class Dokumenpk extends \App\Controllers\BaseController
     
     public function eselon1_export_rekap_excel()
     {
-        echo "International";
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-disposition: attachment; filename=Rekap-progress-per-provinsi.xls");
+        header("Pragma: no-cache");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Expires: 0");
+
+        return view("Modules\Admin\Views\DokumenPk\Rekap\Rekap-Eselon1", []);
     }
 }

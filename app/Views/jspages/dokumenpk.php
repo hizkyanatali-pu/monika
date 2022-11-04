@@ -977,7 +977,11 @@
             render_opsiTahun = renderFormTemplate_opsiTahun(_data.tahun),
             render_warningDokumenYearRevisoin = '',
             inputValue_revisionSameYear = 0,
-            classDNoneOutcome = ''
+            classDNoneOutcome = '',
+            titleTheadTable = '',
+            theadBalaiTarget = '',
+            theadBalaiTargetNumber = ''
+
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
             render_warningDokumenYearRevisoin = `
                 <div class="bg-warning text-white pt-3 pr-3 pb-1 pl-3" role="alert">
@@ -1005,6 +1009,15 @@
             classDNoneOutcome = 'd-none'
         }
 
+        if (_data.template.type == 'master-balai') {
+            titleTheadTable = 'Target Satker ' + <?php echo $sessionYear ?>;
+            theadBalaiTarget = '<td class="text-center" style="width: 250px">Target '+<?php echo $sessionYear ?>+'</td>';
+            theadBalaiTargetNumber = '<td class="text-center p-2">(3)</td>';
+        }
+        else {
+            titleTheadTable = 'Target ' + <?php echo $sessionYear ?>
+        }
+
         let render = `
             <input type="hidden" name="revision_same_year" value="${inputValue_revisionSameYear}" />
 
@@ -1017,8 +1030,9 @@
                     <tr>
                         <td class="text-center" colspan="3">Sasaran Program / Sasaran Kegiatan / Indikator</td>
                         <td class="text-center" style="width: 250px">
-                            Target <?php echo $sessionYear ?>
+                            ${titleTheadTable}
                         </td>
+                        ${theadBalaiTarget}
                         <td class="text-center ${classDNoneOutcome}" style="width: 250px">
                             Outcome
                         </td>
@@ -1029,6 +1043,7 @@
                         </td>
                         <td class="text-center p-2" colspan="2">(1)</td>
                         <td class="text-center p-2">(2)</td>
+                        ${theadBalaiTargetNumber}
                         <td class="text-center p-2 ${classDNoneOutcome}">(3)</td>
                     </tr>
                 </thead>
@@ -1201,7 +1216,7 @@
                     let renderInputTarget = ''
                     if (_templateType == 'master-balai') {
                         renderInputTarget = `
-                            <div class="d-flex" style="width: 400px">
+                            <td>
                                 <div class="input-group mr-3">
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="width: 80px">${ data.targetDefualtValue }</span>
@@ -1210,6 +1225,8 @@
                                         <span class="input-group-text">${ data.target_satuan }</span>
                                     </div>
                                 </div>
+                            </td>
+                            <td>
                                 <div class="input-group">
                                     <input 
                                         type="text" 
@@ -1222,11 +1239,12 @@
                                         <span class="input-group-text">${ data.target_satuan }</span>
                                     </div>
                                 </div>
-                            </div>
+                            </td>
                         `
                     }
                     else {
                         renderInputTarget = `
+                        <td>
                             <div class="input-group">
                                 <input 
                                     type="text" 
@@ -1240,6 +1258,7 @@
                                     <span class="input-group-text">${ data.target_satuan }</span>
                                 </div>
                             </div>
+                        </td>
                         `
                     }
 
@@ -1250,9 +1269,7 @@
                             </td>
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title }</td>
-                            <td>
-                                ${renderInputTarget}
-                            </td>
+                            ${renderInputTarget}
                             <td class="${classDNoneOutcome}">
                                 <div class="input-group">
                                     <input 
