@@ -8,7 +8,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('api', ['namespace' => 'App\Controllers'], function ($routes) {
         //$routes->post('datadukung', '\Modules\Admin\Controllers\Api::index');
         $routes->get('cron-tarik-data/(:any)', '\Modules\Admin\Controllers\CronJob::dataPaket/$1');
-        
+
         $routes->group('posturanggaran', ['namespace' => 'App\Controllers'], function ($routes) {
             $routes->get('get-data-rencana-tender/(:any)', '\Modules\Admin\Controllers\Api\RencanaTender::getData_rencanaTender/$1');
         });
@@ -23,8 +23,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->get('logout', '\Modules\Admin\Controllers\Auth::logout');
 
     $routes->get('csrf-update', '\Modules\Admin\Controllers\Csrf::index');
-    
-    
+
+
     $routes->get('account', '\Modules\Admin\Controllers\Account::index', ['as' => 'account']);
     $routes->post('account', '\Modules\Admin\Controllers\Account::update');
 
@@ -42,16 +42,16 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('edit/(:segment)', '\Modules\Admin\Controllers\Usergroup::edit/$1');
         $routes->post('update', '\Modules\Admin\Controllers\Usergroup::update');
     });
-    
+
 
 
     $session = session();
     if ($session->get('userData')) {
         if (strpos($session->get('userData')['uid'], 'admin') !== false) {
-            $routes->group('dashboard', ['namespace' => 'App\Controllers'], function($routes) {
+            $routes->group('dashboard', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->add('/', '\Modules\Admin\Controllers\Dashboard::index');
             });
-            
+
             $routes->add('excel', '\Modules\Admin\Controllers\Dashboard::Excel');
 
             $routes->group('pulldata', ['namespace' => 'App\Controllers'], function ($routes) {
@@ -200,25 +200,25 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
             $routes->get('maintenance', '\Modules\Admin\Controllers\Maintenance::index');
             $routes->get('pemaketan', '\Modules\Admin\Controllers\Pemaketan::index');
-            
-            $routes->group('bigdata', ['namespace' => 'App\Controllers'], function($routes) {
+
+            $routes->group('bigdata', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('/', '\Modules\Admin\Controllers\BigData::index');
                 $routes->get('load-data', '\Modules\Admin\Controllers\BigData::loadData');
                 $routes->get('filter-select-lookup', '\Modules\Admin\Controllers\BigData::filterSelectLookup');
 
-                $routes->group('download', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->group('download', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\BigData::downloadExcelBigData');
                     $routes->get('prepare', '\Modules\Admin\Controllers\BigData::prepareToDownload');
                     $routes->post('set-temp-column', '\Modules\Admin\Controllers\BigData::setTempColumn');
                 });
             });
 
-            $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function($routes) {
+            $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('dashboard', '\Modules\Admin\Controllers\Dokumenpk::dashboard');
 
                 $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
 
-                $routes->group('arsip', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->group('arsip', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\DokumenpkArsip::arsip');
 
                     $routes->get('get-data/(:any)/(:any)', '\Modules\Admin\Controllers\DokumenpkArsip::getDataArsip/$1/$2');
@@ -228,9 +228,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->post('delete-permanent-multiple', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanentMultiple');
                 });
 
-                $routes->group('satker', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->group('satker', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::satker');
-                    
+
                     $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
                     $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
                     $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
@@ -238,13 +238,13 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
                 $routes->get('balai', '\Modules\Admin\Controllers\Dokumenpk::balai');
                 $routes->get('eselon2', '\Modules\Admin\Controllers\Dokumenpk::eselon2');
-                $routes->group('eselon1', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->group('eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::eselon1');
                     $routes->get('export-rekap-excel', '\Modules\Admin\Controllers\Dokumenpk::eselon1_export_rekap_excel');
                 });
                 $routes->get('get-list-template-buat-dokumen/(:any)/(:any)', '\Modules\Admin\Controllers\Dokumenpk::getListTemplateBuatDokumen/$1/$2');
 
-                $routes->group('template', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->group('template', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::template');
                     $routes->get('detail/(:any)', '\Modules\Admin\Controllers\Dokumenpk::show/$1');
                     $routes->post('create', '\Modules\Admin\Controllers\Dokumenpk::createTemplate');
@@ -253,15 +253,15 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->post('delete', '\Modules\Admin\Controllers\Dokumenpk::removeTemplate');
                 });
 
-                $routes->group('template-balai', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->group('template-balai', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\DokumenpkBalai::template');
                 });
 
-                $routes->group('template-eselon2', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->group('template-eselon2', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::templateEselon2');
                 });
 
-                $routes->group('template-eselon1', ['namespace' => 'App\Controllers'], function($routes) {
+                $routes->group('template-eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::templateEselon1');
                 });
             });
@@ -274,7 +274,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             || strtolower($session->get('userData')['user_type']) == 'balai'
             || strpos($session->get('userData')['uid'], 'admin') !== false
         ) {
-            $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function($routes) {
+            $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('/', '\Modules\Satker\Controllers\Dokumenpk::index');
                 $routes->get('get-template/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getTemplate/$1');
                 $routes->get('check-dokumen-same-year-exist/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::checkDocumentSameYearExist/$1/$2');
@@ -289,15 +289,16 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
 
                 $routes->get('list-satker-balai', '\Modules\Satker\Controllers\Dokumenpk::listSatkerBalai');
-                
-                $routes->group('eselon1', ['namespace' => 'App\Controllers'], function($routes) {
+
+                $routes->group('eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::eselon1');
                     $routes->get('export-rekap-excel', '\Modules\Admin\Controllers\Dokumenpk::eselon1_export_rekap_excel');
                 });
             });
 
-            
-            $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Satker\Controllers\Dokumenpk::balaiSatker/$1');  
+
+            $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Satker\Controllers\Dokumenpk::balaiSatker/$1');
+            $routes->get('panduan', '\Modules\Satker\Controllers\Dokumenpk::panduanpk');
         }
     }
 });

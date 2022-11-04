@@ -768,4 +768,14 @@ class Dokumenpk extends \App\Controllers\BaseController
         }, $input['kegiatan']);
         $this->dokumenSatker_kegiatan->insertBatch($records);
     }
+
+    public function panduanpk()
+    {
+
+        return view('Modules\Satker\Views\PanduanPK.php', [
+            'title'             => "Panduan Perjanjian Kinerja Satker",
+            'sessionYear'       => $this->user['tahun'],
+            'session'           => $this->user['user_type']
+        ]);
+    }
 }
