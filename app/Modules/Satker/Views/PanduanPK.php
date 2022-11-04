@@ -21,7 +21,7 @@
             <div class="d-flex justify-content-between w-100">
                 <div class="d-flex justify-content-start">
                     <h3 class="kt-subheader__title" style="width: 280px">
-                        <?php echo $pageTitle ?? 'Input Perjanjian Kinerja' ?>
+                        <?php echo $pageTitle ?? 'Panduan Input Perjanjian Kinerja' ?>
                     </h3>
 
                 </div>
