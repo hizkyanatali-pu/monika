@@ -1010,7 +1010,7 @@
         }
 
         if (_data.template.type == 'master-balai') {
-            titleTheadTable = 'Target Satker ' + <?php echo $sessionYear ?>;
+            titleTheadTable = 'Target Dari Satker';
             theadBalaiTarget = '<td class="text-center" style="width: 250px">Target '+<?php echo $sessionYear ?>+'</td>';
             theadBalaiTargetNumber = '<td class="text-center p-2">(3)</td>';
         }
