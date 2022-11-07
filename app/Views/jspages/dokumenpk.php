@@ -287,10 +287,23 @@
 
 
     $(document).on('click', '.__prepare-revisi-dokumen', function() {
+
         prepareRevisiDocument({
             dataId: $(this).data('id'),
             templateId: $(this).data('template-id'),
             beforeModalMount: (res) => {
+                //get session satker
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/get-list-template-buat-dokumen') ?>" + "/" + res.dokumen.dokumen_type + "/" + res.dokumen.satkerid,
+                    type: 'GET',
+                    success: (res) => {
+
+                    }
+                })
+
+                //end 
+
+
                 render_prepare_btnSubmitToRevision({
                     dokumenID: res.dokumen.id,
                     dokumenMasterID: res.dokumen.revision_master_dokumen_id ?? res.dokumen.id
@@ -1011,10 +1024,9 @@
 
         if (_data.template.type == 'master-balai') {
             titleTheadTable = 'Target Dari Satker';
-            theadBalaiTarget = '<td class="text-center" style="width: 250px">Target '+<?php echo $sessionYear ?>+'</td>';
+            theadBalaiTarget = '<td class="text-center" style="width: 250px">Target ' + <?php echo $sessionYear ?> + '</td>';
             theadBalaiTargetNumber = '<td class="text-center p-2">(3)</td>';
-        }
-        else {
+        } else {
             titleTheadTable = 'Target ' + <?php echo $sessionYear ?>
         }
 
@@ -1241,8 +1253,7 @@
                                 </div>
                             </td>
                         `
-                    }
-                    else {
+                    } else {
                         renderInputTarget = `
                         <td>
                             <div class="input-group">

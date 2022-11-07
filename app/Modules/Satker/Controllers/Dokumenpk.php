@@ -56,6 +56,11 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.revision_master_number,
             dokumenpk_satker.revision_number,
             dokumenpk_satker.status,
+            (CASE
+            WHEN dokumenpk_satker.acc_by IS NULL THEN dokumenpk_satker.reject_by
+            ELSE dokumenpk_satker.acc_by
+            END) AS verif_by,
+            
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
@@ -144,8 +149,8 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function balaiSatker($_satkerId)
     {
-        $setSession_userData['byBalai_user_type']    = 'upt-balai';
-        $this->session->set('createDokumenByBalai', $setSession_userData);
+        // $setSession_userData['byBalai_user_type']    = 'upt-balai';
+        // $this->session->set('createDokumenByBalai', $setSession_userData);
 
         $queryDataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
@@ -158,6 +163,8 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
             dokumenpk_satker.satkerid,
+            dokumenpk_satker.acc_by,
+            dokumenpk_satker.reject_by,
             dokumen_pk_template.title as dokumenTitle,
             ku_user.nama as userCreatedName
         ')
@@ -165,6 +172,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->join('ku_user', 'dokumenpk_satker.user_created=ku_user.uid', 'left')
             ->where('dokumenpk_satker.status !=', 'revision')
             ->where('dokumenpk_satker.dokumen_type', 'satker')
+            ->where("dokumenpk_satker.tahun", $this->user['tahun'])
             ->orderBy('dokumenpk_satker.id', 'DESC');
 
         if ($_satkerId == 'all') {
