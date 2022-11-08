@@ -597,7 +597,7 @@
                     if (data.iscreatedPK > 0) {
                         renderCheck = '<i class="fas fa-check"></i>'
                     } else if (data.iscreatedPKBeforeAcc > 0) {
-                        renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold bg-secondary"> Menunggu Verifikasi </span> <div > ';
+                        renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold ' + data.status_color + '"> ' + data.status_now + ' </span> <div > ';
                     }
                     renderList += `
                         <li class="list-group-item d-flex justify-content-between">

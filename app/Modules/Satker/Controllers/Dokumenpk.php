@@ -291,6 +291,20 @@ class Dokumenpk extends \App\Controllers\BaseController
         $balai_checklistSatker = $this->satker->select("
             m_satker.satker,
             (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju' ) as iscreatedPKBeforeAcc,
+            (SELECT 
+            CASE
+            WHEN status = 'hold' THEN 'Menunggu Konfirmasi'
+            WHEN status = 'tolak' THEN 'Ditolak'
+            WHEN status = 'revision' THEN 'Telah Di Koreksi'
+            END
+            FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju' ) as status_now,
+            (SELECT 
+            CASE
+            WHEN status = 'hold' THEN 'bg-secondary'
+            WHEN status = 'tolak' THEN 'bg-danger text-white'
+            WHEN status = 'revision' THEN 'bg-dark text-white'
+            END
+            FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju' ) as status_color,
             (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status='setuju' ) as iscreatedPK
         ")
             ->where('balaiid', $session_balaiId)->get()->getResult();
