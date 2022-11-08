@@ -116,7 +116,7 @@
                             <td class="pr-0">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="badge badge-pill px-3 font-weight-bold <?php echo $dokumenStatus[$data->status]['color'] ?>">
-                                        <?= $dokumenStatus[$data->status]['message'] . " Oleh " . ($data->verif_by == 'admin' ? "admin" : "UPT Balai") ?>
+                                        <?= $dokumenStatus[$data->status]['message'] . ($data->status != "hold" ? " Oleh " . ($data->verif_by == 'admin' ? "admin" : "UPT Balai") : " ")  ?>
                                     </span>
 
 

@@ -75,6 +75,11 @@ class Auth extends \App\Controllers\BaseController
 			return redirect()->to('auth')->withInput()->with('error', 'ID Pengguna Tidak Aktif');
 		}
 
+
+		if ($this->request->getPost('tahun') < 2023 and $user['uid'] != "admin") {
+			return redirect()->to('auth')->withInput()->with('error', 'Fitur Input Dokumen Perjanjian Kinerja Dapat Dibuka Jika memilih tahun > 2022');
+		}
+
 		$this->akses = new AksesModel();
 
 		// check db Active

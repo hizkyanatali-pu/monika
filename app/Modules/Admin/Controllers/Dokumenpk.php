@@ -110,7 +110,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataBelumInput = $this->satker->select("
             m_satker.satker
         ")
-            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']} and status='setuju') < 1")
+            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1")
             ->get()->getResult();
 
         $dataBelumInput = array_map(function ($arr) {

@@ -163,8 +163,10 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
             dokumenpk_satker.satkerid,
-            dokumenpk_satker.acc_by,
-            dokumenpk_satker.reject_by,
+            (CASE
+            WHEN dokumenpk_satker.acc_by IS NULL THEN dokumenpk_satker.reject_by
+            ELSE dokumenpk_satker.acc_by
+            END) AS verif_by,
             dokumen_pk_template.title as dokumenTitle,
             ku_user.nama as userCreatedName
         ')

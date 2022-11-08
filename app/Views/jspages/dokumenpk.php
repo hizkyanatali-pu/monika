@@ -1125,7 +1125,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Tahun</label>
                             <div class="col-sm-5">
-                                <select class="form-control" name="created-tahun" data-template-id="${template.id}" data-action-target="${_target}">
+                                <select class="form-control" name="created-tahun" data-template-id="${template.id}" data-action-target="${_target}" style="background:#F7F8FA" readonly>
                                     ${render_opsiTahun}
                                 </select>
                             </div>
