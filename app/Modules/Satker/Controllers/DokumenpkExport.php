@@ -132,8 +132,14 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'target', '');
 
         /** Dokumen Detail 2 */
-        // if ($this->userType == 'balai') $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome');
-        $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome', $qrcode);
+        // dd($dataDokumen['dokumen_type']);
+        if ($dataDokumen['dokumen_type'] == 'balai') {
+
+            $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'output', $qrcode);
+        } else {
+
+            $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome', $qrcode);
+        }
 
         $pdf->SetProtection(array('print'));
 
@@ -320,8 +326,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetMargins(0, 2, 0, 0);
         $pdf->AddPage('L', 'A4');
         $pdf->SetAutoPageBreak(false);
-        $headerTarget = $_detailDokumenType == 'target' ? 'TARGET ' : 'OUTCOME ';
-        $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', $headerTarget . $this->dokumenYear];
+        // $headerTarget = $_detailDokumenType == 'target' ? 'TARGET ' : 'OUTCOME ';
+        $headerTarget = strtoupper($_detailDokumenType);
+
+        $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', $headerTarget . " " . $this->dokumenYear];
         $headerWidth = [
             200,
             65
@@ -445,6 +453,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         $targetValue = $data_targetValue['outcome_value'] . ' ' . $data['outcome_satuan'];
                         break;
 
+                    case 'output':
+                        $targetValue = $data_targetValue['target_value'] . ' ' . $data['target_satuan'];
+
+                        break;
                     default:
                         $targetValue = '';
                         break;
