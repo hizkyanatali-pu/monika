@@ -63,7 +63,7 @@ class Account extends \App\Controllers\BaseController
     // update session data
     //  $this->session->push('userData', $user);
 
-    return redirect()->to('account')->with('success', 'Profil sudah di update');
+    return redirect()->to('account')->with('success', 'Profil berhasil diperbaruhi');
   }
 
   /**
