@@ -46,6 +46,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function index()
     {
+        $isEselon1 = false;
         $listSatkerCreateCokumen = false;
         $this->session->remove('createDokumenByBalai');
 
@@ -99,6 +100,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 case 'satker':
                     $templae_revTable = 'm_satker';
                     $template_revID   = $this->user['satker_id'];
+                    if ($this->user['satker_id'] == '000000') $isEselon1 = true;
                     break;
 
                 case 'balai':
@@ -129,7 +131,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataTemplate = $this->templateDokumen->where('dokumen_pk_template.status', '1')->where("deleted_at is null")->get()->getResult();
 
         returnSection:
-
+        
         return view('Modules\Satker\Views\Dokumenpk.php', [
             'title'             => "Perjanjian Kinerja Balai",
             'sessionYear'       => $this->user['tahun'],
@@ -137,6 +139,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
             'isCanCreated'      => true,
             'isCanConfirm'      => false,
+            'isEselon1'         => $isEselon1,
 
             'listSatkerCreateCokumen' => $listSatkerCreateCokumen,
 

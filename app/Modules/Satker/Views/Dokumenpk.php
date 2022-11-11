@@ -46,6 +46,11 @@
                             </button>
                         <?php } ?>
                     <?php } ?>
+                    <?php if ($isEselon1) { ?>
+                        <a href="<?php echo site_url('dokumenpk/eselon1/export-rekap-excel'); ?>" target="_blank" class="btn btn-success mr-4">
+                            <i class="fas fa-file"></i> Rekap
+                        </a>
+                    <?php } ?>
 
                     <?php if ($isCanCreated) {
 
