@@ -44,7 +44,7 @@
         <div class="kt-portlet__body">
 
             <center>
-                <iframe src="<?= ($session == 'balai' ? 'manual_book/MANUAL BOOK INPUT PK (UPT BALAI)_v1.pdf' : '/manual_book/MANUAL BOOK INPUT PK (SATKER-BALAI TEKNIK-ESELON 2)_v1.pdf')  ?>" width="70%" height="700vh"></iframe>
+                <iframe src="<?= ($session == 'balai' ? 'manual_book/MANUAL-BOOK-INPUT-PK-(UPT-BALAI)_v1.pdf' : '/manual_book/MANUAL-BOOK-INPUT-PK-(SATKER-BALAI-TEKNIK-ESELON-2)_v1.pdf')  ?>" width="70%" height="700vh"></iframe>
             </center>
 
 
