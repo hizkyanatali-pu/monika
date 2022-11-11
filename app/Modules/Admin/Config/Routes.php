@@ -27,6 +27,11 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
     $routes->get('account', '\Modules\Admin\Controllers\Account::index', ['as' => 'account']);
     $routes->post('account', '\Modules\Admin\Controllers\Account::update');
+    $routes->get('change-password', '\Modules\Admin\Controllers\Account::change_password', ['as' => 'change-password']);
+    $routes->post('change-password', '\Modules\Admin\Controllers\Account::updatePassword');
+
+
+
 
     $routes->get('users', '\Modules\Admin\Controllers\Users::index', ['as' => 'users']);
     $routes->get('users/edit/(:segment)', '\Modules\Admin\Controllers\Users::edit/$1');

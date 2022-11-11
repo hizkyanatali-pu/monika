@@ -44,16 +44,26 @@
 
 			<!--begin: Navigation -->
 			<div class="kt-notification">
-				<!-- <a href="/account" class="kt-notification__item">
+				<a href="/account" class="kt-notification__item">
 					<div class="kt-notification__item-icon">
 						<i class="flaticon2-calendar-3 kt-font-primary"></i>
 					</div>
 					<div class="kt-notification__item-details">
 						<div class="kt-notification__item-title kt-font-bold">
-							My Profile
+							Profil
 						</div>
 					</div>
-				</a> -->
+				</a>
+				<a href="/change-password" class="kt-notification__item">
+					<div class="kt-notification__item-icon">
+						<i class="flaticon2-lock kt-font-primary"></i>
+					</div>
+					<div class="kt-notification__item-details">
+						<div class="kt-notification__item-title kt-font-bold">
+							Ganti Password
+						</div>
+					</div>
+				</a>
 				<div class="kt-notification__custom kt-space-between text-right">
 					<a href="<?= site_url('logout') ?>" class="btn btn-label btn-label-brand btn-sm"><i class="fas fa-sign-out-alt"></i> Keluar</a>
 				</div>
