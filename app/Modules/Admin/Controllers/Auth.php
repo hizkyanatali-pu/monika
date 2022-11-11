@@ -50,15 +50,15 @@ class Auth extends \App\Controllers\BaseController
 		}
 
 		// check credentials
-		$users = new UserModel();	
+		$users = new UserModel();
 
 		$user = $users->select("
 			ku_user.*, ku_user_group.group_id
 		")
-		->where('idpengguna', $this->request->getPost('idpengguna'))
-		->where('sandi', md5($this->request->getPost('sandi')))
-		->join('ku_user_group', 'ku_user_group.uid=ku_user.uid', 'left')
-		->first();
+			->where('idpengguna', $this->request->getPost('idpengguna'))
+			->where('sandi', md5($this->request->getPost('sandi')))
+			->join('ku_user_group', 'ku_user_group.uid=ku_user.uid', 'left')
+			->first();
 		//dd($user);
 
 		if (
@@ -73,6 +73,11 @@ class Auth extends \App\Controllers\BaseController
 		// check activation
 		if (!$user['aktif']) {
 			return redirect()->to('auth')->withInput()->with('error', 'ID Pengguna Tidak Aktif');
+		}
+
+
+		if ($this->request->getPost('tahun') < 2023 and $user['uid'] != "admin") {
+			return redirect()->to('auth')->withInput()->with('error', 'Fitur Input Dokumen Perjanjian Kinerja Dapat Dibuka Jika memilih tahun > 2022');
 		}
 
 		$this->akses = new AksesModel();
@@ -100,8 +105,8 @@ class Auth extends \App\Controllers\BaseController
 			'tahun'      => $this->request->getPost('tahun'),
 			'user_type'  => 'other'
 		];
-		
-		
+
+
 		if (
 			strContains($user['uid'], 'satker')
 			|| $user['idkelompok'] == 'SATKER'
@@ -114,24 +119,22 @@ class Auth extends \App\Controllers\BaseController
 				m_balai.balaiid,
 				m_balai.balai
 			")
-			->where('idpengguna', $this->request->getPost('idpengguna'))
-			->where('sandi', md5($this->request->getPost('sandi')))
-			// ->join('ku_user_satker', 'ku_user.uid = ku_user_satker.uid_user', 'left')
-			// ->join('m_satker', 'ku_user_satker.satkerid = m_satker.satkerid', 'left')
-			// ->join('m_balai', 'm_satker.balaiid = m_balai.balaiid', 'left')
-			->join('m_satker', 'ku_user.satkerid = m_satker.satkerid', 'left')
-			->join('m_balai', 'ku_user.balaiid = m_balai.balaiid', 'left')
-			->first();
-			
+				->where('idpengguna', $this->request->getPost('idpengguna'))
+				->where('sandi', md5($this->request->getPost('sandi')))
+				// ->join('ku_user_satker', 'ku_user.uid = ku_user_satker.uid_user', 'left')
+				// ->join('m_satker', 'ku_user_satker.satkerid = m_satker.satkerid', 'left')
+				// ->join('m_balai', 'm_satker.balaiid = m_balai.balaiid', 'left')
+				->join('m_satker', 'ku_user.satkerid = m_satker.satkerid', 'left')
+				->join('m_balai', 'ku_user.balaiid = m_balai.balaiid', 'left')
+				->first();
+
 
 			$setSession_userData['satker_id']   = $dataSarker_n_Balai['satkerid'];
 			$setSession_userData['satker_nama'] = $dataSarker_n_Balai['satker'];
 			$setSession_userData['balai_id']    = $dataSarker_n_Balai['balaiid'];
 			$setSession_userData['balai_nama']  = $dataSarker_n_Balai['jabatan_penanda_tangan_pihak_2'];
 			$setSession_userData['user_type']   = 'satker';
-		}	
-
-		elseif (
+		} elseif (
 			strContains($user['uid'], 'balai')
 			|| $user['idkelompok'] == 'BALAI'
 			|| ($user['balaiid'] != '' && $user['satkerid'] == '')
@@ -140,16 +143,16 @@ class Auth extends \App\Controllers\BaseController
 				m_balai.balaiid,
 				m_balai.balai
 			")
-			->where('uid', $user['uid'])
-			->join('m_balai', 'ku_user.balaiid = m_balai.balaiid', 'left')
-			->first();
+				->where('uid', $user['uid'])
+				->join('m_balai', 'ku_user.balaiid = m_balai.balaiid', 'left')
+				->first();
 
 			$setSession_userData['balai_id']    = $dataBalai['balaiid'];
 			$setSession_userData['balai_nama']  = $dataBalai['balai'];
 			$setSession_userData['user_type']    = 'balai';
 		}
 		/** end-of: set userData session */
-		
+
 		// login OK, save user data to session
 		$this->session->set('isLoggedIn', true);
 		$this->session->set('userData', $setSession_userData);
@@ -173,7 +176,7 @@ class Auth extends \App\Controllers\BaseController
 	 */
 	public function logout()
 	{
-		$this->session->remove(['isLoggedIn', 'userData']);
+		$this->session->remove(['isLoggedIn', 'userData', 'createDokumenByAdmin', 'createDokumenByBalai']);
 		$cache = \Config\Services::cache();
 		$cache->clean();
 		return redirect()->to('auth');

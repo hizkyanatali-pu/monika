@@ -28,7 +28,7 @@
                         <select name="filter-satker" class="form-control">
                             <option value="all">SEMUA SATKER</option>
                             <?php foreach ($filterSatker as $key => $data) { ?>
-                                <option value="<?php echo $data->satkerid ?>" <?php if($data->satkerid == $filterSatker_selected) echo 'selected' ?> >
+                                <option value="<?php echo $data->satkerid ?>" <?php if ($data->satkerid == $filterSatker_selected) echo 'selected' ?>>
                                     <?php echo $data->satker ?>
                                 </option>
                             <?php  } ?>
@@ -41,14 +41,7 @@
                 <div>
                     <?php if (isset($listSatkerCreateCokumen)) { ?>
                         <?php if ($listSatkerCreateCokumen == true) { ?>
-                            <button 
-                                class="btn btn-info __list-satker-telah-membuat-dokumen" 
-                                data-available="<?php echo $templateAvailable ?>"
-
-                                <?php if (isset($balaiCreateForSatker)) { ?>
-                                    data-balai-create-satker="<?php echo $balaiCreateForSatker ?>"
-                                <?php } ?>
-                            >
+                            <button class="btn btn-info __list-satker-telah-membuat-dokumen" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?>>
                                 <i class="fas fa-list"></i> Daftar Satker Membuat Dokumen
                             </button>
                         <?php } ?>
@@ -59,15 +52,17 @@
                         </a>
                     <?php } ?>
 
-                    <?php if ($isCanCreated) { ?>
-                        <button 
-                            class="btn btn-primary __opsi-template" 
-                            data-available="<?php echo $templateAvailable ?>"
+                    <?php if ($isCanCreated) {
 
-                            <?php if (isset($balaiCreateForSatker)) { ?>
-                                data-balai-create-satker="<?php echo $balaiCreateForSatker ?>"
-                            <?php } ?>
-                        >
+                        if (count($dataDokumen) > 0) {
+                            $disabled = $dataDokumen[0]->status != "setuju" ? "disabled" : "";
+                        } else {
+                            $disabled = "";
+                        }
+
+
+                    ?>
+                        <button class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?> <?= $disabled ?>>
                             <i class="fas fa-plus"></i> Buat Dokumen
                         </button>
                     <?php } ?>
@@ -105,9 +100,9 @@
                                 <?php echo $dokumenMasterID ?>
                             </td>
                             <td>
-                                <?php echo "PERJANJIAN KINERJA ".$data->dokumenTitle ?>
+                                <?php echo "PERJANJIAN KINERJA " . $data->dokumenTitle ?>
 
-                                <?php if ($data->revision_master_number || $data->is_revision_same_year) : 
+                                <?php if ($data->revision_master_number || $data->is_revision_same_year) :
                                     $badgeText  = ($data->is_revision_same_year) ? 'Revisi' : 'Koreksi Ke ' . $data->revision_number;
                                     $badgeColor = ($data->is_revision_same_year) ? 'bg-danger' : 'bg-warning'
                                 ?>
@@ -135,7 +130,7 @@
                             <td class="pr-0">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="badge badge-pill px-3 font-weight-bold <?php echo $dokumenStatus[$data->status]['color'] ?>">
-                                        <?php echo $dokumenStatus[$data->status]['message'] ?>
+                                        <?= $dokumenStatus[$data->status]['message'] . ($data->status != "hold" ? " Oleh " . ($data->verif_by == 'admin' ? "admin" : "UPT Balai") : " ")  ?>
                                     </span>
 
 
@@ -168,31 +163,31 @@
 <!-- Modal Form -->
 <div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="d-flex">
-                        <button type="button" class="btn btn-default pr-2 d-none __back-pilih-dokumen">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <h5 class="modal-title pt-2 pl-2">Pilih Dokumen</h5>
-                    </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex">
+                    <button type="button" class="btn btn-default pr-2 d-none __back-pilih-dokumen">
+                        <i class="fas fa-chevron-left"></i>
                     </button>
+                    <h5 class="modal-title pt-2 pl-2">Pilih Dokumen</h5>
                 </div>
-                <div class="modal-body p-0">
-                    <div class="list-group" id="choose-template">
-                        <?php foreach ($templateDokumen as $keyTemplate => $dataTemplate) : ?>
-                            <a class="list-group-item list-group-item-action __buat-dokumen-pilih-template" href="javascript:void(0)" data-id="<?php echo $dataTemplate->id ?>">
-                                <?php echo $dataTemplate->title ?>
-                            </a>
-                        <?php endforeach ?>
-                    </div>
-                    <div class="p-4 d-none" id="make-dokumen">
-                    </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="list-group" id="choose-template">
+                    <?php foreach ($templateDokumen as $keyTemplate => $dataTemplate) : ?>
+                        <a class="list-group-item list-group-item-action __buat-dokumen-pilih-template" href="javascript:void(0)" data-id="<?php echo $dataTemplate->id ?>">
+                            <?php echo $dataTemplate->title ?>
+                        </a>
+                    <?php endforeach ?>
+                </div>
+                <div class="p-4 d-none" id="make-dokumen">
+                </div>
 
-                    
-                    <?php /*if (! $valudasiCreatedDokumen) { ?>
+
+                <?php /*if (! $valudasiCreatedDokumen) { ?>
                         <div class="list-group" id="choose-template">
                             <?php foreach ($balaiChecklistSatker as $keyChecklistBalai => $dataChecklistBalai) : ?>
                                 <li class="list-group-item d-flex justify-content-between">
@@ -205,11 +200,11 @@
                             <?php endforeach ?>
                         </div>
                     <?php }*/ ?>
-                </div>
-                <div class="modal-footer d-none">
-                    <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
-                </div>
             </div>
+            <div class="modal-footer d-none">
+                <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
+            </div>
+        </div>
     </div>
 </div>
 <!-- end-of: Modal Form -->
@@ -245,7 +240,7 @@
                 <div class="container-revision-alert-cetak"></div>
                 <iframe width="100%" style="height: 80vh" frameborder="0"></iframe>
             </div>
-            
+
             <?php if ($isCanConfirm) { ?>
                 <div class="modal-footer p-0"></div>
             <?php } ?>

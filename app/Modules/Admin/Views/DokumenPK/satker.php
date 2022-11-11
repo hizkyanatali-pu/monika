@@ -495,6 +495,11 @@
             showLoaderOnConfirm: true,
             showCancelButton: true,
             preConfirm: () => {
+                if ($('textarea[name=pesan-tolak-dokumen]').val() == '') {
+
+                    return Swal.showValidationMessage('Alasan Penolakan Harus Diisi')
+
+                }
                 $.ajax({
                     url: "<?php echo site_url('dokumenpk/change-status') ?>",
                     type: "POST",

@@ -12,6 +12,7 @@ use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Endroid\QrCode\Writer\PngWriter;
+
 class DokumenpkExport extends \App\Controllers\BaseController
 {
     use ResponseTrait;
@@ -59,20 +60,20 @@ class DokumenpkExport extends \App\Controllers\BaseController
         //qrcode
         $writer = new PngWriter();
 
-        $qrcodeSite = base_url()."/api/showpdf/tampilkan/".$_dokumenSatkerID."?preview=true";
+        $qrcodeSite = base_url() . "/api/showpdf/tampilkan/" . $_dokumenSatkerID . "?preview=true";
 
         // Create QR code
         $qrCode = QrCode::create($qrcodeSite)
             ->setEncoding(new Encoding('UTF-8'))
             ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
-            ->setSize(200)
+            ->setSize(300)
             ->setMargin(10)
             ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
             ->setForegroundColor(new Color(0, 0, 0))
             ->setBackgroundColor(new Color(255, 255, 255));
 
         // Create generic logo
-        $logo = Logo::create(FCPATH .'logo.png')
+        $logo = Logo::create(FCPATH . 'logo.png')
             ->setResizeToWidth(50);
 
         // // Create generic label
@@ -80,7 +81,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         //     ->setTextColor(new Color(255, 0, 0));
 
         $result = $writer->write($qrCode, $logo);
-        
+
         $qrcode = $result->getDataUri();
         // echo '<img src="'.$dataUri.'" alt="PUPR">';exit;
 
@@ -128,33 +129,33 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_pageDokumenOpening($pdf, $dataDokumen);
 
         /** Dokumen Detail */
-        $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'target','');
+        $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'target', '');
 
         /** Dokumen Detail 2 */
-        // if ($this->userType == 'balai') $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome');
-        $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome',$qrcode);
-        
+        // dd($dataDokumen['dokumen_type']);
+        if ($dataDokumen['dokumen_type'] == 'balai') {
+
+            $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'output', $qrcode);
+        } else {
+
+            $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome', $qrcode);
+        }
+
         $pdf->SetProtection(array('print'));
 
 
 
-        if($_GET['preview']){
-            $nm_file = "PK ".str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])). " - ". str_replace(array('DIREKTUR', 'DIREKTORAT'),array("MENTERI","KEMENTERIAN"), str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
-            $pdf->Output('I', $nm_file.'.pdf'); exit;
-         
-        }else{
+        if ($_GET['preview']) {
+            $nm_file = "PK " . str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . " - " . str_replace(array('DIREKTUR', 'DIREKTORAT'), array("MENTERI", "KEMENTERIAN"), str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+            $pdf->Output('I', $nm_file . '.pdf');
+            exit;
+        } else {
 
-            $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf'); 
+            $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
             return $this->respond([
                 'dokumen' => $dataDokumen
             ]);
         };
-       
-
-
-    
-
-        
     }
 
 
@@ -195,9 +196,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial']));
 
         $dokumenKopTitle3 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
-        $dokumenKopTitle3 = str_replace('MENTERI', 'KEMENTERIAN',$dokumenKopTitle3);
+        $dokumenKopTitle3 = str_replace('MENTERI', 'KEMENTERIAN', $dokumenKopTitle3);
 
-        
+
 
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
         $dokumenKopTitle2 = $dokumenKopTitle2;
@@ -320,13 +321,15 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
 
-    private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType,$qrcode)
+    private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType, $qrcode)
     {
-        $pdf->SetMargins(0,2,0,0);
+        $pdf->SetMargins(0, 2, 0, 0);
         $pdf->AddPage('L', 'A4');
         $pdf->SetAutoPageBreak(false);
-        $headerTarget = $_detailDokumenType == 'target' ? 'TARGET ' : 'OUTCOME ';
-        $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', $headerTarget . $this->dokumenYear];
+        // $headerTarget = $_detailDokumenType == 'target' ? 'TARGET ' : 'OUTCOME ';
+        $headerTarget = strtoupper($_detailDokumenType);
+
+        $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', $headerTarget . " " . $this->dokumenYear];
         $headerWidth = [
             200,
             65
@@ -347,9 +350,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         ];
 
         // print_r($qrcode);exit;
-        if($qrcode){
+        if ($qrcode) {
 
-            $pdf->Image($qrcode, 282, 195, 15, 15,"PNG");
+            $pdf->Image($qrcode, 282, 195, 15, 15, "PNG");
         }
 
         /**  Dokumen KOP */
@@ -357,7 +360,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
 
         $divisiPihak2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
-        $divisiPihak2 = str_replace('MENTERI','KEMENTERIAN',$divisiPihak2);
+        $divisiPihak2 = str_replace('MENTERI', 'KEMENTERIAN', $divisiPihak2);
         $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
 
         $pdf->SetFont('Arial', 'B', 10);
@@ -450,6 +453,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         $targetValue = $data_targetValue['outcome_value'] . ' ' . $data['outcome_satuan'];
                         break;
 
+                    case 'output':
+                        $targetValue = $data_targetValue['target_value'] . ' ' . $data['target_satuan'];
+
+                        break;
                     default:
                         $targetValue = '';
                         break;

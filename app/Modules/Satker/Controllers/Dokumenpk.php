@@ -57,6 +57,11 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.revision_master_number,
             dokumenpk_satker.revision_number,
             dokumenpk_satker.status,
+            (CASE
+            WHEN dokumenpk_satker.acc_by IS NULL THEN dokumenpk_satker.reject_by
+            ELSE dokumenpk_satker.acc_by
+            END) AS verif_by,
+            
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
@@ -147,8 +152,8 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function balaiSatker($_satkerId)
     {
-        $setSession_userData['byBalai_user_type']    = 'upt-balai';
-        $this->session->set('createDokumenByBalai', $setSession_userData);
+        // $setSession_userData['byBalai_user_type']    = 'upt-balai';
+        // $this->session->set('createDokumenByBalai', $setSession_userData);
 
         $queryDataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
@@ -161,6 +166,10 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
             dokumenpk_satker.satkerid,
+            (CASE
+            WHEN dokumenpk_satker.acc_by IS NULL THEN dokumenpk_satker.reject_by
+            ELSE dokumenpk_satker.acc_by
+            END) AS verif_by,
             dokumen_pk_template.title as dokumenTitle,
             ku_user.nama as userCreatedName
         ')
@@ -168,6 +177,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->join('ku_user', 'dokumenpk_satker.user_created=ku_user.uid', 'left')
             ->where('dokumenpk_satker.status !=', 'revision')
             ->where('dokumenpk_satker.dokumen_type', 'satker')
+            ->where("dokumenpk_satker.tahun", $this->user['tahun'])
             ->orderBy('dokumenpk_satker.id', 'DESC');
 
         if ($_satkerId == 'all') {
@@ -284,6 +294,20 @@ class Dokumenpk extends \App\Controllers\BaseController
         $balai_checklistSatker = $this->satker->select("
             m_satker.satker,
             (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju' ) as iscreatedPKBeforeAcc,
+            (SELECT 
+            CASE
+            WHEN status = 'hold' THEN 'Menunggu Konfirmasi'
+            WHEN status = 'tolak' THEN 'Ditolak'
+            WHEN status = 'revision' THEN 'Telah Di Koreksi'
+            END
+            FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju' ) as status_now,
+            (SELECT 
+            CASE
+            WHEN status = 'hold' THEN 'bg-secondary'
+            WHEN status = 'tolak' THEN 'bg-danger text-white'
+            WHEN status = 'revision' THEN 'bg-dark text-white'
+            END
+            FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju' ) as status_color,
             (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status='setuju' ) as iscreatedPK
         ")
             ->where('balaiid', $session_balaiId)->get()->getResult();
@@ -770,5 +794,15 @@ class Dokumenpk extends \App\Controllers\BaseController
             ];
         }, $input['kegiatan']);
         $this->dokumenSatker_kegiatan->insertBatch($records);
+    }
+
+    public function panduanpk()
+    {
+
+        return view('Modules\Satker\Views\PanduanPK.php', [
+            'title'             => "Panduan Perjanjian Kinerja Satker",
+            'sessionYear'       => $this->user['tahun'],
+            'session'           => $this->user['user_type']
+        ]);
     }
 }
