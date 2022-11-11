@@ -59,7 +59,7 @@
                                     <div class="form-group row <?php if (session('errors.idpengguna')) echo 'is-invalid'; ?>">
                                         <label class="col-xl-3 col-lg-3 col-form-label">ID Pengguna</label>
                                         <div class="col-lg-9 col-xl-6">
-                                            <input class="form-control" name="idpengguna" type="text" value="<?= $users['idpengguna']; ?>" disabled>
+                                            <input class="form-control" name="idpengguna" type="text" value="<?= $users['idpengguna']; ?>" readonly style="background: #F7F8FA ;">
                                             <div id="idpengguna-error" class="error invalid-feedback"><?= session('errors.idpengguna') ?></div>
                                         </div>
                                     </div>
