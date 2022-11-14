@@ -213,6 +213,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'templateAvailable'       => count($dataTemplate) > 0 ? 'true' : 'false',
             'isCanCreated'            => $isCanCreated,
             'isCanConfirm'            => true,
+            'isEselon1'               => false,
             'listSatkerCreateCokumen' => true,
 
             'filterSatker'          => $this->satker->where('balaiid', $this->user['balaiid'])->get()->getResult(),
