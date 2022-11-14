@@ -371,10 +371,31 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $templateDokumen = $this->templateDokumen->where('id', $id)->get()->getRow();
 
-        $templateRows = array_map(function ($arr) use ($session_userType, $session_balaiId, $templateDokumen) {
-            $targetDefualtValue = '';
+        $templateRows = array_map(function ($arr) use ($session_userType, $session_balaiId, $templateDokumen, $dokumenExistSameYear) {
+            $targetDefualtValue      = '';
+            $targetBalaiDefualtValue = '';
+            $outcomeDefaultValue     = '';
+
+            if ($dokumenExistSameYear) {
+                $rowDokumenExistsValue = $this->dokumenSatker_rows
+                ->where('dokumen_id', $dokumenExistSameYear->last_dokumen_id)
+                ->where('template_row_id', $arr->id)
+                ->get()->getRow();
+            }
+
+
+            if ($session_userType == "satker") {
+                if ($dokumenExistSameYear) {
+                    $targetDefualtValue = $rowDokumenExistsValue->target_value ?? '';
+                    $outcomeDefaultValue = $rowDokumenExistsValue->outcome_value ?? '';
+                }
+            }
 
             if ($session_userType == "balai") {
+                if ($dokumenExistSameYear) {
+                    $targetBalaiDefualtValue = $rowDokumenExistsValue->target_value ?? '';
+                }
+
                 $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
 
                 foreach ($templateRowRumus as $key => $data) {
@@ -463,14 +484,16 @@ class Dokumenpk extends \App\Controllers\BaseController
             }
 
             return [
-                'id'                 => $arr->id,
-                'template_id'        => $arr->template_id,
-                'prefix_title'       => $arr->prefix_title,
-                'title'              => $arr->title,
-                'target_satuan'      => $arr->target_satuan,
-                'outcome_satuan'     => $arr->outcome_satuan,
-                'type'               => $arr->type,
-                'targetDefualtValue' => $targetDefualtValue
+                'id'                      => $arr->id,
+                'template_id'             => $arr->template_id,
+                'prefix_title'            => $arr->prefix_title,
+                'title'                   => $arr->title,
+                'target_satuan'           => $arr->target_satuan,
+                'outcome_satuan'          => $arr->outcome_satuan,
+                'type'                    => $arr->type,
+                'targetDefualtValue'      => $targetDefualtValue,
+                'targetBalaiDefualtValue' => $targetBalaiDefualtValue,
+                'outcomeDefaultValue'     => $outcomeDefaultValue
             ];
         }, $this->templateRow->where('template_id', $id)->get()->getResult());
 

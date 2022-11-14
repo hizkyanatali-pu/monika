@@ -1244,6 +1244,7 @@
                                         type="text" 
                                         class="form-control __inputTemplateRow-target" 
                                         placeholder="Masukkan Nilai"
+                                        value="${ data.targetBalaiDefualtValue }"
                                         data-row-id="${ data.id }"
                                         onkeypress="return isNumberKey(this, event);"
                                     >
@@ -1287,7 +1288,7 @@
                                         type="text" 
                                         class="form-control __inputTemplateRow-outcome" 
                                         placeholder="Masukkan Nilai"
-                                        value=""
+                                        value="${ data.outcomeDefaultValue }"
                                         data-row-id="${ data.id }"
                                         onkeypress="return isNumberKey(this, event);"
                                     >
