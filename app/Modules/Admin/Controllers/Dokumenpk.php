@@ -181,7 +181,6 @@ class Dokumenpk extends \App\Controllers\BaseController
         $template_type    = $userType;
         $templae_revTable = '';
         $template_revID   = $userId;
-
         switch ($userType) {
             case 'satker':
                 $templae_revTable = 'm_satker';

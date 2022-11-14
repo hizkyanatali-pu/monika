@@ -53,16 +53,16 @@
                     <?php } ?>
 
                     <?php if ($isCanCreated) {
-
                         if (count($dataDokumen) > 0) {
                             $disabled = $dataDokumen[0]->status != "setuju" ? "disabled" : "";
                         } else {
                             $disabled = "";
                         }
-
-
                     ?>
-                        <button class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?> <?= $disabled ?>>
+                        <button 
+                            class="btn btn-primary __opsi-template" 
+                            data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?> <?= $disabled ?>
+                        >
                             <i class="fas fa-plus"></i> Buat Dokumen
                         </button>
                     <?php } ?>

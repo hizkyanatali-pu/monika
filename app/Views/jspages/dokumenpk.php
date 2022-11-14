@@ -90,7 +90,7 @@
 
     $(document).on('click', '.__buat-dokumen-pilih-template', function() {
         let dataID = $(this).data('id')
-
+        
         $.ajax({
             url: "<?php echo site_url('dokumenpk/get-template/') ?>" + dataID,
             type: 'GET',

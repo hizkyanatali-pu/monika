@@ -152,8 +152,13 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function balaiSatker($_satkerId)
     {
-        // $setSession_userData['byBalai_user_type']    = 'upt-balai';
-        // $this->session->set('createDokumenByBalai', $setSession_userData);
+        /** 
+         * Jangan di komen !
+         * fungsi berikut merupakan pembuatan session untuk mengetahu bahwa dokumen tersebut di buat oleh balai
+         */
+        $setSession_userData['byBalai_user_type']    = 'upt-balai';
+        $this->session->set('createDokumenByBalai', $setSession_userData);
+        /* */
 
         $queryDataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
@@ -338,6 +343,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $session_balaiNama  = $this->user['balai_nama'] ?? null;
             $session_satkerId   = $this->user['satker_id'] ?? null;
             $session_balaiId    = $this->user['balai_id'] ?? null;
+
         }
 
         $pihak1        = '';
@@ -359,16 +365,16 @@ class Dokumenpk extends \App\Controllers\BaseController
             $jabatanPihak2 = $dataBalai->jabatan_penanda_tangan_pihak_2;
             // $sessions = array("balaiid" => $session_balaiId);
         }
-
+        
         $dokumenExistSameYear = $this->dokumenSatker->select("
             id as last_dokumen_id,
             IFNULL (revision_master_dokumen_id, id) AS revision_master_dokumen_id
         ")
-            ->where('template_id', $id)
-            ->where('satkerid', $session_satkerId)
-            ->where('balaiid', $session_balaiId)
-            ->where("status != ", 'revision')
-            ->where("tahun = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
+        ->where('template_id', $id)
+        ->where('satkerid', $session_satkerId)
+        ->where('balaiid', $session_balaiId)
+        ->where("status != ", 'revision')
+        ->where("tahun = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
 
         $templateDokumen = $this->templateDokumen->where('id', $id)->get()->getRow();
 
@@ -384,7 +390,6 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ->get()->getRow();
             }
 
-
             if ($session_userType == "satker") {
                 if ($dokumenExistSameYear) {
                     $targetDefualtValue = $rowDokumenExistsValue->target_value ?? '';
@@ -393,33 +398,38 @@ class Dokumenpk extends \App\Controllers\BaseController
             }
 
             if ($session_userType == "balai") {
-                if ($dokumenExistSameYear) {
-                    $targetBalaiDefualtValue = $rowDokumenExistsValue->target_value ?? '';
+                if ($templateDokumen->type == 'satker') {
+                    $targetDefualtValue = $rowDokumenExistsValue->target_value ?? '';
+                    $outcomeDefaultValue = $rowDokumenExistsValue->outcome_value ?? '';
                 }
-
-                $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
-
-                foreach ($templateRowRumus as $key => $data) {
-                    $targetRumusOutcome = $this->dokumenSatker->select(
-                        'dokumenpk_satker_rows.outcome_value'
-                    )
-                        ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
-                        ->join('dokumen_pk_template_rowrumus', "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus.template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus.rowId)", 'left')
-                        ->where('dokumen_pk_template_rowrumus.rumus', $data->rumus)
-                        ->where('dokumenpk_satker.balaiid', $session_balaiId)
-                        ->where('dokumenpk_satker.status', 'setuju')
-                        ->where('dokumenpk_satker.tahun', $this->user['tahun'])
-                        ->where('dokumenpk_satker_rows.is_checked', '1')
-                        ->get()->getResult();
-
-                    $outcomeRumus = 0;
-                    foreach ($targetRumusOutcome as $keyOutcome => $dataOutcome) {
-                        $outcomeRumus += $dataOutcome ? ($dataOutcome->outcome_value != '' ? $dataOutcome->outcome_value : 0) : 0;
+                else {
+                    if ($dokumenExistSameYear) {
+                        $targetBalaiDefualtValue = $rowDokumenExistsValue->target_value ?? '';
                     }
-
-                    if ($targetDefualtValue == '' && $outcomeRumus > 0) $targetDefualtValue = 0;
-
-                    if ($outcomeRumus > 0) $targetDefualtValue += $outcomeRumus;
+    
+                    $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
+                    foreach ($templateRowRumus as $key => $data) {
+                        $targetRumusOutcome = $this->dokumenSatker->select(
+                            'dokumenpk_satker_rows.outcome_value'
+                        )
+                            ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                            ->join('dokumen_pk_template_rowrumus', "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus.template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus.rowId)", 'left')
+                            ->where('dokumen_pk_template_rowrumus.rumus', $data->rumus)
+                            ->where('dokumenpk_satker.balaiid', $session_balaiId)
+                            ->where('dokumenpk_satker.status', 'setuju')
+                            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+                            ->where('dokumenpk_satker_rows.is_checked', '1')
+                            ->get()->getResult();
+    
+                        $outcomeRumus = 0;
+                        foreach ($targetRumusOutcome as $keyOutcome => $dataOutcome) {
+                            $outcomeRumus += $dataOutcome ? ($dataOutcome->outcome_value != '' ? $dataOutcome->outcome_value : 0) : 0;
+                        }
+    
+                        if ($targetDefualtValue == '' && $outcomeRumus > 0) $targetDefualtValue = 0;
+    
+                        if ($outcomeRumus > 0) $targetDefualtValue += $outcomeRumus;
+                    }
                 }
             }
 
