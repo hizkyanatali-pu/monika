@@ -328,6 +328,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function getTemplate($id)
     {
+        $sessionYear = $this->user['tahun'];
         $checkCreateFromBalai = $this->session->get('createDokumenByBalai');
         if ($this->user['user_type'] == 'other' || isset($checkCreateFromBalai)) {
             $createByAdmin = $this->session->get('createDokumenByAdmin');
@@ -365,7 +366,6 @@ class Dokumenpk extends \App\Controllers\BaseController
             $jabatanPihak2 = $dataBalai->jabatan_penanda_tangan_pihak_2;
             // $sessions = array("balaiid" => $session_balaiId);
         }
-        
         $dokumenExistSameYear = $this->dokumenSatker->select("
             id as last_dokumen_id,
             IFNULL (revision_master_dokumen_id, id) AS revision_master_dokumen_id
@@ -374,7 +374,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ->where('satkerid', $session_satkerId)
         ->where('balaiid', $session_balaiId)
         ->where("status != ", 'revision')
-        ->where("tahun = YEAR(CURDATE())")->orderBy('id', 'desc')->get()->getRow();
+        ->where("tahun", $sessionYear)->orderBy('id', 'desc')->get()->getRow();
 
         $templateDokumen = $this->templateDokumen->where('id', $id)->get()->getRow();
 
