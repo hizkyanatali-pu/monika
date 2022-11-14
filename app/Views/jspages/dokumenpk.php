@@ -1022,8 +1022,22 @@
             classDNoneOutcome = 'd-none'
         }
 
-        if (_data.template.type == 'master-balai') {
-            titleTheadTable = 'Target Dari Satker';
+        if (_data.template.type == 'master-balai' || _data.template.type == 'eselon1') {
+            titleTheadTable = '';
+            switch (_data.template.type) {
+                case 'master-balai':
+                    titleTheadTable = 'Target Dari Satker';
+                    break;
+
+                case 'eselon1':
+                    titleTheadTable = 'Acuan';
+                    break;
+            
+                default:
+                    titleTheadTable = '';
+                    break;
+            }
+
             theadBalaiTarget = '<td class="text-center" style="width: 250px">Target ' + <?php echo $sessionYear ?> + '</td>';
             theadBalaiTargetNumber = '<td class="text-center p-2">(3)</td>';
         } else {
@@ -1226,7 +1240,7 @@
 
                 case 'form':
                     let renderInputTarget = ''
-                    if (_templateType == 'master-balai') {
+                    if (_templateType == 'master-balai' || _templateType == 'eselon1') {
                         renderInputTarget = `
                             <td>
                                 <div class="input-group mr-3">
