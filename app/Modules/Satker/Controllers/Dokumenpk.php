@@ -366,6 +366,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $jabatanPihak2 = $dataBalai->jabatan_penanda_tangan_pihak_2;
             // $sessions = array("balaiid" => $session_balaiId);
         }
+        
         $dokumenExistSameYear = $this->dokumenSatker->select("
             id as last_dokumen_id,
             IFNULL (revision_master_dokumen_id, id) AS revision_master_dokumen_id
