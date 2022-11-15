@@ -152,11 +152,17 @@
             <div class="form-group">
                 <label for="exampleInputEmail1">Pagu Total</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" name="filter-pagutotal-start">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">Rp.</span>
+                    </div>
+                    <input type="text" id="filter-pagutotal-start" class="form-control" name="filter-pagutotal-start" placeholder="Min Pagu Total">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="">Hingga</span>
                     </div>
-                    <input type="text" class="form-control" name="filter-pagutotal-end">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">Rp.</span>
+                    </div>
+                    <input type="text" id="filter-pagutotal-end" class="form-control" name="filter-pagutotal-end" placeholder="Max Pagu Total">
                 </div>
             </div>
         </div>
@@ -252,6 +258,7 @@
 
 <?= $this->section('footer_js') ?>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://unpkg.com/imask"></script>
 
 <script>
     var page                             = 0,
@@ -261,6 +268,22 @@
         element_iconLoadMore             = element_buttonLoadMore.find('i.fas'),
         element_tableWarningDataNotFound = $("._warning-message-data-not-found")
 
+    
+     var filterPagutotalStartMask = IMask(
+        document.getElementById('filter-pagutotal-start'),
+        {
+            mask: Number,
+            thousandsSeparator: '.'
+        }
+    );
+
+    var filterPagutotalEndMask = IMask(
+        document.getElementById('filter-pagutotal-end'),
+        {
+            mask: Number,
+            thousandsSeparator: '.'
+        }
+    );
 
     
     $(document).ready(function() {
@@ -444,8 +467,8 @@
         if ($('select[name=filter-output]').val() != '*') value.kdoutput = $('select[name=filter-output]').val()
         if ($('select[name=filter-suboutput]').val() != '*') value.kdsoutput = $('select[name=filter-suboutput]').val()
         if ($('input[name=filter-pagutotal-start]').val() != '' && $('input[name=filter-pagutotal-end]').val() != '') {
-            value.pagutotalStart = $('input[name=filter-pagutotal-start]').val()
-            value.pagutotalEnd   = $('input[name=filter-pagutotal-end]').val()
+            value.pagutotalStart = filterPagutotalStartMask.unmaskedValue
+            value.pagutotalEnd   = filterPagutotalEndMask.unmaskedValue
         }
 
         return value
