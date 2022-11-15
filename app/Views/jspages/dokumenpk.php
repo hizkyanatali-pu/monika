@@ -532,6 +532,54 @@
 
 
 
+    function setDetailDataInForm(dokumenId) {
+        $.ajax({
+            url: "<?php echo site_url('dokumenpk/detail/') ?>" + dokumenId,
+            type: 'GET',
+            success: (res) => {
+                res.rows.forEach((data, key) => {
+                    let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
+                        elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
+
+                    elementInput_target.val(data.target_value)
+                    elementInput_outcome.val(data.outcome_value)
+
+                    if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
+                })
+
+                res.kegiatan.forEach((data, key) => {
+                    let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
+                    elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
+                })
+
+                $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
+                $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
+                $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
+
+                $('.title-ttd-pihak1').text(res.dokumen.pihak1_initial)
+                $('.title-ttd-pihak2').text(res.dokumen.pihak2_initial)
+
+                if ($('input[name=ttd-pihak2-jabatan]').length) {
+                    $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
+                }
+
+                if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
+                if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
+
+                $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
+                $('input[name=created-kota-nama]').val(res.dokumen.kota_nama)
+                $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
+                $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
+            },
+            fail: (xhr) => {
+                alert("Terjadi kesalahan pada sistem")
+                console.log(xhr)
+            }
+        })
+    }
+
+
+
     $(document).on('click', '.__cetak-dokumen', function() {
         let dokumenMasterID = $(this).data('dokumen-master-id')
 
@@ -1010,6 +1058,8 @@
                 buttonType: 'warning',
                 buttonText: 'Buat Revisi'
             });
+            
+            setDetailDataInForm(_data.dokumenExistSameYear.last_dokumen_id)
         }
 
 
