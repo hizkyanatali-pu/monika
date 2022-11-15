@@ -149,6 +149,16 @@
                     <?php endforeach; ?>
                 </select>
             </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Pagu Total</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="filter-pagutotal-start">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">Hingga</span>
+                    </div>
+                    <input type="text" class="form-control" name="filter-pagutotal-end">
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" name="act-filter-data" class="btn btn-primary">Terapkan</button>
@@ -433,6 +443,10 @@
         if ($('select[name=filter-kegiatan]').val() != '*') value.kdgiat = $('select[name=filter-kegiatan]').val()
         if ($('select[name=filter-output]').val() != '*') value.kdoutput = $('select[name=filter-output]').val()
         if ($('select[name=filter-suboutput]').val() != '*') value.kdsoutput = $('select[name=filter-suboutput]').val()
+        if ($('input[name=filter-pagutotal-start]').val() != '' && $('input[name=filter-pagutotal-end]').val() != '') {
+            value.pagutotalStart = $('input[name=filter-pagutotal-start]').val()
+            value.pagutotalEnd   = $('input[name=filter-pagutotal-end]').val()
+        }
 
         return value
     }

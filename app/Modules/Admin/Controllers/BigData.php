@@ -310,9 +310,18 @@ class BigData extends \App\Controllers\BaseController
 
         if (is_array($_filterData)) {
             foreach ($_filterData as $key => $value) {
-                if ($key != 'opsiData') $data->where($table.'.'.$key, $value);
+                if ($key != 'opsiData' && $key != 'pagutotalStart' && $key != 'pagutotalEnd') {
+                    $data->where($table.'.'.$key, $value);
+                }
             }
         }
+
+        if (isset($_filterData['pagutotalStart']) && isset($_filterData['pagutotalEnd'])) {
+            $data->where('pagu_total >=', $_filterData['pagutotalStart']);
+            $data->where('pagu_total <=', $_filterData['pagutotalEnd']);
+        }
+
+        // print_r($data->get()->getResultArray()); exit;
 
         if (!empty($_limitData)) $data->limit($_limitData, $_offsetData);
         
