@@ -21,7 +21,7 @@ class Users extends \App\Controllers\BaseController
         $data = array(
             'title'=> 'Dashboard',
             // 'users' => $this->users->paginate(10),
-            'users' => $this->users->get()->getResultArray(),
+            'users' => $this->users->where('user_pk','1')->get()->getResultArray(),
             'pager' => $this->users->pager
         );
        
