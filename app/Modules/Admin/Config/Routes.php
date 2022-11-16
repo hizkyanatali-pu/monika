@@ -232,17 +232,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->post('delete-permanent', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanent');
                     $routes->post('delete-permanent-multiple', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanentMultiple');
                 });
-
-                $routes->group('satker', ['namespace' => 'App\Controllers'], function ($routes) {
-                    $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::satker');
-
-                    $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
-                    $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
-                    $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
-                });
-
-                $routes->get('balai', '\Modules\Admin\Controllers\Dokumenpk::balai');
-                $routes->get('eselon2', '\Modules\Admin\Controllers\Dokumenpk::eselon2');
                 $routes->group('eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::eselon1');
                     $routes->get('export-rekap-excel', '\Modules\Admin\Controllers\Dokumenpk::eselon1_export_rekap_excel');
@@ -294,6 +283,17 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
 
                 $routes->get('list-satker-balai', '\Modules\Satker\Controllers\Dokumenpk::listSatkerBalai');
+                
+                $routes->group('satker', ['namespace' => 'App\Controllers'], function ($routes) {
+                    $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::satker');
+
+                    $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
+                    $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
+                    $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
+                });
+
+                $routes->get('balai', '\Modules\Admin\Controllers\Dokumenpk::balai');
+                $routes->get('eselon2', '\Modules\Admin\Controllers\Dokumenpk::eselon2');
 
                 $routes->group('eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::eselon1');

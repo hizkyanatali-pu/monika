@@ -79,7 +79,14 @@ $title = $title ?? '';
 
                 if (strpos($session->get('userData')['uid'], 'admin') !== false) echo $this->include('admin/partials/sidebar');
 
-                if (strtolower($session->get('userData')['user_type']) == 'satker') echo $this->include('admin/partials/sidebarSatker');
+                if (strtolower($session->get('userData')['user_type']) == 'satker') {
+                    if ($session->get('userData')['satker_grup_jabatan'] == 'eselon1') {
+                        echo $this->include('admin/partials/sidebarEselon1');
+                    }
+                    else {
+                        echo $this->include('admin/partials/sidebarSatker');
+                    }
+                }
 
                 if (strtolower($session->get('userData')['user_type']) == 'balai') echo $this->include('admin/partials/sidebarBalai');
                 ?>

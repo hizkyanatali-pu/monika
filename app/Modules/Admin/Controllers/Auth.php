@@ -116,6 +116,7 @@ class Auth extends \App\Controllers\BaseController
 				m_satker.satkerid,
 				m_satker.satker,
 				m_satker.jabatan_penanda_tangan_pihak_2,
+				m_satker.grup_jabatan,
 				m_balai.balaiid,
 				m_balai.balai
 			")
@@ -129,11 +130,12 @@ class Auth extends \App\Controllers\BaseController
 				->first();
 
 
-			$setSession_userData['satker_id']   = $dataSarker_n_Balai['satkerid'];
-			$setSession_userData['satker_nama'] = $dataSarker_n_Balai['satker'];
-			$setSession_userData['balai_id']    = $dataSarker_n_Balai['balaiid'];
-			$setSession_userData['balai_nama']  = $dataSarker_n_Balai['jabatan_penanda_tangan_pihak_2'];
-			$setSession_userData['user_type']   = 'satker';
+			$setSession_userData['satker_id']           = $dataSarker_n_Balai['satkerid'];
+			$setSession_userData['satker_nama']         = $dataSarker_n_Balai['satker'];
+			$setSession_userData['satker_grup_jabatan'] = $dataSarker_n_Balai['grup_jabatan'];
+			$setSession_userData['balai_id']            = $dataSarker_n_Balai['balaiid'];
+			$setSession_userData['balai_nama']          = $dataSarker_n_Balai['jabatan_penanda_tangan_pihak_2'];
+			$setSession_userData['user_type']           = 'satker';
 		} elseif (
 			strContains($user['uid'], 'balai')
 			|| $user['idkelompok'] == 'BALAI'

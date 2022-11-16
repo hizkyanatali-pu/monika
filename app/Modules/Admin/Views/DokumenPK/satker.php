@@ -1,3 +1,8 @@
+<?php
+    $session = session();
+    $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
+?>
+
 <?= $this->extend('admin/layouts/default') ?>
 
 <?= $this->section('content') ?>
@@ -46,20 +51,22 @@
                     </h5>
                     <?= csrf_field() ?>
                 </div>
-                <div>
-                    <?php if ($dokumenType == 'eselon1') { ?>
-                        <a href="<?php echo site_url('dokumenpk/eselon1/export-rekap-excel'); ?>" target="_blank" class="btn btn-success mr-4">
-                            <i class="fas fa-file"></i> Rekap
-                        </a>
-                    <?php } ?>
+                <?php if ($isAdmin) { ?>
+                    <div>
+                        <?php if ($dokumenType == 'eselon1') { ?>
+                            <a href="<?php echo site_url('dokumenpk/eselon1/export-rekap-excel'); ?>" target="_blank" class="btn btn-success mr-4">
+                                <i class="fas fa-file"></i> Rekap
+                            </a>
+                        <?php } ?>
 
-                    <button class="btn btn-primary __admin-create-dokumen-opsi-users">
-                        <i class="fas fa-plus"></i> Buat Dokumen
-                    </button>
-                    <button class="btn btn-primary __opsi-template d-none">
-                        <i class="fas fa-plus"></i> Buat Dokumen
-                    </button>
-                </div>
+                        <button class="btn btn-primary __admin-create-dokumen-opsi-users">
+                            <i class="fas fa-plus"></i> Buat Dokumen
+                        </button>
+                        <button class="btn btn-primary __opsi-template d-none">
+                            <i class="fas fa-plus"></i> Buat Dokumen
+                        </button>
+                    </div>
+                <?php } ?>
             </div>
             <span class="kt-subheader__separator kt-hidden"></span>
         </div>
@@ -71,10 +78,12 @@
 <!-- begin:: Content -->
 <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
     <ul class="nav nav-pills mb-3 flex-column flex-sm-row" id="pills-tab" role="tablist">
-        <?php if (isset($dataBelumInput)) { ?>
-            <li class="flex-sm-fill text-sm-center nav-item">
-                <a class="nav-link" id="belum-input-tab" data-toggle="pill" href="#belum-input" role="tab" aria-controls="belum-input" aria-selected="true">Belum Input</a>
-            </li>
+        <?php if ($isAdmin) { ?>
+            <?php if (isset($dataBelumInput)) { ?>
+                <li class="flex-sm-fill text-sm-center nav-item">
+                    <a class="nav-link" id="belum-input-tab" data-toggle="pill" href="#belum-input" role="tab" aria-controls="belum-input" aria-selected="true">Belum Input</a>
+                </li>
+            <?php } ?>
         <?php } ?>
 
         <li class="flex-sm-fill text-sm-center nav-item">
@@ -93,26 +102,28 @@
             <!-- <button class="btn btn-icon btn-warning">
            <i class="fas fa-sync-alt"></i>
                                 </button> -->
-            <?php if (isset($dataBelumInput)) { ?>
-                <div class="tab-pane fade show" id="belum-input" role="tabpanel" aria-labelledby="belum-input-tab">
-                    <table class="table table-bordered" id="table-belum-input">
-                        <thead>
-                            <tr class="text-center">
-                                <th width="25px">No</th>
-                                <th><?php echo ucfirst($dokumenType) ?></th>
-                            </tr>
-                        </thead>
-
-                        <tbody style="font-size: 12px">
-                            <?php foreach ($dataBelumInput as $key_belumInput => $value_belumInput) { ?>
-                                <tr>
-                                    <td><?php echo $key_belumInput + 1 ?></td>
-                                    <td><?php echo $value_belumInput['nama'] ?></td>
+            <?php if ($isAdmin) { ?>
+                <?php if (isset($dataBelumInput)) { ?>
+                    <div class="tab-pane fade show" id="belum-input" role="tabpanel" aria-labelledby="belum-input-tab">
+                        <table class="table table-bordered" id="table-belum-input">
+                            <thead>
+                                <tr class="text-center">
+                                    <th width="25px">No</th>
+                                    <th><?php echo ucfirst($dokumenType) ?></th>
                                 </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+
+                            <tbody style="font-size: 12px">
+                                <?php foreach ($dataBelumInput as $key_belumInput => $value_belumInput) { ?>
+                                    <tr>
+                                        <td><?php echo $key_belumInput + 1 ?></td>
+                                        <td><?php echo $value_belumInput['nama'] ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php } ?>
             <?php } ?>
 
 
@@ -125,7 +136,7 @@
                             <th width="25px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
-                            <th width="280px">Aksi</th>
+                            <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
                         </tr>
                     </thead>
 
@@ -144,7 +155,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal disetujui</th>
-                            <th width="280px">Aksi</th>
+                            <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
                         </tr>
                     </thead>
 
@@ -163,7 +174,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal Ditolak</th>
-                            <th width="280px">Aksi</th>
+                            <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
                         </tr>
                     </thead>
 
@@ -271,7 +282,8 @@
 <?php echo $this->include('jspages/dokumenpk') ?>
 
 <script>
-    var element_tableHold = '',
+    var isAdmin = '<?php echo $isAdmin ?>'
+        element_tableHold = '',
         element_tableSetuju = '',
         element_tableTolak = '',
         element_tableBelumInput = '',
@@ -607,6 +619,36 @@
 
             if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>`
 
+            var menuOptions = ''
+
+            if (isAdmin == '1') {
+                menuOptions = `
+                    <button 
+                        class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
+                        data-id="${data.id}"
+                        data-to-confirm="${buttonData_toConfirm}"
+                    >
+                        <i class="fas fa-print"></i><br/>
+                        Cetak
+                    </button>
+                    <button 
+                        class="btn btn-sm btn-outline-success __edit-dokumen"
+                        data-id="${data.id}"
+                        data-template-id="${data.template_id}"
+                    >
+                        <i class="fas fa-edit"></i><br/>
+                        Edit
+                    </button>
+                    <button 
+                        class="btn btn-sm btn-outline-danger __arsipkan-dokumen"
+                        data-id="${data.id}"
+                    >
+                        <i class="fas fa-trash"></i><br/>
+                        Arsipkan
+                    </button>
+                `
+            }
+
             const tr = $(`
                 <tr id="_dokumen-row-${data.id}">
                     <td class="text-center">${ index+1 }</td>
@@ -632,29 +674,7 @@
                             <i class="fas fa-eye"></i><br/>
                             Lihat
                         </button>
-                        <button 
-                            class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
-                            data-id="${data.id}"
-                            data-to-confirm="${buttonData_toConfirm}"
-                        >
-                            <i class="fas fa-print"></i><br/>
-                            Cetak
-                        </button>
-                        <button 
-                            class="btn btn-sm btn-outline-success __edit-dokumen"
-                            data-id="${data.id}"
-                            data-template-id="${data.template_id}"
-                        >
-                            <i class="fas fa-edit"></i><br/>
-                            Edit
-                        </button>
-                        <button 
-                            class="btn btn-sm btn-outline-danger __arsipkan-dokumen"
-                            data-id="${data.id}"
-                        >
-                            <i class="fas fa-trash"></i><br/>
-                            Arsipkan
-                        </button>
+                        ${menuOptions}
                     </td>
                 </tr>
             `);
