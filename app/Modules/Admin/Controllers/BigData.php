@@ -316,8 +316,11 @@ class BigData extends \App\Controllers\BaseController
             }
         }
 
-        if (isset($_filterData['pagutotalStart']) && isset($_filterData['pagutotalEnd'])) {
+        if (isset($_filterData['pagutotalStart'])) {
             $data->where('pagu_total >=', $_filterData['pagutotalStart']);
+        }
+
+        if (isset($_filterData['pagutotalEnd']))  {
             $data->where('pagu_total <=', $_filterData['pagutotalEnd']);
         }
 

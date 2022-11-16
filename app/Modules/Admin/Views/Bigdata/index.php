@@ -466,10 +466,8 @@
         if ($('select[name=filter-kegiatan]').val() != '*') value.kdgiat = $('select[name=filter-kegiatan]').val()
         if ($('select[name=filter-output]').val() != '*') value.kdoutput = $('select[name=filter-output]').val()
         if ($('select[name=filter-suboutput]').val() != '*') value.kdsoutput = $('select[name=filter-suboutput]').val()
-        if ($('input[name=filter-pagutotal-start]').val() != '' && $('input[name=filter-pagutotal-end]').val() != '') {
-            value.pagutotalStart = filterPagutotalStartMask.unmaskedValue
-            value.pagutotalEnd   = filterPagutotalEndMask.unmaskedValue
-        }
+        if ($('input[name=filter-pagutotal-start]').val() != '') value.pagutotalStart = filterPagutotalStartMask.unmaskedValue
+        if ($('input[name=filter-pagutotal-end]').val() != '') value.pagutotalEnd = filterPagutotalEndMask.unmaskedValue
 
         return value
     }
