@@ -597,15 +597,16 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function eselon1_export_rekap_excel()
     {
-        header("Content-type: application/vnd.ms-excel");
-        header("Content-disposition: attachment; filename=Rekap-progress-per-provinsi.xls");
-        header("Pragma: no-cache");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Expires: 0");
+        // header("Content-type: application/vnd.ms-excel");
+        // header("Content-disposition: attachment; filename=Rekap-progress-per-provinsi.xls");
+        // header("Pragma: no-cache");
+        // header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        // header("Expires: 0");
 
         $sessionTahun = $this->user['tahun'];
         $tempData = [];
-        $dataBalai = $this->tableBalai->where('balaiid in (1, 2)')->get()->getResult();
+        // $dataBalai = $this->tableBalai->where('kota_penanda_tangan !=', '')->where('balaiid in (1, 2)')->get()->getResult();
+        $dataBalai = $this->tableBalai->where('kota_penanda_tangan !=', '')->get()->getResult();
 
         foreach ($dataBalai as $keyBalai => $valueBalai) {
             $itemTemp = [
@@ -655,6 +656,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                             SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='".$valueSp->template_id."' and rowId='".$valueIndicatorSp->id."'
                         ")->getResult();
 
+                        $itemTemp['rowspan']++;
+                        $itemTemp['sp'][$keySp]['rowspan']++;
                         
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
                         foreach ($rumusIndikatorSp as $keyRumusIndikatorSp => $valueRumusIndikatorSp) {
@@ -674,13 +677,15 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     and dokumen_pk_template_akses.rev_table='m_satker'
                                     and m_satker.balaiid = '".$valueBalai->balaiid."';
                             ")->getResult();
-                            
-                            $itemTemp['rowspan']++;
-                            $itemTemp['sp'][$keySp]['rowspan']++;
 
                             if ($dataSatker) {
                                 foreach ($dataSatker as $keyDataSatker=> $valueDataSatker) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
+
+                                    if ($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
+                                        $itemTemp['rowspan']++;
+                                        $itemTemp['sp'][$keySp]['rowspan']++;
+                                    }
 
                                     if (array_search($valueDataSatker->satker, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker')) === FALSE) {
                                         array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
@@ -762,12 +767,13 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     ")->getRow();
                                     array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
                                         'title'         => $dataIndicatorSK->title,
-                                        'output'        => $dataDokumen->target_value ?? '',
+                                        'output'        => $dataDokumen->target_value ?? '-',
                                         'outputSatuan'  => $dataIndicatorSK->target_satuan,
-                                        'outcome'       => $dataDokumen->outcome_value ?? '',
+                                        'outcome'       => $dataDokumen->outcome_value ?? '-',
                                         'outcomeSatuan' => $dataIndicatorSK->outcome_satuan
                                     ]);
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
+                                    
                                 }
                             }
                             // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = $dataSatker->satker ?? null;
