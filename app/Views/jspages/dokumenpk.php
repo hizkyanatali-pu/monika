@@ -796,14 +796,13 @@
             }
         })
 
-        $('input[name=kegiatan-anggaran]').each((index, element) => {
-
-            if ($(element).val().replaceAll(".", '').replaceAll(',', '.') > 0 && checkInputKegiatanAnggatan == true) {
-                checkInputKegiatanAnggatan = true
-            } else {
-                checkInputKegiatanAnggatan = false
-            }
-        })
+        // $('input[name=kegiatan-anggaran]').each((index, element) => {
+        //     if ($(element).val().replaceAll(".", '').replaceAll(',', '.') > 0 && checkInputKegiatanAnggatan == true) {
+        //         checkInputKegiatanAnggatan = true
+        //     } else {
+        //         checkInputKegiatanAnggatan = false
+        //     }
+        // })
 
         if (checkInputTarget == false) {
             Swal.fire(
