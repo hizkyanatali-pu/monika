@@ -299,7 +299,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $balai_checklistSatker = [];
         $balai_checklistSatker = $this->satker->select("
             m_satker.satker,
-            (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju' ) as iscreatedPKBeforeAcc,
+            (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju'  order by created_at DESC limit 1 ) as iscreatedPKBeforeAcc,
             (SELECT 
                 CASE
                     WHEN status = 'hold' THEN 'Menunggu Konfirmasi'
