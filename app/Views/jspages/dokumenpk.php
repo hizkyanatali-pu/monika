@@ -1152,7 +1152,7 @@
                             <thead>
                                 <tr>
                                     <th>Nama ${ capitalizeFirstLetter(template.info_title) }</th>
-                                    <th width="250px">Anggaran</th>
+                                    <th width="250px"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1163,7 +1163,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Rp. </span>
                             </div>
-                            <input type="text" class="form-control" style="background: #F7F8FA;text-align: right;" name="total-anggaran" placeholder="Nominal Total Anggaran" readonly/>
+                            <input type="text" class="form-control" style="background: #F7F8FA;text-align: right;" name="total-anggaran" placeholder="Nominal Total Anggaran"/>
                         </div></td>
                                 </tr>
                             </tbody>
@@ -1392,14 +1392,14 @@
                         ${data.nama}
                     </td>
                     <td class="align-middle">
-                        <div class="input-group">
+                        <div class="input-group d-none">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Rp. </span>
                             </div>
                             <input 
                                 class="form-control" 
                                 name="kegiatan-anggaran" 
-                                value="" 
+                                value="0" 
                                 placeholder="Nominal Anggaran"
                                 style = "text-align: right;" 
                                 onkeyup="return this.value = formatRupiah(this.value, '')"
