@@ -1163,7 +1163,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Rp. </span>
                             </div>
-                            <input type="text" class="form-control" style="background: #F7F8FA;text-align: right;" name="total-anggaran" placeholder="Nominal Total Anggaran"/>
+                            <input type="text" class="form-control" style="background: #FFFFFF;text-align: right;" name="total-anggaran" placeholder="Nominal Total Anggaran"/>
                         </div></td>
                                 </tr>
                             </tbody>
