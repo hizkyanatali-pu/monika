@@ -61,7 +61,7 @@
                                         <input name="idpengguna" class="form-control" type="text" value="<?= $user['idpengguna']; ?>" id="idpengguna-input">
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label for="sandi-input" class="col-3 col-form-label">Sandi </label>
                                     <div class="col-6">
                                         <input name="sandi" class="form-control" type="password" value="" id="sandi-input">
@@ -72,7 +72,7 @@
                                     <div class="col-6">
                                         <input name="sandi_konfirm" class="form-control" type="password" value="" id="sandi_konfirm-input">
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group row">
                                     <label for="email-input" class="col-3 col-form-label">Email </label>
                                     <div class="col-6">

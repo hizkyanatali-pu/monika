@@ -35,9 +35,13 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
     $routes->get('users', '\Modules\Admin\Controllers\Users::index', ['as' => 'users']);
     $routes->get('users/edit/(:segment)', '\Modules\Admin\Controllers\Users::edit/$1');
+    $routes->get('users/changepassword/(:segment)', '\Modules\Admin\Controllers\Users::ChangePassword/$1');
+
     $routes->get('users/create', '\Modules\Admin\Controllers\Users::create');
     $routes->post('users/store', '\Modules\Admin\Controllers\Users::store');
     $routes->post('users/update', '\Modules\Admin\Controllers\Users::update');
+    $routes->post('users/updatechangepassword', '\Modules\Admin\Controllers\Users::UpdateChangePassword'); 
+
     $routes->get('users/delete/(:segment)', '\Modules\Admin\Controllers\Users::delete/$1');
 
     $routes->group('usergroups', ['namespace' => 'App\Controllers'], function ($routes) {

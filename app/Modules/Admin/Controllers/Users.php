@@ -18,6 +18,15 @@ class Users extends \App\Controllers\BaseController
         
     }
     public function index(){
+        // $encrypter = \Config\Services::encrypter();
+
+        // $plainText  = 'yusfiadil@gmail.com';
+        // $ciphertext = $encrypter->encrypt($plainText);
+        // $decypt = $encrypter->decrypt($ciphertext);
+        // // Outputs: This is a plain-text message!
+        // echo $decypt;exit;
+
+
         $data = array(
             'title'=> 'Dashboard',
             // 'users' => $this->users->paginate(10),
@@ -43,6 +52,23 @@ class Users extends \App\Controllers\BaseController
 
         return view('Modules\Admin\Views\Users\UsersEdit', $data);
     }
+
+    public function ChangePassword($slug = null){
+
+        $data = array(
+            'title'=> 'Change Password User',
+            'user'=> $this->users->getUsers($slug),
+            'usergroups'=> $this->usergroups->getUserGroups(),
+            'balai'=> $this->balai->get()->getResultArray(),
+            'satker'     => $this->satker->get()->getResultArray()
+        );
+        if (empty($data['user'])) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the users item: ' . $slug);
+        }
+
+        return view('Modules\Admin\Views\Users\UsersChangePassword', $data);
+    }
+
     public function update(){
         $rules = [
             'nama' 				=> 'required|min_length[2]',
@@ -50,10 +76,10 @@ class Users extends \App\Controllers\BaseController
 			'email' 			=> 'required|valid_email|is_unique[ku_user.email,uid,{uid}]',
             'balaiid'           => 'required'
 		];
-        if($this->request->getVar('sandi')){
-            $rules['sandi'] = 'required|min_length[5]';
-            $rules['sandi_konfirm'] = 'required|matches[sandi]';
-        }
+        // if($this->request->getVar('sandi')){
+        //     $rules['sandi'] = 'required|min_length[5]';
+        //     $rules['sandi_konfirm'] = 'required|matches[sandi]';
+        // }
 		if (! $this->validate($rules)) {
 			return redirect()->to('edit/'.$this->request->getVar('uid'))
 				->withInput()
@@ -65,12 +91,49 @@ class Users extends \App\Controllers\BaseController
             'nama' 				=> $this->request->getVar('nama'),
             'idpengguna' 		=> $this->request->getVar('idpengguna'),
             'email' 			=> $this->request->getVar('email'),
-            'sandi'			    => $this->request->getVar('sandi'),
+            // 'sandi'			    => $this->request->getVar('sandi'),
             'telpon'            => $this->request->getVar('telpon'),
             'nip'               => $this->request->getVar('nip'),
             'balaiid'           => $this->request->getVar('balaiid'),
             'satkerid'           => $this->request->getVar('satkerid'),
             'group_id'           => $this->request->getVar('group_id'),
+        ])->update();
+
+        if($saved)
+        {
+            return redirect()->to('/users')->with('success', 'Updated user successfully');
+        }
+    
+    }
+
+    public function UpdateChangePassword(){
+        // $rules = [
+        //     'nama' 				=> 'required|min_length[2]',
+        //     'idpengguna' 		=> 'required|min_length[2]|is_unique[ku_user.idpengguna,uid,{uid}]',
+		// 	'email' 			=> 'required|valid_email|is_unique[ku_user.email,uid,{uid}]',
+        //     'balaiid'           => 'required'
+		// ];
+        if($this->request->getVar('sandi')){
+            $rules['sandi'] = 'required|min_length[5]';
+            $rules['sandi_konfirm'] = 'required|matches[sandi]';
+        }
+		if (! $this->validate($rules)) {
+			return redirect()->to('changepassword/'.$this->request->getVar('uid'))
+				->withInput()
+				->with('errors', $this->validator->getErrors());
+        }
+ 
+        $saved = $this->users->where('uid',  $this->request->getVar('uid'))->set([
+            // 'uid'               => $this->request->getVar('uid'),
+            // 'nama' 				=> $this->request->getVar('nama'),
+            // 'idpengguna' 		=> $this->request->getVar('idpengguna'),
+            // 'email' 			=> $this->request->getVar('email'),
+            'sandi'			    => $this->request->getVar('sandi'),
+            // 'telpon'            => $this->request->getVar('telpon'),
+            // 'nip'               => $this->request->getVar('nip'),
+            // 'balaiid'           => $this->request->getVar('balaiid'),
+            // 'satkerid'           => $this->request->getVar('satkerid'),
+            // 'group_id'           => $this->request->getVar('group_id'),
         ])->update();
 
         if($saved)
