@@ -1163,7 +1163,14 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Rp. </span>
                             </div>
-                            <input type="text" class="form-control" style="background: #FFFFFF;text-align: right;" name="total-anggaran" placeholder="Nominal Total Anggaran"/>
+                            <input 
+                                type="text" 
+                                id="total-anggaran"
+                                class="form-control" 
+                                style="background: #FFFFFF ;text-align: right;" 
+                                name="total-anggaran" 
+                                placeholder="Nominal Total Anggaran"
+                            />
                         </div></td>
                                 </tr>
                             </tbody>
@@ -1249,6 +1256,11 @@
         `
 
         $('#make-dokumen').html(render)
+
+        var numberMask = IMask(document.getElementById('total-anggaran'), {
+            mask: Number,
+            thousandsSeparator: '.'
+        });
 
         // $('select.select2').select2();
     }
