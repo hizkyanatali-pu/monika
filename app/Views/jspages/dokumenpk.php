@@ -205,13 +205,12 @@
                         });
                     } else {
                         if (res.dokumen_type == 'master-balai' || res.dokumen_type == 'balai') {
-
                             render_warningDokumenYearRevisoin = `
-                        <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                        <h5 class="alert-heading">Informasi</h5>
-                        <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
-                    </div>
-                        `
+                                <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                                    <h5 class="alert-heading">Informasi</h5>
+                                    <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
+                                </div>
+                            `
                         }
                         render_reset_btnSubmitToRevision()
                     }
@@ -951,7 +950,7 @@
         }
 
         renderFormTemplate(params.data, params.target)
-        $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
+        // $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
 
         if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
             // $('#modalForm').find('.container-revision-alert').addClass('d-none')
@@ -989,6 +988,15 @@
                     <h6 class="mb-4 mt-4">Daftar satker yang telah membuat dokumen</h6>
                     <div class="list-group">
                         ${renderCheckListSatkerBalai}
+                    </div>
+                `)
+            }
+        }
+        else {
+            if (params.data.template.type == 'master-balai' || params.data.template.type == 'balai') {
+                $('.container-revision-alert').append(`
+                    <div class="bg-success text-white pt-3 pr-3 pb-3 pl-3" role="alert">
+                        <i class="fas fa-check mr-3"></i> <strong>Semua Satker Telah Menginput Dokumen Perjanjian Kinerja. Silahkan Input Perjanjian Kinerja</strong>
                     </div>
                 `)
             }
