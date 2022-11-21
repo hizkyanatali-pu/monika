@@ -1,3 +1,4 @@
+<script src="https://unpkg.com/imask"></script>
 <script>
     var date = new Date(),
         element_modalForm = $('#modalForm'),

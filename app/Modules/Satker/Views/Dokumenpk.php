@@ -279,7 +279,6 @@
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://unpkg.com/imask"></script>
 
 <?php echo script_tag('plugins/inputmask/jquery.inputmask.js'); ?>
 <?php echo script_tag('plugins/inputmask/inputmask.binding.js'); ?>
