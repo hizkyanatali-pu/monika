@@ -684,14 +684,14 @@ class DokumenpkExport extends \App\Controllers\BaseController
             else {
                 array_push($tempRow, $data);
 
-                if ($tempRow[count($tempRow) - 2]['type'] == 'section_title' && $key > 0) {
-                    unset($tempRow[count($tempRow) - 2]);
+                if ($tempRow[array_key_last($tempRow)-1]['type'] == 'section_title' && $key > 0) {
+                    unset($tempRow[array_key_last($tempRow)-1]);
                 }
             }
 
             if ($key == count($tableData)-1) {
-                if ($tempRow[count($tempRow) - 1]['type'] == 'section_title') {
-                    unset($tempRow[count($tempRow) - 1]);
+                if ($tempRow[array_key_last($tempRow)]['type'] == 'section_title') {
+                    unset($tempRow[array_key_last($tempRow)]);
                 }
             }
         }
