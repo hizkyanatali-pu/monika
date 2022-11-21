@@ -338,10 +338,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $dataDokumenKegiatan = $this->dokumenSatker_kegiatan->where('dokumen_id', $_dokumenSatkerID)->get()->getResultArray();
         $dataDokumenInfo     = $this->templateInfo->where('template_id', $dataDokumen['template_id'])->get()->getResultArray();
 
-        $tableData = $this->templateRow
-            ->where('template_id', $dataDokumen['template_id'])
-            ->get()
-            ->getResultArray();
+        // $tableData = $this->templateRow
+        //     ->where('template_id', $dataDokumen['template_id'])
+        //     ->get()
+        //     ->getResultArray();
+
+        $tableData = $this->gettemplateRowChecked($dataDokumen['template_id'], $_dokumenSatkerID);
 
         $tableDataWidth = [
             20,
@@ -654,6 +656,47 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
             // $pdf->Image('images/watermark_dokumen_konsep.png', 23, 80, 250);
         }
+    }
+    
+    
+    
+    private function gettemplateRowChecked($templateId, $dokumenSatkerId) 
+    {
+        $tempRow = [];
+
+        $tableData = $this->templateRow
+            ->where('template_id', $templateId)
+            ->get()
+            ->getResultArray();
+
+        foreach ($tableData as $key => $data) {
+            if ($data['type'] == 'form') 
+            {
+                $data_targetValue = $this->dokumenSatker_rows->where('dokumen_id', $dokumenSatkerId)
+                    ->where('template_row_id', $data['id'])
+                    ->get()
+                    ->getRowArray();
+
+                if ($data_targetValue['is_checked'] == '1'){
+                    array_push($tempRow, $data);
+                }
+            } 
+            else {
+                array_push($tempRow, $data);
+
+                if ($tempRow[count($tempRow) - 2]['type'] == 'section_title' && $key > 0) {
+                    unset($tempRow[count($tempRow) - 2]);
+                }
+            }
+
+            if ($key == count($tableData)-1) {
+                if ($tempRow[count($tempRow) - 1]['type'] == 'section_title') {
+                    unset($tempRow[count($tempRow) - 1]);
+                }
+            }
+        }
+
+        return $tempRow;
     }
 }
 

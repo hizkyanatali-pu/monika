@@ -1256,6 +1256,7 @@
 
         $('#make-dokumen').html(render)
 
+        console.log(document.getElementById('total-anggaran'))
         var numberMask = IMask(document.getElementById('total-anggaran'), {
             mask: Number,
             thousandsSeparator: '.'
@@ -1297,7 +1298,12 @@
                     } else {
                         rows += `
                             <tr>
-                                <td colspan="2"><strong>${ data.prefix_title ?? '-' }</strong></td>
+                                <td>
+                                    <!-- <input type="checkbox" name="form-check-row" checked style="margin-left: 8px !important" /> -->
+                                </td>
+                                <td>
+                                    <strong>${ data.prefix_title ?? '-' }</strong>
+                                </td>
                                 <td colspan="${colspanSectionTitle}">
                                     <strong>${ data.title }</strong>
                                 </td>
