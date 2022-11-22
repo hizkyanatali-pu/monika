@@ -569,7 +569,7 @@ class Preferensi extends \App\Controllers\BaseController
                                         if (in_array($field, $fno) and $value == "") {
                                             $value = 0;
                                         }
-                                        $v .= ($v ? ',' : '') . "'" . str_replace(array("\n", "\t"), array(" ", " "), $value) . "'";
+                                        $v .= ($v ? ',' : '') . '"' . str_replace(array("\n", "\t"), array(" ", " "), $value) . '"';
                                     }
                                     if ($ii == 0) {
                                         fwrite($nf, ($i > 0 ? ";\n" : "") . "INSERT INTO {$tabel} ($f) VALUES ");
