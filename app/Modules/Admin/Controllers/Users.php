@@ -230,7 +230,7 @@ class Users extends \App\Controllers\BaseController
             $enc = base64_encode($encrypter->encrypt($user['idpengguna']));
             $decypt = $encrypter->decrypt(base64_decode($enc));
             $data = [
-                'sandi_new' => $enc ,
+                'sandi' => $enc ,
             ];
             
             $this->users->where('idpengguna',$user['idpengguna'])->set($data)->update();

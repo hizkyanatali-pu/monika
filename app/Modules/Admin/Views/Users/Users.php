@@ -54,7 +54,7 @@
                                         <!-- <th>#</th> -->
                                         <th>ID Pengguna</th>
                                         <th>Sandi</th>
-                                        <th>Nama</th>
+                                        <th>Instansi</th>
                                         <th>Email</th>
                                         <th>nip</th>
                                         <th>Telpon</th>
@@ -77,7 +77,7 @@
                                         $config->driver = 'OpenSSL';
                                         $encrypter = \Config\Services::encrypter($config);
                                         echo $data['sandi'] ? $encrypter->decrypt(base64_decode($data['sandi'])) :''; ?></td>
-                                        <td><?php echo $data['nama']; ?></td>
+                                        <td><?=  $data['satkerid'] ? instansi_name($data['satkerid'])->nama_instansi : "UPT " . instansi_name($data['balaiid'])->nama_instansi; ?></td>
                                         <td><?php echo $data['email']; ?></td>
                                         <td><?php echo $data['nip']; ?></td>
                                         <td><?php echo $data['telpon']; ?></td>
