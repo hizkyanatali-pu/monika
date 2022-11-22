@@ -99,10 +99,19 @@ class UserModel extends Model
      */
 	protected function hashPassword(array $data)
 	{
+
+		$config         = new \Config\Encryption();
+        $config->key    = 'aBigsecret_ofAtleast32Characters';
+        $config->driver = 'OpenSSL';
+        
+        $encrypter = \Config\Services::encrypter($config);
+
 		if (! isset($data['data']['sandi'])) return $data;
 		if ($data['data']['sandi'] ==='') return $data;
 
-		$data['data']['sandi'] = md5($data['data']['sandi']);//password_hash($data['data']['sandi'], PASSWORD_DEFAULT);
+		// dd($data['data']['sandi']);
+
+		$data['data']['sandi'] = base64_encode($encrypter->encrypt($data['data']['sandi']));//password_hash($data['data']['sandi'], PASSWORD_DEFAULT);
 		//unset($data['data']['sandi']);
 
 		return $data;

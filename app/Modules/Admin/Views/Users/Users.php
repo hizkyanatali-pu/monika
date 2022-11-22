@@ -69,7 +69,14 @@
                                     <tr>
                                         <!-- <th scope="row"><?php echo $key+1; ?></th> -->
                                         <td><?php echo $data['idpengguna']; ?></td>
-                                        <td><?php echo $data['sandi']; ?></td>
+                                        
+                                        <td><?php
+                                        
+                                        $config         = new \Config\Encryption();
+                                        $config->key    = 'aBigsecret_ofAtleast32Characters';
+                                        $config->driver = 'OpenSSL';
+                                        $encrypter = \Config\Services::encrypter($config);
+                                        echo $data['sandi'] ? $encrypter->decrypt(base64_decode($data['sandi'])) :''; ?></td>
                                         <td><?php echo $data['nama']; ?></td>
                                         <td><?php echo $data['email']; ?></td>
                                         <td><?php echo $data['nip']; ?></td>

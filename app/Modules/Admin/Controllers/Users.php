@@ -18,14 +18,7 @@ class Users extends \App\Controllers\BaseController
         
     }
     public function index(){
-        // $encrypter = \Config\Services::encrypter();
-
-        // $plainText  = 'yusfiadil@gmail.com';
-        // $ciphertext = $encrypter->encrypt($plainText);
-        // $decypt = $encrypter->decrypt($ciphertext);
-        // // Outputs: This is a plain-text message!
-        // echo $decypt;exit;
-
+        
 
         $data = array(
             'title'=> 'Dashboard',
@@ -213,4 +206,51 @@ class Users extends \App\Controllers\BaseController
             return redirect()->to('/users')->with('error', 'Error proses delete no uid');
         }
     }
+
+
+    public function passwordRechange(){
+        
+        $config         = new \Config\Encryption();
+        $config->key    = 'aBigsecret_ofAtleast32Characters';
+        $config->driver = 'OpenSSL';
+        // $config->digest = 'sha224';
+
+        $encrypter = \Config\Services::encrypter($config);
+
+        // $plainText  = 'yusfiadil@gmail.com';
+        // $ciphertext = $encrypter->encrypt($plainText);
+        // // Outputs: This is a plain-text message!
+        // echo $decypt;exit;
+        
+        $users = $this->users->where('user_pk','1')->get()->getResultArray();
+        
+        // echo count($users);exit;
+        foreach($users As $user){
+            
+            $enc = base64_encode($encrypter->encrypt($user['idpengguna']));
+            $decypt = $encrypter->decrypt(base64_decode($enc));
+            $data = [
+                'sandi_new' => $enc ,
+            ];
+            
+            $this->users->where('idpengguna',$user['idpengguna'])->set($data)->update();
+
+
+
+            // echo $decypt;
+
+        }
+
+
+
+
+
+
+
+
+
+    }
+
+
+
 }

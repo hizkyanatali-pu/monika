@@ -52,17 +52,31 @@ class Auth extends \App\Controllers\BaseController
 		// check credentials
 		$users = new UserModel();
 
+		$config         = new \Config\Encryption();
+        $config->key    = 'aBigsecret_ofAtleast32Characters';
+        $config->driver = 'OpenSSL';
+        
+        $encrypter = \Config\Services::encrypter($config);
+
+		$sandi = $this->request->getPost('sandi');
+
+		// print_r($sandi);exit;
+
 		$user = $users->select("
 			ku_user.*, ku_user_group.group_id
 		")
 			->where('idpengguna', $this->request->getPost('idpengguna'))
-			->where('sandi', md5($this->request->getPost('sandi')))
+			// ->where('sandi',$sandi)
 			->join('ku_user_group', 'ku_user_group.uid=ku_user.uid', 'left')
 			->first();
 		//dd($user);
 
+
+		$checPass = $user['sandi'] ? $encrypter->decrypt(base64_decode($user['sandi'])) :" ";
+
+
 		if (
-			is_null($user)
+			is_null($user) ||  $checPass != $sandi
 			//|| !$user['group_id']
 			//|| ! password_verify($this->request->getPost('sandi'), $user['sandi'])
 		) {
@@ -109,8 +123,8 @@ class Auth extends \App\Controllers\BaseController
 
 		if (
 			strContains($user['uid'], 'satker')
-			|| $user['idkelompok'] == 'SATKER'
-			|| ($user['balaiid'] != '' && $user['satkerid'] != '')
+			|| ($user['idkelompok'] == 'SATKER')
+			|| ($user['balaiid'] != '' && $user['satkerid'] != '') 
 		) {
 			$dataSarker_n_Balai = $users->select("
 				m_satker.satkerid,
@@ -121,7 +135,7 @@ class Auth extends \App\Controllers\BaseController
 				m_balai.balai
 			")
 				->where('idpengguna', $this->request->getPost('idpengguna'))
-				->where('sandi', md5($this->request->getPost('sandi')))
+				// ->where('sandi', md5($this->request->getPost('sandi')))
 				// ->join('ku_user_satker', 'ku_user.uid = ku_user_satker.uid_user', 'left')
 				// ->join('m_satker', 'ku_user_satker.satkerid = m_satker.satkerid', 'left')
 				// ->join('m_balai', 'm_satker.balaiid = m_balai.balaiid', 'left')

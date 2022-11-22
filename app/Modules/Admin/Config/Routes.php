@@ -34,6 +34,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
 
     $routes->get('users', '\Modules\Admin\Controllers\Users::index', ['as' => 'users']);
+    $routes->get('passwordRechange', '\Modules\Admin\Controllers\Users::passwordRechange', ['as' => 'passwordRechange']);
+
     $routes->get('users/edit/(:segment)', '\Modules\Admin\Controllers\Users::edit/$1');
     $routes->get('users/changepassword/(:segment)', '\Modules\Admin\Controllers\Users::ChangePassword/$1');
 
