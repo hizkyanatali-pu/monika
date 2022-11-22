@@ -116,9 +116,7 @@ class DokumenpkArsip extends \App\Controllers\BaseController
     {
         $dokumenId = $this->request->getPost('id');
 
-        $this->dokumenSatker->delete(['id' => $dokumenId]);
-        $this->dokumenSatker_kegiatan->delete(['dokumen_id' => $dokumenId]);
-        $this->dokumenSatker_rows->delete(['dokumen_id' => $dokumenId]);
+        $this->deleteDokumen($dokumenId);
 
         return $this->respond([
             'status' => true
@@ -130,13 +128,37 @@ class DokumenpkArsip extends \App\Controllers\BaseController
     public function deletePermanentMultiple()
     {
         foreach ($this->request->getPost('id') as $key => $value) {
-            $this->dokumenSatker->delete(['id' => $value]);
-            $this->dokumenSatker_kegiatan->delete(['dokumen_id' => $value]);
-            $this->dokumenSatker_rows->delete(['dokumen_id' => $value]);
+            $this->deleteDokumen($value);
         }
 
         return $this->respond([
             'status' => true
         ]);
+    }
+    
+    
+    
+    
+    
+    
+    
+    private function deleteDokumen($dokumenId)
+    {
+        $dataDokumen = $this->dokumenSatker->select('revision_master_dokumen_id')->where(['id' => $dokumenId])->get()->getFirstRow();
+
+        $this->dokumenSatker->delete(['id' => $dokumenId]);
+        $this->dokumenSatker_kegiatan->delete(['dokumen_id' => $dokumenId]);
+        $this->dokumenSatker_rows->delete(['dokumen_id' => $dokumenId]);
+
+        $this->dokumenSatker->delete(['id' => $dataDokumen->revision_master_dokumen_id]);
+        $this->dokumenSatker_kegiatan->delete(['dokumen_id' => $dataDokumen->revision_master_dokumen_id]);
+        $this->dokumenSatker_rows->delete(['dokumen_id' => $dataDokumen->revision_master_dokumen_id]);
+
+        $dataDokumenRevision = $this->dokumenSatker->select('id')->where(['revision_master_dokumen_id' => $dataDokumen->revision_master_dokumen_id])->get()->getResult();
+        foreach ($dataDokumenRevision as $keyRevision => $valueRevision) {
+            $this->dokumenSatker->delete(['id' => $valueRevision->id]);
+            $this->dokumenSatker_kegiatan->delete(['dokumen_id' => $valueRevision->id]);
+            $this->dokumenSatker_rows->delete(['dokumen_id' => $valueRevision->id]);
+        }
     }
 }
