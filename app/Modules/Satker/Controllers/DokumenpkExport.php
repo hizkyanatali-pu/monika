@@ -215,8 +215,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Kop Title 2
         $pdf->SetFont('Times', 'B', 13);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
-        $pdf->SetX((300 - $width_kopTitle2) / 2);
-        $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
+        // $pdf->SetX((300 - $width_kopTitle2) / 2);
+        // $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
+        $pdf->MultiCell(0, 4, $dokumenKopTitle2, 0, 'C');
 
         // Kop Title 3
         $kopTitle3 = $dokumenKopTitle3;
@@ -274,7 +275,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         /** TTD Section */
-        $pdf->Ln(8);
+        $pdf->Ln(5);
         $this->pdf_renderSectionTtd($pdf, $this->sectionWidth, [
             'person1Title' => 'Pihak Kedua',
             'person1Name'  => $dataDokumen['pihak2_ttd'],
@@ -288,17 +289,18 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_renderIntroductionSection($pdf, $_title, $_introduction)
     {
-        $pdf->SetFont('Arial', '', 10);
+        $pdf->SetFont('Arial', '', 8.5);
         $pdf->SetX((330 - $this->sectionWidth) / 2);
         $pdf->Cell(35, 5, $_title, 0);
 
-        $pdf->SetFont('Arial', '', 10);
+        $pdf->SetFont('Arial', '', 8.5);
         $pdf->SetX((360 - $this->sectionWidth) / 2);
         $pdf->Cell(5, 5, ':', 0);
 
-        $pdf->SetFont('Arial', '', 9);
+        $pdf->SetFont('Arial', '', 8.5);
         $pdf->SetX((370 - $this->sectionWidth) / 2);
         $pdf->Cell(150, 5, $_introduction, 0);
+        // $pdf->MultiCell(0, 4, $_introduction, 0, 'L');
 
         $pdf->SetFont('Arial', '', 10);
         $pdf->Ln(7);
@@ -376,8 +378,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Kop Title 2
         $pdf->SetFont('Arial', 'B', 9);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
-        $pdf->SetX((300 - $width_kopTitle2) / 2);
-        $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
+        // $pdf->SetX((300 - $width_kopTitle2) / 2);
+        // $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
+        $pdf->MultiCell(0, 4, $dokumenKopTitle2, 0, 'C');
         $pdf->SetFont('Arial', 'B', 10);
 
         // Line break
