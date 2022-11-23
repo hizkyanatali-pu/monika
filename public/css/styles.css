@@ -224,3 +224,12 @@
     width: 35%;
   }
 }
+
+td.disabled {
+  background: #a8a8a8;
+}
+
+td.disabled input[readonly],
+td.disabled span {
+  background: #a8a8a8;
+}
