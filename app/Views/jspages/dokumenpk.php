@@ -413,6 +413,9 @@
                 $('#modalForm').find('input').attr('disabled', 'disabled')
                 $('#modalForm').find('select').attr('disabled', 'disabled')
                 $('#modalForm').find('.modal-footer').addClass('d-none')
+
+                $('#modalForm').find('.__remove-item-kegiatan').addClass('d-none')
+                $('#modalForm').find('#__add-item-kegiatan').addClass('d-none')
             }
         })
     })
@@ -485,10 +488,24 @@
                         if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
                     })
 
+
+                    $('.__table-kegiatan').find('tbody').html('')
+                    let rowTableKegiatan = ''
                     res.kegiatan.forEach((data, key) => {
-                        let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
-                        elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
+                        let rowType = data.id == '-' ? 'input' : 'text'
+
+                        rowTableKegiatan += renderFormTemplate_rowKegiatan_item({
+                            id      : data.id,
+                            nama    : data.nama,
+                            anggaran: data.anggaran,
+                            rowType : rowType
+                        })
                     })
+                    $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
+                    // res.kegiatan.forEach((data, key) => {
+                    //     let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
+                    //     elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
+                    // })
 
                     $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
                     $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
@@ -716,6 +733,24 @@
 
 
 
+    $(document).on('click', '#__add-item-kegiatan', function() {
+        let element_kegiatanTable =  $('.__table-kegiatan').find('tbody')
+
+        element_kegiatanTable.append(renderFormTemplate_rowKegiatan_item({
+            id     : '-',
+            nama   : '-',
+            rowType: 'input'
+        }))
+    })
+
+
+
+    $(document).on('click', '.__remove-item-kegiatan', function() {
+        $(this).parents('tr').remove()
+    })
+
+
+
     function getFormValue() {
         let rows = [],
             kegiatan = []
@@ -734,9 +769,12 @@
         })
 
         $('.__table-kegiatan').find('tbody').find('tr').each((key, element) => {
+            let idKegiatan   = $(element).data('kegiatan-id'),
+                namaKegiatan = idKegiatan == '-' ? $(element).find('.__nama-kegiatan-manual').val() : $(element).data('kegiatan-nama');
+
             kegiatan.push({
-                id: $(element).data('kegiatan-id'),
-                nama: $(element).data('kegiatan-nama'),
+                id      : idKegiatan,
+                nama    : namaKegiatan,
                 anggaran: $(element).find('input[name=kegiatan-anggaran]').val()
             })
         })
@@ -859,6 +897,8 @@
         $('#modalForm').find('input').removeAttr('disabled')
         $('#modalForm').find('select').removeAttr('disabled')
         $('#modalForm').find('.modal-footer').removeClass('d-none')
+
+        alert();
 
         $('.container-revision-alert-bottom').html('')
 
@@ -1153,27 +1193,37 @@
                                 <tr>
                                     <th>Nama ${ capitalizeFirstLetter(template.info_title) }</th>
                                     <th width="250px"></th>
+                                    <th width="50px"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 ${render_rowKegiatan}
-                                <tr>
-                                <td class="align-middle"> <strong>Total Anggaran</strong></td>
-                                <td class="align-middle"> <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Rp. </span>
-                            </div>
-                            <input 
-                                type="text" 
-                                id="total-anggaran"
-                                class="form-control" 
-                                style="background: #FFFFFF ;text-align: right;" 
-                                name="total-anggaran" 
-                                placeholder="Nominal Total Anggaran"
-                            />
-                        </div></td>
-                                </tr>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="align-middle"> <strong>Total Anggaran</strong></td>
+                                    <td class="align-middle"> 
+                                        <div class="input-group mt-2">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Rp. </span>
+                                            </div>
+                                            <input 
+                                                type="text" 
+                                                id="total-anggaran"
+                                                class="form-control" 
+                                                style="background: #FFFFFF ;text-align: right;" 
+                                                name="total-anggaran" 
+                                                placeholder="Nominal Total Anggaran"
+                                            />
+                                        </div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <button class="btn btn-sm btn-primary" id="__add-item-kegiatan">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                     
@@ -1401,34 +1451,103 @@
     function renderFormTemplate_rowKegiatan(_data) {
         let list = ''
         _data.forEach((data, key) => {
-            list += `
-                <tr
-                    data-kegiatan-id="${data.id}"
-                    data-kegiatan-nama="${data.nama}"
-                >
-                    <td class="align-middle">
-                        ${data.nama}
-                    </td>
-                    <td class="align-middle">
-                        <div class="input-group d-none">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Rp. </span>
-                            </div>
-                            <input 
-                                class="form-control" 
-                                name="kegiatan-anggaran" 
-                                value="0" 
-                                placeholder="Nominal Anggaran"
-                                style = "text-align: right;" 
-                                onkeyup="return this.value = formatRupiah(this.value, '')"
-                            >
-                        </div>
-                    </td>
-                </tr>
-            `
+            list += renderFormTemplate_rowKegiatan_item({
+                id     : data.id,
+                nama   : data.nama,
+                rowType: 'text'
+            })
+            // list += `
+            //     <tr
+            //         data-kegiatan-id="${data.id}"
+            //         data-kegiatan-nama="${data.nama}"
+            //     >
+            //         <td class="align-middle">
+            //             ${data.nama}
+            //         </td>
+            //         <td class="align-middle">
+            //             <div class="input-group d-none">
+            //                 <div class="input-group-prepend">
+            //                     <span class="input-group-text">Rp. </span>
+            //                 </div>
+            //                 <input 
+            //                     class="form-control" 
+            //                     name="kegiatan-anggaran" 
+            //                     value="0" 
+            //                     placeholder="Nominal Anggaran"
+            //                     style = "text-align: right;" 
+            //                     onkeyup="return this.value = formatRupiah(this.value, '')"
+            //                 >
+            //             </div>
+            //         </td>
+            //         <td class="align-middle">
+            //             <button class="btn btn-sm btn-danger">
+            //                 <i class="fas fa-trash"></i>
+            //             </button>
+            //         </td>
+            //     </tr>
+            // `
         });
-
+        
         return list
+    }
+    
+    
+    
+    function renderFormTemplate_rowKegiatan_item(params = {
+        id      : '',
+        nama    : '',
+        anggaran: 0,
+        rowType : ''   // input || text
+    }) {
+        let renderKegiatanNama,
+            kegiatananggaran = params.hasOwnProperty('anggaran') ? params.anggaran : '0'
+
+        switch (params.rowType) {
+            case 'input':
+                let inputKegiatanManualDefaultValue = params.nama != '-' ? params.nama : ''
+                renderKegiatanNama = `<input class="form-control __nama-kegiatan-manual" value="${inputKegiatanManualDefaultValue}" />`
+                break;
+
+            case 'text':
+                renderKegiatanNama = params.nama
+                break;
+        
+            default:
+                renderKegiatanNama = ''
+                break;
+        }
+
+        return `
+            <tr
+                data-kegiatan-id="${params.id}"
+                data-kegiatan-nama="${params.nama}"
+            >
+                <td colspan="2" class="align-middle">
+                    <div>
+                        ${renderKegiatanNama}
+                    </div>
+
+                    <div class="input-group d-none">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp. </span>
+                        </div>
+                        <input 
+                            class="form-control" 
+                            name="kegiatan-anggaran" 
+                            value="${kegiatananggaran}" 
+                            placeholder="Nominal Anggaran"
+                            style = "text-align: right;" 
+                            onkeyup="return this.value = formatRupiah(this.value, '')"
+                        >
+                    </div>
+                </td>
+                <td class="align-middle">
+                    <button class="btn btn-sm btn-danger __remove-item-kegiatan">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `
     }
 
 
