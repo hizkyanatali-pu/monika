@@ -171,6 +171,100 @@ class Dashboard extends \App\Controllers\BaseController
         $data['tenderPhln'] =  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("PHLN", null, null, false, $filterDateStart, $filterDateEnd);
 
 
+        // Filter Menu Dashboard
+        $data['filterMenu'] = [
+            [
+                'title'      => 'PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR',
+                'menuId'     => 'progres_fisik_keuangan_kementerian_pupr',
+                'alwaysShow' => true
+            ],
+            [
+                'title'      => 'PROGRES PROGRAM PADAT KARYA PER KEGIATAN',
+                'menuId'     => 'progres_program_padat_karya_per_kegiatan',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRESS KEGIATAN TEMATIK DIREKTORAT JENDERAL SUMBER DAYA AIR',
+                'menuId'     => 'progress_kegiatan_tematik_direktorat_jenderal_sumber_daya_air',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'POSTUR PAKET KONTRAKTUAL',
+                'menuId'     => 'viewkontraktual',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'POSTUR PAKET BELUM LELANG',
+                'menuId'     => 'belum-lelang',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN',
+                'menuId'     => 'daftar_paket_belum_lelang_rpm_syc_per_kegiatan',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN',
+                'menuId'     => 'daftar_paket_belum_lelang_myc_per_kegiatan',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PAKET BELUM LELANG PHLN - MYC PROJECT LOAN',
+                'menuId'     => 'paket_belum_lelang_phln_myc_project_loan',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'RENCANA TENDER, PAKET BELUM LELANG RPM',
+                'menuId'     => 'rencana_tender_paket_belum_lelang_rpm',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'RENCANA TENDER, PAKET BELUM LELANG PLN',
+                'menuId'     => 'rencana_tender_paket_belum_lelang_pln',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK DITJEN SDA',
+                'menuId'     => 'progres_keuangan_fisik_ditjen_sda',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK PER KEGIATAN',
+                'menuId'     => 'progres_keuangan_fisik_per_kegiatan',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK - BBWS',
+                'menuId'     => 'progres_keuangan_fisik_bbws',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK - BWS',
+                'menuId'     => 'progres_keuangan_fisik_bws',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK - PUSAT',
+                'menuId'     => 'progres_keuangan_fisik_pusat',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK - BALAI TEKNIK',
+                'menuId'     => 'progres_keuangan_fisik_balai_teknik',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK - DINAS',
+                'menuId'     => 'progres_keuangan_fisik_dinas',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES 10 SATUAN KERJA TERENDAH',
+                'menuId'     => 'progres_10_satuan_kerja_terendah',
+                'alwaysShow' => false
+            ]
+        ];
+
         return view('Modules\Admin\Views\Dashboard', $data);
     }
 

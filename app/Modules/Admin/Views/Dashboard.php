@@ -125,6 +125,10 @@
                     </div>
                 </form>
 
+                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFilterMenu">
+                    <i class="fas fa-filter"></i> Filter Menu
+                </button>
+
                 <button class="btn btn-sm btn-primary" onclick="window.print()">
                     <i class="fas fa-print"></i>
                 </button>
@@ -140,7 +144,7 @@
 
     <!-- PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR -->
 
-    <div class="kt-portlet kt-portlet--tab">
+    <div class="kt-portlet kt-portlet--tab" id="progres_fisik_keuangan_kementerian_pupr">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -249,7 +253,7 @@
     <div class="pagebreak"></div>
 
     <!-- PROGRES PROGRAM PADAT KARYA PER KEGIATAN -->
-    <div class="kt-portlet kt-portlet--tab">
+    <div class="kt-portlet kt-portlet--tab" id="progres_program_padat_karya_per_kegiatan">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -326,7 +330,7 @@
     <div class="pagebreak"> </div>
     <!-- PROGRESS KEGIATAN TEMATIK DIREKTORAT JENDERAL SUMBER DAYA AIR T.A.2021 -->
 
-    <div class="kt-portlet kt-portlet--tab">
+    <div class="kt-portlet kt-portlet--tab" id="progress_kegiatan_tematik_direktorat_jenderal_sumber_daya_air">
         <div class="kt-portlet__head" style="text-align: center;">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -811,7 +815,7 @@
     <div class="pagebreak"> </div>
     <!-- DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN -->
 
-    <div class="kt-portlet kt-portlet--tab">
+    <div class="kt-portlet kt-portlet--tab" id="daftar_paket_belum_lelang_rpm_syc_per_kegiatan">
         <div class="kt-portlet__head" style="text-align: center;">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -885,7 +889,7 @@
     <div class="pagebreak"> </div>
     <!-- DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN -->
 
-    <div class="kt-portlet kt-portlet--tab">
+    <div class="kt-portlet kt-portlet--tab" id="daftar_paket_belum_lelang_myc_per_kegiatan">
         <div class="kt-portlet__head" style="text-align: center;">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -959,7 +963,7 @@
     <div class="pagebreak"> </div>
     <!-- PAKET BELUM LELANG PHLN - MYC PROJECT LOAN -->
 
-    <div class="kt-portlet kt-portlet--tab">
+    <div class="kt-portlet kt-portlet--tab" id="paket_belum_lelang_phln_myc_project_loan">
         <div class="kt-portlet__head" style="text-align: center;">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -1037,7 +1041,7 @@
     <div class="pagebreak"> </div>
     <!-- RENCANA TENDER, PAKET BELUM LELANG RPM -->
 
-    <div class="kt-portlet kt-portlet--tab">
+    <div class="kt-portlet kt-portlet--tab" id="rencana_tender_paket_belum_lelang_rpm">
         <div class="kt-portlet__head" style="text-align: center;">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -1099,7 +1103,7 @@
     <div class="pagebreak"> </div>
     <!-- RENCANA TENDER, PAKET BELUM LELANG PLN -->
 
-    <div class="kt-portlet kt-portlet--tab">
+    <div class="kt-portlet kt-portlet--tab" id="rencana_tender_paket_belum_lelang_pln">
         <div class="kt-portlet__head" style="text-align: center;">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -1158,7 +1162,7 @@
     <!-- END RENCANA TENDER, PAKET BELUM LELANG RPM -->
     <div class="pagebreak"> </div>
     <!-- PROGRES KEUANGAN & FISIK DITJEN SDA -->
-    <div class="kt-portlet kt-portlet--tab">
+    <div class="kt-portlet kt-portlet--tab" id="progres_keuangan_fisik_ditjen_sda">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -1262,7 +1266,7 @@
     <!-- END PROGRES KEUANGAN & FISIK DITJEN SDA-->
     <div class="pagebreak"> </div>
     <!-- PROGRES  PROGRES KEUANGAN & FISIK PER KEGIATAN -->
-    <div class="kt-portlet kt-portlet--tab">
+    <div class="kt-portlet kt-portlet--tab" id="progres_keuangan_fisik_per_kegiatan">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label card-center">
                 <span class="kt-portlet__head-icon kt-hidden">
@@ -1328,13 +1332,14 @@
     <!-- END PROGRES  PROGRES KEUANGAN & FISIK PER KEGIATAN-->
 
     <?php
-
-    foreach ($qdata as $key1 => $progfis) { ?>
+        foreach ($qdata as $key1 => $progfis) { 
+        $elementId = $key1 == "Semua Satker" ? 'progres_10_satuan_kerja_terendah' : 'progres_keuangan_fisik_'.str_replace(' ', '_',  strtolower($key1));
+    ?>
         <!-- PROGRESS KEU & FISIK BBWS -->
 
         <div class="pagebreak"> </div>
         <!-- PROGRES  PROGRES KEUANGAN & FISIK PER KEGIATAN -->
-        <div class="kt-portlet kt-portlet--tab">
+        <div id="<?php echo $elementId ?>" class="kt-portlet kt-portlet--tab">
             <div class="kt-portlet__head" style="height: 100px;">
                 <div class="kt-portlet__head-label card-center">
                     <span class="kt-portlet__head-icon kt-hidden">
@@ -1344,11 +1349,9 @@
                         <?php if ($key1 != "Semua Satker") { ?>
                             PROGRES KEUANGAN & FISIK - <?= strtoupper($key1) ?>
                         <?php } else { ?>
-
                             <center>PROGRES 10 SATUAN KERJA TERENDAH TA <?= session('userData.tahun') ?> <br>
                                 <small>Direktorat Jenderal Sumber Daya Air</small>
                             </center>
-
                         <?php  } ?>
                     </h3>
                 </div>
@@ -1516,8 +1519,48 @@
         </div>
         <!-- END PROGRES KEU & FISIK BBWS -->
     <?php } ?>
+</div>
 
-
+<!-- Modal Filter Menu -->
+<div class="modal fade" id="modalFilterMenu" tabindex="-1" role="dialog" aria-labelledby="modalFilterMenuLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalFilterMenuLabel">Filter Menu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-check mb-3">
+                    <input name="filter-menu-all" class="form-check-input" type="checkbox" value="*" id="filter-all-menu" checked="">
+                    <label class="form-check-label" for="filter-all-menu">
+                        <strong>Semua Menu</strong>
+                    </label>
+                </div>
+                <?php foreach ($filterMenu as $keyFilterMenu => $dataFilterMenu) : ?>
+                    <div class="form-check mt-2">
+                        <input 
+                            name="filter-menu" 
+                            class="form-check-input" 
+                            type="checkbox" 
+                            value="<?php echo $dataFilterMenu['menuId'] ?>" 
+                            data-label="<?php echo $dataFilterMenu['title'] ?>" 
+                            id="filter_<?php echo $dataFilterMenu['menuId'] ?>"
+                            data-always-show="<?php echo $dataFilterMenu['alwaysShow'] ?>"
+                            checked
+                        >
+                        <label class="form-check-label" for="filter_<?php echo $dataFilterMenu['menuId'] ?>">
+                            <?php echo $dataFilterMenu['title'] ?>
+                        </label>
+                    </div>
+                <?php endforeach ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" name="action-filter-menu" class="btn btn-primary">Terapkan</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <footer>
@@ -1543,6 +1586,62 @@
 <?php echo view('Modules\Admin\Views\Dashboard\js\ChartPerkegiatan'); ?>
 
 
+<script>
+    $(document).ready(function() {
+        checkDefaultFilterMenu()
+        actionFilterMenu()
+    })
+
+
+
+    $('input:checkbox[name=filter-menu-all]').change(function() {
+        let checked = true
+        if (! this.checked) checked = false
+        $('input:checkbox[name=filter-menu]').prop('checked', checked)
+    })
+
+    $(document).on('click', 'button[name=action-filter-menu]', function() {
+        actionFilterMenu(true)
+
+        $('#modalFilterMenu').modal('hide')
+    })
+
+
+
+    function actionFilterMenu(saveOptions = false) {
+        tempSave = []
+
+        $('input:checkbox[name=filter-menu]').each((index, element) => {
+            let menuElement = $('#'+$(element).val())
+            
+            if($(element).is(':checked')) {
+                menuElement.removeClass('d-none')
+            }
+            else {
+                menuElement.addClass('d-none')
+
+                if ($(element).data('always-show') != '1') {
+                    tempSave.push({
+                        'value': $(element).val(),
+                        'checked': false
+                    })
+                }
+            }
+        })
+
+        if (saveOptions) localStorage.setItem("filter-menu-dashboard", JSON.stringify(tempSave));
+    }
+
+
+
+    function checkDefaultFilterMenu() {
+        JSON.parse(localStorage.getItem("filter-menu-dashboard")).forEach((data, index) => {
+            let checkElement = $('input:checkbox[name=filter-menu][value='+data.value+']')
+            
+            if (checkElement.data('always-show') != '1') checkElement.removeAttr('checked')
+        })
+    }
+</script>
 
 
 <!-- END CHART REKAP REKAP UNOR -->
