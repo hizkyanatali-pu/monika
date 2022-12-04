@@ -734,13 +734,29 @@
 
 
     $(document).on('click', '#__add-item-kegiatan', function() {
-        let element_kegiatanTable =  $('.__table-kegiatan').find('tbody')
+        let element_kegiatanTable =  $('.__table-kegiatan').find('tbody'),
+            element_rowItem_kegiatanTable = $('.__table-kegiatan').find('tbody').find('tr'),
+            kegiatan = []
 
         element_kegiatanTable.append(renderFormTemplate_rowKegiatan_item({
             id     : '-',
             nama   : '-',
             rowType: 'input'
         }))
+
+        element_rowItem_kegiatanTable.each((key, element) => {
+            let idKegiatan   = $(element).data('kegiatan-id'),
+                namaKegiatan = idKegiatan == '-' ? $(element).find('.__nama-kegiatan-manual').val() : $(element).data('kegiatan-nama');
+
+            if (key < element_rowItem_kegiatanTable.length) kegiatan.push(namaKegiatan)
+        })
+
+        $('select.select2').select2({
+            ajax: {
+                url: "<?php echo site_url('dokumenpk/get-tgiat-for-formpk?exists=') ?>" + JSON.stringify(kegiatan),
+                dataType: 'json'
+            }
+        })
     })
 
 
@@ -897,8 +913,6 @@
         $('#modalForm').find('input').removeAttr('disabled')
         $('#modalForm').find('select').removeAttr('disabled')
         $('#modalForm').find('.modal-footer').removeClass('d-none')
-
-        alert();
 
         $('.container-revision-alert-bottom').html('')
 
@@ -1193,7 +1207,11 @@
                                 <tr>
                                     <th>Nama ${ capitalizeFirstLetter(template.info_title) }</th>
                                     <th width="250px"></th>
-                                    <th width="50px"></th>
+                                    <th width="50px">
+                                        <button class="btn btn-sm btn-primary" id="__add-item-kegiatan">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1202,7 +1220,7 @@
                             <tfoot>
                                 <tr>
                                     <td class="align-middle"> <strong>Total Anggaran</strong></td>
-                                    <td class="align-middle"> 
+                                    <td class="align-middle" colspan="2"> 
                                         <div class="input-group mt-2">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">Rp. </span>
@@ -1216,11 +1234,6 @@
                                                 placeholder="Nominal Total Anggaran"
                                             />
                                         </div>
-                                    </td>
-                                    <td class="align-middle">
-                                        <button class="btn btn-sm btn-primary" id="__add-item-kegiatan">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -1313,7 +1326,7 @@
             thousandsSeparator: '.'
         });
 
-        // $('select.select2').select2();
+        $('select.select2').select2();
     }
 
 
@@ -1505,7 +1518,17 @@
         switch (params.rowType) {
             case 'input':
                 let inputKegiatanManualDefaultValue = params.nama != '-' ? params.nama : ''
-                renderKegiatanNama = `<input class="form-control __nama-kegiatan-manual" value="${inputKegiatanManualDefaultValue}" />`
+
+                if (inputKegiatanManualDefaultValue == '') {
+                    renderKegiatanNama = `
+                        <select class="select2 w-100 __nama-kegiatan-manual"></select>
+                    `
+                }
+                else {
+                    params.id = '?'
+                    renderKegiatanNama = inputKegiatanManualDefaultValue
+                }
+
                 break;
 
             case 'text':

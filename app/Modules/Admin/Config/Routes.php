@@ -305,6 +305,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::eselon1');
                     $routes->get('export-rekap-excel', '\Modules\Admin\Controllers\Dokumenpk::eselon1_export_rekap_excel');
                 });
+
+                $routes->get('get-tgiat-for-formpk', '\Modules\Satker\Controllers\Dokumenpk::getTgiatForFormPk');
             });
 
 

@@ -625,6 +625,31 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
+    public function getTgiatForFormPk()
+    {
+        $search = $_GET['term'] ?? '';
+
+        if ($search) {
+            $dataGiat = $this->kegiatan->like('nmgiat', $search)
+            ->where('tahun_anggaran', $this->user['tahun'])
+            ->whereNotIn('nmgiat', json_decode($_GET['exists']))
+            ->get()->getResult();
+
+            $dataGiatResults = array_map(function($arr) {
+                return [
+                    "id"   => $arr->nmgiat,
+                    "text" => $arr->nmgiat
+                ];
+            }, $dataGiat);
+
+            return $this->respond([
+                "results" => $dataGiatResults
+            ]);
+        }
+    }
+
+
+
     public function create()
     {
         $createByAdmin = $this->session->get('createDokumenByAdmin');
