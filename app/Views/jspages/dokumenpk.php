@@ -1319,8 +1319,7 @@
         `
 
         $('#make-dokumen').html(render)
-
-        console.log(document.getElementById('total-anggaran'))
+        
         var numberMask = IMask(document.getElementById('total-anggaran'), {
             mask: Number,
             thousandsSeparator: '.'
@@ -1595,8 +1594,9 @@
             renderJalabatan = `<div><small class="title-ttd-pihak2">${prefixJabatanPenandatangan + ' ' + _dataPenandatanganPihak2}</small></div>`
 
         if (_dataPenandatanganPihak2 == '') {
+            let smallTitleClass = _inputDefaultValue == '' ? 'class="title-ttd-pihak2"' : ''
             renderJalabatan = `
-                <div><small>${_inputDefaultValue}</small></div>
+                <div><small ${smallTitleClass}>${_inputDefaultValue}</small></div>
                 <input class="form-control d-none" name="ttd-pihak2-jabatan" placeholder="Jabatan Penanda Tangan"  value="${ _inputDefaultValue }" />
             `
         }
