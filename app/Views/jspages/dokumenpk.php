@@ -820,6 +820,7 @@
 
     function saveDokumenValidation() {
         let checkInputKegiatanAnggatan = true,
+            checkInputKegiatanManual = true,
             checkInputTarget = true,
             checkInputOutcome = true
 
@@ -859,6 +860,15 @@
         //     }
         // })
 
+        $('.__nama-kegiatan-manual').each((index, element) => {
+            if ($(element).val() != null && checkInputKegiatanAnggatan == true) {
+                checkInputKegiatanManual = true
+            }
+            else {
+                checkInputKegiatanManual = false
+            }
+        })
+
         if (checkInputTarget == false) {
             Swal.fire(
                 'Peringatan',
@@ -881,6 +891,15 @@
             Swal.fire(
                 'Peringatan',
                 'Terdapat angaran untuk kegiatan yang belum terisi',
+                'warning'
+            )
+            return false
+        }
+
+        if (checkInputKegiatanManual == false) {
+            Swal.fire(
+                'Peringatan',
+                'Terdapat kegiatan yang belum terisi',
                 'warning'
             )
             return false
