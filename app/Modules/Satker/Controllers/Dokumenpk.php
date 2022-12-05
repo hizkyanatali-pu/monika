@@ -629,23 +629,26 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         $search = $_GET['term'] ?? '';
 
+        $queryDataGiat = $this->kegiatan->where('tahun_anggaran', $this->user['tahun'])
+        ->whereNotIn('nmgiat', json_decode($_GET['exists']));
+
         if ($search) {
-            $dataGiat = $this->kegiatan->like('nmgiat', $search)
-            ->where('tahun_anggaran', $this->user['tahun'])
-            ->whereNotIn('nmgiat', json_decode($_GET['exists']))
-            ->get()->getResult();
-
-            $dataGiatResults = array_map(function($arr) {
-                return [
-                    "id"   => $arr->nmgiat,
-                    "text" => $arr->nmgiat
-                ];
-            }, $dataGiat);
-
-            return $this->respond([
-                "results" => $dataGiatResults
-            ]);
+            $queryDataGiat->like('nmgiat', $search);
         }
+
+        $dataGiat = $queryDataGiat->orderBy('nmgiat', 'ASC')->get()->getResult();
+
+        $dataGiatResults = array_map(function($arr) {
+            return [
+                "id"   => $arr->nmgiat,
+                "text" => $arr->nmgiat
+            ];
+        }, $dataGiat);
+
+        return $this->respond([
+            "results" => $dataGiatResults
+        ]);
+
     }
 
 
