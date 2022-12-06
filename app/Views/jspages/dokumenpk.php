@@ -554,6 +554,7 @@
             url: "<?php echo site_url('dokumenpk/detail/') ?>" + dokumenId,
             type: 'GET',
             success: (res) => {
+                console.log('markuinyos')
                 res.rows.forEach((data, key) => {
                     let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
                         elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
@@ -564,10 +565,24 @@
                     if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
                 })
 
+                $('.__table-kegiatan').find('tbody').html('')
+                let rowTableKegiatan = ''
+                console.log(res.kegiatan)
                 res.kegiatan.forEach((data, key) => {
-                    let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
-                    elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
+                    let rowType = data.id == '-' ? 'input' : 'text'
+
+                    rowTableKegiatan += renderFormTemplate_rowKegiatan_item({
+                        id      : data.id,
+                        nama    : data.nama,
+                        anggaran: data.anggaran,
+                        rowType : rowType
+                    })
                 })
+                $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
+                // res.kegiatan.forEach((data, key) => {
+                //     let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
+                //     elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
+                // })
 
                 $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
                 $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
@@ -1481,6 +1496,7 @@
 
     function renderFormTemplate_rowKegiatan(_data) {
         let list = ''
+        
         _data.forEach((data, key) => {
             list += renderFormTemplate_rowKegiatan_item({
                 id     : data.id,
@@ -1528,7 +1544,7 @@
         id      : '',
         nama    : '',
         anggaran: 0,
-        rowType : ''   // input || text
+        rowType : '' // input || text
     }) {
         let renderKegiatanNama,
             kegiatananggaran = params.hasOwnProperty('anggaran') ? params.anggaran : '0'
@@ -1557,6 +1573,7 @@
                 renderKegiatanNama = ''
                 break;
         }
+        
 
         return `
             <tr
