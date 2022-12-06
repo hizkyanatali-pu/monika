@@ -38,6 +38,13 @@
     .select2-dropdown {
         z-index: 1061;
     }
+
+    .btn-table-opsi {
+        position: absolute;
+        top: 235px;
+        right: 220px;
+        z-index: 999;
+    }
 </style>
 
 <!-- begin:: Subheader -->
@@ -130,6 +137,10 @@
 
 
             <div class="tab-pane fade show active" id="pills-one" role="tabpanel" aria-labelledby="pills-one-tab">
+                <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="hold">
+                    <i class="fas fa-sync"></i> Refresh Data
+                </button>
+
                 <table class="table table-bordered" id="table-hold">
                     <thead>
                         <tr class="text-center">
@@ -148,6 +159,10 @@
 
 
             <div class="tab-pane fade" id="pills-two" role="tabpanel" aria-labelledby="pills-two-tab">
+                <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="setuju">
+                    <i class="fas fa-sync"></i> Refresh Data
+                </button>
+
                 <table class="table table-bordered" id="table-setuju">
                     <thead>
                         <tr class="text-center">
@@ -167,6 +182,10 @@
 
 
             <div class="tab-pane fade" id="pills-three" role="tabpanel" aria-labelledby="pills-three-tab">
+                <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="tolak">
+                    <i class="fas fa-sync"></i> Refresh Data
+                </button>
+
                 <table class="table table-bordered" id="table-tolak">
                     <thead>
                         <tr class="text-center">
@@ -336,6 +355,28 @@
             }
             getData('tolak');
         }, 300)
+    })
+
+
+
+    $(document).on('click', '.__refresh-data-table', function() {
+        let status = $(this).data('status')
+
+        switch (status) {
+            case 'hold':
+                element_tableHold.clear().draw()
+                break;
+
+            case 'setuju':
+                element_tableSetuju.clear().draw()
+                break;
+
+            case 'tolak':
+                element_tableTolak.clear().draw()
+                break;
+        }
+        
+        getData(status)
     })
 
 
