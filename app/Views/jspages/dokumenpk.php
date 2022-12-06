@@ -938,6 +938,15 @@
             return false
         }
 
+        if ($('select[name=created-bulan]').val() == '')  {
+            Swal.fire(
+                'Peringatan',
+                'Bulan dokumen belum di pilih',
+                'warning'
+            )
+            return false
+        }
+
         return true
     }
 
@@ -1658,12 +1667,17 @@
 
 
     function renderFormTemplate_opsiBulan(_data) {
-        let renderOptions = ''
+        let renderOptions = `
+            <option value=''>
+                Pilih Bulan
+            </option>
+        `
 
         _data.forEach((data, key) => {
-            let isSelected = key == date.getMonth() ? 'selected' : ''
+            // let isSelected = key == date.getMonth() ? 'selected' : ''
             // monthToHide = key > date.getMonth() ? '_option-month-to-hide d-none' : ''
-            monthToHide = '';
+            let isSelected = '',
+                monthToHide = ''
 
 
             renderOptions += `
