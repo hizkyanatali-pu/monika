@@ -143,11 +143,17 @@
                             </td>
                             <td class="d-flex justify-content-start">
                                 <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
-                                    <i class="fas fa-eye"></i> Lihat
+                                    <i class="fas fa-eye"></i> <br/> Lihat
                                 </button>
                                 <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true">
-                                    <i class="fas fa-print"></i> Cetak
+                                    <i class="fas fa-print"></i> <br/> Cetak
                                 </button>
+
+                                <?php if ($data->status == 'hold') { ?> 
+                                    <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
+                                        <i class="fas fa-edit"></i> <br/> Edit
+                                    </button>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -203,6 +209,7 @@
             </div>
             <div class="modal-footer d-none">
                 <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
+                <button type="button" class="btn btn-success __save-update-dokumen d-none">Simpan Dokumen</button>
             </div>
         </div>
     </div>

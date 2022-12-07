@@ -112,6 +112,10 @@
             <?php if ($isAdmin) { ?>
                 <?php if (isset($dataBelumInput)) { ?>
                     <div class="tab-pane fade show" id="belum-input" role="tabpanel" aria-labelledby="belum-input-tab">
+                        <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="belum-input" data-dokumen-type="<?php echo $dokumenType ?>">
+                            <i class="fas fa-sync"></i> Refresh Data
+                        </button>
+
                         <table class="table table-bordered" id="table-belum-input">
                             <thead>
                                 <tr class="text-center">
@@ -263,6 +267,7 @@
                 <div class="p-4 d-none" id="make-dokumen">
                 </div>
             </div>
+            
             <div class="modal-footer d-none">
                 <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
                 <button type="button" class="btn btn-success __save-update-dokumen d-none">Simpan Dokumen</button>
@@ -363,6 +368,11 @@
         let status = $(this).data('status')
 
         switch (status) {
+            case 'belum-input':
+                element_tableBelumInput.clear().draw()
+                getDataBelumInput($(this).data('dokumen-type'))
+                break;
+
             case 'hold':
                 element_tableHold.clear().draw()
                 break;
@@ -376,7 +386,9 @@
                 break;
         }
         
-        getData(status)
+        if (status != 'belum-input') {
+            getData(status)
+        }
     })
 
 
@@ -621,6 +633,18 @@
 
 
 
+    function getDataBelumInput(_dokumenType) {
+        $.ajax({
+            url: "<?php echo site_url('dokumenpk/satker/get-data-belum-input/') ?>" + _dokumenType,
+            type: 'GET',
+            success: (res) => {
+                renderTableRowBelumInput(res.data)
+            }
+        })
+    }
+
+
+
     function renderTableRow(_status, _data) {
         let buttonData_toConfirm = false
 
@@ -733,6 +757,22 @@
                     element_tableTolak.row.add(tr).draw()
                     break;
             }
+        });
+    }
+    
+    
+    
+    function renderTableRowBelumInput(_data) {
+        element_tableBelumInput.clear().draw()
+
+        _data.forEach((data, index) => {
+            console.log(data.nama)
+            element_tableBelumInput.row.add($(`
+                <tr>
+                    <td>${ index+1 }</td>
+                    <td>${ data.nama }</td>
+                </tr>
+            `)).draw()
         });
     }
 

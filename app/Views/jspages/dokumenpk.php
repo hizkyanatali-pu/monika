@@ -432,6 +432,7 @@
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
                 $('.__save-update-dokumen').removeClass('d-none')
+                console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
             }
         })
@@ -915,6 +916,15 @@
             Swal.fire(
                 'Peringatan',
                 'Terdapat kegiatan yang belum terisi',
+                'warning'
+            )
+            return false
+        }
+
+        if ($('input[name=total-anggaran]').val() == '') {
+            Swal.fire(
+                'Peringatan',
+                'Total Anggaran belum terisi',
                 'warning'
             )
             return false
