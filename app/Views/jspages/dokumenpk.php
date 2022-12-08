@@ -1393,11 +1393,11 @@
 
             <div class="container-list-revision-message d-none pt-5">
                 <div class="mt-5">
-                    <h5 style="color: #000">Daftar Korensi</h5>
+                    <h5 style="color: #000">Daftar Koreksi</h5>
                     <table class="table table-bordered table-striped mt-4">
                         <thead>
                             <th width="300px">Tanggal</th>
-                            <th>Pesan Korensi</th>
+                            <th>Pesan Koreksi</th>
                         </thead>
                         <tbody>
                         </tbody>
