@@ -43,7 +43,7 @@
         position: absolute;
         top: 235px;
         right: 220px;
-        z-index: 999;
+        z-index: 9;
     }
 </style>
 
