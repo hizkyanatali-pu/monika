@@ -543,12 +543,14 @@
                         let listRevisionMessage = ''
 
                         res.listRevision.forEach((data, index) => {
-                            listRevisionMessage += `
-                                <tr>
-                                    <td>${ data.tanggal }</td>
-                                    <td>${ data.pesan }</td>
-                                </tr>
-                            `
+                            if (data.pesan != null) {
+                                listRevisionMessage += `
+                                    <tr>
+                                        <td>${ data.tanggal }</td>
+                                        <td>${ data.pesan }</td>
+                                    </tr>
+                                `
+                            }
                         });
 
                         $('.container-list-revision-message').find('tbody').html(listRevisionMessage);
