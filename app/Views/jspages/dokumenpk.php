@@ -21,6 +21,7 @@
         $('#modalForm').on('hidden.bs.modal', function() {
             $('.__save-dokumen').removeClass('d-none')
             $('.__save-update-dokumen').addClass('d-none')
+            $('.container-list-revision-message').addClass('d-none')
             prepareForm_reset()
         })
 
@@ -534,6 +535,23 @@
                                 <p>${res.dokumen.revision_message}</p>
                             </div>
                         `)
+                    }
+
+                    if(res.listRevision.length > 0) {
+                        $('.container-list-revision-message').removeClass('d-none')
+                        
+                        let listRevisionMessage = ''
+
+                        res.listRevision.forEach((data, index) => {
+                            listRevisionMessage += `
+                                <tr>
+                                    <td>${ data.tanggal }</td>
+                                    <td>${ data.pesan }</td>
+                                </tr>
+                            `
+                        });
+
+                        $('.container-list-revision-message').find('tbody').html(listRevisionMessage);
                     }
 
                     params.beforeModalMount(res)
@@ -1368,6 +1386,21 @@
             </div>
 
             <div class="container-revision-alert-bottom">
+            </div>
+
+
+            <div class="container-list-revision-message d-none pt-5">
+                <div class="mt-5">
+                    <h5 style="color: #000">Daftar Korensi</h5>
+                    <table class="table table-bordered table-striped mt-4">
+                        <thead>
+                            <th width="300px">Tanggal</th>
+                            <th>Pesan Korensi</th>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         `
 

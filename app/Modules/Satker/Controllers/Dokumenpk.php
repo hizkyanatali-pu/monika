@@ -635,10 +635,28 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function show($id)
     {
+        $listPesanRevision = [];
+        $dataDokumen =  $this->dokumenSatker->where('id', $id)->get()->getRow();
+
+        if (!is_null($dataDokumen->revision_master_dokumen_id)) {
+            $dataListRevision = $this->dokumenSatker->where('status', 'revision')
+            ->where('id', $dataDokumen->revision_master_dokumen_id)
+            ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
+            ->get()->getResult();
+
+            $listPesanRevision = array_map(function($arr) {
+                return [
+                    'tanggal' => date_indo($arr->change_status_at),
+                    'pesan'   => $arr->revision_message
+                ];
+            }, $dataListRevision);
+        }
+        
         return $this->respond([
-            'dokumen'  => $this->dokumenSatker->where('id', $id)->get()->getRow(),
-            'rows'     => $this->dokumenSatker_rows->where('dokumen_id', $id)->get()->getResult(),
-            'kegiatan' => $this->dokumenSatker_kegiatan->where('dokumen_id', $id)->get()->getResult()
+            'dokumen'      => $dataDokumen,
+            'rows'         => $this->dokumenSatker_rows->where('dokumen_id', $id)->get()->getResult(),
+            'kegiatan'     => $this->dokumenSatker_kegiatan->where('dokumen_id', $id)->get()->getResult(),
+            'listRevision' => $listPesanRevision
         ]);
     }
 
