@@ -486,10 +486,10 @@ class Dokumenpk extends \App\Controllers\BaseController
         $rows = [];
         $rowsNumber = 1;
         foreach ($input['formTable_title'] as $key_rowTitle => $data_rowTitle) {
-            $rowId = $templateID . $rowsNumber++;
+            $rowId = $templateID . rand(10, 100);
 
             array_push($rows, [
-                // 'id'             => $rowId,
+                'id'             => $rowId,
                 'template_id'    => $templateID,
                 'prefix_title'   => $input['formTable_prefixTitle'][$key_rowTitle],
                 'title'          => $data_rowTitle,
