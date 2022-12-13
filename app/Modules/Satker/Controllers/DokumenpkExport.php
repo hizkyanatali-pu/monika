@@ -451,15 +451,15 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $targetValue = '';
                 switch ($_detailDokumenType) {
                     case 'target':
-                        $targetValue = $data_targetValue['target_value'] . ' ' . $data['target_satuan'];
+                        $targetValue = str_replace(".", ",", $data_targetValue['target_value']) . ' ' . $data['target_satuan'];
                         break;
 
                     case 'outcome':
-                        $targetValue = $data_targetValue['outcome_value'] . ' ' . $data['outcome_satuan'];
+                        $targetValue = str_replace(".", ",", $data_targetValue['outcome_value']) . ' ' . $data['outcome_satuan'];
                         break;
 
                     case 'output':
-                        $targetValue = $data_targetValue['target_value'] . ' ' . $data['target_satuan'];
+                        $targetValue = str_replace(".", ",", $data_targetValue['target_value']) . ' ' . $data['target_satuan'];
 
                         break;
                     default:
