@@ -505,18 +505,45 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell(100, 7, 'ANGGARAN', 0, 0, 'R');
         $pdf->Ln(5);
 
-        // anggaran title
-        $pdf->SetFont($this->fontFamily, 'B', 8);
-        $pdf->SetX(183);
-        $pdf->Cell(100, 7, rupiahFormat($dataDokumen['total_anggaran']), 0, 0, 'R');
+
 
         // kegiatan
         foreach ($dataDokumenKegiatan as $key_kegiatan => $data_kegiatan) {
             $pdf->SetFont($this->fontFamily, '', 8);
             $pdf->SetX((310 - array_sum($tableDataWidth)) / 2);
             $pdf->Cell(100, 7, ++$key_kegiatan . ". " . ltrim($data_kegiatan['nama']), 0, 0, 'L');
-            $pdf->Ln(4);
+
+            // anggaran perkegiatan value
+            $pdf->SetFont($this->fontFamily, 'B', 8);
+            $pdf->SetX(170);
+            $pdf->Cell(80, 7, "Rp", 0, 0, 'R');
+
+            // anggaran value
+            $pdf->SetFont($this->fontFamily, 'B', 8);
+            $pdf->SetX(183);
+            $pdf->Cell(100, 7, rupiahFormat($data_kegiatan['anggaran'], false), 0, 0, 'R');
+
+            $pdf->Ln(5);
         }
+        // $pdf->Ln(2);
+
+        // total anggaran title
+        // $pdf->SetFont($this->fontFamily, 'B', 8);
+        // $pdf->SetX(150);
+        // $pdf->Cell(100, 7, "JUMLAH", 0, 0, 'L');
+
+
+        //RP title
+        $pdf->SetFont($this->fontFamily, 'B', 8);
+        $pdf->SetX(170);
+        // $pdf->Cell(80, 7, "JUMLAH : \t \t \t \t \t \t \t Rp", 0, 0, 'R');
+        $pdf->Cell(80, 7, "Rp", 0, 0, 'R');
+
+
+        // total anggaran value
+        $pdf->SetFont($this->fontFamily, 'B', 9);
+        $pdf->SetX(183);
+        $pdf->Cell(100, 7, rupiahFormat($dataDokumen['total_anggaran'], false), 0, 0, 'R');
 
         // info
         // foreach ($dataDokumenInfo as $key_info => $data_info) {
@@ -660,10 +687,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
             // $pdf->Image('images/watermark_dokumen_konsep.png', 23, 80, 250);
         }
     }
-    
-    
-    
-    private function gettemplateRowChecked($templateId, $dokumenSatkerId) 
+
+
+
+    private function gettemplateRowChecked($templateId, $dokumenSatkerId)
     {
         $tempRow = [];
 
@@ -673,26 +700,24 @@ class DokumenpkExport extends \App\Controllers\BaseController
             ->getResultArray();
 
         foreach ($tableData as $key => $data) {
-            if ($data['type'] == 'form') 
-            {
+            if ($data['type'] == 'form') {
                 $data_targetValue = $this->dokumenSatker_rows->where('dokumen_id', $dokumenSatkerId)
                     ->where('template_row_id', $data['id'])
                     ->get()
                     ->getRowArray();
 
-                if ($data_targetValue['is_checked'] == '1'){
+                if ($data_targetValue['is_checked'] == '1') {
                     array_push($tempRow, $data);
                 }
-            } 
-            else {
+            } else {
                 array_push($tempRow, $data);
 
-                if ($tempRow[array_key_last($tempRow)-1]['type'] == 'section_title' && $key > 0) {
-                    unset($tempRow[array_key_last($tempRow)-1]);
+                if ($tempRow[array_key_last($tempRow) - 1]['type'] == 'section_title' && $key > 0) {
+                    unset($tempRow[array_key_last($tempRow) - 1]);
                 }
             }
 
-            if ($key == count($tableData)-1) {
+            if ($key == count($tableData) - 1) {
                 if ($tempRow[array_key_last($tempRow)]['type'] == 'section_title') {
                     unset($tempRow[array_key_last($tempRow)]);
                 }

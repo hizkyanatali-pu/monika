@@ -92,7 +92,7 @@
 
     $(document).on('click', '.__buat-dokumen-pilih-template', function() {
         let dataID = $(this).data('id')
-        
+
         $.ajax({
             url: "<?php echo site_url('dokumenpk/get-template/') ?>" + dataID,
             type: 'GET',
@@ -497,10 +497,10 @@
                         let rowType = data.id == '-' ? 'input' : 'text'
 
                         rowTableKegiatan += renderFormTemplate_rowKegiatan_item({
-                            id      : data.id,
-                            nama    : data.nama,
+                            id: data.id,
+                            nama: data.nama,
                             anggaran: data.anggaran,
-                            rowType : rowType
+                            rowType: rowType
                         })
                     })
                     $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
@@ -537,9 +537,9 @@
                         `)
                     }
 
-                    if(res.listRevision.length > 0) {
+                    if (res.listRevision.length > 0) {
                         $('.container-list-revision-message').removeClass('d-none')
-                        
+
                         let listRevisionMessage = ''
 
                         res.listRevision.forEach((data, index) => {
@@ -588,15 +588,15 @@
 
                 $('.__table-kegiatan').find('tbody').html('')
                 let rowTableKegiatan = ''
-                console.log(res.kegiatan)
+                // console.log(res.kegiatan)
                 res.kegiatan.forEach((data, key) => {
                     let rowType = data.id == '-' ? 'input' : 'text'
 
                     rowTableKegiatan += renderFormTemplate_rowKegiatan_item({
-                        id      : data.id,
-                        nama    : data.nama,
+                        id: data.id,
+                        nama: data.nama,
                         anggaran: data.anggaran,
-                        rowType : rowType
+                        rowType: rowType
                     })
                 })
                 $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
@@ -770,18 +770,18 @@
 
 
     $(document).on('click', '#__add-item-kegiatan', function() {
-        let element_kegiatanTable =  $('.__table-kegiatan').find('tbody'),
+        let element_kegiatanTable = $('.__table-kegiatan').find('tbody'),
             element_rowItem_kegiatanTable = $('.__table-kegiatan').find('tbody').find('tr'),
             kegiatan = []
 
         element_kegiatanTable.append(renderFormTemplate_rowKegiatan_item({
-            id     : '-',
-            nama   : '-',
+            id: '-',
+            nama: '-',
             rowType: 'input'
         }))
 
         element_rowItem_kegiatanTable.each((key, element) => {
-            let idKegiatan   = $(element).data('kegiatan-id'),
+            let idKegiatan = $(element).data('kegiatan-id'),
                 namaKegiatan = idKegiatan == '-' ? $(element).find('.__nama-kegiatan-manual').val() : $(element).data('kegiatan-nama');
 
             if (key < element_rowItem_kegiatanTable.length) kegiatan.push(namaKegiatan)
@@ -821,12 +821,12 @@
         })
 
         $('.__table-kegiatan').find('tbody').find('tr').each((key, element) => {
-            let idKegiatan   = $(element).data('kegiatan-id'),
+            let idKegiatan = $(element).data('kegiatan-id'),
                 namaKegiatan = idKegiatan == '-' ? $(element).find('.__nama-kegiatan-manual').val() : $(element).data('kegiatan-nama');
 
             kegiatan.push({
-                id      : idKegiatan,
-                nama    : namaKegiatan,
+                id: idKegiatan,
+                nama: namaKegiatan,
                 anggaran: $(element).find('input[name=kegiatan-anggaran]').val()
             })
         })
@@ -888,19 +888,18 @@
             }
         })
 
-        // $('input[name=kegiatan-anggaran]').each((index, element) => {
-        //     if ($(element).val().replaceAll(".", '').replaceAll(',', '.') > 0 && checkInputKegiatanAnggatan == true) {
-        //         checkInputKegiatanAnggatan = true
-        //     } else {
-        //         checkInputKegiatanAnggatan = false
-        //     }
-        // })
+        $('input[name=kegiatan-anggaran]').each((index, element) => {
+            if ($(element).val().replaceAll(".", '').replaceAll(',', '.') > 0 && checkInputKegiatanAnggatan == true) {
+                checkInputKegiatanAnggatan = true
+            } else {
+                checkInputKegiatanAnggatan = false
+            }
+        })
 
         $('.__nama-kegiatan-manual').each((index, element) => {
             if ($(element).val() != null && checkInputKegiatanAnggatan == true) {
                 checkInputKegiatanManual = true
-            }
-            else {
+            } else {
                 checkInputKegiatanManual = false
             }
         })
@@ -968,7 +967,7 @@
             return false
         }
 
-        if ($('select[name=created-bulan]').val() == '')  {
+        if ($('select[name=created-bulan]').val() == '') {
             Swal.fire(
                 'Peringatan',
                 'Bulan dokumen belum di pilih',
@@ -1118,8 +1117,7 @@
                     </div>
                 `)
             }
-        }
-        else {
+        } else {
             if (params.data.template.type == 'master-balai' || params.data.template.type == 'balai') {
                 $('.container-revision-alert').append(`
                     <div class="bg-success text-white pt-3 pr-3 pb-3 pl-3" role="alert">
@@ -1193,7 +1191,7 @@
                 buttonType: 'warning',
                 buttonText: 'Buat Revisi'
             });
-            
+
             setDetailDataInForm(_data.dokumenExistSameYear.last_dokumen_id)
         }
 
@@ -1217,7 +1215,7 @@
                 case 'eselon1':
                     titleTheadTable = 'Acuan';
                     break;
-            
+
                 default:
                     titleTheadTable = '';
                     break;
@@ -1278,8 +1276,8 @@
                         <table class="table table-striped border __table-kegiatan">
                             <thead>
                                 <tr>
-                                    <th>Nama ${ capitalizeFirstLetter(template.info_title) }</th>
-                                    <th width="250px"></th>
+                                    <th class="text-center">Nama ${ capitalizeFirstLetter(template.info_title) }</th>
+                                    <th class="text-center" width="250px">Nominal Anggaran</th>
                                     <th width="50px">
                                         <button class="btn btn-sm btn-primary" id="__add-item-kegiatan">
                                             <i class="fas fa-plus"></i>
@@ -1302,9 +1300,9 @@
                                                 type="text" 
                                                 id="total-anggaran"
                                                 class="form-control" 
-                                                style="background: #FFFFFF ;text-align: right;" 
+                                                style="background: #F7F8FA ;text-align: right;" 
                                                 name="total-anggaran" 
-                                                placeholder="Nominal Total Anggaran"
+                                                placeholder="Nominal Total Anggaran" readonly
                                             />
                                         </div>
                                     </td>
@@ -1407,7 +1405,7 @@
         `
 
         $('#make-dokumen').html(render)
-        
+
         var numberMask = IMask(document.getElementById('total-anggaran'), {
             mask: Number,
             thousandsSeparator: '.'
@@ -1550,11 +1548,11 @@
 
     function renderFormTemplate_rowKegiatan(_data) {
         let list = ''
-        
+
         _data.forEach((data, key) => {
             list += renderFormTemplate_rowKegiatan_item({
-                id     : data.id,
-                nama   : data.nama,
+                id: data.id,
+                nama: data.nama,
                 rowType: 'text'
             })
             // list += `
@@ -1588,17 +1586,17 @@
             //     </tr>
             // `
         });
-        
+
         return list
     }
-    
-    
-    
+
+
+
     function renderFormTemplate_rowKegiatan_item(params = {
-        id      : '',
-        nama    : '',
+        id: '',
+        nama: '',
         anggaran: 0,
-        rowType : '' // input || text
+        rowType: '' // input || text
     }) {
         let renderKegiatanNama,
             kegiatananggaran = params.hasOwnProperty('anggaran') ? params.anggaran : '0'
@@ -1611,8 +1609,7 @@
                     renderKegiatanNama = `
                         <select class="select2 w-100 __nama-kegiatan-manual"></select>
                     `
-                }
-                else {
+                } else {
                     params.id = '?'
                     renderKegiatanNama = inputKegiatanManualDefaultValue
                 }
@@ -1622,24 +1619,26 @@
             case 'text':
                 renderKegiatanNama = params.nama
                 break;
-        
+
             default:
                 renderKegiatanNama = ''
                 break;
         }
-        
+
 
         return `
             <tr
                 data-kegiatan-id="${params.id}"
                 data-kegiatan-nama="${params.nama}"
             >
-                <td colspan="2" class="align-middle">
+                <td colspan="1" class="align-middle">
                     <div>
                         ${renderKegiatanNama}
                     </div>
+                </td>
 
-                    <div class="input-group d-none">
+                    <td class="align-middle">
+                    <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Rp. </span>
                         </div>
