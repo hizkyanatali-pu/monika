@@ -484,7 +484,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     private function insertDokumenPK_row($input, $templateID)
     {
         $rows = [];
-        $rowsNumber = 100;
+        $rowsNumber = 1000;
         foreach ($input['formTable_title'] as $key_rowTitle => $data_rowTitle) {
             $rowId = $templateID . $rowsNumber++;
 
