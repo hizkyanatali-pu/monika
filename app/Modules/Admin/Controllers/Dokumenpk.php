@@ -489,7 +489,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $rowId = $templateID . $rowsNumber++;
 
             array_push($rows, [
-                'id'             => $rowId,
+                // 'id'             => $rowId,
                 'template_id'    => $templateID,
                 'prefix_title'   => $input['formTable_prefixTitle'][$key_rowTitle],
                 'title'          => $data_rowTitle,
@@ -626,7 +626,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template.id = dokumen_pk_template_row.template_id
                 where 
                     dokumen_pk_template_akses.rev_table='m_balai' 
-                    and dokumen_pk_template_akses.rev_id='".$valueBalai->balaiid."'
+                    and dokumen_pk_template_akses.rev_id='" . $valueBalai->balaiid . "'
                     and dokumen_pk_template.type='master-balai'
                     and dokumen_pk_template_row.type='section_title';
             ")->getResult();
@@ -642,8 +642,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                     FROM 
                         `dokumen_pk_template_row` 
                     where 
-                        template_id='".$valueSp->template_id."' 
-                        and id > '".$valueSp->id."'
+                        template_id='" . $valueSp->template_id . "' 
+                        and id > '" . $valueSp->id . "'
                 ")->getResult();
 
                 foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
@@ -653,16 +653,16 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
 
                         $rumusIndikatorSp = $this->db->query("
-                            SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='".$valueSp->template_id."' and rowId='".$valueIndicatorSp->id."'
+                            SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
                         ")->getResult();
 
                         $itemTemp['rowspan']++;
                         $itemTemp['sp'][$keySp]['rowspan']++;
-                        
+
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
                         foreach ($rumusIndikatorSp as $keyRumusIndikatorSp => $valueRumusIndikatorSp) {
                             // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rumus'][$keyRumusIndikatorSp]['rumus'] = $valueRumusIndikatorSp->rumus;
-                            
+
                             $dataSatker = $this->db->query("
                                 SELECT 
                                     m_satker.*
@@ -672,14 +672,14 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     left join dokumen_pk_template_akses on dokumen_pk_template.id = dokumen_pk_template_akses.template_id
                                     left join m_satker on dokumen_pk_template_akses.rev_id = m_satker.satkerid
                                 WHERE 
-                                    dokumen_pk_template_rowrumus.rumus='".$valueRumusIndikatorSp->rumus."'
+                                    dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
                                     and dokumen_pk_template.type='satker'
                                     and dokumen_pk_template_akses.rev_table='m_satker'
-                                    and m_satker.balaiid = '".$valueBalai->balaiid."';
+                                    and m_satker.balaiid = '" . $valueBalai->balaiid . "';
                             ")->getResult();
 
                             if ($dataSatker) {
-                                foreach ($dataSatker as $keyDataSatker=> $valueDataSatker) {
+                                foreach ($dataSatker as $keyDataSatker => $valueDataSatker) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
 
                                     if ($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
@@ -711,8 +711,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                                                 dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                                         where 
                                             dokumen_pk_template_akses.rev_table='m_satker' 
-                                            and dokumen_pk_template_akses.rev_id='".$valueDataSatker->satkerid."'
-                                            and dokumen_pk_template_rowrumus.rumus='".$valueRumusIndikatorSp->rumus."'
+                                            and dokumen_pk_template_akses.rev_id='" . $valueDataSatker->satkerid . "'
+                                            and dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
                                             and dokumen_pk_template.type='satker'
                                     ")->getRow();
 
@@ -729,10 +729,10 @@ class Dokumenpk extends \App\Controllers\BaseController
                                                 dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                                         where 
                                             dokumen_pk_template_akses.rev_table='m_satker' 
-                                            and dokumen_pk_template_akses.rev_id='".$valueDataSatker->satkerid."'
+                                            and dokumen_pk_template_akses.rev_id='" . $valueDataSatker->satkerid . "'
                                             and dokumen_pk_template.type='satker'
                                             and dokumen_pk_template_row.type='section_title'
-                                            and dokumen_pk_template_row.id < '".$dataIndicatorSK->id."'
+                                            and dokumen_pk_template_row.id < '" . $dataIndicatorSK->id . "'
                                         ORDER BY dokumen_pk_template_row.id DESC;
                                     ")->getRow();
 
@@ -746,7 +746,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     }
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['rowspan']++;
 
-                                    
+
                                     $findDataSKIndex = array_search($dataSk->title, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk'));
                                     $dataDokumen = $this->db->query("
                                         SELECT
@@ -756,14 +756,14 @@ class Dokumenpk extends \App\Controllers\BaseController
                                             dokumenpk_satker_rows
                                             LEFT JOIN dokumenpk_satker ON dokumenpk_satker_rows.dokumen_id = dokumenpk_satker.id
                                         WHERE
-                                            dokumenpk_satker.template_id='".$dataIndicatorSK->template_id."'
-                                            AND dokumenpk_satker.satkerid='".$valueDataSatker->satkerid."'
-                                            AND dokumenpk_satker.balaiid='".$valueDataSatker->balaiid."'
-                                            AND dokumenpk_satker.tahun='".$sessionTahun."'
+                                            dokumenpk_satker.template_id='" . $dataIndicatorSK->template_id . "'
+                                            AND dokumenpk_satker.satkerid='" . $valueDataSatker->satkerid . "'
+                                            AND dokumenpk_satker.balaiid='" . $valueDataSatker->balaiid . "'
+                                            AND dokumenpk_satker.tahun='" . $sessionTahun . "'
                                             AND dokumenpk_satker.dokumen_type='satker'
                                             AND dokumenpk_satker.status='setuju'
                                             AND dokumenpk_satker.deleted_at is null
-                                            AND dokumenpk_satker_rows.template_row_id='".$dataIndicatorSK->id."'
+                                            AND dokumenpk_satker_rows.template_row_id='" . $dataIndicatorSK->id . "'
                                     ")->getRow();
                                     array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
                                         'title'         => $dataIndicatorSK->title,
@@ -773,7 +773,6 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         'outcomeSatuan' => $dataIndicatorSK->outcome_satuan
                                     ]);
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                    
                                 }
                             }
                             // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = $dataSatker->satker ?? null;
@@ -781,7 +780,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     }
                 }
             }
-            
+
             array_push($tempData, $itemTemp);
         }
 
