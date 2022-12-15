@@ -512,7 +512,7 @@
                     $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
                     res.kegiatan.forEach((data, key) => {
 
-                        let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
+                        let elementInput_target = $('tr[data-kegiatan-id=' + (data.id == "?" ? "-" : data.id) + ']').find('input[name=kegiatan-anggaran]')
                         elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
                     })
 
@@ -582,7 +582,6 @@
             url: "<?php echo site_url('dokumenpk/detail/') ?>" + dokumenId,
             type: 'GET',
             success: (res) => {
-                console.log('markuinyos')
                 res.rows.forEach((data, key) => {
                     let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
                         elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
@@ -608,7 +607,7 @@
                 })
                 $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
                 res.kegiatan.forEach((data, key) => {
-                    let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
+                    let elementInput_target = $('tr[data-kegiatan-id=' + (data.id == "?" ? "-" : data.id) + ']').find('input[name=kegiatan-anggaran]')
                     elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
                 })
 
@@ -779,7 +778,19 @@
     $(document).on('click', '#__add-item-kegiatan', function() {
         let element_kegiatanTable = $('.__table-kegiatan').find('tbody'),
             element_rowItem_kegiatanTable = $('.__table-kegiatan').find('tbody').find('tr'),
+            element_rowItem_anggaran_kegiatan = $('.__table-kegiatan').find('tbody tr').last().find("input[name='kegiatan-anggaran']").val(),
             kegiatan = []
+
+
+        if (element_rowItem_anggaran_kegiatan == 0 || element_rowItem_anggaran_kegiatan == null) {
+
+            Swal.fire(
+                'Peringatan',
+                'Nama dan Anggaran Kegiatan belum terisi',
+                'warning'
+            )
+            return false
+        }
 
         element_kegiatanTable.append(renderFormTemplate_rowKegiatan_item({
             id: '-',
@@ -806,6 +817,19 @@
 
     $(document).on('click', '.__remove-item-kegiatan', function() {
         $(this).parents('tr').remove()
+        let timerInput
+
+        clearTimeout(timerInput)
+
+        timerInput = setTimeout(() => {
+            let totalAnggaran = 0;
+            $('input[name=kegiatan-anggaran]').each((key, element) => {
+
+                totalAnggaran += parseFloat($(element).val().replaceAll(".", '').replaceAll(',', '.'))
+            })
+            $('input[name=total-anggaran]').val(formatRupiah(totalAnggaran.toString().replaceAll('.', ',')))
+        }, 100);
+
     })
 
 
@@ -895,6 +919,8 @@
             }
         })
 
+
+
         $('input[name=kegiatan-anggaran]').each((index, element) => {
             if ($(element).val().replaceAll(".", '').replaceAll(',', '.') > 0 && checkInputKegiatanAnggatan == true) {
                 checkInputKegiatanAnggatan = true
@@ -928,20 +954,31 @@
             )
             return false
         }
-
-        if (checkInputKegiatanAnggatan == false) {
+        if ($('input[name=kegiatan-anggaran]').length < 1) {
             Swal.fire(
                 'Peringatan',
-                'Terdapat angaran untuk kegiatan yang belum terisi',
+                'Daftar Dan Anggaran Kegiatan Belum Ada',
+                'warning'
+            )
+            return false
+
+        }
+
+
+
+        if (checkInputKegiatanManual == false) {
+            Swal.fire(
+                'Peringatan',
+                'Terdapat nilai kegiatan yang belum terisi',
                 'warning'
             )
             return false
         }
 
-        if (checkInputKegiatanManual == false) {
+        if (checkInputKegiatanAnggatan == false) {
             Swal.fire(
                 'Peringatan',
-                'Terdapat kegiatan yang belum terisi',
+                'Terdapat angaran untuk kegiatan yang belum terisi',
                 'warning'
             )
             return false
@@ -1617,7 +1654,7 @@
                         <select class="select2 w-100 __nama-kegiatan-manual"></select>
                     `
                 } else {
-                    params.id = '-'
+                    params.id = '?'
                     renderKegiatanNama = inputKegiatanManualDefaultValue
                 }
 

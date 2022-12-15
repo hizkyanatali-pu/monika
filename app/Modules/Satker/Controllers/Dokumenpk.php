@@ -131,7 +131,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataTemplate = $this->templateDokumen->where('dokumen_pk_template.status', '1')->where("deleted_at is null")->get()->getResult();
 
         returnSection:
-        
+
         return view('Modules\Satker\Views\Dokumenpk.php', [
             'title'             => "Perjanjian Kinerja Balai",
             'sessionYear'       => $this->user['tahun'],
@@ -383,7 +383,6 @@ class Dokumenpk extends \App\Controllers\BaseController
             $session_balaiNama  = $this->user['balai_nama'] ?? null;
             $session_satkerId   = $this->user['satker_id'] ?? null;
             $session_balaiId    = $this->user['balai_id'] ?? null;
-
         }
 
         $pihak1        = '';
@@ -405,17 +404,17 @@ class Dokumenpk extends \App\Controllers\BaseController
             $jabatanPihak2 = $dataBalai->jabatan_penanda_tangan_pihak_2;
             // $sessions = array("balaiid" => $session_balaiId);
         }
-        
-        
+
+
         $dokumenExistSameYear = $this->dokumenSatker->select("
             id as last_dokumen_id,
             IFNULL (revision_master_dokumen_id, id) AS revision_master_dokumen_id
         ")
-        ->where('template_id', $id)
-        ->where('satkerid', $session_satkerId)
-        ->where('balaiid', $session_balaiId)
-        ->where("status != ", 'revision')
-        ->where("tahun", $sessionYear)->orderBy('id', 'desc')->get()->getRow();
+            ->where('template_id', $id)
+            ->where('satkerid', $session_satkerId)
+            ->where('balaiid', $session_balaiId)
+            ->where("status != ", 'revision')
+            ->where("tahun", $sessionYear)->orderBy('id', 'desc')->get()->getRow();
 
         $templateDokumen = $this->templateDokumen->where('id', $id)->get()->getRow();
 
@@ -426,9 +425,9 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             if ($dokumenExistSameYear) {
                 $rowDokumenExistsValue = $this->dokumenSatker_rows
-                ->where('dokumen_id', $dokumenExistSameYear->last_dokumen_id)
-                ->where('template_row_id', $arr->id)
-                ->get()->getRow();
+                    ->where('dokumen_id', $dokumenExistSameYear->last_dokumen_id)
+                    ->where('template_row_id', $arr->id)
+                    ->get()->getRow();
             }
 
             if ($session_userType == "satker") {
@@ -442,12 +441,11 @@ class Dokumenpk extends \App\Controllers\BaseController
                 if ($templateDokumen->type == 'satker') {
                     $targetDefualtValue = $rowDokumenExistsValue->target_value ?? '';
                     $outcomeDefaultValue = $rowDokumenExistsValue->outcome_value ?? '';
-                }
-                else {
+                } else {
                     if ($dokumenExistSameYear) {
                         $targetBalaiDefualtValue = $rowDokumenExistsValue->target_value ?? '';
                     }
-    
+
                     $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
                     foreach ($templateRowRumus as $key => $data) {
                         $targetRumusOutcome = $this->dokumenSatker->select(
@@ -461,14 +459,14 @@ class Dokumenpk extends \App\Controllers\BaseController
                             ->where('dokumenpk_satker.tahun', $this->user['tahun'])
                             ->where('dokumenpk_satker_rows.is_checked', '1')
                             ->get()->getResult();
-    
+
                         $outcomeRumus = 0;
                         foreach ($targetRumusOutcome as $keyOutcome => $dataOutcome) {
                             $outcomeRumus += $dataOutcome ? ($dataOutcome->outcome_value != '' ? $dataOutcome->outcome_value : 0) : 0;
                         }
-    
+
                         if ($targetDefualtValue == '' && $outcomeRumus > 0) $targetDefualtValue = 0;
-    
+
                         if ($outcomeRumus > 0) $targetDefualtValue += $outcomeRumus;
                     }
                 }
@@ -640,18 +638,18 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         if (!is_null($dataDokumen->revision_master_dokumen_id)) {
             $dataListRevision = $this->dokumenSatker->where('status', 'revision')
-            ->where('id', $dataDokumen->revision_master_dokumen_id)
-            ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
-            ->get()->getResult();
+                ->where('id', $dataDokumen->revision_master_dokumen_id)
+                ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
+                ->get()->getResult();
 
-            $listPesanRevision = array_map(function($arr) {
+            $listPesanRevision = array_map(function ($arr) {
                 return [
                     'tanggal' => date_indo($arr->change_status_at),
                     'pesan'   => $arr->revision_message
                 ];
             }, $dataListRevision);
         }
-        
+
         return $this->respond([
             'dokumen'      => $dataDokumen,
             'rows'         => $this->dokumenSatker_rows->where('dokumen_id', $id)->get()->getResult(),
@@ -686,9 +684,18 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function getTgiatForFormPk()
     {
         $search = $_GET['term'] ?? '';
+        $exits = $_GET['exists'];
 
-        $queryDataGiat = $this->kegiatan->where('tahun_anggaran', $this->user['tahun'])
-        ->whereNotIn('nmgiat', json_decode($_GET['exists']));
+        if ($exits == "[]") {
+
+            $queryDataGiat = $this->kegiatan->where('tahun_anggaran', $this->user['tahun']);
+        } else {
+            $queryDataGiat = $this->kegiatan->where('tahun_anggaran', $this->user['tahun'])
+                ->whereNotIn('nmgiat', json_decode($exits));
+        }
+
+
+
 
         if ($search) {
             $queryDataGiat->like('nmgiat', $search);
@@ -696,7 +703,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $dataGiat = $queryDataGiat->orderBy('nmgiat', 'ASC')->get()->getResult();
 
-        $dataGiatResults = array_map(function($arr) {
+        $dataGiatResults = array_map(function ($arr) {
             return [
                 "id"   => $arr->nmgiat,
                 "text" => $arr->nmgiat
@@ -706,7 +713,6 @@ class Dokumenpk extends \App\Controllers\BaseController
         return $this->respond([
             "results" => $dataGiatResults
         ]);
-
     }
 
 
