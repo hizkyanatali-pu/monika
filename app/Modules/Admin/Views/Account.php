@@ -70,6 +70,13 @@
                                             <div id="nama-error" class="error invalid-feedback"><?= session('errors.nama') ?></div>
                                         </div>
                                     </div>
+                                    <div class="form-group row <?php if (session('errors.nama')) echo 'is-invalid'; ?>">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Instansi</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control" type="text" value="<?= isset($userData['satker_nama']) ? $userData['satker_nama'] : (isset($userData['balai_nama']) ? "UPT " . $userData['balai_nama'] : "DIRJEN SDA"); ?>" disabled>
+                                            <div id="nama-error" class="error invalid-feedback"><?= session('errors.instansi') ?></div>
+                                        </div>
+                                    </div>
                                     <div class="form-group row  <?php if (session('errors.telpon')) echo 'is-invalid'; ?>">
                                         <label class="col-xl-3 col-lg-3 col-form-label">Nomor Telp</label>
                                         <div class="col-lg-9 col-xl-6">
