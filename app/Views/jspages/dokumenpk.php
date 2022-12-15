@@ -437,7 +437,7 @@
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
                 $('.__save-update-dokumen').removeClass('d-none')
-                console.log($('.__save-update-dokumen'))
+                // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
             }
         })
