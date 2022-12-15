@@ -781,16 +781,19 @@
             element_rowItem_anggaran_kegiatan = $('.__table-kegiatan').find('tbody tr').last().find("input[name='kegiatan-anggaran']").val(),
             kegiatan = []
 
+        if (element_rowItem_anggaran_kegiatan != undefined) {
 
-        if (element_rowItem_anggaran_kegiatan == 0 || element_rowItem_anggaran_kegiatan == null) {
+            if (element_rowItem_anggaran_kegiatan == 0 || element_rowItem_anggaran_kegiatan == null) {
 
-            Swal.fire(
-                'Peringatan',
-                'Nama dan Anggaran Kegiatan belum terisi',
-                'warning'
-            )
-            return false
+                Swal.fire(
+                    'Peringatan',
+                    'Nama dan Anggaran Kegiatan belum terisi',
+                    'warning'
+                )
+                return false
+            }
         }
+
 
         element_kegiatanTable.append(renderFormTemplate_rowKegiatan_item({
             id: '-',
