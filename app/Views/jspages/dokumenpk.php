@@ -511,6 +511,7 @@
                     })
                     $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
                     res.kegiatan.forEach((data, key) => {
+
                         let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
                         elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
                     })
@@ -1616,7 +1617,7 @@
                         <select class="select2 w-100 __nama-kegiatan-manual"></select>
                     `
                 } else {
-                    params.id = '?'
+                    params.id = '-'
                     renderKegiatanNama = inputKegiatanManualDefaultValue
                 }
 
