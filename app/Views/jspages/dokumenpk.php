@@ -270,6 +270,8 @@
 
             formData['id'] = $(this).data('id')
 
+            $('input[name=total-anggaran]').prop("disabled", false)
+
             $.ajax({
                 url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
                 type: 'POST',
@@ -584,8 +586,8 @@
                     let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
                         elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
-                    elementInput_target.val(data.target_value)
-                    elementInput_outcome.val(data.outcome_value)
+                    elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                    elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
                     if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
                 })
@@ -604,10 +606,10 @@
                     })
                 })
                 $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
-                // res.kegiatan.forEach((data, key) => {
-                //     let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
-                //     elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
-                // })
+                res.kegiatan.forEach((data, key) => {
+                    let elementInput_target = $('tr[data-kegiatan-id=' + data.id + ']').find('input[name=kegiatan-anggaran]')
+                    elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
+                })
 
                 $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
                 $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
