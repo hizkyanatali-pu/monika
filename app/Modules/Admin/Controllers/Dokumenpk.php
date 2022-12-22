@@ -110,7 +110,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataBelumInput = $this->satker->select("
             m_satker.satker
         ")
-            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1")
+            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1 and m_satker.grup_jabatan = 'satker'")
             ->get()->getResult();
 
         $dataBelumInput = array_map(function ($arr) {
@@ -155,10 +155,24 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function eselon2()
     {
+        $dataBelumInput = $this->satker->select("
+        m_satker.satker
+    ")
+        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='eselon2' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1 and m_satker.grup_jabatan = 'eselon2'")
+        ->get()->getResult();
+
+    $dataBelumInput = array_map(function ($arr) {
+        return [
+            'nama' => $arr->satker
+        ];
+    }, $dataBelumInput);
+
+
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
             'title'                => 'Dokumen Penjanjian Kinerja - Eselon 2',
             'dokumenType'              => 'eselon2',
+            'dataBelumInput'           => $dataBelumInput,
             'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon2')->get()->getResult())
         ]);
     }
@@ -166,10 +180,24 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function eselon1()
     {
+
+        $dataBelumInput = $this->satker->select("
+        m_satker.satker
+    ")
+        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='eselon1' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1 and m_satker.grup_jabatan = 'eselon1'")
+        ->get()->getResult();
+
+    $dataBelumInput = array_map(function ($arr) {
+        return [
+            'nama' => $arr->satker
+        ];
+    }, $dataBelumInput);
+
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
             'title'                => 'Dokumen Penjanjian Kinerja - Eselon1',
             'dokumenType'              => 'eselon1',
+            'dataBelumInput'           => $dataBelumInput,
             'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon1')->get()->getResult())
         ]);
     }

@@ -316,6 +316,24 @@ class Dokumenpk extends \App\Controllers\BaseController
                     'nama' => $arr->balai
                 ];
             }, $dataBelumInput);
+        }else{
+
+           
+                $dataBelumInput = $this->satker->select("
+                    m_satker.satker
+                ")
+                    ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='".$type."' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1 and m_satker.grup_jabatan='{$type}'")
+                    ->get()->getResult();
+    
+                $returnData = array_map(function ($arr) {
+                    return [
+                        'nama' => $arr->satker
+                    ];
+                }, $dataBelumInput);
+        
+
+
+
         }
 
         return $this->respond([
