@@ -589,11 +589,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // title ttd 2
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(149);
-        $pdf->Cell(134, 4, $_ttd['person2Date'], 0, 0, 'C');
+        $pdf->Cell(144, 4, $_ttd['person2Date'], 0, 0, 'C');
         $pdf->Ln();
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(167);
-        $pdf->MultiCell(100, 5, $_ttd['person2Title'], 0, 'C');
+        $pdf->MultiCell(110, 5, $_ttd['person2Title'], 0, 'C');
         $pdf->Ln(20);
 
         // td 1
@@ -604,7 +604,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // td 2
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(149);
-        $pdf->Cell(134, 4, $_ttd['person2Name'], 0, 0, 'C');
+        $pdf->Cell(144, 4, $_ttd['person2Name'], 0, 0, 'C');
     }
 
 
