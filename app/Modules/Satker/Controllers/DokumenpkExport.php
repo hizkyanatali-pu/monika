@@ -502,7 +502,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // anggaran title
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(183);
-        $pdf->Cell(100, 7, 'ANGGARAN', 0, 0, 'R');
+        $pdf->Cell(85, 7, 'Anggaran', 0, 0, 'R');
         $pdf->Ln(5);
 
 
@@ -519,7 +519,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $pdf->Cell(80, 7, "Rp", 0, 0, 'R');
 
             // anggaran value
-            $pdf->SetFont($this->fontFamily, 'B', 8);
+            $pdf->SetFont($this->fontFamily, '', 8);
             $pdf->SetX(183);
             $pdf->Cell(100, 7, rupiahFormat($data_kegiatan['anggaran'], false), 0, 0, 'R');
 
@@ -540,8 +540,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell(80, 7, "Rp", 0, 0, 'R');
 
 
+
         // total anggaran value
-        $pdf->SetFont($this->fontFamily, 'B', 9);
+        $pdf->SetFont($this->fontFamily, 'B', 8);
         $pdf->SetX(183);
         $pdf->Cell(100, 7, rupiahFormat($dataDokumen['total_anggaran'], false), 0, 0, 'R');
 
