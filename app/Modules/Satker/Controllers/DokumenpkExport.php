@@ -451,15 +451,15 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $targetValue = '';
                 switch ($_detailDokumenType) {
                     case 'target':
-                        $targetValue = str_replace(".", ",", $data_targetValue['target_value']) . ' ' . $data['target_satuan'];
+                        $targetValue = rupiahFormat($data_targetValue['target_value'], false, 2) . ' ' . $data['target_satuan'];
                         break;
 
                     case 'outcome':
-                        $targetValue = str_replace(".", ",", $data_targetValue['outcome_value']) . ' ' . $data['outcome_satuan'];
+                        $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 2) . ' ' . $data['outcome_satuan'];
                         break;
 
                     case 'output':
-                        $targetValue = str_replace(".", ",", $data_targetValue['target_value']) . ' ' . $data['target_satuan'];
+                        $targetValue = rupiahFormat($data_targetValue['target_value'], false, 2) . ' ' . $data['target_satuan'];
 
                         break;
                     default:
@@ -521,7 +521,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             // anggaran value
             $pdf->SetFont($this->fontFamily, '', 8);
             $pdf->SetX(183);
-            $pdf->Cell(100, 7, rupiahFormat($data_kegiatan['anggaran'], false), 0, 0, 'R');
+            $pdf->Cell(100, 7, rupiahFormat($data_kegiatan['anggaran'], false, 2), 0, 0, 'R');
 
             $pdf->Ln(5);
         }
@@ -544,7 +544,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // total anggaran value
         $pdf->SetFont($this->fontFamily, 'B', 8);
         $pdf->SetX(183);
-        $pdf->Cell(100, 7, rupiahFormat($dataDokumen['total_anggaran'], false), 0, 0, 'R');
+        $pdf->Cell(100, 7, rupiahFormat($dataDokumen['total_anggaran'], false, 2), 0, 0, 'R');
 
         // info
         // foreach ($dataDokumenInfo as $key_info => $data_info) {

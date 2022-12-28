@@ -1532,6 +1532,7 @@
                                         value="${ data.targetBalaiDefualtValue }"
                                         data-row-id="${ data.id }"
                                         onkeypress="return isNumberKey(this, event);"
+                                        onkeyup="return this.value = formatRupiah(this.value, '')"
                                     >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
@@ -1550,6 +1551,7 @@
                                     value="${ data.targetDefualtValue }"
                                     data-row-id="${ data.id }"
                                     onkeypress="return isNumberKey(this, event);"
+                                    onkeyup="return this.value = formatRupiah(this.value, '')"
                                 >
                                 <div class="input-group-append">
                                     <span class="input-group-text">${ data.target_satuan }</span>
@@ -1576,6 +1578,7 @@
                                         value="${ data.outcomeDefaultValue }"
                                         data-row-id="${ data.id }"
                                         onkeypress="return isNumberKey(this, event);"
+                                        onkeyup="return this.value = formatRupiah(this.value, '')"
                                     >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>
