@@ -245,7 +245,7 @@ $title = $title ?? '';
                     }
                 }
             }
-
+            console.log('del')
             return true;
         }
 
