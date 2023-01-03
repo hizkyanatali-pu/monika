@@ -249,6 +249,13 @@ $title = $title ?? '';
             return true;
         }
 
+        function inputHarusHuruf(evt){
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if ((charCode < 65 || charCode > 90)&&(charCode < 97 || charCode > 122)&&charCode>32)
+                return false;
+            return true;
+        }
+
         /* Fungsi formatRupiah */
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, "").toString(),

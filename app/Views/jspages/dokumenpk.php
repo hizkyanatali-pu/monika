@@ -1410,7 +1410,7 @@
                                 ${_data.penandatangan.pihak1}
                             </small>
                         </div>
-                        <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required />
+                        <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required  onkeypress="return inputHarusHuruf(event)"  />
                         <small style="color: #fc0758; font-weight: bold">
                             Isi nama tanpa gelar
                         </small>
@@ -1737,13 +1737,13 @@
             let smallTitleClass = _inputDefaultValue == '' ? 'class="title-ttd-pihak2"' : ''
             renderJalabatan = `
                 <div><small ${smallTitleClass}>${_inputDefaultValue}</small></div>
-                <input class="form-control d-none" name="ttd-pihak2-jabatan" placeholder="Jabatan Penanda Tangan"  value="${ _inputDefaultValue }" />
+                <input class="form-control d-none" name="ttd-pihak2-jabatan" placeholder="Jabatan Penanda Tangan"  value="${ _inputDefaultValue }" onkeypress="return inputHarusHuruf(event)" />
             `
         }
 
         return `
             ${renderJalabatan}
-            <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" />
+            <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" onkeypress="return inputHarusHuruf(event)" />
         `
     }
 
