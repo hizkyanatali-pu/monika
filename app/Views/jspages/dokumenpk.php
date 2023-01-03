@@ -488,10 +488,10 @@
                         let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
                             elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
-                        elementInput_target.val(data.target_value)
-                        elementInput_outcome.val(data.outcome_value)
-                        // elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
-                        // elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
+                        // elementInput_target.val(data.target_value)
+                        // elementInput_outcome.val(data.outcome_value)
+                        elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                        elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
                         if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
                     })
@@ -848,7 +848,7 @@
             rows.push({
                 id: elementInput_target.data('row-id'),
                 target: elementInput_target.val().replace('.', ''),
-                outcome: elementInput_outcome.val(),
+                outcome: elementInput_outcome.val().replace('.', ''),
                 isChecked: element_checkRow.is(':checked') ? '1' : '0'
             })
         })
