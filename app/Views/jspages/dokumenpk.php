@@ -1410,9 +1410,9 @@
                                 ${_data.penandatangan.pihak1}
                             </small>
                         </div>
-                        <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required  onkeypress="return inputHarusHuruf(event)"  />
+                        <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required  onkeyup="this.value = this.value.toUpperCase();" onkeypress="return inputHarusHuruf(event)"  />
                         <small style="color: #fc0758; font-weight: bold">
-                            Isi nama tanpa gelar
+                            <i>Isi nama tanpa gelar</i>
                         </small>
                     </div>
                     <div class="form-group mt-4 pt-2">
@@ -1430,7 +1430,7 @@
                         <div>
                             ${render_ttdPihak2}
                             <small style="color: #fc0758; font-weight: bold">
-                                Isi nama tanpa gelar
+                                <i>Isi nama tanpa gelar</i>
                             </small>
                         </div>
                     </div>
@@ -1743,7 +1743,7 @@
 
         return `
             ${renderJalabatan}
-            <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" onkeypress="return inputHarusHuruf(event)" />
+            <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" onkeyup="this.value = this.value.toUpperCase();" onkeypress="return inputHarusHuruf(event)" />
         `
     }
 
