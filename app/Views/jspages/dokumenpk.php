@@ -847,7 +847,7 @@
 
             rows.push({
                 id: elementInput_target.data('row-id'),
-                target: elementInput_target.val(),
+                target: elementInput_target.val().replace('.', ''),
                 outcome: elementInput_outcome.val(),
                 isChecked: element_checkRow.is(':checked') ? '1' : '0'
             })
@@ -1411,6 +1411,9 @@
                             </small>
                         </div>
                         <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required />
+                        <small style="color: #fc0758; font-weight: bold">
+                            Isi nama tanpa gelar
+                        </small>
                     </div>
                     <div class="form-group mt-4 pt-2">
                         <div class="d-flex justify-content-between">
@@ -1426,6 +1429,9 @@
                         </div>
                         <div>
                             ${render_ttdPihak2}
+                            <small style="color: #fc0758; font-weight: bold">
+                                Isi nama tanpa gelar
+                            </small>
                         </div>
                     </div>
                 </div>
