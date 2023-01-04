@@ -451,15 +451,15 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $targetValue = '';
                 switch ($_detailDokumenType) {
                     case 'target':
-                        $targetValue = rupiahFormat($data_targetValue['target_value'], false, 2) . ' ' . $data['target_satuan'];
+                        $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
                         break;
 
                     case 'outcome':
-                        $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 2) . ' ' . $data['outcome_satuan'];
+                        $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 3) . ' ' . $data['outcome_satuan'];
                         break;
 
                     case 'output':
-                        $targetValue = rupiahFormat($data_targetValue['target_value'], false, 2) . ' ' . $data['target_satuan'];
+                        $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
 
                         break;
                     default:
