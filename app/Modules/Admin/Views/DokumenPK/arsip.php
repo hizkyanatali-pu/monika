@@ -83,9 +83,9 @@
     <div class="kt-portlet" style="margin-top: -5px">
         <div class="kt-portlet__body tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-one" role="tabpanel" aria-labelledby="pills-one-tab">
-                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="hold">
+                <!-- <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="hold">
                     <i class="fas fa-trash"></i> Hapus Permanen Data Terchecklist
-                </button>
+                </button> -->
 
                 <table class="table table-bordered" id="table-hold">
                     <thead>
@@ -96,7 +96,7 @@
                             <th width="25px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
-                            <th width="225px">Aksi</th>
+                            <th width="25px">Aksi</th>
                         </tr>
                     </thead>
 
@@ -108,9 +108,9 @@
 
 
             <div class="tab-pane fade" id="pills-two" role="tabpanel" aria-labelledby="pills-two-tab">
-                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="setuju">
+                <!-- <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="setuju">
                     <i class="fas fa-trash"></i> Hapus Permanen Data Terchecklist
-                </button>
+                </button> -->
 
                 <table class="table table-bordered" id="table-setuju">
                     <thead>
@@ -122,7 +122,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal disetujui</th>
-                            <th width="225px">Aksi</th>
+                            <th width="25px">Aksi</th>
                         </tr>
                     </thead>
 
@@ -134,9 +134,9 @@
 
 
             <div class="tab-pane fade" id="pills-three" role="tabpanel" aria-labelledby="pills-three-tab">
-                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="tolak">
+                <!-- <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="tolak">
                     <i class="fas fa-trash"></i> Hapus Permanen Data Terchecklist
-                </button>
+                </button> -->
 
                 <table class="table table-bordered" id="table-tolak">
                     <thead>
@@ -148,7 +148,7 @@
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal Ditolak</th>
-                            <th width="225px">Aksi</th>
+                            <th width="25px">Aksi</th>
                         </tr>
                     </thead>
 
@@ -477,6 +477,7 @@
                             <i class="fas fa-print"></i><br/>
                             Cetak
                         </button>
+                        <!--
                         <button 
                             class="btn btn-sm btn-outline-success __reStore"
                             data-id="${data.id}"
@@ -491,6 +492,7 @@
                             <i class="fas fa-trash"></i><br/>
                             Hapus
                         </button>
+                        -->
                     </td>
                 </tr>
             `);
