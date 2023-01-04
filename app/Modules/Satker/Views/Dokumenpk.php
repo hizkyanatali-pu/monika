@@ -148,10 +148,14 @@
                                 <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true">
                                     <i class="fas fa-print"></i> <br/> Cetak
                                 </button>
-
                                 <?php if ($data->status == 'hold') { ?> 
                                     <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
                                         <i class="fas fa-edit"></i> <br/> Edit
+                                    </button>
+                                <?php } ?>
+                                <?php if ($data->status == 'setuju') { ?>
+                                    <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
+                                        <i class="fas fa-edit"></i> <br/> Koreksi
                                     </button>
                                 <?php } ?>
                             </td>
