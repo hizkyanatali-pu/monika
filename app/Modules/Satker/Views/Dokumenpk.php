@@ -155,7 +155,7 @@
                                 <?php } ?>
                                 <?php if ($data->status == 'setuju') { ?>
                                     <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
-                                        <i class="fas fa-edit"></i> <br/> Koreksi
+                                        <i class="fas fa-edit"></i> <br/> Edit
                                     </button>
                                 <?php } ?>
                             </td>
