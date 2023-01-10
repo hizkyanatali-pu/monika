@@ -19,7 +19,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $this->PohonAnggaran        = new PohonAnggaranModel();
     }
 
-    
+
     public function index()
     {
 
@@ -83,7 +83,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
         // $data['layananperkantoran'] = $this->db->query("SELECT SUM(pg) as total FROM paket WHERE kdprogram='WA' AND kdsoutput IN ('001','950','951') AND kdkmpnen != '001'")->getRow();
 
         $queryCondition_gajidantunjangan   = "kdgiat='2421' AND kdoutput='EBA' AND kdsoutput='994' AND kdkmpnen='001'";
-        $queryCondition_administrasisatker = "(kdgiat='2421' AND kdoutput='EBA' AND kdsoutput='960') OR (kdgiat='2421' AND kdoutput='EAH')"; 
+        $queryCondition_administrasisatker = "(kdgiat='2421' AND kdoutput='EBA' AND kdsoutput='960') OR (kdgiat='2421' AND kdoutput='EAH')";
 
         $data['gajidantunjangan']   = $this->db->query("SELECT SUM(pg) as total FROM paket WHERE $queryCondition_gajidantunjangan")->getRow();
         $data['administrasisatker'] = $this->db->query("SELECT SUM(pg) as total FROM paket WHERE $queryCondition_administrasisatker")->getRow();
@@ -137,7 +137,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\PosturAnggaran\Alokasi-anggaran', $data);
     }
 
-    
+
 
     public function alokasiAnggaranNew()
     {
@@ -152,7 +152,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
             FROM
                 monika_data_$tahun
         ")
-        ->getRow();
+            ->getRow();
         $alokasiAnggaran = $query_treeRow1->total_pagu_51 + $query_treeRow1->total_pagu_52 + $query_treeRow1->total_pagu_53;
 
         $query_treeRow3_tender = $db->query("SELECT SUM(pfis) as total FROM  monika_kontrak_$tahun")->getRow();
@@ -264,7 +264,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
 
         /** 
          * syc-myc-list RPM
-        */
+         */
         $dataRpmSyc = $this->PohonAnggaran->getDataSisaLelang('RPM', ['SYC ']);
         $data['nilaiRpmSyc']['nilai_kontrak'] = $dataRpmSyc['nilai_kontrak'] * 1000;
         $data['nilaiRpmSyc']['jml_paket']     = $dataRpmSyc['jml_paket'];
@@ -289,7 +289,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
 
         /** 
          * syc-myc-list SBSN
-        */
+         */
         $dataSbsnSyc = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['SYC ']);
         $data['nilaiSbsnSyc']['nilai_kontrak'] = $dataSbsnSyc['nilai_kontrak'] * 1000;
         $data['nilaiSbsnSyc']['jml_paket']     = $dataSbsnSyc['jml_paket'];
@@ -314,7 +314,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
 
         /** 
          * syc-myc-list PHLN
-        */
+         */
         $dataPhlnSyc = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['SYC ']);
         $data['nilaiPhlnSyc']['nilai_kontrak'] = $dataPhlnSyc['nilai_kontrak'] * 1000;
         $data['nilaiPhlnSyc']['jml_paket']     = $dataPhlnSyc['jml_paket'];
@@ -334,7 +334,7 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $data['listPaketPhlnSyc'] = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['SYC '], true);
         $data['listPaketPhlnMycBaru'] = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['MYC Baru '], true);
         $data['listPaketPhlnMycLanjutan'] = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['MYC Lanjutan '], true);
-         /** end-of: syc-myc-list PHLN */
+        /** end-of: syc-myc-list PHLN */
 
 
         return view('Modules\Admin\Views\PosturAnggaran\Sisa-lelang', $data);
@@ -392,12 +392,74 @@ class PohonAnggaran extends \App\Controllers\BaseController
     public function danatidakTerserap()
     {
 
+
+        $getDataRpm = $this->PohonAnggaran->getDataSisaDataTidakTerserap("rpm");
+        $getDataPhln = $this->PohonAnggaran->getDataSisaDataTidakTerserap("phln");
+        $getDataSbsn = $this->PohonAnggaran->getDataSisaDataTidakTerserap("sbsn");
+        $getDataTotal = $this->PohonAnggaran->getDataSisaDataTidakTerserap("total");
+
+        $getDataRpmSwakelola = $this->PohonAnggaran->getDataSisaDataTidakTerserap("rpm", "AU");
+        $getDataSbsnSwakelola = $this->PohonAnggaran->getDataSisaDataTidakTerserap("sbsn", "AU");
+        $getDataPhlnSwakelola = $this->PohonAnggaran->getDataSisaDataTidakTerserap("phln", "AU");
+
+
+        $getDataRpmDrop = $this->PohonAnggaran->getDataSisaDataTidakTerserap("rpm", "", true);
+        $getDataSbsnDrop = $this->PohonAnggaran->getDataSisaDataTidakTerserap("sbsn", "", true);
+        $getDataPhlnDrop = $this->PohonAnggaran->getDataSisaDataTidakTerserap("phln", "", true);
+
+
+        $dataRpmSyc = $this->PohonAnggaran->getDataSisaLelang('RPM', ['SYC ']);
+        $dataSbsnSyc = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['SYC ']);
+        $dataPhlnSyc = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['SYC ']);
+
+
+        $dataRpmMyc = $this->PohonAnggaran->getDataSisaLelang('RPM', ['MYC ', 'MYC Baru ', 'MYC Lanjutan ']);
+        $dataSbsnMyc = $this->PohonAnggaran->getDataSisaLelang('SBSN', ['MYC ', 'MYC Baru ', 'MYC Lanjutan ']);
+        $dataPhlnMyc = $this->PohonAnggaran->getDataSisaLelang('PHLN', ['MYC ', 'MYC Baru ', 'MYC Lanjutan ']);
+
+        $dataRpmSyc_val = $dataRpmSyc['nilai_kontrak'];
+        $dataSbsnSyc_val = $dataSbsnSyc['nilai_kontrak'];
+        $dataPhlnSyc_val = $dataPhlnSyc['nilai_kontrak'];
+
+        $dataRpmMyc_val = $dataRpmMyc['nilai_kontrak'];
+        $dataSbsnMyc_val = $dataSbsnMyc['nilai_kontrak'];
+        $dataPhlnMyc_val = $dataPhlnMyc['nilai_kontrak'];
+
+
+
         $data = array(
             'title' => 'Dana Tidak Terserap',
-            'getDataRpm' => $this->PohonAnggaran->getDataSisaDataTidakTerserap("rpm"),
-            'getDataPhln' => $this->PohonAnggaran->getDataSisaDataTidakTerserap("phln"),
-            'getDataSbsn' => $this->PohonAnggaran->getDataSisaDataTidakTerserap("sbsn"),
-            'getDataTotal' => $this->PohonAnggaran->getDataSisaDataTidakTerserap("total")
+            'getDataRpm' => $getDataRpm,
+            'getDataPhln' => $getDataPhln,
+            'getDataSbsn' => $getDataSbsn,
+            'getDataTotal' => $getDataTotal,
+
+            // Sisa Drop
+            'getSisaDropRpm' =>  $getDataRpmDrop['monika_data']['pagu'] - $getDataRpm['monika_data']['prognosis'],
+            'getSisaDropSbsn' =>  $getDataSbsnDrop['monika_data']['pagu'] - $getDataSbsn['monika_data']['prognosis'],
+            'getSisaDropPhln' =>  $getDataPhlnDrop['monika_data']['pagu'] - $getDataPhln['monika_data']['prognosis'],
+
+            // Sisa Swakelola
+            'getSisaSwakelolaRpm' =>  $getDataRpmSwakelola['monika_data']['pagu'] - $getDataRpm['monika_data']['prognosis'],
+            'getSisaSwakelolaSbsn' =>  $getDataSbsnSwakelola['monika_data']['pagu']  - $getDataSbsn['monika_data']['prognosis'],
+            'getSisaSwakelolaPhln' =>  $getDataPhlnSwakelola['monika_data']['pagu'] - $getDataPhln['monika_data']['prognosis'],
+
+            //sisa lelang SYC
+            'getSisaLelangRpmSyc' => $dataRpmSyc_val,
+            'getSisaLelangSbsnSyc' => $dataSbsnSyc_val,
+            'getSisaLelangPhlnSyc' => $dataPhlnSyc_val,
+
+            //sisa lelang MYC
+            'getSisaLelangRpmMyc' => $dataRpmMyc_val,
+            'getSisaLelangSbsnMyc' => $dataSbsnMyc_val,
+            'getSisaLelangPhlnMyc' => $dataPhlnMyc_val,
+
+
+
+
+
+
+
         );
 
         return view('Modules\Admin\Views\PosturAnggaran\Dana-tidak-terserap', $data);
