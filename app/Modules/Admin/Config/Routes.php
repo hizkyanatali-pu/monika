@@ -235,8 +235,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('get-data/(:any)/(:any)', '\Modules\Admin\Controllers\DokumenpkArsip::getDataArsip/$1/$2');
                     $routes->post('arsipkan', '\Modules\Admin\Controllers\DokumenpkArsip::arsipkanDokumen');
                     $routes->post('restore', '\Modules\Admin\Controllers\DokumenpkArsip::restoreArsip');
-                    $routes->post('delete-permanent', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanent');
-                    $routes->post('delete-permanent-multiple', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanentMultiple');
+
+                    //sementara didisabled dulu
+                    // $routes->post('delete-permanent', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanent');
+                    // $routes->post('delete-permanent-multiple', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanentMultiple');
                 });
                 $routes->group('eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::eselon1');
