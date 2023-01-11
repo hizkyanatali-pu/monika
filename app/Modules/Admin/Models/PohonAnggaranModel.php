@@ -62,15 +62,14 @@ class PohonAnggaranModel extends Model
         */
 
         $whereCondition = " WHERE ";
-        if (array_key_exists('status_tender', $w)) { 
+        if (array_key_exists('status_tender', $w)) {
             if (is_array($w['status_tender'])) {
-                $mapStatusTender = array_map(function($arr) {
+                $mapStatusTender = array_map(function ($arr) {
                     return "'$arr'";
                 }, $w['status_tender']);
                 $implodeStatustender = implode(",", $mapStatusTender);
                 $whereCondition .= " status_tender IN ($implodeStatustender) ";
-            }
-            else {
+            } else {
                 $whereCondition .= " status_tender = :status_tender: ";
             }
         }
@@ -78,7 +77,7 @@ class PohonAnggaranModel extends Model
         if (array_key_exists('jenis_kontrak', $w)) {
             $preffixCondition = $whereCondition == " WHERE " ? "" : "AND";
 
-            $mapJenisKontrak = array_map(function($arr) {
+            $mapJenisKontrak = array_map(function ($arr) {
                 return "'$arr'";
             }, $w['jenis_kontrak']);
             $implodeJenisKontrak = implode(",", $mapJenisKontrak);
@@ -101,32 +100,44 @@ class PohonAnggaranModel extends Model
         return $return;
     }
 
-    public function getDataSisaDataTidakTerserap($sumber_dana = "")
+    public function getDataSisaDataTidakTerserap($sumber_dana = "", $pengadaan = [], $drop = '')
     {
         ini_set('max_execution_time', 0);
+
+        $wherePengadaan = '';
+        if (count($pengadaan) > 0) {
+            $mapJenisKontrak = array_map(function ($arr) {
+                return "'$arr'";
+            }, $pengadaan);
+            $implodeJenisKontrak = implode(",", $mapJenisKontrak);
+            // $whereInJenisKontrak = "AND (SELECT jenis_kontrak FROM monika_kontrak_{$this->user['tahun']} c WHERE SUBSTRING_INDEX(c.kdpaket, '.', -5) = SUBSTRING_INDEX(a.kode, '.', 5) LIMIT 1) IN ($implodeJenisKontrak)";
+            $wherePengadaan = "AND pengadaan IN ($implodeJenisKontrak)";
+        }
+
+        // $wherePengadaan = isset($pengadaan) ? " AND pengadaan IN (".$pengadaan.")" : "";
+
+        $whereDrop = $drop ? " AND real_$sumber_dana < 1 AND prognosis < 1 AND pengadaan NOT IN ('AU','S')" : "";
+
+
 
 
         $db = \Config\Database::connect();
         $qdata['monika_data'] = $db->query("SELECT
-	SUM(prognosis) / 1000 as prognosis
-    FROM
-	monika_data_{$this->user['tahun']} md
-
-    WHERE
-    pagu_$sumber_dana != 0
-    AND pagu_$sumber_dana IS NOT NULL
+        SUM(prognosis) / 1000 as prognosis,SUM(pagu_$sumber_dana)/1000 as pagu, 
+        SUM(pagu_$sumber_dana - prognosis) / 1000 AS sisaPagu
+        FROM
+        monika_data_{$this->user['tahun']} md
+        WHERE
+        pagu_$sumber_dana != 0
+        AND pagu_$sumber_dana IS NOT NULL $wherePengadaan $whereDrop
             
         
         ")->getRowArray();
 
         $qdata['monika_rekap'] = $db->query("SELECT
-    pagu_rpm,pagu_sbsn,pagu_phln,pagu_total,real_rpm,real_sbsn,real_phln,real_total
-
-        FROM
-       monika_rekap_unor_{$this->user['tahun']}
-
-    WHERE
-    kdunit = '06'
+        pagu_rpm,pagu_sbsn,pagu_phln,pagu_total,real_rpm,real_sbsn,real_phln,real_total
+        FROM monika_rekap_unor_{$this->user['tahun']}
+        WHERE kdunit = '06'
         
     
     ")->getRowArray();
@@ -135,7 +146,6 @@ class PohonAnggaranModel extends Model
 
         return $qdata;
     }
-
 
     public function getDataBelumLelangNilai($w = "", $nama_pagu = "", $_filterDateStart = null, $_filterDateEnd = null)
     {
@@ -295,7 +305,7 @@ class PohonAnggaranModel extends Model
         $db = \Config\Database::connect();
 
         ($where != false ? $where = " AND monika_data_{$this->user['tahun']}.$sumber_dana != 0 AND monika_data_{$this->user['tahun']}.$sumber_dana IS NOT NULL" : $where = "");
-        
+
         $whereCondition_dateFilter = "";
         if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " AND (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) >= '$_filterDateStart' AND  (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) <= '$_filterDateEnd' ";
 
@@ -360,10 +370,10 @@ WHERE
         $db = \Config\Database::connect();
 
         ($where != false ? $where = " AND monika_data_{$this->user['tahun']}.$sumber_dana != 0 AND monika_data_{$this->user['tahun']}.$sumber_dana IS NOT NULL" : $where = "");
-        
+
         $whereCondition_dateFilter = "";
         if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " AND (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) >= '$_filterDateStart' AND  (DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m-%d')) <= '$_filterDateEnd' ";
-        
+
         $data = $db->query("
         
         SELECT
@@ -430,9 +440,8 @@ WHERE
         $whereMonthYear = "";
         if (!is_null($_bulan)) {
             // $whereMonthYear = " AND DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y') = '" . session("userData.tahun") . "' ";
-            $whereMonthYear = " AND DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m') $_rangeMonthOperation '" . session("userData.tahun").'-'.$_bulan . "' ";
-        }
-        else {
+            $whereMonthYear = " AND DATE_FORMAT(STR_TO_DATE(tgl_rencana_lelang, '%d-%m-%Y'), '%Y-%m') $_rangeMonthOperation '" . session("userData.tahun") . '-' . $_bulan . "' ";
+        } else {
             if ($full) {
                 $whereMonthYear = "  ";
             } else {
@@ -456,20 +465,22 @@ WHERE
 
 
 
-    public function getDataRencanaTender_detail4Bulan($_pagu) {
+    public function getDataRencanaTender_detail4Bulan($_pagu)
+    {
         return [
             'pagu' => 'aleksander'
         ];
     }
-    
-    
-    
-    public function getDataSisaLelang($_namaPagu, $_jenisKontrak=[], $selectList=false) {
+
+
+
+    public function getDataSisaLelang($_namaPagu, $_jenisKontrak = [], $selectList = false)
+    {
         $db = \Config\Database::connect();
 
         $whereInJenisKontrak = '';
         if (count($_jenisKontrak) > 0) {
-            $mapJenisKontrak = array_map(function($arr) {
+            $mapJenisKontrak = array_map(function ($arr) {
                 return "'$arr'";
             }, $_jenisKontrak);
             $implodeJenisKontrak = implode(",", $mapJenisKontrak);
@@ -484,8 +495,7 @@ WHERE
                 a.nama as nama_paket
             ";
             $limit = "LIMIT 4";
-        }
-        else {
+        } else {
             $select = "
                 sum(a.sisa_lelang) AS nilai_kontrak,
                 count(a.nama) AS jml_paket
@@ -507,7 +517,8 @@ WHERE
         $return = ($selectList) ? $query->getResultArray() : $query->getRowArray();
         return $return;
     }
-    
+
+
 
 
     /*
