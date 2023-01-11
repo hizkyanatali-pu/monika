@@ -398,14 +398,14 @@ class PohonAnggaran extends \App\Controllers\BaseController
         $getDataSbsn = $this->PohonAnggaran->getDataSisaDataTidakTerserap("sbsn");
         $getDataTotal = $this->PohonAnggaran->getDataSisaDataTidakTerserap("total");
 
-        $getDataRpmSwakelola = $this->PohonAnggaran->getDataSisaDataTidakTerserap("rpm", "AU");
-        $getDataSbsnSwakelola = $this->PohonAnggaran->getDataSisaDataTidakTerserap("sbsn", "AU");
-        $getDataPhlnSwakelola = $this->PohonAnggaran->getDataSisaDataTidakTerserap("phln", "AU");
+        $getDataRpmSwakelola = $this->PohonAnggaran->getDataSisaDataTidakTerserap("rpm", ["AU","S"]);
+        $getDataSbsnSwakelola = $this->PohonAnggaran->getDataSisaDataTidakTerserap("sbsn", ["AU","S"]);
+        $getDataPhlnSwakelola = $this->PohonAnggaran->getDataSisaDataTidakTerserap("phln", ["AU","S"]);
 
 
-        $getDataRpmDrop = $this->PohonAnggaran->getDataSisaDataTidakTerserap("rpm", "", true);
-        $getDataSbsnDrop = $this->PohonAnggaran->getDataSisaDataTidakTerserap("sbsn", "", true);
-        $getDataPhlnDrop = $this->PohonAnggaran->getDataSisaDataTidakTerserap("phln", "", true);
+        $getDataRpmDrop = $this->PohonAnggaran->getDataSisaDataTidakTerserap("rpm", [], true);
+        $getDataSbsnDrop = $this->PohonAnggaran->getDataSisaDataTidakTerserap("sbsn", [], true);
+        $getDataPhlnDrop = $this->PohonAnggaran->getDataSisaDataTidakTerserap("phln", [], true);
 
 
         $dataRpmSyc = $this->PohonAnggaran->getDataSisaLelang('RPM', ['SYC ']);
@@ -435,14 +435,14 @@ class PohonAnggaran extends \App\Controllers\BaseController
             'getDataTotal' => $getDataTotal,
 
             // Sisa Drop
-            'getSisaDropRpm' =>  $getDataRpmDrop['monika_data']['pagu'] - $getDataRpm['monika_data']['prognosis'],
-            'getSisaDropSbsn' =>  $getDataSbsnDrop['monika_data']['pagu'] - $getDataSbsn['monika_data']['prognosis'],
-            'getSisaDropPhln' =>  $getDataPhlnDrop['monika_data']['pagu'] - $getDataPhln['monika_data']['prognosis'],
+            'getSisaDropRpm' =>  $getDataRpmDrop['monika_data']['sisaPagu'],
+            'getSisaDropSbsn' =>  $getDataSbsnDrop['monika_data']['sisaPagu'] ,
+            'getSisaDropPhln' =>  $getDataPhlnDrop['monika_data']['sisaPagu'] ,
 
             // Sisa Swakelola
-            'getSisaSwakelolaRpm' =>  $getDataRpmSwakelola['monika_data']['pagu'] - $getDataRpm['monika_data']['prognosis'],
-            'getSisaSwakelolaSbsn' =>  $getDataSbsnSwakelola['monika_data']['pagu']  - $getDataSbsn['monika_data']['prognosis'],
-            'getSisaSwakelolaPhln' =>  $getDataPhlnSwakelola['monika_data']['pagu'] - $getDataPhln['monika_data']['prognosis'],
+            'getSisaSwakelolaRpm' =>  $getDataRpmSwakelola['monika_data']['sisaPagu'] ,
+            'getSisaSwakelolaSbsn' =>  $getDataSbsnSwakelola['monika_data']['sisaPagu']  ,
+            'getSisaSwakelolaPhln' =>  $getDataPhlnSwakelola['monika_data']['sisaPagu'] ,
 
             //sisa lelang SYC
             'getSisaLelangRpmSyc' => $dataRpmSyc_val,

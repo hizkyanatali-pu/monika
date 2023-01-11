@@ -152,10 +152,10 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <small class="text-left">
+                                            <!-- <small class="text-left">
                                                 Catatan* : <br>
                                                 Masih terdapat Dana Drop Food Estate Kalteng yang akan direalokasi ke Bencana NTB&NTT(sedang revisi DIPA).
-                                            </small>
+                                            </small> -->
                                         </li>
 
                                         <li class="" style="width: 25% !important">
@@ -186,10 +186,10 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <small class="text-left">
+                                            <!-- <small class="text-left">
                                                 **Catatan : <br>
                                                 Masih terdapat Dana PEN Sungai yang akan direalokasi ke Bendungan (sedang revisi DIPA) dan SIsa Tanah untuk Tambahan Eskalasi dan Dana Bencana
-                                            </small>
+                                            </small> -->
                                         </li>
 
                                         <li class="" style="width: 25% !important">
