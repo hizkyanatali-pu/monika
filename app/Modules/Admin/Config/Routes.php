@@ -234,6 +234,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
                     $routes->get('get-data/(:any)/(:any)', '\Modules\Admin\Controllers\DokumenpkArsip::getDataArsip/$1/$2');
                     $routes->post('arsipkan', '\Modules\Admin\Controllers\DokumenpkArsip::arsipkanDokumen');
+                    $routes->post('arsipkan-multiple', '\Modules\Admin\Controllers\DokumenpkArsip::arsipkanMultipleDokumen');
                     $routes->post('restore', '\Modules\Admin\Controllers\DokumenpkArsip::restoreArsip');
                     $routes->post('delete-permanent', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanent');
                     $routes->post('delete-permanent-multiple', '\Modules\Admin\Controllers\DokumenpkArsip::deletePermanentMultiple');

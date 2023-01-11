@@ -109,6 +109,7 @@
             <!-- <button class="btn btn-icon btn-warning">
            <i class="fas fa-sync-alt"></i>
                                 </button> -->
+
             <?php if ($isAdmin) { ?>
                 <?php if (isset($dataBelumInput)) { ?>
                     <div class="tab-pane fade show" id="belum-input" role="tabpanel" aria-labelledby="belum-input-tab">
@@ -141,6 +142,10 @@
 
 
             <div class="tab-pane fade show active" id="pills-one" role="tabpanel" aria-labelledby="pills-one-tab">
+                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="hold">
+                    <i class="fas fa-trash"></i> Arsipkan Data Terchecklist
+                </button>
+
                 <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="hold">
                     <i class="fas fa-sync"></i> Refresh Data
                 </button>
@@ -148,6 +153,9 @@
                 <table class="table table-bordered" id="table-hold">
                     <thead>
                         <tr class="text-center">
+                            <th width="15px">
+                                <input type="checkbox" name="checkall" data-status="hold" />
+                            </th>
                             <th width="25px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
@@ -163,6 +171,10 @@
 
 
             <div class="tab-pane fade" id="pills-two" role="tabpanel" aria-labelledby="pills-two-tab">
+                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="setuju">
+                    <i class="fas fa-trash"></i> Arsipkan Data Terchecklist
+                </button>
+
                 <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="setuju">
                     <i class="fas fa-sync"></i> Refresh Data
                 </button>
@@ -170,6 +182,9 @@
                 <table class="table table-bordered" id="table-setuju">
                     <thead>
                         <tr class="text-center">
+                            <th width="15px">
+                                <input type="checkbox" name="checkall" data-status="setuju" />
+                            </th>
                             <th width="30px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
@@ -186,6 +201,10 @@
 
 
             <div class="tab-pane fade" id="pills-three" role="tabpanel" aria-labelledby="pills-three-tab">
+                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="tolak">
+                    <i class="fas fa-trash"></i> Arsipkan Data Terchecklist
+                </button>
+
                 <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="tolak">
                     <i class="fas fa-sync"></i> Refresh Data
                 </button>
@@ -193,6 +212,9 @@
                 <table class="table table-bordered" id="table-tolak">
                     <thead>
                         <tr class="text-center">
+                            <th width="15px">
+                                <input type="checkbox" name="checkall" data-status="tolak" />
+                            </th>
                             <th width="30px">No</th>
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
@@ -621,6 +643,70 @@
 
 
 
+    $(document).on('click', '.__deletePermanenMultiple', function() {
+        let tempCheck = [],
+            checklist = $('input[type=checkbox][name=checklist-multiple-delete][data-status='+$(this).data('target')+']:checked')
+
+        checklist.each((index, element) => {
+            tempCheck.push($(element).val())
+        })
+
+        if (tempCheck.length > 0) {
+            Swal.fire({
+                title: 'Hapus Permanen',
+                text: "Apakah anda yakin mengarsipkan semua data yang telah di pilih",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#000',
+                confirmButtonText: 'Ya, Arsipkan',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: "<?php echo site_url('dokumenpk/arsip/arsipkan-multiple') ?>",
+                        type: 'POST',
+                        data: {
+                            csrf_test_name: $('input[name=csrf_test_name]').val(),
+                            id: tempCheck
+                        },
+                        success: (res) => {
+                            Swal.fire(
+                                'Berhasil',
+                                'Dokumen telah di hapus secara permanent',
+                                'success'
+                            )
+
+                            setTimeout(() => {
+                                location.reload()
+                            }, 1500)
+                        }
+                    })
+                }
+            })
+        }
+        else {
+            Swal.fire({
+                title: 'Oops',
+                text: "anda belum memilih data untuk di hapus",
+                type: "warning",
+                showCancelButton: false,
+                confirmButtonColor: '#000',
+                confirmButtonText: 'OK'
+            })
+        }
+    })
+    
+    
+    
+    $(document).on('click', 'input:checkbox[name=checkall]', function() {
+        let rowChild = $('input:checkbox[name=checklist-multiple-delete]').parents('tr').find('td')
+
+        $('input:checkbox[name=checklist-multiple-delete]').prop('checked', this.checked);
+    });
+
+
+
     function getData(_status) {
         $.ajax({
             url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>",
@@ -716,6 +802,9 @@
 
             const tr = $(`
                 <tr id="_dokumen-row-${data.id}">
+                    <td class="text-center">
+                        <input type="checkbox" name="checklist-multiple-delete" value="${data.id}" data-status="${data.status}" />
+                    </td>
                     <td class="text-center">${ index+1 }</td>
                     <td>
                         PERJANJIAN KINERJA ${data.dokumenTitle}

@@ -360,6 +360,7 @@
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"></script>
 <script>
     var timerUserTyping = '',
         element_formTable = $('._table-form').find('tbody'),
@@ -378,6 +379,8 @@
 
 
     $(document).ready(function() {
+        $('#templateTableList').sortable();
+
         $('#table').DataTable({
             scrollX: true
         })

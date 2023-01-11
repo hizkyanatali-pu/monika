@@ -95,6 +95,22 @@ class DokumenpkArsip extends \App\Controllers\BaseController
             'status' => true
         ]);
     }
+    
+    
+    
+    public function arsipkanMultipleDokumen()
+    {
+        foreach ($this->request->getPost('id') as $key => $value) {
+            $this->dokumenSatker->where('id', $this->request->getPost('id'));
+            $this->dokumenSatker->update([
+                'deleted_at' => date("Y-m-d H:i:s")
+            ]);
+        }
+
+        return $this->respond([
+            'status' => true
+        ]);
+    }
 
 
 

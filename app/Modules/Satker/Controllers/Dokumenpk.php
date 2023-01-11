@@ -432,6 +432,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->where('satkerid', $session_satkerId)
             ->where('balaiid', $session_balaiId)
             ->where("status != ", 'revision')
+            ->where("deleted_at is null")
             ->where("tahun", $sessionYear)->orderBy('id', 'desc')->get()->getRow();
 
         $templateDokumen = $this->templateDokumen->where('id', $id)->get()->getRow();
@@ -636,6 +637,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->where('satkerid', $session_satkerId)
             ->where('balaiid', $session_balaiId)
             ->where("status != ", 'revision')
+            ->where("deleted_at is null")
             ->where("tahun = '$_createdYear'")->orderBy('id', 'desc')->get()->getRow();
 
         $dokumentType = $this->templateDokumen->select("type")->where('id', $_templateId)->get()->getRow();
