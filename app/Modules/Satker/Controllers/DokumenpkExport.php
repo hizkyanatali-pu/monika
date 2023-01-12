@@ -325,7 +325,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType, $qrcode)
     {
-        $pdf->SetMargins(0, 2, 0, 0);
+        $pdf->SetMargins(0, 25, 0, 0);
         $pdf->AddPage('L', 'A4');
         $pdf->SetAutoPageBreak(false);
         // $headerTarget = $_detailDokumenType == 'target' ? 'TARGET ' : 'OUTCOME ';
@@ -637,8 +637,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         // $pdf->watermarkBorder_offsetLeft = 254;
 
                         //koreksi
-                        $pdf->watermarkOffsetLeft        = 244.5;
-                        $pdf->watermarkBorder_width      = 33;
+                        $pdf->watermarkOffsetLeft        = 243.5;
+                        $pdf->watermarkBorder_width      = 24;
                         $pdf->watermarkBorder_offsetLeft = 240;
                     } else {
                         $pdf->watermarkOffsetLeft        = 243;
@@ -664,8 +664,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         // $pdf->watermarkBorder_offsetLeft = 255;
 
                         //revisi
-                        $pdf->watermarkOffsetLeft        = 247;
-                        $pdf->watermarkBorder_width      = 33;
+                        $pdf->watermarkOffsetLeft        = 246;
+                        $pdf->watermarkBorder_width      = 24;
                         $pdf->watermarkBorder_offsetLeft = 240;
                     } else {
                         $pdf->watermarkOffsetLeft        = 250;
@@ -682,8 +682,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     // $pdf->watermarkBorder_offsetLeft = 256;
 
                     //konsep 
-                    $pdf->watermarkOffsetLeft        = 246;
-                    $pdf->watermarkBorder_width      = 33;
+                    $pdf->watermarkOffsetLeft        = 244;
+                    $pdf->watermarkBorder_width      = 24;
+    
                     $pdf->watermarkBorder_offsetLeft = 240;
 
 
@@ -834,7 +835,7 @@ class PDF extends FPDF
 
     function Header()
     {
-        if ($this->PageNo() == 1) {
+        if ($this->PageNo() == 1 || $this->PageNo() == 2 || $this->PageNo() || 3) {
             $this->SetLineWidth(0.2);
             // border merah
             // $this->SetDrawColor(220,20,60);
@@ -842,15 +843,15 @@ class PDF extends FPDF
 
             //bg hitam
             $this->SetDrawColor(0, 0, 0);
-            $this->Rect($this->watermarkBorder_offsetLeft, 16, $this->watermarkBorder_width, 13, 'D');
+            $this->Rect($this->watermarkBorder_offsetLeft, 16, $this->watermarkBorder_width, 5, 'D');
 
             //Put the watermark
-            $this->SetFont('Times', 'B', 15);
+            $this->SetFont('Times', 'B', 11);
             // $this->SetTextColor(255, 192, 203);
             //$this->RotatedText($this->watermarkOffsetLeft, 110, $this->watermarkText, 0);
             // $this->SetTextColor(220,20,60); //text merah
             $this->SetTextColor(0, 0, 0); //text hitam
-            $this->RotatedText($this->watermarkOffsetLeft, 24, $this->watermarkText, 0);
+            $this->RotatedText($this->watermarkOffsetLeft, 20, $this->watermarkText, 0);
 
 
             $this->SetFont('Times', 'B', 40);
