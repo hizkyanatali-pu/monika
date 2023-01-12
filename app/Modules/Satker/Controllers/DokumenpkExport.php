@@ -325,7 +325,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType, $qrcode)
     {
-        $pdf->SetMargins(0, 13, 0, 0);
+        $pdf->SetMargins(0, 16, 0, 0);
         $pdf->AddPage('L', 'A4');
         $pdf->SetAutoPageBreak(false);
         // $headerTarget = $_detailDokumenType == 'target' ? 'TARGET ' : 'OUTCOME ';
