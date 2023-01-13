@@ -132,3 +132,4 @@ nb-configuration.xml
 /.php-cs-fixer.php
 
 monika-sda.code-workspace
+public/
