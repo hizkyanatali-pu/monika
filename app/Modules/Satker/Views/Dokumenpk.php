@@ -142,6 +142,7 @@
                                 </div>
                             </td>
                             <td class="d-flex justify-content-start">
+                                <div class="btn-load">
                                 <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
                                     <i class="fas fa-eye"></i> <br/> Lihat
                                 </button>
@@ -158,6 +159,7 @@
                                         <i class="fas fa-edit"></i> <br/> Edit
                                     </button>
                                 <?php } ?>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -171,7 +173,7 @@
 
 
 <!-- Modal Form -->
-<div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true">
+<div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -223,7 +225,7 @@
 
 
 <!-- Modal Opsi Cetak Dokumen Terevisi -->
-<div class="modal fade" id="modal-cetak-dokumen-revisioned" tabindex="-1" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true">
+<div class="modal fade" id="modal-cetak-dokumen-revisioned" tabindex="-1" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body p-0">
@@ -238,7 +240,7 @@
 
 
 <!-- Modal Preview Cetak Dokumen -->
-<div class="modal fade" id="modal-preview-cetak" tabindex="-1" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true">
+<div class="modal fade" id="modal-preview-cetak" tabindex="-1" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -263,7 +265,7 @@
 
 
 <!-- Modal satker list created -->
-<div class="modal fade" id="modalSatkerListCreated" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalSatkerListCreated" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
