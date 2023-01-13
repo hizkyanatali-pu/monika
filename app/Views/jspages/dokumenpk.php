@@ -234,7 +234,10 @@
 
     element_btnSaveDokumen.on('click', function() {
         if (saveDokumenValidation()) {
-
+            let oldButtonText = element_btnSaveDokumen.text()
+            element_btnSaveDokumen.addClass('d-none')
+            element_btnSaveDokumen.parent().append('<center>menyimpan dokumen</center>')
+            
             $('input[name=total-anggaran]').prop("disabled", false)
             let formData = getFormValue();
 
@@ -265,6 +268,10 @@
 
     element_btnSaveEditDokumen.on('click', function() {
         if (saveDokumenValidation()) {
+            let oldButtonText = element_btnSaveEditDokumen.text()
+            element_btnSaveEditDokumen.addClass('d-none')
+            element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+
             let formData = getFormValue(),
                 dataId = $(this).data('id')
 
