@@ -153,7 +153,7 @@ $title = $title ?? '';
 
     <?php echo script_tag('plugins/popper.js/dist/umd/popper.js'); ?>
 
-    <?php echo script_tag('plugins/bootstrap/dist/js/bootstrap.min.js'); ?>
+    <?php echo script_tag('plugins/bootstrap/dist/js/bootstrap.min.js?1'); ?>
 
     <?php echo $this->renderSection('upper_footer_js') ?>
 
