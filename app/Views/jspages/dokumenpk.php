@@ -234,30 +234,40 @@
 
     element_btnSaveDokumen.on('click', function() {
         if (saveDokumenValidation()) {
+            let oldButtonText = element_btnSaveDokumen.text()
+            element_btnSaveDokumen.attr('disabled', 'disabled')
+            element_btnSaveDokumen.text('Menyiimpan Dokumen')
 
-            $('input[name=total-anggaran]').prop("disabled", false)
-            let formData = getFormValue();
+            setTimeout(function() {
+                $('input[name=total-anggaran]').prop("disabled", false)
+                let formData = getFormValue();
 
 
-            if ($(this).attr('data-dokumen-id')) {
-                formData['revision_dokumen_id'] = $(this).data('dokumen-id')
-                formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
-            }
+                if ($(this).attr('data-dokumen-id')) {
+                    formData['revision_dokumen_id'] = $(this).data('dokumen-id')
+                    formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
+                }
 
-            $.ajax({
-                url: "<?php echo site_url('dokumenpk/create') ?>",
-                type: 'POST',
-                data: formData,
-                success: (res) => {
-                    if (res.status) {
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/create') ?>",
+                    type: 'POST',
+                    data: formData,
+                    success: (res) => {
+                        if (res.status) {
+                            location.reload()
+                        }
+                        else {
+                            alert('error, terjadi kesalahan pengiriman data, bisa jadi di karenakan jaringan internet anda yang kurang baik')
+                            location.reload()
+                        }
+                    },
+                    fail: (xhr) => {
+                        alert('Terjadi kesalahan pada sistem')
+                        console.log(xhr)
                         location.reload()
                     }
-                },
-                fail: (xhr) => {
-                    alert('Terjadi kesalahan pada sistem')
-                    console.log(xhr)
-                }
-            })
+                })
+            }, 2000)
         }
     })
 
@@ -265,27 +275,38 @@
 
     element_btnSaveEditDokumen.on('click', function() {
         if (saveDokumenValidation()) {
-            let formData = getFormValue(),
+            let oldButtonText = element_btnSaveEditDokumen.text()
+            element_btnSaveEditDokumen.attr('disabled', 'disabled')
+            element_btnSaveEditDokumen.text('Menyiimpan Dokumen')
+
+            setTimeout(function() {
+                let formData = getFormValue(),
                 dataId = $(this).data('id')
 
-            formData['id'] = $(this).data('id')
+                formData['id'] = $(this).data('id')
 
-            $('input[name=total-anggaran]').prop("disabled", false)
+                $('input[name=total-anggaran]').prop("disabled", false)
 
-            $.ajax({
-                url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
-                type: 'POST',
-                data: formData,
-                success: (res) => {
-                    if (res.status) {
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
+                    type: 'POST',
+                    data: formData,
+                    success: (res) => {
+                        if (res.status) {
+                            location.reload()
+                        }
+                        else {
+                            alert('error, terjadi kesalahan pengiriman data, bisa jadi di karenakan jaringan internet anda yang kurang baik')
+                            location.reload()
+                        }
+                    },
+                    fail: (xhr) => {
+                        alert('Terjadi kesalahan pada sistem')
+                        console.log(xhr)
                         location.reload()
                     }
-                },
-                fail: (xhr) => {
-                    alert('Terjadi kesalahan pada sistem')
-                    console.log(xhr)
-                }
-            })
+                })
+            }, 2000)
         }
     })
 
