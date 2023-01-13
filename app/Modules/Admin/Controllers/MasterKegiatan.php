@@ -23,15 +23,14 @@ class MasterKegiatan extends \App\Controllers\BaseController
     public function index()
     {
         return view('Modules\Admin\Views\MasterKegiatan\index.php', [
-            'tahunAnggaran' => $this->user['tahun'],
+            'tahunAnggaran' => $this->user['tahun'] ,
             'mainData'      => $this->tGiat->getWhere(['tahun_anggaran' => $this->user['tahun']])->getResult()
         ]);
     }
 
 
 
-    public function exportDataToExcel()
-    {
+    public function exportDataToExcel() {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -68,20 +67,20 @@ class MasterKegiatan extends \App\Controllers\BaseController
 
         $mainData = $this->tGiat->getWhere(['tahun_anggaran' => $this->user['tahun']])->getResult();
         foreach ($mainData as $key => $data) :
-            $row = $key + 3;
-            $sheet->setCellValue('A' . $row, $data->kdgiat);
-            $sheet->setCellValue('B' . $row, $data->nmgiat);
-            $sheet->setCellValue('C' . $row, $data->kddept);
-            $sheet->setCellValue('D' . $row, $data->kdunit);
-            $sheet->setCellValue('E' . $row, $data->kdprogram);
-            $sheet->setCellValue('F' . $row, $data->kdfungsi);
-            $sheet->setCellValue('G' . $row, $data->kdsfung);
-            $sheet->setCellValue('H' . $row, $data->kdes2);
-            $sheet->setCellValue('I' . $row, $data->kdprogout);
+            $row = $key+3;
+            $sheet->setCellValue('A'.$row, $data->kdgiat);
+            $sheet->setCellValue('B'.$row, $data->nmgiat);
+            $sheet->setCellValue('C'.$row, $data->kddept);
+            $sheet->setCellValue('D'.$row, $data->kdunit);
+            $sheet->setCellValue('E'.$row, $data->kdprogram);
+            $sheet->setCellValue('F'.$row, $data->kdfungsi);
+            $sheet->setCellValue('G'.$row, $data->kdsfung);
+            $sheet->setCellValue('H'.$row, $data->kdes2);
+            $sheet->setCellValue('I'.$row, $data->kdprogout);
         endforeach;
 
         $writer = new Xlsx($spreadsheet);
-        $filename = $this->user['tahun'] . '-Data Kegiatan-' . date('Y-m-d-His');
+        $filename = $this->user['tahun'].'-Data Kegiatan-'.date('Y-m-d-His');
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename=' . $filename . '.xlsx');
@@ -92,15 +91,14 @@ class MasterKegiatan extends \App\Controllers\BaseController
 
 
 
-    public function importDataToExcel()
-    {
+    public function importDataToExcel() {
         $file = $this->request->getFile('file');
         $filename = $file->getName();
-        if (file_exists('uploads/' . $filename)) unlink('uploads/' . $filename);
+        if (file_exists('uploads/'.$filename)) unlink('uploads/'.$filename);
         $file->move('uploads', $filename);
-
+        
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
-        $spreadsheet = $reader->load('uploads/' . $filename);
+        $spreadsheet = $reader->load('uploads/'.$filename);
         $sheet = $spreadsheet->getActiveSheet();
         $rows = $sheet->toArray();
 
@@ -127,7 +125,7 @@ class MasterKegiatan extends \App\Controllers\BaseController
         $this->tGiat->delete();
         $this->tGiat->insertBatch($tempInsert);
 
-        unlink('uploads/' . $filename);
+        unlink('uploads/'.$filename);
 
         header("Content-Type: application/json");
         return json_encode([
