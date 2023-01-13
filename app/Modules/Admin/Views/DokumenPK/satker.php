@@ -240,7 +240,7 @@
 
 
 <!-- Modal Preview Cetak Dokumen -->
-<div class="modal fade" id="modal-preview-cetak" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true">
+<div class="modal fade" id="modal-preview-cetak" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -264,7 +264,7 @@
 
 
 <!-- Modal Form Detail -->
-<div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true">
+<div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true"  data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -302,7 +302,7 @@
 
 
 <!-- Modal Cetak Dokumen Terevisi -->
-<div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true">
+<div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true"  data-backdrop="static">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body p-0">
