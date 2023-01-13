@@ -319,8 +319,9 @@
             templateId: $(this).data('template-id'),
             beforeModalMount: (res) => {
                 //get session satker
+                let sessionUserLevelId = res.dokumen.dokumen_type == 'balai' ? res.dokumen.balaiid : res.dokumen.satkerid
                 $.ajax({
-                    url: "<?php echo site_url('dokumenpk/get-list-template-buat-dokumen') ?>" + "/" + res.dokumen.dokumen_type + "/" + res.dokumen.satkerid,
+                    url: "<?php echo site_url('dokumenpk/get-list-template-buat-dokumen') ?>" + "/" + res.dokumen.dokumen_type + "/" + sessionUserLevelId,
                     type: 'GET',
                     success: (res) => {
 
