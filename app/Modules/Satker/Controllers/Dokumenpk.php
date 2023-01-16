@@ -719,8 +719,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         
         } else {
             $queryDataGiat = ($info == "KEGIATAN" ? $this->kegiatan->where('tahun_anggaran', $this->user['tahun'])
-                ->whereNotIn('nmgiat', json_decode($exits)) : $this->program->whereIn("kdprogram",["FC","WA"])
-                ->whereNotIn('nmprogram', json_decode($exits)));
+                ->whereNotIn('nmgiat', json_decode($exits)) : $this->program
+                ->whereNotIn('nmprogram', json_decode($exits)) );
         }
 
 
