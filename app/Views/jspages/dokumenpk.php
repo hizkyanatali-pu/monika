@@ -796,7 +796,7 @@
 
                 Swal.fire(
                     'Peringatan',
-                    'Nama dan Anggaran Kegiatan belum terisi',
+                    'Nama dan Anggaran belum terisi',
                     'warning'
                 )
                 return false
