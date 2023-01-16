@@ -691,7 +691,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ')
             ->where('revision_master_dokumen_id', $id)
             ->orWhere('id', $id)
-            ->orderBy('id', 'DESC')
+            ->orderBy('revision_number', 'DESC')
             ->get()->getResult();
 
         return $this->respond([
