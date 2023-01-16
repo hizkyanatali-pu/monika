@@ -183,7 +183,6 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->where('dokumenpk_satker.status !=', 'revision')
             ->where('dokumenpk_satker.dokumen_type', 'satker')
             ->where("dokumenpk_satker.tahun", $this->user['tahun'])
-            ->groupBy('dokumenpk_satker.id')
             ->orderBy('dokumenpk_satker.id', 'DESC');
 
         if ($_satkerId == 'all') {
