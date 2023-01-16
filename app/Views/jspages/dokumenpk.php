@@ -788,6 +788,8 @@
             element_rowItem_anggaran_kegiatan = $('.__table-kegiatan').find('tbody tr').last().find("input[name='kegiatan-anggaran']").val(),
             kegiatan = []
 
+            info = $(this).data("info");
+
         if (element_rowItem_anggaran_kegiatan != undefined) {
 
             if (element_rowItem_anggaran_kegiatan == 0 || element_rowItem_anggaran_kegiatan == null) {
@@ -817,7 +819,7 @@
 
         $('select.select2').select2({
             ajax: {
-                url: "<?php echo site_url('dokumenpk/get-tgiat-for-formpk?exists=') ?>" + JSON.stringify(kegiatan),
+                url: "<?php echo site_url('dokumenpk/get-tgiat-for-formpk?exists=') ?>" + JSON.stringify(kegiatan)+"&info="+info,
                 dataType: 'json'
             }
         })
@@ -1333,7 +1335,7 @@
                                     <th class="text-center">Nama ${ capitalizeFirstLetter(template.info_title) }</th>
                                     <th class="text-center" width="250px">Nominal Anggaran</th>
                                     <th width="50px">
-                                        <button class="btn btn-sm btn-primary" id="__add-item-kegiatan">
+                                        <button class="btn btn-sm btn-primary" id="__add-item-kegiatan" data-info = "${template.info_title}">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </th>

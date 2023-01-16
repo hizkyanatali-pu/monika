@@ -30,6 +30,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->satker   = $this->db->table('m_satker');
         $this->balai    = $this->db->table('m_balai');
         $this->kegiatan = $this->db->table('tgiat');
+        $this->program = $this->db->table('tprogram');
+
 
         $this->kota = $this->db->table('tkabkota');
 
@@ -705,28 +707,36 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         $search = $_GET['term'] ?? '';
         $exits = $_GET['exists'];
+        $info = $_GET['info'];
+
+
 
         if ($exits == "[]") {
 
-            $queryDataGiat = $this->kegiatan->where('tahun_anggaran', $this->user['tahun']);
+            
+            $queryDataGiat = ($info == "KEGIATAN" ? $this->kegiatan->where('tahun_anggaran', $this->user['tahun']):$this->program->whereIn("kdprogram",["FC","WA"]));
+        
+        
         } else {
-            $queryDataGiat = $this->kegiatan->where('tahun_anggaran', $this->user['tahun'])
-                ->whereNotIn('nmgiat', json_decode($exits));
+            $queryDataGiat = ($info == "KEGIATAN" ? $this->kegiatan->where('tahun_anggaran', $this->user['tahun'])
+                ->whereNotIn('nmgiat', json_decode($exits)) : $this->program->whereIn("kdprogram",["FC","WA"])
+                ->whereNotIn('nmprogram', json_decode($exits)));
         }
 
 
 
 
         if ($search) {
-            $queryDataGiat->like('nmgiat', $search);
+            $info == "KEGIATAN" ? $queryDataGiat->like('nmgiat', $search) :  $queryDataGiat->like('nmprogram', $search);
         }
 
-        $dataGiat = $queryDataGiat->orderBy('nmgiat', 'ASC')->get()->getResult();
-
+        $dataGiat = $info == "KEGIATAN" ? $queryDataGiat->orderBy('nmgiat', 'ASC')->get()->getResult():$queryDataGiat->orderBy('nmprogram', 'ASC')->get()->getResult();
+        
         $dataGiatResults = array_map(function ($arr) {
+            $idselect = (isset($arr->nmgiat) ? $arr->nmgiat:$arr->nmprogram);
             return [
-                "id"   => $arr->nmgiat,
-                "text" => $arr->nmgiat
+                "id"   =>$idselect,
+                "text" => $idselect
             ];
         }, $dataGiat);
 
