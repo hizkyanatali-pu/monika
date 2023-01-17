@@ -452,19 +452,19 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 switch ($_detailDokumenType) {
                     case 'target':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
-                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 3, ',', '.'), '0'), ','). ' ' . $data['target_satuan'];
+                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 5, ',', '.'), '0'), ','). ' ' . $data['target_satuan'];
 
                         break;
 
                     case 'outcome':
                         // $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 3) . ' ' . $data['outcome_satuan'];
-                        $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 3, ',', '.'), '0'), ',') . ' ' . $data['outcome_satuan'];
+                        $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 5, ',', '.'), '0'), ',') . ' ' . $data['outcome_satuan'];
 
                         break;
 
                     case 'output':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
-                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 3, ',', '.'), '0'), ',') . ' ' . $data['target_satuan'];
+                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 5, ',', '.'), '0'), ',') . ' ' . $data['target_satuan'];
 
 
                         break;
