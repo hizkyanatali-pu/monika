@@ -820,7 +820,8 @@
         $('select.select2').select2({
             ajax: {
                 url: "<?php echo site_url('dokumenpk/get-tgiat-for-formpk?exists=') ?>" + JSON.stringify(kegiatan)+"&info="+info,
-                dataType: 'json'
+                dataType: 'json',
+                cache: false
             }
         })
     })
