@@ -709,18 +709,18 @@ class Dokumenpk extends \App\Controllers\BaseController
         $exits = $_GET['exists'];
         $info = $_GET['info'];
 
-
-
+       
         if ($exits == "[]") {
 
             
-            $queryDataGiat = ($info == "KEGIATAN" ? $this->kegiatan->where('tahun_anggaran', $this->user['tahun']):$this->program->whereIn("kdprogram",["FC","WA"]));
+            $queryDataGiat = ($info == "KEGIATAN" ? $this->kegiatan->where('tahun_anggaran', $this->user['tahun']):
+            $this->program->whereIn("kdprogram",["FC","WA"]));
         
         
         } else {
             $queryDataGiat = ($info == "KEGIATAN" ? $this->kegiatan->where('tahun_anggaran', $this->user['tahun'])
-                ->whereNotIn('nmgiat', json_decode($exits)) : $this->program
-                ->whereNotIn('nmprogram', json_decode($exits)))->whereIn("kdprogram",["FC","WA"]);
+                ->whereNotIn('nmgiat', json_decode($exits)) : 
+                $this->program->whereNotIn('nmprogram', json_decode($exits))->whereIn("kdprogram",["FC","WA"]));
         }
 
 
@@ -732,6 +732,12 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $dataGiat = $info == "KEGIATAN" ? $queryDataGiat->orderBy('nmgiat', 'ASC')->get()->getResult():$queryDataGiat->orderBy('nmprogram', 'ASC')->get()->getResult();
         
+
+        // $query = $this->db->getLastQuery();
+
+     
+
+
         $dataGiatResults = array_map(function ($arr) {
             $idselect = (isset($arr->nmgiat) ? $arr->nmgiat:$arr->nmprogram);
             return [
