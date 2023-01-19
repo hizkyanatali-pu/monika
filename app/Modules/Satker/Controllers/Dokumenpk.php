@@ -440,9 +440,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         $templateDokumen = $this->templateDokumen->where('id', $id)->get()->getRow();
 
         $templateRows = array_map(function ($arr) use ($session_userType, $session_balaiId, $templateDokumen, $dokumenExistSameYear) {
-            $targetDefualtValue      = '';
-            $targetBalaiDefualtValue = '';
-            $outcomeDefaultValue     = '';
+            $targetDefualtValue      = 0;
+            $targetBalaiDefualtValue = 0;
+            $outcomeDefaultValue     = 0;
 
             if ($dokumenExistSameYear) {
                 $rowDokumenExistsValue = $this->dokumenSatker_rows
@@ -453,15 +453,15 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             if ($session_userType == "satker") {
                 if ($dokumenExistSameYear) {
-                    $targetDefualtValue = $rowDokumenExistsValue->target_value ?? '';
-                    $outcomeDefaultValue = $rowDokumenExistsValue->outcome_value ?? '';
+                    $targetDefualtValue = $rowDokumenExistsValue->target_value ?? 0;
+                    $outcomeDefaultValue = $rowDokumenExistsValue->outcome_value ?? 0;
                 }
             }
 
             if ($session_userType == "balai") {
                 if ($templateDokumen->type == 'satker') {
-                    $targetDefualtValue = $rowDokumenExistsValue->target_value ?? '';
-                    $outcomeDefaultValue = $rowDokumenExistsValue->outcome_value ?? '';
+                    $targetDefualtValue = $rowDokumenExistsValue->target_value ?? 0;
+                    $outcomeDefaultValue = $rowDokumenExistsValue->outcome_value ?? 0;
                 } else {
                     if ($dokumenExistSameYear) {
                         $targetBalaiDefualtValue = $rowDokumenExistsValue->target_value ?? '';
@@ -492,6 +492,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                     }
                 }
             }
+
+            // print_r($session_userType);exit;
 
             if ($templateDokumen->type == 'eselon1') {
                 $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResultArray();

@@ -819,9 +819,9 @@
 
         $('select.select2').select2({
             ajax: {
-                url: "<?php echo site_url('dokumenpk/get-tgiat-for-formpk?exists=') ?>" + JSON.stringify(kegiatan)+"&info="+info,
+                url: "<?php echo site_url('dokumenpk/get-tgiat-for-formpk?exists=') ?>" + JSON.stringify(kegiatan)+"&info="+info+"&_=" + new Date().getTime(),
                 dataType: 'json',
-                cache: false
+                cache: true
             }
         })
     })

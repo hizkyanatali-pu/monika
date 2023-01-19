@@ -311,11 +311,13 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 });
 
                 $routes->get('get-tgiat-for-formpk', '\Modules\Satker\Controllers\Dokumenpk::getTgiatForFormPk');
+                $routes->get('rekap', '\Modules\Admin\Controllers\RekapPk::pdf');
             });
 
 
             $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Satker\Controllers\Dokumenpk::balaiSatker/$1');
             $routes->get('panduan', '\Modules\Satker\Controllers\Dokumenpk::panduanpk');
+
         }
     }
 });

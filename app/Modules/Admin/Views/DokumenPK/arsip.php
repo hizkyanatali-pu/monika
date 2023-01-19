@@ -181,7 +181,30 @@
     </div>
 </div>
 <!-- end-of: Modal Preview Cetak Dokumen -->
+
+<!-- Modal Cetak Dokumen Terevisi -->
+<div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true"  data-backdrop="static">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        
+        <div class="modal-content">
+        <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Pilih Dokumen :</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="list-group">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal Cetak Dokumen Terevisi -->
+
 <?= $this->endSection() ?>
+
+
 
 
 
@@ -196,7 +219,9 @@
     var element_tableHold = '',
         element_tableSetuju = '',
         element_tableTolak = '',
-        element_modalPreviewCetakDokumen = $('#modal-preview-cetak')
+        element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
+        element_modalListRevision = $('#modal-cetak-dokumen-revisioned')
+
 
 
 
@@ -548,5 +573,48 @@
             }
         })
     }
+
+    $(document).on('click', '.__open-list-revisioned', function() {
+        let dokumenMasterID = $(this).data('dokumen-master-id')
+
+        $.ajax({
+            url: "<?php echo site_url('dokumenpk/satker/get-list-revisioned/') ?>" + dokumenMasterID,
+            type: 'GET',
+            success: (res) => {
+                let list = ''
+                res.dokumenList.forEach((data, key) => {
+                    let listTitle = 'Dokumen Awal',
+                        activeClass = '',
+                        activeSubTitle = '',
+                        buttonData_toConfirm = false
+
+                    if (data.revision_master_number) listTitle = 'Koreksi #' + data.revision_number
+                    if (data.status == 'setuju') {
+                        activeClass = 'active bg-success border-success'
+                        activeSubTitle = '<div><small>Telah di setujui</small></div>'
+                    }
+                    if (data.is_revision_same_year == '1') {
+                        listTitle = 'Revisi'
+                        activeClass = 'active bg-danger border-danger'
+                    }
+                    if (key == 0 && data.status == 'hold') buttonData_toConfirm = true
+
+                    list += `
+                        <button 
+                            class="list-group-item list-group-item-action ${activeClass} __preview-dokumen"
+                            data-id="${data.id}"
+                            data-to-confirm="${buttonData_toConfirm}"
+                        >
+                            ${listTitle}
+                            ${activeSubTitle}
+                        </button>
+                    `
+                })
+
+                element_modalListRevision.find('.list-group').html(list)
+            }
+        })
+        element_modalListRevision.modal('show')
+    })
 </script>
 <?= $this->endSection() ?>
