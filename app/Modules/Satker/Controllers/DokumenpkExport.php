@@ -133,7 +133,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         /** Dokumen Detail 2 */
         // dd($dataDokumen['dokumen_type']);
-        if ($dataDokumen['dokumen_type'] == 'balai') {
+        if ($dataDokumen['dokumen_type'] == 'balai' || $dataDokumen['dokumen_type'] == 'eselon2') {
 
             $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'output', $qrcode);
         } else {
@@ -452,7 +452,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 switch ($_detailDokumenType) {
                     case 'target':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
-                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ','). ' ' . $data['target_satuan'];
+                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' . $data['target_satuan'];
 
                         break;
 
@@ -684,7 +684,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     //konsep 
                     $pdf->watermarkOffsetLeft        = 244;
                     $pdf->watermarkBorder_width      = 24;
-    
+
                     $pdf->watermarkBorder_offsetLeft = 240;
 
 
