@@ -876,8 +876,9 @@
 
     function cetakDokumen(_dokumenID, _toConfirm) {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/export-pdf/') ?>" + _dokumenID,
+            url: "<?php echo site_url('dokumenpk/satker/export-pdf/') ?>" + _dokumenID+"?_="+ new Date().getTime(),
             type: 'GET',
+            cache: false,
             success: (res) => {
                 $('#modal-cetak-dokumen-revisioned').modal('hide')
 
