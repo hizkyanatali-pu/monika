@@ -716,7 +716,7 @@
 
     function getData(_status) {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>",
+            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>"+"?_="+ new Date().getTime(),
             type: 'GET',
             success: (res) => {
                 renderTableRow(_status, res.data)
