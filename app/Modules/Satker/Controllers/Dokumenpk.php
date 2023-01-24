@@ -696,6 +696,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ')
             ->where('revision_master_dokumen_id', $id)
             ->orWhere('id', $id)
+            ->where('deleted_at',null)
             ->orderBy('revision_number', 'DESC')
             ->get()->getResult();
 
