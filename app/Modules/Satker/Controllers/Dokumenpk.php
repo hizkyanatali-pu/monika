@@ -685,20 +685,27 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-    public function getListRevisioned($id)
+    public function getListRevisioned($id,$feature=false)
     {
-        $dokumenList = $this->dokumenSatker->select('
+
+        
+        
+        $this->dokumenSatker->select('
             id,
             revision_master_number,
             revision_number,
             status,
             is_revision_same_year
-        ')
-            ->where('revision_master_dokumen_id', $id)
-            ->where('deleted_at is null')
-            ->orWhere('id', $id)
-            ->orderBy('revision_number', 'DESC')
-            ->get()->getResult();
+        ');
+        $this->dokumenSatker->where('revision_master_dokumen_id', $id);
+        if($feature == false){
+
+        $this->dokumenSatker->where('deleted_at is null');
+
+        }
+        $this->dokumenSatker->orWhere('id', $id);
+        $this->dokumenSatker->orderBy('revision_number', 'DESC');
+        $dokumenList =  $this->dokumenSatker->get()->getResult();
 
         return $this->respond([
             'dokumenList' => $dokumenList

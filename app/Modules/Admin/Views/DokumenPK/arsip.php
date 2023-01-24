@@ -578,7 +578,7 @@
         let dokumenMasterID = $(this).data('dokumen-master-id')
 
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-list-revisioned/') ?>" + dokumenMasterID,
+            url: "<?php echo site_url('dokumenpk/satker/get-list-revisioned/') ?>" + dokumenMasterID+"/"+true,
             type: 'GET',
             success: (res) => {
                 let list = ''
