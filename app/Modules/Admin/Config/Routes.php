@@ -225,6 +225,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             });
 
             $routes->group('dokumenpk', ['namespace' => 'App\Controllers'], function ($routes) {
+                $routes->get('satker', '\Modules\Admin\Controllers\Dokumenpk::satker');
                 $routes->get('dashboard', '\Modules\Admin\Controllers\Dokumenpk::dashboard');
 
                 $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
@@ -294,8 +295,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('list-satker-balai', '\Modules\Satker\Controllers\Dokumenpk::listSatkerBalai');
                 
                 $routes->group('satker', ['namespace' => 'App\Controllers'], function ($routes) {
-                    $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::satker');
-
                     $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
                     $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
                     $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
