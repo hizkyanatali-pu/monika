@@ -478,6 +478,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                             ->where('dokumen_pk_template_rowrumus.rumus', $data->rumus)
                             ->where('dokumenpk_satker.balaiid', $session_balaiId)
                             ->where('dokumenpk_satker.status', 'setuju')
+                            ->where('dokumenpk_satker.deleted_at is null')
                             ->where('dokumenpk_satker.tahun', $this->user['tahun'])
                             ->where('dokumenpk_satker_rows.is_checked', '1')
                             ->get()->getResult();
