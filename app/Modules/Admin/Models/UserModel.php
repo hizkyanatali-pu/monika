@@ -14,7 +14,7 @@ class UserModel extends Model
 
 	protected $allowedFields = [
 		'uid', 'idpengguna', 'balaiid', 'satkerid', 'sandi', 'email',
-		'nama', 'nip', 'telpon', 'gambar','aktif','aksi','in_dt','in_user','group_id','idkelompok'
+		'nama', 'nip', 'telpon', 'gambar','aktif','aksi','in_dt','in_user','group_id','idkelompok','user_pk'
 	];
 
 	protected $useTimestamps = false;
