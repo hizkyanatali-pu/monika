@@ -901,8 +901,9 @@
                         })
                         $('.container-revision-alert-cetak').html('')
                     }
+                    // console.log(res);
 
-                    element_iframePreviewDokumen.attr('src', '<?php echo site_url('dokumen-perjanjian-kinerja.pdf') ?>'+ '?_=' + Math.round(Math.random() * 10000000))
+                    element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/'+_dokumenID+ '?preview=true&_=' + Math.round(Math.random() * 10000000))
                     element_modalPreviewCetakDokumen.modal('show')
 
                     if (_toConfirm) {

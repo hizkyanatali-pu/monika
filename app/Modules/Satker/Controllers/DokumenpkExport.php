@@ -146,12 +146,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         if ($_GET['preview']) {
-            $nm_file = "PK " . str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . " - " . str_replace(array('DIREKTUR', 'DIREKTORAT'), array("MENTERI", "KEMENTERIAN"), str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+            $nm_file = date('Ymdhis')."_PK " . str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . " - " . str_replace(array('DIREKTUR', 'DIREKTORAT'), array("MENTERI", "KEMENTERIAN"), str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
             $pdf->Output('I', $nm_file . '.pdf');
             exit;
         } else {
 
-            $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
+            // $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
             return $this->respond([
                 'dokumen' => $dataDokumen
             ]);
