@@ -49,7 +49,7 @@
                     <div class="kt-section__content">
                         <div class="row">
                             <div class="col-md-12">
-                                <?php echo $piechart['jumlahall'] ?>
+                                <?php //echo $piechart['jumlahall'] ?>
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
@@ -110,9 +110,13 @@
 
 <?= $this->section('footer_js') ?>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="http://static.pureexample.com/js/flot/excanvas.min.js"></script>
+<?php echo script_tag('plugins/flot/jquery.flot.js'); ?>
+<?php echo script_tag('plugins/flot/jquery.flot.pie.js'); ?>
+
+
+<!-- <script src="http://static.pureexample.com/js/flot/excanvas.min.js"></script>
 <script src="http://static.pureexample.com/js/flot/jquery.flot.min.js"></script>
-<script src="http://static.pureexample.com/js/flot/jquery.flot.pie.min.js"></script>
+<script src="http://static.pureexample.com/js/flot/jquery.flot.pie.min.js"></script> -->
 
 <script>
     var data = [
