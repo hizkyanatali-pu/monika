@@ -110,7 +110,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataBelumInput = $this->satker->select("
             m_satker.satker
         ")
-            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1 and m_satker.grup_jabatan = 'satker'")
+            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']} AND `status` != 'revision'
+            AND deleted_at is null) < 1 and m_satker.grup_jabatan = 'satker'")
             ->get()->getResult();
 
         $dataBelumInput = array_map(function ($arr) {
@@ -134,7 +135,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataBelumInput = $this->balai->select("
             balai
         ")
-            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='balai' and balaiid=m_balai.balaiid and tahun={$this->user['tahun']} and status='setuju') < 1 AND kota_penanda_tangan != ''")
+            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='balai' and balaiid=m_balai.balaiid and tahun={$this->user['tahun']} and status='setuju' AND `status` != 'revision'
+            AND deleted_at is null) < 1 AND kota_penanda_tangan != ''")
             ->get()->getResult();
 
         $dataBelumInput = array_map(function ($arr) {
@@ -158,7 +160,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataBelumInput = $this->satker->select("
         m_satker.satker
     ")
-        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='eselon2' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1 and m_satker.grup_jabatan = 'eselon2'")
+        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='eselon2' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']} AND `status` != 'revision'
+		AND deleted_at is null) < 1 and m_satker.grup_jabatan = 'eselon2'")
         ->get()->getResult();
 
     $dataBelumInput = array_map(function ($arr) {
@@ -184,7 +187,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dataBelumInput = $this->satker->select("
         m_satker.satker
     ")
-        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='eselon1' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1 and m_satker.grup_jabatan = 'eselon1'")
+        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='eselon1' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']} AND `status` != 'revision'
+		AND deleted_at is null) < 1 and m_satker.grup_jabatan = 'eselon1'")
         ->get()->getResult();
 
     $dataBelumInput = array_map(function ($arr) {
