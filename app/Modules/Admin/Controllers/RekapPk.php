@@ -12,6 +12,8 @@ use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Endroid\QrCode\Writer\PngWriter;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 
 class RekapPK extends \App\Controllers\BaseController
@@ -20,9 +22,14 @@ class RekapPK extends \App\Controllers\BaseController
     public function __construct()
     {
         $this->db = \Config\Database::connect();
-
+        date_default_timezone_set('Asia/Jakarta');
         $this->balai  = $this->db->table('m_balai');
         $this->satker  = $this->db->table('m_satker');
+        $session = session();
+        $this->user = $session->get('userData');
+
+        // $this->fontFamily = 'Arial';
+        $this->sectionWidth = 265;
     }
 
     public function pdf()
@@ -32,12 +39,10 @@ class RekapPK extends \App\Controllers\BaseController
 
         $balai_s =  $this->balai->select('balai,balaiid')->where("jabatan_penanda_tangan_pihak_1 !=", "")->get()->getResult();
 
-
-
-
+        
         $no = 1;
         foreach ($grup_jabatan as $key => $grup) {
-            echo $grup . "<br>";
+            // echo $grup . "<br>";
 
             switch ($grup) {
                 case 'ESELON II':
@@ -72,24 +77,72 @@ class RekapPK extends \App\Controllers\BaseController
 
 
             foreach ($satker_s as $satker) {
-                echo $no . ". " . $satker->satker . "<br>";
+                // echo $no . ". " . $satker->satker . "<br>";
                 $no++;
             }
         }
 
         foreach ($balai_s as $key => $balai) {
-            $satker_s =  $this->satker->select('satker')->where('balaiid', $balai->balaiid)->get()->getResult();
+            $satker_ss =  $this->satker->select('satker')->where('balaiid', $balai->balaiid)->get()->getResult();
 
+            // echo $balai->balai . "<br>";
 
-
-
-            echo $balai->balai . "<br>";
-
-            foreach ($satker_s as $key => $satker) {
-                echo $no . ". " . $satker->satker . "<br>";
+            foreach ($satker_ss as $key => $satker) {
+                // echo $no . ". " . $satker->satker . "<br>";
                 $no++;
             }
         }
+
+        $tanggal = date('d');
+        $month = date('m');
+        if($month == '1') {
+            $bulan = 'Januari';
+        } else if($month == '2') {
+            $bulan = 'Februari';
+        } else if($month == '3') {
+            $bulan = 'Maret';
+        } else if($month == '4') {
+            $bulan = 'April';
+        } else if($month == '5') {
+            $bulan = 'Mei';
+        } else if($month == '6') {
+            $bulan = 'Juni';
+        } else if($month == '7') {
+            $bulan = 'Juli';
+        } else if($month == '8') {
+            $bulan = 'Agustus';
+        } else if($month == '9') {
+            $bulan = 'September';
+        } else if($month == '10') {
+            $bulan = 'Oktober';
+        } else if($month == '11') {
+            $bulan = 'November';
+        } else if($month == '12') {
+            $bulan = 'Desember';
+        }
+        $tahun = date('Y');
+        $jam = date('H:i:s');
+
+        $data = array(
+            'session_year'      => $this->user['tahun'],
+            'tanggal'           => $tanggal,
+            'bulan'             => $bulan,
+            'tahun'             => $tahun,
+            'jam'               => $jam,
+            'group_jabatan'     => $grup_jabatan,
+            'balai_s'           => $balai_s
+
+        );
+
+        // return view('Modules\Admin\Views\Cetak_rekap', $data);
+
+        $pdf = new Dompdf();
+        $pdf->set_option('isRemoteEnabled', TRUE);
+        $pdf->loadHtml(view('Modules\Admin\Views\Cetak_rekap', $data), 'UTF-8');
+        $pdf->setPaper('A4', 'landscape');
+        $pdf->render();
+        $pdf->stream('rekapcoba.pdf', array('Attachment' => 0));
+
     }
 }
 

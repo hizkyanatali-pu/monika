@@ -12,7 +12,8 @@
         "hermawan/codeigniter4-datatables": "^0.3.0",
         "rogervila/array-diff-multidimensional": "^2.0",
         "phpoffice/phpspreadsheet": "^1.23",
-        "endroid/qr-code": "^4.6"
+        "endroid/qr-code": "^4.6",
+        "dompdf/dompdf": "^2.0"
     },
     "require-dev": {
         "mikey179/vfsstream": "1.6.*",
