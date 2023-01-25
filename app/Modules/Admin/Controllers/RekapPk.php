@@ -42,7 +42,7 @@ class RekapPK extends \App\Controllers\BaseController
             switch ($grup) {
                 case 'ESELON II':
                     # code...
-                    $satker_s =  $this->satker->select('satker')->where('grup_jabatan', "eselon2")->Orwhere('satkerid', 352611)->get()->getResult();
+                    $satker_s =  $this->satker->select('satker')->where('grup_jabatan', "eselon2")->get()->getResult();
                     break;
 
                 case 'UPT/BALAI':

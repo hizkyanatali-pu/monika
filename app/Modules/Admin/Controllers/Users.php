@@ -178,6 +178,7 @@ class Users extends \App\Controllers\BaseController
                 'balaiid'    => $this->request->getVar('balaiid'),
                 'satkerid'   => $this->request->getVar('satkerid'),
                 'group_id'   => $this->request->getVar('group_id'),
+                'user_pk'      => 1
             ]);
 
             if($saved)

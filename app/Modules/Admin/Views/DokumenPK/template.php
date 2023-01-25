@@ -379,7 +379,7 @@
 
 
     $(document).ready(function() {
-        $('#templateTableList').sortable();
+        // $('#templateTableList').sortable();
 
         $('#table').DataTable({
             scrollX: true
