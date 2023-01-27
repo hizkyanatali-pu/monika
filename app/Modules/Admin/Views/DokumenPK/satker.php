@@ -1,6 +1,6 @@
 <?php
-    $session = session();
-    $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
+$session = session();
+$isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 ?>
 
 <?= $this->extend('admin/layouts/default') ?>
@@ -264,7 +264,7 @@
 
 
 <!-- Modal Form Detail -->
-<div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true"  data-backdrop="static">
+<div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -289,7 +289,7 @@
                 <div class="p-4 d-none" id="make-dokumen">
                 </div>
             </div>
-            
+
             <div class="modal-footer d-none">
                 <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
                 <button type="button" class="btn btn-success __save-update-dokumen d-none">Simpan Dokumen</button>
@@ -302,11 +302,11 @@
 
 
 <!-- Modal Cetak Dokumen Terevisi -->
-<div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true"  data-backdrop="static">
+<div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        
+
         <div class="modal-content">
-        <div class="modal-header">
+            <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Pilih Dokumen :</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -336,7 +336,7 @@
 
 <script>
     var isAdmin = '<?php echo $isAdmin ?>'
-        element_tableHold = '',
+    element_tableHold = '',
         element_tableSetuju = '',
         element_tableTolak = '',
         element_tableBelumInput = '',
@@ -414,7 +414,7 @@
                 element_tableTolak.clear().draw()
                 break;
         }
-        
+
         if (status != 'belum-input') {
             getData(status)
         }
@@ -652,7 +652,7 @@
 
     $(document).on('click', '.__deletePermanenMultiple', function() {
         let tempCheck = [],
-            checklist = $('input[type=checkbox][name=checklist-multiple-delete][data-status='+$(this).data('target')+']:checked')
+            checklist = $('input[type=checkbox][name=checklist-multiple-delete][data-status=' + $(this).data('target') + ']:checked')
 
         checklist.each((index, element) => {
             tempCheck.push($(element).val())
@@ -691,8 +691,7 @@
                     })
                 }
             })
-        }
-        else {
+        } else {
             Swal.fire({
                 title: 'Oops',
                 text: "Tidak Ada Data Terpilih",
@@ -703,9 +702,9 @@
             })
         }
     })
-    
-    
-    
+
+
+
     $(document).on('click', 'input:checkbox[name=checkall]', function() {
         let rowChild = $('input:checkbox[name=checklist-multiple-delete]').parents('tr').find('td')
 
@@ -716,7 +715,7 @@
 
     function getData(_status) {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>"+"?_="+ new Date().getTime(),
+            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>" + "?_=" + new Date().getTime(),
             type: 'GET',
             success: (res) => {
                 renderTableRow(_status, res.data)
@@ -855,9 +854,9 @@
             }
         });
     }
-    
-    
-    
+
+
+
     function renderTableRowBelumInput(_data) {
         element_tableBelumInput.clear().draw()
 
@@ -876,7 +875,7 @@
 
     function cetakDokumen(_dokumenID, _toConfirm) {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/export-pdf/') ?>" + _dokumenID+"?_="+ new Date().getTime(),
+            url: "<?php echo site_url('dokumenpk/satker/export-pdf/') ?>" + _dokumenID + "?_=" + new Date().getTime(),
             type: 'GET',
             cache: false,
             success: (res) => {
@@ -903,7 +902,7 @@
                     }
                     // console.log(res);
 
-                    element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/'+_dokumenID+ '?preview=true&_=' + Math.round(Math.random() * 10000000))
+                    element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
                     element_modalPreviewCetakDokumen.modal('show')
 
                     if (_toConfirm) {
@@ -922,6 +921,29 @@
                         element_modalPreviewCetakDokumen.find('.modal-footer').empty()
                     }
                 }, 400)
+            },
+            error: function(XMLHttpRequest, testStatus, error) {
+                if (XMLHttpRequest.readyState == 4) {
+                    // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                    Swal.fire({
+                        type: 'error',
+                        title: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else if (XMLHttpRequest.readyState == 0) {
+                    // Network error (i.e. connection refused, access denied due to CORS, etc.)
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Periksa Jaringan Internet Anda',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                } else {
+                    alert('error');
+                }
+
+
             }
         })
     }

@@ -146,7 +146,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         if ($_GET['preview']) {
-            $nm_file = date('Ymdhis')."_PK " . str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . " - " . str_replace(array('DIREKTUR', 'DIREKTORAT'), array("MENTERI", "KEMENTERIAN"), str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+            $nm_file = date('Ymdhis') . "_PK " . str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . " - " . str_replace(array('DIREKTUR', 'DIREKTORAT'), array("MENTERI", "KEMENTERIAN"), str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
             $pdf->Output('I', $nm_file . '.pdf');
             exit;
         } else {
@@ -169,6 +169,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenOpening($pdf, $dataDokumen)
     {
+        $pdf->SetMargins(17, 10, 17, 0);
         $pdf->AddPage('L', 'A4');
 
         $pdf->SetFont('Arial', 'B', 50);
@@ -204,7 +205,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $dokumenKopTitle2 = $dokumenKopTitle2;
         $dokumenKopTitle3 = $dokumenKopTitle3;
 
-        $pdf->SetFont('Times', 'B', 17);
+        $pdf->SetFont('Times', 'B', 15);
         $pdf->SetFillColor(255);
         $pdf->SetTextColor(0);
         // Kop Title 1
@@ -213,7 +214,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
         // Kop Title 2
-        $pdf->SetFont('Times', 'B', 13);
+        $pdf->SetFont('Times', 'B', 12);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
         // $pdf->SetX((300 - $width_kopTitle2) / 2);
         // $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
@@ -221,7 +222,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         // Kop Title 3
         $kopTitle3 = $dokumenKopTitle3;
-        $pdf->SetFont('Times', 'B', 13);
+        $pdf->SetFont('Times', 'B', 12);
         $width_kopTitle3 = $pdf->GetStringWidth($dokumenKopTitle3) + 6;
         $pdf->SetX((300 - $width_kopTitle3) / 2);
         $pdf->Cell($width_kopTitle3, 6, $kopTitle3, 0, 1, 'C');
