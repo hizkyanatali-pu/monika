@@ -27,7 +27,7 @@ $title = $title ?? '';
 
     <?php echo link_tag('css/style.bundle.min.css?1'); ?>
 
-    <?php echo link_tag('css/styles.css'); ?>
+    <?php echo link_tag('css/styles.css?1'); ?>
 
     <!--begin::Layout Skins(used by all pages) -->
 
