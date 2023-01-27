@@ -271,32 +271,34 @@
                             // die;
 
 
-                            $month = date('m', strtotime($query_satker['created_at']));
-
-                            if($month == '01') {
-                                $bulan = 'Januari';
-                            } else if($month == '02') {
-                                $bulan = 'Februari';
-                            } else if($month == '03') {
-                                $bulan = 'Maret';
-                            } else if($month == '04') {
-                                $bulan = 'April';
-                            } else if($month == '05') {
-                                $bulan = 'Mei';
-                            } else if($month == '06') {
-                                $bulan = 'Juni';
-                            } else if($month == '07') {
-                                $bulan = 'Juli';
-                            } else if($month == '08') {
-                                $bulan = 'Agustus';
-                            } else if($month == '09') {
-                                $bulan = 'September';
-                            } else if($month == '10') {
-                                $bulan = 'Oktober';
-                            } else if($month == '11') {
-                                $bulan = 'November';
-                            } else if($month == '12') {
-                                $bulan = 'Desember';
+                            if(empty($count)) {
+                                $month = date('m', strtotime($query_satker['created_at']));
+    
+                                if($month == '01') {
+                                    $bulan = 'Januari';
+                                } else if($month == '02') {
+                                    $bulan = 'Februari';
+                                } else if($month == '03') {
+                                    $bulan = 'Maret';
+                                } else if($month == '04') {
+                                    $bulan = 'April';
+                                } else if($month == '05') {
+                                    $bulan = 'Mei';
+                                } else if($month == '06') {
+                                    $bulan = 'Juni';
+                                } else if($month == '07') {
+                                    $bulan = 'Juli';
+                                } else if($month == '08') {
+                                    $bulan = 'Agustus';
+                                } else if($month == '09') {
+                                    $bulan = 'September';
+                                } else if($month == '10') {
+                                    $bulan = 'Oktober';
+                                } else if($month == '11') {
+                                    $bulan = 'November';
+                                } else if($month == '12') {
+                                    $bulan = 'Desember';
+                                }
                             }
                         ?>
                         <tr>
