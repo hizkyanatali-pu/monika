@@ -25,7 +25,7 @@ $title = $title ?? '';
 
     <?php echo link_tag('plugins/sweetalert2/dist/sweetalert2.css'); ?>
 
-    <?php echo link_tag('css/style.bundle.min.css'); ?>
+    <?php echo link_tag('css/style.bundle.min.css?1'); ?>
 
     <?php echo link_tag('css/styles.css'); ?>
 
