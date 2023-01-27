@@ -23,8 +23,10 @@ class RekapPK extends \App\Controllers\BaseController
     {
         $this->db = \Config\Database::connect();
         date_default_timezone_set('Asia/Jakarta');
-        $this->balai  = $this->db->table('m_balai');
-        $this->satker  = $this->db->table('m_satker');
+        $this->balai                   = $this->db->table('m_balai');
+        $this->satker                  = $this->db->table('m_satker');
+        $this->dokumenPK_satker        = $this->db->table('dokumenpk_satker');
+        $this->dokumenPK_akses         = $this->db->table('dokumen_pk_template_akses');
         $session = session();
         $this->user = $session->get('userData');
 
@@ -95,23 +97,23 @@ class RekapPK extends \App\Controllers\BaseController
 
         $tanggal = date('d');
         $month = date('m');
-        if($month == '1') {
+        if($month == '01') {
             $bulan = 'Januari';
-        } else if($month == '2') {
+        } else if($month == '02') {
             $bulan = 'Februari';
-        } else if($month == '3') {
+        } else if($month == '03') {
             $bulan = 'Maret';
-        } else if($month == '4') {
+        } else if($month == '04') {
             $bulan = 'April';
-        } else if($month == '5') {
+        } else if($month == '05') {
             $bulan = 'Mei';
-        } else if($month == '6') {
+        } else if($month == '06') {
             $bulan = 'Juni';
-        } else if($month == '7') {
+        } else if($month == '07') {
             $bulan = 'Juli';
-        } else if($month == '8') {
+        } else if($month == '08') {
             $bulan = 'Agustus';
-        } else if($month == '9') {
+        } else if($month == '09') {
             $bulan = 'September';
         } else if($month == '10') {
             $bulan = 'Oktober';
@@ -123,6 +125,50 @@ class RekapPK extends \App\Controllers\BaseController
         $tahun = date('Y');
         $jam = date('H:i:s');
 
+
+        $jumlahTotal = $this->dokumenPK_akses->countAllResults();
+
+        $menungguKonfirmasi_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
+            ->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='hold' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
+            ->countAllResults();
+
+        $menungguKonfirmasi_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')
+            ->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='hold' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
+            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+            ->countAllResults();
+        
+        $menungguKonfirmasi_jumlah = $menungguKonfirmasi_satker + $menungguKonfirmasi_balai;
+        $menungguKonfirmasi_persentase = ($menungguKonfirmasi_jumlah / $jumlahTotal) * 100;
+
+        $terverifikasi_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
+            ->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='setuju' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
+            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+            ->countAllResults();
+
+        $terverifikasi_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')
+            ->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='setuju' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
+            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+            ->countAllResults();
+
+        $terverifikasi_jumlah = $terverifikasi_satker + $terverifikasi_balai;
+        $terverifikasi_persentase = ($terverifikasi_jumlah / $jumlahTotal) * 100;
+
+        $ditolak_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
+            ->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='tolak' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
+            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+            ->countAllResults();
+
+        $ditolak_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')
+            ->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='tolak' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
+            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+            ->countAllResults();
+
+        $ditolak_jumlah = $ditolak_satker + $ditolak_balai;
+        $ditolak_persentase = ($ditolak_jumlah / $jumlahTotal) * 100;
+
+        $belumMenginputkan_jumlah = $jumlahTotal - ($menungguKonfirmasi_jumlah + $terverifikasi_jumlah + $ditolak_jumlah);
+        $belumMenginputkan_persentase = ($belumMenginputkan_jumlah / $jumlahTotal) * 100;
+
         $data = array(
             'session_year'      => $this->user['tahun'],
             'tanggal'           => $tanggal,
@@ -130,18 +176,25 @@ class RekapPK extends \App\Controllers\BaseController
             'tahun'             => $tahun,
             'jam'               => $jam,
             'group_jabatan'     => $grup_jabatan,
-            'balai_s'           => $balai_s
+            'balai_s'           => $balai_s,
+            'chart' => [
+                'belum_menginputkan'      => ['persentase' => round($belumMenginputkan_persentase, 2), 'jumlah' => $belumMenginputkan_jumlah],
+                'menunggu_konfirmasi'     => ['persentase' => round($menungguKonfirmasi_persentase, 2), 'jumlah' => $menungguKonfirmasi_jumlah],
+                'terverifikasi'           => ['persentase' => round($terverifikasi_persentase, 2), 'jumlah' => $terverifikasi_jumlah],
+                'ditolak'                 => ['persentase' => round($ditolak_persentase, 2), 'jumlah' => $ditolak_jumlah],
+                'jumlah'                  => $jumlahTotal
+            ]
 
         );
 
-        // return view('Modules\Admin\Views\Cetak_rekap', $data);
+        return view('Modules\Admin\Views\Cetak_rekap', $data);
 
         $pdf = new Dompdf();
         $pdf->set_option('isRemoteEnabled', TRUE);
         $pdf->loadHtml(view('Modules\Admin\Views\Cetak_rekap', $data), 'UTF-8');
         $pdf->setPaper('A4', 'landscape');
         $pdf->render();
-        $pdf->stream('rekapcoba.pdf', array('Attachment' => 0));
+        $pdf->stream('rekapcoba.pdf', array('Attachment' => false));
 
     }
 }
