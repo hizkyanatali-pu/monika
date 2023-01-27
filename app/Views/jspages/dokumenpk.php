@@ -127,8 +127,12 @@
 
         if (!this.checked) {
             rowChild.addClass('disabled')
+            rowChild.find('input').attr('readonly', 'readonly')
+            rowChild.find('input').val('')
         } else {
             rowChild.removeClass('disabled')
+            rowChild.find('input').removeAttr('readonly')
+
         }
     });
 
