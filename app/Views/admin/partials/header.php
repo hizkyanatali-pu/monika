@@ -28,14 +28,14 @@
 		<div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-xl" style="border-radius: 22px;">
 
 			<!--begin: Head -->
-			<div class="kt-user-card kt-user-card--skin-light kt-notification-item-padding-x" style="background-image: url(assets/media/misc/bg-1.jpg); border-radius: 22px 22px 0 0;">
+			<div class="kt-user-card kt-user-card--skin-light kt-notification-item-padding-x" style="background-image: url(../images/bg-1.jpg); border-radius: 22px 22px 0 0;">
 				<div class="kt-user-card__avatar">
 					<!-- <img class="kt-hidden" alt="Pic" src="assets/media/users/300_25.jpg" /> -->
 
 					<!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
-					<span class="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-primary"><?= substr(session('userData.nama'), 0, 1); ?></span>
+					<span class="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-light"><?= substr(session('userData.nama'), 0, 1); ?></span>
 				</div>
-				<div class="kt-user-card__name">
+				<div class="kt-user-card__name text-light">
 					<?= session('userData.nama'); ?>
 				</div>
 			</div>
