@@ -143,7 +143,7 @@
 
             <div class="tab-pane fade show active" id="pills-one" role="tabpanel" aria-labelledby="pills-one-tab">
                 <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="hold">
-                    <i class="fas fa-trash"></i> Arsipkan Data Terchecklist
+                    <i class="fas fa-trash"></i> Arsipkan Data Terpilih
                 </button>
 
                 <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="hold">
@@ -172,7 +172,7 @@
 
             <div class="tab-pane fade" id="pills-two" role="tabpanel" aria-labelledby="pills-two-tab">
                 <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="setuju">
-                    <i class="fas fa-trash"></i> Arsipkan Data Terchecklist
+                    <i class="fas fa-trash"></i> Arsipkan Data Terpilih
                 </button>
 
                 <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="setuju">
@@ -202,7 +202,7 @@
 
             <div class="tab-pane fade" id="pills-three" role="tabpanel" aria-labelledby="pills-three-tab">
                 <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="tolak">
-                    <i class="fas fa-trash"></i> Arsipkan Data Terchecklist
+                    <i class="fas fa-trash"></i> Arsipkan Data Terpilih
                 </button>
 
                 <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="tolak">
@@ -695,7 +695,7 @@
         else {
             Swal.fire({
                 title: 'Oops',
-                text: "anda belum memilih data untuk di hapus",
+                text: "Tidak Ada Data Terpilih",
                 type: "warning",
                 showCancelButton: false,
                 confirmButtonColor: '#000',
