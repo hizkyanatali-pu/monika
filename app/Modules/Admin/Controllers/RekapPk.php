@@ -126,48 +126,6 @@ class RekapPK extends \App\Controllers\BaseController
         $jam = date('H:i:s');
 
 
-        $jumlahTotal = $this->dokumenPK_akses->countAllResults();
-
-        $menungguKonfirmasi_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
-            ->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='hold' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
-            ->countAllResults();
-
-        $menungguKonfirmasi_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')
-            ->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='hold' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
-            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
-            ->countAllResults();
-        
-        $menungguKonfirmasi_jumlah = $menungguKonfirmasi_satker + $menungguKonfirmasi_balai;
-        $menungguKonfirmasi_persentase = ($menungguKonfirmasi_jumlah / $jumlahTotal) * 100;
-
-        $terverifikasi_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
-            ->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='setuju' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
-            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
-            ->countAllResults();
-
-        $terverifikasi_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')
-            ->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='setuju' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
-            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
-            ->countAllResults();
-
-        $terverifikasi_jumlah = $terverifikasi_satker + $terverifikasi_balai;
-        $terverifikasi_persentase = ($terverifikasi_jumlah / $jumlahTotal) * 100;
-
-        $ditolak_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
-            ->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='tolak' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
-            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
-            ->countAllResults();
-
-        $ditolak_balai = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.balaiid=dokumen_pk_template_akses.rev_id)", 'left')
-            ->where("dokumen_pk_template_akses.rev_table='m_balai' AND dokumenpk_satker.status='tolak' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
-            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
-            ->countAllResults();
-
-        $ditolak_jumlah = $ditolak_satker + $ditolak_balai;
-        $ditolak_persentase = ($ditolak_jumlah / $jumlahTotal) * 100;
-
-        $belumMenginputkan_jumlah = $jumlahTotal - ($menungguKonfirmasi_jumlah + $terverifikasi_jumlah + $ditolak_jumlah);
-        $belumMenginputkan_persentase = ($belumMenginputkan_jumlah / $jumlahTotal) * 100;
 
         $data = array(
             'session_year'      => $this->user['tahun'],
@@ -177,13 +135,6 @@ class RekapPK extends \App\Controllers\BaseController
             'jam'               => $jam,
             'group_jabatan'     => $grup_jabatan,
             'balai_s'           => $balai_s,
-            'chart' => [
-                'belum_menginputkan'      => ['persentase' => round($belumMenginputkan_persentase, 2), 'jumlah' => $belumMenginputkan_jumlah],
-                'menunggu_konfirmasi'     => ['persentase' => round($menungguKonfirmasi_persentase, 2), 'jumlah' => $menungguKonfirmasi_jumlah],
-                'terverifikasi'           => ['persentase' => round($terverifikasi_persentase, 2), 'jumlah' => $terverifikasi_jumlah],
-                'ditolak'                 => ['persentase' => round($ditolak_persentase, 2), 'jumlah' => $ditolak_jumlah],
-                'jumlah'                  => $jumlahTotal
-            ]
 
         );
 

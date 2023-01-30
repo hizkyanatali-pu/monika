@@ -5,32 +5,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
-    <!-- <script type="text/javascript">
-   google.charts.load('current', {'packages':['corechart']});
-
-   google.charts.setOnLoadCallback(drawChart);
-
-   function drawChart()
-   {
-    var data = google.visualization.arrayToDataTable([
-     ['Belum Menginputkan'],
-        <?php echo "['" . $chart['belum_menginputkan']['persentase'] . "'],"; ?>
-    ]);
-
-    var options = {
-     title : 'Chart Rekap',
-     pieHole : 0.4,
-     chartArea:{left:100,top:70,width:'100%',height:'80%'}
-    };
-    var chart_area = document.getElementById('piechart');
-    var chart = new google.visualization.PieChart(chart_area);
-
-    google.visualization.events.addListener(chart, 'ready', function(){
-     chart_area.innerHTML = '<img src="' + chart.getImageURI() + '" class="img-responsive">';
-    });
-    chart.draw(data, options);
-   }
 
 </script>     -->
     <style>
@@ -175,6 +149,7 @@
     $menunggu_konfir = 0;
     $acc = 0;
     $reject = 0;
+    $revisi_terverifikasi = 0;
     $session = session();
     $this->user = $session->get('userData');
 
@@ -257,11 +232,12 @@
                         ->join('dokumenpk_satker', 'dokumenpk_satker.balaiid = m_balai.balaiid', 'left')
                         ->where('m_balai.balaiid', $view->balaiid)
                         ->where('dokumenpk_satker.deleted_at IS NULL')
+                        ->where('dokumenpk_satker.satkerid IS NULL')
                         ->orderBy('dokumenpk_satker.id', 'DESC')
                         ->get()->getRowArray();
 
                     $count = $tb_balai->select("m_balai.balai")
-                        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE balaiid=m_balai.balaiid and tahun={$this->user['tahun']} AND deleted_at IS NULL ORDER BY id DESC) < 1 AND balaiid = $view->balaiid")
+                        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE balaiid=m_balai.balaiid and tahun={$this->user['tahun']} AND deleted_at IS NULL AND dokumen_type = 'balai' ORDER BY id DESC) < 1 AND balaiid = $view->balaiid")
                         ->get()->getRowArray();
                 } else {
                     $query_satker = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at, dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
@@ -310,8 +286,10 @@
                 }
 
                 #kondisi
-                if($query_satker['status'] == 'tolak') {
-                    $reject += 1;
+                if(empty($count)) {
+                    if($query_satker['status'] == 'tolak') {
+                        $reject += 1;
+                    }
                 }
 
                 if(empty($count)) {
@@ -353,17 +331,19 @@
                                         } else {
                                             echo date('d', strtotime($query_satker['created_at'])) ?> <?= $bulan ?> <?= date('Y', strtotime($query_satker['created_at']));
                                                                                                                 } ?></td>
-                    <?php if ($query_satker['acc_date'] != NULL || $query_satker['reject_date'] != NULL) {
+                    <?php if (isset($query_satker['acc_date']) != NULL || isset($query_satker['reject_date']) != NULL) {
                         $terverifikasi += 1;
                         ?>
                         <td class="checklist-verif"><img src="<?= 'https://cdn-icons-png.flaticon.com/512/7046/7046050.png' ?>" style="width:25px;height:25px;"></td>
                     <?php } else { ?>
                         <td class="checklist-verif"></td>
                     <?php } ?>
-                    <?php if ($query_satker['revision_same_year_number'] != 0) { ?>
+                    <?php if (isset($query_satker['revision_same_year_number']) != 0) { ?>
                         <td class="link-document"><a href="<?= base_url() ?>/api/showpdf/tampilkan/<?= $query_satker['id'] ?>?preview=true" target="_blank"><img src="<?= 'https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png' ?>" style="width:42px;height:42px;"></a></td>
                         <td class="date"><?php echo date('d', strtotime($query_satker['change_status_at'])) ?> <?= $bulan ?> <?= date('Y', strtotime($query_satker['change_status_at'])) ?></td>
-                        <?php if ($query_satker['acc_date'] != NULL || $query_satker['reject_date'] != NULL) { ?>
+                        <?php if ($query_satker['acc_date'] != NULL || $query_satker['reject_date'] != NULL) { 
+                            $revisi_terverifikasi += 1;    
+                        ?>
                             <td class="checklist-verif"><img src="<?= 'https://cdn-icons-png.flaticon.com/512/7046/7046050.png' ?>" style="width:20px;height:20px;"></td>
                         <?php } else { ?>
                             <td class="checklist-verif"></td>
@@ -492,9 +472,21 @@
                 </tr>
             <?php } ?>
         <?php } ?>
+        <tr>
+            <td class="col-number">-</td>
+            <td>Total <?= $no-1 ?></td>
+            <td class="melapor"><?= $acc ?></td>
+            <td class="melapor"><?= $menunggu_konfir ?></td>
+            <td class="melapor"><?= '-' ?></td>
+            <td class="melapor"><?= '-' ?></td>
+            <td class="melapor"><?= $terverifikasi ?></td>
+            <td class="melapor"><?= '-' ?></td>
+            <td class="melapor"><?= '-' ?></td>
+            <td class="melapor"><?= $revisi_terverifikasi ?></td>
+        </tr>
     </table>
     <br>
-    <div style="page-break-after: always;">
+    <!-- <div style="page-break-after: always;">
         <table width="50%">
             <tr>
                 <th width="50%">Keterangan</th>
@@ -522,7 +514,7 @@
                 <td><?= $terverifikasi ?></td>
             </tr>
         </table>
-    </div>
+    </div> -->
     <?php
     $chart_belum_lapor = ($belum_lapor / $total_jumlah) * 100;
     $chart_menunggu_konfir = ($menunggu_konfir / $total_jumlah) * 100;
@@ -601,7 +593,7 @@
             data: <?php echo $chart_menunggu_konfir ?>,
             color: '#1c81b0'
         },
-        {
+        { 
             label: "Terverifikasi",
             data: <?php echo $chart_acc ?>,
             color: '#1cb02d'
