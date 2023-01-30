@@ -253,7 +253,7 @@
             foreach ($satker_s as $view) {
 
                 if ($grup == 'UPT/BALAI') {
-                    $query_satker = $tb_balai->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at, dokumenpk_satker.id, dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
+                    $query_satker = $tb_balai->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at,  dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
                         ->join('dokumenpk_satker', 'dokumenpk_satker.balaiid = m_balai.balaiid', 'left')
                         ->where('m_balai.balaiid', $view->balaiid)
                         ->where('dokumenpk_satker.deleted_at IS NULL')
@@ -264,7 +264,7 @@
                         ->where("(SELECT count(id) FROM dokumenpk_satker WHERE balaiid=m_balai.balaiid and tahun={$this->user['tahun']} AND deleted_at IS NULL ORDER BY id DESC) < 1 AND balaiid = $view->balaiid")
                         ->get()->getRowArray();
                 } else {
-                    $query_satker = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at, dokumenpk_satker.id, dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
+                    $query_satker = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at, dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
                         ->join('dokumenpk_satker', 'dokumenpk_satker.satkerid = m_satker.satkerid', 'left')
                         ->where('m_satker.satkerid', $view->satkerid)
                         ->where('dokumenpk_satker.deleted_at IS NULL')
@@ -308,6 +308,25 @@
                         $bulan = 'Desember';
                     }
                 }
+
+                #kondisi
+                if($query_satker['status'] == 'tolak') {
+                    $reject += 1;
+                }
+
+                if(empty($count)) {
+                    if($query_satker['acc_date'] == NULL && $query_satker['reject_date'] == NULL)
+                    {
+                        $menunggu_konfir += 1;
+                    }
+                }
+
+                if (!empty($query_satker['acc_date'])) 
+                {
+                    $acc += 1;
+                }
+
+                
             ?>
                 <tr>
                     <td class="col-number"><?= $no++ ?></td>
@@ -336,14 +355,9 @@
                                                                                                                 } ?></td>
                     <?php if ($query_satker['acc_date'] != NULL || $query_satker['reject_date'] != NULL) {
                         $terverifikasi += 1;
-                        if ($query_satker['acc_date'] != NULL) {
-                            $acc += 1;
-                        } else if ($query_satker['reject_date'] != NULL) {
-                            $reject += 1;
-                        }   ?>
+                        ?>
                         <td class="checklist-verif"><img src="<?= 'https://cdn-icons-png.flaticon.com/512/7046/7046050.png' ?>" style="width:25px;height:25px;"></td>
-                    <?php } else {
-                        $menunggu_konfir += 1 ?>
+                    <?php } else { ?>
                         <td class="checklist-verif"></td>
                     <?php } ?>
                     <?php if ($query_satker['revision_same_year_number'] != 0) { ?>
@@ -361,7 +375,11 @@
                     <?php } ?>
                 </tr>
             <?php } ?>
-        <?php } ?>
+        <?php }
+        // var_dump($acc);
+        // die;
+        ?>
+        
         <?php foreach ($balai_s as $balai) {
             $satker_ss =  $tb_satker->select('satker, satkerid')->where('balaiid', $balai->balaiid)->get()->getResult();
         ?>
@@ -370,7 +388,7 @@
             </tr>
             <?php
             foreach ($satker_ss as $satker) {
-                $query_balai = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at, dokumenpk_satker.id, dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
+                $query_balai = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at, dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
                     ->join('dokumenpk_satker', 'dokumenpk_satker.satkerid = m_satker.satkerid', 'left')
                     ->where('m_satker.satkerid', $satker->satkerid)
                     ->where('dokumenpk_satker.deleted_at IS NULL')
@@ -406,7 +424,23 @@
                 } else if ($month == '12') {
                     $bulan = 'Desember';
                 }
-                // var_dump($count_balai);
+
+                if($query_balai['status'] == 'tolak' || $query_balai['reject_date'] != NULL) {
+                    $reject += 1;
+                }
+
+                if(empty($count_balai)) {
+                    if($query_balai['acc_date'] == NULL && $query_balai['reject_date'] == NULL)
+                    {
+                        $menunggu_konfir += 1;
+                    }
+                }
+
+                if (!empty($query_balai['acc_date']))
+                {
+                    $acc += 1;
+                }
+                // var_dump($acc);
                 // die;
             ?>
 
@@ -437,15 +471,9 @@
                                                                                                                 } ?></td>
                     <?php if ($query_balai['acc_date'] != NULL || $query_balai['reject_date'] != NULL) {
                         $terverifikasi += 1;
-                        if ($query_balai['acc_date'] != NULL) {
-                            $acc += 1;
-                        } else if ($query_balai['reject_date'] != NULL) {
-                            $reject += 1;
-                        }
                     ?>
                         <td class="checklist-verif"><img src="<?= 'https://cdn-icons-png.flaticon.com/512/7046/7046050.png' ?>" style="width:25px;height:25px;"></td>
-                    <?php } else {
-                        $menunggu_konfir += 1 ?>
+                    <?php } else { ?>
                         <td class="checklist-verif"></td>
                     <?php } ?>
                     <?php if ($query_balai['revision_same_year_number'] != 0) { ?>
