@@ -319,24 +319,20 @@ class Dokumenpk extends \App\Controllers\BaseController
                     'nama' => $arr->balai
                 ];
             }, $dataBelumInput);
-        }else{
+        } else {
 
-           
-                $dataBelumInput = $this->satker->select("
+
+            $dataBelumInput = $this->satker->select("
                     m_satker.satker
                 ")
-                    ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='".$type."' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1 and m_satker.grup_jabatan='{$type}'")
-                    ->get()->getResult();
-    
-                $returnData = array_map(function ($arr) {
-                    return [
-                        'nama' => $arr->satker
-                    ];
-                }, $dataBelumInput);
-        
+                ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='" . $type . "' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']}) < 1 and m_satker.grup_jabatan='{$type}'")
+                ->get()->getResult();
 
-
-
+            $returnData = array_map(function ($arr) {
+                return [
+                    'nama' => $arr->satker
+                ];
+            }, $dataBelumInput);
         }
 
         return $this->respond([
@@ -686,11 +682,11 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-    public function getListRevisioned($id,$feature=false)
+    public function getListRevisioned($id, $feature = false)
     {
 
-        
-        
+
+
         $this->dokumenSatker->select('
             id,
             revision_master_number,
@@ -699,13 +695,12 @@ class Dokumenpk extends \App\Controllers\BaseController
             is_revision_same_year
         ');
         $this->dokumenSatker->where('revision_master_dokumen_id', $id);
-        if($feature == false){
+        if ($feature == false) {
 
-        $this->dokumenSatker->where('deleted_at is null');
-
+            $this->dokumenSatker->where('deleted_at is null');
         }
         $this->dokumenSatker->orWhere('id', $id);
-        $this->dokumenSatker->orderBy('revision_number', 'DESC');
+        $this->dokumenSatker->orderBy('created_at', 'DESC');
         $dokumenList =  $this->dokumenSatker->get()->getResult();
 
         return $this->respond([
@@ -721,18 +716,16 @@ class Dokumenpk extends \App\Controllers\BaseController
         $exits = $_GET['exists'];
         $info = $_GET['info'];
 
-       
+
         if ($exits == "[]") {
 
-            
-            $queryDataGiat = ($info == "KEGIATAN" ? $this->kegiatan->where('tahun_anggaran', $this->user['tahun']):
-            $this->program->whereIn("kdprogram",["FC","WA"]));
-        
-        
+
+            $queryDataGiat = ($info == "KEGIATAN" ? $this->kegiatan->where('tahun_anggaran', $this->user['tahun']) :
+                $this->program->whereIn("kdprogram", ["FC", "WA"]));
         } else {
             $queryDataGiat = ($info == "KEGIATAN" ? $this->kegiatan->where('tahun_anggaran', $this->user['tahun'])
-                ->whereNotIn('nmgiat', json_decode($exits)) : 
-                $this->program->whereNotIn('nmprogram', json_decode($exits))->whereIn("kdprogram",["FC","WA"]));
+                ->whereNotIn('nmgiat', json_decode($exits)) :
+                $this->program->whereNotIn('nmprogram', json_decode($exits))->whereIn("kdprogram", ["FC", "WA"]));
         }
 
 
@@ -742,18 +735,18 @@ class Dokumenpk extends \App\Controllers\BaseController
             $info == "KEGIATAN" ? $queryDataGiat->like('nmgiat', $search) :  $queryDataGiat->like('nmprogram', $search);
         }
 
-        $dataGiat = $info == "KEGIATAN" ? $queryDataGiat->orderBy('nmgiat', 'ASC')->get()->getResult():$queryDataGiat->orderBy('nmprogram', 'ASC')->get()->getResult();
-        
+        $dataGiat = $info == "KEGIATAN" ? $queryDataGiat->orderBy('nmgiat', 'ASC')->get()->getResult() : $queryDataGiat->orderBy('nmprogram', 'ASC')->get()->getResult();
+
 
         // $query = $this->db->getLastQuery();
 
-     
+
 
 
         $dataGiatResults = array_map(function ($arr) {
-            $idselect = (isset($arr->nmgiat) ? $arr->nmgiat:$arr->nmprogram);
+            $idselect = (isset($arr->nmgiat) ? $arr->nmgiat : $arr->nmprogram);
             return [
-                "id"   =>$idselect,
+                "id"   => $idselect,
                 "text" => $idselect
             ];
         }, $dataGiat);
