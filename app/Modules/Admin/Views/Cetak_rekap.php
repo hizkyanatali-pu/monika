@@ -475,11 +475,11 @@
         <tr>
             <td class="col-number">-</td>
             <td>Total <?= $no-1 ?></td>
+            <td class="melapor"><?= $melapor ?></td>
+            <td class="melapor"><?= $belum_lapor ?></td>
+            <td class="melapor"><?= '-' ?></td>
+            <td class="melapor"><?= '-' ?></td>
             <td class="melapor"><?= $acc ?></td>
-            <td class="melapor"><?= $menunggu_konfir ?></td>
-            <td class="melapor"><?= '-' ?></td>
-            <td class="melapor"><?= '-' ?></td>
-            <td class="melapor"><?= $terverifikasi ?></td>
             <td class="melapor"><?= '-' ?></td>
             <td class="melapor"><?= '-' ?></td>
             <td class="melapor"><?= $revisi_terverifikasi ?></td>
