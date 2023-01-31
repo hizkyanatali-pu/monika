@@ -193,7 +193,7 @@
             switch ($grup) {
                 case 'ESELON II':
                     # code...
-                    $satker_s =  $tb_satker->select('satker, satkerid')->where('grup_jabatan', "eselon2")->Orwhere('satkerid', 352611)->get()->getResult();
+                    $satker_s =  $tb_satker->select('satker, satkerid')->where('grup_jabatan', "eselon2")->get()->getResult();
                     break;
 
                 case 'UPT/BALAI':
@@ -286,25 +286,23 @@
                 }
 
                 #kondisi
-                if(empty($count)) {
-                    if($query_satker['status'] == 'tolak') {
+                if (empty($count)) {
+                    if ($query_satker['status'] == 'tolak') {
                         $reject += 1;
                     }
                 }
 
-                if(empty($count)) {
-                    if($query_satker['acc_date'] == NULL && $query_satker['reject_date'] == NULL)
-                    {
+                if (empty($count)) {
+                    if ($query_satker['acc_date'] == NULL && $query_satker['reject_date'] == NULL) {
                         $menunggu_konfir += 1;
                     }
                 }
 
-                if (!empty($query_satker['acc_date'])) 
-                {
+                if (!empty($query_satker['acc_date'])) {
                     $acc += 1;
                 }
 
-                
+
             ?>
                 <tr>
                     <td class="col-number"><?= $no++ ?></td>
@@ -333,7 +331,7 @@
                                                                                                                 } ?></td>
                     <?php if (isset($query_satker['acc_date']) != NULL || isset($query_satker['reject_date']) != NULL) {
                         $terverifikasi += 1;
-                        ?>
+                    ?>
                         <td class="checklist-verif"><img src="<?= 'https://cdn-icons-png.flaticon.com/512/7046/7046050.png' ?>" style="width:25px;height:25px;"></td>
                     <?php } else { ?>
                         <td class="checklist-verif"></td>
@@ -341,8 +339,8 @@
                     <?php if (isset($query_satker['revision_same_year_number']) != 0) { ?>
                         <td class="link-document"><a href="<?= base_url() ?>/api/showpdf/tampilkan/<?= $query_satker['id'] ?>?preview=true" target="_blank"><img src="<?= 'https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png' ?>" style="width:42px;height:42px;"></a></td>
                         <td class="date"><?php echo date('d', strtotime($query_satker['change_status_at'])) ?> <?= $bulan ?> <?= date('Y', strtotime($query_satker['change_status_at'])) ?></td>
-                        <?php if ($query_satker['acc_date'] != NULL || $query_satker['reject_date'] != NULL) { 
-                            $revisi_terverifikasi += 1;    
+                        <?php if ($query_satker['acc_date'] != NULL || $query_satker['reject_date'] != NULL) {
+                            $revisi_terverifikasi += 1;
                         ?>
                             <td class="checklist-verif"><img src="<?= 'https://cdn-icons-png.flaticon.com/512/7046/7046050.png' ?>" style="width:20px;height:20px;"></td>
                         <?php } else { ?>
@@ -359,7 +357,7 @@
         // var_dump($acc);
         // die;
         ?>
-        
+
         <?php foreach ($balai_s as $balai) {
             $satker_ss =  $tb_satker->select('satker, satkerid')->where('balaiid', $balai->balaiid)->get()->getResult();
         ?>
@@ -405,19 +403,17 @@
                     $bulan = 'Desember';
                 }
 
-                if($query_balai['status'] == 'tolak' || $query_balai['reject_date'] != NULL) {
+                if ($query_balai['status'] == 'tolak' || $query_balai['reject_date'] != NULL) {
                     $reject += 1;
                 }
 
-                if(empty($count_balai)) {
-                    if($query_balai['acc_date'] == NULL && $query_balai['reject_date'] == NULL)
-                    {
+                if (empty($count_balai)) {
+                    if ($query_balai['acc_date'] == NULL && $query_balai['reject_date'] == NULL) {
                         $menunggu_konfir += 1;
                     }
                 }
 
-                if (!empty($query_balai['acc_date']))
-                {
+                if (!empty($query_balai['acc_date'])) {
                     $acc += 1;
                 }
                 // var_dump($acc);
@@ -474,7 +470,7 @@
         <?php } ?>
         <tr>
             <td class="col-number">-</td>
-            <td>Total <?= $no-1 ?></td>
+            <td>Total <?= $no - 1 ?></td>
             <td class="melapor"><?= $melapor ?></td>
             <td class="melapor"><?= $belum_lapor ?></td>
             <td class="melapor"><?= '-' ?></td>
@@ -593,7 +589,7 @@
             data: <?php echo $chart_menunggu_konfir ?>,
             color: '#1c81b0'
         },
-        { 
+        {
             label: "Terverifikasi",
             data: <?php echo $chart_acc ?>,
             color: '#1cb02d'
