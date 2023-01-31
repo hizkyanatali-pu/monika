@@ -17,6 +17,61 @@
 }
 </style>
 
+<?php
+$this->db = \Config\Database::connect();
+$tb_balai  = $this->db->table('m_balai');
+$tb_satker  = $this->db->table('m_satker');
+$no = 1;
+$melapor = 0;
+$belum_lapor = 0;
+$terverifikasi = 0;
+$menunggu_konfir = 0;
+$acc = 0;
+$reject = 0;
+$revisi_terverifikasi = 0;
+$session = session();
+$this->user = $session->get('userData');
+$componen = '';
+?>
+
+<?php foreach ($group_jabatan as $key => $grup) {
+            switch ($grup) {
+                case 'ESELON II':
+                    # code...
+                    $satker_s =  $tb_satker->select('satker, satkerid')->where('grup_jabatan', "eselon2")->get()->getResult();
+                    break;
+
+                case 'UPT/BALAI':
+                    # code...
+                    $satker_s =  $tb_balai->select('balai as satker, balaiid')->where("jabatan_penanda_tangan_pihak_1 !=", "")->get()->getResult();
+                    break;
+
+                case 'BALAI TEKNIK':
+                    # code...
+                    $satker_s =  $tb_satker->select('satker, satkerid')->where('balaiid', "97")->get()->getResult();
+                    break;
+
+                case 'SATKER PUSAT':
+                    # code...
+                    $satker_s =  $tb_satker->select('satker, satkerid')->whereIn('satkerid', [654098, 403477])->get()->getResult();
+                    break;
+
+                case 'SKPD TP-OP':
+                    # code...
+                    $satker_s =  $tb_satker->select('satker, satkerid')->where('balaiid', "98")->Orwhere('balaiid', "100")->get()->getResult();
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+
+            $componen .= '<tr>
+                            <td class="ket-satker" width="100%" colspan="10"><?= $grup ?></td>
+                        </tr>'
+?>
+<?php } ?>
+
 <!-- begin:: Subheader -->
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
@@ -101,6 +156,34 @@
         </div>
     </div>
 </div>
+
+
+<!-- <div class="container row">
+    <div class="card">
+        <table class="table table-striped">
+            <tr>
+                <th width="5%" rowspan="3">No</th>
+                <th width="20%" rowspan="3">Nama Unit / Satker</th>
+                <th width="15%" colspan="2">Entitas Kerja</th>
+                <th width="60%" colspan="6">Form</th>
+            </tr>
+            <tr>
+                <th width="10%" rowspan="2">Melapor</th>
+                <th width="10%" rowspan="2">Belum Melapor</th>
+                <th width="30%" colspan="3" rowspan="1">PK Awal</th>
+                <th width="30%" colspan="3" rowspan="1">PK Revisi</th>
+            </tr>
+            <tr>
+                <th width="10%" rowspan="1">Dokumen</th>
+                <th width="10%" rowspan="1">Tanggal Kirim</th>
+                <th width="10%" rowspan="1">Verifikasi</th>
+                <th width="10%" rowspan="1">Dokumen</th>
+                <th width="10%" rowspan="1">Tanggal Kirim</th>
+                <th width="10%" rowspan="1">Verifikasi</th>
+            </tr>
+        </table>
+    </div>
+</div> -->
 <!-- end:: Content -->
 <?= $this->endSection() ?>
 

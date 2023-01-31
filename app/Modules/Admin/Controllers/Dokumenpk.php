@@ -43,6 +43,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function dashboard()
     {
+        $grup_jabatan = ["ESELON II", "UPT/BALAI", "BALAI TEKNIK", "SATKER PUSAT", "SKPD TP-OP"];
         $jumlahTotal = $this->dokumenPK_akses->countAllResults();
 
         $menungguKonfirmasi_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
@@ -93,6 +94,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $belumMenginputkan_persentase = ($belumMenginputkan_jumlah / $jumlahTotal) * 100;
 
         return view('Modules\Admin\Views\DokumenPK\dashboard.php', [
+            'group_jabatan'     =>   $grup_jabatan,
             'piechart' => [
                 'belumMenginputkan'  => ['persentase' => round($belumMenginputkan_persentase, 2), 'jumlah' => $belumMenginputkan_jumlah],
                 'menungguKonfirmasi' => ['persentase' => round($menungguKonfirmasi_persentase, 2), 'jumlah' => $menungguKonfirmasi_jumlah],
