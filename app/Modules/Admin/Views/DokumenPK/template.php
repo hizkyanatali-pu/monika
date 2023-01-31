@@ -175,9 +175,9 @@
                                     </a>
 
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <a class="dropdown-item _add-form-row" data-type="full_title">Full Title</a>
-                                        <a class="dropdown-item _add-form-row" data-type="section_title">Section Title</a>
-                                        <a class="dropdown-item _add-form-row" data-type="form">Baris Form</a>
+                                        <a class="dropdown-item _add-form-row" data-type="full_title">Sasaran Program</a>
+                                        <a class="dropdown-item _add-form-row" data-type="section_title">Sasaran Kerja</a>
+                                        <a class="dropdown-item _add-form-row" data-type="form">Indikator</a>
                                     </div>
                                 </div>
                             </div>

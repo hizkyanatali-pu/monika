@@ -428,22 +428,21 @@ function sum_data($tahun = '2021', $bulan = '', $kdprogram = false, $kdgiat = fa
     return $builder;
 }
 
-function instansi_name($id){
+function instansi_name($id)
+{
     $db      = \Config\Database::connect();
 
     if (is_null($id)) return (object) ['nama_instansi' => null];
 
-    $builder = $db->query("SELECT satker as nama_instansi FROM m_satker WHERE 
+    $builder = $db->query("SELECT IF(satker like '%BALAI%' AND balaiid != 97,CONCAT('SATUAN KERJA ',satker),satker) nama_instansi FROM m_satker WHERE 
           satkerid = $id
          ")->getRow();
-    if(empty($builder)){
+    if (empty($builder)) {
 
         $builder = $db->query("SELECT balai as nama_instansi FROM m_balai WHERE 
           balaiid = $id
          ")->getRow();
-
     }
 
     return $builder;
-
 }
