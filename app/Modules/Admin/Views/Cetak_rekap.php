@@ -225,7 +225,7 @@
                 <td class="ket-satker" width="100%" colspan="10"><?= $grup ?></td>
             </tr>
             <?php
-            foreach ($satker_s as $view) {
+            foreach ($satker_s as $view) { 
 
                 if ($grup == 'UPT/BALAI') {
                     $query_satker = $tb_balai->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at,  dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.is_revision_same_year, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
@@ -240,7 +240,7 @@
                         ->where("(SELECT count(id) FROM dokumenpk_satker WHERE balaiid=m_balai.balaiid and tahun={$this->user['tahun']} AND deleted_at IS NULL AND dokumen_type = 'balai' ORDER BY id DESC) < 1 AND balaiid = $view->balaiid")
                         ->get()->getRowArray();
                     
-                    $query_dokumen = $tb_balai->select('dokumenpk_satker.id, dokumenpk_satker.revision_master_dokumen_id, dokumenpk_satker.revision_master_number, dokumenpk_satker.is_revision_same_year')
+                    $query_dokumen = $tb_balai->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.revision_master_dokumen_id, dokumenpk_satker.revision_master_number, dokumenpk_satker.is_revision_same_year')
                         ->join('dokumenpk_satker', 'dokumenpk_satker.balaiid = m_balai.balaiid', 'left')
                         ->where('m_balai.balaiid', $view->balaiid)
                         ->where('dokumenpk_satker.deleted_at IS NULL')
@@ -331,11 +331,11 @@
                     <?php if (empty($count) && $query_satker != 'revision') {
                         $melapor += 1 ?>
                         <td class="melapor"><img src="<?= 'https://cdn-icons-png.flaticon.com/512/7046/7046050.png' ?>" style="width:25px;height:25px;"></td>
-                    <?php } else {
-                        $belum_lapor += 1 ?>
+                    <?php } else { ?>
                         <td class="melapor"></td>
                     <?php  } ?>
-                    <?php if (!empty($count) || $query_satker == 'revision') { ?>
+                    <?php if (!empty($count) || $query_satker == 'revision') {
+                        $belum_lapor += 1 ?>
                         <td class="belum-melapor"><img src="<?= 'https://cdn-icons-png.flaticon.com/512/7046/7046050.png' ?>" style="width:25px;height:25px;"></td>
                     <?php } else { ?>
                         <td class="belum-melapor"></td>
@@ -348,7 +348,7 @@
                     <td class="date"><?php if (empty($query_satker['created_at'])) {
                                             echo '';
                                         } else {
-                                            echo date('d', strtotime($query_satker['created_at'])) ?> <?= $bulan ?> <?= date('Y', strtotime($query_satker['created_at']));
+                                            echo date('d', strtotime($query_dokumen['created_at'])) ?> <?= $bulan ?> <?= date('Y', strtotime($query_dokumen['created_at']));
                                                                                                                 } ?></td>
                     <?php if (isset($query_satker['acc_date']) != NULL || isset($query_satker['reject_date']) != NULL) {
                         $terverifikasi += 1;
@@ -404,7 +404,7 @@
                     ->where("(SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and tahun= {$this->user['tahun']} AND deleted_at IS NULL ORDER BY id DESC) < 1 and satkerid = $satker->satkerid")
                     ->get()->getRowArray();
 
-                $query_dokumen_balai = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.revision_master_dokumen_id, dokumenpk_satker.revision_master_number, dokumenpk_satker.is_revision_same_year, dokumenpk_satker.created_at')
+                $query_dokumen_balai = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.revision_master_dokumen_id, dokumenpk_satker.revision_master_number, dokumenpk_satker.is_revision_same_year')
                     ->join('dokumenpk_satker', 'dokumenpk_satker.satkerid = m_satker.satkerid', 'left')
                     ->where('m_satker.satkerid', $satker->satkerid)
                     ->where('dokumenpk_satker.deleted_at IS NULL')
@@ -475,16 +475,24 @@
                     <?php } else { ?>
                         <td class="belum-melapor"></td>
                     <?php  } ?>
-                    <?php if (!empty($query_dokumen_balai)) { ?>
-                        <td class="link-document"><a href="<?= base_url() ?>/api/showpdf/tampilkan/<?= $query_dokumen_balai['id'] ?>?preview=true" target="_blank"><img src="<?= 'https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png' ?>" style="width:42px;height:42px;"></a></td>
+                    <?php if (empty($count_balai)) { ?>
+                        <?php if(!empty($query_dokumen_balai)) { ?>
+                            <td class="link-document"><a href="<?= base_url() ?>/api/showpdf/tampilkan/<?= $query_dokumen_balai['id'] ?>?preview=true" target="_blank"><img src="<?= 'https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png' ?>" style="width:42px;height:42px;"></a></td>
+                        <?php } else{ ?>
+                            <td class="link-document"><a href="<?= base_url() ?>/api/showpdf/tampilkan/<?= $query_balai['id'] ?>?preview=true" target="_blank"><img src="<?= 'https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png' ?>" style="width:42px;height:42px;"></a></td>
+                        <?php } ?>
                     <?php } else {
                         echo '<td class="link-document">-</td>';
                     } ?>
                     <td class="date"><?php if (empty($query_balai['created_at'])) {
                                             echo '';
                                         } else {
-                                            echo date('d', strtotime($query_balai['created_at'])) ?> <?= $bulan ?> <?= date('Y', strtotime($query_balai['created_at']));
-                                                                                                                } ?></td>
+                                            if(!empty($query_dokumen_balai['created_at'])) {
+                                                echo date('d', strtotime($query_dokumen_balai['created_at'])) ?> <?= $bulan ?> <?= date('Y', strtotime($query_dokumen_balai['created_at']));
+                                            } else {
+                                                echo date('d', strtotime($query_balai['created_at'])) ?> <?= $bulan ?> <?= date('Y', strtotime($query_balai['created_at']));
+                                            }
+                                        } ?></td>
                     <?php if ($query_balai['acc_date'] != NULL || $query_balai['reject_date'] != NULL) {
                         $terverifikasi += 1;
                     ?>

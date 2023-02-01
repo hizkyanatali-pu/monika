@@ -45,6 +45,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         $grup_jabatan = ["ESELON II", "UPT/BALAI", "BALAI TEKNIK", "SATKER PUSAT", "SKPD TP-OP"];
         $jumlahTotal = $this->dokumenPK_akses->countAllResults();
+        $balai_s =  $this->balai->select('balai,balaiid')->where("jabatan_penanda_tangan_pihak_1 !=", "")->get()->getResult();
 
         $menungguKonfirmasi_satker = $this->dokumenPK_akses->join('dokumenpk_satker', "(dokumenpk_satker.template_id=dokumen_pk_template_akses.template_id AND dokumenpk_satker.satkerid=dokumen_pk_template_akses.rev_id)", 'left')
             ->where("dokumen_pk_template_akses.rev_table='m_satker' AND dokumenpk_satker.status='hold' AND dokumenpk_satker.tahun='" . $this->user['tahun'] . "'")
@@ -95,6 +96,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         return view('Modules\Admin\Views\DokumenPK\dashboard.php', [
             'group_jabatan'     =>   $grup_jabatan,
+            'balai_s'           =>   $balai_s,
             'piechart' => [
                 'belumMenginputkan'  => ['persentase' => round($belumMenginputkan_persentase, 2), 'jumlah' => $belumMenginputkan_jumlah],
                 'menungguKonfirmasi' => ['persentase' => round($menungguKonfirmasi_persentase, 2), 'jumlah' => $menungguKonfirmasi_jumlah],

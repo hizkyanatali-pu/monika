@@ -32,6 +32,7 @@ $revisi_terverifikasi = 0;
 $session = session();
 $this->user = $session->get('userData');
 $componen = '';
+$total_componen = '';
 ?>
 
 <?php foreach ($group_jabatan as $key => $grup) {
@@ -66,11 +67,343 @@ $componen = '';
                     break;
             }
 
-            $componen .= '<tr>
-                            <td class="ket-satker" width="100%" colspan="10"><?= $grup ?></td>
-                        </tr>'
+            $componen .= '<tr class="tr-body">
+                            <td class="ket-satker" width="100%" colspan="10">'.  $grup  . '</td>
+                        </tr>';
+            
+            foreach ($satker_s as $view) {
+
+                if ($grup == 'UPT/BALAI') {
+                    $query_satker = $tb_balai->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at,  dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.is_revision_same_year, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
+                        ->join('dokumenpk_satker', 'dokumenpk_satker.balaiid = m_balai.balaiid', 'left')
+                        ->where('m_balai.balaiid', $view->balaiid)
+                        ->where('dokumenpk_satker.deleted_at IS NULL')
+                        ->where('dokumenpk_satker.satkerid IS NULL')
+                        ->orderBy('dokumenpk_satker.id', 'DESC')
+                        ->get()->getRowArray();
+            
+                    $count = $tb_balai->select("m_balai.balai")
+                        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE balaiid=m_balai.balaiid and tahun={$this->user['tahun']} AND deleted_at IS NULL AND dokumen_type = 'balai' ORDER BY id DESC) < 1 AND balaiid = $view->balaiid")
+                        ->get()->getRowArray();
+                                
+                    $query_dokumen = $tb_balai->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.revision_master_dokumen_id, dokumenpk_satker.revision_master_number, dokumenpk_satker.is_revision_same_year')
+                        ->join('dokumenpk_satker', 'dokumenpk_satker.balaiid = m_balai.balaiid', 'left')
+                        ->where('m_balai.balaiid', $view->balaiid)
+                        ->where('dokumenpk_satker.deleted_at IS NULL')
+                        ->where('dokumenpk_satker.satkerid IS NULL')
+                        ->where('dokumenpk_satker.revision_master_dokumen_id IS NULL')
+                        ->where('dokumenpk_satker.revision_master_number IS NULL')
+                        ->orderBy('dokumenpk_satker.id', 'DESC')
+                        ->get()->getRowArray();
+            
+                } else {
+                    $query_satker = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at, dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.is_revision_same_year, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
+                        ->join('dokumenpk_satker', 'dokumenpk_satker.satkerid = m_satker.satkerid', 'left')
+                        ->where('m_satker.satkerid', $view->satkerid)
+                        ->where('dokumenpk_satker.deleted_at IS NULL')
+                        ->orderBy('dokumenpk_satker.id', 'DESC')
+                        ->get()->getRowArray();
+            
+                    $count = $tb_satker->select('m_satker.satker')
+                        ->where("(SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and tahun= {$this->user['tahun']} AND deleted_at IS NULL ORDER BY id DESC) < 1 and satkerid = $view->satkerid")
+                        ->get()->getRowArray();
+            
+                    $query_dokumen = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.revision_master_dokumen_id, dokumenpk_satker.revision_master_number, dokumenpk_satker.is_revision_same_year, dokumenpk_satker.created_at')
+                        ->join('dokumenpk_satker', 'dokumenpk_satker.satkerid = m_satker.satkerid', 'left')
+                        ->where('m_satker.satkerid', $view->satkerid)
+                        ->where('dokumenpk_satker.deleted_at IS NULL')
+                        ->where('dokumenpk_satker.revision_master_dokumen_id IS NULL')
+                        ->where('dokumenpk_satker.revision_master_number IS NULL')
+                        ->orderBy('dokumenpk_satker.id', 'DESC')
+                        ->get()->getRowArray();
+                }
+                            // var_dump($query_dokumen); 
+                            // die;
+            
+            
+                            if (empty($count)) {
+                                $month = date('m', strtotime($query_satker['created_at']));
+            
+                                if ($month == '01') {
+                                    $bulan = 'Januari';
+                                } else if ($month == '02') {
+                                    $bulan = 'Februari';
+                                } else if ($month == '03') {
+                                    $bulan = 'Maret';
+                                } else if ($month == '04') {
+                                    $bulan = 'April';
+                                } else if ($month == '05') {
+                                    $bulan = 'Mei';
+                                } else if ($month == '06') {
+                                    $bulan = 'Juni';
+                                } else if ($month == '07') {
+                                    $bulan = 'Juli';
+                                } else if ($month == '08') {
+                                    $bulan = 'Agustus';
+                                } else if ($month == '09') {
+                                    $bulan = 'September';
+                                } else if ($month == '10') {
+                                    $bulan = 'Oktober';
+                                } else if ($month == '11') {
+                                    $bulan = 'November';
+                                } else if ($month == '12') {
+                                    $bulan = 'Desember';
+                                }
+                            }
+
+                #kondisi
+                if (empty($count)) {
+                    if ($query_satker['status'] == 'tolak') {
+                        $reject += 1;
+                    }
+                }
+
+                if (empty($count)) {
+                    if ($query_satker['acc_date'] == NULL && $query_satker['reject_date'] == NULL) {
+                        $menunggu_konfir += 1;
+                    }
+                }
+
+                if (!empty($query_satker['acc_date'])) {
+                    $acc += 1;
+                }
+
+                if(empty($count) && $query_satker != 'revision') {
+                    $melapor += 1;
+                    $data_melapor = '<img src="https://cdn-icons-png.flaticon.com/512/7046/7046050.png" style="width:25px;height:25px;">';
+                } else {
+                    $data_melapor = '';
+                }
+
+                if(!empty($count) || $query_satker == 'revision') {
+                    $belum_lapor += 1;
+                    $data_belum_melapor = '<img src="https://cdn-icons-png.flaticon.com/512/7046/7046050.png" style="width:25px;height:25px;">';
+                } else {
+                    $data_belum_melapor = '';
+                }
+
+                if(empty($count)) {
+                    $file_dokumen = '<a href="'. base_url() . '/api/showpdf/tampilkan/'.$query_dokumen['id'].'?preview=true" target="_blank"><img src="https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png" style="width:42px;height:42px;"></a>';
+                } else {
+                    $file_dokumen = '-';
+                }
+
+                if(empty($query_satker['created_at'])) {
+                    $tanggal_kirim = '-';
+                } else {
+                    $tanggal_kirim = date('d', strtotime($query_dokumen['created_at'])).' '. $bulan.' '. date('Y', strtotime($query_dokumen['created_at']));
+                }
+
+                if(isset($query_satker['acc_date']) != NULL || isset($query_satker['reject_date']) != NULL) {
+                    $terverifikasi += 1;
+                    $verifikasi_satker1 = '<img src=" https://cdn-icons-png.flaticon.com/512/7046/7046050.png" style="width:25px;height:25px;">';
+                } else {
+                    $verifikasi_satker1 = '';
+                }
+
+                if(empty($count)) {
+                    if($query_satker['revision_same_year_number'] != 0) {
+                        $file_dokumen_revisi = '<a href="'. base_url() .'/api/showpdf/tampilkan/'. $query_satker['id'] .'?preview=true" target="_blank"><img src="https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png" style="width:42px;height:42px;"></a>';
+                        $tanggal_kirim_revisi = date('d', strtotime($query_dokumen['created_at'])).' '. $bulan.' '. date('Y', strtotime($query_dokumen['created_at']));
+                        
+                        if($query_balai['acc_date'] != NULL || $query_balai['reject_date'] != NULL) {
+                            $revisi_terverifikasi += 1;
+                            $verifikasi_satker2 = '<img src=" https://cdn-icons-png.flaticon.com/512/7046/7046050.png" style="width:25px;height:25px;">';
+                        } else {
+                            $verifikasi_satker2 = '';
+                        }
+                    } else {
+                        $file_dokumen_revisi = '';
+                        $tanggal_kirim_revisi = '';
+                        $verifikasi_satker2 = '';
+                    }
+                }  else {
+                    $file_dokumen_revisi = '';
+                    $tanggal_kirim_revisi = '';
+                    $verifikasi_satker2 = '';
+                }
+                
+                $componen .= '<tr class="tr-isi">
+                                <td class="td-isi">'. $no++ .'</td>
+                                <td class="td-satker">'. $view->satker .'</td>
+                                <td class="td-isi">'. $data_melapor .'</td>
+                                <td class="td-isi">'. $data_belum_melapor .'</td>
+                                <td class="td-isi">'. $file_dokumen .'</td>
+                                <td class="td-isi">'. $tanggal_kirim .'</td>
+                                <td class="td-isi">'. $verifikasi_satker1 .'</td>
+                                <td class="td-isi">'. $file_dokumen_revisi .'</td>
+                                <td class="td-isi">'. $tanggal_kirim_revisi .'</td>
+                                <td class="td-isi">'. $verifikasi_satker2 .'</td>
+                            </tr>';
+    }
+}
+
+
+    foreach($balai_s as $balai) {
+        $satker_ss =  $tb_satker->select('satker, satkerid')->where('balaiid', $balai->balaiid)->get()->getResult();
+
+        $componen .= '<tr>
+                        <td class="ket-satker" width="100%" colspan="10">'. $balai->balai .'</td>
+                    </tr>';
+        foreach ($satker_ss as $satker) {
+            $query_balai = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.status, dokumenpk_satker.deleted_at, dokumenpk_satker.acc_date, dokumenpk_satker.reject_date, dokumenpk_satker.revision_same_year_number, dokumenpk_satker.change_status_at')
+                ->join('dokumenpk_satker', 'dokumenpk_satker.satkerid = m_satker.satkerid', 'left')
+                ->where('m_satker.satkerid', $satker->satkerid)
+                ->where('dokumenpk_satker.deleted_at IS NULL')
+                ->orderBy('dokumenpk_satker.id', 'DESC')
+                ->get()->getRowArray();
+            $count_balai = $tb_satker->select('m_satker.satker')
+                ->where("(SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and tahun= {$this->user['tahun']} AND deleted_at IS NULL ORDER BY id DESC) < 1 and satkerid = $satker->satkerid")
+                ->get()->getRowArray();
+
+            $query_dokumen_balai = $tb_satker->select('dokumenpk_satker.id, dokumenpk_satker.created_at, dokumenpk_satker.revision_master_dokumen_id, dokumenpk_satker.revision_master_number, dokumenpk_satker.is_revision_same_year')
+                ->join('dokumenpk_satker', 'dokumenpk_satker.satkerid = m_satker.satkerid', 'left')
+                ->where('m_satker.satkerid', $satker->satkerid)
+                ->where('dokumenpk_satker.deleted_at IS NULL')
+                ->where('dokumenpk_satker.revision_master_dokumen_id IS NULL')
+                ->where('dokumenpk_satker.revision_master_number IS NULL')
+                ->orderBy('dokumenpk_satker.id', 'ASC')
+                ->get()->getRowArray();
+
+                $month = date('m', strtotime($query_balai['created_at']));
+                    if ($month == '01') {
+                        $bulan = 'Januari';
+                    } else if ($month == '02') {
+                        $bulan = 'Februari';
+                    } else if ($month == '03') {
+                        $bulan = 'Maret';
+                    } else if ($month == '04') {
+                        $bulan = 'April';
+                    } else if ($month == '05') {
+                        $bulan = 'Mei';
+                    } else if ($month == '06') {
+                        $bulan = 'Juni';
+                    } else if ($month == '07') {
+                        $bulan = 'Juli';
+                    } else if ($month == '08') {
+                        $bulan = 'Agustus';
+                    } else if ($month == '09') {
+                        $bulan = 'September';
+                    } else if ($month == '10') {
+                        $bulan = 'Oktober';
+                    } else if ($month == '11') {
+                        $bulan = 'November';
+                    } else if ($month == '12') {
+                        $bulan = 'Desember';
+                    }
+                
+
+                    #kondisi
+                    if ($query_balai['status'] == 'tolak' || $query_balai['reject_date'] != NULL) {
+                        $reject += 1;
+                    }
+    
+                    if (empty($count_balai)) {
+                        if ($query_balai['acc_date'] == NULL && $query_balai['reject_date'] == NULL) {
+                            $menunggu_konfir += 1;
+                        }
+                    }
+    
+                    if (!empty($query_balai['acc_date'])) {
+                        $acc += 1;
+                    }
+
+                    if(empty($count_balai) && $query_balai != 'revision') {
+                        $melapor += 1;
+                        $data_balai_melapor = '<img src="https://cdn-icons-png.flaticon.com/512/7046/7046050.png" style="width:25px;height:25px;">';
+                    } else {
+                        $data_balai_melapor = '';
+                    }
+
+                    if(!empty($count_balai) || $query_balai == 'revision') {
+                        $belum_lapor += 1;
+                        $data_balai_belum_melapor = '<img src="https://cdn-icons-png.flaticon.com/512/7046/7046050.png" style="width:25px;height:25px;">';
+                    } else {
+                        $data_balai_belum_melapor = '';
+                    }
+
+                    if(empty($count_balai)) {
+                        if(!empty($query_dokumen_balai)) {
+                            $file_dokumen_balai = '<a href="'. base_url() . '/api/showpdf/tampilkan/'.$query_dokumen_balai['id'].'?preview=true" target="_blank"><img src="https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png" style="width:42px;height:42px;"></a>';
+                        } else {
+                            $file_dokumen_balai = '<a href="'. base_url() . '/api/showpdf/tampilkan/'.$query_balai['id'].'?preview=true" target="_blank"><img src="https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png" style="width:42px;height:42px;"></a>';
+                        }
+                    } else {
+                        $file_dokumen_balai = '-';
+                    }
+    
+                    if(empty($query_balai['created_at'])) {
+                        $tanggal_kirim_balai = '-';
+                    } else {
+                        if(!empty($query_dokumen_balai['created_at'])) {
+                            $tanggal_kirim_balai = date('d', strtotime($query_dokumen_balai['created_at'])).' '. $bulan.' '. date('Y', strtotime($query_dokumen_balai['created_at']));
+                        } else {
+                            $tanggal_kirim_balai = date('d', strtotime($query_balai['created_at'])).' '. $bulan.' '. date('Y', strtotime($query_balai['created_at']));
+                        }
+                    }
+
+                    if(isset($query_balai['acc_date']) != NULL || isset($query_balai['reject_date']) != NULL) {
+                        $terverifikasi += 1;
+                        $verifikasi_balai1 = '<img src=" https://cdn-icons-png.flaticon.com/512/7046/7046050.png" style="width:25px;height:25px;">';
+                    } else {
+                        $verifikasi_balai1 = '';
+                    }
+
+                    if(empty($count_balai)) {
+                        if($query_balai['revision_same_year_number'] != 0) {
+                            $file_dokumen_revisi_balai = '<a href="'. base_url() .'/api/showpdf/tampilkan/'. $query_balai['id'] .'?preview=true" target="_blank"><img src="https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png" style="width:42px;height:42px;"></a>';
+                            $tanggal_kirim_revisi_balai = date('d', strtotime($query_balai['created_at'])).' '. $bulan.' '. date('Y', strtotime($query_balai['created_at']));
+                            
+                            if($query_balai['acc_date'] != NULL || $query_balai['reject_date'] != NULL) {
+                                $revisi_terverifikasi += 1;
+                                $verifikasi_balai2 = '<img src=" https://cdn-icons-png.flaticon.com/512/7046/7046050.png" style="width:25px;height:25px;">';
+                            } else {
+                                $verifikasi_balai2 = '';
+                            }
+                        } else {
+                            $file_dokumen_revisi_balai = '';
+                            $tanggal_kirim_revisi_balai = '';
+                            $verifikasi_balai2 = '';
+                        }
+                    }  else {
+                        $file_dokumen_revisi_balai = '';
+                        $tanggal_kirim_revisi_balai = '';
+                        $verifikasi_balai2 = '';
+                    }
+
+                    $jumlah_total = $no;
+
+                    $componen .= '<tr class="tr-isi">
+                                    <td class="td-isi">'. $no++ .'</td>
+                                    <td class="td-satker">'. $satker->satker .'</td>
+                                    <td class="td-isi">'. $data_balai_melapor .'</td>
+                                    <td class="td-isi">'. $data_balai_belum_melapor .'</td>
+                                    <td class="td-isi">'. $file_dokumen_balai .'</td>
+                                    <td class="td-isi">'. $tanggal_kirim_balai .'</td>
+                                    <td class="td-isi">'. $verifikasi_balai1 .'</td>
+                                    <td class="td-isi">'. $file_dokumen_revisi_balai .'</td>
+                                    <td class="td-isi">'. $tanggal_kirim_revisi_balai .'</td>
+                                    <td class="td-isi">'. $verifikasi_balai2 .'</td>
+                                </tr>';
+
+                                
+                                
+                            }
+                        }
+                        $total_componen .= '<tr class="tr-isi">
+                                            <td class="td-isi">-</td>
+                                            <td class="td-satker">Total '. $jumlah_total .'</td>
+                                            <td class="td-isi">'. $melapor .'</td>
+                                            <td class="td-isi">'. $belum_lapor .'</td>
+                                            <td class="td-isi">-</td>
+                                            <td class="td-isi">-</td>
+                                            <td class="td-isi">'.$acc.'</td>
+                                            <td class="td-isi">-</td>
+                                            <td class="td-isi">-</td>
+                                            <td class="td-isi">'.$revisi_terverifikasi.'</td>
+                                        </tr>';
+
 ?>
-<?php } ?>
 
 <!-- begin:: Subheader -->
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
@@ -93,11 +426,11 @@ $componen = '';
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="row" style="margin: 0px 80px;">
-    <div class="col-md-6">
+<div class="card row" style="margin: 0px 80px;">
+    <div class="col-md-7">
         <div id="flotcontainer"></div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         <div class="kt-portlet kt-portlet--tab">
             <div class="kt-portlet__body">
                 <div class="kt-section mb-0">
@@ -157,33 +490,35 @@ $componen = '';
     </div>
 </div>
 
-
-<!-- <div class="container row">
-    <div class="card">
-        <table class="table table-striped">
-            <tr>
-                <th width="5%" rowspan="3">No</th>
-                <th width="20%" rowspan="3">Nama Unit / Satker</th>
-                <th width="15%" colspan="2">Entitas Kerja</th>
-                <th width="60%" colspan="6">Form</th>
+<div class="tabel-rekap card row" style="margin: 30px 80px;">
+        <table width="100%">
+            <tr class="tr-head">
+                <th class="th-head" width="5%" rowspan="3">No</th>
+                <th class="th-head" width="20%" rowspan="3">Nama Unit / Satker</th>
+                <th class="th-head" width="15%" colspan="2">Entitas Kerja</th>
+                <th class="th-head" width="60%" colspan="6">Form</th>
             </tr>
-            <tr>
-                <th width="10%" rowspan="2">Melapor</th>
-                <th width="10%" rowspan="2">Belum Melapor</th>
-                <th width="30%" colspan="3" rowspan="1">PK Awal</th>
-                <th width="30%" colspan="3" rowspan="1">PK Revisi</th>
+            <tr class="tr-head">
+                <th class="th-head" width="10%" rowspan="2">Melapor</th>
+                <th class="th-head" width="10%" rowspan="2">Belum Melapor</th>
+                <th class="th-head" width="30%" colspan="3" rowspan="1">PK Awal</th>
+                <th class="th-head" width="30%" colspan="3" rowspan="1">PK Revisi</th>
             </tr>
-            <tr>
-                <th width="10%" rowspan="1">Dokumen</th>
-                <th width="10%" rowspan="1">Tanggal Kirim</th>
-                <th width="10%" rowspan="1">Verifikasi</th>
-                <th width="10%" rowspan="1">Dokumen</th>
-                <th width="10%" rowspan="1">Tanggal Kirim</th>
-                <th width="10%" rowspan="1">Verifikasi</th>
+            <tr class="tr-head">
+                <th class="th-head" width="10%" rowspan="1">Dokumen</th>
+                <th class="th-head" width="10%" rowspan="1">Tanggal Kirim</th>
+                <th class="th-head" width="10%" rowspan="1">Verifikasi</th>
+                <th class="th-head" width="10%" rowspan="1">Dokumen</th>
+                <th class="th-head" width="10%" rowspan="1">Tanggal Kirim</th>
+                <th class="th-head" width="10%" rowspan="1">Verifikasi</th>
             </tr>
+            <?= $componen ?>
+            <?= $total_componen ?>
         </table>
-    </div>
-</div> -->
+</div>
+
+
+
 <!-- end:: Content -->
 <?= $this->endSection() ?>
 
@@ -202,7 +537,7 @@ $componen = '';
 <script src="http://static.pureexample.com/js/flot/jquery.flot.pie.min.js"></script> -->
 
 <script>
-    var data = [
+        var data = [
         {label: "Belum Menginputkan", data:<?php echo $piechart['belumMenginputkan']['persentase'] ?>, color: '#807d7e'},
         {label: "Menunggu Konfirmasi", data: <?php echo $piechart['menungguKonfirmasi']['persentase'] ?>, color: '#1c81b0'},
         {label: "Terverifikasi", data: <?php echo $piechart['terverifikasi']['persentase'] ?>, color: '#1cb02d'},
@@ -215,7 +550,8 @@ $componen = '';
                     },
             legend: {
                 show: false
-            }
+            },
+            // console.log('holla');
          };
  
     $.plot($("#flotcontainer"), data, options);  

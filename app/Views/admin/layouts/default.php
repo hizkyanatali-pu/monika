@@ -48,6 +48,8 @@ $title = $title ?? '';
     <?php echo link_tag('css/skins/brand/light.css'); ?>
 
     <?php echo link_tag('css/skins/aside/light.css'); ?>
+
+    <?php echo link_tag('css/custom.css'); ?>
     <!--end::Layout Skins -->
 
 </head>

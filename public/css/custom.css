@@ -1,0 +1,44 @@
+.tabel-rekap {
+    background-color: #3E7899;
+    color: #ffffff;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.tr-head {
+    border: 1px solid black;
+    text-align: center;
+}
+
+.tr-body {
+    border: 1px solid black;
+}
+
+.tr-isi {
+    background-color: #ffffff;
+    border: 1px solid black;
+}
+
+.td-satker {
+    color: black;
+    text-align: left;
+    border: 1px solid black;
+}
+
+.td-isi {
+    color: black;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.ket-satker {
+    text-align: left;
+    color: black;
+    background: #d4d700;
+    border: 1px solid black;
+}
+
+.th-head {
+    border: 1px solid black;
+    text-align: center;
+}
