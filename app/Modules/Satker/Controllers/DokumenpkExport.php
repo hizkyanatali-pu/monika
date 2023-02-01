@@ -326,6 +326,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType, $qrcode)
     {
+        // header('Content-Type: text/html; charset=utf-8');
         $pdf->SetMargins(0, 16, 0, 0);
         $pdf->AddPage('L', 'A4');
         $pdf->SetAutoPageBreak(false);
@@ -450,22 +451,62 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
             if ($data['type'] == 'form') {
                 $targetValue = '';
+                // $str = 'M <sup>3</sup> ';
+                $str = iconv('UTF-8', 'windows-1252', html_entity_decode("&sup3;"));
+
+                switch (strtolower($data['target_satuan'])) {
+                    case 'm3/detik':
+                        $satuan_target = 'M' . $str . "/Detik";
+
+                        break;
+                    case 'juta m3':
+                        $satuan_target = "Juta M" . $str;
+
+                        break;
+                    case 'm3/kapita':
+                        $satuan_target = 'M' . $str . '/Kapita';
+                        break;
+                    case 'm3/tahun/hektar':
+                        $satuan_target = 'M' . $str . '/Tahun/Hektar';
+                        break;
+                    case 'miliar m3':
+                        $satuan_target = 'Miliar M' . $str;
+                        break;
+                    default:
+                        $satuan_target = $data['target_satuan'];
+                        break;
+                }
+
+                switch (strtolower($data['outcome_satuan'])) {
+                    case 'm3/detik':
+                        $satuan_outcome = 'M' . $str . "/Detik";
+                        break;
+                    case 'juta m3':
+                        $satuan_outcome = "Juta M" . $str;
+                        break;
+                    default:
+                        $satuan_outcome = $data['outcome_satuan'];
+                        break;
+                }
+
+
+
                 switch ($_detailDokumenType) {
                     case 'target':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
-                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' . $data['target_satuan'];
+                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') .  ' ' .  $satuan_target;
 
                         break;
 
                     case 'outcome':
                         // $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 3) . ' ' . $data['outcome_satuan'];
-                        $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 10, ',', '.'), '0'), ',') . ' ' . $data['outcome_satuan'];
+                        $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 10, ',', '.'), '0'), ',') . ' ' . $satuan_outcome;
 
                         break;
 
                     case 'output':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
-                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' . $data['target_satuan'];
+                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' .  $satuan_target;
 
 
                         break;
