@@ -169,7 +169,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenOpening($pdf, $dataDokumen)
     {
-        $pdf->SetMargins(70, 10, 70, 0);
+        $pdf->SetMargins(17, 10, 17, 0);
         $pdf->AddPage('L', 'A4');
 
         $pdf->SetFont('Arial', 'B', 50);
