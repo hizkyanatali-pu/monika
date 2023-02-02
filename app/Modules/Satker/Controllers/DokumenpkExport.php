@@ -169,7 +169,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenOpening($pdf, $dataDokumen)
     {
-        $pdf->SetMargins(17, 10, 17, 0);
+        $pdf->SetMargins(70, 10, 70, 0);
         $pdf->AddPage('L', 'A4');
 
         $pdf->SetFont('Arial', 'B', 50);
@@ -313,7 +313,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
     {
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->Cell(7, 5, $_listNo, 0);
-        $pdf->SetLeftMargin(25);
+        $pdf->SetMargins(25, 0, 10, 0);
+        // $pdf->MultiCell($this->sectionWidth - 7, 5, $pdf->WriteHTML($_listContent), 0);
         $pdf->MultiCell($this->sectionWidth - 7, 5, $pdf->WriteHTML($_listContent), 0);
     }
 
