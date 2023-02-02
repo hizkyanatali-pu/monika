@@ -402,6 +402,11 @@ $total_componen = '';
                                             <td class="td-isi">-</td>
                                             <td class="td-isi">'.$revisi_terverifikasi.'</td>
                                         </tr>';
+                
+        $chart_belum_lapor = ($belum_lapor / $jumlah_total) * 100;
+        $chart_menunggu_konfir = ($menunggu_konfir / $jumlah_total) * 100;
+        $chart_acc = ($acc / $jumlah_total) * 100;
+        $chart_reject = ($reject / $jumlah_total) * 100;
 
 ?>
 
@@ -450,34 +455,34 @@ $total_componen = '';
                                         <tr>
                                             <td class="d-flex">
                                                 <div style="width: 15px; height: 15px; background: #807d7e; margin-top: 2px; margin-right: 10px"></div>
-                                                Belum Menginputkan
+                                                Belum Lapor
                                             </td>
-                                            <td><?php echo $piechart['belumMenginputkan']['persentase'] ?>%</td>
-                                            <td><?php echo $piechart['belumMenginputkan']['jumlah'] ?></td>
+                                            <td><?php echo round($chart_belum_lapor, 2) ?>%</td>
+                                            <td><?php echo $belum_lapor ?></td>
                                         </tr>
                                         <tr>
                                             <td class="d-flex">
                                                 <div style="width: 15px; height: 15px; background: #1c81b0; margin-top: 2px; margin-right: 10px"></div>
-                                                Menunggu Konfirmasi
+                                                Menunggu Verifikasi
                                             </td>
-                                            <td><?php echo $piechart['menungguKonfirmasi']['persentase'] ?>%</td>
-                                            <td><?php echo $piechart['menungguKonfirmasi']['jumlah'] ?></td>
+                                            <td><?php echo round($chart_menunggu_konfir, 2) ?>%</td>
+                                            <td><?php echo $menunggu_konfir ?></td>
                                         </tr>
                                         <tr>
                                             <td class="d-flex">
                                                 <div style="width: 15px; height: 15px; background: #1cb02d; margin-top: 2px; margin-right: 10px"></div>
                                                 Terverifikasi
                                             </td>
-                                            <td><?php echo $piechart['terverifikasi']['persentase'] ?>%</td>
-                                            <td><?php echo $piechart['terverifikasi']['jumlah'] ?></td>
+                                            <td><?php echo round($chart_acc, 2) ?>%</td>
+                                            <td><?php echo $acc ?></td>
                                         </tr>
                                         <tr>
                                             <td class="d-flex">
                                                 <div style="width: 15px; height: 15px; background: #a8163d; margin-top: 2px; margin-right: 10px"></div>
                                                 Ditolak
                                             </td>
-                                            <td><?php echo $piechart['ditolak']['persentase'] ?>%</td>
-                                            <td><?php echo $piechart['ditolak']['jumlah'] ?></td>
+                                            <td><?php echo round($chart_reject, 2) ?>%</td>
+                                            <td><?php echo $reject ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -490,30 +495,34 @@ $total_componen = '';
     </div>
 </div>
 
-<div class="tabel-rekap card row" style="margin: 30px 80px;">
-        <table width="100%">
-            <tr class="tr-head">
-                <th class="th-head" width="5%" rowspan="3">No</th>
-                <th class="th-head" width="20%" rowspan="3">Nama Unit / Satker</th>
-                <th class="th-head" width="15%" colspan="2">Entitas Kerja</th>
-                <th class="th-head" width="60%" colspan="6">Form</th>
-            </tr>
-            <tr class="tr-head">
-                <th class="th-head" width="10%" rowspan="2">Melapor</th>
-                <th class="th-head" width="10%" rowspan="2">Belum Melapor</th>
-                <th class="th-head" width="30%" colspan="3" rowspan="1">PK Awal</th>
-                <th class="th-head" width="30%" colspan="3" rowspan="1">PK Revisi</th>
-            </tr>
-            <tr class="tr-head">
-                <th class="th-head" width="10%" rowspan="1">Dokumen</th>
-                <th class="th-head" width="10%" rowspan="1">Tanggal Kirim</th>
-                <th class="th-head" width="10%" rowspan="1">Verifikasi</th>
-                <th class="th-head" width="10%" rowspan="1">Dokumen</th>
-                <th class="th-head" width="10%" rowspan="1">Tanggal Kirim</th>
-                <th class="th-head" width="10%" rowspan="1">Verifikasi</th>
-            </tr>
-            <?= $componen ?>
-            <?= $total_componen ?>
+<div class="tabel-rekap tableFixHead card row" style="margin: 30px 80px;">
+        <table class="table-bordered" width="100%">
+            <thead class="table-primary text-dark">
+                <tr class="tr-head">
+                    <th class="th-head" width="5%" rowspan="3">No</th>
+                    <th class="th-head" width="20%" rowspan="3">Nama Unit / Satker</th>
+                    <th class="th-head" width="15%" colspan="2">Entitas Kerja</th>
+                    <th class="th-head" width="60%" colspan="6">Form</th>
+                </tr>
+                <tr class="tr-head">
+                    <th class="th-head" width="10%" rowspan="2">Melapor</th>
+                    <th class="th-head" width="10%" rowspan="2">Belum Melapor</th>
+                    <th class="th-head" width="30%" colspan="3" rowspan="1">PK Awal</th>
+                    <th class="th-head" width="30%" colspan="3" rowspan="1">PK Revisi</th>
+                </tr>
+                <tr class="tr-head">
+                    <th class="th-head" width="10%" rowspan="1">Dokumen</th>
+                    <th class="th-head" width="10%" rowspan="1">Tanggal Kirim</th>
+                    <th class="th-head" width="10%" rowspan="1">Verifikasi</th>
+                    <th class="th-head" width="10%" rowspan="1">Dokumen</th>
+                    <th class="th-head" width="10%" rowspan="1">Tanggal Kirim</th>
+                    <th class="th-head" width="10%" rowspan="1">Verifikasi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?= $componen ?>
+                <?= $total_componen ?>
+            </tbody>
         </table>
 </div>
 
@@ -538,10 +547,10 @@ $total_componen = '';
 
 <script>
         var data = [
-        {label: "Belum Menginputkan", data:<?php echo $piechart['belumMenginputkan']['persentase'] ?>, color: '#807d7e'},
-        {label: "Menunggu Konfirmasi", data: <?php echo $piechart['menungguKonfirmasi']['persentase'] ?>, color: '#1c81b0'},
-        {label: "Terverifikasi", data: <?php echo $piechart['terverifikasi']['persentase'] ?>, color: '#1cb02d'},
-        {label: "Ditolak", data: <?php echo $piechart['ditolak']['persentase'] ?>, color: '#a8163d'}
+        {label: "Belum Melapor", data:<?php echo $chart_belum_lapor ?>, color: '#807d7e'},
+        {label: "Menunggu Verifikasi", data: <?php echo $chart_menunggu_konfir ?>, color: '#1c81b0'},
+        {label: "Terverifikasi", data: <?php echo $chart_acc ?>, color: '#1cb02d'},
+        {label: "Ditolak", data: <?php echo $chart_reject ?>, color: '#a8163d'}
     ];
  
     var options = {
