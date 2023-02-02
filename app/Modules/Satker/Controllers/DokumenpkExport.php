@@ -313,7 +313,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
     {
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->Cell(7, 5, $_listNo, 0);
-        $pdf->SetMargins(25, 0, 10, 0);
+        $pdf->SetMargins(23, 0, 10, 0);
         // $pdf->MultiCell($this->sectionWidth - 7, 5, $pdf->WriteHTML($_listContent), 0);
         $pdf->MultiCell($this->sectionWidth - 7, 5, $pdf->WriteHTML($_listContent), 0);
     }
