@@ -232,7 +232,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         /**  Dokumen Pengenalan Pihak */
-        $pdf->SetFont('Arial', '', 11);
+        $pdf->SetFont('Arial', '', 10.5);
         // Text
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->MultiCell($this->sectionWidth, 4, "Dalam rangka mewujudkan manajemen pemerintahan yang efektif, transparan, dan akuntabel serta berorientasi pada hasil, kami yang bertandatangan di bawah ini:", 0, 'J');
@@ -244,7 +244,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . $dataDokumen['pihak1_initial']);
 
         // Text 2
-        $pdf->Ln(4);
+        // $pdf->Ln(2);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         // $pdf->MultiCell($this->sectionWidth, 5, "Selanjutnya disebut PIHAK PERTAMA", 0, 'J');
         $pdf->MultiCell($this->sectionWidth, 4, $pdf->WriteHTML("Selanjutnya disebut <b>PIHAK PERTAMA</b>"), 0, 'J');
@@ -253,13 +253,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Kedua
         $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak2_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial']);
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . ucwords($dataDokumen['pihak2_initial']));
 
         // Text 3
-        $pdf->Ln(4);
+        $pdf->Ln(2);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->MultiCell($this->sectionWidth, 5, $pdf->WriteHTML("Selaku atasan langsung <b>PIHAK PERTAMA</b>. selanjutnya disebut <b>PIHAK KEDUA</b>"), 0, 'J');
-        $pdf->Ln(3);
+        $pdf->Ln(2);
 
 
         /** Isi */
@@ -290,21 +290,21 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_renderIntroductionSection($pdf, $_title, $_introduction)
     {
-        $pdf->SetFont('Arial', '', 8.5);
+        $pdf->SetFont('Arial', '', 10.5);
         $pdf->SetX((330 - $this->sectionWidth) / 2);
         $pdf->Cell(35, 5, $_title, 0);
 
-        $pdf->SetFont('Arial', '', 8.5);
+        $pdf->SetFont('Arial', '', 10.5);
         $pdf->SetX((360 - $this->sectionWidth) / 2);
-        $pdf->Cell(5, 5, ':', 0);
+        $pdf->Cell(2, 5, ':', 0);
 
-        $pdf->SetFont('Arial', '', 8.5);
+        $pdf->SetFont('Arial', '', 9);
         $pdf->SetX((370 - $this->sectionWidth) / 2);
-        $pdf->Cell(150, 5, $_introduction, 0);
-        // $pdf->MultiCell(0, 4, $_introduction, 0, 'L');
+        // $pdf->Cell(150, 5, $_introduction, 0);
+        $pdf->MultiCell(0, 5.5, $_introduction, 0, 'L');
 
-        $pdf->SetFont('Arial', '', 10);
-        $pdf->Ln(7);
+        $pdf->SetFont('Arial', '', 10.5);
+        $pdf->Ln(1);
     }
 
 
