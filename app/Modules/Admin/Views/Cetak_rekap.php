@@ -159,7 +159,7 @@
         <br>DITJEN SUMBER DAYA AIR
         <br>STATUS
         <?= $tanggal ?> <?= $bulan ?> <?= $tahun ?>
-        ; <?= $jam ?> WIB
+        , <?= $jam ?> WIB
     </h5>
 
     <div>

@@ -495,7 +495,15 @@ $total_componen = '';
     </div>
 </div>
 
-<div class="tabel-rekap tableFixHead card row" style="margin: 30px 80px;">
+<div class="card row text-title" style="margin: 30px 80px;">
+    <h5 class="kop-rekap">REKAPITULASI PENGIRIMAN DOKUMEN PERJANJIAN KINERJA (PK) ES II / UPT / SATUAN KERJA TA <?= $session_year ?>
+            <br>DITJEN SUMBER DAYA AIR
+            <br>STATUS
+            <?= $tanggal ?> <?= $bulan ?> <?= $tahun ?>
+            , <?= $jam ?> WIB
+    </h5>
+</div>
+<div class="tabel-rekap tableFixHead card row" style="margin: 0px 80px;">
         <table class="table-bordered" width="100%">
             <thead class="table-primary text-dark">
                 <tr class="tr-head">

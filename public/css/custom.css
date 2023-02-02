@@ -4,6 +4,12 @@
     text-align: center;
 }
 
+.kop-rekap {
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
 .tr-head {
     border: 1px solid black;
     text-align: center;
