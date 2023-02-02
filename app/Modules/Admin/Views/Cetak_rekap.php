@@ -29,7 +29,7 @@
         .ket-satker {
             text-align: left;
             background: #d4d700;
-            border: 1px solid white;
+            border: 1px solid black;
         }
 
         th {

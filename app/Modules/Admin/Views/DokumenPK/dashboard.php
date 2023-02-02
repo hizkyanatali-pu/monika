@@ -6,14 +6,14 @@
 
 <style type="text/css">
 #flotcontainer {
-    width: 35vw;
-    height: 35vw;
+    width: 25vw;
+    height: 25vw;
     text-align: left;
 }
 
 .pieLabel div {
     font-weight: bold !important;
-    font-size: 15px !important;
+    font-size: 10px !important;
 }
 </style>
 
@@ -431,62 +431,60 @@ $total_componen = '';
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="row">
-    <div class="col-md-7">
-        <div id="flotcontainer"></div>
-    </div>
-    <div class="col-md-5">
-        <div class="kt-portlet kt-portlet--tab">
-            <div class="kt-portlet__body">
-                <div class="kt-section mb-0">
-                    <div class="kt-section__content">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <?php //echo $piechart['jumlahall'] ?>
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Keterangan</th>
-                                            <th>Persentase</th>
-                                            <th>Jumlah Instansi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="d-flex">
-                                                <div style="width: 15px; height: 15px; background: #807d7e; margin-top: 2px; margin-right: 10px"></div>
-                                                Belum Lapor
-                                            </td>
-                                            <td><?php echo round($chart_belum_lapor, 2) ?>%</td>
-                                            <td><?php echo $belum_lapor ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="d-flex">
-                                                <div style="width: 15px; height: 15px; background: #1c81b0; margin-top: 2px; margin-right: 10px"></div>
-                                                Menunggu Verifikasi
-                                            </td>
-                                            <td><?php echo round($chart_menunggu_konfir, 2) ?>%</td>
-                                            <td><?php echo $menunggu_konfir ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="d-flex">
-                                                <div style="width: 15px; height: 15px; background: #1cb02d; margin-top: 2px; margin-right: 10px"></div>
-                                                Terverifikasi
-                                            </td>
-                                            <td><?php echo round($chart_acc, 2) ?>%</td>
-                                            <td><?php echo $acc ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="d-flex">
-                                                <div style="width: 15px; height: 15px; background: #a8163d; margin-top: 2px; margin-right: 10px"></div>
-                                                Ditolak
-                                            </td>
-                                            <td><?php echo round($chart_reject, 2) ?>%</td>
-                                            <td><?php echo $reject ?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid mt-3">
+    <div class="kt-portlet">
+        <div class="kt-portlet__body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="flotcontainer" class="mx-auto"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php //echo $piechart['jumlahall'] ?>
+                            <table class="table table-striped" style="border: 1px solid gray;">
+                                <thead>
+                                    <tr>
+                                        <th>Keterangan</th>
+                                        <th>Persentase</th>
+                                        <th>Jumlah Instansi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="d-flex">
+                                            <div style="width: 15px; height: 15px; background: #807d7e; margin-top: 2px; margin-right: 10px"></div>
+                                            Belum Lapor
+                                        </td>
+                                        <td><?php echo round($chart_belum_lapor, 2) ?>%</td>
+                                        <td><?php echo $belum_lapor ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="d-flex">
+                                            <div style="width: 15px; height: 15px; background: #1c81b0; margin-top: 2px; margin-right: 10px"></div>
+                                            Menunggu Verifikasi
+                                        </td>
+                                        <td><?php echo round($chart_menunggu_konfir, 2) ?>%</td>
+                                        <td><?php echo $menunggu_konfir ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="d-flex">
+                                            <div style="width: 15px; height: 15px; background: #1cb02d; margin-top: 2px; margin-right: 10px"></div>
+                                            Terverifikasi
+                                        </td>
+                                        <td><?php echo round($chart_acc, 2) ?>%</td>
+                                        <td><?php echo $acc ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="d-flex">
+                                            <div style="width: 15px; height: 15px; background: #a8163d; margin-top: 2px; margin-right: 10px"></div>
+                                            Ditolak
+                                        </td>
+                                        <td><?php echo round($chart_reject, 2) ?>%</td>
+                                        <td><?php echo $reject ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
