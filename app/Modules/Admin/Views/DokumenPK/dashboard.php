@@ -431,7 +431,7 @@ $total_componen = '';
 <!-- end:: Subheader -->
 
 <!-- begin:: Content -->
-<div class="card row" style="margin: 0px 80px;">
+<div class="row">
     <div class="col-md-7">
         <div id="flotcontainer"></div>
     </div>
@@ -495,45 +495,55 @@ $total_componen = '';
     </div>
 </div>
 
-<div class="card row text-title" style="margin: 30px 80px;">
-    <h5 class="kop-rekap">REKAPITULASI PENGIRIMAN DOKUMEN PERJANJIAN KINERJA (PK) ES II / UPT / SATUAN KERJA TA <?= $session_year ?>
-            <br>DITJEN SUMBER DAYA AIR
-            <br>STATUS
-            <?= $tanggal ?> <?= $bulan ?> <?= $tahun ?>
-            , <?= $jam ?> WIB
-    </h5>
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid mt-3">
+    <div class="kt-portlet">
+        <div class="kt-portlet__body">
+            <div class="clearfix mb-3">
+                <h5 class="kop-rekap">REKAPITULASI PENGIRIMAN DOKUMEN PERJANJIAN KINERJA (PK) ES II / UPT / SATUAN KERJA TA <?= $session_year ?>
+                        <br>DITJEN SUMBER DAYA AIR
+                        <br>STATUS
+                        <?= $tanggal ?> <?= $bulan ?> <?= $tahun ?>
+                        , <?= $jam ?> WIB
+                </h5>
+                <hr>
+                <div class="button-pdf text-right">
+                    <a href="<?= site_url('dokumenpk/rekap') ?>" target="_blank" class="btn btn-primary btn-sm text-white"><i class="fa fa-file-pdf"> Rekap</i></a>
+                </div>
+                <br>
+                <div class="tabel-rekap tableFixHead card row">
+                        <table class="table-bordered" width="100%">
+                            <thead class="table-primary text-dark">
+                                <tr class="tr-head">
+                                    <th class="th-head" width="5%" rowspan="3">No</th>
+                                    <th class="th-head" width="20%" rowspan="3">Nama Unit / Satker</th>
+                                    <th class="th-head" width="15%" colspan="2">Entitas Kerja</th>
+                                    <th class="th-head" width="60%" colspan="6">Form</th>
+                                </tr>
+                                <tr class="tr-head">
+                                    <th class="th-head" width="10%" rowspan="2">Melapor</th>
+                                    <th class="th-head" width="10%" rowspan="2">Belum Melapor</th>
+                                    <th class="th-head" width="30%" colspan="3" rowspan="1">PK Awal</th>
+                                    <th class="th-head" width="30%" colspan="3" rowspan="1">PK Revisi</th>
+                                </tr>
+                                <tr class="tr-head">
+                                    <th class="th-head" width="10%" rowspan="1">Dokumen</th>
+                                    <th class="th-head" width="10%" rowspan="1">Tanggal Kirim</th>
+                                    <th class="th-head" width="10%" rowspan="1">Verifikasi</th>
+                                    <th class="th-head" width="10%" rowspan="1">Dokumen</th>
+                                    <th class="th-head" width="10%" rowspan="1">Tanggal Kirim</th>
+                                    <th class="th-head" width="10%" rowspan="1">Verifikasi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?= $componen ?>
+                                <?= $total_componen ?>
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="tabel-rekap tableFixHead card row" style="margin: 0px 80px;">
-        <table class="table-bordered" width="100%">
-            <thead class="table-primary text-dark">
-                <tr class="tr-head">
-                    <th class="th-head" width="5%" rowspan="3">No</th>
-                    <th class="th-head" width="20%" rowspan="3">Nama Unit / Satker</th>
-                    <th class="th-head" width="15%" colspan="2">Entitas Kerja</th>
-                    <th class="th-head" width="60%" colspan="6">Form</th>
-                </tr>
-                <tr class="tr-head">
-                    <th class="th-head" width="10%" rowspan="2">Melapor</th>
-                    <th class="th-head" width="10%" rowspan="2">Belum Melapor</th>
-                    <th class="th-head" width="30%" colspan="3" rowspan="1">PK Awal</th>
-                    <th class="th-head" width="30%" colspan="3" rowspan="1">PK Revisi</th>
-                </tr>
-                <tr class="tr-head">
-                    <th class="th-head" width="10%" rowspan="1">Dokumen</th>
-                    <th class="th-head" width="10%" rowspan="1">Tanggal Kirim</th>
-                    <th class="th-head" width="10%" rowspan="1">Verifikasi</th>
-                    <th class="th-head" width="10%" rowspan="1">Dokumen</th>
-                    <th class="th-head" width="10%" rowspan="1">Tanggal Kirim</th>
-                    <th class="th-head" width="10%" rowspan="1">Verifikasi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?= $componen ?>
-                <?= $total_componen ?>
-            </tbody>
-        </table>
-</div>
-
 
 
 <!-- end:: Content -->
