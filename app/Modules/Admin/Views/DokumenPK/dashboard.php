@@ -442,7 +442,7 @@ $total_componen = '';
                     <div class="row">
                         <div class="col-md-12">
                             <?php //echo $piechart['jumlahall'] ?>
-                            <table class="table table-striped" style="border: 1px solid gray;">
+                            <table class="table table-striped" style="border: 1px solid #807d7e;">
                                 <thead>
                                     <tr>
                                         <th>Keterangan</th>

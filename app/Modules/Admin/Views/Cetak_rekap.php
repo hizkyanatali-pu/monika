@@ -92,8 +92,13 @@
         #flotcontainer {
             width: 500px;
             height: 500px;
-            text-align: center;
             font-size: 13px;
+            margin-left: 70%;
+        }
+
+        .pieLabel div {
+            font-weight: bold !important;
+            font-size: 15px !important;
         }
 
         .ket-chart,
@@ -102,7 +107,8 @@
         }
 
         .tabel-keterangan {
-            margin-left: 20px;
+            margin-left: 25%;
+    
         }
 
         .btn {
@@ -127,6 +133,14 @@
             .hidden-print,
             .hidden-print * {
                 display: none !important;
+            }
+
+            #flotcontainer {
+                margin-left: 5%;
+            }
+
+            .tabel-keterangan {
+                margin-left: 25%;
             }
 
             .hidden-back,
