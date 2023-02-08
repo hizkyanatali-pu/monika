@@ -61,9 +61,10 @@
                                             <td>
                                                 <?php echo $valueSkIndikator['title'] ?>
                                             </td>
-                                            <td><?php echo $valueSkIndikator['output'] ?></td>
+                                            <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
                                             <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
-                                            <td><?php echo $valueSkIndikator['outcome'] ?></td>
+                                            <!-- <td><?php echo $valueSkIndikator['outcome'] ?></td> -->
+                                            <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
                                             <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
                                         </tr>
                                     <?php } ?>
