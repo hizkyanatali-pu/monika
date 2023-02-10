@@ -680,6 +680,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         foreach ($rumusIndikatorSp as $keyRumusIndikatorSp => $valueRumusIndikatorSp) {
                             // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rumus'][$keyRumusIndikatorSp]['rumus'] = $valueRumusIndikatorSp->rumus;
 
+
                             $dataSatker = $this->db->query("
                                 SELECT 
                                     m_satker.*
@@ -690,11 +691,25 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     left join m_satker on dokumen_pk_template_akses.rev_id = m_satker.satkerid
                                 WHERE 
                                     dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
-                                    and dokumen_pk_template.type='satker'
                                     and dokumen_pk_template_akses.rev_table='m_satker'
                                     and m_satker.balaiid = '" . $valueBalai->balaiid . "';
                             ")->getResult();
 
+                            $queryBalai = $this->db->query("
+                                SELECT 
+                                    m_balai.*
+                                FROM 
+                                dokumen_pk_template_rowrumus 
+                                    left join dokumen_pk_template on dokumen_pk_template_rowrumus.template_id = dokumen_pk_template.id
+                                    left join dokumen_pk_template_akses on dokumen_pk_template.id = dokumen_pk_template_akses.template_id
+                                    left join m_balai on dokumen_pk_template_akses.rev_id = m_balai.balaiid
+                                WHERE 
+                                    dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
+                                    and dokumen_pk_template_akses.rev_table='m_balai'
+                                    and m_balai.balaiid = '" . $valueBalai->balaiid . "';
+                            ")->getResult();
+
+                            
                             if ($dataSatker) {
                                 foreach ($dataSatker as $keyDataSatker => $valueDataSatker) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
@@ -777,7 +792,6 @@ class Dokumenpk extends \App\Controllers\BaseController
                                             AND dokumenpk_satker.satkerid='" . $valueDataSatker->satkerid . "'
                                             AND dokumenpk_satker.balaiid='" . $valueDataSatker->balaiid . "'
                                             AND dokumenpk_satker.tahun='" . $sessionTahun . "'
-                                            AND dokumenpk_satker.dokumen_type='satker'
                                             AND dokumenpk_satker.status='setuju'
                                             AND dokumenpk_satker.deleted_at is null
                                             AND dokumenpk_satker_rows.template_row_id='" . $dataIndicatorSK->id . "'
@@ -791,7 +805,116 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     ]);
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
                                 }
-                            }
+
+
+                            } else if($queryBalai) {
+                                foreach ($queryBalai as $keyDataBalai => $valueDataBalai) {
+                                    $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
+
+                                    if ($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
+                                        $itemTemp['rowspan']++;
+                                        $itemTemp['sp'][$keySp]['rowspan']++;
+                                    }
+
+                                    if (array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaBalai')) === FALSE) {
+                                        array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
+                                            'namaBalai' => $valueDataBalai->balai,
+                                            'rowspan' => 0,
+                                            // 'rumus' => [$valueRumusIndikatorSp->rumus],
+                                            'sk' => []
+                                        ]);
+                                    }
+
+                                    
+                                    
+                                    $dataIndicatorSK2 = $this->db->query("
+                                    SELECT 
+                                    dokumen_pk_template_row.*,
+                                    dokumen_pk_template_rowrumus.rumus
+                                    FROM 
+                                    dokumen_pk_template_akses
+                                    left join dokumen_pk_template on 
+                                    dokumen_pk_template_akses.template_id = dokumen_pk_template.id
+                                    left join dokumen_pk_template_row ON
+                                    dokumen_pk_template.id = dokumen_pk_template_row.template_id
+                                    left join dokumen_pk_template_rowrumus ON
+                                    dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
+                                    where 
+                                    dokumen_pk_template_akses.rev_table='m_balai' 
+                                    and dokumen_pk_template_akses.rev_id='" . $valueDataBalai->balaiid . "'
+                                    and dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
+                                    and dokumen_pk_template.type='master-balai'
+                                    ")->getRow();
+                                    
+
+                                    $dataSkBalai = $this->db->query("
+                                        SELECT 
+                                            dokumen_pk_template_row.*
+                                        FROM 
+                                            dokumen_pk_template_akses
+                                            left join dokumen_pk_template on 
+                                                dokumen_pk_template_akses.template_id = dokumen_pk_template.id
+                                            left join dokumen_pk_template_row ON
+                                                dokumen_pk_template.id = dokumen_pk_template_row.template_id
+                                            left join dokumen_pk_template_rowrumus ON
+                                                dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
+                                        where 
+                                            dokumen_pk_template_akses.rev_table='m_balai' 
+                                            and dokumen_pk_template_akses.rev_id='" . $valueDataSatker->balaiid . "'
+                                            and dokumen_pk_template.type='balai'
+                                            and dokumen_pk_template_row.type='section_title'
+                                            and dokumen_pk_template_row.id < '" . $dataIndicatorSK2->id . "'
+                                        ORDER BY dokumen_pk_template_row.id DESC;
+                                    ")->getRow();
+
+                                    
+                                    $findDataSatkerIndex = array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaBalai'));
+                                    // var_dump($dataSkBalai->title);
+                                    // die;
+                                    if (array_search(isset($dataSkBalai->title), array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk')) === FALSE) {
+                                        array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], [
+                                            'namaSk' => '-',
+                                            'rowspan' => 0,
+                                            'indikatorSk' => []
+                                        ]);
+                                    }
+                                    $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['rowspan']++;
+
+
+                                    $findDataSKIndex = array_search(isset($dataSkBalai->title), array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk'));
+
+                                    $dataDokumen2 = $this->db->query("
+                                        SELECT
+                                            dokumenpk_satker_rows.target_value,
+                                            dokumenpk_satker_rows.outcome_value
+                                        FROM
+                                            dokumenpk_satker_rows
+                                            LEFT JOIN dokumenpk_satker ON dokumenpk_satker_rows.dokumen_id = dokumenpk_satker.id
+                                        WHERE
+                                            dokumenpk_satker.template_id='" . $dataIndicatorSK2->template_id . "'
+                                            AND dokumenpk_satker.balaiid='" . $valueDataBalai->balaiid . "'
+                                            AND dokumenpk_satker.satkerid is null
+                                            AND dokumenpk_satker.tahun='" . $sessionTahun . "'
+                                            AND dokumenpk_satker.status='setuju'
+                                            AND dokumenpk_satker.deleted_at is null
+                                            AND dokumenpk_satker_rows.template_row_id='" . $dataIndicatorSK2->id . "'
+                                    ")->getRow(); 
+
+                                    // var_dump($dataDokumen2);
+                                    // die;
+                                    
+                                    array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
+                                        // 'title'         => $dataIndicatorSK2->title,
+                                        'title'         => '-',
+                                        'output'        => $dataDokumen2->target_value ?? '-',
+                                        'outputSatuan'  => $dataIndicatorSK->target_satuan,
+                                        'outcome'       => $dataDokumen2->outcome_value ?? '-',
+                                        'outcomeSatuan' => $dataIndicatorSK->outcome_satuan
+                                    ]);
+                                    $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
+                                    }
+
+                                }
                             // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = $dataSatker->satker ?? null;
                         }
                     }
