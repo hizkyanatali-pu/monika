@@ -235,6 +235,15 @@ class BigData extends \App\Controllers\BaseController
             'totalFile' => 1 //ceil($this->getData($filterData, null, null, true)['total'] / 1000)
         ], 200);
     }
+    
+    
+    
+    public function downloadJsonFile() {
+        $result = [
+            'data'   => $this->getData()
+        ];
+        return $this->respond($result, 200);
+    }
 
 
 
@@ -298,14 +307,16 @@ class BigData extends \App\Controllers\BaseController
         ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
         ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
 
-        switch ($_filterData['opsiData']) {
-            case '1':
-                $data->where('blokir', '0');
-                break;
-            
-            case '2':
-                $data->where('blokir >', '0');
-                break;
+        if (array_key_exists('opsiData', $_filterData)) {
+            switch ($_filterData['opsiData']) {
+                case '1':
+                    $data->where('blokir', '0');
+                    break;
+                
+                case '2':
+                    $data->where('blokir >', '0');
+                    break;
+            }
         }
 
         if (is_array($_filterData)) {

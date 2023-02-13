@@ -221,6 +221,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\BigData::downloadExcelBigData');
                     $routes->get('prepare', '\Modules\Admin\Controllers\BigData::prepareToDownload');
                     $routes->post('set-temp-column', '\Modules\Admin\Controllers\BigData::setTempColumn');
+                    $routes->get('json', '\Modules\Admin\Controllers\BigData::downloadJsonFile');
                 });
             });
 
