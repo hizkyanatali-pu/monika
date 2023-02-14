@@ -235,15 +235,6 @@ class BigData extends \App\Controllers\BaseController
             'totalFile' => 1 //ceil($this->getData($filterData, null, null, true)['total'] / 1000)
         ], 200);
     }
-    
-    
-    
-    public function downloadJsonFile() {
-        $result = [
-            'data'   => $this->getData()
-        ];
-        return $this->respond($result, 200);
-    }
 
 
 
