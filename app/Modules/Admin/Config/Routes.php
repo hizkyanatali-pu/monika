@@ -15,6 +15,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('cron-tarik-data-sisa-lelang', '\Modules\Admin\Controllers\CronJob::tarikDataEmonSisaLelangSda/$1');
         //check dokument PK
         $routes->get('showpdf/tampilkan/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
+
+        $routes->get('backup-table/(:any)', '\Modules\Admin\Controllers\DataJson::downloadDataTable/$1');
     });
 
 
@@ -53,6 +55,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('edit/(:segment)', '\Modules\Admin\Controllers\Usergroup::edit/$1');
         $routes->post('update', '\Modules\Admin\Controllers\Usergroup::update');
     });
+
+
+
+    
 
 
 
@@ -221,7 +227,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\BigData::downloadExcelBigData');
                     $routes->get('prepare', '\Modules\Admin\Controllers\BigData::prepareToDownload');
                     $routes->post('set-temp-column', '\Modules\Admin\Controllers\BigData::setTempColumn');
-                    $routes->get('json', '\Modules\Admin\Controllers\BigData::downloadJsonFile');
                 });
             });
 
