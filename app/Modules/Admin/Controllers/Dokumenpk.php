@@ -816,9 +816,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         $itemTemp['sp'][$keySp]['rowspan']++;
                                     }
 
-                                    if (array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaBalai')) === FALSE) {
+                                    if (array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker')) === FALSE) {
                                         array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
-                                            'namaBalai' => $valueDataBalai->balai,
+                                            'namaSatker' => '-',
                                             'rowspan' => 0,
                                             // 'rumus' => [$valueRumusIndikatorSp->rumus],
                                             'sk' => []
@@ -868,7 +868,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     ")->getRow();
 
                                     
-                                    $findDataSatkerIndex = array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaBalai'));
+                                    $findDataSatkerIndex = array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
                                     // var_dump($dataSkBalai->title);
                                     // die;
                                     if (array_search(isset($dataSkBalai->title), array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk')) === FALSE) {
@@ -923,8 +923,14 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             array_push($tempData, $itemTemp);
         }
-
+        
         // echo json_encode($tempData); exit;
+        $filename = 'Rekap Data Eselon 1';
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-disposition: attachment; filename=" . $filename . ".xls");
+        header("Pragma: no-cache");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Expires: 0");
 
         return view("Modules\Admin\Views\DokumenPk\Rekap\Rekap-Eselon1", [
             'data' => $tempData,
