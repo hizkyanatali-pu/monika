@@ -274,6 +274,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->group('template-eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::templateEselon1');
                 });
+
+                $routes->group('rekapitulasi', ['namespace' => 'App\Controllers'], function ($routes) {
+                    $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::rekapitulasi');
+                });
             });
         }
 
@@ -317,6 +321,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
                 $routes->get('get-tgiat-for-formpk', '\Modules\Satker\Controllers\Dokumenpk::getTgiatForFormPk');
                 $routes->get('rekap', '\Modules\Admin\Controllers\RekapPk::pdf');
+                $routes->get('rekapitulasi', '\Modules\Admin\Controllers\Dokumenpk::rekapitulasi');
             });
 
 

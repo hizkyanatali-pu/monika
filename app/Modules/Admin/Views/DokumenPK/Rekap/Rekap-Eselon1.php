@@ -27,7 +27,7 @@
             <tbody>
                 <?php foreach($data as $key => $value) { ?>
                     <tr>
-                        <td rowspan="<?php echo $value['rowspan'] ?>">
+                        <td valign="middle" rowspan="<?php echo $value['rowspan'] ?>">
                             <?php echo $key+1 ?>
                         </td>
                         <td rowspan="<?php echo $value['rowspan'] ?>">
