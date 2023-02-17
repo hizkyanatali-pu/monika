@@ -420,6 +420,16 @@ $request = \Config\Services::request();
                                             </span>
                                         </a>
                                     </li>
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'rekapitulasi'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('dokumenpk/rekapitulasi'); ?>" class="kt-menu__link ">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="kt-menu__link-text">
+                                                Rekapitulasi
+                                            </span>
+                                        </a>
+                                    </li>
                                     <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'arsip'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                                         <a href="<?= site_url('dokumenpk/arsip'); ?>" class="kt-menu__link">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
