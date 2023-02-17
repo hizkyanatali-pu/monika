@@ -9,15 +9,14 @@ class DataJson extends \App\Controllers\BaseController
     use ResponseTrait;
 
     public function __construct() {
+        // $this->kinerja        = new KinerjaOutputBulananModel();
+        // helper('dbdinamic');
+        // $session = session();
+        // $this->user = $session->get('userData');
+        // $dbcustom = switch_db($this->user['dbuse']);
+        // $this->db = \Config\Database::connect($dbcustom);
 
-        $this->kinerja        = new KinerjaOutputBulananModel();
-        helper('dbdinamic');
-        $session = session();
-        $this->user = $session->get('userData');
-        $dbcustom = switch_db($this->user['dbuse']);
-        $this->db = \Config\Database::connect($dbcustom);
-
-        $this->dbUtama                       = \Config\Database::connect();;
+        $this->dbUtama = \Config\Database::connect();;
     }
 
     public function getData()
@@ -45,15 +44,16 @@ class DataJson extends \App\Controllers\BaseController
         ];
 
         if (in_array($tableName, $allowedTable)) {
-            $response =  [ 'data' => $this->dbUtama->table($tableName)->get()->getResult()];
+            $data = $this->dbUtama->table($tableName)->get()->getResult();
+            // echo json_encode($data);
+            return $this->respond($data);
         }
         else {
             $response = [
                 'status' => 'fail',
                 'message' => 'tidak dapat mengakses data'
             ];
+            return $this->respond($response);
         }   
-
-        return $this->respond($response);
     }
 }

@@ -17,6 +17,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('showpdf/tampilkan/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
 
         $routes->get('backup-table/(:any)', '\Modules\Admin\Controllers\DataJson::downloadDataTable/$1');
+
+        $routes->get('download-backup-table/(:any)', '\Modules\Admin\Controllers\DownloadBackupTable::download/$1');
     });
 
 
