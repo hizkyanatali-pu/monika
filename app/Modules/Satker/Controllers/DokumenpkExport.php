@@ -258,7 +258,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Text 3
         // $pdf->Ln(3);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
-        $pdf->MultiCell($this->sectionWidth, 5, $pdf->WriteHTML("Selaku atasan langsung pihak pertama. selanjutnya disebut <b>PIHAK KEDUA</b>"), 0, 'J');
+        $pdf->MultiCell($this->sectionWidth, 5, $pdf->WriteHTML("Selaku atasan langsung pihak pertama, selanjutnya disebut <b>PIHAK KEDUA</b>"), 0, 'J');
         $pdf->Ln(3);
 
 
