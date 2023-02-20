@@ -199,80 +199,85 @@ class TematikModel extends Model
 
 	public function getListRekap($option, $_filterDateStart = null, $_filterDateEnd = null)
 	{
-		$whereCondition_dateFilter = "";
-
-		if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " AND tgl_mulai >= '$_filterDateStart' AND  tgl_mulai <= '$_filterDateEnd'"; 
-
-		$listData = [];
-		foreach ($option as $key => $value) {
-			$strTematikCode = join(',', $value['tematikCode']);
-			$data = $this->db_2->query("
-	    		select 
-					tmtlink.kdtematik,
-					sum(pkt.pg) as total_pagu,
-					sum(pkt.rtot) as total_realisasi,
-					sum(pkt.ufis) as total_ufis,
-					(JSON_OBJECT(
-						'tematik', satker.grup,
-						'pagu', sum(pkt.pg),
-						'realisasi', sum(pkt.rtot),
-						'prog_keu', ((sum(pkt.rtot) / sum(pkt.pg)) * 100),
-						'prog_fis', ((sum(pkt.ufis) / sum(pkt.pg)) * 100),
-						'ket', (
-							select 
-								GROUP_CONCAT(
-									CASE 
-										WHEN
-											(INSTR(sub_pkt.nmpaket, ';')) > 0
-										THEN
-											'- ' || SUBSTR(sub_pkt.nmpaket, 1, (INSTR(sub_pkt.nmpaket, ';')-1))
-										ELSE
-											'- ' || sub_pkt.nmpaket
-									END, '<br>'
-								) 
-							from 
-								paket sub_pkt
-								left join satker_sda sub_satker on sub_pkt.kdsatker=sub_satker.kdsatker
-								left join tematik_link sub_tmtlink on sub_pkt.kode=sub_tmtlink.kode_ang
-							where 
-								sub_satker.grup=satker.grup
-								and sub_tmtlink.kdtematik = tmtlink.kdtematik
-						)
-					)) as data
-				from 
-					satker_sda satker
-					left join paket pkt on satker.kdsatker=pkt.kdsatker
-					left join tematik_link tmtlink on pkt.kode=tmtlink.kode_ang
-				WHERE
-					tmtlink.kdtematik in ($strTematikCode)
-					$whereCondition_dateFilter
-				group by 
-				satker.grup
-	    	")->getResult();
-
-			$totalPagu = 0;
-			$totalRealisasi = 0;
-			$totalUFis = 0;
-			$itemList = [];
-			foreach ($data as $key2 => $value2) {
-				$totalPagu += $value2->total_pagu;
-				$totalRealisasi += $value2->total_realisasi;
-				$totalUFis += $value2->total_ufis;
-				array_push($itemList, json_decode($value2->data));
+		try {
+			$whereCondition_dateFilter = "";
+	
+			if (!is_null($_filterDateStart) && !is_null($_filterDateEnd)) $whereCondition_dateFilter = " AND tgl_mulai >= '$_filterDateStart' AND  tgl_mulai <= '$_filterDateEnd'"; 
+	
+			$listData = [];
+			foreach ($option as $key => $value) {
+				$strTematikCode = join(',', $value['tematikCode']);
+				$data = $this->db_2->query("
+					select 
+						tmtlink.kdtematik,
+						sum(pkt.pg) as total_pagu,
+						sum(pkt.rtot) as total_realisasi,
+						sum(pkt.ufis) as total_ufis,
+						(JSON_OBJECT(
+							'tematik', satker.grup,
+							'pagu', sum(pkt.pg),
+							'realisasi', sum(pkt.rtot),
+							'prog_keu', ((sum(pkt.rtot) / sum(pkt.pg)) * 100),
+							'prog_fis', ((sum(pkt.ufis) / sum(pkt.pg)) * 100),
+							'ket', (
+								select 
+									GROUP_CONCAT(
+										CASE 
+											WHEN
+												(INSTR(sub_pkt.nmpaket, ';')) > 0
+											THEN
+												'- ' || SUBSTR(sub_pkt.nmpaket, 1, (INSTR(sub_pkt.nmpaket, ';')-1))
+											ELSE
+												'- ' || sub_pkt.nmpaket
+										END, '<br>'
+									) 
+								from 
+									paket sub_pkt
+									left join satker_sda sub_satker on sub_pkt.kdsatker=sub_satker.kdsatker
+									left join tematik_link sub_tmtlink on sub_pkt.kode=sub_tmtlink.kode_ang
+								where 
+									sub_satker.grup=satker.grup
+									and sub_tmtlink.kdtematik = tmtlink.kdtematik
+							)
+						)) as data
+					from 
+						satker_sda satker
+						left join paket pkt on satker.kdsatker=pkt.kdsatker
+						left join tematik_link tmtlink on pkt.kode=tmtlink.kode_ang
+					WHERE
+						tmtlink.kdtematik in ($strTematikCode)
+						$whereCondition_dateFilter
+					group by 
+					satker.grup
+				")->getResult();
+	
+				$totalPagu = 0;
+				$totalRealisasi = 0;
+				$totalUFis = 0;
+				$itemList = [];
+				foreach ($data as $key2 => $value2) {
+					$totalPagu += $value2->total_pagu;
+					$totalRealisasi += $value2->total_realisasi;
+					$totalUFis += $value2->total_ufis;
+					array_push($itemList, json_decode($value2->data));
+				}
+	
+				$pushedArr = [
+					'title' => $value['title'],
+					'totalPagu' => $totalPagu,
+					'totalRealisasi' => $totalRealisasi,
+					'totalProgKeu' => ($totalPagu !=  0  ? ($totalRealisasi / $totalPagu) * 100 : 0),
+					'totalProgFis' => ($totalPagu !=  0  ? ($totalUFis / $totalPagu) * 100 : 0),
+					'list' => $itemList
+				];
+	
+				array_push($listData, $pushedArr);
 			}
-
-			$pushedArr = [
-				'title' => $value['title'],
-				'totalPagu' => $totalPagu,
-				'totalRealisasi' => $totalRealisasi,
-				'totalProgKeu' => ($totalPagu !=  0  ? ($totalRealisasi / $totalPagu) * 100 : 0),
-				'totalProgFis' => ($totalPagu !=  0  ? ($totalUFis / $totalPagu) * 100 : 0),
-				'list' => $itemList
-			];
-
-			array_push($listData, $pushedArr);
+	
+			return $listData;
+		} catch (\Throwable $th) {
+			header("Location:" . base_url('/preferensi/dari-sqlite'));
+			exit;
 		}
-
-		return $listData;
 	}
 }
