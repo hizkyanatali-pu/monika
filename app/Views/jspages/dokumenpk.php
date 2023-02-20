@@ -259,6 +259,15 @@
                     if (res.status) {
                         location.reload()
                     }
+                    else {
+                        Swal.fire(
+                            'Gagal',
+                            res.message,
+                            'error'
+                        ).then(result => {
+                            location.reload()
+                        })
+                    }
                 },
                 fail: (xhr) => {
                     alert('Terjadi kesalahan pada sistem')

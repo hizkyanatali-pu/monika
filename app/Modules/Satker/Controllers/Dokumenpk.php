@@ -859,21 +859,37 @@ class Dokumenpk extends \App\Controllers\BaseController
             ]);
         }
 
-        $this->dokumenSatker->insert($inserted_dokumenSatker);
-        $dokumenID = $this->db->insertID();
-        /** end-of: dokumen */
+        $checkDokumenSatkerExist = $this->dokumenSatker->select('id')
+        ->where('template_id', $inserted_dokumenSatker['template_id'])
+        ->where('dokumen_type', $inserted_dokumenSatker['dokumen_type'])
+        ->where('satkerid', $inserted_dokumenSatker['satkerid'])
+        ->where('balaiid', $inserted_dokumenSatker['balaiid'])
+        ->where('tahun', $inserted_dokumenSatker['tahun'])
+        ->get()->getNumRows();
+        if ($checkDokumenSatkerExist > 0) {
+            return $this->respond([
+                'status' => false,
+                'message' => 'Dokumen telah di terdaftar'
+            ]);
+    
+        }
+        else {
+            $this->dokumenSatker->insert($inserted_dokumenSatker);
+            $dokumenID = $this->db->insertID();
+            /** end-of: dokumen */
 
-        /* dokumen rows */
-        $this->insertDokumenSatker_rows($this->request->getPost(), $dokumenID);
-        /** end-of: dokumen rows */
+            /* dokumen rows */
+            $this->insertDokumenSatker_rows($this->request->getPost(), $dokumenID);
+            /** end-of: dokumen rows */
 
-        /** dokumen kegiatan */
-        $this->insertDokumenSatker_kegiatan($this->request->getPost(), $dokumenID);
-        /** end-of: dokumen kegiatan */
+            /** dokumen kegiatan */
+            $this->insertDokumenSatker_kegiatan($this->request->getPost(), $dokumenID);
+            /** end-of: dokumen kegiatan */
 
-        return $this->respond([
-            'status' => true,
-        ]);
+            return $this->respond([
+                'status' => true,
+            ]);
+        }
     }
 
 
