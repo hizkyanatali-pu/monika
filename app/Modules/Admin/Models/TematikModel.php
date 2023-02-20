@@ -20,179 +20,194 @@ class TematikModel extends Model
 
 	public function getListTematik($argKdTematik)
 	{
-		$data = $this->db_2->query("
-    		select 
-	            kdsatker,
-	            nmsatker,
-	            (
-	                select 
-	                    '[' || GROUP_CONCAT(
-	                        JSON_OBJECT(
-	                            'nmpaket', paket.nmpaket,
-	                            'vol', paket.vol,
-	                            'satuan', paket.sat,
-	                            'provinsi', tlokasi.nmlokasi,
-	                            'lokasi', tkabkota.nmkabkota,
-	                            'pengadaan', (
-	                                CASE 
-	                                    WHEN paket.kdpengadaan=0 THEN 'A'
-	                                    WHEN paket.kdpengadaan=1 THEN 'K'
-	                                    WHEN paket.kdpengadaan=2 THEN 'S'
-	                                    WHEN paket.kdpengadaan=3 THEN 'E'
-	                                    ELSE 'L'
-	                                END
-	                            ),
-	                            'pagu', paket.pg,
-	                            'realisasi', CASE  WHEN paket.rtot='' THEN 0 ELSE paket.rtot END ,
-	                            'persen_keu', (paket.rtot / paket.pg)*100,
-	                            'persen_fis', (paket.ufis / paket.pg)*100
-	                        )
-	                    ) || ']'
-	                from 
-	                    paket 
-	                    left join tematik_link on paket.kode = tematik_link.kode_ang
-	                    left join tlokasi on paket.kdlokasi=tlokasi.kdlokasi
-	                    left join tkabkota on (paket.kdkabkota=tkabkota.kdkabkota and paket.kdlokasi=tkabkota.kdlokasi)
-	                where
-	                    tematik_link.kdtematik='$argKdTematik'
-	                    and paket.kdsatker=satker_sda.kdsatker
-	            ) as paket
-	        from 
-	            satker_sda
-	        where
-	            (select count(paket.kdunit) from paket left join tematik_link on paket.kode = tematik_link.kode_ang where paket.kdsatker=satker_sda.kdsatker and tematik_link.kdtematik='$argKdTematik') > 0
-    	")->getResult();
+		try {
+			$data = $this->db_2->query("
+				select 
+					kdsatker,
+					nmsatker,
+					(
+						select 
+							'[' || GROUP_CONCAT(
+								JSON_OBJECT(
+									'nmpaket', paket.nmpaket,
+									'vol', paket.vol,
+									'satuan', paket.sat,
+									'provinsi', tlokasi.nmlokasi,
+									'lokasi', tkabkota.nmkabkota,
+									'pengadaan', (
+										CASE 
+											WHEN paket.kdpengadaan=0 THEN 'A'
+											WHEN paket.kdpengadaan=1 THEN 'K'
+											WHEN paket.kdpengadaan=2 THEN 'S'
+											WHEN paket.kdpengadaan=3 THEN 'E'
+											ELSE 'L'
+										END
+									),
+									'pagu', paket.pg,
+									'realisasi', CASE  WHEN paket.rtot='' THEN 0 ELSE paket.rtot END ,
+									'persen_keu', (paket.rtot / paket.pg)*100,
+									'persen_fis', (paket.ufis / paket.pg)*100
+								)
+							) || ']'
+						from 
+							paket 
+							left join tematik_link on paket.kode = tematik_link.kode_ang
+							left join tlokasi on paket.kdlokasi=tlokasi.kdlokasi
+							left join tkabkota on (paket.kdkabkota=tkabkota.kdkabkota and paket.kdlokasi=tkabkota.kdlokasi)
+						where
+							tematik_link.kdtematik='$argKdTematik'
+							and paket.kdsatker=satker_sda.kdsatker
+					) as paket
+				from 
+					satker_sda
+				where
+					(select count(paket.kdunit) from paket left join tematik_link on paket.kode = tematik_link.kode_ang where paket.kdsatker=satker_sda.kdsatker and tematik_link.kdtematik='$argKdTematik') > 0
+			")->getResult();
 
-		return array_map(function ($arr) {
-			return (object) [
-				'satker' 	=> $arr->nmsatker,
-				'paketList' => json_decode($arr->paket)
-			];
-		}, $data);
+			return array_map(function ($arr) {
+				return (object) [
+					'satker' 	=> $arr->nmsatker,
+					'paketList' => json_decode($arr->paket)
+				];
+			}, $data);
+		} catch (\Throwable $th) {
+			header("Location:" . base_url('/preferensi/dari-sqlite'));
+			exit;
+		}
 	}
 
 
 
 	public function getListTematikFoodEstate($argKdTematik)
 	{
-		/** section get satker used in tematik link (sqlite) */
-		$get_satkerUsed = $this->db_2->query("SELECT
-	            kdsatker
-			FROM
-				tematik_link
-			WHERE
-				tematik_link.kdtematik='$argKdTematik'
-			GROUP BY kdsatker
-		")->getResult();
-
-		$map_satkerUsed = array_map(function($arr) {
-			return $arr->kdsatker;
-		}, $get_satkerUsed);
-
-		$satkerUserd = implode(',', $map_satkerUsed);
-		/** end-of: section get satker used in tematik link (sqlite) */
-
-
-		/** get satker (mysql) */
-		$tableSatker = $this->db->table('m_satker');
-		$dataSatker = $tableSatker->select('satkerid, satker')
-		->where("satkerid IN ($satkerUserd)")->get()->getResult();
-		/** end-of: get satker (mysql) */
-
-		/** section get paket */
-		$data_satkerPaket = array_map(function($arr) use ($argKdTematik) {
-			$dataPaket = $this->db_2->query("
-				select 
-					('[' || GROUP_CONCAT(
-						JSON_OBJECT(
-							'nmpaket', paket.nmpaket,
-							'vol', paket.vol,
-							'satuan', paket.sat,
-							'provinsi', tlokasi.nmlokasi,
-							'lokasi', tkabkota.nmkabkota,
-							'pengadaan', (
-								CASE 
-									WHEN paket.kdpengadaan=0 THEN 'A'
-									WHEN paket.kdpengadaan=1 THEN 'K'
-									WHEN paket.kdpengadaan=2 THEN 'S'
-									WHEN paket.kdpengadaan=3 THEN 'E'
-									ELSE 'L'
-								END
-							),
-							'pagu', paket.pg,
-							'realisasi', CASE  WHEN paket.rtot='' THEN 0 ELSE paket.rtot END ,
-							'persen_keu', (paket.rtot / paket.pg)*100,
-							'persen_fis', (paket.ufis / paket.pg)*100
-						)
-					) || ']') as paket
-				from 
-					paket 
-					left join tematik_link on paket.kode = tematik_link.kode_ang
-					left join tlokasi on paket.kdlokasi=tlokasi.kdlokasi
-					left join tkabkota on (paket.kdkabkota=tkabkota.kdkabkota and paket.kdlokasi=tkabkota.kdlokasi)
-				where
+		try {
+			/** section get satker used in tematik link (sqlite) */
+			$get_satkerUsed = $this->db_2->query("SELECT
+					kdsatker
+				FROM
+					tematik_link
+				WHERE
 					tematik_link.kdtematik='$argKdTematik'
-					and paket.kdsatker='$arr->satkerid'
+				GROUP BY kdsatker
 			")->getResult();
 
-			return (object) [
-				'idSatker' 	=> $arr->satkerid,
-				'satker' 	=> $arr->satker,
-				'paketList' => json_decode($dataPaket[0]->paket)
-			];
-		}, $dataSatker);
-		/** end-of: section get paket */
+			$map_satkerUsed = array_map(function($arr) {
+				return $arr->kdsatker;
+			}, $get_satkerUsed);
 
-		return $data_satkerPaket;
+			$satkerUserd = implode(',', $map_satkerUsed);
+			/** end-of: section get satker used in tematik link (sqlite) */
+
+
+			/** get satker (mysql) */
+			$tableSatker = $this->db->table('m_satker');
+			$dataSatker = $tableSatker->select('satkerid, satker')
+			->where("satkerid IN ($satkerUserd)")->get()->getResult();
+			/** end-of: get satker (mysql) */
+
+			/** section get paket */
+			$data_satkerPaket = array_map(function($arr) use ($argKdTematik) {
+				$dataPaket = $this->db_2->query("
+					select 
+						('[' || GROUP_CONCAT(
+							JSON_OBJECT(
+								'nmpaket', paket.nmpaket,
+								'vol', paket.vol,
+								'satuan', paket.sat,
+								'provinsi', tlokasi.nmlokasi,
+								'lokasi', tkabkota.nmkabkota,
+								'pengadaan', (
+									CASE 
+										WHEN paket.kdpengadaan=0 THEN 'A'
+										WHEN paket.kdpengadaan=1 THEN 'K'
+										WHEN paket.kdpengadaan=2 THEN 'S'
+										WHEN paket.kdpengadaan=3 THEN 'E'
+										ELSE 'L'
+									END
+								),
+								'pagu', paket.pg,
+								'realisasi', CASE  WHEN paket.rtot='' THEN 0 ELSE paket.rtot END ,
+								'persen_keu', (paket.rtot / paket.pg)*100,
+								'persen_fis', (paket.ufis / paket.pg)*100
+							)
+						) || ']') as paket
+					from 
+						paket 
+						left join tematik_link on paket.kode = tematik_link.kode_ang
+						left join tlokasi on paket.kdlokasi=tlokasi.kdlokasi
+						left join tkabkota on (paket.kdkabkota=tkabkota.kdkabkota and paket.kdlokasi=tkabkota.kdlokasi)
+					where
+						tematik_link.kdtematik='$argKdTematik'
+						and paket.kdsatker='$arr->satkerid'
+				")->getResult();
+
+				return (object) [
+					'idSatker' 	=> $arr->satkerid,
+					'satker' 	=> $arr->satker,
+					'paketList' => json_decode($dataPaket[0]->paket)
+				];
+			}, $dataSatker);
+			/** end-of: section get paket */
+
+			return $data_satkerPaket;
+		} catch (\Throwable $th) {
+			header("Location:" . base_url('/preferensi/dari-sqlite'));
+			exit;
+		}
 	}
 
 
 
 	public function getListTematikKspn($kspnCode)
 	{
-		$data = $this->db_2->query("
-    		select 
-	            kdsatker,
-	            nmsatker,
-	            (
-	                select 
-	                    '[' || GROUP_CONCAT(
-	                        JSON_OBJECT(
-	                            'nmpaket', paket.nmpaket,
-								'vol', CASE  WHEN paket.vol = '' THEN 0 ELSE paket.vol END,
-								'satuan', paket.sat,
-								'lokasi', tlokasi.nmlokasi,
-								'pagu_rpm', (paket.pgrupiah + paket.pgsbsn),
-								'pagu_phln', paket.pgpln,
-								'pagu_total', paket.pg,
-								'realisasi_rpm', CASE  WHEN (paket.rr_rupiahm + paket.rr_sbsn) ='' THEN 0 ELSE  (paket.rr_rupiahm + paket.rr_sbsn) END,
-								'realisasi_phln', CASE  WHEN paket.rr_pln='' THEN 0 ELSE paket.rr_pln  END,
-								'realisasi_total', CASE  WHEN paket.rtot ='' THEN 0 ELSE paket.rtot END ,
-								'persen_keu', (paket.rtot/paket.pg)*100,
-								'persen_fi', (paket.ufis/paket.pg)*100
-	                        )
-	                    ) || ']'
-	                from 
-	                    paket 
-	                    left join tematik_link on paket.kode = tematik_link.kode_ang
-	                    left join tlokasi on paket.kdlokasi=tlokasi.kdlokasi
-	                    left join tkabkota on (paket.kdkabkota=tkabkota.kdkabkota and paket.kdlokasi=tkabkota.kdlokasi)
-	                where
-	                    tematik_link.kdtematik='$kspnCode'
-	                    and paket.kdsatker=satker_sda.kdsatker
-	            ) as paket
-	        from 
-	            satker_sda
-	        where
-	            (select count(paket.kdunit) from paket left join tematik_link on paket.kode = tematik_link.kode_ang where paket.kdsatker=satker_sda.kdsatker and tematik_link.kdtematik='$kspnCode') > 0
-    	")->getResult();
+		try {
+			$data = $this->db_2->query("
+				select 
+					kdsatker,
+					nmsatker,
+					(
+						select 
+							'[' || GROUP_CONCAT(
+								JSON_OBJECT(
+									'nmpaket', paket.nmpaket,
+									'vol', CASE  WHEN paket.vol = '' THEN 0 ELSE paket.vol END,
+									'satuan', paket.sat,
+									'lokasi', tlokasi.nmlokasi,
+									'pagu_rpm', (paket.pgrupiah + paket.pgsbsn),
+									'pagu_phln', paket.pgpln,
+									'pagu_total', paket.pg,
+									'realisasi_rpm', CASE  WHEN (paket.rr_rupiahm + paket.rr_sbsn) ='' THEN 0 ELSE  (paket.rr_rupiahm + paket.rr_sbsn) END,
+									'realisasi_phln', CASE  WHEN paket.rr_pln='' THEN 0 ELSE paket.rr_pln  END,
+									'realisasi_total', CASE  WHEN paket.rtot ='' THEN 0 ELSE paket.rtot END ,
+									'persen_keu', (paket.rtot/paket.pg)*100,
+									'persen_fi', (paket.ufis/paket.pg)*100
+								)
+							) || ']'
+						from 
+							paket 
+							left join tematik_link on paket.kode = tematik_link.kode_ang
+							left join tlokasi on paket.kdlokasi=tlokasi.kdlokasi
+							left join tkabkota on (paket.kdkabkota=tkabkota.kdkabkota and paket.kdlokasi=tkabkota.kdlokasi)
+						where
+							tematik_link.kdtematik='$kspnCode'
+							and paket.kdsatker=satker_sda.kdsatker
+					) as paket
+				from 
+					satker_sda
+				where
+					(select count(paket.kdunit) from paket left join tematik_link on paket.kode = tematik_link.kode_ang where paket.kdsatker=satker_sda.kdsatker and tematik_link.kdtematik='$kspnCode') > 0
+			")->getResult();
 
-		return array_map(function ($arr) {
-			return (object) [
-				'satker' 	=> $arr->nmsatker,
-				'paketList' => json_decode($arr->paket)
-			];
-		}, $data);
+			return array_map(function ($arr) {
+				return (object) [
+					'satker' 	=> $arr->nmsatker,
+					'paketList' => json_decode($arr->paket)
+				];
+			}, $data);
+		} catch (\Throwable $th) {
+			header("Location:" . base_url('/preferensi/dari-sqlite'));
+			exit;
+		}
 	}
 
 

@@ -871,7 +871,6 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'status' => false,
                 'message' => 'Dokumen telah di terdaftar'
             ]);
-    
         }
         else {
             $this->dokumenSatker->insert($inserted_dokumenSatker);
