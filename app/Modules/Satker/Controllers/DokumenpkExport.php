@@ -244,7 +244,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt","Skpd Tp-op","Bws","Bbws","Ii","IIi","Iv","Vi","VIi","VIIi"],["SNVT","SKPD TP-OP","BWS","BBWS","II","III","IV","VI","VII","VIII"],ucwords(strtolower($dataDokumen['pihak1_initial']))));
 
         // Text 2
-        // $pdf->Ln(1);
+        $pdf->Ln(2);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         // $pdf->MultiCell($this->sectionWidth, 5, "Selanjutnya disebut PIHAK PERTAMA", 0, 'J');
         $pdf->MultiCell($this->sectionWidth, 4, $pdf->WriteHTML("Selanjutnya disebut <b>PIHAK PERTAMA</b>"), 0, 'J');
@@ -256,10 +256,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt","Skpd Tp-op","Bws","Bbws","Ii","IIi","Iv","Vi","VIi","VIIi"],["SNVT","SKPD TP-OP","BWS","BBWS","II","III","IV","VI","VII","VIII"],ucwords(strtolower($dataDokumen['pihak2_initial']))));
 
         // Text 3
-        // $pdf->Ln(3);
+        $pdf->Ln(2);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->MultiCell($this->sectionWidth, 5, $pdf->WriteHTML("Selaku atasan langsung pihak pertama, selanjutnya disebut <b>PIHAK KEDUA</b>"), 0, 'J');
-        $pdf->Ln(3);
+        $pdf->Ln(5);
 
 
         /** Isi */
@@ -276,7 +276,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         /** TTD Section */
-        $pdf->Ln(3);
+        $pdf->Ln(2);
         // $this->pdf_renderSectionTtd($pdf, $this->sectionWidth, [
         //     'person1Title' => 'Pihak Kedua',
         //     'person1Name'  => $dataDokumen['pihak2_ttd'],
