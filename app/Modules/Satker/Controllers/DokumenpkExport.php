@@ -169,7 +169,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenOpening($pdf, $dataDokumen)
     {
-        $pdf->SetMargins(70, 10, 70, 0);
+        $pdf->SetMargins(30, 10, 30, 0);
         $pdf->AddPage('L', 'A4');
 
         $pdf->SetFont('Arial', 'B', 50);
@@ -214,7 +214,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
         // Kop Title 2
-        $pdf->SetFont('Times', 'B', 12);
+        $pdf->SetFont('Times', 'B', 13);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
         // $pdf->SetX((300 - $width_kopTitle2) / 2);
         // $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
@@ -222,7 +222,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         // Kop Title 3
         $kopTitle3 = $dokumenKopTitle3;
-        $pdf->SetFont('Times', 'B', 12);
+        $pdf->SetFont('Times', 'B', 13);
         $width_kopTitle3 = $pdf->GetStringWidth($dokumenKopTitle3) + 6;
         $pdf->SetX((300 - $width_kopTitle3) / 2);
         $pdf->Cell($width_kopTitle3, 6, $kopTitle3, 0, 1, 'C');
@@ -232,34 +232,34 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         /**  Dokumen Pengenalan Pihak */
-        $pdf->SetFont('Arial', '', 10.5);
+        $pdf->SetFont('Arial', '', 13);
         // Text
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->MultiCell($this->sectionWidth, 4, "Dalam rangka mewujudkan manajemen pemerintahan yang efektif, transparan, dan akuntabel serta berorientasi pada hasil, kami yang bertandatangan di bawah ini:", 0, 'J');
-        $pdf->Ln(2);
+        $pdf->Ln(3);
 
         // Pihak Pertama
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak1_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . $dataDokumen['pihak1_initial']);
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt","Skpd Tp-op","Bws","Bbws","Ii","IIi","Iv","Vi","VIi","VIIi"],["SNVT","SKPD TP-OP","BWS","BBWS","II","III","IV","VI","VII","VIII"],ucwords(strtolower($dataDokumen['pihak1_initial']))));
 
         // Text 2
-        // $pdf->Ln(2);
+        $pdf->Ln(4);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         // $pdf->MultiCell($this->sectionWidth, 5, "Selanjutnya disebut PIHAK PERTAMA", 0, 'J');
         $pdf->MultiCell($this->sectionWidth, 4, $pdf->WriteHTML("Selanjutnya disebut <b>PIHAK PERTAMA</b>"), 0, 'J');
-        $pdf->Ln(2);
+        $pdf->Ln(4);
 
         // Pihak Kedua
         $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
-        $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak2_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . ucwords($dataDokumen['pihak2_initial']));
+        $this->pdf_renderIntroductionSection($pdf, 'Nama', ucwords($dataDokumen['pihak2_ttd']));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt","Skpd Tp-op","Bws","Bbws","Ii","IIi","Iv","Vi","VIi","VIIi"],["SNVT","SKPD TP-OP","BWS","BBWS","II","III","IV","VI","VII","VIII"],ucwords(strtolower($dataDokumen['pihak2_initial']))));
 
         // Text 3
-        $pdf->Ln(2);
+        $pdf->Ln(3);
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->MultiCell($this->sectionWidth, 5, $pdf->WriteHTML("Selaku atasan langsung <b>PIHAK PERTAMA</b>. selanjutnya disebut <b>PIHAK KEDUA</b>"), 0, 'J');
-        $pdf->Ln(2);
+        $pdf->Ln(3);
 
 
         /** Isi */
@@ -269,42 +269,70 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         // Text
-        $pdf->Ln(2);
-        $this->pdf_renderListIsiSection($pdf, '1.', "<b>Pihak pertama</b> pada tahun " . $this->dokumenYear . " ini berjanji akan mewujudkan target kinerja yang seharusnya sesuai lampiran perjanjian ini, dalam rangka mencapai target kinerja jangka menengah seperti yang telah di tetapkan dalam dokumen perencanaan. Keberhasilan dan kegagalan pencapaian target kinerja tersebut menjadi tanggung jawab <b>pihak pertama</b>.");
-        $pdf->Ln(2);
-        $this->pdf_renderListIsiSection($pdf, '2.', "<b>Pihak kedua</b> akan melakukan supervisi yang di perlukan serta akan melakukan evaluasi terhadap capaian kinerja dari perjanjian ini dan mengambil tindakan yang diperlukan dalam rangka pemberian penghargaan dan sanksi.");
+        // $pdf->Ln(1);
+        $this->pdf_renderListIsiSection($pdf, '1.', "Pihak pertama pada tahun " . $this->dokumenYear . " ini berjanji akan mewujudkan target kinerja yang seharusnya sesuai lampiran perjanjian ini, dalam rangka mencapai target kinerja jangka menengah seperti yang telah ditetapkan dalam dokumen perencanaan. Keberhasilan dan kegagalan pencapaian target kinerja tersebut menjadi tanggung jawab pihak pertama.");
+        // $pdf->Ln(1);
+        $this->pdf_renderListIsiSection($pdf, '2.', "Pihak kedua akan melakukan supervisi yang diperlukan serta akan melakukan evaluasi terhadap capaian kinerja dari perjanjian ini dan mengambil tindakan yang diperlukan dalam rangka pemberian penghargaan dan sanksi.");
 
 
         /** TTD Section */
-        $pdf->Ln(5);
-        $this->pdf_renderSectionTtd($pdf, $this->sectionWidth, [
-            'person1Title' => 'Pihak Kedua',
-            'person1Name'  => $dataDokumen['pihak2_ttd'],
-            'person2Date'  => $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear,
-            'person2Title' => 'Pihak Pertama',
-            'person2Name'  => $dataDokumen['pihak1_ttd'],
-        ]);
+        $pdf->Ln(3);
+        // $this->pdf_renderSectionTtd($pdf, $this->sectionWidth, [
+        //     'person1Title' => 'Pihak Kedua',
+        //     'person1Name'  => $dataDokumen['pihak2_ttd'],
+        //     'person2Date'  => $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear,
+        //     'person2Title' => 'Pihak Pertama',
+        //     'person2Name'  => $dataDokumen['pihak1_ttd'],
+        // ]);
+
+         // title ttd 1
+         $pdf->SetFont($this->fontFamily, 'B', 12);
+         $pdf->SetX((300 - $this->sectionWidth) / 2);
+         $pdf->Cell(125, 13.7,'Pihak Kedua', 0, 0, 'C');
+ 
+         // title ttd 2
+         $pdf->SetFont($this->fontFamily, '', 12);
+         $pdf->SetX(149);
+         $pdf->Cell(144, 4,$this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
+         $pdf->Ln();
+         $pdf->SetFont($this->fontFamily, 'B', 12);
+         $pdf->SetX(167);
+         $pdf->MultiCell(110, 5, 'Pihak Pertama', 0, 'C');
+         $pdf->Ln(20);
+ 
+         // td 1
+         $pdf->SetFont($this->fontFamily, 'B', 12);
+         $pdf->SetX((300 - $this->sectionWidth) / 2);
+         $pdf->Cell(125, 4, strtoupper($dataDokumen['pihak2_ttd']), 0, 0, 'C');
+ 
+         // td 2
+         $pdf->SetFont($this->fontFamily, 'B', 12);
+         $pdf->SetX(149);
+         $pdf->Cell(144, 4, strtoupper($dataDokumen['pihak1_ttd']), 0, 0, 'C');
+
+
+
     }
 
 
 
     private function pdf_renderIntroductionSection($pdf, $_title, $_introduction)
     {
-        $pdf->SetFont('Arial', '', 10.5);
+        $pdf->SetFont('Arial', '', 12);
         $pdf->SetX((330 - $this->sectionWidth) / 2);
         $pdf->Cell(35, 5, $_title, 0);
 
-        $pdf->SetFont('Arial', '', 10.5);
+        $pdf->SetFont('Arial', '', 12);
         $pdf->SetX((360 - $this->sectionWidth) / 2);
         $pdf->Cell(2, 5, ':', 0);
 
-        $pdf->SetFont('Arial', '', 9);
+        $pdf->SetFont('Arial', '', 12);
         $pdf->SetX((370 - $this->sectionWidth) / 2);
         // $pdf->Cell(150, 5, $_introduction, 0);
         $pdf->MultiCell(0, 5.5, $_introduction, 0, 'L');
 
-        $pdf->SetFont('Arial', '', 10.5);
-        $pdf->Ln(1);
+        $pdf->SetFont('Arial', '', 13);
+        // $pdf->Ln(1);
     }
 
 
@@ -313,7 +341,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
     {
         $pdf->SetX((297 - $this->sectionWidth) / 2);
         $pdf->Cell(7, 5, $_listNo, 0);
-        $pdf->SetMargins(23, 0, 16, 0);
+        $pdf->SetMargins(23, 0, 12, 0);
         // $pdf->MultiCell($this->sectionWidth - 7, 5, $pdf->WriteHTML($_listContent), 0);
         $pdf->MultiCell($this->sectionWidth - 7, 5, $pdf->WriteHTML($_listContent), 0, 'J');
     }
