@@ -822,50 +822,15 @@ class Dokumenpk extends \App\Controllers\BaseController
             $inserted_dokumenSatker['balaiid']        = $session_balaiId;
         }
 
-        if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
-
-
-        if ($this->request->getPost('revision_dokumen_id')) {
-            $revision_dokumenID       = $this->request->getPost('revision_dokumen_id');
-            $revision_dokumenMasterID = $this->request->getPost('revision_dokumen_master_id');
-
-            $inserted_dokumenSatker['revision_dokumen_id']        = $revision_dokumenID;
-            $inserted_dokumenSatker['revision_master_dokumen_id'] = $revision_dokumenMasterID;
-
-            $inserted_dokumenSatker['revision_master_number'] = $this->dokumenSatker->selectCount('id')->where('revision_master_dokumen_id', $revision_dokumenMasterID)->orWhere('id', $revision_dokumenMasterID)->get()->getFirstRow()->id;
-
-            if ($this->request->getPost('revisionSameYear') == '1') {
-                $lastRevisionSameYearNumber = $this->dokumenSatker->select('revision_same_year_number')->groupStart()
-                    ->where('revision_master_dokumen_id', $revision_dokumenMasterID)
-                    ->orWhere('id', $revision_dokumenMasterID)
-                    ->groupEnd()
-                    ->where('is_revision_same_year', '1')
-                    ->orderBy('id', 'DESC')
-                    ->get()->getFirstRow();
-
-                $inserted_dokumenSatker['revision_same_year_number'] = $lastRevisionSameYearNumber ? $lastRevisionSameYearNumber->revision_same_year_number + 1 : 1;
-                $inserted_dokumenSatker['revision_number'] = '0';
-            } else {
-                $inserted_dokumenSatker['revision_number'] = $this->dokumenSatker->select('revision_number')->where('revision_master_dokumen_id', $revision_dokumenMasterID)
-                    ->orWhere('id', $revision_dokumenMasterID)
-                    ->orderBy('id', 'DESC')
-                    ->get()->getFirstRow()->revision_number + 1;
-            }
-
-            $this->dokumenSatker->update([
-                'status' => 'revision'
-            ], [
-                'id' => $revision_dokumenID
-            ]);
-        }
-
         $checkDokumenSatkerExist = $this->dokumenSatker->select('id')
         ->where('template_id', $inserted_dokumenSatker['template_id'])
         ->where('dokumen_type', $inserted_dokumenSatker['dokumen_type'])
         ->where('satkerid', $inserted_dokumenSatker['satkerid'])
         ->where('balaiid', $inserted_dokumenSatker['balaiid'])
         ->where('tahun', $inserted_dokumenSatker['tahun'])
+        ->where('status !=', 'revision')
         ->get()->getNumRows();
+        
         if ($checkDokumenSatkerExist > 0) {
             return $this->respond([
                 'status' => false,
@@ -873,6 +838,44 @@ class Dokumenpk extends \App\Controllers\BaseController
             ]);
         }
         else {
+            if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
+
+
+            if ($this->request->getPost('revision_dokumen_id')) {
+                $revision_dokumenID       = $this->request->getPost('revision_dokumen_id');
+                $revision_dokumenMasterID = $this->request->getPost('revision_dokumen_master_id');
+
+                $inserted_dokumenSatker['revision_dokumen_id']        = $revision_dokumenID;
+                $inserted_dokumenSatker['revision_master_dokumen_id'] = $revision_dokumenMasterID;
+
+                $inserted_dokumenSatker['revision_master_number'] = $this->dokumenSatker->selectCount('id')->where('revision_master_dokumen_id', $revision_dokumenMasterID)->orWhere('id', $revision_dokumenMasterID)->get()->getFirstRow()->id;
+
+                if ($this->request->getPost('revisionSameYear') == '1') {
+                    $lastRevisionSameYearNumber = $this->dokumenSatker->select('revision_same_year_number')->groupStart()
+                        ->where('revision_master_dokumen_id', $revision_dokumenMasterID)
+                        ->orWhere('id', $revision_dokumenMasterID)
+                        ->groupEnd()
+                        ->where('is_revision_same_year', '1')
+                        ->orderBy('id', 'DESC')
+                        ->get()->getFirstRow();
+
+                    $inserted_dokumenSatker['revision_same_year_number'] = $lastRevisionSameYearNumber ? $lastRevisionSameYearNumber->revision_same_year_number + 1 : 1;
+                    $inserted_dokumenSatker['revision_number'] = '0';
+                } else {
+                    $inserted_dokumenSatker['revision_number'] = $this->dokumenSatker->select('revision_number')->where('revision_master_dokumen_id', $revision_dokumenMasterID)
+                        ->orWhere('id', $revision_dokumenMasterID)
+                        ->orderBy('id', 'DESC')
+                        ->get()->getFirstRow()->revision_number + 1;
+                }
+
+                $this->dokumenSatker->update([
+                    'status' => 'revision'
+                ], [
+                    'id' => $revision_dokumenID
+                ]);
+            }
+
+        
             $this->dokumenSatker->insert($inserted_dokumenSatker);
             $dokumenID = $this->db->insertID();
             /** end-of: dokumen */
