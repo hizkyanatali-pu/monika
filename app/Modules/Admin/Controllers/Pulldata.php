@@ -303,7 +303,6 @@ class Pulldata extends \App\Controllers\BaseController
 
     public function cetak_semua_satker()
     {
-
         $data = [
             'title' => 'Cetak Semua Satker',
             'qdata' => $this->PulldataModel->getBalaiPaket("satker")
@@ -314,7 +313,6 @@ class Pulldata extends \App\Controllers\BaseController
     //satker terendah
     public function satker_terendah()
     {
-
         $data = [
             'title' => 'Satker Terendah',
             'posisi' => ['<i class="fa fa-home"></i>'],
@@ -330,10 +328,24 @@ class Pulldata extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\Paket\Satker_terendah', $data);
     }
 
+    public function cetak_satker_terendah()
+    {
+        $data = [
+            'title' => 'Cetak Satker Terendah',
+            'qdata' => [
+                [
+                    'title' => 'Satker Terendah',
+                    'data' => $this->PulldataModel->getBalaiPaket("satker10terendah", "md.tahun = " . session('userData.tahun')),
+                    'template' => 'satker_terendah'
+                ]
+            ]
+        ];
+        return view('Modules\Admin\Views\Paket\cetak\Format_cetak_satker', $data);
+    }
+
     //satker tertinggi
     public function satker_tertinggi()
     {
-
         $data = [
             'title' => 'Satker Tertinggi',
             'posisi' => ['<i class="fa fa-home"></i>'],
@@ -347,6 +359,21 @@ class Pulldata extends \App\Controllers\BaseController
             'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         ];
         return view('Modules\Admin\Views\Paket\Satker_terendah', $data);
+    }
+
+    public function cetak_satker_tertinggi()
+    {
+        $data = [
+            'title' => 'Cetak Satker Tertinggi',
+            'qdata' => [
+                [
+                    'title' => 'Satker Tertinggi',
+                    'data' => $this->PulldataModel->getBalaiPaket("satker10tertinggi", "md.tahun = " . session('userData.tahun')),
+                    'template' => 'satker_tertinggi'
+                ]
+            ]
+        ];
+        return view('Modules\Admin\Views\Paket\cetak\Format_cetak_satker', $data);
     }
 
 
@@ -367,6 +394,26 @@ class Pulldata extends \App\Controllers\BaseController
             'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         ];
         return view('Modules\Admin\Views\Paket\Satker_deviasi_terbesar', $data);
+    }
+
+    public function cetak_satker_deviasi_terbesar()
+    {
+        $data = [
+            'title' => 'Cetak Satker Deviasi Terbesar',
+            'qdata' => [
+                [
+                    'title' => 'Nominal Deviasi Terbesar',
+                    'data' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar", "md.tahun = " . session('userData.tahun')),
+                    'template' => 'satker_terendah'
+                ],
+                [
+                    'title' => 'Persentase Deviase Terbesar',
+                    'data' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar_persen", "md.tahun = " . session('userData.tahun')),
+                    'template' => 'satker_terendah'
+                ]
+            ]
+        ];
+        return view('Modules\Admin\Views\Paket\cetak\Format_cetak_satker', $data);
     }
     
     
@@ -542,6 +589,7 @@ class Pulldata extends \App\Controllers\BaseController
         $pgview = "Rekap-1";
         if ($pg == "paket") $pgview = "Rekap-2";
 
+        $useSatkerFormat = ['satkerterendah', 'satkertertinggi', 'satkerdeviasiterbesar'];
 
         $hal['unitkerja']       = ['pg' => 'unitkerja', 'idk' => '', 'label' => '', 'filter' => 'balai', 'where' => null, 'title' => 'Unit Kerja'];
         $hal['bbws']            = ['pg' => 'bbws', 'idk' => '', 'label' => '', 'filter' => 'balai', 'where' => "b.st like 'BBWS'", 'title' => 'BBWS'];
@@ -556,6 +604,53 @@ class Pulldata extends \App\Controllers\BaseController
         $hal['paket']     = ['pg' => 'paket', 'idk' => $_GET['idk'], 'label' => $_GET['label'], 'label2' => (!empty($_GET['label2']) ? $_GET['label2'] : ''), 'format' => (!empty($_GET['format']) ? $_GET['format'] : ''), 'filter' => 'satker', 'where' => "md.kdsatker='{$_GET['idks']}'", 'title' => 'Paket'];
         $hal['balaiteknik']     = ['pg' => 'balaiteknik', 'idk' => $_GET['idk'], 'label' => $_GET['label'], 'filter' => 'satker', 'where' => "b.balaiid='{$_GET['idk']}'", 'title' => 'Balai Teknik'];
         $hal['semuasatker']     = ['pg' => 'balaiteknik', 'idk' => '', 'label' => $_GET['label'], 'filter' => 'satker', 'where' => "", 'title' => 'Semua Satker'];
+        
+        $hal['satkerterendah']     = [
+            'pg' => 'balaiteknik', 
+            'idk' => '', 
+            'label' => $_GET['label'],
+            'getData' => [
+                [
+                    'title' => 'Satker Terendah',
+                    'data' => $this->PulldataModel->getBalaiPaket("satker10terendah", "md.tahun = " . session('userData.tahun')),
+                    'template' => 'satker_terendah'
+                ]
+            ],
+            'title' => 'Satker Tertinggi'
+        ];
+
+        $hal['satkertertinggi']     = [
+            'pg' => 'balaiteknik', 
+            'idk' => '', 
+            'label' => $_GET['label'],
+            'getData' => [
+                [
+                    'title' => 'Satker Tertinggi',
+                    'data' => $this->PulldataModel->getBalaiPaket("satker10tertinggi", "md.tahun = " . session('userData.tahun')),
+                    'template' => 'satker_tertinggi'
+                ]
+            ],
+            'title' => 'Satker Tertinggi'
+        ];
+
+        $hal['satkerdeviasiterbesar']     = [
+            'pg' => 'balaiteknik', 
+            'idk' => '', 
+            'label' => $_GET['label'], 
+            'getData' => [
+                [
+                    'title' => 'Nominal Deviasi Terbesar',
+                    'data' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar", "md.tahun = " . session('userData.tahun')),
+                    'template' => 'satker_terendah'
+                ],
+                [
+                    'title' => 'Persentase Deviase Terbesar',
+                    'data' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar_persen", "md.tahun = " . session('userData.tahun')),
+                    'template' => 'satker_terendah'
+                ]
+            ],
+            'title' => 'Satker Tertinggi'
+        ];
 
         foreach ($hal as $key => $value) {
             $hall[] = $key;
@@ -590,7 +685,14 @@ class Pulldata extends \App\Controllers\BaseController
 
         $fileName = "rekapMonika-" . $hal[$pg]['title'] . "-" . date('Ymdhis');
         $data = $hal[$pg];
-        $data['qdata'] = ($pg == "paket" ? $this->PulldataModel->getPaket($hal[$pg]['where']) : ($hal[$pg]['where'] == null ? $this->PulldataModel->getBalaiPaket($hal[$pg]['filter']) : $this->PulldataModel->getBalaiPaket($hal[$pg]['filter'], $hal[$pg]['where'])));
+
+        if (in_array($pg, $useSatkerFormat)) {
+            $data['qdata'] = $hal[$pg]['getData'];
+            $pgview = "Rekap-satker";
+        }
+        else {
+            $data['qdata'] = ($pg == "paket" ? $this->PulldataModel->getPaket($hal[$pg]['where']) : ($hal[$pg]['where'] == null ? $this->PulldataModel->getBalaiPaket($hal[$pg]['filter']) : $this->PulldataModel->getBalaiPaket($hal[$pg]['filter'], $hal[$pg]['where'])));
+        }
         // dd($data);
 
         // $data = array(

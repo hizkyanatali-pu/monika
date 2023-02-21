@@ -671,7 +671,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Ln();
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(167);
-        $pdf->MultiCell(110, 5, $_ttd['person2Title'], 0, 'C');
+        $pdf->MultiCell(115, 5, $_ttd['person2Title'], 0, 'C');
         $pdf->Ln(20);
 
         // td 1

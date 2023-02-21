@@ -255,8 +255,12 @@ $currentDayOfMonth = date('j');
                         </div> -->
                     </div>
                     <div class="float-right">
-                        <!-- <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
-                        <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a> -->
+                        <a class="btn btn-warning btn-sm text-white pdf-report">
+                            <i class="fa fa-file-pdf"></i> PDF
+                        </a>
+                        <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white">
+                            <i class="fa fa-file-excel"></i >Rekap
+                        </a>
                         <b>*Dalam Ribuan</b>
                     </div>
                 </div>
@@ -288,13 +292,10 @@ $currentDayOfMonth = date('j');
                                     <?php
 
                                     if ($key1 == 'Satker Terendah') { ?>
-
                                         <th class="tdNilai pagu_rpm pagu">RPM </th>
                                         <th class="tdNilai pagu_sbsn pagu">SBSN </th>
                                         <th class="tdNilai pagu_phln pagu">PHLN </th>
                                         <th class="tdNilai pagu_total pagu">TOTAL </th>
-
-
                                     <?php } else { ?>
 
                                         <th class="tdNilai pagu_realisasi pagu">Realisasi</th>
@@ -391,9 +392,6 @@ $currentDayOfMonth = date('j');
                                             <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_real_total / $total_pagu_total * 100, 2, ',', '.'); ?></td>
 
                                         <?php  }  ?>
-
-
-
                                         <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
                                     </tr>
                                 <?php endif; ?>
@@ -416,5 +414,14 @@ $currentDayOfMonth = date('j');
 <?= $this->section('footer_js') ?>
 <script>
     // console.log('additional footer js')
+
+    $(".pdf-report").click(function() {
+        <?php 
+            $linkPdf = $id_report;
+            if ($title == 'Semua Satker' || $title == 'Progres Per Provinsi')  $linkPdf = '../'.$id_report;
+        ?>
+        $(this).attr("href", "<?= $linkPdf ?>")
+        $(this).attr("target", "_blank")
+    })
 </script>
 <?= $this->endSection() ?>

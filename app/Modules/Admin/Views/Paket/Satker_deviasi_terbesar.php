@@ -173,7 +173,16 @@ $currentDayOfMonth = date('j');
 
 
 
-
+                <div class="clearfix">
+                    <div class="mb-5 float-right">
+                        <a class="btn btn-warning btn-sm text-white pdf-report">
+                            <i class="fa fa-file-pdf"></i> PDF
+                        </a>
+                        <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white">
+                            <i class="fa fa-file-excel"></i> Rekap
+                        </a>
+                    </div>
+                </div>
 
                 <?php
                 for ($i = 0; $i < 2; $i++) {
@@ -269,8 +278,6 @@ $currentDayOfMonth = date('j');
                             </div> -->
                         </div>
                         <div class="float-right">
-                            <!-- <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
-                            <a target="_blank" href="<?php echo site_url('pulldata/rekap/' . $rekap) . "?idk=" . $idk . "&label=" . $label; ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a> -->
                             <b>*Dalam Ribuan</b>
                         </div>
                     </div>
@@ -439,5 +446,13 @@ $currentDayOfMonth = date('j');
 <?= $this->section('footer_js') ?>
 <script>
     // console.log('additional footer js')
+    $(".pdf-report").click(function() {
+        <?php 
+            $linkPdf = $id_report;
+            if ($title == 'Semua Satker' || $title == 'Progres Per Provinsi')  $linkPdf = '../'.$id_report;
+        ?>
+        $(this).attr("href", "<?= $linkPdf ?>")
+        $(this).attr("target", "_blank")
+    })
 </script>
 <?= $this->endSection() ?>
