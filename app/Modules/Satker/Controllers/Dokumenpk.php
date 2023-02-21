@@ -828,7 +828,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ->where('satkerid', $inserted_dokumenSatker['satkerid'])
         ->where('balaiid', $inserted_dokumenSatker['balaiid'])
         ->where('tahun', $inserted_dokumenSatker['tahun'])
-        ->where('status !=', 'revision')
+        ->where('status', 'hold')
         ->get()->getNumRows();
         
         if ($checkDokumenSatkerExist > 0) {
@@ -904,7 +904,6 @@ class Dokumenpk extends \App\Controllers\BaseController
             "." => "",
             "," => ".",
         ];
-
 
         /* dokumen */
         $inserted_dokumenSatker = [
