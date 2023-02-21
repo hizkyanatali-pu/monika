@@ -346,7 +346,6 @@ class Pulldata extends \App\Controllers\BaseController
     //satker tertinggi
     public function satker_tertinggi()
     {
-
         $data = [
             'title' => 'Satker Tertinggi',
             'posisi' => ['<i class="fa fa-home"></i>'],

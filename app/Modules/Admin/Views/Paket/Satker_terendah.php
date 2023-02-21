@@ -392,9 +392,6 @@ $currentDayOfMonth = date('j');
                                             <td class="tdNilai text-right col-pagu_total"><?php echo number_format($total_real_total / $total_pagu_total * 100, 2, ',', '.'); ?></td>
 
                                         <?php  }  ?>
-
-
-
                                         <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
                                     </tr>
                                 <?php endif; ?>
