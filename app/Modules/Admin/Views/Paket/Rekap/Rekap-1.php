@@ -182,11 +182,12 @@
         <tbody id="tbody-utama">
             <?php if ($qdata) : ?>
                 <?php
-                $total_pagu_rpm = 0;
-                $total_pagu_sbsn = 0;
-                $total_pagu_phln = 0;
-                $total_pagu_total = 0;
-                $total_real_total = 0;
+                    $total_pagu_rpm = 0;
+                    $total_pagu_sbsn = 0;
+                    $total_pagu_phln = 0;
+                    $total_pagu_total = 0;
+                    $total_real_total = 0;
+                    $total_paket = 0;
                 ?>
                 <?php
                 foreach ($qdata as $key => $data) : ?>
@@ -210,15 +211,17 @@
                         <td class="tdPersen text-right"><?php echo round($data['jml_nilai_deviasi']); ?></td>
                     </tr>
                     <?php
-                    $total_pagu_rpm += $data['jml_pagu_rpm'];
-                    $total_pagu_sbsn += $data['jml_pagu_sbsn'];
-                    $total_pagu_phln += $data['jml_pagu_phln'];
-                    $total_pagu_total += $data['jml_pagu_total'];
-                    $total_real_total += $data['jml_real_total'];
+                        $total_pagu_rpm += $data['jml_pagu_rpm'];
+                        $total_pagu_sbsn += $data['jml_pagu_sbsn'];
+                        $total_pagu_phln += $data['jml_pagu_phln'];
+                        $total_pagu_total += $data['jml_pagu_total'];
+                        $total_real_total += $data['jml_real_total'];
+                        $total_paket += $data['jml_paket'];
                     ?>
                 <?php endforeach; ?>
                 <tr style="background-color:#ccb3ff; border:2px solid #ccc;">
-                    <td colspan="2" class="text-center">TOTAL</td>
+                    <td class="text-center">TOTAL</td>
+                    <td class="tdNilai text-right"><?php echo $total_paket; ?></td>
                     <td class="tdNilai text-right"><?php echo $total_pagu_rpm; ?></td>
                     <td class="tdNilai text-right"><?php echo $total_pagu_sbsn; ?></td>
                     <td class="tdNilai text-right"><?php echo $total_pagu_phln; ?></td>
