@@ -795,6 +795,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             } else {
                 array_push($tempRow, $data);
 
+                // TODO: BG-185, comment kondisi dibawah untuk mengatasai bug
                 if ($tempRow[array_key_last($tempRow) - 1]['type'] == 'section_title' && $key > 0) {
                     unset($tempRow[array_key_last($tempRow) - 1]);
                 }
