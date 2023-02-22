@@ -829,8 +829,10 @@ class Dokumenpk extends \App\Controllers\BaseController
         ->where('balaiid', $inserted_dokumenSatker['balaiid'])
         ->where('tahun', $inserted_dokumenSatker['tahun'])
         ->where('status', 'hold')
+        ->where('deleted_at is null')
+        ->where('reject_date is null')
         ->get()->getNumRows();
-        
+
         if ($checkDokumenSatkerExist > 0) {
             return $this->respond([
                 'status' => false,
