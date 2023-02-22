@@ -286,7 +286,7 @@ $title = $title ?? '';
                 }, 3500);
             
                 const img = document.createElement("img");
-                img.src = "https://picsum.photos/640/480";
+                img.src = "<?php echo base_url('logo.png') ?>" //"https://picsum.photos/640/480"
                 img.onload = () => {
                     resolve(true)
                     loaded = true;
