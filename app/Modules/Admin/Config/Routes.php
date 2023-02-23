@@ -117,6 +117,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('cetak_skpd_tp_op', '\Modules\Admin\Controllers\Pulldata::cetak_skpdtpop');
                 $routes->get('cetak_satker_pagu_100m', '\Modules\Admin\Controllers\Pulldata::cetak_satkerpagu100m');
                 $routes->get('cetak_semua_satker', '\Modules\Admin\Controllers\Pulldata::cetak_semua_satker');
+                $routes->get('cetak_satker_terendah', '\Modules\Admin\Controllers\Pulldata::cetak_satker_terendah');
+                $routes->get('cetak_satker_tertinggi', '\Modules\Admin\Controllers\Pulldata::cetak_satker_tertinggi');
+                $routes->get('cetak_satker_deviasi_terbesar', '\Modules\Admin\Controllers\Pulldata::cetak_satker_deviasi_terbesar');
             });
 
             $routes->group('importdata', ['namespace' => 'App\Controllers'], function ($routes) {

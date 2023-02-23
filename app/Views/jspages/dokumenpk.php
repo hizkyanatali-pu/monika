@@ -237,76 +237,84 @@
 
 
     element_btnSaveDokumen.on('click', function() {
-        if (saveDokumenValidation()) {
-            let oldButtonText = element_btnSaveDokumen.text()
-            element_btnSaveDokumen.addClass('d-none')
-            element_btnSaveDokumen.parent().append('<center>menyimpan dokumen</center>')
-            
-            $('input[name=total-anggaran]').prop("disabled", false)
-            let formData = getFormValue();
+        CheckConnection().then(result => {
+            if (saveDokumenValidation()) {
+                let oldButtonText = element_btnSaveDokumen.text()
+                element_btnSaveDokumen.addClass('d-none')
+                element_btnSaveDokumen.parent().append('<center>menyimpan dokumen</center>')
+                
+                $('input[name=total-anggaran]').prop("disabled", false)
+                let formData = getFormValue();
 
 
-            if ($(this).attr('data-dokumen-id')) {
-                formData['revision_dokumen_id'] = $(this).data('dokumen-id')
-                formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
-            }
-
-            $.ajax({
-                url: "<?php echo site_url('dokumenpk/create') ?>",
-                type: 'POST',
-                data: formData,
-                success: (res) => {
-                    if (res.status) {
-                        location.reload()
-                    }
-                    else {
-                        Swal.fire(
-                            'Gagal',
-                            res.message,
-                            'error'
-                        ).then(result => {
-                            location.reload()
-                        })
-                    }
-                },
-                fail: (xhr) => {
-                    alert('Terjadi kesalahan pada sistem')
-                    console.log(xhr)
+                if ($(this).attr('data-dokumen-id')) {
+                    formData['revision_dokumen_id'] = $(this).data('dokumen-id')
+                    formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
                 }
-            })
-        }
+
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/create') ?>",
+                    type: 'POST',
+                    data: formData,
+                    success: (res) => {
+                        if (res.status) {
+                            location.reload()
+                        }
+                        else {
+                            Swal.fire(
+                                'Gagal',
+                                res.message,
+                                'error'
+                            ).then(result => {
+                                location.reload()
+                            })
+                        }
+                    },
+                    fail: (xhr) => {
+                        alert('Terjadi kesalahan pada sistem')
+                        console.log(xhr)
+                    }
+                })
+            }
+        }).catch(error => {
+            alert("Youre internet connection  cs slow");
+        });
     })
 
 
 
     element_btnSaveEditDokumen.on('click', function() {
-        if (saveDokumenValidation()) {
-            let oldButtonText = element_btnSaveEditDokumen.text()
-            element_btnSaveEditDokumen.addClass('d-none')
-            element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+        CheckConnection().then(result => {
+            if (saveDokumenValidation()) {
+                let oldButtonText = element_btnSaveEditDokumen.text()
+                element_btnSaveEditDokumen.addClass('d-none')
+                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
 
-            let formData = getFormValue(),
-                dataId = $(this).data('id')
+                let formData = getFormValue(),
+                    dataId = $(this).data('id')
 
-            formData['id'] = $(this).data('id')
+                formData['id'] = $(this).data('id')
 
-            $('input[name=total-anggaran]').prop("disabled", false)
+                $('input[name=total-anggaran]').prop("disabled", false)
 
-            $.ajax({
-                url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
-                type: 'POST',
-                data: formData,
-                success: (res) => {
-                    if (res.status) {
-                        location.reload()
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
+                    type: 'POST',
+                    data: formData,
+                    success: (res) => {
+                        if (res.status) {
+                            location.reload()
+                        }
+                    },
+                    fail: (xhr) => {
+                        alert('Terjadi kesalahan pada sistem')
+                        console.log(xhr)
                     }
-                },
-                fail: (xhr) => {
-                    alert('Terjadi kesalahan pada sistem')
-                    console.log(xhr)
-                }
-            })
-        }
+                })
+            }
+        }).catch(error => {
+            alert("Youre internet connection  cs slow");
+        });
     })
 
 

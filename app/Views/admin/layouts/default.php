@@ -274,6 +274,26 @@ $title = $title ?? '';
             rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
             return prefix == undefined ? rupiah : rupiah ? "" + rupiah : "";
         }
+
+        function CheckConnection() {
+            return new Promise((resolve, reject) => {
+                let isSlow;
+                let loaded;
+            
+                loaded = false;
+                isSlow = setTimeout(() => {
+                    reject();
+                }, 3500);
+            
+                const img = document.createElement("img");
+                img.src = "<?php echo base_url('logo.png') ?>" //"https://picsum.photos/640/480"
+                img.onload = () => {
+                    resolve(true)
+                    loaded = true;
+                    clearTimeout(isSlow);
+                };
+            })
+        }
     </script>
 
     <?php echo $this->renderSection('footer_js') ?>
