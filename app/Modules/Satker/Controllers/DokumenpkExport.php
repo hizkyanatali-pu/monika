@@ -523,19 +523,27 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 switch ($_detailDokumenType) {
                     case 'target':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
-                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') .  ' ' .  $satuan_target;
+                        $rSeparator = explode('.',$data_targetValue['target_value']);
+                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.').  ' ' .  $satuan_target;
+                        // $targetValue = str_replace('.',',',$data_targetValue['target_value']) .  ' ' .  $satuan_target;
+                        // $targetValue = (number_format($data_targetValue['target_value'],)) .  ' ' .  $satuan_target;
 
                         break;
 
                     case 'outcome':
                         // $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 3) . ' ' . $data['outcome_satuan'];
-                        $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 10, ',', '.'), '0'), ',') . ' ' . $satuan_outcome;
+                        // $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 10, ',', '.'), '0'), ',') . ' ' . $satuan_outcome;
+                        $rSeparator = explode('.',$data_targetValue['outcome_value']);
+                        $targetValue = number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.').  ' ' .  $satuan_outcome;
+
 
                         break;
 
                     case 'output':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
-                        $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' .  $satuan_target;
+                        // $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' .  $satuan_target;
+                        $rSeparator = explode('.',$data_targetValue['target_value']);
+                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.').  ' ' .  $satuan_target;
 
 
                         break;
