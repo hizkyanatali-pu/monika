@@ -776,6 +776,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
     private function gettemplateRowChecked($templateId, $dokumenSatkerId)
     {
         $tempRow = [];
+        $lastFormIndex = 0;
 
         $tableData = $this->templateRow
             ->where('template_id', $templateId)
@@ -791,22 +792,14 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                 if ($data_targetValue['is_checked'] == '1') {
                     array_push($tempRow, $data);
+                    $lastFormIndex = count($tempRow);
                 }
             } else {
                 array_push($tempRow, $data);
-
-                // TODO: BG-185, comment kondisi dibawah untuk mengatasai bug
-                if ($tempRow[array_key_last($tempRow) - 1]['type'] == 'section_title' && $key > 0) {
-                    unset($tempRow[array_key_last($tempRow) - 1]);
-                }
-            }
-
-            if ($key == count($tableData) - 1) {
-                if ($tempRow[array_key_last($tempRow)]['type'] == 'section_title') {
-                    unset($tempRow[array_key_last($tempRow)]);
-                }
             }
         }
+
+        array_splice($tempRow, $lastFormIndex);
 
         return $tempRow;
     }
