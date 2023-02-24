@@ -641,6 +641,19 @@
                     <td><?php echo round($chart_reject, 2) ?>%</td>
                     <td><?php echo $reject ?></td>
                 </tr>
+                <tr>
+                    <td class="d-flex">
+                        Total
+                    </td>
+                    <td>
+                        <?php $jumlah_persen =  $chart_belum_lapor + $chart_menunggu_konfir + $chart_acc + $chart_reject;
+                        echo round($jumlah_persen) ?>%
+                    </td>
+                    <td>
+                        <?php $jumlah_instansi = $belum_lapor + $menunggu_konfir + $acc + $reject; 
+                        echo $jumlah_instansi ?>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>

@@ -53,7 +53,6 @@
                         <option value="satker">SATKER</option>
                         <option value="balai">BALAI</option>
                         <option value="eselon2">ESELON 2</option>
-                        <option value="eselon1">ESELON 1</option>
                     </select>
 
                     <?= csrf_field() ?>
@@ -73,7 +72,7 @@
             </div>
             <div class="clearfix mb-3">
                 <div class="float-right">
-                    <a href="<?php echo site_url('dokumenpk/eselon1/export-rekap-excel'); ?>" class="btn btn-success btn-sm"><i class="fa fa-file-excel"></i> Rekap</a>
+                    <a href="<?php echo site_url('dokumenpk/eselon1/export-rekap-excel'); ?>" target="_blank" class="btn btn-success btn-sm"><i class="fa fa-file-excel"></i> Rekap</a>
                 </div>
             </div>
             <div class="tabel-rekap tableFixHead card row">
@@ -94,7 +93,7 @@
                             <th>Satuan</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="all-data">
                         <!-- <?php if($data) { ?>
                             <?php foreach($data as $key => $value) { ?>
                                 <tr>
@@ -151,9 +150,9 @@
                                     <?php } ?>
                                 <?php } ?>
                             <?php } ?>
-                        <?php } ?> -->
+                        <?php } ?>
                         <?php if($databalai) { ?>
-                            <?php foreach($databalai as $key => $value) { ?>
+                            <?php foreach($data as $key => $value) { ?>
                                 <tr>
                                     <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
                                         <?php echo $key+1 ?>
@@ -162,12 +161,201 @@
                                         <?php echo $tahun ?>
                                     </td>
                                     <td rowspan="<?php echo $value['rowspan'] ?>">
-                                        <?php echo $value['nama_balai'] ?>
+                                        <?php echo $value['namaBalai'] ?>
                                     </td>
                                 <?php foreach($value['sp'] as $keySp => $valueSp) { ?>
                                     <?php if ($keySp >= 1) { ?> </tr><tr> <?php } ?>
                                             <td rowspan="<?php echo $valueSp['rowspan'] <= 0 ? 1 : $valueSp['rowspan'] ?>">
-                                                <?php echo $valueSp['nama_sp'] ?>
+                                                <?php echo $valueSp['namaSp'] ?>
+                                            </td>
+                                    <?php foreach($valueSp['indikatorSp'] as $keyIndicatorSp => $valueIndicatorSp) { ?>
+                                        <?php if ($keyIndicatorSp >= 1) { ?> </tr><tr> <?php } ?>
+                                            <td rowspan="<?php echo $valueIndicatorSp['rowspan'] <= 0 ? 1 : $valueIndicatorSp['rowspan'] ?>">
+                                                <?php echo $valueIndicatorSp['title'] ?>
+                                            </td>
+                                        <?php foreach($valueIndicatorSp['satker'] as $keySatker => $valueSatker) { ?>
+                                                <?php if ($keySatker >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
+                                                        -
+                                                    </td>
+                                            <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
+                                                <?php if ($keySk >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSk['rowspan'] <= 0 ? 1 : $valueSk['rowspan'] ?>">
+                                                        -
+                                                    </td>
+                                                <?php foreach($valueSk['indikatorSk'] as $keySkIndikator => $valueSkIndikator) { ?>
+                                                    <?php if ($keySkIndikator >= 1) { ?> </tr><tr> <?php } ?>
+                                                        <td>
+                                                            -
+                                                        </td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
+                                                    </tr>
+                                                    <?php } ?>
+                                                </tr>
+
+                                            <?php } ?>
+                                        <?php } ?>
+                                    <?php } ?>
+                                <?php } ?>
+                            <?php } ?>
+                        <?php } ?>
+                        <?php if($dataskpd) { ?>
+                            <?php $value = $dataskpd[0]; $no = 1; ?>
+                                <tr>
+                                    <td align="center" rowspan="<?php echo $value['rowspan'] + 1 ?>">
+                                        <?php echo $no ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] + 1 ?>">
+                                        <?php echo $tahun ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] + 1 ?>">
+                                        <?php echo $value['nama_balai'] ?>
+                                    </td>
+                                <?php foreach($value['sp'] as $keySp => $valueSp) { $rowspan_sp = $valueSp['rowspan'] + 1; ?>
+                                    <?php if ($keySp >= 1) { ?> </tr><tr> <?php } ?>
+                                            <td rowspan="<?php echo $rowspan_sp <= 0 ? 1 : $rowspan_sp ?>">
+                                                <?php echo $valueSp['namaSp'] ?>
+                                            </td>
+                                    <?php foreach($valueSp['indikatorSkSKPD'] as $keyIndicatorSp => $valueIndicatorSp) { ?>
+                                        <?php if ($keyIndicatorSp >= 1) { ?> </tr><tr> <?php } ?>
+                                            <td rowspan="<?php echo $valueIndicatorSp['rowspan'] <= 0 ? 1 : $valueIndicatorSp['rowspan'] ?>">
+                                                -
+                                            </td>
+                                        <?php foreach($valueIndicatorSp['satker'] as $keySatker => $valueSatker) { $ke ?>
+                                                <?php if ($keySatker >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
+                                                        <?php echo $valueSatker['nama_satker'] ?>
+                                                    </td>
+                                            <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
+                                                <?php if($valueSk['indikatorSk'] != NULL) { 
+                                                    if ($keySk >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSk['rowspan'] <= 0 ? 1 : $valueSk['rowspan'] ?>">
+                                                        <?php echo $valueSk['namaSk'] ?>
+                                                    </td>
+                                                <?php } ?>
+                                                <?php foreach($valueSk['indikatorSk'] as $keySkIndikator => $valueSkIndikator) { ?>
+                                                    <?php if ($keySkIndikator >= 1) { ?> </tr><tr> <?php } ?>
+                                                        <td>
+                                                            <?php echo $valueSkIndikator['title'] ?>
+                                                        </td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
+                                                    </tr>
+                                                    <?php } ?>
+                                                </tr>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    <?php } ?>
+                                <?php } ?>
+                        <?php } ?>
+                        <?php if($datasatpus) { ?>
+                            <?php $value = $datasatpus[0]; $no = 1; ?>
+                                <tr>
+                                    <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $no ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $tahun ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['nama_balai'] ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['namaSp'] ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['indikator_sp'] ?>
+                                    </td>
+                                    <?php foreach($value['satker'] as $keySatker => $valueSatker) { ?>
+                                                <?php if ($keySatker >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
+                                                        <?php echo $valueSatker['nama_satker'] ?>
+                                                    </td>
+                                            <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
+                                                    <?php if($keySk >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSk['rowspan'] <= 0 ? 1 : $valueSk['rowspan'] ?>">
+                                                        <?php echo $valueSk['namaSk'] ?>
+                                                    </td>
+                                                    <?php $valueSkIndikator = $valueSk['indikatorSk'][0];
+                                                    if ($keySkIndikator >= 1) { ?> </tr><tr> <?php } ?>
+                                                        <td>
+                                                            <?php echo $valueSkIndikator['title'] ?>
+                                                        </td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
+                                                    </tr>
+                                                </tr>
+                                            <?php } ?>
+                                    <?php } ?>
+                        <?php } ?> -->
+                        <?php if($dataeselon2) { ?>
+                            <?php $value = $dataeselon2[0]; $no = 1; ?>
+                                <tr>
+                                    <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $no ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $tahun ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['nama_balai'] ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['namaSp'] ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['indikator_sp'] ?>
+                                    </td>
+                                    <?php foreach($value['satker'] as $keySatker => $valueSatker) { ?>
+                                        <?php if ($keySatker >= 1) { ?> </tr><tr> <?php } ?>
+                                            <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
+                                                <?php echo $valueSatker['nama_satker'] ?>
+                                            </td>
+                                            <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
+                                                <?php if ($keySk >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSk['rowspan'] <= 0 ? 1 : $valueSk['rowspan'] ?>">
+                                                        <?php echo $valueSk['namaSk']; ?>
+                                                    </td>
+                                                <?php foreach($valueSk['indikatorSk'] as $keySkIndikator => $valueSkIndikator) { ?>
+                                                    <?php if ($keySkIndikator >= 1) { ?> </tr><tr> <?php } ?>
+                                                        <td>
+                                                            <?php echo $valueSkIndikator['title'] ?>
+                                                        </td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
+                                                    </tr>
+                                                </tr>
+                                        <?php } ?>
+                                    <?php } ?>
+                                <?php } ?>
+                        <?php } ?>
+                    </tbody>
+                    <tbody class="data-satker">
+                        <?php if($data) { ?>
+                            <?php foreach($data as $key => $value) { ?>
+                                <tr>
+                                    <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $key+1 ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $tahun ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['namaBalai'] ?>
+                                    </td>
+                                <?php foreach($value['sp'] as $keySp => $valueSp) { ?>
+                                    <?php if ($keySp >= 1) { ?> </tr><tr> <?php } ?>
+                                            <td rowspan="<?php echo $valueSp['rowspan'] <= 0 ? 1 : $valueSp['rowspan'] ?>">
+                                                <?php echo $valueSp['namaSp'] ?>
                                             </td>
                                     <?php foreach($valueSp['indikatorSp'] as $keyIndicatorSp => $valueIndicatorSp) { ?>
                                         <?php if ($keyIndicatorSp >= 1) { ?> </tr><tr> <?php } ?>
@@ -179,6 +367,8 @@
                                                     <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
                                                         <?php if(!empty($valueSatker['namaSatker'])) {
                                                             echo $valueSatker['namaSatker'];
+                                                        } else {
+                                                            echo '-';
                                                         } ?>
                                                     </td>
                                             <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
@@ -197,11 +387,117 @@
                                                         </td>
                                                         <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
                                                         <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
-                                                        <!-- <td><?php echo $valueSkIndikator['outcome'] ?></td> -->
                                                         <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
                                                         <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
                                                     </tr>
                                                 <?php } ?>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    <?php } ?>
+                                <?php } ?>
+                            <?php } ?>
+                        <?php } ?>
+                    </tbody>
+                    <tbody class="data-balai">
+                        <?php if($databalai) { ?>
+                            <?php foreach($data as $key => $value) { ?>
+                                <tr>
+                                    <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $key+1 ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $tahun ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['namaBalai'] ?>
+                                    </td>
+                                <?php foreach($value['sp'] as $keySp => $valueSp) { ?>
+                                    <?php if ($keySp >= 1) { ?> </tr><tr> <?php } ?>
+                                            <td rowspan="<?php echo $valueSp['rowspan'] <= 0 ? 1 : $valueSp['rowspan'] ?>">
+                                                <?php echo $valueSp['namaSp'] ?>
+                                            </td>
+                                    <?php foreach($valueSp['indikatorSp'] as $keyIndicatorSp => $valueIndicatorSp) { ?>
+                                        <?php if ($keyIndicatorSp >= 1) { ?> </tr><tr> <?php } ?>
+                                            <td rowspan="<?php echo $valueIndicatorSp['rowspan'] <= 0 ? 1 : $valueIndicatorSp['rowspan'] ?>">
+                                                <?php echo $valueIndicatorSp['title'] ?>
+                                            </td>
+                                        <?php foreach($valueIndicatorSp['satker'] as $keySatker => $valueSatker) { ?>
+                                                <?php if ($keySatker >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
+                                                        -
+                                                    </td>
+                                            <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
+                                                <?php if ($keySk >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSk['rowspan'] <= 0 ? 1 : $valueSk['rowspan'] ?>">
+                                                        -
+                                                    </td>
+                                                <?php foreach($valueSk['indikatorSk'] as $keySkIndikator => $valueSkIndikator) { ?>
+                                                    <?php if ($keySkIndikator >= 1) { ?> </tr><tr> <?php } ?>
+                                                        <td>
+                                                            -
+                                                        </td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
+                                                    </tr>
+                                                    <?php } ?>
+                                                </tr>
+
+                                            <?php } ?>
+                                        <?php } ?>
+                                    <?php } ?>
+                                <?php } ?>
+                            <?php } ?>
+                        <?php } ?>
+                    </tbody>
+                    <tbody class="data-skpd">
+                        <?php if($dataskpd) { ?>
+                            <?php foreach($dataskpd as $key => $value) { ?>
+                                <tr>
+                                    <td align="center" rowspan="<?php echo $value['rowspan'] + 1 ?>">
+                                        <?php echo $key+1 ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] + 1 ?>">
+                                        <?php echo $tahun ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] + 1 ?>">
+                                        <?php echo $value['nama_balai'] ?>
+                                    </td>
+                                <?php foreach($value['sp'] as $keySp => $valueSp) { $rowspan_sp = $valueSp['rowspan'] + 1; ?>
+                                    <?php if ($keySp >= 1) { ?> </tr><tr> <?php } ?>
+                                            <td rowspan="<?php echo $rowspan_sp <= 0 ? 1 : $rowspan_sp ?>">
+                                                <?php echo $valueSp['namaSp'] ?>
+                                            </td>
+                                    <?php foreach($valueSp['indikatorSkSKPD'] as $keyIndicatorSp => $valueIndicatorSp) { ?>
+                                        <?php if ($keyIndicatorSp >= 1) { ?> </tr><tr> <?php } ?>
+                                            <td rowspan="<?php echo $valueIndicatorSp['rowspan'] <= 0 ? 1 : $valueIndicatorSp['rowspan'] ?>">
+                                                -
+                                            </td>
+                                        <?php foreach($valueIndicatorSp['satker'] as $keySatker => $valueSatker) { $ke ?>
+                                                <?php if ($keySatker >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
+                                                        <?php echo $valueSatker['nama_satker'] ?>
+                                                    </td>
+                                            <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
+                                                <?php if($valueSk['indikatorSk'] != NULL) { 
+                                                    if ($keySk >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSk['rowspan'] <= 0 ? 1 : $valueSk['rowspan'] ?>">
+                                                        <?php echo $valueSk['namaSk'] ?>
+                                                    </td>
+                                                <?php } ?>
+                                                <?php foreach($valueSk['indikatorSk'] as $keySkIndikator => $valueSkIndikator) { ?>
+                                                    <?php if ($keySkIndikator >= 1) { ?> </tr><tr> <?php } ?>
+                                                        <td>
+                                                            <?php echo $valueSkIndikator['title'] ?>
+                                                        </td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
+                                                    </tr>
+                                                    <?php } ?>
+                                                </tr>
                                             <?php } ?>
                                         <?php } ?>
                                     <?php } ?>
@@ -227,4 +523,9 @@
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $('.data-satker').hide();
+    $('.data-balai').hide();
+    $('.data-skpd').hide();
+</script>
 <?= $this->endSection() ?>
