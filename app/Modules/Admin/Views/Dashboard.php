@@ -1014,9 +1014,6 @@
                                                 <td style="padding: 0px 4px 0px 4px !important"><?= str_replace(",", "", $dt->paketList->paket) ?></td>
 
                                             </tr>
-
-
-
                                         <?php }
                                     } else {  ?>
                                         <tr>

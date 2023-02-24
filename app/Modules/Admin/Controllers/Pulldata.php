@@ -335,6 +335,7 @@ class Pulldata extends \App\Controllers\BaseController
             'qdata' => [
                 [
                     'title' => 'Satker Terendah',
+                    'firstFieldTitle' => 'Satker Terendah',
                     'data' => $this->PulldataModel->getBalaiPaket("satker10terendah", "md.tahun = " . session('userData.tahun')),
                     'template' => 'satker_terendah'
                 ]
@@ -368,6 +369,7 @@ class Pulldata extends \App\Controllers\BaseController
             'qdata' => [
                 [
                     'title' => 'Satker Tertinggi',
+                    'firstFieldTitle' => 'Satker Tertinggi',
                     'data' => $this->PulldataModel->getBalaiPaket("satker10tertinggi", "md.tahun = " . session('userData.tahun')),
                     'template' => 'satker_tertinggi'
                 ]
@@ -403,11 +405,13 @@ class Pulldata extends \App\Controllers\BaseController
             'qdata' => [
                 [
                     'title' => 'Nominal Deviasi Terbesar',
+                    'firstFieldTitle' => 'Satker Deviasi terbesar',
                     'data' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar", "md.tahun = " . session('userData.tahun')),
                     'template' => 'satker_terendah'
                 ],
                 [
                     'title' => 'Persentase Deviase Terbesar',
+                    'firstFieldTitle' => 'Satker Deviasi terbesar',
                     'data' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar_persen", "md.tahun = " . session('userData.tahun')),
                     'template' => 'satker_terendah'
                 ]
@@ -612,11 +616,12 @@ class Pulldata extends \App\Controllers\BaseController
             'getData' => [
                 [
                     'title' => 'Satker Terendah',
+                    'firstFieldTitle' => 'Satker Terendah',
                     'data' => $this->PulldataModel->getBalaiPaket("satker10terendah", "md.tahun = " . session('userData.tahun')),
                     'template' => 'satker_terendah'
                 ]
             ],
-            'title' => 'Satker Tertinggi'
+            'title' => 'Satker Terendah'
         ];
 
         $hal['satkertertinggi']     = [
@@ -626,6 +631,7 @@ class Pulldata extends \App\Controllers\BaseController
             'getData' => [
                 [
                     'title' => 'Satker Tertinggi',
+                    'firstFieldTitle' => 'Satker Tertinggi',
                     'data' => $this->PulldataModel->getBalaiPaket("satker10tertinggi", "md.tahun = " . session('userData.tahun')),
                     'template' => 'satker_tertinggi'
                 ]
@@ -640,16 +646,18 @@ class Pulldata extends \App\Controllers\BaseController
             'getData' => [
                 [
                     'title' => 'Nominal Deviasi Terbesar',
+                    'firstFieldTitle' => 'Satker Deviasi terbesar',
                     'data' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar", "md.tahun = " . session('userData.tahun')),
                     'template' => 'satker_terendah'
                 ],
                 [
                     'title' => 'Persentase Deviase Terbesar',
+                    'firstFieldTitle' => 'Satker Deviasi terbesar',
                     'data' => $this->PulldataModel->getBalaiPaket("satkerdeviasiterbesar_persen", "md.tahun = " . session('userData.tahun')),
                     'template' => 'satker_terendah'
                 ]
             ],
-            'title' => 'Satker Tertinggi'
+            'title' => 'Satker Deviasi Terbesar'
         ];
 
         foreach ($hal as $key => $value) {
@@ -685,6 +693,7 @@ class Pulldata extends \App\Controllers\BaseController
 
         $fileName = "rekapMonika-" . $hal[$pg]['title'] . "-" . date('Ymdhis');
         $data = $hal[$pg];
+
 
         if (in_array($pg, $useSatkerFormat)) {
             $data['qdata'] = $hal[$pg]['getData'];
