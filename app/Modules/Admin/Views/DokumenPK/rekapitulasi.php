@@ -74,7 +74,13 @@
             </div>
             <div class="clearfix mb-3">
                 <div class="float-right">
-                    <a href="<?php echo site_url('dokumenpk/eselon1/export-rekap-excel'); ?>" target="_blank" class="btn btn-success btn-sm"><i class="fa fa-file-excel"></i> Rekap</a>
+                    <a href="<?php echo site_url('dokumenpk/rekapitulasi/export-rekap-all'); ?>" target="_blank" class="btn btn-success btn-sm btn-rekap-all"><i class="fa fa-file-excel"></i> Rekap Semua</a>
+                    <a href="<?php echo site_url('dokumenpk/rekapitulasi/export-rekap-satker'); ?>" target="_blank" class="btn btn-success btn-sm btn-rekap-satker" hidden><i class="fa fa-file-excel"></i> Rekap Satker</a>
+                    <a href="<?php echo site_url('dokumenpk/rekapitulasi/export-rekap-balai'); ?>" target="_blank" class="btn btn-success btn-sm btn-rekap-balai" hidden><i class="fa fa-file-excel"></i> Rekap Balai</a>
+                    <a href="<?php echo site_url('dokumenpk/rekapitulasi/export-rekap-skpd'); ?>" target="_blank" class="btn btn-success btn-sm btn-rekap-skpd" hidden><i class="fa fa-file-excel"></i> Rekap SKPD TP-OP</a>
+                    <a href="<?php echo site_url('dokumenpk/rekapitulasi/export-rekap-satpus'); ?>" target="_blank" class="btn btn-success btn-sm btn-rekap-satpus" hidden><i class="fa fa-file-excel"></i> Rekap Satker Pusat</a>
+                    <a href="<?php echo site_url('dokumenpk/rekapitulasi/export-rekap-eselon2') ?>" target="_blank" class="btn btn-success btn-sm btn-rekap-eselon2" hidden><i class="fa fa-file-excel"></i> Rekap Eselon 2</a>
+                    <a href="<?php echo site_url('dokumenpk/rekapitulasi/export-rekap-baltek') ?>" target="_blank" class="btn btn-success btn-sm btn-rekap-baltek" hidden><i class="fa fa-file-excel"></i> Rekap Balai Teknik</a>
                 </div>
             </div>
             <div class="tabel-rekap tableFixHead card row">
@@ -703,12 +709,16 @@
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+
+    // tbbody
     $('.data-satker').hide();
     $('.data-balai').hide();
     $('.data-skpd').hide();
     $('.data-satpus').hide();
     $('.data-eselon2').hide();
     $('.data-baltek').hide();
+
+    //button
 
     $(document).on('change', 'select.filter-dokumen', function(event) {
 
@@ -719,6 +729,13 @@
             $('.data-eselon2').hide();
             $('.data-baltek').hide();
             $('.data-satker').hide();
+            $('.btn-rekap-balai').hide();
+            $('.btn-rekap-skpd').hide();
+            $('.btn-rekap-satpus').hide();
+            $('.btn-rekap-eselon2').hide();
+            $('.btn-rekap-baltek').hide();
+            $('.btn-rekap-satker').hide();
+            $('.btn-rekap-all').show();
             $('.all-data').show();
         }
         
@@ -729,6 +746,14 @@
             $('.data-satpus').hide();
             $('.data-eselon2').hide();
             $('.data-baltek').hide();
+            $('.btn-rekap-all').hide();
+            $('.btn-rekap-balai').hide();
+            $('.btn-rekap-skpd').hide();
+            $('.btn-rekap-satpus').hide();
+            $('.btn-rekap-eselon2').hide();
+            $('.btn-rekap-baltek').hide();
+            $('.btn-rekap-satker').removeAttr("hidden");
+            $('.btn-rekap-satker').show();
             $('.data-satker').show();
         }
         
@@ -739,6 +764,14 @@
             $('.data-eselon2').hide();
             $('.data-baltek').hide();
             $('.data-satker').hide();
+            $('.btn-rekap-all').hide();
+            $('.btn-rekap-skpd').hide();
+            $('.btn-rekap-satpus').hide();
+            $('.btn-rekap-eselon2').hide();
+            $('.btn-rekap-baltek').hide();
+            $('.btn-rekap-satker').hide();
+            $('.btn-rekap-balai').removeAttr("hidden");
+            $('.btn-rekap-balai').show();
             $('.data-balai').show();
         }
 
@@ -749,6 +782,14 @@
             $('.data-baltek').hide();
             $('.data-satker').hide();
             $('.data-balai').hide();
+            $('.btn-rekap-all').hide();
+            $('.btn-rekap-satpus').hide();
+            $('.btn-rekap-eselon2').hide();
+            $('.btn-rekap-baltek').hide();
+            $('.btn-rekap-satker').hide();
+            $('.btn-rekap-balai').hide();
+            $('.btn-rekap-skpd').removeAttr("hidden");
+            $('.btn-rekap-skpd').show();
             $('.data-skpd').show();
         }
 
@@ -759,6 +800,14 @@
             $('.data-satker').hide();
             $('.data-balai').hide();
             $('.data-skpd').hide();
+            $('.btn-rekap-all').hide();
+            $('.btn-rekap-eselon2').hide();
+            $('.btn-rekap-baltek').hide();
+            $('.btn-rekap-satker').hide();
+            $('.btn-rekap-balai').hide();
+            $('.btn-rekap-skpd').hide();
+            $('.btn-rekap-satpus').removeAttr("hidden");
+            $('.btn-rekap-satpus').show();
             $('.data-satpus').show();
         }
 
@@ -769,6 +818,14 @@
             $('.data-balai').hide();
             $('.data-skpd').hide();
             $('.data-satpus').hide();
+            $('.btn-rekap-all').hide();
+            $('.btn-rekap-baltek').hide();
+            $('.btn-rekap-satker').hide();
+            $('.btn-rekap-balai').hide();
+            $('.btn-rekap-skpd').hide();
+            $('.btn-rekap-satpus').hide();
+            $('.btn-rekap-eselon2').removeAttr("hidden");
+            $('.btn-rekap-eselon2').show()
             $('.data-eselon2').show();
         }
 
@@ -779,6 +836,14 @@
             $('.data-skpd').hide();
             $('.data-satpus').hide();
             $('.data-eselon2').hide();
+            $('.btn-rekap-all').hide();
+            $('.btn-rekap-satker').hide();
+            $('.btn-rekap-balai').hide();
+            $('.btn-rekap-skpd').hide();
+            $('.btn-rekap-satpus').hide();
+            $('.btn-rekap-eselon2').hide();
+            $('.btn-rekap-baltek').removeAttr("hidden");
+            $('.btn-rekap-baltek').show();
             $('.data-baltek').show();
         }
     })
