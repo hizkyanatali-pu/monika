@@ -48,13 +48,15 @@
                         Rekapitulasi
                     </h3>
 
-                    <select name="filter-jenis-dokumen" class="form-control">
+                    <select name="filter-jenis-dokumen" class="form-control filter-dokumen">
                         <option value="all">SEMUA</option>
                         <option value="satker">SATKER</option>
                         <option value="balai">BALAI</option>
+                        <option value="skpd">SKPD TP-OP</option>
+                        <option value="satker_pusat">SATKER PUSAT</option>
                         <option value="eselon2">ESELON 2</option>
+                        <option value="balai_teknik">BALAI TEKNIK</option>
                     </select>
-
                     <?= csrf_field() ?>
                 </div>
             </div>
@@ -94,7 +96,7 @@
                         </tr>
                     </thead>
                     <tbody class="all-data">
-                        <!-- <?php if($data) { ?>
+                        <?php if($data) { ?>
                             <?php foreach($data as $key => $value) { ?>
                                 <tr>
                                     <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
@@ -294,9 +296,52 @@
                                                 </tr>
                                             <?php } ?>
                                     <?php } ?>
-                        <?php } ?> -->
+                        <?php } ?>
                         <?php if($dataeselon2) { ?>
                             <?php $value = $dataeselon2[0]; $no = 1; ?>
+                                <tr>
+                                    <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $no ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $tahun ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['nama_balai'] ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['namaSp'] ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['indikator_sp'] ?>
+                                    </td>
+                                    <?php foreach($value['satker'] as $keySatker => $valueSatker) { ?>
+                                        <?php if ($keySatker >= 1) { ?> </tr><tr> <?php } ?>
+                                            <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
+                                                <?php echo $valueSatker['nama_satker'] ?>
+                                            </td>
+                                            <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
+                                                <?php if ($keySk >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSk['rowspan'] <= 0 ? 1 : $valueSk['rowspan'] ?>">
+                                                        <?php echo $valueSk['namaSk']; ?>
+                                                    </td>
+                                                <?php foreach($valueSk['indikatorSk'] as $keySkIndikator => $valueSkIndikator) { ?>
+                                                    <?php if ($keySkIndikator >= 1) { ?> </tr><tr> <?php } ?>
+                                                        <td>
+                                                            <?php echo $valueSkIndikator['title'] ?>
+                                                        </td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
+                                                    </tr>
+                                                </tr>
+                                        <?php } ?>
+                                    <?php } ?>
+                                <?php } ?>
+                        <?php } ?>
+                        <?php if($databaltek) { ?>
+                            <?php $value = $databaltek[0]; $no = 1; ?>
                                 <tr>
                                     <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
                                         <?php echo $no ?>
@@ -505,6 +550,140 @@
                             <?php } ?>
                         <?php } ?>
                     </tbody>
+                    <tbody class="data-satpus">
+                        <?php if($datasatpus) { ?>
+                            <?php $value = $datasatpus[0]; $no = 1; ?>
+                                <tr>
+                                    <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $no ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $tahun ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['nama_balai'] ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['namaSp'] ?>
+                                    </td>
+                                    <td rowspan="<?php echo $value['rowspan'] ?>">
+                                        <?php echo $value['indikator_sp'] ?>
+                                    </td>
+                                    <?php foreach($value['satker'] as $keySatker => $valueSatker) { ?>
+                                                <?php if ($keySatker >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
+                                                        <?php echo $valueSatker['nama_satker'] ?>
+                                                    </td>
+                                            <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
+                                                    <?php if($keySk >= 1) { ?> </tr><tr> <?php } ?>
+                                                    <td rowspan="<?php echo $valueSk['rowspan'] <= 0 ? 1 : $valueSk['rowspan'] ?>">
+                                                        <?php echo $valueSk['namaSk'] ?>
+                                                    </td>
+                                                    <?php $valueSkIndikator = $valueSk['indikatorSk'][0];
+                                                    if ($keySkIndikator >= 1) { ?> </tr><tr> <?php } ?>
+                                                        <td>
+                                                            <?php echo $valueSkIndikator['title'] ?>
+                                                        </td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
+                                                        <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
+                                                        <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
+                                                    </tr>
+                                                </tr>
+                                            <?php } ?>
+                                    <?php } ?>
+                        <?php } ?>
+                    </tbody>
+                    <tbody class="data-eselon2">
+                        <?php if($dataeselon2) { ?>
+                                <?php $value = $dataeselon2[0]; $no = 1; ?>
+                                    <tr>
+                                        <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
+                                            <?php echo $no ?>
+                                        </td>
+                                        <td rowspan="<?php echo $value['rowspan'] ?>">
+                                            <?php echo $tahun ?>
+                                        </td>
+                                        <td rowspan="<?php echo $value['rowspan'] ?>">
+                                            <?php echo $value['nama_balai'] ?>
+                                        </td>
+                                        <td rowspan="<?php echo $value['rowspan'] ?>">
+                                            <?php echo $value['namaSp'] ?>
+                                        </td>
+                                        <td rowspan="<?php echo $value['rowspan'] ?>">
+                                            <?php echo $value['indikator_sp'] ?>
+                                        </td>
+                                        <?php foreach($value['satker'] as $keySatker => $valueSatker) { ?>
+                                            <?php if ($keySatker >= 1) { ?> </tr><tr> <?php } ?>
+                                                <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
+                                                    <?php echo $valueSatker['nama_satker'] ?>
+                                                </td>
+                                                <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
+                                                    <?php if ($keySk >= 1) { ?> </tr><tr> <?php } ?>
+                                                        <td rowspan="<?php echo $valueSk['rowspan'] <= 0 ? 1 : $valueSk['rowspan'] ?>">
+                                                            <?php echo $valueSk['namaSk']; ?>
+                                                        </td>
+                                                    <?php foreach($valueSk['indikatorSk'] as $keySkIndikator => $valueSkIndikator) { ?>
+                                                        <?php if ($keySkIndikator >= 1) { ?> </tr><tr> <?php } ?>
+                                                            <td>
+                                                                <?php echo $valueSkIndikator['title'] ?>
+                                                            </td>
+                                                            <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
+                                                            <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
+                                                            <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
+                                                            <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
+                                                        </tr>
+                                                    </tr>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    <?php } ?>
+                            <?php } ?>
+                    </tbody>
+                    <tbody class="data-baltek">
+                        <?php if($databaltek) { ?>
+                                <?php $value = $databaltek[0]; $no = 1; ?>
+                                    <tr>
+                                        <td align="center" rowspan="<?php echo $value['rowspan'] ?>">
+                                            <?php echo $no ?>
+                                        </td>
+                                        <td rowspan="<?php echo $value['rowspan'] ?>">
+                                            <?php echo $tahun ?>
+                                        </td>
+                                        <td rowspan="<?php echo $value['rowspan'] ?>">
+                                            <?php echo $value['nama_balai'] ?>
+                                        </td>
+                                        <td rowspan="<?php echo $value['rowspan'] ?>">
+                                            <?php echo $value['namaSp'] ?>
+                                        </td>
+                                        <td rowspan="<?php echo $value['rowspan'] ?>">
+                                            <?php echo $value['indikator_sp'] ?>
+                                        </td>
+                                        <?php foreach($value['satker'] as $keySatker => $valueSatker) { ?>
+                                            <?php if ($keySatker >= 1) { ?> </tr><tr> <?php } ?>
+                                                <td rowspan="<?php echo $valueSatker['rowspan'] <= 0 ? 1 : $valueSatker['rowspan'] ?>">
+                                                    <?php echo $valueSatker['nama_satker'] ?>
+                                                </td>
+                                                <?php foreach($valueSatker['sk'] as $keySk => $valueSk) { ?>
+                                                    <?php if ($keySk >= 1) { ?> </tr><tr> <?php } ?>
+                                                        <td rowspan="<?php echo $valueSk['rowspan'] <= 0 ? 1 : $valueSk['rowspan'] ?>">
+                                                            <?php echo $valueSk['namaSk']; ?>
+                                                        </td>
+                                                    <?php foreach($valueSk['indikatorSk'] as $keySkIndikator => $valueSkIndikator) { ?>
+                                                        <?php if ($keySkIndikator >= 1) { ?> </tr><tr> <?php } ?>
+                                                            <td>
+                                                                <?php echo $valueSkIndikator['title'] ?>
+                                                            </td>
+                                                            <td><?php echo str_replace('.', ',', $valueSkIndikator['output']) ?></td>
+                                                            <td><?php echo $valueSkIndikator['outputSatuan'] ?></td>
+                                                            <td><?php echo str_replace('.', ',', $valueSkIndikator['outcome']) ?></td>
+                                                            <td><?php echo $valueSkIndikator['outcomeSatuan'] ?></td>
+                                                        </tr>
+                                                    </tr>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    <?php } ?>
+                            <?php } ?>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -527,5 +706,81 @@
     $('.data-satker').hide();
     $('.data-balai').hide();
     $('.data-skpd').hide();
+    $('.data-satpus').hide();
+    $('.data-eselon2').hide();
+    $('.data-baltek').hide();
+
+    $(document).on('change', 'select.filter-dokumen', function(event) {
+
+        if($('select.filter-dokumen').val() == 'all') {
+            $('.data-balai').hide();
+            $('.data-skpd').hide();
+            $('.data-satpus').hide();
+            $('.data-eselon2').hide();
+            $('.data-baltek').hide();
+            $('.data-satker').hide();
+            $('.all-data').show();
+        }
+        
+        if($('select.filter-dokumen').val() == 'satker') {
+            $('.all-data').hide();
+            $('.data-balai').hide();
+            $('.data-skpd').hide();
+            $('.data-satpus').hide();
+            $('.data-eselon2').hide();
+            $('.data-baltek').hide();
+            $('.data-satker').show();
+        }
+        
+        if($('select.filter-dokumen').val() == 'balai') {
+            $('.all-data').hide();
+            $('.data-skpd').hide();
+            $('.data-satpus').hide();
+            $('.data-eselon2').hide();
+            $('.data-baltek').hide();
+            $('.data-satker').hide();
+            $('.data-balai').show();
+        }
+
+        if($('select.filter-dokumen').val() == 'skpd') {
+            $('.all-data').hide();
+            $('.data-satpus').hide();
+            $('.data-eselon2').hide();
+            $('.data-baltek').hide();
+            $('.data-satker').hide();
+            $('.data-balai').hide();
+            $('.data-skpd').show();
+        }
+
+        if($('select.filter-dokumen').val() == 'satker_pusat') {
+            $('.all-data').hide();
+            $('.data-eselon2').hide();
+            $('.data-baltek').hide();
+            $('.data-satker').hide();
+            $('.data-balai').hide();
+            $('.data-skpd').hide();
+            $('.data-satpus').show();
+        }
+
+        if($('select.filter-dokumen').val() == 'eselon2') {
+            $('.all-data').hide();
+            $('.data-baltek').hide();
+            $('.data-satker').hide();
+            $('.data-balai').hide();
+            $('.data-skpd').hide();
+            $('.data-satpus').hide();
+            $('.data-eselon2').show();
+        }
+
+        if($('select.filter-dokumen').val() == 'balai_teknik') {
+            $('.all-data').hide();
+            $('.data-satker').hide();
+            $('.data-balai').hide();
+            $('.data-skpd').hide();
+            $('.data-satpus').hide();
+            $('.data-eselon2').hide();
+            $('.data-baltek').show();
+        }
+    })
 </script>
 <?= $this->endSection() ?>
