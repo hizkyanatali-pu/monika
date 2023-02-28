@@ -241,7 +241,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Pertama
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak1_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt","Skpd Tp-op","Bws","Bbws","Ii","IIi","Iv","Vi","VIi","VIIi"],["SNVT","SKPD TP-OP","BWS","BBWS","II","III","IV","VI","VII","VIII"],ucwords(strtolower($dataDokumen['pihak1_initial']))));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII"], ucwords(strtolower($dataDokumen['pihak1_initial']))));
 
         // Text 2
         $pdf->Ln(2);
@@ -253,7 +253,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Kedua
         $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', ucwords($dataDokumen['pihak2_ttd']));
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt","Skpd Tp-op","Bws","Bbws","Ii","IIi","Iv","Vi","VIi","VIIi"],["SNVT","SKPD TP-OP","BWS","BBWS","II","III","IV","VI","VII","VIII"],ucwords(strtolower($dataDokumen['pihak2_initial']))));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII"], ucwords(strtolower($dataDokumen['pihak2_initial']))));
 
         // Text 3
         $pdf->Ln(2);
@@ -285,33 +285,30 @@ class DokumenpkExport extends \App\Controllers\BaseController
         //     'person2Name'  => $dataDokumen['pihak1_ttd'],
         // ]);
 
-         // title ttd 1
-         $pdf->SetFont($this->fontFamily, 'B', 12);
-         $pdf->SetX((300 - $this->sectionWidth) / 2);
-         $pdf->Cell(125, 13.7,'Pihak Kedua', 0, 0, 'C');
- 
-         // title ttd 2
-         $pdf->SetFont($this->fontFamily, '', 12);
-         $pdf->SetX(149);
-         $pdf->Cell(144, 4,$this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
-         $pdf->Ln();
-         $pdf->SetFont($this->fontFamily, 'B', 12);
-         $pdf->SetX(167);
-         $pdf->MultiCell(110, 5, 'Pihak Pertama', 0, 'C');
-         $pdf->Ln(20);
- 
-         // td 1
-         $pdf->SetFont($this->fontFamily, 'B', 12);
-         $pdf->SetX((300 - $this->sectionWidth) / 2);
-         $pdf->Cell(125, 4, strtoupper($dataDokumen['pihak2_ttd']), 0, 0, 'C');
- 
-         // td 2
-         $pdf->SetFont($this->fontFamily, 'B', 12);
-         $pdf->SetX(149);
-         $pdf->Cell(144, 4, strtoupper($dataDokumen['pihak1_ttd']), 0, 0, 'C');
+        // title ttd 1
+        $pdf->SetFont($this->fontFamily, 'B', 12);
+        $pdf->SetX((300 - $this->sectionWidth) / 2);
+        $pdf->Cell(125, 13.7, 'Pihak Kedua', 0, 0, 'C');
 
+        // title ttd 2
+        $pdf->SetFont($this->fontFamily, '', 12);
+        $pdf->SetX(149);
+        $pdf->Cell(144, 4, $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
+        $pdf->Ln();
+        $pdf->SetFont($this->fontFamily, 'B', 12);
+        $pdf->SetX(167);
+        $pdf->MultiCell(110, 5, 'Pihak Pertama', 0, 'C');
+        $pdf->Ln(20);
 
+        // td 1
+        $pdf->SetFont($this->fontFamily, 'B', 12);
+        $pdf->SetX((300 - $this->sectionWidth) / 2);
+        $pdf->Cell(125, 4, strtoupper($dataDokumen['pihak2_ttd']), 0, 0, 'C');
 
+        // td 2
+        $pdf->SetFont($this->fontFamily, 'B', 12);
+        $pdf->SetX(149);
+        $pdf->Cell(144, 4, strtoupper($dataDokumen['pihak1_ttd']), 0, 0, 'C');
     }
 
 
@@ -323,7 +320,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell(35, 5, $_title, 0);
 
         $pdf->SetFont('Arial', '', 13);
-        $pdf->SetX((360 - $this->sectionWidth) / 2);
+        $pdf->SetX((365 - $this->sectionWidth) / 2);
         $pdf->Cell(2, 5, ':', 0);
 
         $pdf->SetFont('Arial', '', 13);
@@ -439,6 +436,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $pdf->Cell($headerWidth[$key_header], 4, '(' . (string)($key_header + 1) . ')', 1, 0, 'C');
         $pdf->Ln();
 
+        
+
         // Data
         $pdf->SetFont($this->fontFamily, '', 8);
         $rowNUmber = 0;
@@ -473,14 +472,14 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
             $pdf->SetX((300 - array_sum($tableDataWidth)) / 2);
+            $numberText = $rowNUmber;
             if ($data_targetValue['is_checked'] == '1') {
-                $pdf->Cell($tableDataWidth[0], 6, $rowNUmber, 'T,B,L', 0, 'C', $celTableDataFill);
-                $pdf->Cell($width_cellTitle, 6, $data['title'], 'T,R,B', 0, 'L', $celTableDataFill);
+                // $pdf->Cell($tableDataWidth[0], 6, $rowNUmber, 'T,B,L', 0, 'C', $celTableDataFill);
+                // $pdf->Cell($width_cellTitle, 6, $data['title'], 'T,R,B', 0, 'L', $celTableDataFill);
             }
 
             if ($data['type'] == 'form') {
                 $targetValue = '';
-                // $str = 'M <sup>3</sup> ';
                 $str = iconv('UTF-8', 'windows-1252', html_entity_decode("&sup3;"));
 
                 switch (strtolower($data['target_satuan'])) {
@@ -518,13 +517,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         break;
                 }
 
-
-
                 switch ($_detailDokumenType) {
                     case 'target':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
-                        $rSeparator = explode('.',$data_targetValue['target_value']);
-                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.').  ' ' .  $satuan_target;
+                        $rSeparator = explode('.', $data_targetValue['target_value']);
+                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_target;
                         // $targetValue = str_replace('.',',',$data_targetValue['target_value']) .  ' ' .  $satuan_target;
                         // $targetValue = (number_format($data_targetValue['target_value'],)) .  ' ' .  $satuan_target;
 
@@ -533,8 +530,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     case 'outcome':
                         // $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 3) . ' ' . $data['outcome_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 10, ',', '.'), '0'), ',') . ' ' . $satuan_outcome;
-                        $rSeparator = explode('.',$data_targetValue['outcome_value']);
-                        $targetValue = number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.').  ' ' .  $satuan_outcome;
+                        $rSeparator = explode('.', $data_targetValue['outcome_value']);
+                        $targetValue = number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_outcome;
 
 
                         break;
@@ -542,8 +539,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     case 'output':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' .  $satuan_target;
-                        $rSeparator = explode('.',$data_targetValue['target_value']);
-                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.').  ' ' .  $satuan_target;
+                        $rSeparator = explode('.', $data_targetValue['target_value']);
+                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_target;
 
 
                         break;
@@ -552,9 +549,28 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         break;
                 }
 
-                if ($data_targetValue['is_checked'] == '1')  $pdf->Cell($tableDataWidth[2], 6, $targetValue, 1, 0, 'C', $celTableDataFill);
+                $pdf->SetWidths(Array($tableDataWidth[0], $width_cellTitle, $tableDataWidth[2]));
+                $pdf->SetAligns(Array('C','L','C'));
+                $pdf->SetValigns(Array(true,false, true));
+                $pdf->SetLineHeight(6);
+                $pdf->Row(Array(
+                    $numberText,
+                    $data['title'],
+                    $targetValue,
+                ), $celTableDataFill);
+
+                // if ($data_targetValue['is_checked'] == '1')  $pdf->Cell($tableDataWidth[2], 6, $targetValue, 1, 0, 'C', $celTableDataFill);
             } else {
                 $rowNUmber = 0;
+                
+                $pdf->SetWidths(Array($tableDataWidth[0], $width_cellTitle));
+                $pdf->SetAligns(Array('C','L'));
+                $pdf->SetValigns(Array(true,false));
+                $pdf->SetLineHeight(6);
+                $pdf->Row(Array(
+                    $numberText,
+                    $data['title']
+                ), $celTableDataFill);
             }
 
             if ($data_targetValue['is_checked'] == '1') $pdf->Ln();
@@ -836,6 +852,11 @@ class PDF extends FPDF
     public $watermarkBorder_width      = 0;
     public $watermarkBorder_offsetLeft = 0;
 
+    var $widths;
+    var $aligns;
+    var $valigns;
+    var $lineHeight;
+
     function WriteHTML($html)
     {
         // HTML parser
@@ -961,5 +982,278 @@ class PDF extends FPDF
             $cy = ($this->h - $y) * $this->k;
             $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy));
         }
+    }
+
+
+
+
+    function SetWidths($w){
+        $this->widths=$w;
+    }
+    
+    //Set the array of column alignments
+    function SetAligns($a){
+        $this->aligns=$a;
+    }
+
+    function SetValigns($a){
+        $this->valigns=$a;
+    }
+    
+    //Set line height
+    function SetLineHeight($h){
+        $this->lineHeight=$h;
+    }
+    
+    //Calculate the height of the row
+    function Row($data, $fill = null)
+    {
+        // number of line
+        $nb=0;
+    
+        // loop each data to find out greatest line number in a row.
+        for($i=0;$i<count($data);$i++){
+            // NbLines will calculate how many lines needed to display text wrapped in specified width.
+            // then max function will compare the result with current $nb. Returning the greatest one. And reassign the $nb.
+            $nb=max($nb,$this->NbLines($this->widths[$i],$data[$i]));
+        }
+        
+        //multiply number of line with line height. This will be the height of current row
+        $h=$this->lineHeight * $nb;
+    
+        //Issue a page break first if needed
+        $this->CheckPageBreak($h);
+    
+        //Draw the cells of current row
+        for($i=0;$i<count($data);$i++)
+        {
+            // width of the current col
+            $w=$this->widths[$i];
+            // alignment of the current col. if unset, make it left.
+            $a=isset($this->aligns[$i]) ? $this->aligns[$i] : 'L';
+            $valign=$this->valigns[$i] ? $this->valigns[$i] : false;
+            //Save the current position
+            $x=$this->GetX();
+            $y=$this->GetY();
+            //Draw the border
+            $this->Rect($x,$y,$w,$h, 'DF');
+            //Print the text
+            $text = $valign ? $this->drawTextBox($data[$i], $w, $h, $a, 'M', false) : $data[$i];
+            $this->MultiCell($w,6,$text,0,$a);
+            //Put the position to the right of the cell
+            $this->SetXY($x+$w,$y);
+        }
+        //Go to the next line
+        $this->Ln($h > 6 ? ($h-6) : 0);
+    }
+    
+    function CheckPageBreak($h)
+    {
+        //If the height h would cause an overflow, add a new page immediately
+        if($this->GetY()+$h>$this->PageBreakTrigger)
+            $this->AddPage($this->CurOrientation);
+    }
+    
+    function NbLines($w,$txt)
+    {
+        //calculate the number of lines a MultiCell of width w will take
+        $cw=&$this->CurrentFont['cw'];
+        if($w==0)
+            $w=$this->w-$this->rMargin-$this->x;
+        $wmax=($w-2*$this->cMargin)*1000/$this->FontSize;
+        $s=str_replace("\r",'',$txt);
+        $nb=strlen($s);
+        if($nb>0 and $s[$nb-1]=="\n")
+            $nb--;
+        $sep=-1;
+        $i=0;
+        $j=0;
+        $l=0;
+        $nl=1;
+        while($i<$nb)
+        {
+            $c=$s[$i];
+            if($c=="\n")
+            {
+                $i++;
+                $sep=-1;
+                $j=$i;
+                $l=0;
+                $nl++;
+                continue;
+            }
+            if($c==' ')
+                $sep=$i;
+            $l+=$cw[$c];
+            if($l>$wmax)
+            {
+                if($sep==-1)
+                {
+                    if($i==$j)
+                        $i++;
+                }
+                else
+                    $i=$sep+1;
+                $sep=-1;
+                $j=$i;
+                $l=0;
+                $nl++;
+            }
+            else
+                $i++;
+        }
+        return $nl;
+    }
+
+    function drawTextBox($strText, $w, $h, $align='L', $valign='T', $border=true)
+    {
+        $xi=$this->GetX();
+        $yi=$this->GetY();
+        
+        $hrow=$this->FontSize;
+        $textrows=$this->drawRows($w,$hrow,$strText,0,$align,0,0,0);
+        $maxrows=floor($h/$this->FontSize);
+        $rows=min($textrows,$maxrows);
+
+        $dy=0;
+        if (strtoupper($valign)=='M')
+            $dy=($h-$rows*$this->FontSize)/2;
+        if (strtoupper($valign)=='B')
+            $dy=$h-$rows*$this->FontSize;
+
+        $this->SetY($yi+$dy);
+        $this->SetX($xi);
+
+        $this->drawRows($w,$hrow,$strText,0,$align,false,$rows,1);
+
+        if ($border)
+            $this->Rect($xi,$yi,$w,$h);
+    }
+
+    function drawRows($w, $h, $txt, $border=0, $align='J', $fill=false, $maxline=0, $prn=0)
+    {
+        if(!isset($this->CurrentFont))
+            $this->Error('No font has been set');
+        $cw=$this->CurrentFont['cw'];
+        if($w==0)
+            $w=$this->w-$this->rMargin-$this->x;
+        $wmax=($w-2*$this->cMargin)*1000/$this->FontSize;
+        $s=str_replace("\r",'',(string)$txt);
+        $nb=strlen($s);
+        if($nb>0 && $s[$nb-1]=="\n")
+            $nb--;
+        $b=0;
+        if($border)
+        {
+            if($border==1)
+            {
+                $border='LTRB';
+                $b='LRT';
+                $b2='LR';
+            }
+            else
+            {
+                $b2='';
+                if(is_int(strpos($border,'L')))
+                    $b2.='L';
+                if(is_int(strpos($border,'R')))
+                    $b2.='R';
+                $b=is_int(strpos($border,'T')) ? $b2.'T' : $b2;
+            }
+        }
+        $sep=-1;
+        $i=0;
+        $j=0;
+        $l=0;
+        $ns=0;
+        $nl=1;
+        while($i<$nb)
+        {
+            //Get next character
+            $c=$s[$i];
+            if($c=="\n")
+            {
+                //Explicit line break
+                if($this->ws>0)
+                {
+                    $this->ws=0;
+                    if ($prn==1) $this->_out('0 Tw');
+                }
+                if ($prn==1) {
+                    $this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+                }
+                $i++;
+                $sep=-1;
+                $j=$i;
+                $l=0;
+                $ns=0;
+                $nl++;
+                if($border && $nl==2)
+                    $b=$b2;
+                if ( $maxline && $nl > $maxline )
+                    return substr($s,$i);
+                continue;
+            }
+            if($c==' ')
+            {
+                $sep=$i;
+                $ls=$l;
+                $ns++;
+            }
+            $l+=$cw[$c];
+            if($l>$wmax)
+            {
+                //Automatic line break
+                if($sep==-1)
+                {
+                    if($i==$j)
+                        $i++;
+                    if($this->ws>0)
+                    {
+                        $this->ws=0;
+                        if ($prn==1) $this->_out('0 Tw');
+                    }
+                    if ($prn==1) {
+                        $this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+                    }
+                }
+                else
+                {
+                    if($align=='J')
+                    {
+                        $this->ws=($ns>1) ? ($wmax-$ls)/1000*$this->FontSize/($ns-1) : 0;
+                        if ($prn==1) $this->_out(sprintf('%.3F Tw',$this->ws*$this->k));
+                    }
+                    if ($prn==1){
+                        $this->Cell($w,$h,substr($s,$j,$sep-$j),$b,2,$align,$fill);
+                    }
+                    $i=$sep+1;
+                }
+                $sep=-1;
+                $j=$i;
+                $l=0;
+                $ns=0;
+                $nl++;
+                if($border && $nl==2)
+                    $b=$b2;
+                if ( $maxline && $nl > $maxline )
+                    return substr($s,$i);
+            }
+            else
+                $i++;
+        }
+        //Last chunk
+        if($this->ws>0)
+        {
+            $this->ws=0;
+            if ($prn==1) $this->_out('0 Tw');
+        }
+        if($border && is_int(strpos($border,'B')))
+            $b.='B';
+        if ($prn==1) {
+            $this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+        }
+        $this->x=$this->lMargin;
+        return $nl;
     }
 }

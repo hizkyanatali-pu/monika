@@ -187,7 +187,6 @@ $total_componen = '';
                 } else {
                     $file_dokumen = '-';
                 }
-
                 if(empty($query_satker['created_at'])) {
                     $tanggal_kirim = '-';
                 } else {

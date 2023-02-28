@@ -29,7 +29,6 @@
 <?php 
     foreach ($qdata as $keyQdata => $dataQdata) : 
         $isTemplateSatkerTertinggi = $dataQdata['template'] == "satker_tertinggi";
-        echo $isTemplateSatkerTertinggi;
 ?>
     <div class="section-table">
         <div style="text-align: center;">
@@ -50,7 +49,7 @@
                     <th class="deviasi" colspan="2">Deviasi</th>
                 </tr>
                 <tr class="text-center">
-                    <th class="unit_kerja">Satker Terendah</th>
+                    <th class="unit_kerja"><?php echo $dataQdata['firstFieldTitle'] ?></th>
                     <th class="satker_">Satker</th>
                     <th class="tdNilai paket">Jml Paket</th>
                     <th class="tdNilai pagu_rpm pagu">RPM</th>
