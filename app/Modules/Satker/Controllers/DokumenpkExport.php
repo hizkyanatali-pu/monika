@@ -241,7 +241,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Pertama
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak1_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt","Skpd Tp-op","Bws","Bbws","Ii","IIi","Iv","Vi","VIi","VIIi"],["SNVT","SKPD TP-OP","BWS","BBWS","II","III","IV","VI","VII","VIII"],ucwords(strtolower($dataDokumen['pihak1_initial']))));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII"], ucwords(strtolower($dataDokumen['pihak1_initial']))));
 
         // Text 2
         $pdf->Ln(2);
@@ -253,7 +253,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Kedua
         $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', ucwords($dataDokumen['pihak2_ttd']));
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt","Skpd Tp-op","Bws","Bbws","Ii","IIi","Iv","Vi","VIi","VIIi"],["SNVT","SKPD TP-OP","BWS","BBWS","II","III","IV","VI","VII","VIII"],ucwords(strtolower($dataDokumen['pihak2_initial']))));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII"], ucwords(strtolower($dataDokumen['pihak2_initial']))));
 
         // Text 3
         $pdf->Ln(2);
@@ -285,33 +285,30 @@ class DokumenpkExport extends \App\Controllers\BaseController
         //     'person2Name'  => $dataDokumen['pihak1_ttd'],
         // ]);
 
-         // title ttd 1
-         $pdf->SetFont($this->fontFamily, 'B', 12);
-         $pdf->SetX((300 - $this->sectionWidth) / 2);
-         $pdf->Cell(125, 13.7,'Pihak Kedua', 0, 0, 'C');
- 
-         // title ttd 2
-         $pdf->SetFont($this->fontFamily, '', 12);
-         $pdf->SetX(149);
-         $pdf->Cell(144, 4,$this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
-         $pdf->Ln();
-         $pdf->SetFont($this->fontFamily, 'B', 12);
-         $pdf->SetX(167);
-         $pdf->MultiCell(110, 5, 'Pihak Pertama', 0, 'C');
-         $pdf->Ln(20);
- 
-         // td 1
-         $pdf->SetFont($this->fontFamily, 'B', 12);
-         $pdf->SetX((300 - $this->sectionWidth) / 2);
-         $pdf->Cell(125, 4, strtoupper($dataDokumen['pihak2_ttd']), 0, 0, 'C');
- 
-         // td 2
-         $pdf->SetFont($this->fontFamily, 'B', 12);
-         $pdf->SetX(149);
-         $pdf->Cell(144, 4, strtoupper($dataDokumen['pihak1_ttd']), 0, 0, 'C');
+        // title ttd 1
+        $pdf->SetFont($this->fontFamily, 'B', 12);
+        $pdf->SetX((300 - $this->sectionWidth) / 2);
+        $pdf->Cell(125, 13.7, 'Pihak Kedua', 0, 0, 'C');
 
+        // title ttd 2
+        $pdf->SetFont($this->fontFamily, '', 12);
+        $pdf->SetX(149);
+        $pdf->Cell(144, 4, $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
+        $pdf->Ln();
+        $pdf->SetFont($this->fontFamily, 'B', 12);
+        $pdf->SetX(167);
+        $pdf->MultiCell(110, 5, 'Pihak Pertama', 0, 'C');
+        $pdf->Ln(20);
 
+        // td 1
+        $pdf->SetFont($this->fontFamily, 'B', 12);
+        $pdf->SetX((300 - $this->sectionWidth) / 2);
+        $pdf->Cell(125, 4, strtoupper($dataDokumen['pihak2_ttd']), 0, 0, 'C');
 
+        // td 2
+        $pdf->SetFont($this->fontFamily, 'B', 12);
+        $pdf->SetX(149);
+        $pdf->Cell(144, 4, strtoupper($dataDokumen['pihak1_ttd']), 0, 0, 'C');
     }
 
 
@@ -323,7 +320,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell(35, 5, $_title, 0);
 
         $pdf->SetFont('Arial', '', 13);
-        $pdf->SetX((360 - $this->sectionWidth) / 2);
+        $pdf->SetX((365 - $this->sectionWidth) / 2);
         $pdf->Cell(2, 5, ':', 0);
 
         $pdf->SetFont('Arial', '', 13);
@@ -523,8 +520,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 switch ($_detailDokumenType) {
                     case 'target':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
-                        $rSeparator = explode('.',$data_targetValue['target_value']);
-                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.').  ' ' .  $satuan_target;
+                        $rSeparator = explode('.', $data_targetValue['target_value']);
+                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_target;
                         // $targetValue = str_replace('.',',',$data_targetValue['target_value']) .  ' ' .  $satuan_target;
                         // $targetValue = (number_format($data_targetValue['target_value'],)) .  ' ' .  $satuan_target;
 
@@ -533,8 +530,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     case 'outcome':
                         // $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 3) . ' ' . $data['outcome_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 10, ',', '.'), '0'), ',') . ' ' . $satuan_outcome;
-                        $rSeparator = explode('.',$data_targetValue['outcome_value']);
-                        $targetValue = number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.').  ' ' .  $satuan_outcome;
+                        $rSeparator = explode('.', $data_targetValue['outcome_value']);
+                        $targetValue = number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_outcome;
 
 
                         break;
@@ -542,8 +539,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     case 'output':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' .  $satuan_target;
-                        $rSeparator = explode('.',$data_targetValue['target_value']);
-                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.').  ' ' .  $satuan_target;
+                        $rSeparator = explode('.', $data_targetValue['target_value']);
+                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_target;
 
 
                         break;
