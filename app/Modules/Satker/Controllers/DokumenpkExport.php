@@ -1042,12 +1042,12 @@ class PDF extends FPDF
             $this->Rect($x,$y,$w,$h, 'DF');
             //Print the text
             $text = $valign ? $this->drawTextBox($data[$i], $w, $h, $a, 'M', false) : $data[$i];
-            $this->MultiCell($w,5,$text,0,$a);
+            $this->MultiCell($w,6,$text,0,$a);
             //Put the position to the right of the cell
             $this->SetXY($x+$w,$y);
         }
         //Go to the next line
-        $this->Ln($h > 6 ? ($h-6)+1 : 1);
+        $this->Ln($h > 6 ? ($h-6) : 0);
     }
     
     function CheckPageBreak($h)
