@@ -504,10 +504,10 @@
                     </tbody>
                     <tbody class="data-skpd">
                         <?php if($dataskpd) { ?>
-                            <?php foreach($dataskpd as $key => $value) { ?>
+                            <?php $value = $dataskpd[0]; $no = 1; ?>
                                 <tr>
                                     <td align="center" rowspan="<?php echo $value['rowspan'] + 1 ?>">
-                                        <?php echo $key+1 ?>
+                                        <?php echo $no ?>
                                     </td>
                                     <td rowspan="<?php echo $value['rowspan'] + 1 ?>">
                                         <?php echo $tahun ?>
@@ -553,7 +553,6 @@
                                         <?php } ?>
                                     <?php } ?>
                                 <?php } ?>
-                            <?php } ?>
                         <?php } ?>
                     </tbody>
                     <tbody class="data-satpus">
