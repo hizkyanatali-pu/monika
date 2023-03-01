@@ -2374,7 +2374,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 left join m_satker on dokumen_pk_template_akses.rev_id = m_satker.satkerid 
             WHERE 
                 dokumen_pk_template_akses.rev_table='m_satker' 
-                and m_satker.grup_jabatan ='satker-pusat' 
+                and m_satker.satkerid IN (403477,654098)
             ORDER BY 
                 `satkerid` ASC;
         ")->getResult();
@@ -3682,10 +3682,423 @@ class Dokumenpk extends \App\Controllers\BaseController
             array_push($tempSKPD, $itemSKPD);
         }
 
-        return view('Modules\Admin\Views\DokumenPK\Rekap-SKPD.php', [
+        $filename = 'Rekap Data SKPD TP-OP';
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-disposition: attachment; filename=" . $filename . ".xls");
+        header("Pragma: no-cache");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Expires: 0");
+
+        return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-SKPD.php', [
             'title' => "Perjanjian Kinerja Arsip", 
             'dataskpd' => $tempSKPD,
             'nama_balai' => $dataSKPD['balai'],
+            'tahun' => $sessionTahun
+        ]);
+    }
+
+    public function export_rekap_excel_satpus()
+    {
+        $sessionTahun = $this->user['tahun'];
+        $tempSatpus = [];
+        $dataSatpus = $this->tableBalai->where('balaiid', 99)->get()->getRowArray();
+
+           //Satker Pusat
+            $itemSatpus = [
+            'nama_balai' => $dataSatpus['balai'],
+            'rowspan' => 0,
+            'namaSp' => '-',
+            'indikator_sp' => '-'
+        ];
+
+        $dataSatker_Satpus = $this->db->query("
+            SELECT 
+                m_satker.* 
+            FROM 
+                dokumen_pk_template_akses 
+                left join m_satker on dokumen_pk_template_akses.rev_id = m_satker.satkerid 
+            WHERE 
+                dokumen_pk_template_akses.rev_table='m_satker' 
+                and m_satker.satkerid IN (403477,654098)
+            ORDER BY 
+                `satkerid` ASC;
+        ")->getResult();
+        
+        $itemSatpus['satker'] = [];
+        foreach($dataSatker_Satpus as $keySatker_Satpus => $valueSatker_Satpus) {
+            $itemSatpus['rowspan']++;
+            if (array_search($valueSatker_Satpus->satker, array_column($itemSatpus['satker'], 'nama_satker')) === FALSE) {
+                array_push($itemSatpus['satker'], [
+                    'nama_satker' => $valueSatker_Satpus->satker,
+                    'rowspan' => 0,
+                    // 'rumus' => [$valueRumusIndikatorSp->rumus],
+                    'sk' => []
+                ]);
+            }
+
+            $dataIndikatorSk_Satker = $this->db->query("
+                SELECT 
+                    dokumen_pk_template_row.*,
+                    dokumen_pk_template_rowrumus.rumus
+                FROM 
+                    dokumen_pk_template_akses
+                    left join dokumen_pk_template on 
+                        dokumen_pk_template_akses.template_id = dokumen_pk_template.id
+                    left join dokumen_pk_template_row ON
+                        dokumen_pk_template.id = dokumen_pk_template_row.template_id
+                    left join dokumen_pk_template_rowrumus ON
+                        dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
+                where 
+                    dokumen_pk_template_akses.rev_table='m_satker' 
+                    and dokumen_pk_template_akses.rev_id='". $valueSatker_Satpus->satkerid ."'
+                    and dokumen_pk_template_row.type='form'
+                    and dokumen_pk_template.type='satker';
+            ")->getRow();
+
+            $dataSK_Satpus = $this->db->query("
+                SELECT 
+                    dokumen_pk_template_row.*
+                FROM 
+                    dokumen_pk_template_akses
+                    left join dokumen_pk_template on 
+                        dokumen_pk_template_akses.template_id = dokumen_pk_template.id
+                    left join dokumen_pk_template_row ON
+                        dokumen_pk_template.id = dokumen_pk_template_row.template_id
+                where 
+                    dokumen_pk_template_akses.rev_table='m_satker'
+                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Satpus->satkerid ."'
+                    and dokumen_pk_template.type='satker'
+                    and dokumen_pk_template_row.prefix_title='SK'
+                    and dokumen_pk_template_row.type='section_title'
+                ORDER BY 
+                    dokumen_pk_template_row.id DESC;
+            ")->getRow();
+
+            $findDataSatkerIndexSatpus = array_search($valueSatker_Satpus->satker, array_column($itemSatpus['satker'], 'nama_satker'));
+            $findDataSKIndexSatpus = array_search($dataSK_Satpus->title, array_column($itemSatpus['satker'][$findDataSatkerIndexSatpus]['sk'], 'namaSk'));
+            if (array_search($dataSK_Satpus->title, array_column($itemSatpus['satker'][$findDataSatkerIndexSatpus]['sk'], 'namaSk')) === FALSE) {
+                array_push($itemSatpus['satker'][$findDataSatkerIndexSatpus]['sk'], [
+                    'namaSk' => $dataSK_Satpus->title,
+                    'rowspan' => 0,
+                    'indikatorSk' => []
+                ]);
+            }
+
+            $itemSatpus['satker'][$findDataSatkerIndexSatpus]['rowspan']++;
+            $findDataSKIndex = array_search($dataSK_Satpus->title, array_column($itemSatpus['satker'][$findDataSatkerIndexSatpus]['sk'], 'namaSk'));
+            $dataDokumen_Satker = $this->db->query("
+                SELECT
+                    dokumenpk_satker_rows.target_value,
+                    dokumenpk_satker_rows.outcome_value,
+                    dokumenpk_satker_rows.is_checked
+                FROM
+                    dokumenpk_satker_rows
+                    LEFT JOIN dokumenpk_satker ON dokumenpk_satker_rows.dokumen_id = dokumenpk_satker.id
+                WHERE
+                    dokumenpk_satker.template_id='" . $dataIndikatorSk_Satker->template_id . "'
+                    AND dokumenpk_satker.satkerid='" . $valueSatker_Satpus->satkerid . "'
+                    AND dokumenpk_satker.balaiid='" . $dataSatpus['balai'] . "'
+                    AND dokumenpk_satker.tahun='" . $sessionTahun . "'
+                    AND dokumenpk_satker.status='setuju'
+                    AND dokumenpk_satker.deleted_at is null
+                    AND dokumenpk_satker_rows.template_row_id='" . $dataIndikatorSk_Satker->id . "'
+            ")->getRow();
+
+            array_push($itemSatpus['satker'][$findDataSatkerIndexSatpus]['sk'][$findDataSKIndexSatpus]['indikatorSk'], [
+                'title'         => $dataIndikatorSk_Satker->title,
+                'output'        => $dataDokumen_Satker->target_value ?? '-',
+                'outputSatuan'  => $dataIndikatorSk_Satker->target_satuan,
+                'outcome'       => $dataDokumen_Satker->outcome_value ?? '-',
+                'outcomeSatuan' => $dataIndikatorSk_Satker->outcome_satuan,
+                'is_checked'    => $dataDokumen_Satker->is_checked ?? '-'
+            ]);
+            $itemSatpus['satker'][$findDataSatkerIndexSatpus]['sk'][$findDataSKIndexSatpus]['rowspan']++;
+        }
+        array_push($tempSatpus, $itemSatpus);
+
+        $filename = 'Rekap Data Satker Pusat';
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-disposition: attachment; filename=" . $filename . ".xls");
+        header("Pragma: no-cache");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Expires: 0");
+
+        return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-Satpus.php', [
+            'title' => "Perjanjian Kinerja Arsip", 
+            'datasatpus' => $tempSatpus,
+            'tahun' => $sessionTahun
+        ]);
+    }
+
+    public function export_rekap_excel_eselon2()
+    {
+        $sessionTahun = $this->user['tahun'];
+        $tempEselon = [];
+
+          //Eselon2
+        $itemEselon = [
+            'nama_balai' => '-',
+            'rowspan' => 0,
+            'namaSp' => '-',
+            'indikator_sp' => '-',
+        ];
+
+        $dataSatker_Eselon = $this->db->query("
+            SELECT 
+                m_satker.* 
+            FROM 
+                dokumen_pk_template_akses left join m_satker on dokumen_pk_template_akses.rev_id = m_satker.satkerid 
+            WHERE 
+                dokumen_pk_template_akses.rev_table='m_satker' 
+                and m_satker.grup_jabatan ='eselon2'
+            ORDER BY 
+                `satkerid` ASC;
+        ")->getResult();
+
+        $itemEselon['satker'] = [];
+        foreach($dataSatker_Eselon as $keySatker_Eselon => $valueSatker_Eselon) {
+            if (array_search($valueSatker_Eselon->satker, array_column($itemEselon['satker'], 'nama_satker')) === FALSE) {
+                array_push($itemEselon['satker'], [
+                    'nama_satker' => $valueSatker_Eselon->satker,
+                    'rowspan' => 0,
+                    // 'rumus' => [$valueRumusIndikatorSp->rumus],
+                    'sk' => []
+                ]);
+            }
+
+            $dataSk_Eselon = $this->db->query("
+                SELECT 
+                    dokumen_pk_template_row.*
+                FROM 
+                    dokumen_pk_template_akses
+                    left join dokumen_pk_template on 
+                        dokumen_pk_template_akses.template_id = dokumen_pk_template.id
+                    left join dokumen_pk_template_row ON
+                        dokumen_pk_template.id = dokumen_pk_template_row.template_id
+                where 
+                    dokumen_pk_template_akses.rev_table='m_satker'
+                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Eselon->satkerid ."'
+                    and dokumen_pk_template.type='eselon2'
+                    and dokumen_pk_template_row.prefix_title='SK'
+                    and dokumen_pk_template_row.type='section_title'
+                ORDER BY 
+                    dokumen_pk_template_row.id DESC;
+            ")->getRow();
+
+            $dataIndikatorSk_Eselon = $this->db->query("
+                SELECT 
+                    dokumen_pk_template_row.*,
+                    dokumen_pk_template_rowrumus.rumus
+                FROM 
+                    dokumen_pk_template_akses
+                    left join dokumen_pk_template on 
+                        dokumen_pk_template_akses.template_id = dokumen_pk_template.id
+                    left join dokumen_pk_template_row ON
+                        dokumen_pk_template.id = dokumen_pk_template_row.template_id
+                    left join dokumen_pk_template_rowrumus ON
+                        dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
+                where 
+                    dokumen_pk_template_akses.rev_table='m_satker' 
+                    and dokumen_pk_template_akses.rev_id='". $valueSatker_Eselon->satkerid ."'
+                    and dokumen_pk_template_row.type='form'
+                    and dokumen_pk_template.type='eselon2';
+            ")->getResult();
+
+            $findDataSatkerIndexEselon = array_search($valueSatker_Eselon->satker, array_column($itemEselon['satker'], 'nama_satker'));
+
+            if (array_search($dataSk_Eselon->title, array_column($itemEselon['satker'][$findDataSatkerIndexEselon]['sk'], 'namaSk')) === FALSE) {
+                array_push($itemEselon['satker'][$findDataSatkerIndexEselon]['sk'], [
+                    'namaSk' => $dataSk_Eselon->title,
+                    'rowspan' => 0,
+                    'indikatorSk' => []
+                ]);
+            }
+
+            foreach($dataIndikatorSk_Eselon as $keyIndikatorSk_Eselon => $valueIndikatorSk_Eselon) {
+                $itemEselon['rowspan']++;
+                $itemEselon['satker'][$findDataSatkerIndexEselon]['rowspan']++;
+                $findDataSKIndexEselon = array_search($dataSk_Eselon->title, array_column($itemEselon['satker'][$findDataSatkerIndexEselon]['sk'], 'namaSk'));
+                $dataDokumen_Eselon = $this->db->query("
+                SELECT
+                    dokumenpk_satker_rows.target_value,
+                    dokumenpk_satker_rows.outcome_value,
+                    dokumenpk_satker_rows.is_checked
+                FROM
+                    dokumenpk_satker_rows
+                    LEFT JOIN dokumenpk_satker ON dokumenpk_satker_rows.dokumen_id = dokumenpk_satker.id
+                WHERE
+                    dokumenpk_satker.template_id='" . $valueIndikatorSk_Eselon->template_id . "'
+                    AND dokumenpk_satker.satkerid='" . $valueSatker_Eselon->satkerid . "'
+                    AND dokumenpk_satker.tahun='" . $sessionTahun . "'
+                    AND dokumenpk_satker.status='setuju'
+                    AND dokumenpk_satker.deleted_at is null
+                    AND dokumenpk_satker_rows.template_row_id='" . $valueIndikatorSk_Eselon->id . "'
+                ")->getRow();
+    
+                array_push($itemEselon['satker'][$findDataSatkerIndexEselon]['sk'][$findDataSKIndexEselon]['indikatorSk'], [
+                    'title'         => $valueIndikatorSk_Eselon->title,
+                    'output'        => $dataDokumen_Eselon->target_value ?? '-',
+                    'outputSatuan'  => $valueIndikatorSk_Eselon->target_satuan,
+                    'outcome'       => $dataDokumen_Eselon->outcome_value ?? '-',
+                    'outcomeSatuan' => $valueIndikatorSk_Eselon->outcome_satuan,
+                    'is_checked'    => $dataDokumen_Eselon->is_checked ?? '-'
+                ]);
+                $itemEselon['satker'][$findDataSatkerIndexEselon]['sk'][$findDataSKIndexEselon]['rowspan']++;
+            }
+        }
+        array_push($tempEselon, $itemEselon);
+
+        $filename = 'Rekap Data Eselon 2';
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-disposition: attachment; filename=" . $filename . ".xls");
+        header("Pragma: no-cache");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Expires: 0");
+
+        return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-Eselon2.php', [
+            'title' => "Perjanjian Kinerja Arsip", 
+            'dataeselon2' => $tempEselon,
+            'tahun' => $sessionTahun
+        ]);
+    }
+
+    public function export_rekap_excel_baltek()
+    {
+        $sessionTahun = $this->user['tahun'];
+        $tempBalaiTeknik = [];
+        $dataBalaiTeknik = $this->tableBalai->where('balaiid', 97)->get()->getRow();
+
+          //Balai Teknik
+        $itemBaltek = [
+            'nama_balai' => $dataBalaiTeknik->balai,
+            'rowspan' => 0,
+            'namaSp' => '-',
+            'indikator_sp' => '-'
+
+        ];
+
+        $dataSatker_Baltek = $this->db->query("
+            SELECT 
+                m_satker.* 
+            FROM 
+                dokumen_pk_template_akses left join m_satker on dokumen_pk_template_akses.rev_id = m_satker.satkerid 
+            WHERE 
+                dokumen_pk_template_akses.rev_table='m_satker' 
+                and m_satker.balaiid ='97'
+            ORDER BY 
+                `satkerid` ASC;
+        ")->getResult();
+
+        $itemBaltek['satker'] = [];
+        foreach($dataSatker_Baltek as $keySatker_Baltek => $valueSatker_Baltek) {
+
+            if (array_search($valueSatker_Baltek->satker, array_column($itemBaltek['satker'], 'nama_satker')) === FALSE) {
+                array_push($itemBaltek['satker'], [
+                    'nama_satker' => $valueSatker_Baltek->satker,
+                    'rowspan' => 0,
+                    // 'rumus' => [$valueRumusIndikatorSp->rumus],
+                    'sk' => []
+                ]);
+            }
+
+            $dataSk_Baltek = $this->db->query("
+                SELECT 
+                    dokumen_pk_template_row.*
+                FROM 
+                    dokumen_pk_template_akses
+                    left join dokumen_pk_template on 
+                        dokumen_pk_template_akses.template_id = dokumen_pk_template.id
+                    left join dokumen_pk_template_row ON
+                        dokumen_pk_template.id = dokumen_pk_template_row.template_id
+                where 
+                    dokumen_pk_template_akses.rev_table='m_satker'
+                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Baltek->satkerid ."'
+                    and dokumen_pk_template.type='satker'
+                    and dokumen_pk_template_row.type='section_title'
+                ORDER BY 
+                    dokumen_pk_template_row.id ASC;
+            ")->getResult();
+            
+
+            $findDataSatkerIndexBaltek = array_search($valueSatker_Baltek->satker, array_column($itemBaltek['satker'], 'nama_satker'));
+            $itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'] = [];
+            foreach($dataSk_Baltek as $keySk_Baltek => $valueSk_Baltek) {
+                $itemBaltek['rowspan']++;
+                $itemBaltek['satker'][$findDataSatkerIndexBaltek]['rowspan']++;
+
+                if (array_search($valueSk_Baltek->title, array_column($itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'], 'namaSk')) === FALSE) {
+                    array_push($itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'], [
+                        'namaSk' => $valueSk_Baltek->title,
+                        'rowspan' => 0,
+                        'indikatorSk' => []
+                    ]);
+                }
+
+                $dataIndikatorSk_Baltek = $this->db->query("
+                    SELECT 
+                        dokumen_pk_template_row.*,
+                        dokumen_pk_template_rowrumus.rumus
+                    FROM 
+                        dokumen_pk_template_akses
+                        left join dokumen_pk_template on 
+                            dokumen_pk_template_akses.template_id = dokumen_pk_template.id
+                        left join dokumen_pk_template_row ON
+                            dokumen_pk_template.id = dokumen_pk_template_row.template_id
+                        left join dokumen_pk_template_rowrumus ON
+                            dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
+                    where 
+                        dokumen_pk_template_akses.rev_table='m_satker' 
+                        and dokumen_pk_template_akses.rev_id='". $valueSatker_Baltek->satkerid ."'
+                        and dokumen_pk_template_row.type='form'
+                        and dokumen_pk_template_row.id > '" . $valueSk_Baltek->id . "'
+                        and dokumen_pk_template.type='satker';
+                ")->getRow(); 
+
+
+                $findDataSKIndexBaltek = array_search($valueSk_Baltek->title, array_column($itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'], 'namaSk'));
+                $dataDokumen_Baltek = $this->db->query("
+                    SELECT
+                        dokumenpk_satker_rows.target_value,
+                        dokumenpk_satker_rows.outcome_value,
+                        dokumenpk_satker_rows.is_checked
+                    FROM
+                        dokumenpk_satker_rows
+                        LEFT JOIN dokumenpk_satker ON dokumenpk_satker_rows.dokumen_id = dokumenpk_satker.id
+                    WHERE
+                        dokumenpk_satker.template_id='" . $dataIndikatorSk_Baltek->template_id . "'
+                        AND dokumenpk_satker.satkerid='" . $valueSatker_Baltek->satkerid . "'
+                        AND dokumenpk_satker.balaiid='" . $dataBalaiTeknik->balaiid . "'
+                        AND dokumenpk_satker.tahun='" . $sessionTahun . "'
+                        AND dokumenpk_satker.status='setuju'
+                        AND dokumenpk_satker.deleted_at is null
+                        AND dokumenpk_satker_rows.template_row_id='" . $dataIndikatorSk_Baltek->id . "'
+                ")->getRow();
+
+                array_push($itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'][$findDataSKIndexBaltek]['indikatorSk'], [
+                    'title'         => $dataIndikatorSk_Baltek->title,
+                    'output'        => $dataDokumen_Baltek->target_value ?? '-',
+                    'outputSatuan'  => $dataIndikatorSk_Baltek->target_satuan,
+                    'outcome'       => $dataDokumen_Baltek->outcome_value ?? '-',
+                    'outcomeSatuan' => $dataIndikatorSk_Baltek->outcome_satuan,
+                    'is_checked'    => $dataDokumen_Baltek->is_checked ?? '-'
+                ]);
+                $itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'][$findDataSKIndexBaltek]['rowspan']++;
+            
+            }
+
+        }
+        array_push($tempBalaiTeknik, $itemBaltek);
+
+        $filename = 'Rekap Data Balai Teknik';
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-disposition: attachment; filename=" . $filename . ".xls");
+        header("Pragma: no-cache");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Expires: 0");
+        
+        return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-Baltek.php', [
+            'title' => "Perjanjian Kinerja Arsip", 
+            'databaltek' => $tempBalaiTeknik,
             'tahun' => $sessionTahun
         ]);
     }
