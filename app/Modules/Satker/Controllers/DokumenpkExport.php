@@ -436,7 +436,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $pdf->Cell($headerWidth[$key_header], 4, '(' . (string)($key_header + 1) . ')', 1, 0, 'C');
         $pdf->Ln();
 
-        
+
 
         // Data
         $pdf->SetFont($this->fontFamily, '', 8);
@@ -549,11 +549,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         break;
                 }
 
-                $pdf->SetWidths(Array($tableDataWidth[0], $width_cellTitle, $tableDataWidth[2]));
-                $pdf->SetAligns(Array('C','L','C'));
-                $pdf->SetValigns(Array(true,false, true));
+                $pdf->SetWidths(array($tableDataWidth[0], $width_cellTitle, $tableDataWidth[2]));
+                $pdf->SetAligns(array('C', 'L', 'C'));
+                $pdf->SetValigns(array(true, false, true));
                 $pdf->SetLineHeight(6);
-                $pdf->Row(Array(
+                $pdf->Row(array(
                     $numberText,
                     $data['title'],
                     $targetValue,
@@ -562,12 +562,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 // if ($data_targetValue['is_checked'] == '1')  $pdf->Cell($tableDataWidth[2], 6, $targetValue, 1, 0, 'C', $celTableDataFill);
             } else {
                 $rowNUmber = 0;
-                
-                $pdf->SetWidths(Array($tableDataWidth[0], $width_cellTitle));
-                $pdf->SetAligns(Array('C','L'));
-                $pdf->SetValigns(Array(true,false));
+
+                $pdf->SetWidths(array($tableDataWidth[0], $width_cellTitle));
+                $pdf->SetAligns(array('C', 'L'));
+                $pdf->SetValigns(array(true, false));
                 $pdf->SetLineHeight(6);
-                $pdf->Row(Array(
+                $pdf->Row(array(
                     $numberText,
                     $data['title']
                 ), $celTableDataFill);
@@ -694,23 +694,38 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // $pdf->Cell(144, 4, $_ttd['person2Date'], 0, 0, 'C');
         $pdf->Cell(130, 4, $_ttd['person2Date'], 0, 0, 'C');
         $pdf->Ln();
+
+
+        switch ($_ttd['person2Title']) {
+            case 'KEPALA BALAI BESAR WILAYAH SUNGAI BENGAWAN SOLO':
+                $widthmC = 85;
+                $widthC = 122;
+                break;
+
+            default:
+                $widthmC = 95;
+                $widthC = 130;
+                break;
+        }
+
+
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(167);
         // $pdf->MultiCell(115, 5, $_ttd['person2Title'], 0, 'C');
-        $pdf->MultiCell(95, 5, $_ttd['person2Title'], 0, 'C');
+        $pdf->MultiCell($widthmC, 5, $_ttd['person2Title'], 0, 'C');
 
         $pdf->Ln(20);
 
         // td 1
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX((300 - $_sectionWidth) / 2);
-        $pdf->Cell(125, 4, strtoupper($_ttd['person1Name']), 0, 0, 'C');
+        $pdf->Cell(120, 4, strtoupper($_ttd['person1Name']), 0, 0, 'C');
 
         // td 2
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(149);
         // $pdf->Cell(144, 4, strtoupper($_ttd['person2Name']), 0, 0, 'C');
-        $pdf->Cell(130, 4, strtoupper($_ttd['person2Name']), 0, 0, 'C');
+        $pdf->Cell($widthC, 4, strtoupper($_ttd['person2Name']), 0, 0, 'C');
     }
 
 
@@ -987,273 +1002,254 @@ class PDF extends FPDF
 
 
 
-    function SetWidths($w){
-        $this->widths=$w;
-    }
-    
-    //Set the array of column alignments
-    function SetAligns($a){
-        $this->aligns=$a;
+    function SetWidths($w)
+    {
+        $this->widths = $w;
     }
 
-    function SetValigns($a){
-        $this->valigns=$a;
+    //Set the array of column alignments
+    function SetAligns($a)
+    {
+        $this->aligns = $a;
     }
-    
+
+    function SetValigns($a)
+    {
+        $this->valigns = $a;
+    }
+
     //Set line height
-    function SetLineHeight($h){
-        $this->lineHeight=$h;
+    function SetLineHeight($h)
+    {
+        $this->lineHeight = $h;
     }
-    
+
     //Calculate the height of the row
     function Row($data, $fill = null)
     {
         // number of line
-        $nb=0;
-    
+        $nb = 0;
+
         // loop each data to find out greatest line number in a row.
-        for($i=0;$i<count($data);$i++){
+        for ($i = 0; $i < count($data); $i++) {
             // NbLines will calculate how many lines needed to display text wrapped in specified width.
             // then max function will compare the result with current $nb. Returning the greatest one. And reassign the $nb.
-            $nb=max($nb,$this->NbLines($this->widths[$i],$data[$i]));
+            $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
         }
-        
+
         //multiply number of line with line height. This will be the height of current row
-        $h=$this->lineHeight * $nb;
-    
+        $h = $this->lineHeight * $nb;
+
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
-    
+
         //Draw the cells of current row
-        for($i=0;$i<count($data);$i++)
-        {
+        for ($i = 0; $i < count($data); $i++) {
             // width of the current col
-            $w=$this->widths[$i];
+            $w = $this->widths[$i];
             // alignment of the current col. if unset, make it left.
-            $a=isset($this->aligns[$i]) ? $this->aligns[$i] : 'L';
-            $valign=$this->valigns[$i] ? $this->valigns[$i] : false;
+            $a = isset($this->aligns[$i]) ? $this->aligns[$i] : 'L';
+            $valign = $this->valigns[$i] ? $this->valigns[$i] : false;
             //Save the current position
-            $x=$this->GetX();
-            $y=$this->GetY();
+            $x = $this->GetX();
+            $y = $this->GetY();
             //Draw the border
-            $this->Rect($x,$y,$w,$h, 'DF');
+            $this->Rect($x, $y, $w, $h, 'DF');
             //Print the text
             $text = $valign ? $this->drawTextBox($data[$i], $w, $h, $a, 'M', false) : $data[$i];
-            $this->MultiCell($w,6,$text,0,$a);
+            $this->MultiCell($w, 6, $text, 0, $a);
             //Put the position to the right of the cell
-            $this->SetXY($x+$w,$y);
+            $this->SetXY($x + $w, $y);
         }
         //Go to the next line
-        $this->Ln($h > 6 ? ($h-6) : 0);
+        $this->Ln($h > 6 ? ($h - 6) : 0);
     }
-    
+
     function CheckPageBreak($h)
     {
         //If the height h would cause an overflow, add a new page immediately
-        if($this->GetY()+$h>$this->PageBreakTrigger)
+        if ($this->GetY() + $h > $this->PageBreakTrigger)
             $this->AddPage($this->CurOrientation);
     }
-    
-    function NbLines($w,$txt)
+
+    function NbLines($w, $txt)
     {
         //calculate the number of lines a MultiCell of width w will take
-        $cw=&$this->CurrentFont['cw'];
-        if($w==0)
-            $w=$this->w-$this->rMargin-$this->x;
-        $wmax=($w-2*$this->cMargin)*1000/$this->FontSize;
-        $s=str_replace("\r",'',$txt);
-        $nb=strlen($s);
-        if($nb>0 and $s[$nb-1]=="\n")
+        $cw = &$this->CurrentFont['cw'];
+        if ($w == 0)
+            $w = $this->w - $this->rMargin - $this->x;
+        $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
+        $s = str_replace("\r", '', $txt);
+        $nb = strlen($s);
+        if ($nb > 0 and $s[$nb - 1] == "\n")
             $nb--;
-        $sep=-1;
-        $i=0;
-        $j=0;
-        $l=0;
-        $nl=1;
-        while($i<$nb)
-        {
-            $c=$s[$i];
-            if($c=="\n")
-            {
+        $sep = -1;
+        $i = 0;
+        $j = 0;
+        $l = 0;
+        $nl = 1;
+        while ($i < $nb) {
+            $c = $s[$i];
+            if ($c == "\n") {
                 $i++;
-                $sep=-1;
-                $j=$i;
-                $l=0;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
                 $nl++;
                 continue;
             }
-            if($c==' ')
-                $sep=$i;
-            $l+=$cw[$c];
-            if($l>$wmax)
-            {
-                if($sep==-1)
-                {
-                    if($i==$j)
+            if ($c == ' ')
+                $sep = $i;
+            $l += $cw[$c];
+            if ($l > $wmax) {
+                if ($sep == -1) {
+                    if ($i == $j)
                         $i++;
-                }
-                else
-                    $i=$sep+1;
-                $sep=-1;
-                $j=$i;
-                $l=0;
+                } else
+                    $i = $sep + 1;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
                 $nl++;
-            }
-            else
+            } else
                 $i++;
         }
         return $nl;
     }
 
-    function drawTextBox($strText, $w, $h, $align='L', $valign='T', $border=true)
+    function drawTextBox($strText, $w, $h, $align = 'L', $valign = 'T', $border = true)
     {
-        $xi=$this->GetX();
-        $yi=$this->GetY();
-        
-        $hrow=$this->FontSize;
-        $textrows=$this->drawRows($w,$hrow,$strText,0,$align,0,0,0);
-        $maxrows=floor($h/$this->FontSize);
-        $rows=min($textrows,$maxrows);
+        $xi = $this->GetX();
+        $yi = $this->GetY();
 
-        $dy=0;
-        if (strtoupper($valign)=='M')
-            $dy=($h-$rows*$this->FontSize)/2;
-        if (strtoupper($valign)=='B')
-            $dy=$h-$rows*$this->FontSize;
+        $hrow = $this->FontSize;
+        $textrows = $this->drawRows($w, $hrow, $strText, 0, $align, 0, 0, 0);
+        $maxrows = floor($h / $this->FontSize);
+        $rows = min($textrows, $maxrows);
 
-        $this->SetY($yi+$dy);
+        $dy = 0;
+        if (strtoupper($valign) == 'M')
+            $dy = ($h - $rows * $this->FontSize) / 2;
+        if (strtoupper($valign) == 'B')
+            $dy = $h - $rows * $this->FontSize;
+
+        $this->SetY($yi + $dy);
         $this->SetX($xi);
 
-        $this->drawRows($w,$hrow,$strText,0,$align,false,$rows,1);
+        $this->drawRows($w, $hrow, $strText, 0, $align, false, $rows, 1);
 
         if ($border)
-            $this->Rect($xi,$yi,$w,$h);
+            $this->Rect($xi, $yi, $w, $h);
     }
 
-    function drawRows($w, $h, $txt, $border=0, $align='J', $fill=false, $maxline=0, $prn=0)
+    function drawRows($w, $h, $txt, $border = 0, $align = 'J', $fill = false, $maxline = 0, $prn = 0)
     {
-        if(!isset($this->CurrentFont))
+        if (!isset($this->CurrentFont))
             $this->Error('No font has been set');
-        $cw=$this->CurrentFont['cw'];
-        if($w==0)
-            $w=$this->w-$this->rMargin-$this->x;
-        $wmax=($w-2*$this->cMargin)*1000/$this->FontSize;
-        $s=str_replace("\r",'',(string)$txt);
-        $nb=strlen($s);
-        if($nb>0 && $s[$nb-1]=="\n")
+        $cw = $this->CurrentFont['cw'];
+        if ($w == 0)
+            $w = $this->w - $this->rMargin - $this->x;
+        $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
+        $s = str_replace("\r", '', (string)$txt);
+        $nb = strlen($s);
+        if ($nb > 0 && $s[$nb - 1] == "\n")
             $nb--;
-        $b=0;
-        if($border)
-        {
-            if($border==1)
-            {
-                $border='LTRB';
-                $b='LRT';
-                $b2='LR';
-            }
-            else
-            {
-                $b2='';
-                if(is_int(strpos($border,'L')))
-                    $b2.='L';
-                if(is_int(strpos($border,'R')))
-                    $b2.='R';
-                $b=is_int(strpos($border,'T')) ? $b2.'T' : $b2;
+        $b = 0;
+        if ($border) {
+            if ($border == 1) {
+                $border = 'LTRB';
+                $b = 'LRT';
+                $b2 = 'LR';
+            } else {
+                $b2 = '';
+                if (is_int(strpos($border, 'L')))
+                    $b2 .= 'L';
+                if (is_int(strpos($border, 'R')))
+                    $b2 .= 'R';
+                $b = is_int(strpos($border, 'T')) ? $b2 . 'T' : $b2;
             }
         }
-        $sep=-1;
-        $i=0;
-        $j=0;
-        $l=0;
-        $ns=0;
-        $nl=1;
-        while($i<$nb)
-        {
+        $sep = -1;
+        $i = 0;
+        $j = 0;
+        $l = 0;
+        $ns = 0;
+        $nl = 1;
+        while ($i < $nb) {
             //Get next character
-            $c=$s[$i];
-            if($c=="\n")
-            {
+            $c = $s[$i];
+            if ($c == "\n") {
                 //Explicit line break
-                if($this->ws>0)
-                {
-                    $this->ws=0;
-                    if ($prn==1) $this->_out('0 Tw');
+                if ($this->ws > 0) {
+                    $this->ws = 0;
+                    if ($prn == 1) $this->_out('0 Tw');
                 }
-                if ($prn==1) {
-                    $this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+                if ($prn == 1) {
+                    $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
                 }
                 $i++;
-                $sep=-1;
-                $j=$i;
-                $l=0;
-                $ns=0;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $ns = 0;
                 $nl++;
-                if($border && $nl==2)
-                    $b=$b2;
-                if ( $maxline && $nl > $maxline )
-                    return substr($s,$i);
+                if ($border && $nl == 2)
+                    $b = $b2;
+                if ($maxline && $nl > $maxline)
+                    return substr($s, $i);
                 continue;
             }
-            if($c==' ')
-            {
-                $sep=$i;
-                $ls=$l;
+            if ($c == ' ') {
+                $sep = $i;
+                $ls = $l;
                 $ns++;
             }
-            $l+=$cw[$c];
-            if($l>$wmax)
-            {
+            $l += $cw[$c];
+            if ($l > $wmax) {
                 //Automatic line break
-                if($sep==-1)
-                {
-                    if($i==$j)
+                if ($sep == -1) {
+                    if ($i == $j)
                         $i++;
-                    if($this->ws>0)
-                    {
-                        $this->ws=0;
-                        if ($prn==1) $this->_out('0 Tw');
+                    if ($this->ws > 0) {
+                        $this->ws = 0;
+                        if ($prn == 1) $this->_out('0 Tw');
                     }
-                    if ($prn==1) {
-                        $this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+                    if ($prn == 1) {
+                        $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
                     }
+                } else {
+                    if ($align == 'J') {
+                        $this->ws = ($ns > 1) ? ($wmax - $ls) / 1000 * $this->FontSize / ($ns - 1) : 0;
+                        if ($prn == 1) $this->_out(sprintf('%.3F Tw', $this->ws * $this->k));
+                    }
+                    if ($prn == 1) {
+                        $this->Cell($w, $h, substr($s, $j, $sep - $j), $b, 2, $align, $fill);
+                    }
+                    $i = $sep + 1;
                 }
-                else
-                {
-                    if($align=='J')
-                    {
-                        $this->ws=($ns>1) ? ($wmax-$ls)/1000*$this->FontSize/($ns-1) : 0;
-                        if ($prn==1) $this->_out(sprintf('%.3F Tw',$this->ws*$this->k));
-                    }
-                    if ($prn==1){
-                        $this->Cell($w,$h,substr($s,$j,$sep-$j),$b,2,$align,$fill);
-                    }
-                    $i=$sep+1;
-                }
-                $sep=-1;
-                $j=$i;
-                $l=0;
-                $ns=0;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $ns = 0;
                 $nl++;
-                if($border && $nl==2)
-                    $b=$b2;
-                if ( $maxline && $nl > $maxline )
-                    return substr($s,$i);
-            }
-            else
+                if ($border && $nl == 2)
+                    $b = $b2;
+                if ($maxline && $nl > $maxline)
+                    return substr($s, $i);
+            } else
                 $i++;
         }
         //Last chunk
-        if($this->ws>0)
-        {
-            $this->ws=0;
-            if ($prn==1) $this->_out('0 Tw');
+        if ($this->ws > 0) {
+            $this->ws = 0;
+            if ($prn == 1) $this->_out('0 Tw');
         }
-        if($border && is_int(strpos($border,'B')))
-            $b.='B';
-        if ($prn==1) {
-            $this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+        if ($border && is_int(strpos($border, 'B')))
+            $b .= 'B';
+        if ($prn == 1) {
+            $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
         }
-        $this->x=$this->lMargin;
+        $this->x = $this->lMargin;
         return $nl;
     }
 }
