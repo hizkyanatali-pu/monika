@@ -271,7 +271,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Text
         // $pdf->Ln(1);
         $this->pdf_renderListIsiSection($pdf, '1.', "Pihak pertama pada tahun " . $this->dokumenYear . " ini berjanji akan mewujudkan target kinerja yang seharusnya sesuai lampiran perjanjian ini, dalam rangka mencapai target kinerja jangka menengah seperti yang telah ditetapkan dalam dokumen perencanaan. Keberhasilan dan kegagalan pencapaian target kinerja tersebut menjadi tanggung jawab pihak pertama.");
-        // $pdf->Ln(1);
+        $pdf->Ln(1.5);
         $this->pdf_renderListIsiSection($pdf, '2.', "Pihak kedua akan melakukan supervisi yang diperlukan serta akan melakukan evaluasi terhadap capaian kinerja dari perjanjian ini dan mengambil tindakan yang diperlukan dalam rangka pemberian penghargaan dan sanksi.");
 
 
