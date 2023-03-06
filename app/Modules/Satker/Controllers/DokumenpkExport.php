@@ -298,7 +298,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetFont($this->fontFamily, 'B', 12);
         $pdf->SetX(167);
         $pdf->MultiCell(110, 5, 'Pihak Pertama', 0, 'C');
-        $pdf->Ln(20);
+        $pdf->Ln(19);
 
         // td 1
         $pdf->SetFont($this->fontFamily, 'B', 12);
