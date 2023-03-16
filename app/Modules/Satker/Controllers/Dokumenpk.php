@@ -438,8 +438,10 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $templateRows = array_map(function ($arr) use ($session_userType, $session_balaiId, $templateDokumen, $dokumenExistSameYear) {
             $targetDefualtValue      = 0;
+            $Testing_Data            = 0;
             $targetBalaiDefualtValue = 0;
             $outcomeDefaultValue     = 0;
+            $targetDefaultValue      = 0;
 
             if ($dokumenExistSameYear) {
                 $rowDokumenExistsValue = $this->dokumenSatker_rows
@@ -467,7 +469,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
                     foreach ($templateRowRumus as $key => $data) {
                         $targetRumusOutcome = $this->dokumenSatker->select(
-                            'dokumenpk_satker_rows.outcome_value'
+                            'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id'
                         )
                             ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
                             ->join('dokumen_pk_template_rowrumus', "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus.template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus.rowId)", 'left')
@@ -480,13 +482,24 @@ class Dokumenpk extends \App\Controllers\BaseController
                             ->get()->getResult();
 
                         $outcomeRumus = 0;
+                        $targetValueRumus = 0;
                         foreach ($targetRumusOutcome as $keyOutcome => $dataOutcome) {
                             $outcomeRumus += $dataOutcome ? ($dataOutcome->outcome_value != '' ? $dataOutcome->outcome_value : 0) : 0;
+                            if($dataOutcome->template_row_id == '11004') {
+                                $targetValueRumus += $dataOutcome ? ($dataOutcome->target_value != '' ? $dataOutcome->target_value : 0) : 0;
+                            }
                         }
 
                         if ($targetDefualtValue == '' && $outcomeRumus > 0) $targetDefualtValue = 0;
-
+                        
                         if ($outcomeRumus > 0) $targetDefualtValue += $outcomeRumus;
+                        
+                        if($arr->id == 291010) { 
+                            if ($targetDefaultValue == '' && $targetValueRumus > 0) $targetDefaultValue = 0;
+                            if ($targetValueRumus > 0) $targetDefaultValue += $targetValueRumus;
+                        }
+
+                        // var_dump($data);die;
                     }
                 }
             }
@@ -563,6 +576,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'outcome_satuan'          => $arr->outcome_satuan,
                 'type'                    => $arr->type,
                 'targetDefualtValue'      => $targetDefualtValue,
+                'target_balai_value'      => $targetDefaultValue,
                 'targetBalaiDefualtValue' => $targetBalaiDefualtValue,
                 'outcomeDefaultValue'     => $outcomeDefaultValue
             ];

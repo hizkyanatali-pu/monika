@@ -608,10 +608,6 @@ class Dokumenpk extends \App\Controllers\BaseController
     }
 
 
-
-
-
-
     public function eselon1_export_rekap_excel()
     {
         // header("Content-type: application/vnd.ms-excel");
@@ -963,6 +959,22 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'nama_balai' => $valueBalai->balai,
                 'rowspan' => 0
             ];
+
+
+            // $queryDataBalaiKosong = $this->db->query("
+            //     SELECT 
+            //         dokumenpk_satker_rows.* FROM m_satker 
+            //     LEFT JOIN 
+            //         dokumenpk_satker 
+            //         ON m_satker.satkerid = dokumenpk_satker.satkerid 
+            //     LEFT JOIN dokumenpk_satker_rows 
+            //         ON dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id 
+            //     WHERE 
+            //         dokumenpk_satker.status='setuju' 
+            //         AND dokumenpk_satker.deleted_at is null 
+            //         AND dokumenpk_satker_rows.target_value != '' 
+            //         AND dokumenpk_satker_rows.outcome_value != '';
+            // ")->getRow();
 
 
             $dataSP = $this->db->query("

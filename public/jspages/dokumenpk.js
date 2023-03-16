@@ -854,10 +854,12 @@ function renderFormTemplate(_data, _target) {
 
 
 function renderFormTemplate_rowTable(_data, _templateType) {
+    console.log(_data);
     let rows                = '',
         rowNumber           = 1,
         colspanSectionTitle = 3,
-        classDNoneOutcome   = ''
+        classDNoneOutcome   = '',
+        data_value          = ''
 
     if (
         _templateType == 'eselon1'
@@ -884,6 +886,12 @@ function renderFormTemplate_rowTable(_data, _templateType) {
                 break;
 
             case 'form':
+                if(data.id == "291010") {
+                    data_value = data.target_balai_value;
+                } else {
+                    data_value = data.targetDefualtValue;
+                }
+                
                 rows += `
                     <tr>
                         <td class="text-center align-middle" width="50px">
@@ -897,7 +905,7 @@ function renderFormTemplate_rowTable(_data, _templateType) {
                                     type="text" 
                                     class="form-control __inputTemplateRow-target" 
                                     placeholder="Masukkan Nilai"
-                                    value="${ data.targetDefualtValue }"
+                                    value="${ data_value }"
                                     data-row-id="${ data.id }"
                                     onkeypress="return isNumberKey(this, event);"
                                 >
