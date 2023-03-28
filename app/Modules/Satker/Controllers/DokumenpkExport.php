@@ -121,6 +121,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         }
         $watermaskRevisi       = $dataDokumen['is_revision_same_year'] == '1' ? 'revision-same-year' : $dataDokumen['status'];
         $watermarkRevisiNumber = $dataDokumen['is_revision_same_year'] == '1' ? $dataDokumen['revision_same_year_number'] : $dataDokumen['revision_number'];
+
         $this->pdf_renderWatermarkKonsep($pdf, $watermaskRevisi, $watermarkRevisiNumber);
 
         $this->dokumenLoadedStatus = $dataDokumen['status'];
@@ -751,13 +752,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         // $pdf->watermarkBorder_offsetLeft = 254;
 
                         //koreksi
-                        $pdf->watermarkOffsetLeft        = 243.5;
+                        $pdf->watermarkOffsetLeft        = 202.5;
                         $pdf->watermarkBorder_width      = 24;
-                        $pdf->watermarkBorder_offsetLeft = 240;
+                        $pdf->watermarkBorder_offsetLeft = 200;
                     } else {
-                        $pdf->watermarkOffsetLeft        = 243;
+                        $pdf->watermarkOffsetLeft        = 200;
                         $pdf->watermarkBorder_width      = 46;
-                        $pdf->watermarkBorder_offsetLeft = 240;
+                        $pdf->watermarkBorder_offsetLeft = 200;
                     }
                     break;
 
@@ -796,10 +797,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     // $pdf->watermarkBorder_offsetLeft = 256;
 
                     //konsep 
-                    $pdf->watermarkOffsetLeft        = 244;
+                    $pdf->watermarkOffsetLeft        = 254.5;
                     $pdf->watermarkBorder_width      = 24;
 
-                    $pdf->watermarkBorder_offsetLeft = 240;
+                    $pdf->watermarkBorder_offsetLeft = 250;
 
 
 
@@ -866,6 +867,7 @@ class PDF extends FPDF
     public $watermarkSubTextOffsetLeft = 95;
     public $watermarkBorder_width      = 0;
     public $watermarkBorder_offsetLeft = 0;
+    public $watermarkBorder_offsetRight = 0;
 
     var $widths;
     var $aligns;
@@ -949,7 +951,7 @@ class PDF extends FPDF
     function Header()
     {
         if ($this->PageNo() == 1 || $this->PageNo() == 2 || $this->PageNo() || 3) {
-            $this->SetLineWidth(0.2);
+            $this->SetLineWidth(0.0);
             // border merah
             // $this->SetDrawColor(220,20,60);
             // $this->Rect($this->watermarkBorder_offsetLeft, 13, $this->watermarkBorder_width, 10, 'D');
