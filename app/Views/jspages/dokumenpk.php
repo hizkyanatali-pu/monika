@@ -1505,7 +1505,8 @@
         let rows = '',
             rowNumber = 1,
             colspanSectionTitle = 3,
-            classDNoneOutcome = ''
+            classDNoneOutcome = '',
+            data_value = ''
 
         if (
             _templateType == 'eselon1' ||
@@ -1520,7 +1521,6 @@
             switch (data.type) {
                 case 'section_title':
                     rowNumber = 1
-
                     if (data.prefix_title == 'full') {
                         rows += `
                             <tr>
@@ -1548,13 +1548,19 @@
                     break;
 
                 case 'form':
-                    let renderInputTarget = ''
+                    let renderInputTarget = '';
+                    if(data.id == "291010") {
+                        data_value  = data.target_balai_value;
+                    } else {
+                        data_value = data.targetDefualtValue;
+                    }
+
                     if (_templateType == 'master-balai' || _templateType == 'eselon1') {
                         renderInputTarget = `
                             <td>
                                 <div class="input-group mr-3">
                                     <div class="input-group-append">
-                                        <span class="input-group-text" style="width: 80px">${ data.targetDefualtValue }</span>
+                                        <span class="input-group-text" style="width: 80px">${ data_value }</span>
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>

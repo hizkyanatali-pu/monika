@@ -121,6 +121,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         }
         $watermaskRevisi       = $dataDokumen['is_revision_same_year'] == '1' ? 'revision-same-year' : $dataDokumen['status'];
         $watermarkRevisiNumber = $dataDokumen['is_revision_same_year'] == '1' ? $dataDokumen['revision_same_year_number'] : $dataDokumen['revision_number'];
+
         $this->pdf_renderWatermarkKonsep($pdf, $watermaskRevisi, $watermarkRevisiNumber);
 
         $this->dokumenLoadedStatus = $dataDokumen['status'];
@@ -241,7 +242,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Pertama
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak1_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII"], ucwords(strtolower($dataDokumen['pihak1_initial']))));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi", "(kaltim)", "(kalteng)", "(kalsel)"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII", "(Kaltim)", "(Kalteng)", "(Kalsel)"], ucwords(strtolower($dataDokumen['pihak1_initial']))));
 
         // Text 2
         $pdf->Ln(2);
@@ -253,7 +254,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Kedua
         $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', ucwords($dataDokumen['pihak2_ttd']));
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII"], ucwords(strtolower($dataDokumen['pihak2_initial']))));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi", "(kaltim)", "(kalteng)", "(kalsel)"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII", "(Kaltim)", "(Kalteng)", "(Kalsel)"], ucwords(strtolower($dataDokumen['pihak2_initial']))));
 
         // Text 3
         $pdf->Ln(2);
@@ -751,13 +752,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         // $pdf->watermarkBorder_offsetLeft = 254;
 
                         //koreksi
-                        $pdf->watermarkOffsetLeft        = 243.5;
+                        $pdf->watermarkOffsetLeft        = 202.5;
                         $pdf->watermarkBorder_width      = 24;
-                        $pdf->watermarkBorder_offsetLeft = 240;
+                        $pdf->watermarkBorder_offsetLeft = 200;
                     } else {
-                        $pdf->watermarkOffsetLeft        = 243;
+                        $pdf->watermarkOffsetLeft        = 200;
                         $pdf->watermarkBorder_width      = 46;
-                        $pdf->watermarkBorder_offsetLeft = 240;
+                        $pdf->watermarkBorder_offsetLeft = 200;
                     }
                     break;
 
@@ -796,10 +797,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     // $pdf->watermarkBorder_offsetLeft = 256;
 
                     //konsep 
-                    $pdf->watermarkOffsetLeft        = 244;
+                    $pdf->watermarkOffsetLeft        = 254.5;
                     $pdf->watermarkBorder_width      = 24;
 
-                    $pdf->watermarkBorder_offsetLeft = 240;
+                    $pdf->watermarkBorder_offsetLeft = 250;
 
 
 
@@ -866,6 +867,7 @@ class PDF extends FPDF
     public $watermarkSubTextOffsetLeft = 95;
     public $watermarkBorder_width      = 0;
     public $watermarkBorder_offsetLeft = 0;
+    public $watermarkBorder_offsetRight = 0;
 
     var $widths;
     var $aligns;
@@ -949,7 +951,7 @@ class PDF extends FPDF
     function Header()
     {
         if ($this->PageNo() == 1 || $this->PageNo() == 2 || $this->PageNo() || 3) {
-            $this->SetLineWidth(0.2);
+            $this->SetLineWidth(0.0);
             // border merah
             // $this->SetDrawColor(220,20,60);
             // $this->Rect($this->watermarkBorder_offsetLeft, 13, $this->watermarkBorder_width, 10, 'D');
