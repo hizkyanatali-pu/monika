@@ -320,8 +320,8 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         return $this->respond([
             'template' => $this->dokumenPK->where('id', $_id)->get()->getRow(),
-            'rows'     => $this->dokumenPK_row->select('dokumen_pk_template_row.*, (SELECT COUNT(dokumen_pk_template_rowrumus.rowId) FROM dokumen_pk_template_rowrumus WHERE dokumen_pk_template_rowrumus.rowId=dokumen_pk_template_row.id) as rumusJml')->where('template_id', $_id)->get()->getResult(),
-            'rowRumus' => $this->dokumenPk_rowRumus->where('template_id', $_id)->get()->getResult(),
+            'rows'     => $this->dokumenPK_row->select('dokumen_pk_template_row.*, (SELECT COUNT(dokumen_pk_template_rowrumus.rowId) FROM dokumen_pk_template_rowrumus WHERE dokumen_pk_template_rowrumus.rowId=dokumen_pk_template_row.id) as rumusJml')->where('template_id', $_id)->orderBy('no_urut', 'ASC')->get()->getResult(),
+            'rowRumus' => $this->dokumenPk_rowRumus->where('template_id', $_id)->orderBy('urutan', 'ASC')->get()->getResult(),
             'kegiatan' => $this->dokumenPK_kegiatan->where('template_id', $_id)->get()->getResult(),
             'info'     => $this->dokumenPK_info->where('template_id', $_id)->get()->getResult(),
             'akses'    => $this->dokumenPK_akses->where('template_id', $_id)->get()->getResult()
@@ -390,26 +390,26 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
         /* row */
-        $this->dokumenPK_row->delete(['template_id' => $templateID]);
-        $this->dokumenPk_rowRumus->delete(['template_id' => $templateID]);
-        $this->insertDokumenPK_row($this->request->getPost(), $templateID);
+        // $this->dokumenPK_row->delete(['template_id' => $templateID]);
+        // $this->dokumenPk_rowRumus->delete(['template_id' => $templateID]);
+        $this->updateDokumenPK_row($this->request->getPost(), $templateID);
         /** end-of: row */
 
 
         /* kegiatan */
-        $this->dokumenPK_kegiatan->delete(['template_id' => $templateID]);
+        // $this->dokumenPK_kegiatan->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_kegiatan($this->request->getPost(), $templateID);
         /** end-of: kegiatan */
 
 
         /* info */
         // $this->dokumenPK_info->delete(['template_id' => $templateID]);
-        // $this->insertDokumenPK_info($this->request->getPost(), $templateID);
+        $this->insertDokumenPK_info($this->request->getPost(), $templateID);
         /** end-of: info */
 
 
         /** Akses */
-        $this->dokumenPK_akses->delete(['template_id' => $templateID]);
+        // $this->dokumenPK_akses->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_akses($this->request->getPost(), $templateID, $input_dokumenType);
         /** end-of: Akses */
 
@@ -501,25 +501,66 @@ class Dokumenpk extends \App\Controllers\BaseController
     private function insertDokumenPK_row($input, $templateID)
     {
         $rows = [];
+        $input_rowRumus = [];
         $rowsNumber = 1000;
+        $no_urut = 0;
         foreach ($input['formTable_title'] as $key_rowTitle => $data_rowTitle) {
-            $rowId = $templateID . $rowsNumber++;
-
+            $rowId = $input['formTable_idRow'][$key_rowTitle];
+            $no_urut++;
+            
             array_push($rows, [
                 'id'             => $rowId,
                 'template_id'    => $templateID,
                 'prefix_title'   => $input['formTable_prefixTitle'][$key_rowTitle],
+                'no_urut'        => $no_urut,
                 'title'          => $data_rowTitle,
                 'target_satuan'  => $input['formTable_targetSatuan'][$key_rowTitle],
                 'outcome_satuan' => $input['formTable_outcomeSatuan'][$key_rowTitle],
                 'type'           => $input['formTable_type'][$key_rowTitle]
             ]);
-
+            
+            
             if ($input['formTable_rumus'][$key_rowTitle]) {
-                $this->insertDokumenPK_rowRumus(explode(',', $input['formTable_rumus'][$key_rowTitle]), $rowId, $templateID);
+                $this->insertDokumenPK_rowRumus(explode(',', $input['formTable_idRow'][$key_rowTitle]), $rowId, $templateID);
             }
         }
+        // var_dump($rows[0]['id']);die;
         $this->dokumenPK_row->insertBatch($rows);
+    }
+
+    private function updateDokumenPK_row($input, $templateID)
+    {
+        // echo json_encode($input);die;
+        $rows = [];
+        $input_rowRumus = [];
+        $rowsNumber = 1000;
+        $no_urut = 0;
+        foreach ($input['formTable_title'] as $key_rowTitle => $data_rowTitle) {
+            $no_urut++;
+            // $rowId = $input['formTable_idRow'][$key_rowTitle];
+            
+            array_push($rows, [
+                'id'             => $input['formTable_idRow'][$key_rowTitle],
+                'template_id'    => $templateID,
+                'prefix_title'   => $input['formTable_prefixTitle'][$key_rowTitle],
+                'no_urut'        => $no_urut,
+                'title'          => $data_rowTitle,
+                'target_satuan'  => $input['formTable_targetSatuan'][$key_rowTitle],
+                'outcome_satuan' => $input['formTable_outcomeSatuan'][$key_rowTitle],
+                'type'           => $input['formTable_type'][$key_rowTitle]
+            ]);
+            
+            
+            if ($input['formTable_rumus'][$key_rowTitle]) {
+                array_push($input_rowRumus, [
+                    'rowId'     => $input['formTable_idRow'][$key_rowTitle],
+                    'rumus'     => $input['formTable_rumus'][$key_rowTitle]
+                ]);
+                $this->updateDokumenPK_rowRumus($input_rowRumus, $templateID);
+            }
+        }
+        // var_dump($rows[0]['id']);die;
+        $this->dokumenPK_row->updateBatch($rows, 'id');
     }
 
 
@@ -588,23 +629,42 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-
-
-
-
-    private function insertDokumenPK_rowRumus($inputRumus, $rowId, $templateId)
+    private function insertDokumenPK_rowRumus($input, $rowId, $templateId)
     {
         $rumus = [];
+        $urutan = 0;
 
-        foreach ($inputRumus as $key => $data) {
+        foreach ($input as $key => $data) {
+            $urutan++;
             array_push($rumus, [
                 'template_id' => $templateId,
+                'rumus'       => $data,
                 'rowId'       => $rowId,
-                'rumus'       => $data
+                'urutan'      => $urutan
             ]);
         }
 
         $this->dokumenPk_rowRumus->insertBatch($rumus);
+    }
+    
+    private function updateDokumenPK_rowRumus($input_rowRumus, $templateId)
+    {
+        $rumus = [];
+        $urutan = 0;
+    
+        foreach ($input_rowRumus as $key => $data) {
+            $urutan++;
+            array_push($rumus, [
+                'template_id' => $templateId,
+                'rumus'       => $data['rumus'],
+                'rowId'       => $data['rowId'],
+                'urutan'      => $urutan
+            ]);
+        }
+        // echo json_encode($rumus);die;
+    
+        $this->dokumenPk_rowRumus->updateBatch($rumus, 'rowId');
+
     }
 
 
@@ -1002,12 +1062,14 @@ class Dokumenpk extends \App\Controllers\BaseController
                 $indikatorItemSpChild = true;
                 $indikatorSp = $this->db->query("
                 SELECT 
-                id, title, type 
+                id, title, type, no_urut
                 FROM 
                 `dokumen_pk_template_row` 
                 where 
                 template_id='" . $valueSp->template_id . "' 
                 and id > '" . $valueSp->id . "'
+                ORDER BY 
+                dokumen_pk_template_row.no_urut ASC;
                 ")->getResult();
                 
                 foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
@@ -1208,7 +1270,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         $itemTemp['sp'][$keySp]['rowspan']++;
                                     }
 
-                                    if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyRumusIndikatorSp]['rowspan'] > 1) {
+                                    // var_dump($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']);die;
+                                    if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
                                         $itemBalai['rowspan']++;
                                         $itemBalai['sp'][$keySp]['rowspan']++;
                                     }
@@ -1395,6 +1458,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             where 
                 template_id='" . $valueSkSKPD->template_id . "' 
                 and id > '" . $valueSkSKPD->id . "'
+            ORDER BY dokumen_pk_template_row.no_urut ASC
             ")->getResult();
 
             foreach ($indikatorSkSKPD as $keyIndikatorSkSKPD => $valueIndikatorSkSKPD) {
@@ -1901,6 +1965,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 where 
                 template_id='" . $valueSp->template_id . "' 
                 and id > '" . $valueSp->id . "'
+                ORDER BY dokumen_pk_template.no_urut ASC
                 ")->getResult();
                 
                 foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
@@ -2101,7 +2166,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         $itemTemp['sp'][$keySp]['rowspan']++;
                                     }
 
-                                    if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyRumusIndikatorSp]['rowspan'] > 1) {
+                                    if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
                                         $itemBalai['rowspan']++;
                                         $itemBalai['sp'][$keySp]['rowspan']++;
                                     }
@@ -2288,6 +2353,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             where 
                 template_id='" . $valueSkSKPD->template_id . "' 
                 and id > '" . $valueSkSKPD->id . "'
+            ORDER BY dokumen_pk_template.no_urut ASC
             ")->getResult();
 
             foreach ($indikatorSkSKPD as $keyIndikatorSkSKPD => $valueIndikatorSkSKPD) {
@@ -3208,6 +3274,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                where 
                template_id='" . $valueSp->template_id . "' 
                and id > '" . $valueSp->id . "'
+               ORDER BY dokumen_pk_template_row.no_urut ASC
                ")->getResult();
                
                foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
@@ -3219,7 +3286,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                        $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
                        
                        $rumusIndikatorSp = $this->db->query("
-                       SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
+                       SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "' ORDER BY dokumen_pk_template_rowrumus.urutan ASC
                        ")->getResult();
                        
                        $itemTemp['rowspan']++;
@@ -3408,7 +3475,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                        $itemTemp['sp'][$keySp]['rowspan']++;
                                    }
 
-                                   if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyRumusIndikatorSp]['rowspan'] > 1) {
+                                   if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
                                        $itemBalai['rowspan']++;
                                        $itemBalai['sp'][$keySp]['rowspan']++;
                                    }
@@ -3613,6 +3680,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             where 
                 template_id='" . $valueSkSKPD->template_id . "' 
                 and id > '" . $valueSkSKPD->id . "'
+            ORDER BY dokumen_pk_template_row.no_urut ASC
             ")->getResult();
 
             foreach ($indikatorSkSKPD as $keyIndikatorSkSKPD => $valueIndikatorSkSKPD) {
@@ -3764,7 +3832,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                     dokumen_pk_template_akses.rev_table='m_satker' 
                     and dokumen_pk_template_akses.rev_id='". $valueSatker_Satpus->satkerid ."'
                     and dokumen_pk_template_row.type='form'
-                    and dokumen_pk_template.type='satker';
+                    and dokumen_pk_template.type='satker'
+                ;
             ")->getRow();
 
             $dataSK_Satpus = $this->db->query("

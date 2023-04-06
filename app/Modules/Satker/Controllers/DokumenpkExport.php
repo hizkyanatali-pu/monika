@@ -820,6 +820,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         $tableData = $this->templateRow
             ->where('template_id', $templateId)
+            ->orderBy('no_urut', 'ASC')
             ->get()
             ->getResultArray();
 

@@ -466,7 +466,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $targetBalaiDefualtValue = $rowDokumenExistsValue->target_value ?? '';
                     }
 
-                    $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
+                    $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->orderBy('urutan','ASC')->get()->getResult();
                     foreach ($templateRowRumus as $key => $data) {
                         $targetRumusOutcome = $this->dokumenSatker->select(
                             'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id'
@@ -507,7 +507,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             // print_r($session_userType);exit;
 
             if ($templateDokumen->type == 'eselon1') {
-                $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResultArray();
+                $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->orderBy('urutan', 'ASC')->get()->getResultArray();
 
                 $rumusRow         = implode(',', array_column($templateRowRumus, 'rumus'));
                 $rumusPersenBalai = false;
@@ -580,7 +580,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'targetBalaiDefualtValue' => $targetBalaiDefualtValue,
                 'outcomeDefaultValue'     => $outcomeDefaultValue
             ];
-        }, $this->templateRow->where('template_id', $id)->get()->getResult());
+        }, $this->templateRow->where('template_id', $id)->orderBy('no_urut', 'ASC')->get()->getResult());
 
 
         $valudasiCreatedDokumen = true;
