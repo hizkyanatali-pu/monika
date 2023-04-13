@@ -860,9 +860,11 @@ class Dokumenpk extends \App\Controllers\BaseController
             if ($this->request->getPost('revision_dokumen_id')) {
                 $revision_dokumenID       = $this->request->getPost('revision_dokumen_id');
                 $revision_dokumenMasterID = $this->request->getPost('revision_dokumen_master_id');
+                $revision_message         = $this->request->getPost('revision_message');
 
                 $inserted_dokumenSatker['revision_dokumen_id']        = $revision_dokumenID;
                 $inserted_dokumenSatker['revision_master_dokumen_id'] = $revision_dokumenMasterID;
+                $inserted_dokumenSatker['revision_message']           = $revision_message;
 
                 $inserted_dokumenSatker['revision_master_number'] = $this->dokumenSatker->selectCount('id')->where('revision_master_dokumen_id', $revision_dokumenMasterID)->orWhere('id', $revision_dokumenMasterID)->get()->getFirstRow()->id;
 

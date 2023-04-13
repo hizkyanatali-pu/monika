@@ -454,6 +454,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function changeStatus()
     {
+        // var_dump($this->request->getPost());die;
         switch ($this->request->getPost('dokumenType')) {
             case 'satker':
                 $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
@@ -465,6 +466,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     'change_status_at' => date("Y-m-d H:i:s")
                 ];
 
+                $from = $this->request->getPost('dataID');
 
                 if ($newStatus == "tolak") {
                     $updatedData['revision_message'] = $this->request->getPost('message');
@@ -477,6 +479,23 @@ class Dokumenpk extends \App\Controllers\BaseController
                 };
 
 
+
+                $this->dokumenSatker->update($updatedData);
+                break;
+            case 'satker-revision':
+                $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
+                $newStatus = $this->request->getPost('newStatus');
+
+                $updatedData = [
+                    'status'           => $newStatus,
+                    'change_status_at' => date("Y-m-d H:i:s")
+                ];
+
+                if($newStatus == 'revision') {
+                    $updatedData['revision_message'] = $this->request->getPost('message');
+                }
+
+                // var_dump($updat edData);die;
 
                 $this->dokumenSatker->update($updatedData);
                 break;
@@ -717,6 +736,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     where 
                         template_id='" . $valueSp->template_id . "' 
                         and id > '" . $valueSp->id . "'
+                    ORDER BY dokumen_pk_template_row.no_urut ASC
                 ")->getResult();
 
                 foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
@@ -726,7 +746,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
 
                         $rumusIndikatorSp = $this->db->query("
-                            SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
+                            SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "' ORDER BY urutan ASC
                         ")->getResult();
 
                         $itemTemp['rowspan']++;
@@ -1081,7 +1101,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
                         
                         $rumusIndikatorSp = $this->db->query("
-                        SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
+                        SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "' ORDER BY urutan ASC
                         ")->getResult();
                         
                         $itemTemp['rowspan']++;
@@ -1977,7 +1997,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
                         
                         $rumusIndikatorSp = $this->db->query("
-                        SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
+                        SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "' ORDER by urutan ASC
                         ")->getResult();
                         
                         $itemTemp['rowspan']++;
@@ -2858,6 +2878,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 where 
                 template_id='" . $valueSp->template_id . "' 
                 and id > '" . $valueSp->id . "'
+                ORDER BY no_urut ASC
                 ")->getResult();
                 
                 foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
@@ -2869,7 +2890,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
                         
                         $rumusIndikatorSp = $this->db->query("
-                        SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
+                        SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "' ORDER BY urutan ASC
                         ")->getResult();
                         
                         $itemTemp['rowspan']++;
