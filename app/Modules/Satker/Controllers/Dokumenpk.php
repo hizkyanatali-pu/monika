@@ -34,6 +34,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
         $this->kota = $this->db->table('tkabkota');
+        $this->kuUser = $this->db->table('ku_user');
 
         $this->dokumenStatus = [
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
@@ -679,9 +680,12 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ->get()->getResult();
 
             $listPesanRevision = array_map(function ($arr) {
+                // var_dump($arr);die;
+                $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
                 return [
-                    'tanggal' => date_indo($arr->change_status_at),
-                    'pesan'   => $arr->revision_message
+                    'tanggal'       => date_indo($arr->change_status_at),
+                    'pesan'         => $arr->revision_message,
+                    'koreksi_by'    => $dataPengguna->nama ?? '',
                 ];
             }, $dataListRevision);
         }
@@ -861,10 +865,12 @@ class Dokumenpk extends \App\Controllers\BaseController
                 $revision_dokumenID       = $this->request->getPost('revision_dokumen_id');
                 $revision_dokumenMasterID = $this->request->getPost('revision_dokumen_master_id');
                 $revision_message         = $this->request->getPost('revision_message');
+                $reject_by                = $this->user['idpengguna'];
 
                 $inserted_dokumenSatker['revision_dokumen_id']        = $revision_dokumenID;
                 $inserted_dokumenSatker['revision_master_dokumen_id'] = $revision_dokumenMasterID;
                 $inserted_dokumenSatker['revision_message']           = $revision_message;
+                $inserted_dokumenSatker['reject_by']                  = $reject_by;
 
                 $inserted_dokumenSatker['revision_master_number'] = $this->dokumenSatker->selectCount('id')->where('revision_master_dokumen_id', $revision_dokumenMasterID)->orWhere('id', $revision_dokumenMasterID)->get()->getFirstRow()->id;
 

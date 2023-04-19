@@ -251,9 +251,9 @@
                     formData['revision_dokumen_id'] = $(this).data('dokumen-id')
                     formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
                     Swal.fire({
-                        title: "Kenapa dokumen ini di revisi?",
+                        title: "Kenapa dokumen ini di koreksi?",
                         html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan untuk pembuat dokumen"></textarea>`,
-                        confirmButtonText: "Kirim Alasan Revisi",
+                        confirmButtonText: "Kirim Alasan Koreksi",
                         cancelButtonText: "Batal",
                         showLoaderOnConfirm: true,
                         showCancelButton: true,
@@ -649,6 +649,7 @@
                                     <tr>
                                         <td>${ data.tanggal }</td>
                                         <td>${ data.pesan }</td>
+                                        <td>${ data.koreksi_by }</td>
                                     </tr>
                                 `
                             }
@@ -1547,6 +1548,7 @@
                         <thead>
                             <th width="300px">Tanggal</th>
                             <th>Pesan Koreksi</th>
+                            <th>Koreksi Oleh</th>
                         </thead>
                         <tbody>
                         </tbody>
