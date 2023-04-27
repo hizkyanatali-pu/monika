@@ -554,6 +554,7 @@
                 type: 'GET',
                 success: (res) => {
                     preapreForm_afterChooseTemplate({
+                        dataId: dataId,
                         templateId: templateId,
                         data: res,
                         target: 'koreksi'
@@ -1202,6 +1203,7 @@
 
 
     function preapreForm_afterChooseTemplate(params = {
+        dataId: '',
         templateId: '',
         templateTitle: '',
         data: {},
@@ -1221,7 +1223,7 @@
             `)
         }
 
-        renderFormTemplate(params.data, params.target)
+        renderFormTemplate(params.dataId, params.data, params.target)
         // $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
 
         if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
@@ -1305,8 +1307,9 @@
 
 
 
-    function renderFormTemplate(_data, _target) {
+    function renderFormTemplate(_dataId, _data, _target) {
         let template = _data.template,
+            value_dataId = _dataId,
             templateExtraData = _data.templateExtraData,
             render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type),
             render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
@@ -1543,7 +1546,14 @@
 
             <div class="container-list-revision-message d-none pt-5">
                 <div class="mt-5">
-                    <h5 style="color: #000">Daftar Koreksi</h5>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <h5 style="color: #000">Daftar Koreksi</h5>
+                        </div>
+                        <div class="col-sm-2">
+                            <a href="<?php echo base_url('dokumenpk-download-log') ?>/`+`${value_dataId}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fa fa-download"></i> Download Log</a>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-striped mt-4">
                         <thead>
                             <th width="300px">Tanggal</th>

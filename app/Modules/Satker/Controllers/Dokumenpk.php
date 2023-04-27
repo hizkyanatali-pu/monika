@@ -3,7 +3,9 @@
 namespace Modules\Satker\Controllers;
 
 use CodeIgniter\API\ResponseTrait;
-use App\Libraries\FPDF;
+// use App\Libraries\FPDF;
+use App\Libraries\FPDF_PROTEC as FPDF;
+use Dompdf\Dompdf;
 
 class Dokumenpk extends \App\Controllers\BaseController
 {
@@ -700,6 +702,43 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
+    public function logKoreksi($id)
+    {
+        $pdf = new Dompdf();
+        $dataDokumen =  $this->dokumenSatker->where('id', $id)->get()->getRow();
+    
+        if (!is_null($dataDokumen->revision_master_dokumen_id)) {
+            $dataListKoreksi = $this->dokumenSatker->where('status', 'revision')
+                ->where('id', $dataDokumen->revision_master_dokumen_id)
+                ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
+                ->get()->getResult();
+    
+            $listPesanRevision = array_map(function ($arr) {
+                // var_dump($arr);die;
+                $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
+                return [
+                    'tanggal'       => date_indo($arr->change_status_at),
+                    'pesan'         => $arr->revision_message,
+                    'koreksi_by'    => $dataPengguna->nama ?? '',
+                ];
+            }, $dataListKoreksi);
+        }
+
+        $data_value = [
+            'datakoreksi' => $listPesanRevision,
+        ];
+
+        $pdf = new Dompdf();
+        $pdf->set_option('isRemoteEnabled', TRUE);
+        $pdf->loadHtml(view('Modules\Satker\Views\LogKoreksi', $data_value), 'UTF-8');
+        $pdf->setPaper('A4', 'landscape');
+        $pdf->render();
+        $pdf->stream('log_koreksi.pdf', array('Attachment' => false));
+    }
+
+
+
+
     public function getListRevisioned($id, $feature = false)
     {
 
@@ -1013,5 +1052,414 @@ class Dokumenpk extends \App\Controllers\BaseController
             'sessionYear'       => $this->user['tahun'],
             'session'           => $this->user['user_type']
         ]);
+    }
+
+
+
+
+
+}
+
+class PDF extends FPDF
+{
+    protected $B                   = 0;
+    protected $I                   = 0;
+    protected $U                   = 0;
+    protected $HREF                = '';
+
+    var $angle               = 0;
+
+    public $watermarkText              = '';
+    public $watermarkSubText           = '';
+    public $watermarkOffsetLeft        = 70;
+    public $watermarkSubTextOffsetLeft = 95;
+    public $watermarkBorder_width      = 0;
+    public $watermarkBorder_offsetLeft = 0;
+    public $watermarkBorder_offsetRight = 0;
+
+    var $widths;
+    var $aligns;
+    var $valigns;
+    var $lineHeight;
+
+    function WriteHTML($html)
+    {
+        // HTML parser
+        $html = str_replace("\n", ' ', $html);
+        $a = preg_split('/<(.*)>/U', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
+        foreach ($a as $i => $e) {
+            if ($i % 2 == 0) {
+                // Text
+                if ($this->HREF)
+                    $this->PutLink($this->HREF, $e);
+                else
+                    $this->Write(5, $e);
+            } else {
+                // Tag
+                if ($e[0] == '/')
+                    $this->CloseTag(strtoupper(substr($e, 1)));
+                else {
+                    // Extract attributes
+                    $a2 = explode(' ', $e);
+                    $tag = strtoupper(array_shift($a2));
+                    $attr = array();
+                    foreach ($a2 as $v) {
+                        if (preg_match('/([^=]*)=["\']?([^"\']*)/', $v, $a3))
+                            $attr[strtoupper($a3[1])] = $a3[2];
+                    }
+                    $this->OpenTag($tag, $attr);
+                }
+            }
+        }
+    }
+
+    function OpenTag($tag, $attr)
+    {
+        // Opening tag
+        if ($tag == 'B' || $tag == 'I' || $tag == 'U')
+            $this->SetStyle($tag, true);
+        if ($tag == 'A')
+            $this->HREF = $attr['HREF'];
+        if ($tag == 'BR')
+            $this->Ln(5);
+    }
+
+    function CloseTag($tag)
+    {
+        // Closing tag
+        if ($tag == 'B' || $tag == 'I' || $tag == 'U')
+            $this->SetStyle($tag, false);
+        if ($tag == 'A')
+            $this->HREF = '';
+    }
+
+    function SetStyle($tag, $enable)
+    {
+        // Modify style and select corresponding font
+        $this->$tag += ($enable ? 1 : -1);
+        $style = '';
+        foreach (array('B', 'I', 'U') as $s) {
+            if ($this->$s > 0)
+                $style .= $s;
+        }
+        $this->SetFont('', $style);
+    }
+
+    function PutLink($URL, $txt)
+    {
+        // Put a hyperlink
+        $this->SetTextColor(0, 0, 255);
+        $this->SetStyle('U', true);
+        $this->Write(5, $txt, $URL);
+        $this->SetStyle('U', false);
+        $this->SetTextColor(0);
+    }
+
+
+    function Header()
+    {
+        if ($this->PageNo() == 1 || $this->PageNo() == 2 || $this->PageNo() || 3) {
+            $this->SetLineWidth(0.0);
+            // border merah
+            // $this->SetDrawColor(220,20,60);
+            // $this->Rect($this->watermarkBorder_offsetLeft, 13, $this->watermarkBorder_width, 10, 'D');
+
+            //bg hitam
+            $this->SetDrawColor(0, 0, 0);
+            $this->Rect($this->watermarkBorder_offsetLeft, 16, $this->watermarkBorder_width, 5, 'D');
+
+            //Put the watermark
+            $this->SetFont('Times', 'B', 11);
+            // $this->SetTextColor(255, 192, 203);
+            //$this->RotatedText($this->watermarkOffsetLeft, 110, $this->watermarkText, 0);
+            // $this->SetTextColor(220,20,60); //text merah
+            $this->SetTextColor(0, 0, 0); //text hitam
+            $this->RotatedText($this->watermarkOffsetLeft, 20, $this->watermarkText, 0);
+
+
+            $this->SetFont('Times', 'B', 40);
+            $this->RotatedText($this->watermarkSubTextOffsetLeft, 130, $this->watermarkSubText, 0);
+        }
+    }
+
+    function RotatedText($x, $y, $txt, $angle)
+    {
+        //Text rotated around its origin
+        $this->Rotate($angle, $x, $y);
+        $this->Text($x, $y, $txt);
+        $this->Rotate(0);
+    }
+
+    function Rotate($angle, $x = -1, $y = -1)
+    {
+        if ($x == -1)
+            $x = $this->x;
+        if ($y == -1)
+            $y = $this->y;
+        if ($this->angle != 0)
+            $this->_out('Q');
+        $this->angle = $angle;
+        if ($angle != 0) {
+            $angle *= M_PI / 180;
+            $c = cos($angle);
+            $s = sin($angle);
+            $cx = $x * $this->k;
+            $cy = ($this->h - $y) * $this->k;
+            $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy));
+        }
+    }
+
+
+
+
+    function SetWidths($w)
+    {
+        $this->widths = $w;
+    }
+
+    //Set the array of column alignments
+    function SetAligns($a)
+    {
+        $this->aligns = $a;
+    }
+
+    function SetValigns($a)
+    {
+        $this->valigns = $a;
+    }
+
+    //Set line height
+    function SetLineHeight($h)
+    {
+        $this->lineHeight = $h;
+    }
+
+    //Calculate the height of the row
+    function Row($data, $fill = null)
+    {
+        // number of line
+        $nb = 0;
+
+        // loop each data to find out greatest line number in a row.
+        for ($i = 0; $i < count($data); $i++) {
+            // NbLines will calculate how many lines needed to display text wrapped in specified width.
+            // then max function will compare the result with current $nb. Returning the greatest one. And reassign the $nb.
+            $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
+        }
+
+        //multiply number of line with line height. This will be the height of current row
+        $h = $this->lineHeight * $nb;
+
+        //Issue a page break first if needed
+        $this->CheckPageBreak($h);
+
+        //Draw the cells of current row
+        for ($i = 0; $i < count($data); $i++) {
+            // width of the current col
+            $w = $this->widths[$i];
+            // alignment of the current col. if unset, make it left.
+            $a = isset($this->aligns[$i]) ? $this->aligns[$i] : 'L';
+            $valign = $this->valigns[$i] ? $this->valigns[$i] : false;
+            //Save the current position
+            $x = $this->GetX();
+            $y = $this->GetY();
+            //Draw the border
+            $this->Rect($x, $y, $w, $h, 'DF');
+            //Print the text
+            $text = $valign ? $this->drawTextBox($data[$i], $w, $h, $a, 'M', false) : $data[$i];
+            $this->MultiCell($w, 6, $text, 0, $a);
+            //Put the position to the right of the cell
+            $this->SetXY($x + $w, $y);
+        }
+        //Go to the next line
+        $this->Ln($h > 6 ? ($h - 6) : 0);
+    }
+
+    function CheckPageBreak($h)
+    {
+        //If the height h would cause an overflow, add a new page immediately
+        if ($this->GetY() + $h > $this->PageBreakTrigger)
+            $this->AddPage($this->CurOrientation);
+    }
+
+    function NbLines($w, $txt)
+    {
+        //calculate the number of lines a MultiCell of width w will take
+        $cw = &$this->CurrentFont['cw'];
+        if ($w == 0)
+            $w = $this->w - $this->rMargin - $this->x;
+        $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
+        $s = str_replace("\r", '', $txt);
+        $nb = strlen($s);
+        if ($nb > 0 and $s[$nb - 1] == "\n")
+            $nb--;
+        $sep = -1;
+        $i = 0;
+        $j = 0;
+        $l = 0;
+        $nl = 1;
+        while ($i < $nb) {
+            $c = $s[$i];
+            if ($c == "\n") {
+                $i++;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $nl++;
+                continue;
+            }
+            if ($c == ' ')
+                $sep = $i;
+            $l += $cw[$c];
+            if ($l > $wmax) {
+                if ($sep == -1) {
+                    if ($i == $j)
+                        $i++;
+                } else
+                    $i = $sep + 1;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $nl++;
+            } else
+                $i++;
+        }
+        return $nl;
+    }
+
+    function drawTextBox($strText, $w, $h, $align = 'L', $valign = 'T', $border = true)
+    {
+        $xi = $this->GetX();
+        $yi = $this->GetY();
+
+        $hrow = $this->FontSize;
+        $textrows = $this->drawRows($w, $hrow, $strText, 0, $align, 0, 0, 0);
+        $maxrows = floor($h / $this->FontSize);
+        $rows = min($textrows, $maxrows);
+
+        $dy = 0;
+        if (strtoupper($valign) == 'M')
+            $dy = ($h - $rows * $this->FontSize) / 2;
+        if (strtoupper($valign) == 'B')
+            $dy = $h - $rows * $this->FontSize;
+
+        $this->SetY($yi + $dy);
+        $this->SetX($xi);
+
+        $this->drawRows($w, $hrow, $strText, 0, $align, false, $rows, 1);
+
+        if ($border)
+            $this->Rect($xi, $yi, $w, $h);
+    }
+
+    function drawRows($w, $h, $txt, $border = 0, $align = 'J', $fill = false, $maxline = 0, $prn = 0)
+    {
+        if (!isset($this->CurrentFont))
+            $this->Error('No font has been set');
+        $cw = $this->CurrentFont['cw'];
+        if ($w == 0)
+            $w = $this->w - $this->rMargin - $this->x;
+        $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
+        $s = str_replace("\r", '', (string)$txt);
+        $nb = strlen($s);
+        if ($nb > 0 && $s[$nb - 1] == "\n")
+            $nb--;
+        $b = 0;
+        if ($border) {
+            if ($border == 1) {
+                $border = 'LTRB';
+                $b = 'LRT';
+                $b2 = 'LR';
+            } else {
+                $b2 = '';
+                if (is_int(strpos($border, 'L')))
+                    $b2 .= 'L';
+                if (is_int(strpos($border, 'R')))
+                    $b2 .= 'R';
+                $b = is_int(strpos($border, 'T')) ? $b2 . 'T' : $b2;
+            }
+        }
+        $sep = -1;
+        $i = 0;
+        $j = 0;
+        $l = 0;
+        $ns = 0;
+        $nl = 1;
+        while ($i < $nb) {
+            //Get next character
+            $c = $s[$i];
+            if ($c == "\n") {
+                //Explicit line break
+                if ($this->ws > 0) {
+                    $this->ws = 0;
+                    if ($prn == 1) $this->_out('0 Tw');
+                }
+                if ($prn == 1) {
+                    $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
+                }
+                $i++;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $ns = 0;
+                $nl++;
+                if ($border && $nl == 2)
+                    $b = $b2;
+                if ($maxline && $nl > $maxline)
+                    return substr($s, $i);
+                continue;
+            }
+            if ($c == ' ') {
+                $sep = $i;
+                $ls = $l;
+                $ns++;
+            }
+            $l += $cw[$c];
+            if ($l > $wmax) {
+                //Automatic line break
+                if ($sep == -1) {
+                    if ($i == $j)
+                        $i++;
+                    if ($this->ws > 0) {
+                        $this->ws = 0;
+                        if ($prn == 1) $this->_out('0 Tw');
+                    }
+                    if ($prn == 1) {
+                        $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
+                    }
+                } else {
+                    if ($align == 'J') {
+                        $this->ws = ($ns > 1) ? ($wmax - $ls) / 1000 * $this->FontSize / ($ns - 1) : 0;
+                        if ($prn == 1) $this->_out(sprintf('%.3F Tw', $this->ws * $this->k));
+                    }
+                    if ($prn == 1) {
+                        $this->Cell($w, $h, substr($s, $j, $sep - $j), $b, 2, $align, $fill);
+                    }
+                    $i = $sep + 1;
+                }
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $ns = 0;
+                $nl++;
+                if ($border && $nl == 2)
+                    $b = $b2;
+                if ($maxline && $nl > $maxline)
+                    return substr($s, $i);
+            } else
+                $i++;
+        }
+        //Last chunk
+        if ($this->ws > 0) {
+            $this->ws = 0;
+            if ($prn == 1) $this->_out('0 Tw');
+        }
+        if ($border && is_int(strpos($border, 'B')))
+            $b .= 'B';
+        if ($prn == 1) {
+            $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
+        }
+        $this->x = $this->lMargin;
+        return $nl;
     }
 }

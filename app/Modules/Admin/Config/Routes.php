@@ -347,6 +347,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
 
             $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Satker\Controllers\Dokumenpk::balaiSatker/$1');
+            $routes->get('dokumenpk-download-log/(:any)', '\Modules\Satker\Controllers\Dokumenpk::logKoreksi/$1');
             $routes->get('panduan', '\Modules\Satker\Controllers\Dokumenpk::panduanpk');
 
         }
