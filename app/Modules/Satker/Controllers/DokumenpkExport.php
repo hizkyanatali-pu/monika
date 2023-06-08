@@ -404,6 +404,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetX((300 - $width_kopTitle1) / 2);
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
+
+        if ($dataDokumen['satkerid'] == 309214) {
+            $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . chr(10) . $divisiPihak2;
+        } else {
+            $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
+        }
+
         // Kop Title 2
         $pdf->SetFont('Arial', 'B', 9);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;

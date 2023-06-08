@@ -106,7 +106,7 @@ class Importdata extends \App\Controllers\BaseController
         //     $_ENV['SERVER']
         //     == "local"
         // ) {
-            exit;
+        // exit;
         if ($type == 'paket') {
             $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_paket_' . $tahunAnggaran;
