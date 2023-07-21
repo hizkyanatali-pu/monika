@@ -242,7 +242,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Pertama
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak1_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi", "(kaltim)", "(kalteng)", "(kalsel)"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII", "(Kaltim)", "(Kalteng)", "(Kalsel)"], ucwords(strtolower($dataDokumen['pihak1_initial']))));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi", "(kaltim)", "(kalteng)", "(kalsel)", "D.i"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII", "(Kaltim)", "(Kalteng)", "(Kalsel)", "D.I"], ucwords(strtolower($dataDokumen['pihak1_initial']))));
 
         // Text 2
         $pdf->Ln(2);
@@ -254,7 +254,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Kedua
         $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', ucwords($dataDokumen['pihak2_ttd']));
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi", "(kaltim)", "(kalteng)", "(kalsel)"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII", "(Kaltim)", "(Kalteng)", "(Kalsel)"], ucwords(strtolower($dataDokumen['pihak2_initial']))));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi", "(kaltim)", "(kalteng)", "(kalsel)", "D.i"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII", "(Kaltim)", "(Kalteng)", "(Kalsel)", "D.I"], ucwords(strtolower($dataDokumen['pihak2_initial']))));
 
         // Text 3
         $pdf->Ln(2);
@@ -403,6 +403,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $width_kopTitle1 = $pdf->GetStringWidth($dokumenKopTitle1) + 6;
         $pdf->SetX((300 - $width_kopTitle1) / 2);
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
+
+
+        if ($dataDokumen['satkerid'] == 309214) {
+            $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . chr(10) . $divisiPihak2;
+        } else {
+            $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
+        }
 
         // Kop Title 2
         $pdf->SetFont('Arial', 'B', 9);

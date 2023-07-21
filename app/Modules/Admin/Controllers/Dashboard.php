@@ -37,39 +37,35 @@ class Dashboard extends \App\Controllers\BaseController
     {
 
         //cek jika tabel yang berkaitan dengan api emon kosong 
-        
-       $check_empty_table_paket = $this->db_mysql->query("SELECT * FROM monika_data_{$this->user['tahun']}")->getNumRows();
-       $check_empty_table_kontrak = $this->db_mysql->query("SELECT * FROM monika_kontrak_{$this->user['tahun']}")->getNumRows();
-       $check_empty_table_rekap_unor = $this->db_mysql->query("SELECT * FROM monika_rekap_unor_{$this->user['tahun']}")->getNumRows();
-       $check_empty_table_paket_register = $this->db_mysql->query("SELECT * FROM monika_paket_register_{$this->user['tahun']}")->getNumRows();
+
+        $check_empty_table_paket = $this->db_mysql->query("SELECT * FROM monika_data_{$this->user['tahun']}")->getNumRows();
+        $check_empty_table_kontrak = $this->db_mysql->query("SELECT * FROM monika_kontrak_{$this->user['tahun']}")->getNumRows();
+        $check_empty_table_rekap_unor = $this->db_mysql->query("SELECT * FROM monika_rekap_unor_{$this->user['tahun']}")->getNumRows();
+        $check_empty_table_paket_register = $this->db_mysql->query("SELECT * FROM monika_paket_register_{$this->user['tahun']}")->getNumRows();
 
 
 
-       if( $check_empty_table_paket < 1){
+        if ($check_empty_table_paket < 1) {
 
-        return redirect()->to(site_url("preferensi/tarik-data-emon/paket"));
+            return redirect()->to(site_url("preferensi/tarik-data-emon/paket"));
+        }
 
-       }
+        if ($check_empty_table_kontrak < 1) {
 
-       if( $check_empty_table_kontrak < 1){
+            return redirect()->to(site_url("preferensi/tarik-data-emon/kontrak"));
+        }
 
-        return redirect()->to(site_url("preferensi/tarik-data-emon/kontrak"));
+        if ($check_empty_table_rekap_unor < 1) {
 
-       }
+            return redirect()->to(site_url("preferensi/tarik-data-emon/rekap_unor"));
+        }
 
-       if( $check_empty_table_rekap_unor < 1){
+        if ($check_empty_table_paket_register < 1) {
 
-        return redirect()->to(site_url("preferensi/tarik-data-emon/rekap_unor"));
+            return redirect()->to(site_url("preferensi/tarik-data-emon/paket_register"));
+        }
 
-       }
-
-       if( $check_empty_table_paket_register < 1){
-
-        return redirect()->to(site_url("preferensi/tarik-data-emon/paket_register"));
-
-       }
-
-       // end
+        // end
 
 
         $filterDateStart = $this->request->getGet('filter-date-start') ?? null;
@@ -137,11 +133,11 @@ class Dashboard extends \App\Controllers\BaseController
 
 
             'qdata' => [
-                "bbws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS'"), 
-                "bws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS'"), 
-                "pusat" => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99'"), 
-                'Balai Teknik' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"), 
-                'dinas' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98'"), 
+                "bbws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS'"),
+                "bws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS'"),
+                "pusat" => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99'"),
+                'Balai Teknik' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"),
+                'dinas' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98'"),
                 'Semua Satker' => $this->PulldataModel->getBalaiPaket("satker10terendah")
             ],
 
@@ -370,7 +366,7 @@ class Dashboard extends \App\Controllers\BaseController
 
         ini_set('max_execution_time', 300);
 
-        $rekapUnor =  $this->RekapUnorModel->getRekapUnor('', 'urutan ASC');
+        $rekapUnor =  $this->RekapUnorModel->getRekapUnor('', '');
 
 
         $inputFileType = 'Xlsx'; // Xlsx - Xml - Ods - Slk - Gnumeric - Csv

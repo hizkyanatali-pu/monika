@@ -49,29 +49,29 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $tanggal = date('d');
         $month = date('m');
-        if($month == '01') {
+        if ($month == '01') {
             $bulan = 'Januari';
-        } else if($month == '02') {
+        } else if ($month == '02') {
             $bulan = 'Februari';
-        } else if($month == '03') {
+        } else if ($month == '03') {
             $bulan = 'Maret';
-        } else if($month == '04') {
+        } else if ($month == '04') {
             $bulan = 'April';
-        } else if($month == '05') {
+        } else if ($month == '05') {
             $bulan = 'Mei';
-        } else if($month == '06') {
+        } else if ($month == '06') {
             $bulan = 'Juni';
-        } else if($month == '07') {
+        } else if ($month == '07') {
             $bulan = 'Juli';
-        } else if($month == '08') {
+        } else if ($month == '08') {
             $bulan = 'Agustus';
-        } else if($month == '09') {
+        } else if ($month == '09') {
             $bulan = 'September';
-        } else if($month == '10') {
+        } else if ($month == '10') {
             $bulan = 'Oktober';
-        } else if($month == '11') {
+        } else if ($month == '11') {
             $bulan = 'November';
-        } else if($month == '12') {
+        } else if ($month == '12') {
             $bulan = 'Desember';
         }
         $tahun = date('Y');
@@ -390,26 +390,26 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
         /* row */
-        $this->dokumenPK_row->delete(['template_id' => $templateID]);
-        $this->dokumenPk_rowRumus->delete(['template_id' => $templateID]);
-        $this->insertDokumenPK_row($this->request->getPost(), $templateID);
+        // $this->dokumenPK_row->delete(['template_id' => $templateID]);
+        // $this->dokumenPk_rowRumus->delete(['template_id' => $templateID]);
+        $this->updateDokumenPK_row($this->request->getPost(), $templateID);
         /** end-of: row */
 
 
         /* kegiatan */
-        $this->dokumenPK_kegiatan->delete(['template_id' => $templateID]);
+        // $this->dokumenPK_kegiatan->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_kegiatan($this->request->getPost(), $templateID);
         /** end-of: kegiatan */
 
 
         /* info */
         // $this->dokumenPK_info->delete(['template_id' => $templateID]);
-        // $this->insertDokumenPK_info($this->request->getPost(), $templateID);
+        $this->insertDokumenPK_info($this->request->getPost(), $templateID);
         /** end-of: info */
 
 
         /** Akses */
-        $this->dokumenPK_akses->delete(['template_id' => $templateID]);
+        // $this->dokumenPK_akses->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_akses($this->request->getPost(), $templateID, $input_dokumenType);
         /** end-of: Akses */
 
@@ -454,6 +454,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function changeStatus()
     {
+        // var_dump($this->request->getPost());die;
         switch ($this->request->getPost('dokumenType')) {
             case 'satker':
                 $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
@@ -465,6 +466,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     'change_status_at' => date("Y-m-d H:i:s")
                 ];
 
+                $from = $this->request->getPost('dataID');
 
                 if ($newStatus == "tolak") {
                     $updatedData['revision_message'] = $this->request->getPost('message');
@@ -477,6 +479,23 @@ class Dokumenpk extends \App\Controllers\BaseController
                 };
 
 
+
+                $this->dokumenSatker->update($updatedData);
+                break;
+            case 'satker-revision':
+                $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
+                $newStatus = $this->request->getPost('newStatus');
+
+                $updatedData = [
+                    'status'           => $newStatus,
+                    'change_status_at' => date("Y-m-d H:i:s")
+                ];
+
+                if ($newStatus == 'revision') {
+                    $updatedData['revision_message'] = $this->request->getPost('message');
+                }
+
+                // var_dump($updat edData);die;
 
                 $this->dokumenSatker->update($updatedData);
                 break;
@@ -501,10 +520,11 @@ class Dokumenpk extends \App\Controllers\BaseController
     private function insertDokumenPK_row($input, $templateID)
     {
         $rows = [];
+        $input_rowRumus = [];
         $rowsNumber = 1000;
-        foreach ($input['formTable_title'] as $key_rowTitle => $data_rowTitle) {
-            $rowId = $templateID . $rowsNumber++;
 
+        foreach ($input['formTable_title'] as $key_rowTitle => $data_rowTitle) {
+            $rowId = $input['formTable_idRow'][$key_rowTitle];
             array_push($rows, [
                 'id'             => $rowId,
                 'template_id'    => $templateID,
@@ -515,11 +535,45 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'type'           => $input['formTable_type'][$key_rowTitle]
             ]);
 
+
             if ($input['formTable_rumus'][$key_rowTitle]) {
-                $this->insertDokumenPK_rowRumus(explode(',', $input['formTable_rumus'][$key_rowTitle]), $rowId, $templateID);
+                $this->insertDokumenPK_rowRumus(explode(',', $input['formTable_idRow'][$key_rowTitle]), $rowId, $templateID);
             }
         }
+        // var_dump($rows[0]['id']);die;
         $this->dokumenPK_row->insertBatch($rows);
+    }
+
+    private function updateDokumenPK_row($input, $templateID)
+    {
+        // echo json_encode($input);die;
+        $rows = [];
+        $input_rowRumus = [];
+        $rowsNumber = 1000;
+        foreach ($input['formTable_title'] as $key_rowTitle => $data_rowTitle) {
+            // $rowId = $input['formTable_idRow'][$key_rowTitle];
+
+            array_push($rows, [
+                'id'             => $input['formTable_idRow'][$key_rowTitle],
+                'template_id'    => $templateID,
+                'prefix_title'   => $input['formTable_prefixTitle'][$key_rowTitle],
+                'title'          => $data_rowTitle,
+                'target_satuan'  => $input['formTable_targetSatuan'][$key_rowTitle],
+                'outcome_satuan' => $input['formTable_outcomeSatuan'][$key_rowTitle],
+                'type'           => $input['formTable_type'][$key_rowTitle]
+            ]);
+
+
+            if ($input['formTable_rumus'][$key_rowTitle]) {
+                array_push($input_rowRumus, [
+                    'rowId'     => $input['formTable_idRow'][$key_rowTitle],
+                    'rumus'     => $input['formTable_rumus'][$key_rowTitle]
+                ]);
+                $this->updateDokumenPK_rowRumus($input_rowRumus, $templateID);
+            }
+        }
+        // var_dump($rows[0]['id']);die;
+        $this->dokumenPK_row->updateBatch($rows, 'id');
     }
 
 
@@ -588,23 +642,39 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-
-
-
-
-    private function insertDokumenPK_rowRumus($inputRumus, $rowId, $templateId)
+    private function insertDokumenPK_rowRumus($input, $rowId, $templateId)
     {
         $rumus = [];
 
-        foreach ($inputRumus as $key => $data) {
+
+        foreach ($input as $key => $data) {
+
             array_push($rumus, [
                 'template_id' => $templateId,
+                'rumus'       => $data,
                 'rowId'       => $rowId,
-                'rumus'       => $data
+
             ]);
         }
 
         $this->dokumenPk_rowRumus->insertBatch($rumus);
+    }
+
+    private function updateDokumenPK_rowRumus($input_rowRumus, $templateId)
+    {
+        $rumus = [];
+
+        foreach ($input_rowRumus as $key => $data) {
+
+            array_push($rumus, [
+                'template_id' => $templateId,
+                'rumus'       => $data['rumus'],
+                'rowId'       => $data['rowId']
+            ]);
+        }
+        // echo json_encode($rumus);die;
+
+        $this->dokumenPk_rowRumus->updateBatch($rumus, 'rowId');
     }
 
 
@@ -666,7 +736,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
 
                         $rumusIndikatorSp = $this->db->query("
-                            SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
+                        SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
                         ")->getResult();
 
                         $itemTemp['rowspan']++;
@@ -705,7 +775,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     and m_balai.balaiid = '" . $valueBalai->balaiid . "';
                             ")->getResult();
 
-                            
+
                             if ($dataSatker) {
                                 foreach ($dataSatker as $keyDataSatker => $valueDataSatker) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
@@ -799,9 +869,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     ]);
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
                                 }
-
-
-                            } else if($queryBalai) {
+                            } else if ($queryBalai) {
                                 foreach ($queryBalai as $keyDataBalai => $valueDataBalai) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
 
@@ -819,8 +887,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         ]);
                                     }
 
-                                    
-                                    
+
+
                                     $dataIndicatorSK2 = $this->db->query("
                                         SELECT 
                                             dokumen_pk_template_row.*,
@@ -839,7 +907,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                             and dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
                                             and dokumen_pk_template.type='master-balai'
                                         ")->getRow();
-                                    
+
 
                                     $dataSkBalai = $this->db->query("
                                         SELECT 
@@ -861,7 +929,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         ORDER BY dokumen_pk_template_row.id DESC;
                                     ")->getRow();
 
-                                    
+
                                     $findDataSatkerIndex = array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
                                     // var_dump($dataSkBalai->title);
                                     // die;
@@ -892,11 +960,11 @@ class Dokumenpk extends \App\Controllers\BaseController
                                             AND dokumenpk_satker.status='setuju'
                                             AND dokumenpk_satker.deleted_at is null
                                             AND dokumenpk_satker_rows.template_row_id='" . $dataIndicatorSK2->id . "'
-                                    ")->getRow(); 
+                                    ")->getRow();
 
                                     // var_dump($dataDokumen2);
                                     // die;
-                                    
+
                                     array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
                                         // 'title'         => $dataIndicatorSK2->title,
                                         'title'         => '-',
@@ -906,9 +974,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         'outcomeSatuan' => $dataIndicatorSK2->outcome_satuan
                                     ]);
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                    }
-
                                 }
+                            }
                             // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = $dataSatker->satker ?? null;
                         }
                     }
@@ -917,7 +984,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             array_push($tempData, $itemTemp);
         }
-        
+
         // echo json_encode($tempData); exit;
         // $filename = 'Rekap Data Eselon 1';
         // header("Content-type: application/vnd.ms-excel");
@@ -998,18 +1065,19 @@ class Dokumenpk extends \App\Controllers\BaseController
                 $itemTemp['sp'][$keySp]['rowspan'] = 0;
                 $itemBalai['sp'][$keySp]['nama_sp'] = $valueSp->title;
                 $itemBalai['sp'][$keySp]['rowspan'] = 0;
-                
+
                 $indikatorItemSpChild = true;
                 $indikatorSp = $this->db->query("
                 SELECT 
-                id, title, type 
+                id, title, type
                 FROM 
                 `dokumen_pk_template_row` 
                 where 
                 template_id='" . $valueSp->template_id . "' 
                 and id > '" . $valueSp->id . "'
+               
                 ")->getResult();
-                
+
                 foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
                     if ($valueIndicatorSp->type == 'section_title') $indikatorItemSpChild = false;
                     if ($indikatorItemSpChild) {
@@ -1017,16 +1085,16 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp] = (array) $valueIndicatorSp;
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
-                        
+
                         $rumusIndikatorSp = $this->db->query("
-                        SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
+                            SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
                         ")->getResult();
-                        
+
                         $itemTemp['rowspan']++;
                         $itemTemp['sp'][$keySp]['rowspan']++;
                         $itemBalai['rowspan']++;
                         $itemBalai['sp'][$keySp]['rowspan']++;
-                        
+
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
                         foreach ($rumusIndikatorSp as $keyRumusIndikatorSp => $valueRumusIndikatorSp) {
@@ -1060,7 +1128,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     and m_balai.balaiid = '" . $valueBalai->balaiid . "';
                             ")->getResult();
 
-                            
+
                             if ($dataSatker) {
                                 foreach ($dataSatker as $keyDataSatker => $valueDataSatker) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
@@ -1157,7 +1225,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                                     $findDataSKIndex = array_search($dataSk->title, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk'));
 
-                                    $findDataSKIndex2= array_search($dataSk->title, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], 'namaSk'));
+                                    $findDataSKIndex2 = array_search($dataSk->title, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], 'namaSk'));
 
                                     $dataDokumen = $this->db->query("
                                         SELECT
@@ -1185,7 +1253,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         'is_checked'    => $dataDokumen->is_checked ?? '-'
                                     ]);
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                    
+
                                     array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'][$findDataSKIndex2]['indikatorSk'], [
                                         'title'         => '-',
                                         'output'        => $dataDokumen->target_value ?? '-',
@@ -1196,9 +1264,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     ]);
                                     $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'][$findDataSKIndex2]['rowspan']++;
                                 }
-
-
-                            } else if($queryBalai) {
+                            } else if ($queryBalai) {
                                 foreach ($queryBalai as $keyDataBalai => $valueDataBalai) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
                                     $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
@@ -1208,7 +1274,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         $itemTemp['sp'][$keySp]['rowspan']++;
                                     }
 
-                                    if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyRumusIndikatorSp]['rowspan'] > 1) {
+                                    // var_dump($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']);die;
+                                    if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
                                         $itemBalai['rowspan']++;
                                         $itemBalai['sp'][$keySp]['rowspan']++;
                                     }
@@ -1234,7 +1301,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     // var_dump($valueDataBalai->balaiid);
                                     // die;
 
-                                    
+
                                     $dataIndicatorSK2 = $this->db->query("
                                         SELECT 
                                             dokumen_pk_template_row.*,
@@ -1253,7 +1320,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                             and dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
                                             and dokumen_pk_template.type='master-balai'
                                     ")->getRow();
-                                    
+
 
                                     $dataSkBalai = $this->db->query("
                                         SELECT 
@@ -1275,7 +1342,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         ORDER BY dokumen_pk_template_row.id DESC;
                                     ")->getRow();
 
-                                    
+
                                     $findDataSatkerIndex = array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
                                     $findDataBalaiIndex = array_search($valueDataBalai->balai, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
 
@@ -1319,9 +1386,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                                             AND dokumenpk_satker.status='setuju'
                                             AND dokumenpk_satker.deleted_at is null
                                             AND dokumenpk_satker_rows.template_row_id='" . $dataIndicatorSK2->id . "'
-                                    ")->getRow(); 
+                                    ")->getRow();
 
-                                    
+
                                     array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
                                         // 'title'         => $dataIndicatorSK2->title,
                                         'title'         => '-',
@@ -1344,9 +1411,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
                                     $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                    
                                 }
-
                             }
                             // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = $dataSatker->satker ?? null;
                         }
@@ -1382,7 +1447,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 and dokumen_pk_template_row.type='section_title';
         ")->getResult();
 
-        foreach($dataSK_SKPD as $keySK_SKPD => $valueSkSKPD) {
+        foreach ($dataSK_SKPD as $keySK_SKPD => $valueSkSKPD) {
             $itemSKPD['sp'][$keySK_SKPD]['namaSp'] = '-';
             $itemSKPD['sp'][$keySK_SKPD]['rowspan'] = 0;
 
@@ -1408,16 +1473,16 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template_akses left join m_satker on dokumen_pk_template_akses.rev_id = m_satker.satkerid 
                     WHERE 
                         dokumen_pk_template_akses.rev_table='m_satker' 
-                        and m_satker.balaiid ='". $dataSKPD['balaiid'] ."' 
+                        and m_satker.balaiid ='" . $dataSKPD['balaiid'] . "' 
                     ORDER BY 
                         `satkerid` ASC 
                 ")->getResult();
 
                 $itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['satker'] = [];
-                foreach($satkerSKPD as $keySatkerSKPD => $valueSatkerSKPD) {
+                foreach ($satkerSKPD as $keySatkerSKPD => $valueSatkerSKPD) {
                     $itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['rowspan']++;
 
-                    if($itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['rowspan'] > 1) {
+                    if ($itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['rowspan'] > 1) {
                         $itemSKPD['rowspan']++;
                         $itemSKPD['sp'][$keySK_SKPD]['rowspan']++;
                     }
@@ -1453,10 +1518,10 @@ class Dokumenpk extends \App\Controllers\BaseController
                             dokumenpk_satker_rows
                             LEFT JOIN dokumenpk_satker ON dokumenpk_satker_rows.dokumen_id = dokumenpk_satker.id
                         WHERE
-                            dokumenpk_satker.template_id='". $valueSkSKPD->template_id ."'
-                            AND dokumenpk_satker.satkerid='". $valueSatkerSKPD->satkerid ."'
-                            AND dokumenpk_satker.balaiid='". $dataSKPD['balaiid'] ."'
-                            AND dokumenpk_satker.tahun='". $sessionTahun ."'
+                            dokumenpk_satker.template_id='" . $valueSkSKPD->template_id . "'
+                            AND dokumenpk_satker.satkerid='" . $valueSatkerSKPD->satkerid . "'
+                            AND dokumenpk_satker.balaiid='" . $dataSKPD['balaiid'] . "'
+                            AND dokumenpk_satker.tahun='" . $sessionTahun . "'
                             AND dokumenpk_satker.status='setuju'
                             AND dokumenpk_satker.deleted_at is null;
                     ")->getRow();
@@ -1471,7 +1536,6 @@ class Dokumenpk extends \App\Controllers\BaseController
                     ]);
                     $itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['satker'][$findDataSatkerSKPD]['sk'][$findDataSKIndexSKPD]['rowspan']++;
                 }
-                
             }
             array_push($tempSKPD, $itemSKPD);
         }
@@ -1497,9 +1561,9 @@ class Dokumenpk extends \App\Controllers\BaseController
             ORDER BY 
                 `satkerid` ASC;
         ")->getResult();
-        
+
         $itemSatpus['satker'] = [];
-        foreach($dataSatker_Satpus as $keySatker_Satpus => $valueSatker_Satpus) {
+        foreach ($dataSatker_Satpus as $keySatker_Satpus => $valueSatker_Satpus) {
             $itemSatpus['rowspan']++;
             if (array_search($valueSatker_Satpus->satker, array_column($itemSatpus['satker'], 'nama_satker')) === FALSE) {
                 array_push($itemSatpus['satker'], [
@@ -1524,7 +1588,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker' 
-                    and dokumen_pk_template_akses.rev_id='". $valueSatker_Satpus->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id='" . $valueSatker_Satpus->satkerid . "'
                     and dokumen_pk_template_row.type='form'
                     and dokumen_pk_template.type='satker';
             ")->getRow();
@@ -1540,7 +1604,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template.id = dokumen_pk_template_row.template_id
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker'
-                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Satpus->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id = '" . $valueSatker_Satpus->satkerid . "'
                     and dokumen_pk_template.type='satker'
                     and dokumen_pk_template_row.prefix_title='SK'
                     and dokumen_pk_template_row.type='section_title'
@@ -1589,7 +1653,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $itemSatpus['satker'][$findDataSatkerIndexSatpus]['sk'][$findDataSKIndexSatpus]['rowspan']++;
         }
         array_push($tempSatpus, $itemSatpus);
-        
+
 
         //Eselon2
         $itemEselon = [
@@ -1612,7 +1676,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ")->getResult();
 
         $itemEselon['satker'] = [];
-        foreach($dataSatker_Eselon as $keySatker_Eselon => $valueSatker_Eselon) {
+        foreach ($dataSatker_Eselon as $keySatker_Eselon => $valueSatker_Eselon) {
             if (array_search($valueSatker_Eselon->satker, array_column($itemEselon['satker'], 'nama_satker')) === FALSE) {
                 array_push($itemEselon['satker'], [
                     'nama_satker' => $valueSatker_Eselon->satker,
@@ -1633,7 +1697,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template.id = dokumen_pk_template_row.template_id
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker'
-                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Eselon->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id = '" . $valueSatker_Eselon->satkerid . "'
                     and dokumen_pk_template.type='eselon2'
                     and dokumen_pk_template_row.prefix_title='SK'
                     and dokumen_pk_template_row.type='section_title'
@@ -1655,7 +1719,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker' 
-                    and dokumen_pk_template_akses.rev_id='". $valueSatker_Eselon->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id='" . $valueSatker_Eselon->satkerid . "'
                     and dokumen_pk_template_row.type='form'
                     and dokumen_pk_template.type='eselon2';
             ")->getResult();
@@ -1670,7 +1734,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ]);
             }
 
-            foreach($dataIndikatorSk_Eselon as $keyIndikatorSk_Eselon => $valueIndikatorSk_Eselon) {
+            foreach ($dataIndikatorSk_Eselon as $keyIndikatorSk_Eselon => $valueIndikatorSk_Eselon) {
                 $itemEselon['rowspan']++;
                 $itemEselon['satker'][$findDataSatkerIndexEselon]['rowspan']++;
                 $findDataSKIndexEselon = array_search($dataSk_Eselon->title, array_column($itemEselon['satker'][$findDataSatkerIndexEselon]['sk'], 'namaSk'));
@@ -1691,7 +1755,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     AND dokumenpk_satker.deleted_at is null
                     AND dokumenpk_satker_rows.template_row_id='" . $valueIndikatorSk_Eselon->id . "'
                 ")->getRow();
-    
+
                 array_push($itemEselon['satker'][$findDataSatkerIndexEselon]['sk'][$findDataSKIndexEselon]['indikatorSk'], [
                     'title'         => $valueIndikatorSk_Eselon->title,
                     'output'        => $dataDokumen_Eselon->target_value ?? '-',
@@ -1705,7 +1769,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         }
         array_push($tempEselon, $itemEselon);
 
-        
+
         //Balai Teknik
         $itemBaltek = [
             'nama_balai' => $dataBalaiTeknik->balai,
@@ -1728,7 +1792,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ")->getResult();
 
         $itemBaltek['satker'] = [];
-        foreach($dataSatker_Baltek as $keySatker_Baltek => $valueSatker_Baltek) {
+        foreach ($dataSatker_Baltek as $keySatker_Baltek => $valueSatker_Baltek) {
 
             if (array_search($valueSatker_Baltek->satker, array_column($itemBaltek['satker'], 'nama_satker')) === FALSE) {
                 array_push($itemBaltek['satker'], [
@@ -1750,17 +1814,17 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template.id = dokumen_pk_template_row.template_id
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker'
-                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Baltek->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id = '" . $valueSatker_Baltek->satkerid . "'
                     and dokumen_pk_template.type='satker'
                     and dokumen_pk_template_row.type='section_title'
                 ORDER BY 
                     dokumen_pk_template_row.id ASC;
             ")->getResult();
-            
+
 
             $findDataSatkerIndexBaltek = array_search($valueSatker_Baltek->satker, array_column($itemBaltek['satker'], 'nama_satker'));
             $itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'] = [];
-            foreach($dataSk_Baltek as $keySk_Baltek => $valueSk_Baltek) {
+            foreach ($dataSk_Baltek as $keySk_Baltek => $valueSk_Baltek) {
                 $itemBaltek['rowspan']++;
                 $itemBaltek['satker'][$findDataSatkerIndexBaltek]['rowspan']++;
 
@@ -1786,11 +1850,11 @@ class Dokumenpk extends \App\Controllers\BaseController
                             dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                     where 
                         dokumen_pk_template_akses.rev_table='m_satker' 
-                        and dokumen_pk_template_akses.rev_id='". $valueSatker_Baltek->satkerid ."'
+                        and dokumen_pk_template_akses.rev_id='" . $valueSatker_Baltek->satkerid . "'
                         and dokumen_pk_template_row.type='form'
                         and dokumen_pk_template_row.id > '" . $valueSk_Baltek->id . "'
                         and dokumen_pk_template.type='satker';
-                ")->getRow(); 
+                ")->getRow();
 
 
                 $findDataSKIndexBaltek = array_search($valueSk_Baltek->title, array_column($itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'], 'namaSk'));
@@ -1821,15 +1885,13 @@ class Dokumenpk extends \App\Controllers\BaseController
                     'is_checked'    => $dataDokumen_Baltek->is_checked ?? '-'
                 ]);
                 $itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'][$findDataSKIndexBaltek]['rowspan']++;
-            
             }
-
         }
         array_push($tempBalaiTeknik, $itemBaltek);
 
         // echo json_encode($tempData); exit;
         return view('Modules\Admin\Views\DokumenPK\rekapitulasi.php', [
-            'title' => "Perjanjian Kinerja Arsip", 
+            'title' => "Perjanjian Kinerja Arsip",
             'data' => $tempData,
             'databalai' => $tempDataBalai,
             'dataskpd' => $tempSKPD,
@@ -1891,7 +1953,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 $itemTemp['sp'][$keySp]['rowspan'] = 0;
                 $itemBalai['sp'][$keySp]['nama_sp'] = $valueSp->title;
                 $itemBalai['sp'][$keySp]['rowspan'] = 0;
-                
+
                 $indikatorItemSpChild = true;
                 $indikatorSp = $this->db->query("
                 SELECT 
@@ -1902,7 +1964,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 template_id='" . $valueSp->template_id . "' 
                 and id > '" . $valueSp->id . "'
                 ")->getResult();
-                
+
                 foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
                     if ($valueIndicatorSp->type == 'section_title') $indikatorItemSpChild = false;
                     if ($indikatorItemSpChild) {
@@ -1910,16 +1972,16 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp] = (array) $valueIndicatorSp;
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
-                        
+
                         $rumusIndikatorSp = $this->db->query("
                         SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
                         ")->getResult();
-                        
+
                         $itemTemp['rowspan']++;
                         $itemTemp['sp'][$keySp]['rowspan']++;
                         $itemBalai['rowspan']++;
                         $itemBalai['sp'][$keySp]['rowspan']++;
-                        
+
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
                         foreach ($rumusIndikatorSp as $keyRumusIndikatorSp => $valueRumusIndikatorSp) {
@@ -1953,7 +2015,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     and m_balai.balaiid = '" . $valueBalai->balaiid . "';
                             ")->getResult();
 
-                            
+
                             if ($dataSatker) {
                                 foreach ($dataSatker as $keyDataSatker => $valueDataSatker) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
@@ -2050,7 +2112,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                                     $findDataSKIndex = array_search($dataSk->title, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk'));
 
-                                    $findDataSKIndex2= array_search($dataSk->title, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], 'namaSk'));
+                                    $findDataSKIndex2 = array_search($dataSk->title, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], 'namaSk'));
 
                                     $dataDokumen = $this->db->query("
                                         SELECT
@@ -2078,7 +2140,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         'is_checked'    => $dataDokumen->is_checked ?? '-'
                                     ]);
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                    
+
                                     array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'][$findDataSKIndex2]['indikatorSk'], [
                                         'title'         => '-',
                                         'output'        => $dataDokumen->target_value ?? '-',
@@ -2089,9 +2151,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     ]);
                                     $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'][$findDataSKIndex2]['rowspan']++;
                                 }
-
-
-                            } else if($queryBalai) {
+                            } else if ($queryBalai) {
                                 foreach ($queryBalai as $keyDataBalai => $valueDataBalai) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
                                     $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
@@ -2101,7 +2161,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         $itemTemp['sp'][$keySp]['rowspan']++;
                                     }
 
-                                    if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyRumusIndikatorSp]['rowspan'] > 1) {
+                                    if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
                                         $itemBalai['rowspan']++;
                                         $itemBalai['sp'][$keySp]['rowspan']++;
                                     }
@@ -2127,7 +2187,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     // var_dump($valueDataBalai->balaiid);
                                     // die;
 
-                                    
+
                                     $dataIndicatorSK2 = $this->db->query("
                                         SELECT 
                                             dokumen_pk_template_row.*,
@@ -2146,7 +2206,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                             and dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
                                             and dokumen_pk_template.type='master-balai'
                                     ")->getRow();
-                                    
+
 
                                     $dataSkBalai = $this->db->query("
                                         SELECT 
@@ -2168,7 +2228,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         ORDER BY dokumen_pk_template_row.id DESC;
                                     ")->getRow();
 
-                                    
+
                                     $findDataSatkerIndex = array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
                                     $findDataBalaiIndex = array_search($valueDataBalai->balai, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
 
@@ -2212,9 +2272,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                                             AND dokumenpk_satker.status='setuju'
                                             AND dokumenpk_satker.deleted_at is null
                                             AND dokumenpk_satker_rows.template_row_id='" . $dataIndicatorSK2->id . "'
-                                    ")->getRow(); 
+                                    ")->getRow();
 
-                                    
+
                                     array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
                                         // 'title'         => $dataIndicatorSK2->title,
                                         'title'         => '-',
@@ -2237,9 +2297,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
                                     $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                    
                                 }
-
                             }
                             // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = $dataSatker->satker ?? null;
                         }
@@ -2275,7 +2333,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 and dokumen_pk_template_row.type='section_title';
         ")->getResult();
 
-        foreach($dataSK_SKPD as $keySK_SKPD => $valueSkSKPD) {
+        foreach ($dataSK_SKPD as $keySK_SKPD => $valueSkSKPD) {
             $itemSKPD['sp'][$keySK_SKPD]['namaSp'] = '-';
             $itemSKPD['sp'][$keySK_SKPD]['rowspan'] = 0;
 
@@ -2301,16 +2359,16 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template_akses left join m_satker on dokumen_pk_template_akses.rev_id = m_satker.satkerid 
                     WHERE 
                         dokumen_pk_template_akses.rev_table='m_satker' 
-                        and m_satker.balaiid ='". $dataSKPD['balaiid'] ."' 
+                        and m_satker.balaiid ='" . $dataSKPD['balaiid'] . "' 
                     ORDER BY 
                         `satkerid` ASC 
                 ")->getResult();
 
                 $itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['satker'] = [];
-                foreach($satkerSKPD as $keySatkerSKPD => $valueSatkerSKPD) {
+                foreach ($satkerSKPD as $keySatkerSKPD => $valueSatkerSKPD) {
                     $itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['rowspan']++;
 
-                    if($itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['rowspan'] > 1) {
+                    if ($itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['rowspan'] > 1) {
                         $itemSKPD['rowspan']++;
                         $itemSKPD['sp'][$keySK_SKPD]['rowspan']++;
                     }
@@ -2346,10 +2404,10 @@ class Dokumenpk extends \App\Controllers\BaseController
                             dokumenpk_satker_rows
                             LEFT JOIN dokumenpk_satker ON dokumenpk_satker_rows.dokumen_id = dokumenpk_satker.id
                         WHERE
-                            dokumenpk_satker.template_id='". $valueSkSKPD->template_id ."'
-                            AND dokumenpk_satker.satkerid='". $valueSatkerSKPD->satkerid ."'
-                            AND dokumenpk_satker.balaiid='". $dataSKPD['balaiid'] ."'
-                            AND dokumenpk_satker.tahun='". $sessionTahun ."'
+                            dokumenpk_satker.template_id='" . $valueSkSKPD->template_id . "'
+                            AND dokumenpk_satker.satkerid='" . $valueSatkerSKPD->satkerid . "'
+                            AND dokumenpk_satker.balaiid='" . $dataSKPD['balaiid'] . "'
+                            AND dokumenpk_satker.tahun='" . $sessionTahun . "'
                             AND dokumenpk_satker.status='setuju'
                             AND dokumenpk_satker.deleted_at is null;
                     ")->getRow();
@@ -2364,7 +2422,6 @@ class Dokumenpk extends \App\Controllers\BaseController
                     ]);
                     $itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['satker'][$findDataSatkerSKPD]['sk'][$findDataSKIndexSKPD]['rowspan']++;
                 }
-                
             }
             array_push($tempSKPD, $itemSKPD);
         }
@@ -2390,9 +2447,9 @@ class Dokumenpk extends \App\Controllers\BaseController
             ORDER BY 
                 `satkerid` ASC;
         ")->getResult();
-        
+
         $itemSatpus['satker'] = [];
-        foreach($dataSatker_Satpus as $keySatker_Satpus => $valueSatker_Satpus) {
+        foreach ($dataSatker_Satpus as $keySatker_Satpus => $valueSatker_Satpus) {
             $itemSatpus['rowspan']++;
             if (array_search($valueSatker_Satpus->satker, array_column($itemSatpus['satker'], 'nama_satker')) === FALSE) {
                 array_push($itemSatpus['satker'], [
@@ -2417,7 +2474,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker' 
-                    and dokumen_pk_template_akses.rev_id='". $valueSatker_Satpus->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id='" . $valueSatker_Satpus->satkerid . "'
                     and dokumen_pk_template_row.type='form'
                     and dokumen_pk_template.type='satker';
             ")->getRow();
@@ -2433,7 +2490,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template.id = dokumen_pk_template_row.template_id
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker'
-                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Satpus->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id = '" . $valueSatker_Satpus->satkerid . "'
                     and dokumen_pk_template.type='satker'
                     and dokumen_pk_template_row.prefix_title='SK'
                     and dokumen_pk_template_row.type='section_title'
@@ -2482,7 +2539,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $itemSatpus['satker'][$findDataSatkerIndexSatpus]['sk'][$findDataSKIndexSatpus]['rowspan']++;
         }
         array_push($tempSatpus, $itemSatpus);
-        
+
 
         //Eselon2
         $itemEselon = [
@@ -2505,7 +2562,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ")->getResult();
 
         $itemEselon['satker'] = [];
-        foreach($dataSatker_Eselon as $keySatker_Eselon => $valueSatker_Eselon) {
+        foreach ($dataSatker_Eselon as $keySatker_Eselon => $valueSatker_Eselon) {
             if (array_search($valueSatker_Eselon->satker, array_column($itemEselon['satker'], 'nama_satker')) === FALSE) {
                 array_push($itemEselon['satker'], [
                     'nama_satker' => $valueSatker_Eselon->satker,
@@ -2526,7 +2583,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template.id = dokumen_pk_template_row.template_id
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker'
-                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Eselon->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id = '" . $valueSatker_Eselon->satkerid . "'
                     and dokumen_pk_template.type='eselon2'
                     and dokumen_pk_template_row.prefix_title='SK'
                     and dokumen_pk_template_row.type='section_title'
@@ -2548,7 +2605,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker' 
-                    and dokumen_pk_template_akses.rev_id='". $valueSatker_Eselon->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id='" . $valueSatker_Eselon->satkerid . "'
                     and dokumen_pk_template_row.type='form'
                     and dokumen_pk_template.type='eselon2';
             ")->getResult();
@@ -2563,7 +2620,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ]);
             }
 
-            foreach($dataIndikatorSk_Eselon as $keyIndikatorSk_Eselon => $valueIndikatorSk_Eselon) {
+            foreach ($dataIndikatorSk_Eselon as $keyIndikatorSk_Eselon => $valueIndikatorSk_Eselon) {
                 $itemEselon['rowspan']++;
                 $itemEselon['satker'][$findDataSatkerIndexEselon]['rowspan']++;
                 $findDataSKIndexEselon = array_search($dataSk_Eselon->title, array_column($itemEselon['satker'][$findDataSatkerIndexEselon]['sk'], 'namaSk'));
@@ -2584,7 +2641,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     AND dokumenpk_satker.deleted_at is null
                     AND dokumenpk_satker_rows.template_row_id='" . $valueIndikatorSk_Eselon->id . "'
                 ")->getRow();
-    
+
                 array_push($itemEselon['satker'][$findDataSatkerIndexEselon]['sk'][$findDataSKIndexEselon]['indikatorSk'], [
                     'title'         => $valueIndikatorSk_Eselon->title,
                     'output'        => $dataDokumen_Eselon->target_value ?? '-',
@@ -2598,7 +2655,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         }
         array_push($tempEselon, $itemEselon);
 
-        
+
         //Balai Teknik
         $itemBaltek = [
             'nama_balai' => $dataBalaiTeknik->balai,
@@ -2621,7 +2678,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ")->getResult();
 
         $itemBaltek['satker'] = [];
-        foreach($dataSatker_Baltek as $keySatker_Baltek => $valueSatker_Baltek) {
+        foreach ($dataSatker_Baltek as $keySatker_Baltek => $valueSatker_Baltek) {
 
             if (array_search($valueSatker_Baltek->satker, array_column($itemBaltek['satker'], 'nama_satker')) === FALSE) {
                 array_push($itemBaltek['satker'], [
@@ -2643,17 +2700,17 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template.id = dokumen_pk_template_row.template_id
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker'
-                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Baltek->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id = '" . $valueSatker_Baltek->satkerid . "'
                     and dokumen_pk_template.type='satker'
                     and dokumen_pk_template_row.type='section_title'
                 ORDER BY 
                     dokumen_pk_template_row.id ASC;
             ")->getResult();
-            
+
 
             $findDataSatkerIndexBaltek = array_search($valueSatker_Baltek->satker, array_column($itemBaltek['satker'], 'nama_satker'));
             $itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'] = [];
-            foreach($dataSk_Baltek as $keySk_Baltek => $valueSk_Baltek) {
+            foreach ($dataSk_Baltek as $keySk_Baltek => $valueSk_Baltek) {
                 $itemBaltek['rowspan']++;
                 $itemBaltek['satker'][$findDataSatkerIndexBaltek]['rowspan']++;
 
@@ -2679,11 +2736,11 @@ class Dokumenpk extends \App\Controllers\BaseController
                             dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                     where 
                         dokumen_pk_template_akses.rev_table='m_satker' 
-                        and dokumen_pk_template_akses.rev_id='". $valueSatker_Baltek->satkerid ."'
+                        and dokumen_pk_template_akses.rev_id='" . $valueSatker_Baltek->satkerid . "'
                         and dokumen_pk_template_row.type='form'
                         and dokumen_pk_template_row.id > '" . $valueSk_Baltek->id . "'
                         and dokumen_pk_template.type='satker';
-                ")->getRow(); 
+                ")->getRow();
 
 
                 $findDataSKIndexBaltek = array_search($valueSk_Baltek->title, array_column($itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'], 'namaSk'));
@@ -2714,9 +2771,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     'is_checked'    => $dataDokumen_Baltek->is_checked ?? '-'
                 ]);
                 $itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'][$findDataSKIndexBaltek]['rowspan']++;
-            
             }
-
         }
         array_push($tempBalaiTeknik, $itemBaltek);
 
@@ -2729,7 +2784,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         // echo json_encode($tempData); exit;
         return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-Semua.php', [
-            'title' => "Perjanjian Kinerja Arsip", 
+            'title' => "Perjanjian Kinerja Arsip",
             'data' => $tempData,
             'databalai' => $tempDataBalai,
             'dataskpd' => $tempSKPD,
@@ -2747,8 +2802,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $tempData = [];
         $tempDataBalai = [];
         $dataBalai = $this->tableBalai->where('kota_penanda_tangan !=', '')->get()->getResult();
-         //Balai dan Satker
-         foreach ($dataBalai as $keyBalai => $valueBalai) {
+        //Balai dan Satker
+        foreach ($dataBalai as $keyBalai => $valueBalai) {
 
             $itemTemp = [
                 'namaBalai' => $valueBalai->balai,
@@ -2782,7 +2837,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 $itemTemp['sp'][$keySp]['rowspan'] = 0;
                 $itemBalai['sp'][$keySp]['nama_sp'] = $valueSp->title;
                 $itemBalai['sp'][$keySp]['rowspan'] = 0;
-                
+
                 $indikatorItemSpChild = true;
                 $indikatorSp = $this->db->query("
                 SELECT 
@@ -2793,7 +2848,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 template_id='" . $valueSp->template_id . "' 
                 and id > '" . $valueSp->id . "'
                 ")->getResult();
-                
+
                 foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
                     if ($valueIndicatorSp->type == 'section_title') $indikatorItemSpChild = false;
                     if ($indikatorItemSpChild) {
@@ -2801,16 +2856,16 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp] = (array) $valueIndicatorSp;
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
-                        
+
                         $rumusIndikatorSp = $this->db->query("
                         SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
                         ")->getResult();
-                        
+
                         $itemTemp['rowspan']++;
                         $itemTemp['sp'][$keySp]['rowspan']++;
                         $itemBalai['rowspan']++;
                         $itemBalai['sp'][$keySp]['rowspan']++;
-                        
+
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
                         $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
                         foreach ($rumusIndikatorSp as $keyRumusIndikatorSp => $valueRumusIndikatorSp) {
@@ -2844,7 +2899,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     and m_balai.balaiid = '" . $valueBalai->balaiid . "';
                             ")->getResult();
 
-                            
+
                             if ($dataSatker) {
                                 foreach ($dataSatker as $keyDataSatker => $valueDataSatker) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
@@ -2941,7 +2996,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                                     $findDataSKIndex = array_search($dataSk->title, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk'));
 
-                                    $findDataSKIndex2= array_search($dataSk->title, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], 'namaSk'));
+                                    $findDataSKIndex2 = array_search($dataSk->title, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], 'namaSk'));
 
                                     $dataDokumen = $this->db->query("
                                         SELECT
@@ -2969,7 +3024,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         'is_checked'    => $dataDokumen->is_checked ?? '-'
                                     ]);
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                    
+
                                     array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'][$findDataSKIndex2]['indikatorSk'], [
                                         'title'         => '-',
                                         'output'        => $dataDokumen->target_value ?? '-',
@@ -2980,9 +3035,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     ]);
                                     $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'][$findDataSKIndex2]['rowspan']++;
                                 }
-
-
-                            } else if($queryBalai) {
+                            } else if ($queryBalai) {
                                 foreach ($queryBalai as $keyDataBalai => $valueDataBalai) {
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
                                     $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
@@ -3018,7 +3071,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     // var_dump($valueDataBalai->balaiid);
                                     // die;
 
-                                    
+
                                     $dataIndicatorSK2 = $this->db->query("
                                         SELECT 
                                             dokumen_pk_template_row.*,
@@ -3037,7 +3090,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                             and dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
                                             and dokumen_pk_template.type='master-balai'
                                     ")->getRow();
-                                    
+
 
                                     $dataSkBalai = $this->db->query("
                                         SELECT 
@@ -3059,7 +3112,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                         ORDER BY dokumen_pk_template_row.id DESC;
                                     ")->getRow();
 
-                                    
+
                                     $findDataSatkerIndex = array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
                                     $findDataBalaiIndex = array_search($valueDataBalai->balai, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
 
@@ -3103,9 +3156,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                                             AND dokumenpk_satker.status='setuju'
                                             AND dokumenpk_satker.deleted_at is null
                                             AND dokumenpk_satker_rows.template_row_id='" . $dataIndicatorSK2->id . "'
-                                    ")->getRow(); 
+                                    ")->getRow();
 
-                                    
+
                                     array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
                                         // 'title'         => $dataIndicatorSK2->title,
                                         'title'         => '-',
@@ -3128,9 +3181,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                                     $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
                                     $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                    
                                 }
-
                             }
                             // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = $dataSatker->satker ?? null;
                         }
@@ -3151,7 +3202,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         header("Expires: 0");
 
         return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-Satker.php', [
-            'title' => "Perjanjian Kinerja Arsip", 
+            'title' => "Perjanjian Kinerja Arsip",
             'data' => $tempData,
             'tahun' => $sessionTahun
         ]);
@@ -3166,18 +3217,18 @@ class Dokumenpk extends \App\Controllers\BaseController
         //Balai dan Satker
         foreach ($dataBalai as $keyBalai => $valueBalai) {
 
-           $itemTemp = [
-               'namaBalai' => $valueBalai->balai,
-               'rowspan' => 0
-           ];
+            $itemTemp = [
+                'namaBalai' => $valueBalai->balai,
+                'rowspan' => 0
+            ];
 
-           $itemBalai = [
-               'nama_balai' => $valueBalai->balai,
-               'rowspan' => 0
-           ];
+            $itemBalai = [
+                'nama_balai' => $valueBalai->balai,
+                'rowspan' => 0
+            ];
 
 
-           $dataSP = $this->db->query("
+            $dataSP = $this->db->query("
                SELECT 
                    dokumen_pk_template_row.*
                FROM 
@@ -3193,14 +3244,14 @@ class Dokumenpk extends \App\Controllers\BaseController
                    and dokumen_pk_template_row.type='section_title';
            ")->getResult();
 
-           foreach ($dataSP as $keySp => $valueSp) {
-               $itemTemp['sp'][$keySp]['namaSp'] = $valueSp->title;
-               $itemTemp['sp'][$keySp]['rowspan'] = 0;
-               $itemBalai['sp'][$keySp]['nama_sp'] = $valueSp->title;
-               $itemBalai['sp'][$keySp]['rowspan'] = 0;
-               
-               $indikatorItemSpChild = true;
-               $indikatorSp = $this->db->query("
+            foreach ($dataSP as $keySp => $valueSp) {
+                $itemTemp['sp'][$keySp]['namaSp'] = $valueSp->title;
+                $itemTemp['sp'][$keySp]['rowspan'] = 0;
+                $itemBalai['sp'][$keySp]['nama_sp'] = $valueSp->title;
+                $itemBalai['sp'][$keySp]['rowspan'] = 0;
+
+                $indikatorItemSpChild = true;
+                $indikatorSp = $this->db->query("
                SELECT 
                id, title, type 
                FROM 
@@ -3208,31 +3259,32 @@ class Dokumenpk extends \App\Controllers\BaseController
                where 
                template_id='" . $valueSp->template_id . "' 
                and id > '" . $valueSp->id . "'
+    
                ")->getResult();
-               
-               foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
-                   if ($valueIndicatorSp->type == 'section_title') $indikatorItemSpChild = false;
-                   if ($indikatorItemSpChild) {
-                       $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp] = (array) $valueIndicatorSp;
-                       $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
-                       $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp] = (array) $valueIndicatorSp;
-                       $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
-                       
-                       $rumusIndikatorSp = $this->db->query("
-                       SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
-                       ")->getResult();
-                       
-                       $itemTemp['rowspan']++;
-                       $itemTemp['sp'][$keySp]['rowspan']++;
-                       $itemBalai['rowspan']++;
-                       $itemBalai['sp'][$keySp]['rowspan']++;
-                       
-                       $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
-                       $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
-                       foreach ($rumusIndikatorSp as $keyRumusIndikatorSp => $valueRumusIndikatorSp) {
-                           // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rumus'][$keyRumusIndikatorSp]['rumus'] = $valueRumusIndikatorSp->rumus;
 
-                           $dataSatker = $this->db->query("
+                foreach ($indikatorSp as $keyIndicatorSp => $valueIndicatorSp) {
+                    if ($valueIndicatorSp->type == 'section_title') $indikatorItemSpChild = false;
+                    if ($indikatorItemSpChild) {
+                        $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp] = (array) $valueIndicatorSp;
+                        $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
+                        $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp] = (array) $valueIndicatorSp;
+                        $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
+
+                        $rumusIndikatorSp = $this->db->query("
+                        SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
+                    ")->getResult();
+
+                        $itemTemp['rowspan']++;
+                        $itemTemp['sp'][$keySp]['rowspan']++;
+                        $itemBalai['rowspan']++;
+                        $itemBalai['sp'][$keySp]['rowspan']++;
+
+                        $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
+                        $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = [];
+                        foreach ($rumusIndikatorSp as $keyRumusIndikatorSp => $valueRumusIndikatorSp) {
+                            // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rumus'][$keyRumusIndikatorSp]['rumus'] = $valueRumusIndikatorSp->rumus;
+
+                            $dataSatker = $this->db->query("
                                SELECT 
                                    m_satker.*
                                FROM 
@@ -3246,7 +3298,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                    and m_satker.balaiid = '" . $valueBalai->balaiid . "';
                            ")->getResult();
 
-                           $queryBalai = $this->db->query("
+                            $queryBalai = $this->db->query("
                                SELECT 
                                    m_balai.*
                                FROM 
@@ -3260,42 +3312,42 @@ class Dokumenpk extends \App\Controllers\BaseController
                                    and m_balai.balaiid = '" . $valueBalai->balaiid . "';
                            ")->getResult();
 
-                           
-                           if ($dataSatker) {
-                               foreach ($dataSatker as $keyDataSatker => $valueDataSatker) {
-                                   $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
-                                   $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
 
-                                   if ($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
-                                       $itemTemp['rowspan']++;
-                                       $itemTemp['sp'][$keySp]['rowspan']++;
-                                   }
+                            if ($dataSatker) {
+                                foreach ($dataSatker as $keyDataSatker => $valueDataSatker) {
+                                    $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
+                                    $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
 
-                                   if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
-                                       $itemBalai['rowspan']++;
-                                       $itemBalai['sp'][$keySp]['rowspan']++;
-                                   }
+                                    if ($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
+                                        $itemTemp['rowspan']++;
+                                        $itemTemp['sp'][$keySp]['rowspan']++;
+                                    }
 
-                                   if (array_search($valueDataSatker->satker, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker')) === FALSE) {
-                                       array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
-                                           'namaSatker' => $valueDataSatker->satker,
-                                           'rowspan' => 0,
-                                           // 'rumus' => [$valueRumusIndikatorSp->rumus],
-                                           'sk' => []
-                                       ]);
-                                   }
+                                    if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
+                                        $itemBalai['rowspan']++;
+                                        $itemBalai['sp'][$keySp]['rowspan']++;
+                                    }
 
-                                   if (array_search($valueDataSatker->satker, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker')) === FALSE) {
-                                       array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
-                                           'namaSatker' => '-',
-                                           'rowspan' => 0,
-                                           // 'rumus' => [$valueRumusIndikatorSp->rumus],
-                                           'sk' => []
-                                       ]);
-                                   }
-                                   // array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['rumus'], $valueRumusIndikatorSp->rumus);
+                                    if (array_search($valueDataSatker->satker, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker')) === FALSE) {
+                                        array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
+                                            'namaSatker' => $valueDataSatker->satker,
+                                            'rowspan' => 0,
+                                            // 'rumus' => [$valueRumusIndikatorSp->rumus],
+                                            'sk' => []
+                                        ]);
+                                    }
 
-                                   $dataIndicatorSK = $this->db->query("
+                                    if (array_search($valueDataSatker->satker, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker')) === FALSE) {
+                                        array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
+                                            'namaSatker' => '-',
+                                            'rowspan' => 0,
+                                            // 'rumus' => [$valueRumusIndikatorSp->rumus],
+                                            'sk' => []
+                                        ]);
+                                    }
+                                    // array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['rumus'], $valueRumusIndikatorSp->rumus);
+
+                                    $dataIndicatorSK = $this->db->query("
                                        SELECT 
                                            dokumen_pk_template_row.*,
                                            dokumen_pk_template_rowrumus.rumus
@@ -3314,7 +3366,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                            and dokumen_pk_template.type='satker'
                                    ")->getRow();
 
-                                   $dataSk = $this->db->query("
+                                    $dataSk = $this->db->query("
                                        SELECT 
                                            dokumen_pk_template_row.*
                                        FROM 
@@ -3334,32 +3386,32 @@ class Dokumenpk extends \App\Controllers\BaseController
                                        ORDER BY dokumen_pk_template_row.id DESC;
                                    ")->getRow();
 
-                                   $findDataSatkerIndex = array_search($valueDataSatker->satker, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
-                                   $findDataSatkerIndex2 = array_search($valueDataSatker->satker, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
+                                    $findDataSatkerIndex = array_search($valueDataSatker->satker, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
+                                    $findDataSatkerIndex2 = array_search($valueDataSatker->satker, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
 
-                                   if (array_search($dataSk->title, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk')) === FALSE) {
-                                       array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], [
-                                           'namaSk' => $dataSk->title,
-                                           'rowspan' => 0,
-                                           'indikatorSk' => []
-                                       ]);
-                                   }
+                                    if (array_search($dataSk->title, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk')) === FALSE) {
+                                        array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], [
+                                            'namaSk' => $dataSk->title,
+                                            'rowspan' => 0,
+                                            'indikatorSk' => []
+                                        ]);
+                                    }
 
-                                   if (array_search($dataSk->title, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], 'namaSk')) === FALSE) {
-                                       array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], [
-                                           'namaSk' => '-',
-                                           'rowspan' => 0,
-                                           'indikatorSk' => []
-                                       ]);
-                                   }
-                                   $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['rowspan']++;
-                                   $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['rowspan']++;
+                                    if (array_search($dataSk->title, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], 'namaSk')) === FALSE) {
+                                        array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], [
+                                            'namaSk' => '-',
+                                            'rowspan' => 0,
+                                            'indikatorSk' => []
+                                        ]);
+                                    }
+                                    $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['rowspan']++;
+                                    $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['rowspan']++;
 
-                                   $findDataSKIndex = array_search($dataSk->title, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk'));
+                                    $findDataSKIndex = array_search($dataSk->title, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk'));
 
-                                   $findDataSKIndex2= array_search($dataSk->title, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], 'namaSk'));
+                                    $findDataSKIndex2 = array_search($dataSk->title, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'], 'namaSk'));
 
-                                   $dataDokumen = $this->db->query("
+                                    $dataDokumen = $this->db->query("
                                        SELECT
                                            dokumenpk_satker_rows.target_value,
                                            dokumenpk_satker_rows.outcome_value,
@@ -3376,66 +3428,64 @@ class Dokumenpk extends \App\Controllers\BaseController
                                            AND dokumenpk_satker.deleted_at is null
                                            AND dokumenpk_satker_rows.template_row_id='" . $dataIndicatorSK->id . "'
                                    ")->getRow();
-                                   array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
-                                       'title'         => $dataIndicatorSK->title,
-                                       'output'        => $dataDokumen->target_value ?? '-',
-                                       'outputSatuan'  => $dataIndicatorSK->target_satuan,
-                                       'outcome'       => $dataDokumen->outcome_value ?? '-',
-                                       'outcomeSatuan' => $dataIndicatorSK->outcome_satuan,
-                                       'is_checked'    => $dataDokumen->is_checked ?? '-'
-                                   ]);
-                                   $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                   
-                                   array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'][$findDataSKIndex2]['indikatorSk'], [
-                                       'title'         => '-',
-                                       'output'        => $dataDokumen->target_value ?? '-',
-                                       'outputSatuan'  => $dataIndicatorSK->target_satuan,
-                                       'outcome'       => $dataDokumen->outcome_value ?? '-',
-                                       'outcomeSatuan' => $dataIndicatorSK->outcome_satuan,
-                                       'is_checked'    => $dataDokumen->is_checked ?? '-'
-                                   ]);
-                                   $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'][$findDataSKIndex2]['rowspan']++;
-                               }
+                                    array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
+                                        'title'         => $dataIndicatorSK->title,
+                                        'output'        => $dataDokumen->target_value ?? '-',
+                                        'outputSatuan'  => $dataIndicatorSK->target_satuan,
+                                        'outcome'       => $dataDokumen->outcome_value ?? '-',
+                                        'outcomeSatuan' => $dataIndicatorSK->outcome_satuan,
+                                        'is_checked'    => $dataDokumen->is_checked ?? '-'
+                                    ]);
+                                    $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
+
+                                    array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'][$findDataSKIndex2]['indikatorSk'], [
+                                        'title'         => '-',
+                                        'output'        => $dataDokumen->target_value ?? '-',
+                                        'outputSatuan'  => $dataIndicatorSK->target_satuan,
+                                        'outcome'       => $dataDokumen->outcome_value ?? '-',
+                                        'outcomeSatuan' => $dataIndicatorSK->outcome_satuan,
+                                        'is_checked'    => $dataDokumen->is_checked ?? '-'
+                                    ]);
+                                    $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex2]['sk'][$findDataSKIndex2]['rowspan']++;
+                                }
+                            } else if ($queryBalai) {
+                                foreach ($queryBalai as $keyDataBalai => $valueDataBalai) {
+                                    $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
+                                    $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
+
+                                    if ($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
+                                        $itemTemp['rowspan']++;
+                                        $itemTemp['sp'][$keySp]['rowspan']++;
+                                    }
+
+                                    if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
+                                        $itemBalai['rowspan']++;
+                                        $itemBalai['sp'][$keySp]['rowspan']++;
+                                    }
+
+                                    if (array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker')) === FALSE) {
+                                        array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
+                                            'namaSatker' => '-',
+                                            'rowspan' => 0,
+                                            // 'rumus' => [$valueRumusIndikatorSp->rumus],
+                                            'sk' => []
+                                        ]);
+                                    }
+
+                                    if (array_search($valueDataBalai->balai, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker')) === FALSE) {
+                                        array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
+                                            'namaSatker' => '-',
+                                            'rowspan' => 0,
+                                            // 'rumus' => [$valueRumusIndikatorSp->rumus],
+                                            'sk' => []
+                                        ]);
+                                    }
+
+                                    // var_dump($valueDataBalai->balaiid);
+                                    // die;
 
 
-                           } else if($queryBalai) {
-                               foreach ($queryBalai as $keyDataBalai => $valueDataBalai) {
-                                   $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
-                                   $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan']++;
-
-                                   if ($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] > 1) {
-                                       $itemTemp['rowspan']++;
-                                       $itemTemp['sp'][$keySp]['rowspan']++;
-                                   }
-
-                                   if ($itemBalai['sp'][$keySp]['indikatorSp'][$keyRumusIndikatorSp]['rowspan'] > 1) {
-                                       $itemBalai['rowspan']++;
-                                       $itemBalai['sp'][$keySp]['rowspan']++;
-                                   }
-
-                                   if (array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker')) === FALSE) {
-                                       array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
-                                           'namaSatker' => '-',
-                                           'rowspan' => 0,
-                                           // 'rumus' => [$valueRumusIndikatorSp->rumus],
-                                           'sk' => []
-                                       ]);
-                                   }
-
-                                   if (array_search($valueDataBalai->balai, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker')) === FALSE) {
-                                       array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], [
-                                           'namaSatker' => '-',
-                                           'rowspan' => 0,
-                                           // 'rumus' => [$valueRumusIndikatorSp->rumus],
-                                           'sk' => []
-                                       ]);
-                                   }
-
-                                   // var_dump($valueDataBalai->balaiid);
-                                   // die;
-
-                                   
-                                   $dataIndicatorSK2 = $this->db->query("
+                                    $dataIndicatorSK2 = $this->db->query("
                                        SELECT 
                                            dokumen_pk_template_row.*,
                                            dokumen_pk_template_rowrumus.rumus
@@ -3453,9 +3503,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                                            and dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
                                            and dokumen_pk_template.type='master-balai'
                                    ")->getRow();
-                                   
 
-                                   $dataSkBalai = $this->db->query("
+
+                                    $dataSkBalai = $this->db->query("
                                        SELECT 
                                            dokumen_pk_template_row.*
                                        FROM 
@@ -3475,35 +3525,35 @@ class Dokumenpk extends \App\Controllers\BaseController
                                        ORDER BY dokumen_pk_template_row.id DESC;
                                    ")->getRow();
 
-                                   
-                                   $findDataSatkerIndex = array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
-                                   $findDataBalaiIndex = array_search($valueDataBalai->balai, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
 
-                                   if (array_search(isset($dataSkBalai->title), array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk')) === FALSE) {
-                                       array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], [
-                                           'namaSk' => '-',
-                                           'rowspan' => 0,
-                                           'indikatorSk' => []
-                                       ]);
-                                   }
+                                    $findDataSatkerIndex = array_search($valueDataBalai->balai, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
+                                    $findDataBalaiIndex = array_search($valueDataBalai->balai, array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
 
-                                   if (array_search(isset($dataSkBalai->title), array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataBalaiIndex]['sk'], 'namaSk')) === FALSE) {
-                                       array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataBalaiIndex]['sk'], [
-                                           'namaSk' => '-',
-                                           'rowspan' => 0,
-                                           'indikatorSk' => []
-                                       ]);
-                                   }
+                                    if (array_search(isset($dataSkBalai->title), array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk')) === FALSE) {
+                                        array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], [
+                                            'namaSk' => '-',
+                                            'rowspan' => 0,
+                                            'indikatorSk' => []
+                                        ]);
+                                    }
 
-                                   $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['rowspan']++;
-                                   $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataBalaiIndex]['rowspan']++;
+                                    if (array_search(isset($dataSkBalai->title), array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataBalaiIndex]['sk'], 'namaSk')) === FALSE) {
+                                        array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataBalaiIndex]['sk'], [
+                                            'namaSk' => '-',
+                                            'rowspan' => 0,
+                                            'indikatorSk' => []
+                                        ]);
+                                    }
+
+                                    $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['rowspan']++;
+                                    $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataBalaiIndex]['rowspan']++;
 
 
-                                   $findDataSKIndex = array_search(isset($dataSkBalai->title), array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk'));
+                                    $findDataSKIndex = array_search(isset($dataSkBalai->title), array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'], 'namaSk'));
 
-                                   $findDataSKIndexBalai = array_search(isset($dataSkBalai->title), array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataBalaiIndex]['sk'], 'namaSk'));
+                                    $findDataSKIndexBalai = array_search(isset($dataSkBalai->title), array_column($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataBalaiIndex]['sk'], 'namaSk'));
 
-                                   $dataDokumen2 = $this->db->query("
+                                    $dataDokumen2 = $this->db->query("
                                        SELECT
                                            dokumenpk_satker_rows.target_value,
                                            dokumenpk_satker_rows.outcome_value,
@@ -3519,44 +3569,42 @@ class Dokumenpk extends \App\Controllers\BaseController
                                            AND dokumenpk_satker.status='setuju'
                                            AND dokumenpk_satker.deleted_at is null
                                            AND dokumenpk_satker_rows.template_row_id='" . $dataIndicatorSK2->id . "'
-                                   ")->getRow(); 
+                                   ")->getRow();
 
-                                   
-                                   array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
-                                       // 'title'         => $dataIndicatorSK2->title,
-                                       'title'         => '-',
-                                       'output'        => $dataDokumen2->target_value ?? '-',
-                                       'outputSatuan'  => $dataIndicatorSK2->target_satuan,
-                                       'outcome'       => $dataDokumen2->outcome_value ?? '-',
-                                       'outcomeSatuan' => $dataIndicatorSK2->outcome_satuan,
-                                       'is_checked'    => $dataDokumen2->is_checked ?? '-'
-                                   ]);
 
-                                   array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataBalaiIndex]['sk'][$findDataSKIndexBalai]['indikatorSk'], [
-                                       // 'title'         => $dataIndicatorSK2->title,
-                                       'title'         => '-',
-                                       'output'        => $dataDokumen2->target_value ?? '-',
-                                       'outputSatuan'  => $dataIndicatorSK2->target_satuan,
-                                       'outcome'       => $dataDokumen2->outcome_value ?? '-',
-                                       'outcomeSatuan' => $dataIndicatorSK2->outcome_satuan,
-                                       'is_checked'    => $dataDokumen2->is_checked ?? '-'
-                                   ]);
+                                    array_push($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['indikatorSk'], [
+                                        // 'title'         => $dataIndicatorSK2->title,
+                                        'title'         => '-',
+                                        'output'        => $dataDokumen2->target_value ?? '-',
+                                        'outputSatuan'  => $dataIndicatorSK2->target_satuan,
+                                        'outcome'       => $dataDokumen2->outcome_value ?? '-',
+                                        'outcomeSatuan' => $dataIndicatorSK2->outcome_satuan,
+                                        'is_checked'    => $dataDokumen2->is_checked ?? '-'
+                                    ]);
 
-                                   $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                   $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
-                                   
-                               }
+                                    array_push($itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataBalaiIndex]['sk'][$findDataSKIndexBalai]['indikatorSk'], [
+                                        // 'title'         => $dataIndicatorSK2->title,
+                                        'title'         => '-',
+                                        'output'        => $dataDokumen2->target_value ?? '-',
+                                        'outputSatuan'  => $dataIndicatorSK2->target_satuan,
+                                        'outcome'       => $dataDokumen2->outcome_value ?? '-',
+                                        'outcomeSatuan' => $dataIndicatorSK2->outcome_satuan,
+                                        'is_checked'    => $dataDokumen2->is_checked ?? '-'
+                                    ]);
 
-                           }
-                           // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = $dataSatker->satker ?? null;
-                       }
-                   }
-               }
-           }
+                                    $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
+                                    $itemBalai['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'][$findDataSatkerIndex]['sk'][$findDataSKIndex]['rowspan']++;
+                                }
+                            }
+                            // $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'] = $dataSatker->satker ?? null;
+                        }
+                    }
+                }
+            }
 
-           array_push($tempData, $itemTemp);
-           array_push($tempDataBalai, $itemBalai);
-           // echo json_encode($itemBalai); die;
+            array_push($tempData, $itemTemp);
+            array_push($tempDataBalai, $itemBalai);
+            // echo json_encode($itemBalai); die;
         }
 
         $filename = 'Rekap Data Balai';
@@ -3567,7 +3615,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         header("Expires: 0");
 
         return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-Balai.php', [
-            'title' => "Perjanjian Kinerja Arsip", 
+            'title' => "Perjanjian Kinerja Arsip",
             'data' => $tempData,
             'databalai' => $tempDataBalai,
             'tahun' => $sessionTahun
@@ -3600,7 +3648,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 and dokumen_pk_template_row.type='section_title';
         ")->getResult();
 
-        foreach($dataSK_SKPD as $keySK_SKPD => $valueSkSKPD) {
+        foreach ($dataSK_SKPD as $keySK_SKPD => $valueSkSKPD) {
             $itemSKPD['sp'][$keySK_SKPD]['namaSp'] = '-';
             $itemSKPD['sp'][$keySK_SKPD]['rowspan'] = 0;
 
@@ -3626,16 +3674,16 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template_akses left join m_satker on dokumen_pk_template_akses.rev_id = m_satker.satkerid 
                     WHERE 
                         dokumen_pk_template_akses.rev_table='m_satker' 
-                        and m_satker.balaiid ='". $dataSKPD['balaiid'] ."' 
+                        and m_satker.balaiid ='" . $dataSKPD['balaiid'] . "' 
                     ORDER BY 
                         `satkerid` ASC 
                 ")->getResult();
 
                 $itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['satker'] = [];
-                foreach($satkerSKPD as $keySatkerSKPD => $valueSatkerSKPD) {
+                foreach ($satkerSKPD as $keySatkerSKPD => $valueSatkerSKPD) {
                     $itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['rowspan']++;
 
-                    if($itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['rowspan'] > 1) {
+                    if ($itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['rowspan'] > 1) {
                         $itemSKPD['rowspan']++;
                         $itemSKPD['sp'][$keySK_SKPD]['rowspan']++;
                     }
@@ -3671,10 +3719,10 @@ class Dokumenpk extends \App\Controllers\BaseController
                             dokumenpk_satker_rows
                             LEFT JOIN dokumenpk_satker ON dokumenpk_satker_rows.dokumen_id = dokumenpk_satker.id
                         WHERE
-                            dokumenpk_satker.template_id='". $valueSkSKPD->template_id ."'
-                            AND dokumenpk_satker.satkerid='". $valueSatkerSKPD->satkerid ."'
-                            AND dokumenpk_satker.balaiid='". $dataSKPD['balaiid'] ."'
-                            AND dokumenpk_satker.tahun='". $sessionTahun ."'
+                            dokumenpk_satker.template_id='" . $valueSkSKPD->template_id . "'
+                            AND dokumenpk_satker.satkerid='" . $valueSatkerSKPD->satkerid . "'
+                            AND dokumenpk_satker.balaiid='" . $dataSKPD['balaiid'] . "'
+                            AND dokumenpk_satker.tahun='" . $sessionTahun . "'
                             AND dokumenpk_satker.status='setuju'
                             AND dokumenpk_satker.deleted_at is null;
                     ")->getRow();
@@ -3689,7 +3737,6 @@ class Dokumenpk extends \App\Controllers\BaseController
                     ]);
                     $itemSKPD['sp'][$keySK_SKPD]['indikatorSkSKPD'][$keyIndikatorSkSKPD]['satker'][$findDataSatkerSKPD]['sk'][$findDataSKIndexSKPD]['rowspan']++;
                 }
-                
             }
             array_push($tempSKPD, $itemSKPD);
         }
@@ -3702,7 +3749,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         header("Expires: 0");
 
         return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-SKPD.php', [
-            'title' => "Perjanjian Kinerja Arsip", 
+            'title' => "Perjanjian Kinerja Arsip",
             'dataskpd' => $tempSKPD,
             'nama_balai' => $dataSKPD['balai'],
             'tahun' => $sessionTahun
@@ -3715,8 +3762,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $tempSatpus = [];
         $dataSatpus = $this->tableBalai->where('balaiid', 99)->get()->getRowArray();
 
-           //Satker Pusat
-            $itemSatpus = [
+        //Satker Pusat
+        $itemSatpus = [
             'nama_balai' => $dataSatpus['balai'],
             'rowspan' => 0,
             'namaSp' => '-',
@@ -3735,9 +3782,9 @@ class Dokumenpk extends \App\Controllers\BaseController
             ORDER BY 
                 `satkerid` ASC;
         ")->getResult();
-        
+
         $itemSatpus['satker'] = [];
-        foreach($dataSatker_Satpus as $keySatker_Satpus => $valueSatker_Satpus) {
+        foreach ($dataSatker_Satpus as $keySatker_Satpus => $valueSatker_Satpus) {
             $itemSatpus['rowspan']++;
             if (array_search($valueSatker_Satpus->satker, array_column($itemSatpus['satker'], 'nama_satker')) === FALSE) {
                 array_push($itemSatpus['satker'], [
@@ -3762,9 +3809,10 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker' 
-                    and dokumen_pk_template_akses.rev_id='". $valueSatker_Satpus->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id='" . $valueSatker_Satpus->satkerid . "'
                     and dokumen_pk_template_row.type='form'
-                    and dokumen_pk_template.type='satker';
+                    and dokumen_pk_template.type='satker'
+                ;
             ")->getRow();
 
             $dataSK_Satpus = $this->db->query("
@@ -3778,7 +3826,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template.id = dokumen_pk_template_row.template_id
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker'
-                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Satpus->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id = '" . $valueSatker_Satpus->satkerid . "'
                     and dokumen_pk_template.type='satker'
                     and dokumen_pk_template_row.prefix_title='SK'
                     and dokumen_pk_template_row.type='section_title'
@@ -3836,7 +3884,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         header("Expires: 0");
 
         return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-Satpus.php', [
-            'title' => "Perjanjian Kinerja Arsip", 
+            'title' => "Perjanjian Kinerja Arsip",
             'datasatpus' => $tempSatpus,
             'tahun' => $sessionTahun
         ]);
@@ -3847,7 +3895,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $sessionTahun = $this->user['tahun'];
         $tempEselon = [];
 
-          //Eselon2
+        //Eselon2
         $itemEselon = [
             'nama_balai' => '-',
             'rowspan' => 0,
@@ -3868,7 +3916,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ")->getResult();
 
         $itemEselon['satker'] = [];
-        foreach($dataSatker_Eselon as $keySatker_Eselon => $valueSatker_Eselon) {
+        foreach ($dataSatker_Eselon as $keySatker_Eselon => $valueSatker_Eselon) {
             if (array_search($valueSatker_Eselon->satker, array_column($itemEselon['satker'], 'nama_satker')) === FALSE) {
                 array_push($itemEselon['satker'], [
                     'nama_satker' => $valueSatker_Eselon->satker,
@@ -3889,7 +3937,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template.id = dokumen_pk_template_row.template_id
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker'
-                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Eselon->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id = '" . $valueSatker_Eselon->satkerid . "'
                     and dokumen_pk_template.type='eselon2'
                     and dokumen_pk_template_row.prefix_title='SK'
                     and dokumen_pk_template_row.type='section_title'
@@ -3911,7 +3959,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker' 
-                    and dokumen_pk_template_akses.rev_id='". $valueSatker_Eselon->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id='" . $valueSatker_Eselon->satkerid . "'
                     and dokumen_pk_template_row.type='form'
                     and dokumen_pk_template.type='eselon2';
             ")->getResult();
@@ -3926,7 +3974,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ]);
             }
 
-            foreach($dataIndikatorSk_Eselon as $keyIndikatorSk_Eselon => $valueIndikatorSk_Eselon) {
+            foreach ($dataIndikatorSk_Eselon as $keyIndikatorSk_Eselon => $valueIndikatorSk_Eselon) {
                 $itemEselon['rowspan']++;
                 $itemEselon['satker'][$findDataSatkerIndexEselon]['rowspan']++;
                 $findDataSKIndexEselon = array_search($dataSk_Eselon->title, array_column($itemEselon['satker'][$findDataSatkerIndexEselon]['sk'], 'namaSk'));
@@ -3946,7 +3994,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     AND dokumenpk_satker.deleted_at is null
                     AND dokumenpk_satker_rows.template_row_id='" . $valueIndikatorSk_Eselon->id . "'
                 ")->getRow();
-    
+
                 array_push($itemEselon['satker'][$findDataSatkerIndexEselon]['sk'][$findDataSKIndexEselon]['indikatorSk'], [
                     'title'         => $valueIndikatorSk_Eselon->title,
                     'output'        => $dataDokumen_Eselon->target_value ?? '-',
@@ -3968,7 +4016,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         header("Expires: 0");
 
         return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-Eselon2.php', [
-            'title' => "Perjanjian Kinerja Arsip", 
+            'title' => "Perjanjian Kinerja Arsip",
             'dataeselon2' => $tempEselon,
             'tahun' => $sessionTahun
         ]);
@@ -3980,7 +4028,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $tempBalaiTeknik = [];
         $dataBalaiTeknik = $this->tableBalai->where('balaiid', 97)->get()->getRow();
 
-          //Balai Teknik
+        //Balai Teknik
         $itemBaltek = [
             'nama_balai' => $dataBalaiTeknik->balai,
             'rowspan' => 0,
@@ -4002,7 +4050,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         ")->getResult();
 
         $itemBaltek['satker'] = [];
-        foreach($dataSatker_Baltek as $keySatker_Baltek => $valueSatker_Baltek) {
+        foreach ($dataSatker_Baltek as $keySatker_Baltek => $valueSatker_Baltek) {
 
             if (array_search($valueSatker_Baltek->satker, array_column($itemBaltek['satker'], 'nama_satker')) === FALSE) {
                 array_push($itemBaltek['satker'], [
@@ -4024,17 +4072,17 @@ class Dokumenpk extends \App\Controllers\BaseController
                         dokumen_pk_template.id = dokumen_pk_template_row.template_id
                 where 
                     dokumen_pk_template_akses.rev_table='m_satker'
-                    and dokumen_pk_template_akses.rev_id = '". $valueSatker_Baltek->satkerid ."'
+                    and dokumen_pk_template_akses.rev_id = '" . $valueSatker_Baltek->satkerid . "'
                     and dokumen_pk_template.type='satker'
                     and dokumen_pk_template_row.type='section_title'
                 ORDER BY 
                     dokumen_pk_template_row.id ASC;
             ")->getResult();
-            
+
 
             $findDataSatkerIndexBaltek = array_search($valueSatker_Baltek->satker, array_column($itemBaltek['satker'], 'nama_satker'));
             $itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'] = [];
-            foreach($dataSk_Baltek as $keySk_Baltek => $valueSk_Baltek) {
+            foreach ($dataSk_Baltek as $keySk_Baltek => $valueSk_Baltek) {
                 $itemBaltek['rowspan']++;
                 $itemBaltek['satker'][$findDataSatkerIndexBaltek]['rowspan']++;
 
@@ -4060,11 +4108,11 @@ class Dokumenpk extends \App\Controllers\BaseController
                             dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
                     where 
                         dokumen_pk_template_akses.rev_table='m_satker' 
-                        and dokumen_pk_template_akses.rev_id='". $valueSatker_Baltek->satkerid ."'
+                        and dokumen_pk_template_akses.rev_id='" . $valueSatker_Baltek->satkerid . "'
                         and dokumen_pk_template_row.type='form'
                         and dokumen_pk_template_row.id > '" . $valueSk_Baltek->id . "'
                         and dokumen_pk_template.type='satker';
-                ")->getRow(); 
+                ")->getRow();
 
 
                 $findDataSKIndexBaltek = array_search($valueSk_Baltek->title, array_column($itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'], 'namaSk'));
@@ -4095,9 +4143,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     'is_checked'    => $dataDokumen_Baltek->is_checked ?? '-'
                 ]);
                 $itemBaltek['satker'][$findDataSatkerIndexBaltek]['sk'][$findDataSKIndexBaltek]['rowspan']++;
-            
             }
-
         }
         array_push($tempBalaiTeknik, $itemBaltek);
 
@@ -4107,9 +4153,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         header("Pragma: no-cache");
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
         header("Expires: 0");
-        
+
         return view('Modules\Admin\Views\DokumenPK\Rekap\Rekap-Baltek.php', [
-            'title' => "Perjanjian Kinerja Arsip", 
+            'title' => "Perjanjian Kinerja Arsip",
             'databaltek' => $tempBalaiTeknik,
             'tahun' => $sessionTahun
         ]);

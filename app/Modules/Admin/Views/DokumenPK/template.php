@@ -42,6 +42,7 @@
         font-size: 7px;
         margin-top: -7px;
     }
+
 </style>
 
 <!-- begin:: Subheader -->
@@ -468,6 +469,7 @@
         switch ($(this).data('action')) {
             case 'prepare-edit':
                 prepare_updateForm(dataID)
+
                 break;
 
             case 'prepare-remove':
@@ -653,6 +655,8 @@
         if (formValidation()) {
             let form = get_formInputValue()
             form.append('dataId', $(this).data('id'))
+            // console.log(form.getAll('formTable_noUrut[]'));
+            // return false;
 
             $.ajax({
                 url: '<?php echo site_url('dokumenpk/template/update') ?>',
@@ -755,7 +759,7 @@
     function prepare_updateForm(_dataID) {
         let element_updateButton = $('button[name=update-document]')
 
-        $('button[name=save-document]').addClass('d-none')
+        $('button[name=save-document]').addClass('d-none') 
         element_updateButton.removeClass('d-none')
 
         element_updateButton.attr('data-id', _dataID)
@@ -797,6 +801,9 @@
             form.append('formTable_outcomeSatuan[]', data.outcome_satuan)
             form.append('formTable_rumus[]', data.rumus)
             form.append('formTable_type[]', data.type)
+            form.append('formTable_noUrut[]', data.noUrut)
+            form.append('formTable_idRow[]', data.idRow)
+            // form.append('formTable_urutan[]', data.urutan)
         })
 
         tableKegiatan_to_array().forEach((data, key) => {
@@ -858,33 +865,42 @@
             if (data.type == "section_title") {
                 if (data.prefix_title == 'full') {
                     element_formTable.append(render_rowFullTitleSection({
-                        titleSection: data.title
+                        titleSection: data.title,
+                        no_urut: data.no_urut
                     }))
                 } else {
                     element_formTable.append(render_rowTitleSection({
                         prefixTitleSection: data.prefix_title,
-                        titleSection: data.title
+                        titleSection: data.title,
+                        idRow: data.id,
+                        no_urut: data.no_urut
                     }))
                 }
             } else {
-                element_formTable.append(render_rowForm({
-                    namaItem: data.title,
-                    targetSatuan: data.target_satuan,
-                    outcomeSatuan: data.outcome_satuan
-                }))
-
-                if (parseInt(data.rumusJml) > 0) {
-                    $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
-                    indexDataRumus++
-
-                    for (let index = 1; index < parseInt(data.rumusJml); index++) {
-                        $('.__tambah_row-form-rumus-item:last').trigger('click')
-
+                if(_data.rowRumus[indexDataRumus]) {
+                    element_formTable.append(render_rowForm({
+                        namaItem: data.title,
+                        targetSatuan: data.target_satuan,
+                        outcomeSatuan: data.outcome_satuan,
+                        idRow: data.id,
+                        no_urut: data.no_urut,
+                        rumus: _data.rowRumus[indexDataRumus].rumus
+    
+                    }))
+    
+                    if (parseInt(data.rumusJml) > 0) {
                         $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
                         indexDataRumus++
+    
+                        for (let index = 1; index < parseInt(data.rumusJml); index++) {
+                            $('.__tambah_row-form-rumus-item:last').trigger('click')
+    
+                            $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
+                            indexDataRumus++
+                        }
+                        // $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
+                        // indexDataRumus++
                     }
-                    // $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
-                    // indexDataRumus++
                 }
             }
         })
@@ -906,30 +922,37 @@
         _data.akses.forEach((data, key) => {
             $('input.open-to-check[type=checkbox][name=check-list-opsi-satker][value=' + data.rev_id + ']').prop('checked', true)
         });
+
+        render_dragdrop();
     }
 
 
 
     function tableForm_to_array() {
         let tempArrayForm = []
-
         element_formTable.find('tr').each((key, element) => {
             let prefixTitle = '',
                 title = '',
                 target_satuan = '',
                 outcome_satuan = '',
                 rumus = [],
-                type = ''
+                type = '',
+                idRow = '',
+                noUrut = ''
 
             if ($(element).hasClass('_title-section')) {
                 prefixTitle = $(element).find('select[name=prefix-title-section]').val()
                 title = $(element).find('._title-section').val()
+                idRow = $(element).find('._id-row').val()
+                noUrut = $(element).find('._no-urut').val()
                 type = 'section_title'
             } else {
                 prefixTitle = ''
                 title = $(element).find('._nama-item').val()
                 target_satuan = $(element).find('._target-satuan').val()
                 outcome_satuan = $(element).find('._outcome-satuan').val()
+                idRow = $(element).find('._id-row').val()
+                noUrut = $(element).find('._no-urut').val()
                 type = 'form'
 
                 $(element).find('._rumus').each((key, rumusElement) => {
@@ -943,7 +966,9 @@
                 target_satuan: target_satuan,
                 outcome_satuan: outcome_satuan,
                 rumus: rumus,
-                type: type
+                type: type,
+                noUrut: noUrut,
+                idRow: idRow
             })
         })
 
@@ -1006,15 +1031,23 @@
 
     function render_rowTitleSection(params = {
         prefixTitleSection: '',
-        titleSection: ''
+        titleSection: '',
+        rowId: '',
+        no_urut: ''
     }) {
         let titleSection = params.hasOwnProperty('titleSection') ? params.titleSection : '',
-            prefixTitleSection = params.hasOwnProperty('prefixTitleSection') ? params.prefixTitleSection : ''
+            prefixTitleSection = params.hasOwnProperty('prefixTitleSection') ? params.prefixTitleSection : '',
+            rowId = params.hasOwnProperty('idRow') ? params.idRow : '',
+            no_urut = params.hasOwnProperty('no_urut') ? params.no_urut : ''
+        
 
+            // <span>${no_urut}</span>
         return `
             <tr class="_title-section">
                 <td colspan="3" class="bg-secondary" style="position: relative">
                     <div class="d-flex justify-content-start">
+                        <input type="hidden" class="form-control _id-row" value="${rowId}">
+                        <input type="hidden" class="form-control _no-urut" value="${no_urut}">
                         <select class="form-control" style="width: 80px" name="prefix-title-section">
                             <option value="SK" ${prefixTitleSection=='SK' ? 'selected="selected"' : ''}>SK</option>
                             <option value="SP" ${prefixTitleSection=='SP' ? 'selected="selected"' : ''}>SP</option>
@@ -1035,27 +1068,36 @@
     function render_rowForm(params = {
         namaItem: '',
         targetSatuan: '',
-        outcomeSatuan: ''
+        outcomeSatuan: '',
+        rumus: '',
+        rowId: '',
+        no_urut: ''
     }) {
         let namaItem = params.hasOwnProperty('namaItem') ? params.namaItem : '',
             targetSatuan = params.hasOwnProperty('targetSatuan') ? params.targetSatuan : '',
-            outcomeSatuan = params.hasOwnProperty('outcomeSatuan') ? params.outcomeSatuan : ''
+            outcomeSatuan = params.hasOwnProperty('outcomeSatuan') ? params.outcomeSatuan : '',
+            rumus = params.hasOwnProperty('rumus') ? params.rumus : '',
+            rowId = params.hasOwnProperty('idRow') ? params.idRow : '',
+            no_urut = params.hasOwnProperty('no_urut') ? params.no_urut : ''
+
 
         return `
-            <tr class="_row-form">
-                <td>
-                    <input type="text" class="form-control _nama-item" placeholder="Nama item" value="${namaItem}">
+            <tr class="_row-form" draggable="true">
+                <td class="_col-form" draggable="true">
+                    <input type="hidden" class="form-control _id-row" value="${rowId}">
+                    <input type="hidden" class="form-control _no-urut" value="${no_urut}">
+                    <input type="text" class="form-control _nama-item" id="nama_item" placeholder="Nama item" value="${namaItem}">
                 </td>
-                <td>
+                <td class="_col-form" draggable="true">
                     <input type="text" class="form-control _target-satuan" placeholder="Satuan" value="${targetSatuan}">
                 </td>
-                <td class="<?php if ($defaultType == 'eselon1' || $defaultType == 'eselon2') echo 'd-none' ?>" style="position: relative">
+                <td class="<?php if ($defaultType == 'eselon1' || $defaultType == 'eselon2') echo 'd-none' ?> _col-form"  draggable="true" style="position: relative">
                     <input type="text" class="form-control _outcome-satuan" placeholder="Satuan" value="${outcomeSatuan}">
                 </td>
-                <td class="rumus" style="position: relative">
+                <td class="rumus _col-form" draggable="true" style="position: relative">
                     <div class="_container-row-form-rumus">
                         <div>
-                            <input type="text" class="form-control _rumus" placeholder="Tulis Rumus" value="">
+                            <input type="text" class="form-control _rumus" placeholder="Tulis Rumus" value="${rumus}">
                         </div>
                     </div>
 
@@ -1148,5 +1190,61 @@
             </tr>
         `)
     }
+
+    function render_dragdrop() {
+        
+        var columns = document.querySelectorAll('._row-form');
+        var draggingClass = 'dragging';
+        var dragSource;
+    
+        Array.prototype.forEach.call(columns, function (col) {
+            col.addEventListener('dragstart', handleDragStart, false);
+            col.addEventListener('dragenter', handleDragEnter, false)
+            col.addEventListener('dragover', handleDragOver, false);
+            col.addEventListener('dragleave', handleDragLeave, false);
+            col.addEventListener('drop', handleDrop, false);
+            col.addEventListener('dragend', handleDragEnd, false);
+        });
+
+        function handleDragStart (evt) {
+            dragSource = this;
+            evt.target.classList.add(draggingClass);
+            evt.dataTransfer.effectAllowed = 'move';
+            evt.dataTransfer.setData('text/html', this.innerHTML);
+        }
+    
+        function handleDragOver (evt) {
+            evt.dataTransfer.dropEffect = 'move';
+            evt.preventDefault();
+        }
+    
+        function handleDragEnter (evt) {
+            this.classList.add('over');
+        }
+    
+        function handleDragLeave (evt) {
+            this.classList.remove('over');
+        }
+    
+        function handleDrop (evt) {
+            evt.stopPropagation();
+            
+            if (dragSource !== this) {
+                dragSource.innerHTML = this.innerHTML;
+                this.innerHTML = evt.dataTransfer.getData('text/html');
+            }
+            
+            evt.preventDefault();
+        }
+    
+        function handleDragEnd (evt) {
+            Array.prototype.forEach.call(columns, function (col) {
+                ['over', 'dragging'].forEach(function (className) {
+                col.classList.remove(className);
+                });
+            });
+        }
+    }
+
 </script>
 <?= $this->endSection() ?>

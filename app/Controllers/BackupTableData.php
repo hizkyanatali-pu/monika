@@ -8,6 +8,6 @@ class BackupTableData extends BaseController
 {
     public function tester()
     {
-        echo 'tester'
+        echo 'tester';
     }
 }

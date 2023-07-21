@@ -25,7 +25,7 @@
             prepareForm_reset()
         })
 
-        $('#modal-preview-cetak').on('shown.bs.modal', function() {
+        $('.modal').on('shown.bs.modal', function() {
             $(document).off('focusin.modal');
         });
 
@@ -250,31 +250,66 @@
                 if ($(this).attr('data-dokumen-id')) {
                     formData['revision_dokumen_id'] = $(this).data('dokumen-id')
                     formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
-                }
-
-                $.ajax({
-                    url: "<?php echo site_url('dokumenpk/create') ?>",
-                    type: 'POST',
-                    data: formData,
-                    success: (res) => {
-                        if (res.status) {
-                            location.reload()
-                        }
-                        else {
-                            Swal.fire(
-                                'Gagal',
-                                res.message,
-                                'error'
-                            ).then(result => {
-                                location.reload()
+                    Swal.fire({
+                        title: "Kenapa dokumen ini di koreksi?",
+                        html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan untuk pembuat dokumen"></textarea>`,
+                        confirmButtonText: "Kirim Alasan Koreksi",
+                        cancelButtonText: "Batal",
+                        showLoaderOnConfirm: true,
+                        showCancelButton: true,
+                        preConfirm: () => {
+                                formData['revision_message'] = $('textarea[name=pesan-koreksi-dokumen]').val();
+                                $.ajax({
+                                url: "<?php echo site_url('dokumenpk/create') ?>",
+                                type: 'POST',
+                                data: formData,
+                                success: (res) => {
+                                    if (res.status) {
+                                        location.reload()
+                                    }
+                                    else {
+                                        Swal.fire(
+                                            'Gagal',
+                                            res.message,
+                                            'error'
+                                        ).then(result => {
+                                            location.reload()
+                                        })
+                                    }
+                                },
+                                fail: (xhr) => {
+                                    alert('Terjadi kesalahan pada sistem')
+                                    console.log(xhr)
+                                }
                             })
                         }
-                    },
-                    fail: (xhr) => {
-                        alert('Terjadi kesalahan pada sistem')
-                        console.log(xhr)
-                    }
-                })
+                    })
+                } else {
+                    $.ajax({
+                        url: "<?php echo site_url('dokumenpk/create') ?>",
+                        type: 'POST',
+                        data: formData,
+                        success: (res) => {
+                            if (res.status) {
+                                location.reload()
+                            }
+                            else {
+                                Swal.fire(
+                                    'Gagal',
+                                    res.message,
+                                    'error'
+                                ).then(result => {
+                                    location.reload()
+                                })
+                            }
+                        },
+                        fail: (xhr) => {
+                            alert('Terjadi kesalahan pada sistem')
+                            console.log(xhr)
+                        }
+                    })
+                }
+
             }
         }).catch(error => {
             alert("Youre internet connection  cs slow");
@@ -282,44 +317,75 @@
     })
 
 
+   
 
     element_btnSaveEditDokumen.on('click', function() {
-        CheckConnection().then(result => {
-            if (saveDokumenValidation()) {
-                let oldButtonText = element_btnSaveEditDokumen.text()
-                element_btnSaveEditDokumen.addClass('d-none')
-                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
 
-                let formData = getFormValue(),
-                    dataId = $(this).data('id')
+        let dataID = $(this).data('id')
+        // console.log(dataID);
 
-                formData['id'] = $(this).data('id')
+        Swal.fire({
+        title: "Kenapa dokumen diedit?",
+        html: `<textarea class="form-control" name="pesan-revisi-dokumen" rows="10" placeholder="Tulis pesan untuk pembuat dokumen"></textarea>`,
+        confirmButtonText: "Kirim, Beri alasan",
+        cancelButtonText: "Batal",
+        showLoaderOnConfirm: true,
+        showCancelButton: true,
+        preConfirm: () => {
+            $.ajax({
+                url: "<?php echo site_url('dokumenpk/change-status') ?>",
+                type: "POST",
+                data: {
+                    csrf_test_name: $('input[name=csrf_test_name]').val(),
+                    dokumenType: 'satker-revision',
+                    dataID: dataID,
+                    message: $('textarea[name=pesan-revisi-dokumen]').val(),
+                    newStatus: 'revision'
+                },
+                success: (res) => {
+                    CheckConnection().then(result => {
+                    if (saveDokumenValidation()) {
+                            let oldButtonText = element_btnSaveEditDokumen.text()
+                            element_btnSaveEditDokumen.addClass('d-none')
+                            element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
 
-                $('input[name=total-anggaran]').prop("disabled", false)
+                            let formData = getFormValue(),
+                                dataId = $(this).data('id')
 
-                $.ajax({
-                    url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
-                    type: 'POST',
-                    data: formData,
-                    success: (res) => {
-                        if (res.status) {
-                            location.reload()
+                            formData['id'] = $(this).data('id')
+
+                            $('input[name=total-anggaran]').prop("disabled", false)
+
+                            $.ajax({
+                                url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
+                                type: 'POST',
+                                data: formData,
+                                success: (res) => {
+                                    if (res.status) {
+                                        location.reload()
+                                    }
+                                },
+                                fail: (xhr) => {
+                                    alert('Terjadi kesalahan pada sistem')
+                                    console.log(xhr)
+                                }
+                            })
                         }
-                    },
-                    fail: (xhr) => {
-                        alert('Terjadi kesalahan pada sistem')
-                        console.log(xhr)
-                    }
-                })
-            }
-        }).catch(error => {
-            alert("Youre internet connection  cs slow");
-        });
+                    }).catch(error => {
+                        alert("Youre internet connection  cs slow");
+                    });
+                }
+            })
+        }
+        })
+
     })
 
 
 
     $(document).on('click', '.__prepare-revisi-dokumen', function() {
+        let document_id = $(this).data('id')
+        element_btnSaveEditDokumen.data('id', document_id)
 
         prepareRevisiDocument({
             dataId: $(this).data('id'),
@@ -488,6 +554,7 @@
                 type: 'GET',
                 success: (res) => {
                     preapreForm_afterChooseTemplate({
+                        dataId: dataId,
                         templateId: templateId,
                         data: res,
                         target: 'koreksi'
@@ -583,6 +650,7 @@
                                     <tr>
                                         <td>${ data.tanggal }</td>
                                         <td>${ data.pesan }</td>
+                                        <td>${ data.koreksi_by }</td>
                                     </tr>
                                 `
                             }
@@ -1135,6 +1203,7 @@
 
 
     function preapreForm_afterChooseTemplate(params = {
+        dataId: '',
         templateId: '',
         templateTitle: '',
         data: {},
@@ -1154,7 +1223,7 @@
             `)
         }
 
-        renderFormTemplate(params.data, params.target)
+        renderFormTemplate(params.dataId, params.data, params.target)
         // $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
 
         if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
@@ -1238,8 +1307,9 @@
 
 
 
-    function renderFormTemplate(_data, _target) {
+    function renderFormTemplate(_dataId, _data, _target) {
         let template = _data.template,
+            value_dataId = _dataId,
             templateExtraData = _data.templateExtraData,
             render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type),
             render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
@@ -1476,11 +1546,19 @@
 
             <div class="container-list-revision-message d-none pt-5">
                 <div class="mt-5">
-                    <h5 style="color: #000">Daftar Koreksi</h5>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <h5 style="color: #000">Daftar Koreksi</h5>
+                        </div>
+                        <div class="col-sm-2">
+                            <a href="<?php echo base_url('dokumenpk-download-log') ?>/`+`${value_dataId}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fa fa-download"></i> Download Log</a>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-striped mt-4">
                         <thead>
                             <th width="300px">Tanggal</th>
                             <th>Pesan Koreksi</th>
+                            <th>Koreksi Oleh</th>
                         </thead>
                         <tbody>
                         </tbody>
