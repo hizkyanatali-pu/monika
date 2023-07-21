@@ -469,7 +469,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $targetBalaiDefualtValue = $rowDokumenExistsValue->target_value ?? '';
                     }
 
-                    $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->orderBy('urutan','ASC')->get()->getResult();
+                    $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
                     foreach ($templateRowRumus as $key => $data) {
                         $targetRumusOutcome = $this->dokumenSatker->select(
                             'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id'
@@ -488,16 +488,16 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $targetValueRumus = 0;
                         foreach ($targetRumusOutcome as $keyOutcome => $dataOutcome) {
                             $outcomeRumus += $dataOutcome ? ($dataOutcome->outcome_value != '' ? $dataOutcome->outcome_value : 0) : 0;
-                            if($dataOutcome->template_row_id == '11004') {
+                            if ($dataOutcome->template_row_id == '11004') {
                                 $targetValueRumus += $dataOutcome ? ($dataOutcome->target_value != '' ? $dataOutcome->target_value : 0) : 0;
                             }
                         }
 
                         if ($targetDefualtValue == '' && $outcomeRumus > 0) $targetDefualtValue = 0;
-                        
+
                         if ($outcomeRumus > 0) $targetDefualtValue += $outcomeRumus;
-                        
-                        if($arr->id == 291010) { 
+
+                        if ($arr->id == 291010) {
                             if ($targetDefaultValue == '' && $targetValueRumus > 0) $targetDefaultValue = 0;
                             if ($targetValueRumus > 0) $targetDefaultValue += $targetValueRumus;
                         }
@@ -510,7 +510,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             // print_r($session_userType);exit;
 
             if ($templateDokumen->type == 'eselon1') {
-                $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->orderBy('urutan', 'ASC')->get()->getResultArray();
+                $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResultArray();
 
                 $rumusRow         = implode(',', array_column($templateRowRumus, 'rumus'));
                 $rumusPersenBalai = false;
@@ -583,7 +583,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'targetBalaiDefualtValue' => $targetBalaiDefualtValue,
                 'outcomeDefaultValue'     => $outcomeDefaultValue
             ];
-        }, $this->templateRow->where('template_id', $id)->orderBy('no_urut', 'ASC')->get()->getResult());
+        }, $this->templateRow->where('template_id', $id)->get()->getResult());
 
 
         $valudasiCreatedDokumen = true;
@@ -706,13 +706,13 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         $pdf = new Dompdf();
         $dataDokumen =  $this->dokumenSatker->where('id', $id)->get()->getRow();
-    
+
         if (!is_null($dataDokumen->revision_master_dokumen_id)) {
             $dataListKoreksi = $this->dokumenSatker->where('status', 'revision')
                 ->where('id', $dataDokumen->revision_master_dokumen_id)
                 ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
                 ->get()->getResult();
-    
+
             $listPesanRevision = array_map(function ($arr) {
                 // var_dump($arr);die;
                 $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
@@ -880,23 +880,22 @@ class Dokumenpk extends \App\Controllers\BaseController
         }
 
         $checkDokumenSatkerExist = $this->dokumenSatker->select('id')
-        ->where('template_id', $inserted_dokumenSatker['template_id'])
-        ->where('dokumen_type', $inserted_dokumenSatker['dokumen_type'])
-        ->where('satkerid', $inserted_dokumenSatker['satkerid'])
-        ->where('balaiid', $inserted_dokumenSatker['balaiid'])
-        ->where('tahun', $inserted_dokumenSatker['tahun'])
-        ->where('status', 'hold')
-        ->where('deleted_at is null')
-        ->where('reject_date is null')
-        ->get()->getNumRows();
+            ->where('template_id', $inserted_dokumenSatker['template_id'])
+            ->where('dokumen_type', $inserted_dokumenSatker['dokumen_type'])
+            ->where('satkerid', $inserted_dokumenSatker['satkerid'] ?? null)
+            ->where('balaiid', $inserted_dokumenSatker['balaiid'])
+            ->where('tahun', $inserted_dokumenSatker['tahun'])
+            ->where('status', 'hold')
+            ->where('deleted_at is null')
+            ->where('reject_date is null')
+            ->get()->getNumRows();
 
         if ($checkDokumenSatkerExist > 0) {
             return $this->respond([
                 'status' => false,
                 'message' => 'Dokumen telah di terdaftar'
             ]);
-        }
-        else {
+        } else {
             if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
 
 
@@ -938,7 +937,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ]);
             }
 
-        
+
             $this->dokumenSatker->insert($inserted_dokumenSatker);
             $dokumenID = $this->db->insertID();
             /** end-of: dokumen */
@@ -1053,11 +1052,6 @@ class Dokumenpk extends \App\Controllers\BaseController
             'session'           => $this->user['user_type']
         ]);
     }
-
-
-
-
-
 }
 
 class PDF extends FPDF

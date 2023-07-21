@@ -242,7 +242,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Pertama
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', $dataDokumen['pihak1_ttd']);
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi", "(kaltim)", "(kalteng)", "(kalsel)"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII", "(Kaltim)", "(Kalteng)", "(Kalsel)"], ucwords(strtolower($dataDokumen['pihak1_initial']))));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak1_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi", "(kaltim)", "(kalteng)", "(kalsel)", "D.i"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII", "(Kaltim)", "(Kalteng)", "(Kalsel)", "D.I"], ucwords(strtolower($dataDokumen['pihak1_initial']))));
 
         // Text 2
         $pdf->Ln(2);
@@ -254,7 +254,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Pihak Kedua
         $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
         $this->pdf_renderIntroductionSection($pdf, 'Nama', ucwords($dataDokumen['pihak2_ttd']));
-        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi", "(kaltim)", "(kalteng)", "(kalsel)"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII", "(Kaltim)", "(Kalteng)", "(Kalsel)"], ucwords(strtolower($dataDokumen['pihak2_initial']))));
+        $this->pdf_renderIntroductionSection($pdf, 'Jabatan', $jabatanPihak2_isPlt . str_replace(["Snvt", "Skpd Tp-op", "Bws", "Bbws", "Ii", "IIi", "Iv", "Vi", "VIi", "VIIi", "(kaltim)", "(kalteng)", "(kalsel)", "D.i"], ["SNVT", "SKPD TP-OP", "BWS", "BBWS", "II", "III", "IV", "VI", "VII", "VIII", "(Kaltim)", "(Kalteng)", "(Kalsel)", "D.I"], ucwords(strtolower($dataDokumen['pihak2_initial']))));
 
         // Text 3
         $pdf->Ln(2);
@@ -827,7 +827,6 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         $tableData = $this->templateRow
             ->where('template_id', $templateId)
-            ->orderBy('no_urut', 'ASC')
             ->get()
             ->getResultArray();
 
