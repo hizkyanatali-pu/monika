@@ -685,7 +685,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 // var_dump($arr);die;
                 $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
                 return [
-                    'tanggal'       => date_indo($arr->change_status_at),
+                    'tanggal'       => date_indo($arr->change_status_at) . " " . date("H:i", strtotime($arr->change_status_at)),
                     'pesan'         => $arr->revision_message,
                     'koreksi_by'    => $dataPengguna->nama ?? '',
                 ];
@@ -961,7 +961,6 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function edit()
     {
         $dokumenID = $this->request->getPost('id');
-
         $replacements = [
             "." => "",
             "," => ".",

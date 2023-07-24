@@ -242,7 +242,7 @@
                 let oldButtonText = element_btnSaveDokumen.text()
                 element_btnSaveDokumen.addClass('d-none')
                 element_btnSaveDokumen.parent().append('<center>menyimpan dokumen</center>')
-                
+
                 $('input[name=total-anggaran]').prop("disabled", false)
                 let formData = getFormValue();
 
@@ -251,23 +251,28 @@
                     formData['revision_dokumen_id'] = $(this).data('dokumen-id')
                     formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
                     Swal.fire({
-                        title: "Kenapa dokumen ini di koreksi?",
-                        html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan untuk pembuat dokumen"></textarea>`,
+                        title: "Anda yakin akan mengedit dokumen ini ?",
+                        html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan"></textarea>`,
                         confirmButtonText: "Kirim Alasan Koreksi",
                         cancelButtonText: "Batal",
                         showLoaderOnConfirm: true,
                         showCancelButton: true,
                         preConfirm: () => {
-                                formData['revision_message'] = $('textarea[name=pesan-koreksi-dokumen]').val();
-                                $.ajax({
+                            const pesanRevisi = $('textarea[name=pesan-koreksi-dokumen]').val();
+
+                            if (!pesanRevisi) {
+                                Swal.showValidationMessage('Pesan harus diisi');
+                                return false;
+                            }
+                            formData['revision_message'] = $('textarea[name=pesan-koreksi-dokumen]').val();
+                            $.ajax({
                                 url: "<?php echo site_url('dokumenpk/create') ?>",
                                 type: 'POST',
                                 data: formData,
                                 success: (res) => {
                                     if (res.status) {
                                         location.reload()
-                                    }
-                                    else {
+                                    } else {
                                         Swal.fire(
                                             'Gagal',
                                             res.message,
@@ -292,8 +297,7 @@
                         success: (res) => {
                             if (res.status) {
                                 location.reload()
-                            }
-                            else {
+                            } else {
                                 Swal.fire(
                                     'Gagal',
                                     res.message,
@@ -317,66 +321,73 @@
     })
 
 
-   
+
 
     element_btnSaveEditDokumen.on('click', function() {
 
         let dataID = $(this).data('id')
-        // console.log(dataID);
+
 
         Swal.fire({
-        title: "Kenapa dokumen diedit?",
-        html: `<textarea class="form-control" name="pesan-revisi-dokumen" rows="10" placeholder="Tulis pesan untuk pembuat dokumen"></textarea>`,
-        confirmButtonText: "Kirim, Beri alasan",
-        cancelButtonText: "Batal",
-        showLoaderOnConfirm: true,
-        showCancelButton: true,
-        preConfirm: () => {
-            $.ajax({
-                url: "<?php echo site_url('dokumenpk/change-status') ?>",
-                type: "POST",
-                data: {
-                    csrf_test_name: $('input[name=csrf_test_name]').val(),
-                    dokumenType: 'satker-revision',
-                    dataID: dataID,
-                    message: $('textarea[name=pesan-revisi-dokumen]').val(),
-                    newStatus: 'revision'
-                },
-                success: (res) => {
-                    CheckConnection().then(result => {
-                    if (saveDokumenValidation()) {
-                            let oldButtonText = element_btnSaveEditDokumen.text()
-                            element_btnSaveEditDokumen.addClass('d-none')
-                            element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+            title: "Anda yakin akan mengedit dokumen ini ? ",
+            html: `<textarea class="form-control" name="pesan-revisi-dokumen" rows="10" placeholder="Tulis pesan" required></textarea>`,
+            confirmButtonText: "Kirim, Beri alasan",
+            cancelButtonText: "Batal",
+            showLoaderOnConfirm: true,
+            showCancelButton: true,
+            preConfirm: () => {
 
-                            let formData = getFormValue(),
-                                dataId = $(this).data('id')
+                const pesanRevisi = $('textarea[name=pesan-revisi-dokumen]').val();
 
-                            formData['id'] = $(this).data('id')
-
-                            $('input[name=total-anggaran]').prop("disabled", false)
-
-                            $.ajax({
-                                url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
-                                type: 'POST',
-                                data: formData,
-                                success: (res) => {
-                                    if (res.status) {
-                                        location.reload()
-                                    }
-                                },
-                                fail: (xhr) => {
-                                    alert('Terjadi kesalahan pada sistem')
-                                    console.log(xhr)
-                                }
-                            })
-                        }
-                    }).catch(error => {
-                        alert("Youre internet connection  cs slow");
-                    });
+                if (!pesanRevisi) {
+                    Swal.showValidationMessage('Pesan harus diisi');
+                    return false;
                 }
-            })
-        }
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/change-status') ?>",
+                    type: "POST",
+                    data: {
+                        csrf_test_name: $('input[name=csrf_test_name]').val(),
+                        dokumenType: 'hold-edit',
+                        dataID: dataID,
+                        message: $('textarea[name=pesan-revisi-dokumen]').val(),
+                        newStatus: 'hold'
+                    },
+                    success: (res) => {
+                        CheckConnection().then(result => {
+                            if (saveDokumenValidation()) {
+
+                                let oldButtonText = element_btnSaveEditDokumen.text()
+                                element_btnSaveEditDokumen.addClass('d-none')
+                                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+
+                                let formData = getFormValue(),
+                                    dataId = $(this).data('id')
+
+                                formData['id'] = $(this).data('id')
+                                formData['csrf_test_name'] = res.token
+
+                                $.ajax({
+                                    url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
+                                    type: "POST",
+                                    data: formData,
+                                    success: (res) => {
+                                        if (res.status) {
+                                            location.reload()
+                                        }
+                                    },
+                                    fail: (xhr) => {
+                                        alert('Terjadi kesalahan pada sistem')
+                                        console.log(xhr)
+                                    }
+                                })
+                            }
+                        }).catch(error => {
+                            alert("Youre internet connection  cs slow");
+                        });
+                    }
+                })
+            }
         })
 
     })
@@ -607,7 +618,7 @@
                     $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
                     res.kegiatan.forEach((data, key) => {
                         let elementInput_target = $('tr[data-kegiatan-id=' + (data.id == "?" ? "-" : data.id) + ']').find('input[name=kegiatan-anggaran]')
-                        
+
                         elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
                     })
 
@@ -633,7 +644,7 @@
                     if (res.dokumen.revision_message != null) {
                         $('.container-revision-alert').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Perlu Di Koreksi !</h5>
+                                <h5 class="alert-heading">Pesan !</h5>
                                 <p>${res.dokumen.revision_message}</p>
                             </div>
                         `)
@@ -877,7 +888,7 @@
             element_rowItem_anggaran_kegiatan = $('.__table-kegiatan').find('tbody tr').last().find("input[name='kegiatan-anggaran']").val(),
             kegiatan = []
 
-            info = $(this).data("info");
+        info = $(this).data("info");
 
         if (element_rowItem_anggaran_kegiatan != undefined) {
 
@@ -908,7 +919,7 @@
 
         $('select.select2').select2({
             ajax: {
-                url: "<?php echo site_url('dokumenpk/get-tgiat-for-formpk?exists=') ?>" + JSON.stringify(kegiatan)+"&info="+info+"&_=" + new Date().getTime(),
+                url: "<?php echo site_url('dokumenpk/get-tgiat-for-formpk?exists=') ?>" + JSON.stringify(kegiatan) + "&info=" + info + "&_=" + new Date().getTime(),
                 dataType: 'json',
                 cache: true
             }
@@ -1147,7 +1158,7 @@
 
     function cetakDokumen(_dokumenID, _toConfirm) {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/export-pdf/') ?>" + _dokumenID +"?_="+ new Date().getTime(),
+            url: "<?php echo site_url('dokumenpk/export-pdf/') ?>" + _dokumenID + "?_=" + new Date().getTime(),
             type: 'GET',
             cache: false,
             success: (res) => {
@@ -1162,7 +1173,7 @@
                         })
                         $('.container-revision-alert-cetak').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Perlu Di Koreksi !</h5>
+                                <h5 class="alert-heading">Pesan !</h5>
                                 <p>${res.dokumen.revision_message}</p>
                             </div>
                         `)
@@ -1173,7 +1184,7 @@
                         $('.container-revision-alert-cetak').html('')
                     }
 
-                    element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/'+_dokumenID+ '?preview=true&_=' + Math.round(Math.random() * 10000000))
+                    element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
                     element_modalPreviewCetakDokumen.modal('show')
 
                     if (_toConfirm) {
@@ -1551,7 +1562,7 @@
                             <h5 style="color: #000">Daftar Koreksi</h5>
                         </div>
                         <div class="col-sm-2">
-                            <a href="<?php echo base_url('dokumenpk-download-log') ?>/`+`${value_dataId}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fa fa-download"></i> Download Log</a>
+                            <a href="<?php echo base_url('dokumenpk-download-log') ?>/` + `${value_dataId}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fa fa-download"></i> Download Log</a>
                         </div>
                     </div>
                     <table class="table table-bordered table-striped mt-4">
@@ -1627,8 +1638,8 @@
 
                 case 'form':
                     let renderInputTarget = '';
-                    if(data.id == "291010") {
-                        data_value  = data.target_balai_value;
+                    if (data.id == "291010") {
+                        data_value = data.target_balai_value;
                     } else {
                         data_value = data.targetDefualtValue;
                     }
