@@ -879,6 +879,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             type: 'GET',
             cache: false,
             success: (res) => {
+                console.log(res);
                 $('#modal-cetak-dokumen-revisioned').modal('hide')
 
                 setTimeout(() => {
@@ -890,7 +891,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         })
                         $('.container-revision-alert-cetak').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Perlu Di Koreksi !</h5>
+                                <h5 class="alert-heading">Pesan !</h5>
                                 <p>${res.dokumen.revision_message}</p>
                             </div>
                         `)

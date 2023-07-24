@@ -454,7 +454,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function changeStatus()
     {
-        // var_dump($this->request->getPost());die;
+
         switch ($this->request->getPost('dokumenType')) {
             case 'satker':
                 $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
@@ -482,7 +482,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                 $this->dokumenSatker->update($updatedData);
                 break;
-            case 'satker-revision':
+            case 'hold-edit':
                 $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
                 $newStatus = $this->request->getPost('newStatus');
 
@@ -490,10 +490,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                     'status'           => $newStatus,
                     'change_status_at' => date("Y-m-d H:i:s")
                 ];
+                $updatedData['revision_message'] = $this->request->getPost('message');
 
-                if ($newStatus == 'revision') {
-                    $updatedData['revision_message'] = $this->request->getPost('message');
-                }
 
                 // var_dump($updat edData);die;
 
@@ -504,6 +502,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         return $this->respond([
             'status' => true,
             'dataStatus' => 'setuju', //stuju||tolak
+            'token' => csrf_hash(),
             'input'  => $this->request->getPost()
         ]);
     }

@@ -183,11 +183,11 @@
 <!-- end-of: Modal Preview Cetak Dokumen -->
 
 <!-- Modal Cetak Dokumen Terevisi -->
-<div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true"  data-backdrop="static">
+<div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        
+
         <div class="modal-content">
-        <div class="modal-header">
+            <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Pilih Dokumen :</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -352,12 +352,12 @@
             }
         })
     })
-    
-    
-    
+
+
+
     $(document).on('click', '.__deletePermanenMultiple', function() {
         let tempCheck = [],
-            checklist = $('input[type=checkbox][name=checklist-multiple-delete][data-status='+$(this).data('target')+']:checked')
+            checklist = $('input[type=checkbox][name=checklist-multiple-delete][data-status=' + $(this).data('target') + ']:checked')
 
         checklist.each((index, element) => {
             tempCheck.push($(element).val())
@@ -396,8 +396,7 @@
                     })
                 }
             })
-        }
-        else {
+        } else {
             Swal.fire({
                 title: 'Oops',
                 text: "anda belum memilih data untuk di hapus",
@@ -408,9 +407,9 @@
             })
         }
     })
-    
-    
-    
+
+
+
     $(document).on('click', 'input:checkbox[name=checkall]', function() {
         let rowChild = $('input:checkbox[name=checklist-multiple-delete]').parents('tr').find('td')
 
@@ -556,7 +555,7 @@
                         })
                         $('.container-revision-alert-cetak').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Perlu Di Koreksi !</h5>
+                                <h5 class="alert-heading">Pesan !</h5>
                                 <p>${res.dokumen.revision_message}</p>
                             </div>
                         `)
@@ -567,8 +566,9 @@
                         $('.container-revision-alert-cetak').html('')
                     }
 
-                    // element_iframePreviewDokumen.attr('src', '<?php //echo site_url('dokumen-perjanjian-kinerja.pdf') ?>')
-                    element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/'+_dokumenID+ '?preview=true&_=' + Math.round(Math.random() * 10000000))
+                    // element_iframePreviewDokumen.attr('src', '<?php //echo site_url('dokumen-perjanjian-kinerja.pdf') 
+                                                                    ?>')
+                    element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
                     element_modalPreviewCetakDokumen.modal('show')
                 }, 400)
             }
@@ -579,7 +579,7 @@
         let dokumenMasterID = $(this).data('dokumen-master-id')
 
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-list-revisioned/') ?>" + dokumenMasterID+"/"+true,
+            url: "<?php echo site_url('dokumenpk/satker/get-list-revisioned/') ?>" + dokumenMasterID + "/" + true,
             type: 'GET',
             success: (res) => {
                 let list = ''
