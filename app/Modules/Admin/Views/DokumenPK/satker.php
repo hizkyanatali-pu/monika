@@ -488,9 +488,11 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
 
     $(document).on('click', '.__preview-dokumen', function() {
+
         cetakDokumen(
             $(this).data('id'),
-            $(this).data('to-confirm')
+            $(this).data('to-confirm'),
+            $(this).data('createdat')
         )
     })
 
@@ -561,7 +563,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     list += `
                         <button 
                             class="list-group-item list-group-item-action ${activeClass} __preview-dokumen"
-                            data-id="${data.id}"
+                            data-id="${data.id}" data-createdat = "${data.created_at}"
                             data-to-confirm="${buttonData_toConfirm}"
                         >
                             ${listTitle}
@@ -782,7 +784,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 menuOptions = `
                     <button 
                         class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
-                        data-id="${data.id}"
+                        data-id="${data.id}" data-createdat ="${data.created_at}"
                         data-to-confirm="${buttonData_toConfirm}"
                     >
                         <i class="fas fa-print"></i><br/>
@@ -861,7 +863,6 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
         element_tableBelumInput.clear().draw()
 
         _data.forEach((data, index) => {
-            console.log(data.nama)
             element_tableBelumInput.row.add($(`
                 <tr>
                     <td>${ index+1 }</td>
@@ -873,15 +874,13 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
 
 
-    function cetakDokumen(_dokumenID, _toConfirm) {
+    function cetakDokumen(_dokumenID, _toConfirm, createAt) {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/export-pdf/') ?>" + _dokumenID + "?_=" + new Date().getTime(),
+            url: "<?php echo site_url('dokumenpk/satker/export-pdf/') ?>" + _dokumenID + "_" + createAt + "?_=" + new Date().getTime(),
             type: 'GET',
             cache: false,
             success: (res) => {
-                console.log(res);
                 $('#modal-cetak-dokumen-revisioned').modal('hide')
-
                 setTimeout(() => {
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
 
@@ -901,9 +900,8 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         })
                         $('.container-revision-alert-cetak').html('')
                     }
-                    // console.log(res);
 
-                    element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
+                    element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/' + _dokumenID + "_" + createAt + '?preview=true&_=' + Math.round(Math.random() * 10000000))
                     element_modalPreviewCetakDokumen.modal('show')
 
                     if (_toConfirm) {

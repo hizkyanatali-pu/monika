@@ -749,7 +749,8 @@ class Dokumenpk extends \App\Controllers\BaseController
             revision_master_number,
             revision_number,
             status,
-            is_revision_same_year
+            is_revision_same_year,
+            created_at
         ');
         $this->dokumenSatker->where('revision_master_dokumen_id', $id);
         if ($feature == false) {
@@ -759,6 +760,10 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->dokumenSatker->orWhere('id', $id);
         $this->dokumenSatker->orderBy('created_at', 'DESC');
         $dokumenList =  $this->dokumenSatker->get()->getResult();
+        // Ubah format tanggal ke Indonesia
+        foreach ($dokumenList as &$dokumen) {
+            $dokumen->created_at = date_indo($dokumen->created_at);
+        }
 
         return $this->respond([
             'dokumenList' => $dokumenList
