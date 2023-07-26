@@ -691,6 +691,28 @@ class DokumenpkExport extends \App\Controllers\BaseController
         'person2Name'  => '-',
     ])
     {
+
+        // Tanda tangan instansi Khusus
+        switch ($_ttd['person2Title']) {
+                // merapikan ttd
+            case 'KEPALA BALAI BESAR WILAYAH SUNGAI BENGAWAN SOLO':
+                $widthTitleJabatan = 85;
+                $widthNamaPejabat = 122;
+                break;
+
+            case 'KEPALA SEKRETARIAT DIREKTORAT JENDERAL SUMBER DAYA AIR':
+                $ttd =  str_replace('KEPALA', '', $_ttd['person2Title']);
+                $widthTitleJabatan = 78;
+                $widthNamaPejabat = 115;
+                break;
+
+            default:
+                $widthTitleJabatan = 95;
+                $widthNamaPejabat = 130;
+                $ttd = $_ttd['person2Title'];
+                break;
+        }
+
         // title ttd 1
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX((300 - $_sectionWidth) / 2);
@@ -700,27 +722,15 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(149);
         // $pdf->Cell(144, 4, $_ttd['person2Date'], 0, 0, 'C');
-        $pdf->Cell(130, 4, $_ttd['person2Date'], 0, 0, 'C');
+        $pdf->Cell($widthNamaPejabat, 4, $_ttd['person2Date'], 0, 0, 'C');
         $pdf->Ln();
 
-
-        switch ($_ttd['person2Title']) {
-            case 'KEPALA BALAI BESAR WILAYAH SUNGAI BENGAWAN SOLO':
-                $widthmC = 85;
-                $widthC = 122;
-                break;
-
-            default:
-                $widthmC = 95;
-                $widthC = 130;
-                break;
-        }
 
 
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(167);
         // $pdf->MultiCell(115, 5, $_ttd['person2Title'], 0, 'C');
-        $pdf->MultiCell($widthmC, 5, $_ttd['person2Title'], 0, 'C');
+        $pdf->MultiCell($widthTitleJabatan, 5, $ttd, 0, 'C');
 
         $pdf->Ln(20);
 
@@ -733,7 +743,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(149);
         // $pdf->Cell(144, 4, strtoupper($_ttd['person2Name']), 0, 0, 'C');
-        $pdf->Cell($widthC, 4, strtoupper($_ttd['person2Name']), 0, 0, 'C');
+        $pdf->Cell($widthNamaPejabat, 4, strtoupper($_ttd['person2Name']), 0, 0, 'C');
     }
 
 
