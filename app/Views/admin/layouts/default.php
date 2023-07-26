@@ -257,6 +257,14 @@ $title = $title ?? '';
             return true;
         }
 
+        function inputHarusHurufDenganTitik(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 46 && charCode !== 32)
+                return false;
+            return true;
+        }
+
+
         /* Fungsi formatRupiah */
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, "").toString(),
@@ -279,12 +287,12 @@ $title = $title ?? '';
             return new Promise((resolve, reject) => {
                 let isSlow;
                 let loaded;
-            
+
                 loaded = false;
                 isSlow = setTimeout(() => {
                     reject();
                 }, 3500);
-            
+
                 const img = document.createElement("img");
                 img.src = "<?php echo base_url('logo.png') ?>" //"https://picsum.photos/640/480"
                 img.onload = () => {

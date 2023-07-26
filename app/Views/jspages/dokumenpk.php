@@ -1524,7 +1524,7 @@
                                 ${_data.penandatangan.pihak1}
                             </small>
                         </div>
-                        <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required  onkeyup="this.value = this.value.toUpperCase();" onkeypress="return inputHarusHuruf(event)"  />
+                        <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required  onkeyup="this.value = this.value.toUpperCase();" onkeypress="return inputHarusHurufDenganTitik(event)"  />
                         <small style="color: #fc0758; font-weight: bold">
                             <i>Isi nama tanpa gelar</i>
                         </small>
@@ -1871,7 +1871,7 @@
 
         return `
             ${renderJalabatan}
-            <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" onkeyup="this.value = this.value.toUpperCase();" onkeypress="return inputHarusHuruf(event)" />
+            <input class="form-control" name="ttd-pihak2" placeholder="Masukkan Nama Penanda Tangan" onkeyup="this.value = this.value.toUpperCase();" onkeypress="return inputHarusHurufDenganTitik(event)" />
         `
     }
 

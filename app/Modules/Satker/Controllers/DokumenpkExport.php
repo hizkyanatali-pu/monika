@@ -703,16 +703,24 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell(130, 4, $_ttd['person2Date'], 0, 0, 'C');
         $pdf->Ln();
 
-
+        // Tanda tangan instansi Khusus
         switch ($_ttd['person2Title']) {
+                // merapikan ttd
             case 'KEPALA BALAI BESAR WILAYAH SUNGAI BENGAWAN SOLO':
                 $widthmC = 85;
                 $widthC = 122;
                 break;
 
+            case 'KEPALA SEKRETARIAT DIREKTORAT JENDERAL SUMBER DAYA AIR':
+                $ttd =  str_replace('KEPALA', '', $_ttd['person2Title']);
+                $widthmC = 78;
+                $widthC = 115;
+                break;
+
             default:
                 $widthmC = 95;
                 $widthC = 130;
+                $ttd = $_ttd['person2Title'];
                 break;
         }
 
@@ -720,7 +728,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(167);
         // $pdf->MultiCell(115, 5, $_ttd['person2Title'], 0, 'C');
-        $pdf->MultiCell($widthmC, 5, $_ttd['person2Title'], 0, 'C');
+        $pdf->MultiCell($widthmC, 5, $ttd, 0, 'C');
 
         $pdf->Ln(20);
 
