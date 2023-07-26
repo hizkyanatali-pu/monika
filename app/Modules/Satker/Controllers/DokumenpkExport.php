@@ -701,7 +701,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 break;
 
             case 'KEPALA SEKRETARIAT DIREKTORAT JENDERAL SUMBER DAYA AIR':
-                $ttd =  str_replace('KEPALA', '', $_ttd['person2Title']);
+                $ttd =  str_replace('SEKRETARIAT', 'SEKRETARIS', str_replace('KEPALA', '', $_ttd['person2Title']));
                 $widthTitleJabatan = 78;
                 $widthNamaPejabat = 115;
                 break;
