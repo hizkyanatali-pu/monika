@@ -46,7 +46,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->get('users/create', '\Modules\Admin\Controllers\Users::create');
     $routes->post('users/store', '\Modules\Admin\Controllers\Users::store');
     $routes->post('users/update', '\Modules\Admin\Controllers\Users::update');
-    $routes->post('users/updatechangepassword', '\Modules\Admin\Controllers\Users::UpdateChangePassword'); 
+    $routes->post('users/updatechangepassword', '\Modules\Admin\Controllers\Users::UpdateChangePassword');
 
     $routes->get('users/delete/(:segment)', '\Modules\Admin\Controllers\Users::delete/$1');
 
@@ -60,7 +60,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
 
 
-    
+
 
 
 
@@ -289,7 +289,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->group('template-eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::templateEselon1');
                 });
-
             });
         }
 
@@ -315,7 +314,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
 
                 $routes->get('list-satker-balai', '\Modules\Satker\Controllers\Dokumenpk::listSatkerBalai');
-                
+
                 $routes->group('satker', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
                     $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
@@ -349,7 +348,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Satker\Controllers\Dokumenpk::balaiSatker/$1');
             $routes->get('dokumenpk-download-log/(:any)', '\Modules\Satker\Controllers\Dokumenpk::logKoreksi/$1');
             $routes->get('panduan', '\Modules\Satker\Controllers\Dokumenpk::panduanpk');
-
         }
     }
 });
