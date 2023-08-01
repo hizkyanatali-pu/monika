@@ -41,7 +41,9 @@ class LoginFilter implements FilterInterface
 			if ($path[0] === 'users' || $path[0] === 'usergroups') {
 				$session = session();
 				$user = $session->get('userData');
-				if ($user['group_id'] !== 'Administrator') return redirect('usulan');
+				if (isset($user['group_id']) !== 'Administrator') {
+					return redirect('auth');
+				}
 			}
 		}
 
@@ -49,7 +51,7 @@ class LoginFilter implements FilterInterface
 			return;
 		}
 
-		if (!logged_in() AND $path[0] != 'api') {
+		if (!logged_in() and $path[0] != 'api') {
 
 			return redirect('auth');
 		}

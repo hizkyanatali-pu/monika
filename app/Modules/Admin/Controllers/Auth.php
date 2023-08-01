@@ -53,10 +53,10 @@ class Auth extends \App\Controllers\BaseController
 		$users = new UserModel();
 
 		$config         = new \Config\Encryption();
-        $config->key    = 'aBigsecret_ofAtleast32Characters';
-        $config->driver = 'OpenSSL';
-        
-        $encrypter = \Config\Services::encrypter($config);
+		$config->key    = 'aBigsecret_ofAtleast32Characters';
+		$config->driver = 'OpenSSL';
+
+		$encrypter = \Config\Services::encrypter($config);
 
 		$sandi = $this->request->getPost('sandi');
 
@@ -72,7 +72,7 @@ class Auth extends \App\Controllers\BaseController
 		//dd($user);
 
 
-		$checPass = $user['sandi'] ? $encrypter->decrypt(base64_decode($user['sandi'])) :" ";
+		$checPass = $user['sandi'] ? $encrypter->decrypt(base64_decode($user['sandi'])) : " ";
 
 
 		if (
@@ -124,7 +124,7 @@ class Auth extends \App\Controllers\BaseController
 		if (
 			strContains($user['uid'], 'satker')
 			|| ($user['idkelompok'] == 'SATKER')
-			|| ($user['balaiid'] != '' && $user['satkerid'] != '') 
+			|| ($user['balaiid'] != '' && $user['satkerid'] != '')
 		) {
 			$dataSarker_n_Balai = $users->select("
 				m_satker.satkerid,
