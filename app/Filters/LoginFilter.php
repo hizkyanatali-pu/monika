@@ -41,7 +41,7 @@ class LoginFilter implements FilterInterface
 			if ($path[0] === 'users' || $path[0] === 'usergroups') {
 				$session = session();
 				$user = $session->get('userData');
-				if ($user['group_id'] !== 'Administrator') return redirect('usulan');
+				// if ($user['group_id'] !== 'Administrator') return redirect('usulan');
 			}
 		}
 
