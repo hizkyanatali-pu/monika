@@ -147,15 +147,15 @@ class Importdata extends \App\Controllers\BaseController
         $targetDir1 = WRITEPATH . "emon" . DIRECTORY_SEPARATOR . "FileSql";
 
 
-        if ($pullcount > 14) {
+        // if ($pullcount > 14) {
 
-            $query = $this->ImportdataModel->deleteFiles(["nmfile" => $namefile, "type" => $type]);
+        //     $query = $this->ImportdataModel->deleteFiles(["nmfile" => $namefile, "type" => $type]);
 
-            if (file_exists($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql)) {
-                unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
-                unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
-            }
-        }
+        //     if (file_exists($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql)) {
+        //         unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
+        //         unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
+        //     }
+        // }
 
 
         //import data
