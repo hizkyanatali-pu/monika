@@ -78,6 +78,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $jam = date('H:i:s');
 
         return view('Modules\Admin\Views\DokumenPK\dashboard.php', [
+            'title' => 'Dashboard Perjanjian Kinerja',
             'session_year'      =>   $this->user['tahun'],
             'tanggal'           =>   $tanggal,
             'bulan'             =>   $bulan,
