@@ -591,6 +591,9 @@
                 url: "<?php echo site_url('dokumenpk/detail/') ?>" + res,
                 type: 'GET',
                 success: (res) => {
+                    if (res.dokumen.revision_same_year_number != 0) {
+                        $('input[name=revision_same_year]').val(1)
+                    }
                     res.rows.forEach((data, key) => {
                         let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
                             elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
