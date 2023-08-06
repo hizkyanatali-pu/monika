@@ -119,10 +119,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
             if ($dataDokumen['bulan'] != '') $this->dokumenBulan = $this->bulan[$dataDokumen['bulan'] - 1];
         }
-        $watermaskRevisi       = $dataDokumen['is_revision_same_year'] == '1' ? 'revision-same-year' : $dataDokumen['status'];
-        $watermarkRevisiNumber = $dataDokumen['is_revision_same_year'] == '1' ? $dataDokumen['revision_same_year_number'] : $dataDokumen['revision_number'];
+        // $watermaskRevisi       = $dataDokumen['is_revision_same_year'] == '1' ? 'revision-same-year' : $dataDokumen['status'];
+        // $watermarkRevisiNumber = $dataDokumen['is_revision_same_year'] == '1' ? $dataDokumen['revision_same_year_number'] : $dataDokumen['revision_number'];
 
-        $this->pdf_renderWatermarkKonsep($pdf, $watermaskRevisi, $watermarkRevisiNumber);
+
+
+        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen);
 
         $this->dokumenLoadedStatus = $dataDokumen['status'];
 
@@ -746,87 +748,149 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell($widthNamaPejabat, 4, strtoupper($_ttd['person2Name']), 0, 0, 'C');
     }
 
-
-
-    private function pdf_renderWatermarkKonsep($pdf, $_dokumenStatus, $_revisionNumber)
+    private function pdf_renderWatermarkKonsep($pdf, $_dataDokumen)
     {
-        if ($_dokumenStatus != "setuju") {
-            switch ($_dokumenStatus) {
-                case 'revision':
-                    $subtitle = '';
-                    if (!is_null($_revisionNumber)) {
-                        // $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
-                        $pdf->watermarkSubTextOffsetLeft = 133;
-                    } else {
-                        // $subtitle = ' - Dokumen Awal';
-                    }
-
-                    $pdf->watermarkText = 'KOREKSI' . $subtitle;
-                    if ($subtitle == '') {
-                        //lama
-                        // $pdf->watermarkOffsetLeft        = 257;
-                        // $pdf->watermarkBorder_width      = 30;
-                        // $pdf->watermarkBorder_offsetLeft = 254;
-
-                        //koreksi
-                        $pdf->watermarkOffsetLeft        = 202.5;
-                        $pdf->watermarkBorder_width      = 24;
-                        $pdf->watermarkBorder_offsetLeft = 200;
-                    } else {
-                        $pdf->watermarkOffsetLeft        = 200;
-                        $pdf->watermarkBorder_width      = 46;
-                        $pdf->watermarkBorder_offsetLeft = 200;
-                    }
-                    break;
-
-                case 'revision-same-year':
-                    $subtitle = '';
-                    if (!is_null($_revisionNumber)) {
-                        // $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
-                        $pdf->watermarkSubTextOffsetLeft = 133;
-                    } else {
-                        // $subtitle = ' - Dokumen Awal';
-                    }
-
-                    $pdf->watermarkText = 'REVISI' . $subtitle;
-                    if ($subtitle == '') {
-                        //lama
-                        // $pdf->watermarkOffsetLeft        = 260;
-                        // $pdf->watermarkBorder_width      = 28;
-                        // $pdf->watermarkBorder_offsetLeft = 255;
-
-                        //revisi
-                        $pdf->watermarkOffsetLeft        = 246;
-                        $pdf->watermarkBorder_width      = 24;
-                        $pdf->watermarkBorder_offsetLeft = 240;
-                    } else {
-                        $pdf->watermarkOffsetLeft        = 250;
-                        $pdf->watermarkBorder_width      = 39;
-                        $pdf->watermarkBorder_offsetLeft = 247;
-                    }
-                    break;
-
-                default:
-                    $pdf->watermarkText = 'KONSEP';
-                    // $pdf->watermarkOffsetLeft = 70;
-                    // $pdf->watermarkOffsetLeft        = 259;
-                    // $pdf->watermarkBorder_width      = 28;
-                    // $pdf->watermarkBorder_offsetLeft = 256;
-
-                    //konsep 
-                    $pdf->watermarkOffsetLeft        = 254.5;
-                    $pdf->watermarkBorder_width      = 24;
-
-                    $pdf->watermarkBorder_offsetLeft = 250;
 
 
 
-                    break;
+
+        if ($_dataDokumen['is_revision_same_year'] < 1) {
+            //     $created_at = $this->dokumenSatker->select('
+            //     dokumenpk_satker.created_at
+            // ')
+            //         ->where('dokumenpk_satker.satkerid', $_dataDokumen['satkerid'])
+            //         ->where('dokumenpk_satker.status', 'revision')
+            //         ->where('dokumenpk_satker.is_revision_same_year', 0)
+            //         ->where('dokumenpk_satker.revision_master_number', '!=', null)
+            //         ->orderBy('created_at', 'desc')
+            //         ->limit(1)
+            //         ->get()
+            //         ->getRowArray();
+
+            //     // Ubah nilai string menjadi timestamp
+            //     $acuan = strtotime($created_at['created_at']);
+            //     $createdAtThisDokumen = strtotime($_dataDokumen['created_at']);
+            // print_r($created_at['created_at'] . " -- " . $_dataDokumen['created_at']);
+            // exit;
+
+
+            $rev_number = $this->dokumenSatker->select('
+                dokumenpk_satker.revision_number
+            ')
+                ->where('dokumenpk_satker.satkerid', $_dataDokumen['satkerid'])
+                // ->where('dokumenpk_satker.status', 'revision')
+                ->where('dokumenpk_satker.is_revision_same_year', 0)
+                // ->where('dokumenpk_satker.revision_master_number', '!=', null)
+                ->orderBy('created_at', 'desc')
+                ->limit(1)
+                ->get()
+                ->getRowArray();
+
+            if ($_dataDokumen['status'] == 'hold' || $_dataDokumen['status'] == 'tolak') {
+                $pdf->watermarkText = 'KONSEP';
+                $pdf->watermarkOffsetLeft        = 254.5;
+                $pdf->watermarkBorder_width      = 24;
+                $pdf->watermarkBorder_offsetLeft = 250;
             }
+            if (($_dataDokumen['status'] == 'revision' && $_dataDokumen['acc_by'] == null) || ($rev_number['revision_number'] != $_dataDokumen['revision_number'])) {
+                $pdf->watermarkText = 'KOREKSI';
+                $pdf->watermarkOffsetLeft        = 202.5;
+                $pdf->watermarkBorder_width      = 24;
+                $pdf->watermarkBorder_offsetLeft = 200;
+            }
+        }
 
-            // $pdf->Image('images/watermark_dokumen_konsep.png', 23, 80, 250);
+        if ($_dataDokumen['is_revision_same_year'] > 0) {
+
+            $pdf->watermarkText = 'REVISI';
+            $pdf->watermarkOffsetLeft        = 246;
+            $pdf->watermarkBorder_width      = 24;
+            $pdf->watermarkBorder_offsetLeft = 240;
         }
     }
+
+
+
+
+    // private function pdf_renderWatermarkKonsep($pdf, $_dokumenStatus, $_revisionNumber)
+    // {
+    //     if ($_dokumenStatus != "setuju") {
+    //         switch ($_dokumenStatus) {
+    //             case 'revision':
+    //                 $subtitle = '';
+    //                 if (!is_null($_revisionNumber)) {
+    //                     // $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
+    //                     $pdf->watermarkSubTextOffsetLeft = 133;
+    //                 } else {
+    //                     // $subtitle = ' - Dokumen Awal';
+    //                 }
+
+    //                 $pdf->watermarkText = 'KOREKSI' . $subtitle;
+    //                 if ($subtitle == '') {
+    //                     //lama
+    //                     // $pdf->watermarkOffsetLeft        = 257;
+    //                     // $pdf->watermarkBorder_width      = 30;
+    //                     // $pdf->watermarkBorder_offsetLeft = 254;
+
+    //                     //koreksi
+    //                     $pdf->watermarkOffsetLeft        = 202.5;
+    //                     $pdf->watermarkBorder_width      = 24;
+    //                     $pdf->watermarkBorder_offsetLeft = 200;
+    //                 } else {
+    //                     $pdf->watermarkOffsetLeft        = 200;
+    //                     $pdf->watermarkBorder_width      = 46;
+    //                     $pdf->watermarkBorder_offsetLeft = 200;
+    //                 }
+    //                 break;
+
+    //             case 'revision-same-year':
+    //                 $subtitle = '';
+    //                 if (!is_null($_revisionNumber)) {
+    //                     // $subtitle = $_revisionNumber > 1 ? ' Ke - ' . $_revisionNumber : '';
+    //                     $pdf->watermarkSubTextOffsetLeft = 133;
+    //                 } else {
+    //                     // $subtitle = ' - Dokumen Awal';
+    //                 }
+
+    //                 $pdf->watermarkText = 'REVISI' . $subtitle;
+    //                 if ($subtitle == '') {
+    //                     //lama
+    //                     // $pdf->watermarkOffsetLeft        = 260;
+    //                     // $pdf->watermarkBorder_width      = 28;
+    //                     // $pdf->watermarkBorder_offsetLeft = 255;
+
+    //                     //revisi
+    //                     $pdf->watermarkOffsetLeft        = 246;
+    //                     $pdf->watermarkBorder_width      = 24;
+    //                     $pdf->watermarkBorder_offsetLeft = 240;
+    //                 } else {
+    //                     $pdf->watermarkOffsetLeft        = 250;
+    //                     $pdf->watermarkBorder_width      = 39;
+    //                     $pdf->watermarkBorder_offsetLeft = 247;
+    //                 }
+    //                 break;
+
+    //             default:
+    //                 $pdf->watermarkText = 'KONSEP';
+    //                 // $pdf->watermarkOffsetLeft = 70;
+    //                 // $pdf->watermarkOffsetLeft        = 259;
+    //                 // $pdf->watermarkBorder_width      = 28;
+    //                 // $pdf->watermarkBorder_offsetLeft = 256;
+
+    //                 //konsep 
+    //                 $pdf->watermarkOffsetLeft        = 254.5;
+    //                 $pdf->watermarkBorder_width      = 24;
+
+    //                 $pdf->watermarkBorder_offsetLeft = 250;
+
+
+
+    //                 break;
+    //         }
+
+    //         // $pdf->Image('images/watermark_dokumen_konsep.png', 23, 80, 250);
+    //     }
+    // }
 
 
 
