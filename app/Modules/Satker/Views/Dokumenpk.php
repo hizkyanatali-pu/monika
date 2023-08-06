@@ -59,10 +59,7 @@
                             $disabled = "";
                         }
                     ?>
-                        <button 
-                            class="btn btn-primary __opsi-template" 
-                            data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?> <?= $disabled ?>
-                        >
+                        <button class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?> <?= $disabled ?>>
                             <i class="fas fa-plus"></i> Buat Dokumen
                         </button>
                     <?php } ?>
@@ -107,7 +104,7 @@
                                     $badgeColor = ($data->is_revision_same_year) ? 'bg-danger' : 'bg-warning'
                                 ?>
                                     <div>
-                                        <span class="badge badge-sm <?php echo $badgeColor ?> text-white __cetak-dokumen" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>">
+                                        <span class="badge badge-sm <?php echo $badgeColor ?> text-white __cetak-dokumen" style="cursor: pointer;" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>">
                                             <?php echo $badgeText ?>
                                         </span>
                                     </div>
@@ -143,22 +140,22 @@
                             </td>
                             <td class="d-flex justify-content-start">
                                 <div class="btn-load">
-                                <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
-                                    <i class="fas fa-eye"></i> <br/> Lihat
-                                </button>
-                                <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true">
-                                    <i class="fas fa-print"></i> <br/> Cetak
-                                </button>
-                                <?php if ($data->status == 'hold') { ?> 
-                                    <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
-                                        <i class="fas fa-edit"></i> <br/> Edit
+                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
+                                        <i class="fas fa-eye"></i> <br /> Lihat
                                     </button>
-                                <?php } ?>
-                                <?php if ($data->status == 'setuju') { ?>
-                                    <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
-                                        <i class="fas fa-edit"></i> <br/> Edit
+                                    <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true">
+                                        <i class="fas fa-print"></i> <br /> Cetak
                                     </button>
-                                <?php } ?>
+                                    <?php if ($data->status == 'hold') { ?>
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
+                                            <i class="fas fa-edit"></i> <br /> Edit
+                                        </button>
+                                    <?php } ?>
+                                    <?php if ($data->status == 'setuju') { ?>
+                                        <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
+                                            <i class="fas fa-edit"></i> <br /> Edit
+                                        </button>
+                                    <?php } ?>
                                 </div>
                             </td>
                         </tr>
@@ -228,7 +225,7 @@
 <div class="modal fade" id="modal-cetak-dokumen-revisioned" tabindex="-1" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
-        <div class="modal-header">
+            <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Pilih Dokumen :</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

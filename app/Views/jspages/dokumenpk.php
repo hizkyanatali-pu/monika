@@ -253,7 +253,7 @@
                     Swal.fire({
                         title: "Anda yakin akan mengedit dokumen ini ?",
                         html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan"></textarea>`,
-                        confirmButtonText: "Kirim Alasan Koreksi",
+                        confirmButtonText: "Kirim",
                         cancelButtonText: "Batal",
                         showLoaderOnConfirm: true,
                         showCancelButton: true,
