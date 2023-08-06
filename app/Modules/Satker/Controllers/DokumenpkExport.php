@@ -778,6 +778,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 dokumenpk_satker.revision_number
             ')
                 ->where('dokumenpk_satker.satkerid', $_dataDokumen['satkerid'])
+                ->where('dokumenpk_satker.balaiid', $_dataDokumen['balaiid'])
                 // ->where('dokumenpk_satker.status', 'revision')
                 ->where('dokumenpk_satker.is_revision_same_year', 0)
                 // ->where('dokumenpk_satker.revision_master_number', '!=', null)
@@ -785,6 +786,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 ->limit(1)
                 ->get()
                 ->getRowArray();
+
+
 
             if ($_dataDokumen['status'] == 'hold' || $_dataDokumen['status'] == 'tolak') {
                 $pdf->watermarkText = 'KONSEP';
