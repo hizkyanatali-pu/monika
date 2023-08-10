@@ -613,6 +613,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'pihak1' => $pihak1,
                 'pihak2' => $pihak2
             ],
+            'satkerid' => $session_satkerId,
             'kota'  => $this->kota->get()->getResult(),
             'bulan' => ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
             'tahun' => $this->user['tahun'],
