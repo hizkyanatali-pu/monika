@@ -1132,7 +1132,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         // Save spreadsheet as Excel file
         $writer = new Xlsx($spreadsheet);
-        $writer->save('export_data_dokumen.xlsx');
+        $writer->save('php://output');
 
         echo 'Ekspor data berhasil.';
     }
