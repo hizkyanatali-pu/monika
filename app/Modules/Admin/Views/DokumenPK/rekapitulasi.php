@@ -116,7 +116,7 @@
             </div>
             <div class="clearfix mb-3">
                 <div class="float-right">
-                    <a href="<?php echo site_url('dokumenpk/rekapitulasi/export-rekap-all'); ?>" target="_blank" class="btn btn-success btn-sm btn-rekap-all"><i class="fa fa-file-excel"></i> Rekap Excel</a>
+                    <a href="<?php echo site_url('dokumenpk/rekapitulasi/export-excel'); ?>" target="_blank" class="btn btn-success btn-sm btn-rekap-all"><i class="fa fa-file-excel"></i> Rekap Excel</a>
                 </div>
             </div>
             <!-- <table>
