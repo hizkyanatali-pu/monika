@@ -204,7 +204,7 @@ $total_componen = '';
                 $file_dokumen_revisi = '<a href="' . base_url() . '/api/showpdf/tampilkan/' . $query_satker['id'] . '?preview=true" target="_blank"><img src="https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png" style="width:42px;height:42px;"></a>';
                 $tanggal_kirim_revisi = date('d', strtotime($query_dokumen['created_at'])) . ' ' . $bulan . ' ' . date('Y', strtotime($query_dokumen['created_at']));
 
-                if ($query_balai['acc_date'] != NULL || $query_balai['reject_date'] != NULL) {
+                if (isset($query_balai['acc_date']) != NULL || isset($query_balai['reject_date']) != NULL) {
                     $revisi_terverifikasi += 1;
                     $verifikasi_satker2 = '<img src=" https://cdn-icons-png.flaticon.com/512/7046/7046050.png" style="width:25px;height:25px;">';
                 } else {

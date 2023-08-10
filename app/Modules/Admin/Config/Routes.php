@@ -7,6 +7,8 @@
 $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('api', ['namespace' => 'App\Controllers'], function ($routes) {
         //$routes->post('datadukung', '\Modules\Admin\Controllers\Api::index');
+        $routes->get('getpaket/(:any)', '\Modules\Admin\Controllers\Pulldata::getPaketTagging/$1');
+
         $routes->get('cron-tarik-data/(:any)', '\Modules\Admin\Controllers\CronJob::dataPaket/$1');
 
         $routes->group('posturanggaran', ['namespace' => 'App\Controllers'], function ($routes) {
@@ -259,6 +261,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 });
                 $routes->group('rekapitulasi', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::rekapitulasi');
+                    $routes->get('export-excel', '\Modules\Admin\Controllers\Dokumenpk::rekapitulasi_export_excel');
                     $routes->get('export-rekap-all', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_all');
                     $routes->get('export-rekap-satker', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_satker');
                     $routes->get('export-rekap-balai', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_balai');
@@ -307,6 +310,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
                 $routes->post('create', '\Modules\Satker\Controllers\Dokumenpk::create');
                 $routes->post('editDokumen', '\Modules\Satker\Controllers\Dokumenpk::edit');
+                $routes->get('get-paket/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getPaket/$1/$2');
+
 
                 $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
                 $routes->get('get-list-template-buat-dokumen/(:any)/(:any)', '\Modules\Admin\Controllers\Dokumenpk::getListTemplateBuatDokumen/$1/$2');
