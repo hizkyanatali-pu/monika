@@ -1002,7 +1002,72 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function rekapitulasi()
     {
         $sessionTahun = $this->user['tahun'];
-        $q = "SELECT
+        // $q1 = "SELECT
+        //     a.id,
+        //     a.satkerid,
+        //     a.balaiid,
+        //     d.title AS indikator,
+        //     b.target_value,
+        //     d.target_satuan,
+        //     b.outcome_value,
+        //     d.outcome_satuan,
+        //     a.status,
+        //     a.is_revision_same_year
+        // FROM
+        //     dokumenpk_satker a
+        // LEFT JOIN dokumenpk_satker_rows b ON b.dokumen_id = a.id
+        // LEFT JOIN dokumen_pk_template_row d ON b.template_row_id = d.id
+        // WHERE
+        //     a.created_at = (
+        //         SELECT MAX(created_at)
+        //         FROM dokumenpk_satker
+        //         WHERE 
+
+        //          balaiid = a.balaiid
+        //          AND satkerid =a.satkerid
+        //             AND tahun = $sessionTahun 
+        //             AND ISNULL(deleted_at)
+        //     )
+
+        //     AND a.tahun = $sessionTahun
+        //     AND ISNULL(a.deleted_at)
+        // ORDER BY
+        //    d.id, a.pihak1_initial"; // Menambahkan ORDER BY
+
+
+        // $q2 = "SELECT
+        //     a.id,
+        //     a.satkerid,
+        //     a.balaiid,
+        //     d.title AS indikator,
+        //     b.target_value,
+        //     d.target_satuan,
+        //     b.outcome_value,
+        //     d.outcome_satuan,
+        //     a.status,
+        //     a.is_revision_same_year
+        // FROM
+        //     dokumenpk_satker a
+        // LEFT JOIN dokumenpk_satker_rows b ON b.dokumen_id = a.id
+        // LEFT JOIN dokumen_pk_template_row d ON b.template_row_id = d.id
+        // WHERE
+        //     a.dokumen_type = 'balai'
+        //     AND a.tahun = $sessionTahun 
+        //     AND ISNULL(a.deleted_at)
+        //     AND (a.balaiid, a.created_at) IN (
+        //         SELECT balaiid, MAX(created_at)
+        //         FROM dokumenpk_satker
+        //         WHERE dokumen_type = 'balai'
+        //             AND tahun = $sessionTahun 
+        //             AND ISNULL(deleted_at)
+        //         GROUP BY balaiid
+        //     )
+        // ORDER BY
+        //     d.id, a.pihak1_initial;"; // Menambahkan ORDER BY
+
+
+        $q = "
+        SELECT
         a.id,
         a.satkerid,
         a.balaiid,
@@ -1012,25 +1077,39 @@ class Dokumenpk extends \App\Controllers\BaseController
         b.outcome_value,
         d.outcome_satuan,
         a.status,
-        a.is_revision_same_year
+        a.is_revision_same_year,
+        a.pihak1_initial
     FROM
         dokumenpk_satker a
     LEFT JOIN dokumenpk_satker_rows b ON b.dokumen_id = a.id
     LEFT JOIN dokumen_pk_template_row d ON b.template_row_id = d.id
     WHERE
-        a.created_at = (
+        (a.created_at = (
             SELECT MAX(created_at)
             FROM dokumenpk_satker
             WHERE 
-                (balaiid = a.balaiid OR ISNULL(balaiid)) 
-                AND (satkerid = a.satkerid OR ISNULL(satkerid)) 
+                balaiid = a.balaiid
+                AND satkerid = a.satkerid
                 AND tahun = $sessionTahun 
                 AND ISNULL(deleted_at)
-        )
-        AND a.tahun = $sessionTahun
+        ) OR
+        (a.dokumen_type = 'balai'
+        AND a.tahun = $sessionTahun 
         AND ISNULL(a.deleted_at)
+        AND (a.balaiid, a.created_at) IN (
+            SELECT balaiid, MAX(created_at)
+            FROM dokumenpk_satker
+            WHERE dokumen_type = 'balai'
+                AND tahun = $sessionTahun 
+                AND ISNULL(deleted_at)
+            GROUP BY balaiid
+        )))
     ORDER BY
-        a.dokumen_type desc,d.id"; // Menambahkan ORDER BY
+    d.id, a.pihak1_initial;
+     
+        ";
+
+
 
         $queryResult = $this->db->query($q)->getResultArray();
 
@@ -1067,35 +1146,110 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
 
         $sessionTahun = $this->user['tahun'];
-        $q = "SELECT
-                a.id,
-                a.satkerid,
-                a.balaiid,
-                d.title AS indikator,
-                b.target_value,
-                d.target_satuan,
-                b.outcome_value,
-                d.outcome_satuan,
-                a.status,
-                a.is_revision_same_year
-            FROM
-                dokumenpk_satker a
-            LEFT JOIN dokumenpk_satker_rows b ON b.dokumen_id = a.id
-            LEFT JOIN dokumen_pk_template_row d ON b.template_row_id = d.id
-            WHERE
-                a.created_at = (
-                    SELECT MAX(created_at)
-                    FROM dokumenpk_satker
-                    WHERE 
-                        (balaiid = a.balaiid OR ISNULL(balaiid)) 
-                        AND (satkerid = a.satkerid OR ISNULL(satkerid)) 
-                        AND tahun = $sessionTahun 
-                        AND ISNULL(deleted_at)
-                )
-                AND a.tahun = $sessionTahun
-                AND ISNULL(a.deleted_at)
-                ORDER BY
-        a.dokumen_type desc,d.id"; // Menambahkan ORDER BY
+        //         $q = "SELECT
+        //             a.id,
+        //             a.satkerid,
+        //             a.balaiid,
+        //             d.title AS indikator,
+        //             b.target_value,
+        //             d.target_satuan,
+        //             b.outcome_value,
+        //             d.outcome_satuan,
+        //             a.status,
+        //             a.is_revision_same_year
+        //         FROM
+        //             dokumenpk_satker a
+        //         LEFT JOIN dokumenpk_satker_rows b ON b.dokumen_id = a.id
+        //         LEFT JOIN dokumen_pk_template_row d ON b.template_row_id = d.id
+        //         WHERE
+        //             a.created_at = (
+        //                 SELECT MAX(created_at)
+        //                 FROM dokumenpk_satker
+        //                 WHERE 
+
+        //                  balaiid = a.balaiid
+        //                  AND satkerid =a.satkerid
+        //                     AND tahun = $sessionTahun 
+        //                     AND ISNULL(deleted_at)
+        //             )
+
+        //             AND a.tahun = $sessionTahun
+        //             AND ISNULL(a.deleted_at)
+        //         ORDER BY
+        //             a.dokumen_type desc,d.id"; // Menambahkan ORDER BY
+
+        //         $q = "SELECT
+        //     a.id,
+        //     a.satkerid,
+        //     a.balaiid,
+        //     d.title AS indikator,
+        //     b.target_value,
+        //     d.target_satuan,
+        //     b.outcome_value,
+        //     d.outcome_satuan,
+        //     a.status,
+        //     a.is_revision_same_year
+        // FROM
+        //     dokumenpk_satker a
+        // LEFT JOIN dokumenpk_satker_rows b ON b.dokumen_id = a.id
+        // LEFT JOIN dokumen_pk_template_row d ON b.template_row_id = d.id
+        // WHERE
+        //     a.dokumen_type = 'balai'
+        //     AND a.tahun = 2023
+        //     AND ISNULL(a.deleted_at)
+        //     AND (a.balaiid, a.created_at) IN (
+        //         SELECT balaiid, MAX(created_at)
+        //         FROM dokumenpk_satker
+        //         WHERE dokumen_type = 'balai'
+        //             AND tahun = 2023
+        //             AND ISNULL(deleted_at)
+        //         GROUP BY balaiid
+        //     )
+        // ORDER BY
+        //     d.id, a.pihak1_initial;"; // Menambahkan ORDER BY
+
+        $q = "
+SELECT
+a.id,
+a.satkerid,
+a.balaiid,
+d.title AS indikator,
+b.target_value,
+d.target_satuan,
+b.outcome_value,
+d.outcome_satuan,
+a.status,
+a.is_revision_same_year,
+a.pihak1_initial
+FROM
+dokumenpk_satker a
+LEFT JOIN dokumenpk_satker_rows b ON b.dokumen_id = a.id
+LEFT JOIN dokumen_pk_template_row d ON b.template_row_id = d.id
+WHERE
+(a.created_at = (
+    SELECT MAX(created_at)
+    FROM dokumenpk_satker
+    WHERE 
+        balaiid = a.balaiid
+        AND satkerid = a.satkerid
+        AND tahun = $sessionTahun 
+        AND ISNULL(deleted_at)
+) OR
+(a.dokumen_type = 'balai'
+AND a.tahun = $sessionTahun 
+AND ISNULL(a.deleted_at)
+AND (a.balaiid, a.created_at) IN (
+    SELECT balaiid, MAX(created_at)
+    FROM dokumenpk_satker
+    WHERE dokumen_type = 'balai'
+        AND tahun = $sessionTahun 
+        AND ISNULL(deleted_at)
+    GROUP BY balaiid
+)))
+ORDER BY
+d.id, a.pihak1_initial;
+
+";
 
         $queryResult = $this->db->query($q)->getResultArray();
 
