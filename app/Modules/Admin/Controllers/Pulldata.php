@@ -43,6 +43,82 @@ class Pulldata extends \App\Controllers\BaseController
         die();
     }
 
+
+    function getPaketTagging($w = '')
+    {
+        $getSatker = $this->db->query("SELECT * from m_satker WHERE satkerid=$w")->getRow();
+        $where = "md.kdsatker = $w";
+
+        if (empty($getSatker)) {
+            $getSatkerResult = $this->db->query("SELECT GROUP_CONCAT(satkerid) as satkerids from m_satker WHERE balaiid=$w")->getRow();
+            $getSatkerIds = $getSatkerResult->satkerids;
+            $where = "md.kdsatker IN ($getSatkerIds)";
+        }
+
+
+        $q = "SELECT
+        b.balaiid, b.balai,
+		md.kdsatker as satkerid, s.satker,
+        md.kdprogram as programid, md.kdgiat as giatid, md.kdoutput as outputid, md.kdsoutput as soutputid, md.kdkmpnen as komponenid,
+        md.kdpaket as id, md.nmpaket as label, 
+       
+        md.vol,
+        SUBSTRING_INDEX(SUBSTRING_INDEX(md.nmpaket,';',3),';',-1) as lokasi, 
+        SUBSTRING_INDEX(SUBSTRING_INDEX(md.nmpaket,';',6),';',-1) as jenis_paket, SUBSTRING_INDEX(SUBSTRING_INDEX(md.nmpaket,';',7),';',-1) as metode_pemilihan,
+        md.sat,
+        md.pagu_rpm as pagu_rpm,
+        md.pagu_sbsn as pagu_sbsn,
+        md.pagu_phln as pagu_phln,
+        md.pagu_total as pagu_total,
+
+        md.real_total as real_total, md.progres_keuangan, md.progres_fisik
+
+        FROM monika_data_{$this->user['tahun']} md
+		LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
+		LEFT JOIN m_balai b ON b.balaiid=s.balaiid
+        " . ($w ? " WHERE $where" : '') . " ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
+
+
+        // Eksekusi query dan ambil hasil dari database
+        $result =   $this->db->query($q)->getResultArray();
+
+        $nestedData = array();
+
+        foreach ($result as $row) {
+            $satkerid = $row['satkerid'];
+            $id = $row['id'];
+
+            // Jika belum ada data untuk satker ini, inisialisasi array kosong
+            if (!isset($nestedData[$satkerid])) {
+                $nestedData[$satkerid] = array(
+                    'balai' => $row['balai'],
+                    'satkerid' => $satkerid,
+                    'satker' => $row['satker'],
+                    'paket' => array()
+                );
+            }
+
+            // Menambahkan data paket ke dalam array paket
+            $nestedData[$satkerid]['paket'][] = array(
+                'paketId' => $id,
+                'label' => $row['label'],
+                'vol' => $row['vol'],
+                'satuan' => $row['sat'],
+                'paguDipa' => rupiahFormat($row['pagu_total'], false),
+                'realisasi' => rupiahFormat($row['real_total'], false),
+                'persenKeu' => $row['progres_keuangan'],
+                'persenFis' => $row['progres_fisik']
+            );
+        }
+
+        // Konversi array ke format JSON
+        $jsonResponse = json_encode(array_values($nestedData), JSON_PRETTY_PRINT);
+
+        // Menampilkan response JSON
+        header('Content-Type: application/json');
+        echo $jsonResponse;
+    }
+
     //format satu-satu
     public function unitkerja($slug = '')
     {
@@ -419,9 +495,9 @@ class Pulldata extends \App\Controllers\BaseController
         ];
         return view('Modules\Admin\Views\Paket\cetak\Format_cetak_satker', $data);
     }
-    
-    
-    
+
+
+
     public function progresPerProvinsi()
     {
         $pageData = [];
@@ -450,7 +526,7 @@ class Pulldata extends \App\Controllers\BaseController
             ]);
 
             $dataPaket = $this->PulldataModel->getBalaiPaket(
-                "satker", 
+                "satker",
                 "md.tahun= " . session('userData.tahun') . " AND kdlokasi= " . $data->kdlokasi
             );
             foreach ($dataPaket as $keyPaket => $dataPaket) {
@@ -490,11 +566,11 @@ class Pulldata extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\Paket\Format_2', $data);
         // return view('Modules\Admin\Views\Paket\Progres_per_provinsi', []);
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     //pindah ya!
     // function simpandata(){
     //     $this->akses->goakses('add', $this->InModul);
@@ -608,10 +684,10 @@ class Pulldata extends \App\Controllers\BaseController
         $hal['paket']     = ['pg' => 'paket', 'idk' => $_GET['idk'], 'label' => $_GET['label'], 'label2' => (!empty($_GET['label2']) ? $_GET['label2'] : ''), 'format' => (!empty($_GET['format']) ? $_GET['format'] : ''), 'filter' => 'satker', 'where' => "md.kdsatker='{$_GET['idks']}'", 'title' => 'Paket'];
         $hal['balaiteknik']     = ['pg' => 'balaiteknik', 'idk' => $_GET['idk'], 'label' => $_GET['label'], 'filter' => 'satker', 'where' => "b.balaiid='{$_GET['idk']}'", 'title' => 'Balai Teknik'];
         $hal['semuasatker']     = ['pg' => 'balaiteknik', 'idk' => '', 'label' => $_GET['label'], 'filter' => 'satker', 'where' => "", 'title' => 'Semua Satker'];
-        
+
         $hal['satkerterendah']     = [
-            'pg' => 'balaiteknik', 
-            'idk' => '', 
+            'pg' => 'balaiteknik',
+            'idk' => '',
             'label' => $_GET['label'],
             'getData' => [
                 [
@@ -625,8 +701,8 @@ class Pulldata extends \App\Controllers\BaseController
         ];
 
         $hal['satkertertinggi']     = [
-            'pg' => 'balaiteknik', 
-            'idk' => '', 
+            'pg' => 'balaiteknik',
+            'idk' => '',
             'label' => $_GET['label'],
             'getData' => [
                 [
@@ -640,9 +716,9 @@ class Pulldata extends \App\Controllers\BaseController
         ];
 
         $hal['satkerdeviasiterbesar']     = [
-            'pg' => 'balaiteknik', 
-            'idk' => '', 
-            'label' => $_GET['label'], 
+            'pg' => 'balaiteknik',
+            'idk' => '',
+            'label' => $_GET['label'],
             'getData' => [
                 [
                     'title' => 'Nominal Deviasi Terbesar',
@@ -698,8 +774,7 @@ class Pulldata extends \App\Controllers\BaseController
         if (in_array($pg, $useSatkerFormat)) {
             $data['qdata'] = $hal[$pg]['getData'];
             $pgview = "Rekap-satker";
-        }
-        else {
+        } else {
             $data['qdata'] = ($pg == "paket" ? $this->PulldataModel->getPaket($hal[$pg]['where']) : ($hal[$pg]['where'] == null ? $this->PulldataModel->getBalaiPaket($hal[$pg]['filter']) : $this->PulldataModel->getBalaiPaket($hal[$pg]['filter'], $hal[$pg]['where'])));
         }
         // dd($data);
@@ -747,7 +822,7 @@ class Pulldata extends \App\Controllers\BaseController
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header("Expires: 0");
         }
-        
+
         $pageData = [];
         $dataProvinsi = $this->tableProvinsi->get()->getResult();
         foreach ($dataProvinsi as $key => $data) {
@@ -774,7 +849,7 @@ class Pulldata extends \App\Controllers\BaseController
             ]);
 
             $dataPaket = $this->PulldataModel->getBalaiPaket(
-                "satker", 
+                "satker",
                 "md.tahun= " . session('userData.tahun') . " AND kdlokasi= " . $data->kdlokasi
             );
             foreach ($dataPaket as $keyPaket => $dataPaket) {

@@ -227,6 +227,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
             $routes->group('bigdata', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('/', '\Modules\Admin\Controllers\BigData::index');
+                $routes->get('sda_paket', '\Modules\Admin\Controllers\BigData::getDataMonikaData');
+                $routes->get('sda_paket_column', '\Modules\Admin\Controllers\BigData::getColom');
+
                 $routes->get('load-data', '\Modules\Admin\Controllers\BigData::loadData');
                 $routes->get('filter-select-lookup', '\Modules\Admin\Controllers\BigData::filterSelectLookup');
 
@@ -353,6 +356,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Satker\Controllers\Dokumenpk::balaiSatker/$1');
             $routes->get('dokumenpk-download-log/(:any)', '\Modules\Satker\Controllers\Dokumenpk::logKoreksi/$1');
             $routes->get('panduan', '\Modules\Satker\Controllers\Dokumenpk::panduanpk');
+            $routes->get('instansi-list/(:any)', '\Modules\Admin\Controllers\Dokumenpk::instansiList/$1');
         }
     }
 });

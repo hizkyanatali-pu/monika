@@ -17,7 +17,7 @@ class BigData extends \App\Controllers\BaseController
         $session                       = session();
         $this->user                    = $session->get('userData');
         $this->db                      = \Config\Database::connect();
-        $this->monikaData              = $this->db->table('monika_data_'.$this->user['tahun']);
+        $this->monikaData              = $this->db->table('monika_data_' . $this->user['tahun']);
         $this->satker                  = $this->db->table('m_satker');
         $this->program                 = $this->db->table('tprogram');
         $this->kegiatan                = $this->db->table('tgiat');
@@ -28,13 +28,135 @@ class BigData extends \App\Controllers\BaseController
     }
 
 
-    
-    public function index()
+
+    function index()
+    {
+
+        return view('Modules\Admin\Views\Bigdata\bigdatapaket.php');
+    }
+
+    function getDataMonikaData()
+    {
+
+        // $kolomYangDiminta = "satker";
+        // $kolomArray = explode(',', $kolomYangDiminta);
+
+        // Bangun array kolom seperti yang diminta
+        // $daftarkolom = [];
+        // foreach ($kolomArray as $field) {
+
+        //     $daftarkolom[] = [
+        //         'title' => $field,
+        //         'field' => $field
+        //     ];
+        // }
+
+        // Ambil parameter dari permintaan
+        $page = $this->request->getVar('page') ?? 1;
+        $perPage = $this->request->getVar('size') ?? 10;
+        $column = $this->request->getVar('column');
+        $year = $this->request->getVar('year');
+
+        $listKolom = implode(',', $column);
+
+        $dataPaket = $this->getDataWithColumns($listKolom, $page, $perPage, $year);
+        $resultArray = array();
+
+
+        // foreach ($dataPaket['data'] as $data) {
+        //     foreach ($data as $kolom => $nilai) {
+        //         $resultArray[] = array(
+        //             "title" => $kolom,
+        //             "field" => $kolom
+        //         );
+        //     }
+        //     // Hentikan loop setelah satu baris data
+        //     break;
+        // }
+
+        return $this->respond(
+            [
+                "last_page" => ceil($dataPaket['total'] / $perPage),
+                "data" =>  $dataPaket['data'],
+                // "columns" => $resultArray,
+                // "page" => $page,
+            ]
+        );
+    }
+
+
+    public function getDataWithColumns($kolom, $page, $perpage, $year)
+    {
+        $table  = "monika_data_" .  $year;
+        $offset = ($page - 1) * $perpage;
+        $q  =  $this->db->table($table)->select($kolom)
+            ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
+            ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
+            ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran=$year", 'left')
+            ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran=$year)", 'left')
+            ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran=$year)", 'left')
+            ->limit($perpage, $offset)->get()->getResultArray();
+        $totalData = $this->db->table($table)->countAll();
+        return ["data" => $q, "total" => $totalData];
+    }
+
+    function getColom()
+    {
+        $year = $this->request->getVar('year') ?? 2023;
+
+        $table = 'monika_data_' . $year;
+
+        // Gunakan metode select() untuk mengambil kolom-kolom dari tabel
+        $kolomValid = $this->db->table($table)->select("*")->limit(1)->get()->getResult();
+
+        // Jika data berhasil diambil, ambil nama kolom dari array pertama
+        if (!empty($kolomValid)) {
+            $namaKolom = array_keys((array)$kolomValid[0]);
+
+            // Tambahkan nama tabel di depan setiap nama kolom
+            // $namaKolomDenganTabel = array_map(function ($kolom) use ($table) {
+            //     return $table . '.' . $kolom;
+            // }, $namaKolom);
+
+            return $this->response->setJSON($namaKolom);
+        } else {
+            // Handle jika data tidak ditemukan
+            return $this->response->setStatusCode(404)->setJSON(['message' => 'Data tidak ditemukan']);
+        }
+    }
+
+    // public function getValidColumns()
+    // {
+    //     $table = 'monika_data_2023';
+    //     $query = $this->db->table($table)->select("$table.*,tprogram.nmprogram,tgiat.nmgiat,toutput.nmoutput,tsoutput.nmro")
+    //         ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
+    //         ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
+    //         ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='2023'", 'left')
+    //         ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='2023')", 'left')
+    //         ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='2023')", 'left')
+    //         ->limit(1)->get();
+    //     $fields = $query->getFieldNames();
+
+
+    //     $kolomValid = [];
+    //     foreach ($fields as $field) {
+    //         $kolomValid[] = $field;
+    //     }
+
+    //     return $kolomValid;
+    // }
+
+
+
+
+
+    //ubah nama menjadi index jika ingin menerapkan yang lama
+    public function bigdatalama()
     {
         $tahun = $this->user['tahun'];
         $column = $this->tableColumn();
 
-        $table  = 'monika_data_'.$this->user['tahun'];
+        $table  = 'monika_data_' . $this->user['tahun'];
         $data   = $this->monikaData->select("
             $table.*, 
             m_satker.satker as nmsatker,
@@ -43,14 +165,14 @@ class BigData extends \App\Controllers\BaseController
             toutput.nmoutput,
             tsoutput.nmro
         ")
-        ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
-        ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
-        ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
-        ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
-        ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left')
-        ->limit(1)
-        ->get()
-        ->getResultArray();
+            ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
+            ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
+            ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
+            ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
+            ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left')
+            ->limit(1)
+            ->get()
+            ->getResultArray();
 
         return view('Modules\Admin\Views\Bigdata\index.php', [
             'column'        => $column,
@@ -78,13 +200,14 @@ class BigData extends \App\Controllers\BaseController
                 'kegiatan'  => $this->kegiatan->select('kdgiat as id, nmgiat as nama')->get()->getResult(),
                 'output'    => $this->output->select('kdoutput as id, nmoutput as nama')->get()->getResult(),
                 'suboutput' => $this->suboutput->select('kdro as id, nmro as nama')->get()->getResult(),
-            ] 
+            ]
         ]);
     }
 
 
 
-    public function loadData() {
+    public function loadData()
+    {
         $limitData  = 1000;
         $offsetData = $this->request->getGet('page') * $limitData;
         $filterData = $this->request->getGet('filter');
@@ -99,23 +222,23 @@ class BigData extends \App\Controllers\BaseController
 
         return $this->respond($result, 200);
     }
-    
-    
-    
-    public function filterSelectLookup ()
+
+
+
+    public function filterSelectLookup()
     {
         $input  = $this->request->getGet();
         $result = [];
-        
+
         switch ($input['childTarget']) {
             case 'kegiatan':
                 $result = $this->kegiatan->select('kdgiat as id, nmgiat as nama')->where('kdprogram', $input['parentValue'])->get()->getResult();
                 break;
-            
+
             case 'output':
                 $result = $this->output->select('kdoutput as id, nmoutput as nama')->where('kdgiat', $input['parentValue'])->get()->getResult();
                 break;
-            
+
             case 'suboutput':
                 $result = $this->suboutput->select('kdro as id, nmro as nama')->where('kdgiat', $input['kdgiat'])->where('kdkro', $input['parentValue'])->get()->getResult();
                 break;
@@ -126,7 +249,8 @@ class BigData extends \App\Controllers\BaseController
 
 
 
-    public function downloadExcelBigData() {
+    public function downloadExcelBigData()
+    {
         // $limitData    = 1000;
         // $offsetData   = ($this->request->getGet('fileNumber') - 1) * $limitData;
         $limitData    = null;
@@ -138,11 +262,11 @@ class BigData extends \App\Controllers\BaseController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', 'No.');
-        
+
         $cellHeaderEndIndex = 0;
         $columnHeader = $this->tempExportBigdataColumn->getWhere(['session' => $this->user['nama']])->getResultArray();
         foreach ($columnHeader as $keyColHeader => $dataColHeader) {
-            $cellHeaderEndIndex = $keyColHeader+2;
+            $cellHeaderEndIndex = $keyColHeader + 2;
             $sheet->setCellValueByColumnAndRow($cellHeaderEndIndex, 1, $dataColHeader['label']);
 
             $cellStringHeader = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($cellHeaderEndIndex);;
@@ -164,17 +288,17 @@ class BigData extends \App\Controllers\BaseController
             ]
         ];
 
-        $sheet->getStyle('A1:'.$cellHeaderEnd.'1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('000000');
-        $sheet->getStyle('A1:'.$cellHeaderEnd.'1')->applyFromArray($styleArray);
+        $sheet->getStyle('A1:' . $cellHeaderEnd . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('000000');
+        $sheet->getStyle('A1:' . $cellHeaderEnd . '1')->applyFromArray($styleArray);
 
 
         $mainData = $this->getData($filterData, $limitData, $offsetData);
         foreach ($mainData as $key => $data) {
-            $row = $key+2;
-            $sheet->setCellValue('A'.$row, ($key+1)+$offsetData);
+            $row = $key + 2;
+            $sheet->setCellValue('A' . $row, ($key + 1) + $offsetData);
 
             foreach ($columnHeader as $kelCell => $dataCell) {
-                $cellIndex = $kelCell+2;
+                $cellIndex = $kelCell + 2;
                 $cellText = $data[$dataCell['name']];
 
                 $masterColumnKey  = array_search($dataCell['name'], array_column($masterColumn, 'value'));
@@ -208,7 +332,7 @@ class BigData extends \App\Controllers\BaseController
         // $filename = $this->user['tahun'].'-Data Kegiatan-'.date('Y-m-d-His');
 
         // $filename = 'monika-bigdata-part-' . $this->request->getGet('fileNumber');
-        $filename = 'monika-bigdata-'.date('Y-m-d-His');
+        $filename = 'monika-bigdata-' . date('Y-m-d-His');
 
         // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         // header('Content-Disposition: attachment;filename=' . $filename . '.xlsx');
@@ -220,15 +344,16 @@ class BigData extends \App\Controllers\BaseController
         ob_end_clean();
         $response =  array(
             'status' => TRUE,
-            'file' => "data:application/vnd.ms-excel;base64,".base64_encode($xlsData)
+            'file' => "data:application/vnd.ms-excel;base64," . base64_encode($xlsData)
         );
-    
+
         die(json_encode($response));
     }
 
 
 
-    public function prepareToDownload() {
+    public function prepareToDownload()
+    {
         $filterData = $this->request->getGet('filter');
 
         return $this->respond([
@@ -238,7 +363,7 @@ class BigData extends \App\Controllers\BaseController
 
 
 
-    public function setTempColumn() 
+    public function setTempColumn()
     {
         $filterColumn      = json_decode($this->request->getPost('columnString'));
         $session_userNama = $this->user['nama'];
@@ -249,7 +374,7 @@ class BigData extends \App\Controllers\BaseController
         /** end-of: remove existing temp */
 
         /* insert temp */
-        $map_filterColumn = array_map(function($arr) use ($session_userNama) {
+        $map_filterColumn = array_map(function ($arr) use ($session_userNama) {
             return [
                 'session' => $session_userNama,
                 'name'    => $arr->value,
@@ -268,10 +393,10 @@ class BigData extends \App\Controllers\BaseController
 
 
 
-    private function getData($_filterData = [], $_limitData=null, $_offsetData=null, $_getTotal = false) 
+    private function getData($_filterData = [], $_limitData = null, $_offsetData = null, $_getTotal = false)
     {
         $tahun = $this->user['tahun'];
-        $table = 'monika_data_'.$tahun;
+        $table = 'monika_data_' . $tahun;
 
         $select = "
             $table.*, 
@@ -289,21 +414,21 @@ class BigData extends \App\Controllers\BaseController
         if ($_getTotal) $select = "count($table.kdpaket) as total";
 
         $data = $this->monikaData->select($select)
-        ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
-        ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
-        ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
-        ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
-        ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
-        ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left')
-        ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
-        ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
+            ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
+            ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
+            ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
+            ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
+            ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
+            ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left')
+            ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
+            ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
 
         if (array_key_exists('opsiData', $_filterData)) {
             switch ($_filterData['opsiData']) {
                 case '1':
                     $data->where('blokir', '0');
                     break;
-                
+
                 case '2':
                     $data->where('blokir >', '0');
                     break;
@@ -313,7 +438,7 @@ class BigData extends \App\Controllers\BaseController
         if (is_array($_filterData)) {
             foreach ($_filterData as $key => $value) {
                 if ($key != 'opsiData' && $key != 'pagutotalStart' && $key != 'pagutotalEnd') {
-                    $data->where($table.'.'.$key, $value);
+                    $data->where($table . '.' . $key, $value);
                 }
             }
         }
@@ -322,21 +447,21 @@ class BigData extends \App\Controllers\BaseController
             $data->where('pagu_total >=', $_filterData['pagutotalStart']);
         }
 
-        if (isset($_filterData['pagutotalEnd']))  {
+        if (isset($_filterData['pagutotalEnd'])) {
             $data->where('pagu_total <=', $_filterData['pagutotalEnd']);
         }
 
         // print_r($data->get()->getResultArray()); exit;
 
         if (!empty($_limitData)) $data->limit($_limitData, $_offsetData);
-        
+
         if ($_getTotal) return $data->get()->getRowArray();
         return $data->get()->getResultArray();
     }
 
 
 
-    private function tableColumn() 
+    private function tableColumn()
     {
         return [
             [
@@ -390,7 +515,7 @@ class BigData extends \App\Controllers\BaseController
                 'label'       => 'kode output',
                 'widthColumn' => 80
             ],
-            
+
             [
                 'value'       => 'nmoutput',
                 'label'       => 'nama output',

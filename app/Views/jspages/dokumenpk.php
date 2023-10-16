@@ -1,5 +1,12 @@
 <script src="https://unpkg.com/imask"></script>
+
 <script>
+    $(window).on('beforeunload', function() {
+        localStorage.clear();
+    });
+
+    var paramsBtnPaket = "";
+
     var date = new Date(),
         element_modalForm = $('#modalForm'),
         element_modalDialog = element_modalForm.find('.modal-dialog'),
@@ -10,14 +17,14 @@
         element_modalFormBackChooseTemplate = element_modalForm.find('.__back-pilih-dokumen'),
         element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
         element_btnSaveDokumen = $('.__save-dokumen'),
-        element_btnSaveEditDokumen = $('.__save-update-dokumen')
+        element_btnSaveEditDokumen = $('.__save-update-dokumen'),
+        element_btnChoosePaket = $('.paket')
 
     $(document).ready(function() {
         $('#table').DataTable({
             ordering: false,
             scrollX: true
         })
-
         $('#modalForm').on('hidden.bs.modal', function() {
             $('.__save-dokumen').removeClass('d-none')
             $('.__save-update-dokumen').addClass('d-none')
@@ -29,7 +36,11 @@
             $(document).off('focusin.modal');
         });
 
+
+
+
     })
+
 
 
 
@@ -128,10 +139,20 @@
         if (!this.checked) {
             rowChild.addClass('disabled')
             rowChild.find('input').attr('readonly', 'readonly')
+            rowChild.find('button.paket').attr('disabled', 'true')
             rowChild.find('input').val('')
+            rowChild.find('.totalpaket').html("0")
+            localStorage.clear()
+            // var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
+            // totalPaketElement.html(selectedItems.length);
+
+
+
         } else {
             rowChild.removeClass('disabled')
             rowChild.find('input').removeAttr('readonly')
+            rowChild.find('button.paket').removeAttr('disabled')
+
 
         }
     });
@@ -146,10 +167,19 @@
         if (!$(this).is(':checked')) {
             element_parentsColumn.addClass('disabled')
             element_parentsColumn.find('input').attr('readonly', 'readonly')
+            element_parentsColumn.find('button.paket').attr('disabled', 'true')
             element_parentsColumn.find('input').val('')
+            element_parentsColumn.find('.totalpaket').html("0")
+            rowid = element_parentsColumn.find('.paket').attr('data-rowid');
+
+            localStorage.removeItem(rowid);
+
+            // localStorage.clear()
         } else {
             element_parentsColumn.removeClass('disabled')
             element_parentsColumn.find('input').removeAttr('readonly')
+            element_parentsColumn.find('button.paket').removeAttr('disabled')
+
         }
 
         if ($('input:checkbox[name=form-check-row]:checked').length == $('input:checkbox[name=form-check-row]').length) {
@@ -214,7 +244,7 @@
                             render_warningDokumenYearRevisoin = `
                                 <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                                     <h5 class="alert-heading">Informasi</h5>
-                                    <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
+                                    <p>Dokumen perjanjian kinerja dapat dibuat/diedit setelah seluruh satker menginputkan perjanjian kinerja masing-masing. Daftar satker dapat dilihat di bagian bawah formulir.</p>
                                 </div>
                             `
                         }
@@ -240,16 +270,20 @@
         CheckConnection().then(result => {
             if (saveDokumenValidation()) {
                 let oldButtonText = element_btnSaveDokumen.text()
-                element_btnSaveDokumen.addClass('d-none')
-                element_btnSaveDokumen.parent().append('<center>menyimpan dokumen</center>')
+                element_btnSaveDokumen.addClass('d-none');
+
+                // Simpan referensi ke elemen penyimpanan pesan
+                let savingMessageElement = $('<center>menyimpan dokumen</center>');
+                element_btnSaveDokumen.parent().append(savingMessageElement);
+
 
                 $('input[name=total-anggaran]').prop("disabled", false)
                 let formData = getFormValue();
 
-
                 if ($(this).attr('data-dokumen-id')) {
                     formData['revision_dokumen_id'] = $(this).data('dokumen-id')
                     formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
+
                     Swal.fire({
                         title: "Anda yakin akan mengedit dokumen ini ?",
                         html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan"></textarea>`,
@@ -257,6 +291,10 @@
                         cancelButtonText: "Batal",
                         showLoaderOnConfirm: true,
                         showCancelButton: true,
+                        onCancel: () => {
+                            element_btnSaveDokumen.removeClass('d-none');
+
+                        },
                         preConfirm: () => {
                             const pesanRevisi = $('textarea[name=pesan-koreksi-dokumen]').val();
 
@@ -264,6 +302,7 @@
                                 Swal.showValidationMessage('Pesan harus diisi');
                                 return false;
                             }
+
                             formData['revision_message'] = $('textarea[name=pesan-koreksi-dokumen]').val();
                             $.ajax({
                                 url: "<?php echo site_url('dokumenpk/create') ?>",
@@ -367,13 +406,16 @@
                                 formData['id'] = $(this).data('id')
                                 formData['csrf_test_name'] = res.token
 
+
                                 $.ajax({
                                     url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
                                     type: "POST",
                                     data: formData,
                                     success: (res) => {
+
                                         if (res.status) {
                                             location.reload()
+
                                         }
                                     },
                                     fail: (xhr) => {
@@ -395,6 +437,8 @@
 
 
     $(document).on('click', '.__prepare-revisi-dokumen', function() {
+        paramsBtnPaket = "edit";
+
         let document_id = $(this).data('id')
         element_btnSaveEditDokumen.data('id', document_id)
 
@@ -516,6 +560,7 @@
 
 
     $(document).on('click', '.__lihat-dokumen', function() {
+        paramsBtnPaket = "lihat";
         prepareRevisiDocument({
             dataId: $(this).data('id'),
             templateId: $(this).data('template-id'),
@@ -527,13 +572,17 @@
 
                 $('#modalForm').find('.__remove-item-kegiatan').addClass('d-none')
                 $('#modalForm').find('#__add-item-kegiatan').addClass('d-none')
+
             }
         })
+
     })
 
 
 
     $(document).on('click', '.__edit-dokumen', function() {
+
+        paramsBtnPaket = "edit";
         let documentId = $(this).data('id')
 
         prepareRevisiDocument({
@@ -561,7 +610,7 @@
                 dataId = params.dataId
 
             $.ajax({
-                url: "<?php echo site_url('dokumenpk/get-template/') ?>" + templateId,
+                url: "<?php echo site_url('dokumenpk/get-template/') ?>" + templateId + "/" + dataId,
                 type: 'GET',
                 success: (res) => {
                     preapreForm_afterChooseTemplate({
@@ -642,6 +691,7 @@
                     $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
                     $('input[name=created-kota-nama]').val(res.dokumen.kota_nama)
                     $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
+                    $('select[name=created-day]').val(res.dokumen.tanggal).trigger('change')
                     $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
 
                     if (res.dokumen.revision_message != null) {
@@ -952,6 +1002,7 @@
 
     function getFormValue() {
         let rows = [],
+            paket = [],
             kegiatan = []
 
         $('.__inputTemplateRow-target').each((key, element) => {
@@ -965,6 +1016,12 @@
                 outcome: elementInput_outcome.val().replace('.', ''),
                 isChecked: element_checkRow.is(':checked') ? '1' : '0'
             })
+
+            paket.push({
+                id: elementInput_target.data('row-id'),
+                paketId: localStorage.getItem(elementInput_target.data('row-id')),
+                isChecked: element_checkRow.is(':checked') ? '1' : '0'
+            });
         })
 
         $('.__table-kegiatan').find('tbody').find('tr').each((key, element) => {
@@ -983,6 +1040,7 @@
             revisionSameYear: $('input[name=revision_same_year]').val(),
             templateID: element_btnSaveDokumen.data('template-id'),
             rows: rows,
+            paket: paket,
             kegiatan: kegiatan,
             totalAnggaran: $('input[name=total-anggaran]').val(),
             ttdPihak1: $('input[name=ttd-pihak1]').val(),
@@ -992,6 +1050,7 @@
             kota: $('select[name=created-kota]').val(),
             kotaNama: $('input[name=created-kota-nama]').val(),
             bulan: $('select[name=created-bulan]').val(),
+            tanggal: $('select[name=created-day]').val(),
             tahun: $('select[name=created-tahun]').val()
         }
         if ($('input[name=ttd-pihak2-jabatan]').length) inputValue.ttdPihak2Jabatan = $('input[name=ttd-pihak2-jabatan]').val()
@@ -1005,7 +1064,23 @@
         let checkInputKegiatanAnggatan = true,
             checkInputKegiatanManual = true,
             checkInputTarget = true,
-            checkInputOutcome = true
+            checkInputOutcome = true,
+            checkPaket = true
+
+        $('.paket').each((index, element) => {
+
+            let element_rowParent = $(element).parents('tr').find('td'),
+                checlist = element_rowParent.find('input:checkbox[name=form-check-row]').is(':checked')
+
+            if (checlist) {
+                if ($(element).find('.totalpaket').text() > 0) {
+                    checkPaket = true
+                } else {
+                    checkPaket = false
+                }
+            }
+
+        })
 
         $('.__inputTemplateRow-target').each((index, element) => {
             let element_rowParent = $(element).parents('tr').find('td'),
@@ -1037,6 +1112,8 @@
 
 
 
+
+
         $('input[name=kegiatan-anggaran]').each((index, element) => {
             if ($(element).val().replaceAll(".", '').replaceAll(',', '.') > 0 && checkInputKegiatanAnggatan == true) {
                 checkInputKegiatanAnggatan = true
@@ -1052,6 +1129,15 @@
                 checkInputKegiatanManual = false
             }
         })
+
+        if (checkPaket == false) {
+            Swal.fire(
+                'Peringatan',
+                'Terdapat paket yang belum dipilih pada indikator',
+                'warning'
+            )
+            return false
+        }
 
         if (checkInputTarget == false) {
             Swal.fire(
@@ -1155,6 +1241,7 @@
         element_modalFormBackChooseTemplate.addClass('d-none')
         element_modalFormTitle.html('Pilih Dokumen')
         render_reset_btnSubmitToRevision()
+        localStorage.clear();
     }
 
 
@@ -1268,7 +1355,7 @@
                 $('.container-revision-alert').append(`
                     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                         <h5 class="alert-heading">Informasi</h5>
-                        <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
+                        <p>Dokumen perjanjian kinerja dapat dibuat/diedit setelah seluruh satker menginputkan perjanjian kinerja masing-masing. Daftar satker dapat dilihat di bagian bawah formulir.</p>
                     </div>
                 `)
 
@@ -1322,10 +1409,16 @@
 
 
     function renderFormTemplate(_dataId, _data, _target) {
+        last_dokumen_id = '';
+        if (_target == 'create' && _data.dokumenExistSameYear != null) {
+            paramsBtnPaket = "edit";
+            last_dokumen_id = _data.dokumenExistSameYear.last_dokumen_id;
+        }
+
         let template = _data.template,
-            value_dataId = _dataId,
+            value_dataId = _dataId ?? last_dokumen_id,
             templateExtraData = _data.templateExtraData,
-            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type),
+            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type, _data.satkerid, value_dataId),
             render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
             render_listInfo = renderFormTemplate_listInfo(_data.templateInfo),
             render_ttdPihak2 = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2, templateExtraData.jabatanPihak2),
@@ -1338,6 +1431,7 @@
             titleTheadTable = '',
             theadBalaiTarget = '',
             theadBalaiTargetNumber = ''
+
 
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
             render_warningDokumenYearRevisoin = `
@@ -1384,11 +1478,12 @@
                     break;
             }
 
-            theadBalaiTarget = '<td class="text-center" style="width: 250px">Target ' + <?php echo $sessionYear ?> + '</td>';
+            theadBalaiTarget = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
             theadBalaiTargetNumber = '<td class="text-center p-2">(3)</td>';
         } else {
             titleTheadTable = 'Target ' + <?php echo $sessionYear ?>
         }
+
 
         let render = `
             <input type="hidden" name="revision_same_year" value="${inputValue_revisionSameYear}" />
@@ -1400,12 +1495,12 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <td class="text-center" colspan="3">Sasaran Program / Sasaran Kegiatan / Indikator</td>
-                        <td class="text-center" style="width: 250px">
+                        <td class="text-center"  style="width: 70%" colspan="3">Sasaran Program / Sasaran Kegiatan / Indikator</td>
+                        <td class="text-center" style="width: 15%">
                             ${titleTheadTable}
                         </td>
                         ${theadBalaiTarget}
-                        <td class="text-center ${classDNoneOutcome}" style="width: 250px">
+                        <td class="text-center ${classDNoneOutcome}" style="width: 15%">
                             Outcome
                         </td>
                     </tr>
@@ -1454,7 +1549,7 @@
                             <tfoot>
                                 <tr>
                                     <td class="align-middle"> <strong>Total Anggaran</strong></td>
-                                    <td class="align-middle" colspan="2"> 
+                                    <td class="align-middle"> 
                                         <div class="input-group mt-2">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">Rp. </span>
@@ -1493,8 +1588,17 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Bulan</label>
                             <div class="col-sm-5">
-                                <select class="form-control" name="created-bulan">
+                                <select class="form-control opsi-bulan" name="created-bulan">
                                     ${render_opsiBulan}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Tanggal</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="created-day">
+                                <option value="">Pilih Tanggal</option>
                                 </select>
                             </div>
                         </div>
@@ -1593,7 +1697,9 @@
 
 
 
-    function renderFormTemplate_rowTable(_data, _templateType) {
+    function renderFormTemplate_rowTable(_data, _templateType, _satkerId, DocID) {
+
+
         let rows = '',
             rowNumber = 1,
             colspanSectionTitle = 3,
@@ -1641,18 +1747,14 @@
 
                 case 'form':
                     let renderInputTarget = '';
-                    if (data.id == "291010") {
-                        data_value = data.target_balai_value;
-                    } else {
-                        data_value = data.targetDefualtValue;
-                    }
+
 
                     if (_templateType == 'master-balai' || _templateType == 'eselon1') {
                         renderInputTarget = `
                             <td>
                                 <div class="input-group mr-3">
                                     <div class="input-group-append">
-                                        <span class="input-group-text" style="width: 80px">${ data_value }</span>
+                                        <span class="input-group-text">${ data.targetDefualtValue }</span>
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
@@ -1695,13 +1797,40 @@
                         `
                     }
 
+                    if (paramsBtnPaket == "lihat" || paramsBtnPaket == "edit") {
+
+                        $.ajax({
+                            url: "<?php echo site_url('dokumenpk/detail/') ?>" + DocID,
+                            type: 'GET',
+                            success: (res) => {
+                                if (res.paket) {
+                                    const idPaketArray = res.paket
+                                        .filter(item => item.template_row_id == data.id)
+                                        .map(item => item.idpaket);
+
+                                    selectedItems = idPaketArray;
+                                    localStorage.setItem(data.id, JSON.stringify(idPaketArray));
+
+                                    var totalPaketElement = $('[data-rowid="' + data.id + '"]').find('.totalpaket');
+                                    var elem = $('[data-rowid="' + data.id + '"]');
+
+                                    elem.attr('data-satkerid', res.dokumen.satkerid ?? res.dokumen.balaiid);
+                                    totalPaketElement.html(selectedItems.length);
+
+                                }
+                            }
+                        });
+
+                    }
+
                     rows += `
                         <tr>
                             <td class="text-center align-middle" width="50px">
                                 <input type="checkbox" name="form-check-row" checked />
                             </td>
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
-                            <td class="align-middle">${ data.title }</td>
+                            <td class="align-middle">${ data.title } 
+                            <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" data-dokid="${DocID||0}" data-indikator="${ data.title }" data-rowid="${data.id}">Paket <span class="label label-sm label-white ml-2 totalpaket">${data.paket.length}</span></button></td>
                             ${renderInputTarget}
                             <td class="${classDNoneOutcome}">
                                 <div class="input-group">
@@ -1721,8 +1850,17 @@
                         </tr>
                     `
                     break;
+
+
+
             }
+
+
+
         });
+
+
+
 
         return rows
     }
@@ -1916,6 +2054,25 @@
         return renderOptions
     }
 
+    $(document).on('change', '.opsi-bulan', function(e) {
+        var bulan = $(this).val();
+        var tahun = $("select[name=created-tahun]").val();
+        var tanggalDropdown = $("select[name=created-day");
+
+        // Membuat objek Date dengan bulan dan tahun yang dipilih
+        var tanggalMaksimum = new Date(tahun, bulan, 0);
+
+        // Mendapatkan tanggal maksimum untuk bulan dan tahun tersebut
+        var tanggalMaksimumFormatted = tanggalMaksimum.getDate();
+
+        // Mengosongkan pilihan tanggal sebelum menambahkan yang baru
+        tanggalDropdown.empty();
+        tanggalDropdown.append(`<option value="">Pilih Tanggal</option>`);
+        for (let iTanggal = 1; iTanggal <= tanggalMaksimumFormatted; iTanggal++) {
+            tanggalDropdown.append(`<option value="${iTanggal}">${iTanggal}</option>`);
+        }
+    });
+
 
 
     function renderFormTemplate_opsiTahun(_data) {
@@ -1940,4 +2097,271 @@
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     }
+</script>
+<!-- modal render pilih paket -->
+
+<script>
+    $(document).on('click', '.paket', function() {
+        var selectedItems = [];
+
+        $('#modalPilihPaket').modal('show');
+
+        let satkerId = $(this).data('satkerid') ?? "<?php
+                                                    $session = session();
+                                                    $this->user = $session->get('userData');
+                                                    $this->userUID = $this->user['satker_id'] ?? $this->user['balai_id'] ?? '';
+                                                    echo $this->userUID ?>";
+
+        var balaiCreateSatker = $(".__opsi-template").attr("data-balai-create-satker");
+
+
+        if (balaiCreateSatker != undefined) {
+
+            satkerId = balaiCreateSatker;
+
+        }
+
+
+
+        let indikator = $(this).data('indikator');
+        let docId = $(this).data('dokid');
+        let indikatorID = $(this).data('rowid');
+
+
+        $('#modalFormTitlePaket').html(``);
+        $('#modalFormTitlePaket').html(`<h6>Pilih Paket</h6>
+                        <small>Indikator : <b>${ indikator }</b></small>`);
+
+
+        $('.save-btn-paket').removeAttr("data-indikatorid");
+        $('.save-btn-paket').attr("data-indikatorid", indikatorID)
+
+
+        var storedItems = localStorage.getItem(indikatorID);
+
+        if (storedItems) {
+            selectedItems = JSON.parse(storedItems);
+        }
+
+
+
+        //get paket
+        $.ajax({
+            url: "<?php echo site_url('api/getpaket') ?>" + "/" + satkerId,
+            type: 'GET',
+            success: (res) => {
+                const tbody = $('#tbody');
+                tbody.empty();
+                var jsonData = JSON.parse(res);
+
+                jsonData.forEach(function(balai, index) {
+                    if (index === 0) {
+                        tbody.append(`
+                    <tr style="background-color:#89CFF0">
+                    <td>-</td>
+                    <td colspan = "10"><strong>${balai.balai}</strong></td>
+                    </tr>`);
+                    }
+                    tbody.append(`
+                    
+                    <tr style="background-color:#b6dced">
+                    <td><strong>${balai.satkerid}</strong></td>
+                    <td colspan = "10"><strong>${balai.satker}</strong></td>
+                    </tr>
+                    
+
+
+
+                   `);
+
+                    balai.paket.forEach(function(paket, index) {
+
+                        trClass = '';
+                        var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
+                        if (paramsBtnPaket == "lihat") {
+                            checkboxHtml += 'disabled';
+                            $('.save-btn-paket').addClass('d-none');
+                        } else {
+                            $('.save-btn-paket').removeClass('d-none');
+                        }
+                        if (selectedItems.includes(paket.paketId)) {
+                            checkboxHtml += ' checked'; // Set checked attribute
+                            trClass = "style='background-color:#e0f2e9'"
+                        }
+
+                        checkboxHtml += '>';
+
+                        tbody.append(`
+                          <tr ${trClass}>
+                          <td>${checkboxHtml}</td>
+                            <td>${paket.paketId}</td>
+                            <td>${paket.label}</td>
+                            <td>${paket.vol}</td>
+                            <td>${paket.satuan}</td>
+                            <td>${paket.paguDipa}</td>
+                            <td>${paket.realisasi}</td>
+                            <td>${paket.persenKeu}</td>
+                            <td>${paket.persenFis}</td>
+                            <td>
+                            <div class="form-group form-group-last row">
+								<div class="form-group-sub">
+									<label class="form-control-label">Nilai :</label>
+									<input type="text" class="form-control target_nilai" name="target_nilai" placeholder="">
+								</div>
+                                <div class="form-group-sub">
+									<label class="form-control-label">Satuan :</label>
+									<input type="text" class="form-control target_satuan" name="target_satuan" placeholder="">
+								</div>
+							</div>
+                            
+                            </td>
+                            <td>
+                            <div class="form-group form-group-last row">
+								<div class="form-group-sub">
+									<label class="form-control-label center">Nilai :</label>
+									<input type="text" class="form-control outcome_nilai" name="outcome_nilai" placeholder="">
+								</div>
+                                <div class="form-group-sub">
+									<label class="form-control-label">Satuan :</label>
+									<input type="text" class="form-control outcome_satuan" name="outcome_satuan" placeholder="">
+								</div>
+							</div>
+                            
+                            </td>
+                          </tr>
+                        `);
+                    });
+
+
+
+
+
+
+
+                    //                 trClass = '';
+                    //                 var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
+                    //                 if (paramsBtnPaket == "lihat") {
+                    //                     checkboxHtml += 'disabled';
+                    //                     $('.save-btn-paket').addClass('d-none');
+                    //                 } else {
+                    //                     $('.save-btn-paket').removeClass('d-none');
+                    //                 }
+                    //                 if (selectedItems.includes(paket.paketId)) {
+                    //                     checkboxHtml += ' checked'; // Set checked attribute
+                    //                     trClass = "style='background-color:#e0f2e9'"
+                    //                 }
+
+                    //                 checkboxHtml += '>';
+
+
+                    //                 tbody.append(`
+                    //   <tr ${trClass}>
+                    //     <td>${checkboxHtml}</td>
+                    //     <td>${paket.paketId}</td>
+                    //     <td>${paket.label}</td>
+                    //     <td>${paket.vol}</td>
+                    //     <td>${paket.satuan}</td>
+                    //     <td>${paket.paguDipa}</td>
+                    //     <td>${paket.realisasi}</td>
+                    //     <td>${paket.persenKeu}</td>
+                    //     <td>${paket.persenFis}</td>
+                    //   </tr>
+                    // `);
+
+
+
+
+                })
+
+
+                //     jsonData.forEach(function(balai) {
+                //         balai.paket.forEach(function(paket, index) {
+                //             if (index === 0) {
+                //                 tbody.append(`
+                //     <tr style="background-color:#89CFF0">
+                //     <td>-</td>
+                //     <td colspan = "8"><strong>${balai.balai}</strong></td>
+                //     </tr>
+                //     <tr style="background-color:#b6dced">
+                //     <td><strong>${balai.satkerid}</strong></td>
+
+                //     <td colspan = "8"><strong>${balai.satker}</strong></td>
+                //     </tr>
+
+                //     `);
+                //             } else {
+                //                 trClass = '';
+                //                 var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
+                //                 if (paramsBtnPaket == "lihat") {
+                //                     checkboxHtml += 'disabled';
+                //                     $('.save-btn-paket').addClass('d-none');
+                //                 } else {
+                //                     $('.save-btn-paket').removeClass('d-none');
+                //                 }
+                //                 if (selectedItems.includes(paket.paketId)) {
+                //                     checkboxHtml += ' checked'; // Set checked attribute
+                //                     trClass = "style='background-color:#e0f2e9'"
+                //                 }
+
+                //                 checkboxHtml += '>';
+
+
+                //                 tbody.append(`
+                //   <tr ${trClass}>
+                //     <td>${checkboxHtml}</td>
+                //     <td>${paket.paketId}</td>
+                //     <td>${paket.label}</td>
+                //     <td>${paket.vol}</td>
+                //     <td>${paket.satuan}</td>
+                //     <td>${paket.paguDipa}</td>
+                //     <td>${paket.realisasi}</td>
+                //     <td>${paket.persenKeu}</td>
+                //     <td>${paket.persenFis}</td>
+                //   </tr>
+                // `);
+
+                //             }
+                //         });
+                //     });
+
+
+            }
+        })
+
+
+
+
+
+    });
+</script>
+
+<script>
+    $(document).on('click', '.save-btn-paket', function(e) {
+        e.preventDefault();
+        indikatorId = $(this).attr("data-indikatorid");
+        var selectedItems = [];
+
+        $('.checkbox:checked').each(function() {
+            var paketId = $(this).attr('val');
+            selectedItems.push(paketId);
+        });
+
+        if (selectedItems.length > 0) {
+            localStorage.setItem(indikatorId, JSON.stringify(selectedItems));
+            var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
+            totalPaketElement.html(selectedItems.length);
+
+            $('#modalPilihPaket').modal('hide');
+        } else {
+            Swal.fire(
+                'Gagal Menyimpan',
+                'Tidak ada paket yang dipilih !',
+                'warning'
+            )
+        }
+
+
+
+
+    });
 </script>

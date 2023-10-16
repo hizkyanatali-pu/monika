@@ -79,12 +79,12 @@
             <table class="table" id="table">
                 <thead>
                     <tr>
-                        <th width="100px">No. Dokumen</td>
-                        <th>Dokumen</td>
-                        <th width="150px">Tanggal Kirim</th>
-                        <th width="150px">Tanggal Disetujui / Ditolak</th>
-                        <th width="250px">Status</th>
-                        <th width="70px">Aksi</th>
+                        <th width="8%" class="text-center">No. Dokumen</td>
+                        <th width="50%" class="text-center">Dokumen</td>
+                        <th width="10%" class="text-center">Tanggal Kirim</th>
+                        <th width="10%" class="text-center">Tanggal Disetujui / Ditolak</th>
+                        <th width="5%" class="text-center">Status</th>
+                        <th width="17%" class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,14 +132,14 @@
 
 
                                     <?php if ($data->status == 'tolak') : ?>
-                                        <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
-                                            <i class="fas fa-edit"></i> Koreksi
+                                        <button class="ml-2 btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
+                                            <i class="fas fa-edit"></i>Koreksi
                                         </button>
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td class="d-flex justify-content-start">
-                                <div class="btn-load">
+                            <td class="d-flex justify-content-center">
+                                <div class="btn-load mt-3">
                                     <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
                                         <i class="fas fa-eye"></i> <br /> Lihat
                                     </button>
@@ -211,6 +211,7 @@
                     <?php }*/ ?>
             </div>
             <div class="modal-footer d-none">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Batal</button>
                 <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
                 <button type="button" class="btn btn-success __save-update-dokumen d-none">Simpan Dokumen</button>
             </div>
@@ -218,6 +219,57 @@
     </div>
 </div>
 <!-- end-of: Modal Form -->
+
+
+<!-- Modal Pilih Paket -->
+<div class="modal fade" id="modalPilihPaket" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content" style="height: 100% !important;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalFormTitlePaket">
+                    Pilih Paket
+                </h5>
+                <div class="d-flex">
+                    <button type="button" class="btn btn-modal-full"><i class="fas fa-external-link-alt"></i></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                Data Diambil Dari Emon pada 17 Agustus 2023
+                <table class="table">
+                    <thead class="table-primary">
+                        <tr class=" text-center theader">
+                            <th></th>
+                            <th class="tdKode">Kode</th>
+                            <th class="tdLabel">Paket</th>
+                            <th class="tdvol">Vol</th>
+                            <th class="tdSatuan">Satuan</th>
+                            <th class="tdNilai">Pagu Dipa</th>
+                            <th class="tdNilai">Realisasi</th>
+                            <th class="tdPersen">%keu</th>
+                            <th class="tdPersen">%fisik</th>
+                            <th class="tdPersen">Target</th>
+                            <th class="tdPersen">Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <!-- Footer Modal Pertama -->
+                <button class="btn btn-success save-btn-paket"> Simpan Paket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal Pilih Paket -->
+
+
 
 
 

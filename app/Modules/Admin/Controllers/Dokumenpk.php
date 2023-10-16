@@ -106,12 +106,15 @@ class Dokumenpk extends \App\Controllers\BaseController
             ];
         }, $dataBelumInput);
 
+        $instansi =  $this->tableSatker->select("satkerid,satker")->get()->getResult();
+
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
             'title'                => 'Dokumen Penjanjian Kinerja - Satker',
             'dokumenType'              => 'satker',
             'dataBelumInput'           => $dataBelumInput,
-            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'satker')->get()->getResult())
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'satker')->get()->getResult()),
+            'instansi' => $instansi
         ]);
     }
 
@@ -3554,5 +3557,44 @@ d.id, a.pihak1_initial;
             'databaltek' => $tempBalaiTeknik,
             'tahun' => $sessionTahun
         ]);
+    }
+
+
+
+    public function instansiList($instansi)
+    {
+        $instansiList = [];
+        $searchTerm = $this->request->getVar('term') ?? '';
+
+        if ($instansi == 'satker') {
+            $dataSatker = $this->db->query("
+                    SELECT
+                        satkerid as id,satker as text
+                    FROM
+                       m_satker
+                    WHERE
+                      grup_jabatan = 'satker' 
+                      AND
+                    satker LIKE '%" . $searchTerm . "%'
+                ")->getResult();
+
+
+            foreach ($dataSatker as $satker) {
+                $text = $satker->text;
+
+                // Jika 'term' mengandung kata 'satker' atau jika 'text' mengandung kata 'BALAI', tambahkan 'SATKER'
+                // if (stripos($text, 'BALAI') !== false) {
+                //     $text = 'SATKER ' . $text;
+                // }
+                $instansiList[] = [
+                    'id' => $satker->id,
+                    'text' => $text
+                ];
+            }
+        }
+
+
+
+        return $this->response->setJSON($instansiList);
     }
 }

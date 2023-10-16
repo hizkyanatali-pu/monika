@@ -45,6 +45,12 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
         right: 220px;
         z-index: 9;
     }
+
+    .m-demo__preview {
+        background: white;
+        border: 4px solid #f7f7fa;
+        padding: 30px
+    }
 </style>
 
 <!-- begin:: Subheader -->
@@ -142,13 +148,32 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
 
             <div class="tab-pane fade show active" id="pills-one" role="tabpanel" aria-labelledby="pills-one-tab">
-                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="hold">
-                    <i class="fas fa-trash"></i> Arsipkan Data Terpilih
-                </button>
 
-                <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="hold">
-                    <i class="fas fa-sync"></i> Refresh Data
-                </button>
+                <div class="col-12">
+                    <div class="m-demo__preview">
+                        <!--begin::Form-->
+                        <div class="m-form__group form-group row">
+                            <label class="col-3 col-form-label">Instansi</label>
+                            <div class="col-6">
+                                <select class="form-control F_instansi">
+
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary filter-instansi" data-status="hold">Cari</button>
+                        <button type="button" class="btn btn-danger __refresh-data-table" data-status="hold">Reset</button>
+                        <!--end::Form-->
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="hold">
+                        <i class="fas fa-trash"></i> Arsipkan Data Terpilih
+                    </button>
+
+                    <button class="btn btn-primary mb-4 __refresh-data-table" data-status="hold">
+                        <i class="fas fa-sync"></i> Refresh Data
+                    </button>
+                </div>
 
                 <table class="table table-bordered" id="table-hold">
                     <thead>
@@ -171,13 +196,32 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
 
             <div class="tab-pane fade" id="pills-two" role="tabpanel" aria-labelledby="pills-two-tab">
-                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="setuju">
-                    <i class="fas fa-trash"></i> Arsipkan Data Terpilih
-                </button>
+                <div class="col-12">
+                    <div class="m-demo__preview">
+                        <!--begin::Form-->
+                        <div class="m-form__group form-group row">
+                            <label class="col-3 col-form-label">Instansi</label>
+                            <div class="col-6">
+                                <select class="form-control F_instansi">
 
-                <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="setuju">
-                    <i class="fas fa-sync"></i> Refresh Data
-                </button>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary filter-instansi" data-status="setuju">Cari</button>
+                        <button type="button" class="btn btn-danger __refresh-data-table" data-status="setuju">Reset</button>
+                        <!--end::Form-->
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="setuju">
+                        <i class="fas fa-trash"></i> Arsipkan Data Terpilih
+                    </button>
+
+                    <button class="btn btn-primary mb-4 __refresh-data-table" data-status="setuju">
+                        <i class="fas fa-sync"></i> Refresh Data
+                    </button>
+                </div>
+
 
                 <table class="table table-bordered" id="table-setuju">
                     <thead>
@@ -201,13 +245,31 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
 
             <div class="tab-pane fade" id="pills-three" role="tabpanel" aria-labelledby="pills-three-tab">
-                <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="tolak">
-                    <i class="fas fa-trash"></i> Arsipkan Data Terpilih
-                </button>
+                <div class="col-12">
+                    <div class="m-demo__preview">
+                        <!--begin::Form-->
+                        <div class="m-form__group form-group row">
+                            <label class="col-3 col-form-label">Instansi</label>
+                            <div class="col-6">
+                                <select class="form-control F_instansi">
 
-                <button class="btn btn-sm btn-primary btn-table-opsi __refresh-data-table" data-status="tolak">
-                    <i class="fas fa-sync"></i> Refresh Data
-                </button>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary filter-instansi" data-status="tolak">Cari</button>
+                        <button type="button" class="btn btn-danger __refresh-data-table" data-status="tolak">Reset</button>
+                        <!--end::Form-->
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="tolak">
+                        <i class="fas fa-trash"></i> Arsipkan Data Terpilih
+                    </button>
+
+                    <button class="btn btn-primary mb-4 __refresh-data-table" data-status="tolak">
+                        <i class="fas fa-sync"></i> Refresh Data
+                    </button>
+                </div>
 
                 <table class="table table-bordered" id="table-tolak">
                     <thead>
@@ -300,6 +362,53 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 <!-- end-of: Modal Form Detail -->
 
 
+<!-- Modal Pilih Paket -->
+<div class="modal fade" id="modalPilihPaket" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalFormTitlePaket">
+                    Pilih Paket
+                </h5>
+                <div class="d-flex">
+                    <button type="button" class="btn btn-modal-full"><i class="fas fa-external-link-alt"></i></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                Data Diambil Dari Emon pada 17 Agustus 2023
+                <table class="table">
+                    <thead class="table-primary">
+                        <tr class=" text-center theader">
+                            <th></th>
+                            <th class="tdKode">Kode</th>
+                            <th class="tdLabel">Paket</th>
+                            <th class="tdvol">Vol</th>
+                            <th class="tdSatuan">Satuan</th>
+                            <th class="tdNilai">Pagu Dipa</th>
+                            <th class="tdNilai">Realisasi</th>
+                            <th class="tdPersen">%keu</th>
+                            <th class="tdPersen">%fisik</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <!-- Footer Modal Pertama -->
+                <button class="btn btn-success save-btn-paket"> Simpan Paket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal Pilih Paket -->
+
+
 
 <!-- Modal Cetak Dokumen Terevisi -->
 <div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true" data-backdrop="static">
@@ -353,6 +462,22 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             })
             getData('hold');
         }, 300)
+
+
+        $('.F_instansi').select2({
+            placeholder: 'Pilih Instansi',
+            ajax: {
+                url: '<?php echo site_url('instansi-list/satker') ?>', // Ganti '/path/to/instansiList/satker' dengan URL sesuai dengan endpoint Anda
+                dataType: 'json',
+                processResults: function(data) {
+                    return {
+                        results: data
+                    };
+                }
+            },
+        });
+
+
     })
 
 
@@ -395,7 +520,8 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
     $(document).on('click', '.__refresh-data-table', function() {
         let status = $(this).data('status')
-
+        $('.F_instansi').val(null).trigger('change');
+        console.log("ok");
         switch (status) {
             case 'belum-input':
                 element_tableBelumInput.clear().draw()
@@ -404,20 +530,24 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
             case 'hold':
                 element_tableHold.clear().draw()
+                getData(status)
                 break;
 
             case 'setuju':
                 element_tableSetuju.clear().draw()
+                getData(status)
                 break;
 
             case 'tolak':
                 element_tableTolak.clear().draw()
+                getData(status)
                 break;
+
         }
 
-        if (status != 'belum-input') {
-            getData(status)
-        }
+        // if (status != 'belum-input') {
+        //     getData(status)
+        // }
     })
 
 
@@ -433,7 +563,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
         });
 
         let html = `
-            <select class="select2" name="states[]"> 
+            <select class="select2 list-satker" name="states[]"> 
                 ${selectOpntionList}
             </select>
         `
@@ -445,13 +575,13 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             confirmButtonText: 'Pilih',
             showLoaderOnConfirm: true,
             onOpen: function() {
-                $('.select2').select2({
+                $('.list-satker').select2({
                     width: '100%',
-                    placeholder: "Seleziona",
+                    // placeholder: "Seleziona",
                 });
             },
             preConfirm: () => {
-                return $('.select2').val()
+                return $('.list-satker').val()
             }
         }).then((result) => {
             if (result.value != undefined) {
@@ -715,9 +845,9 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
 
 
-    function getData(_status) {
+    function getData(_status, instansi = '') {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>" + "?_=" + new Date().getTime(),
+            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>" + "/" + instansi + "?_=" + new Date().getTime(),
             type: 'GET',
             success: (res) => {
                 renderTableRow(_status, res.data)
@@ -946,5 +1076,38 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             }
         })
     }
+
+    //filter
+    $(document).on('click', '.filter-instansi', function() {
+        let status = $(this).data('status')
+        let value_instansi = $('.tab-pane.active .F_instansi').val();
+        switch (status) {
+            case 'belum-input':
+                element_tableBelumInput.clear().draw()
+                getDataBelumInput($(this).data('dokumen-type'))
+                break;
+
+            case 'hold':
+
+                element_tableHold.clear();
+                getData(status, value_instansi)
+                break;
+
+            case 'setuju':
+
+                element_tableSetuju.clear();
+                getData(status, value_instansi)
+                break;
+
+            case 'tolak':
+                element_tableTolak.clear()
+                getData(status, value_instansi)
+                break;
+        }
+
+        // if (status != 'belum-input') {
+        //     getData(status)
+        // }
+    })
 </script>
 <?= $this->endSection() ?>

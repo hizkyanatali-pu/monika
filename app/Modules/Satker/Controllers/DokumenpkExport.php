@@ -28,6 +28,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->dokumenYear   = $this->user['tahun'];
         $this->dokumenLokasi = 'JAKARTA';
         $this->dokumenBulan  = '';
+        $this->day = '';
         $this->bulan         = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         $this->db            = \Config\Database::connect();
 
@@ -118,6 +119,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             }
 
             if ($dataDokumen['bulan'] != '') $this->dokumenBulan = $this->bulan[$dataDokumen['bulan'] - 1];
+            if ($dataDokumen['tanggal'] != '') $this->tanggal = $dataDokumen['tanggal'];
         }
         // $watermaskRevisi       = $dataDokumen['is_revision_same_year'] == '1' ? 'revision-same-year' : $dataDokumen['status'];
         // $watermarkRevisiNumber = $dataDokumen['is_revision_same_year'] == '1' ? $dataDokumen['revision_same_year_number'] : $dataDokumen['revision_number'];
@@ -296,7 +298,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // title ttd 2
         $pdf->SetFont($this->fontFamily, '', 12);
         $pdf->SetX(149);
-        $pdf->Cell(144, 4, $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
+        $pdf->Cell(144, 4, $this->dokumenLokasi . ', ' . $this->tanggal . ' ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
         $pdf->Ln();
         $pdf->SetFont($this->fontFamily, 'B', 12);
         $pdf->SetX(167);
@@ -707,6 +709,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $widthTitleJabatan = 78;
                 $widthNamaPejabat = 115;
                 break;
+
+                // case 'KEPALA SNVT PEMBANGUNAN BENDUNGAN BWS NUSA TENGGARA I':
+                //     $ttd = $_ttd['person2Title'];
+                //     $widthTitleJabatan = 85;
+                //     $widthNamaPejabat = 122;
+                //     break;
 
             default:
                 $widthTitleJabatan = 95;

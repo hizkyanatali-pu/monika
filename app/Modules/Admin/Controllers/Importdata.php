@@ -20,7 +20,7 @@ class Importdata extends \App\Controllers\BaseController
     public function index($slug = "paket")
     {
         $pg = 20;
-        $type = ["type" => $slug];
+        $type = ["type" => $slug,"tahunanggaran" => $this->user['tahun']];
         $data = [
             'title' => 'Daftar pemanggilan data',
             'pg' => $pg,
@@ -59,7 +59,7 @@ class Importdata extends \App\Controllers\BaseController
                 'import_uid'   => $this->user['uid'],
                 'st'            => 2
             ];
-            $this->ImportdataModel->where(['st' => 3, 'type' => $d["type"]])->set($post)->update();
+            $this->ImportdataModel->where(['st' => 3, 'type' => $d["type"],'tahunanggaran'=>$this->user['tahun']])->set($post)->update();
             $this->importsql($d['nmfile']);
             $post = [
                 'aktif_dt'    => date("ymdHis"),
@@ -70,7 +70,7 @@ class Importdata extends \App\Controllers\BaseController
         }
 
         if ($aksi == true) {
-            $q = $this->ImportdataModel->where(['idpull' => $slug, 'type' => $d["type"]])->set($post)->update();
+            $q = $this->ImportdataModel->where(['idpull' => $slug, 'type' => $d["type"],'tahunanggaran'=>$this->user['tahun']])->set($post)->update();
         }
 
         return redirect()->to('/preferensi/tarik-data-emon/' . $d["type"])->with('success', 'Proses selesai');
@@ -82,7 +82,7 @@ class Importdata extends \App\Controllers\BaseController
         $tipe = 'Txt';
         $file = $d['nmfile'];
         $nmFile = $d['nmfile'] . '.txt';
-        if ($type == "sql") {
+        if ($type == "sql") {  
             $tipe = 'Sql';
             $file = $d['sqlfile_nm'];
             $nmFile = $d['sqlfile_nm'];
