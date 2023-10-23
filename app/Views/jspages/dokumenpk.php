@@ -1806,7 +1806,17 @@
                                 if (res.paket) {
                                     const idPaketArray = res.paket
                                         .filter(item => item.template_row_id == data.id)
-                                        .map(item => item.idpaket);
+                                        .map(item => {
+                                                return {
+                                                    paketId: item.idpaket,
+                                                    target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
+                                                    target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
+                                                    outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
+                                                    outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                                                };
+                                            }
+
+                                        );
 
                                     selectedItems = idPaketArray;
                                     localStorage.setItem(data.id, JSON.stringify(idPaketArray));
@@ -2143,8 +2153,6 @@
             selectedItems = JSON.parse(storedItems);
         }
 
-
-
         //get paket
         $.ajax({
             url: "<?php echo site_url('api/getpaket') ?>" + "/" + satkerId,
@@ -2180,11 +2188,13 @@
                         var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
                         if (paramsBtnPaket == "lihat") {
                             checkboxHtml += 'disabled';
+                            $(".checkbox-click").attr("disabled", true)
                             $('.save-btn-paket').addClass('d-none');
                         } else {
                             $('.save-btn-paket').removeClass('d-none');
                         }
-                        if (selectedItems.includes(paket.paketId)) {
+                        // if (selectedItems.includes(paket.paketId)) {
+                        if (selectedItems.some(item => item.paketId === paket.paketId)) {
                             checkboxHtml += ' checked'; // Set checked attribute
                             trClass = "style='background-color:#e0f2e9'"
                         }
@@ -2206,11 +2216,11 @@
                             <div class="form-group form-group-last row">
 								<div class="form-group-sub">
 									<label class="form-control-label">Nilai :</label>
-									<input type="text" class="form-control target_nilai" name="target_nilai" placeholder="">
+									<input type="text" class="form-control target_nilai checkbox-click" name="target_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"}>
 								</div>
                                 <div class="form-group-sub">
 									<label class="form-control-label">Satuan :</label>
-									<input type="text" class="form-control target_satuan" name="target_satuan" placeholder="">
+									<input type="text" class="form-control target_satuan checkbox-click" name="target_satuan" placeholder="" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_satuan:"disabled"}>
 								</div>
 							</div>
                             
@@ -2219,17 +2229,32 @@
                             <div class="form-group form-group-last row">
 								<div class="form-group-sub">
 									<label class="form-control-label center">Nilai :</label>
-									<input type="text" class="form-control outcome_nilai" name="outcome_nilai" placeholder="">
+									<input type="text" class="form-control outcome_nilai checkbox-click" name="outcome_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_nilai:"disabled"}>
 								</div>
                                 <div class="form-group-sub">
 									<label class="form-control-label">Satuan :</label>
-									<input type="text" class="form-control outcome_satuan" name="outcome_satuan" placeholder="">
+									<input type="text" class="form-control outcome_satuan checkbox-click" name="outcome_satuan" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_satuan:"disabled"}>
 								</div>
 							</div>
                             
                             </td>
                           </tr>
                         `);
+
+                        // Mendengarkan perubahan status kotak centang
+                        $('input.checkbox').on('change', function() {
+                            if (this.checked) {
+                                // Kotak centang dicentang, maka menonaktifkan input dengan class "target_nilai"
+                                $(this).closest('tr').find('.checkbox-click').prop('disabled', false);
+                                $(this).closest('tr').attr('style', 'background-color:#e0f2e9');
+
+                            } else {
+                                // Kotak centang tidak dicentang, maka mengaktifkan kembali input dengan class "target_nilai"
+                                $(this).closest('tr').find('.checkbox-click').prop('disabled', true);
+                                $(this).closest('tr').removeAttr('style');
+
+                            }
+                        });
                     });
 
 
@@ -2340,13 +2365,46 @@
         e.preventDefault();
         indikatorId = $(this).attr("data-indikatorid");
         var selectedItems = [];
+        var errorMessages = [];
 
         $('.checkbox:checked').each(function() {
             var paketId = $(this).attr('val');
-            selectedItems.push(paketId);
-        });
+            var target_nilai = $(this).closest('tr').find('input[name=target_nilai]').val();
+            var target_satuan = $(this).closest('tr').find('input[name=target_satuan]').val();
+            var outcome_nilai = $(this).closest('tr').find('input[name=outcome_nilai]').val();
+            var outcome_satuan = $(this).closest('tr').find('input[name=outcome_satuan]').val();
 
-        if (selectedItems.length > 0) {
+            if (target_nilai.trim() === '') {
+                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
+            } else if (target_satuan.trim() === '') {
+                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Satuan yang belum diisi.');
+
+
+            } else if (outcome_nilai.trim() === '') {
+                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Outcome Nilai yang belum diisi.');
+
+
+            } else if (outcome_satuan.trim() === '') {
+                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Outcome Satuan yang belum diisi.');
+
+
+            } else {
+                selectedItems.push({
+                    paketId: paketId,
+                    target_nilai: target_nilai,
+                    target_satuan: target_satuan,
+                    outcome_nilai: outcome_nilai,
+                    outcome_satuan: outcome_satuan
+                });
+            }
+
+        });
+        if (errorMessages.length > 0) {
+            // Menampilkan pesan kesalahan jika ada
+            errorMessages.forEach(function(message) {
+                Swal.fire('Peringatan', message, 'warning');
+            });
+        } else if (selectedItems.length > 0) {
             localStorage.setItem(indikatorId, JSON.stringify(selectedItems));
             var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
             totalPaketElement.html(selectedItems.length);

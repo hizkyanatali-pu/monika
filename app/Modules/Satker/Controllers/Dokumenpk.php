@@ -1100,12 +1100,20 @@ class Dokumenpk extends \App\Controllers\BaseController
         $data = $this->request->getPost('paket');
 
         foreach ($input['paket'] as $item) {
+
             if (isset($item['paketId']) && !empty($item['paketId'])) {
                 $paketIds = json_decode($item['paketId'], true); // Mendekode JSON menjadi array
+                // print_r($paketIds);
+                // exit;
                 foreach ($paketIds as $paketId) {
+
                     $dataPaket[] = [
                         'template_row_id' => $item['id'],
-                        'idpaket' => $paketId,
+                        'idpaket' => $paketId['paketId'],
+                        'target_value' => $paketId['target_nilai'],
+                        'target_unit' => $paketId['target_satuan'],
+                        'output_value' => $paketId['outcome_nilai'],
+                        'output_unit' => $paketId['outcome_satuan'],
                         // 'isChecked' => $item['id']
 
                     ];
@@ -1118,6 +1126,10 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'dokumen_id'      => $_dokumenID,
                 'template_row_id' => $arr['template_row_id'],
                 'idpaket'    =>  $arr['idpaket'],
+                'target_value' => $arr['target_value'],
+                'target_unit' => $arr['target_unit'],
+                'output_value' => $arr['output_value'],
+                'output_unit' => $arr['output_unit'],
                 // 'outcome_value'   => str_replace(',', '.', $arr['outcome']),
                 // 'is_checked'      => $arr['isChecked']
             ];
