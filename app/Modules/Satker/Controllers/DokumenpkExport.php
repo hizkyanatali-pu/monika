@@ -298,7 +298,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // title ttd 2
         $pdf->SetFont($this->fontFamily, '', 12);
         $pdf->SetX(149);
-        $pdf->Cell(144, 4, $this->dokumenLokasi . ', ' . $this->tanggal . ' ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
+        $pdf->Cell(144, 4, $this->dokumenLokasi . ',   ' . $this->tanggal . ' ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
         $pdf->Ln();
         $pdf->SetFont($this->fontFamily, 'B', 12);
         $pdf->SetX(167);
@@ -676,7 +676,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
             'person1Title' => $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial'],
             'person1Name'  => $dataDokumen['pihak2_ttd'],
-            'person2Date'  => $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear,
+            'person2Date'  => $this->dokumenLokasi . ',   ' . $this->tanggal . ' '  . $this->dokumenBulan . ' ' . $this->dokumenYear,
             // 'person2Title' => $jabatanPihak1_isPlt . $dokumenKopTitle1_prefix . $dataDokumen['pihak1_initial'],
             'person2Title' => $jabatanPihak1_isPlt . $dataDokumen['pihak1_initial'],
             'person2Name'  => $dataDokumen['pihak1_ttd'],

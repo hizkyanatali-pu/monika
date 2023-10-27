@@ -391,6 +391,8 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                             <th class="tdNilai">Realisasi</th>
                             <th class="tdPersen">%keu</th>
                             <th class="tdPersen">%fisik</th>
+                            <th class="tdPersen">Target</th>
+                            <th class="tdPersen">Outcome</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
