@@ -1,0 +1,4 @@
+ALTER TABLE `dokumenpk_satker_rows`
+ADD COLUMN `target_sat`  varchar(15) NULL AFTER `target_value`,
+ADD COLUMN `outcome_sat`  varchar(15) NULL AFTER `outcome_value`;
+

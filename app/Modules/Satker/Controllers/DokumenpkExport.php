@@ -36,9 +36,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->dokumenSatker_rows     = $this->db->table('dokumenpk_satker_rows');
         $this->dokumenSatker_kegiatan = $this->db->table('dokumenpk_satker_kegiatan');
 
-        $this->templateDokumen = $this->db->table('dokumen_pk_template');
-        $this->templateRow     = $this->db->table('dokumen_pk_template_row');
-        $this->templateInfo    = $this->db->table('dokumen_pk_template_info');
+        $this->templateDokumen = $this->db->table('dokumen_pk_template_' . session('userData.tahun'));
+        $this->templateRow     = $this->db->table('dokumen_pk_template_row_' . session('userData.tahun'));
+        $this->templateInfo    = $this->db->table('dokumen_pk_template_info_' . session('userData.tahun'));
 
         $this->dokumenStatus = [
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
@@ -94,10 +94,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $dataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.*,
             tkabkota.*,
-            dokumen_pk_template.keterangan,
-            dokumen_pk_template.info_title
+            dokumen_pk_template_' . session('userData.tahun') . '.keterangan,
+            dokumen_pk_template_' . session('userData.tahun') . '.info_title
         ')
-            ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+            ->join('dokumen_pk_template_' . session('userData.tahun'), 'dokumenpk_satker.template_id = dokumen_pk_template_' . session('userData.tahun') . '.id', 'left')
             ->join('tkabkota', "(SUBSTRING_INDEX(dokumenpk_satker.kota, '-', 1) = tkabkota.kdlokasi AND SUBSTRING_INDEX(dokumenpk_satker.kota, '-', -1) = tkabkota.kdkabkota)", 'left')
             ->where('dokumenpk_satker.id', $_dokumenSatkerID)
             ->get()
@@ -453,6 +453,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Data
         $pdf->SetFont($this->fontFamily, '', 8);
         $rowNUmber = 0;
+
         foreach ($tableData as $key => $data) {
             // $celTableDataFill = $this->dokumenLoadedStatus == 'setuju' ? true : false;
             $celTableDataFill = true;
@@ -493,8 +494,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             if ($data['type'] == 'form') {
                 $targetValue = '';
                 $str = iconv('UTF-8', 'windows-1252', html_entity_decode("&sup3;"));
-
-                switch (strtolower($data['target_satuan'])) {
+                switch (strtolower($data_targetValue['target_sat'] ?? $data['target_satuan'])) {
                     case 'm3/detik':
                         $satuan_target = 'M' . $str . "/Detik";
 
@@ -513,7 +513,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         $satuan_target = 'Miliar M' . $str;
                         break;
                     default:
-                        $satuan_target = $data['target_satuan'];
+                        $satuan_target = $data_targetValue['target_sat'] ?? $data['target_satuan'];
                         break;
                 }
 

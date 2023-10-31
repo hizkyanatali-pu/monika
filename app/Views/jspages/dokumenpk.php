@@ -36,12 +36,14 @@
             $(document).off('focusin.modal');
         });
 
-
-
-
     })
 
-
+    // $(document).on('change', '.select-target-satuan', function() {
+    //     // Mengambil nilai terpilih dari elemen select
+    //     var nilaiTerpilih = $(this).val();
+    //     // Memasukkan nilai ke dalam atribut data-outputsatuan pada tombol
+    //     $('.paket').attr('data-outputsatuan', nilaiTerpilih);
+    // });
 
 
     $(document).on('change', 'select[name=filter-satker]', function() {
@@ -139,6 +141,7 @@
         if (!this.checked) {
             rowChild.addClass('disabled')
             rowChild.find('input').attr('readonly', 'readonly')
+            rowChild.find('select').attr('disabled', 'disabled')
             rowChild.find('button.paket').attr('disabled', 'true')
             rowChild.find('input').val('')
             rowChild.find('.totalpaket').html("0")
@@ -151,6 +154,7 @@
         } else {
             rowChild.removeClass('disabled')
             rowChild.find('input').removeAttr('readonly')
+            rowChild.find('select').removeAttr('disabled')
             rowChild.find('button.paket').removeAttr('disabled')
 
 
@@ -167,6 +171,7 @@
         if (!$(this).is(':checked')) {
             element_parentsColumn.addClass('disabled')
             element_parentsColumn.find('input').attr('readonly', 'readonly')
+            element_parentsColumn.find('select').attr('disabled', 'disabled')
             element_parentsColumn.find('button.paket').attr('disabled', 'true')
             element_parentsColumn.find('input').val('')
             element_parentsColumn.find('.totalpaket').html("0")
@@ -178,6 +183,7 @@
         } else {
             element_parentsColumn.removeClass('disabled')
             element_parentsColumn.find('input').removeAttr('readonly')
+            element_parentsColumn.find('select').removeAttr('disabled')
             element_parentsColumn.find('button.paket').removeAttr('disabled')
 
         }
@@ -267,96 +273,96 @@
 
 
     element_btnSaveDokumen.on('click', function() {
-        CheckConnection().then(result => {
-            if (saveDokumenValidation()) {
-                let oldButtonText = element_btnSaveDokumen.text()
-                element_btnSaveDokumen.addClass('d-none');
+        // CheckConnection().then(result => {
+        if (saveDokumenValidation()) {
+            let oldButtonText = element_btnSaveDokumen.text()
+            element_btnSaveDokumen.addClass('d-none');
 
-                // Simpan referensi ke elemen penyimpanan pesan
-                let savingMessageElement = $('<center>menyimpan dokumen</center>');
-                element_btnSaveDokumen.parent().append(savingMessageElement);
+            // Simpan referensi ke elemen penyimpanan pesan
+            let savingMessageElement = $('<center>menyimpan dokumen</center>');
+            element_btnSaveDokumen.parent().append(savingMessageElement);
 
 
-                $('input[name=total-anggaran]').prop("disabled", false)
-                let formData = getFormValue();
+            $('input[name=total-anggaran]').prop("disabled", false)
+            let formData = getFormValue();
 
-                if ($(this).attr('data-dokumen-id')) {
-                    formData['revision_dokumen_id'] = $(this).data('dokumen-id')
-                    formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
+            if ($(this).attr('data-dokumen-id')) {
+                formData['revision_dokumen_id'] = $(this).data('dokumen-id')
+                formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
 
-                    Swal.fire({
-                        title: "Anda yakin akan mengedit dokumen ini ?",
-                        html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan"></textarea>`,
-                        confirmButtonText: "Kirim",
-                        cancelButtonText: "Batal",
-                        showLoaderOnConfirm: true,
-                        showCancelButton: true,
-                        onCancel: () => {
-                            element_btnSaveDokumen.removeClass('d-none');
+                Swal.fire({
+                    title: "Anda yakin akan mengedit dokumen ini ?",
+                    html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan"></textarea>`,
+                    confirmButtonText: "Kirim",
+                    cancelButtonText: "Batal",
+                    showLoaderOnConfirm: true,
+                    showCancelButton: true,
+                    onCancel: () => {
+                        element_btnSaveDokumen.removeClass('d-none');
 
-                        },
-                        preConfirm: () => {
-                            const pesanRevisi = $('textarea[name=pesan-koreksi-dokumen]').val();
+                    },
+                    preConfirm: () => {
+                        const pesanRevisi = $('textarea[name=pesan-koreksi-dokumen]').val();
 
-                            if (!pesanRevisi) {
-                                Swal.showValidationMessage('Pesan harus diisi');
-                                return false;
-                            }
+                        if (!pesanRevisi) {
+                            Swal.showValidationMessage('Pesan harus diisi');
+                            return false;
+                        }
 
-                            formData['revision_message'] = $('textarea[name=pesan-koreksi-dokumen]').val();
-                            $.ajax({
-                                url: "<?php echo site_url('dokumenpk/create') ?>",
-                                type: 'POST',
-                                data: formData,
-                                success: (res) => {
-                                    if (res.status) {
+                        formData['revision_message'] = $('textarea[name=pesan-koreksi-dokumen]').val();
+                        $.ajax({
+                            url: "<?php echo site_url('dokumenpk/create') ?>",
+                            type: 'POST',
+                            data: formData,
+                            success: (res) => {
+                                if (res.status) {
+                                    location.reload()
+                                } else {
+                                    Swal.fire(
+                                        'Gagal',
+                                        res.message,
+                                        'error'
+                                    ).then(result => {
                                         location.reload()
-                                    } else {
-                                        Swal.fire(
-                                            'Gagal',
-                                            res.message,
-                                            'error'
-                                        ).then(result => {
-                                            location.reload()
-                                        })
-                                    }
-                                },
-                                fail: (xhr) => {
-                                    alert('Terjadi kesalahan pada sistem')
-                                    console.log(xhr)
+                                    })
                                 }
+                            },
+                            fail: (xhr) => {
+                                alert('Terjadi kesalahan pada sistem')
+                                console.log(xhr)
+                            }
+                        })
+                    }
+                })
+            } else {
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/create') ?>",
+                    type: 'POST',
+                    data: formData,
+                    success: (res) => {
+                        if (res.status) {
+                            location.reload()
+                        } else {
+                            Swal.fire(
+                                'Gagal',
+                                res.message,
+                                'error'
+                            ).then(result => {
+                                location.reload()
                             })
                         }
-                    })
-                } else {
-                    $.ajax({
-                        url: "<?php echo site_url('dokumenpk/create') ?>",
-                        type: 'POST',
-                        data: formData,
-                        success: (res) => {
-                            if (res.status) {
-                                location.reload()
-                            } else {
-                                Swal.fire(
-                                    'Gagal',
-                                    res.message,
-                                    'error'
-                                ).then(result => {
-                                    location.reload()
-                                })
-                            }
-                        },
-                        fail: (xhr) => {
-                            alert('Terjadi kesalahan pada sistem')
-                            console.log(xhr)
-                        }
-                    })
-                }
-
+                    },
+                    fail: (xhr) => {
+                        alert('Terjadi kesalahan pada sistem')
+                        console.log(xhr)
+                    }
+                })
             }
-        }).catch(error => {
-            alert("Youre internet connection  cs slow");
-        });
+
+        }
+        // }).catch(error => {
+        //     alert("Youre internet connection  cs slow");
+        // });
     })
 
 
@@ -393,40 +399,41 @@
                         newStatus: 'hold'
                     },
                     success: (res) => {
-                        CheckConnection().then(result => {
-                            if (saveDokumenValidation()) {
+                        // CheckConnection().then(result => {
 
-                                let oldButtonText = element_btnSaveEditDokumen.text()
-                                element_btnSaveEditDokumen.addClass('d-none')
-                                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+                        if (saveDokumenValidation()) {
 
-                                let formData = getFormValue(),
-                                    dataId = $(this).data('id')
+                            let oldButtonText = element_btnSaveEditDokumen.text()
+                            element_btnSaveEditDokumen.addClass('d-none')
+                            element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
 
-                                formData['id'] = $(this).data('id')
-                                formData['csrf_test_name'] = res.token
+                            let formData = getFormValue(),
+                                dataId = $(this).data('id')
+
+                            formData['id'] = $(this).data('id')
+                            formData['csrf_test_name'] = res.token
 
 
-                                $.ajax({
-                                    url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
-                                    type: "POST",
-                                    data: formData,
-                                    success: (res) => {
+                            $.ajax({
+                                url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
+                                type: "POST",
+                                data: formData,
+                                success: (res) => {
 
-                                        if (res.status) {
-                                            location.reload()
+                                    if (res.status) {
+                                        location.reload()
 
-                                        }
-                                    },
-                                    fail: (xhr) => {
-                                        alert('Terjadi kesalahan pada sistem')
-                                        console.log(xhr)
                                     }
-                                })
-                            }
-                        }).catch(error => {
-                            alert("Youre internet connection  cs slow");
-                        });
+                                },
+                                fail: (xhr) => {
+                                    alert('Terjadi kesalahan pada sistem')
+                                    console.log(xhr)
+                                }
+                            })
+                        }
+                        // }).catch(error => {
+                        //     alert("Youre internet connection  cs slow");
+                        // });
                     }
                 })
             }
@@ -645,11 +652,13 @@
                     }
                     res.rows.forEach((data, key) => {
                         let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
+                            elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
                             elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
                         // elementInput_target.val(data.target_value)
                         // elementInput_outcome.val(data.outcome_value)
                         elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                        data.target_sat ? elementInput_target_satuan.val(data.target_sat) : ''
                         elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
                         if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
@@ -744,9 +753,11 @@
             success: (res) => {
                 res.rows.forEach((data, key) => {
                     let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
+                        elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
                         elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
                     elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                    elementInput_target_satuan.val(data.target_sat)
                     elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
                     if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
@@ -939,21 +950,40 @@
         let element_kegiatanTable = $('.__table-kegiatan').find('tbody'),
             element_rowItem_kegiatanTable = $('.__table-kegiatan').find('tbody').find('tr'),
             element_rowItem_anggaran_kegiatan = $('.__table-kegiatan').find('tbody tr').last().find("input[name='kegiatan-anggaran']").val(),
+            element_rowItem_nama_kegiatan_fill = $('.__table-kegiatan').find('tbody tr').last().attr("data-kegiatan-nama"),
+            element_rowItem_nama_kegiatan = $('.__table-kegiatan').find('tbody tr').last().find("select").val(),
             kegiatan = []
 
         info = $(this).data("info");
 
         if (element_rowItem_anggaran_kegiatan != undefined) {
 
-            if (element_rowItem_anggaran_kegiatan == 0 || element_rowItem_anggaran_kegiatan == null) {
 
-                Swal.fire(
-                    'Peringatan',
-                    'Nama dan Anggaran belum terisi',
-                    'warning'
-                )
-                return false
+
+            if (element_rowItem_nama_kegiatan_fill == '-') {
+                if (element_rowItem_nama_kegiatan == 0 || element_rowItem_nama_kegiatan == null || element_rowItem_nama_kegiatan == '') {
+
+                    Swal.fire(
+                        'Peringatan',
+                        'Nama Kegiatan belum terisi',
+                        'warning'
+                    )
+                    return false
+                }
+
+                if (element_rowItem_anggaran_kegiatan == 0 || element_rowItem_anggaran_kegiatan == null || element_rowItem_anggaran_kegiatan == '') {
+
+                    Swal.fire(
+                        'Peringatan',
+                        'Anggaran Kegiatan belum terisi',
+                        'warning'
+                    )
+                    return false
+                }
+
             }
+
+
         }
 
 
@@ -1007,12 +1037,14 @@
 
         $('.__inputTemplateRow-target').each((key, element) => {
             let elementInput_target = $(element),
+                elementInput_target_satuan = $('.select-target-satuan').eq(key),
                 elementInput_outcome = $('.__inputTemplateRow-outcome').eq(key),
                 element_checkRow = $('input:checkbox[name=form-check-row]').eq(key)
 
             rows.push({
                 id: elementInput_target.data('row-id'),
                 target: elementInput_target.val().replace('.', ''),
+                target_satuan: elementInput_target_satuan.val(),
                 outcome: elementInput_outcome.val().replace('.', ''),
                 isChecked: element_checkRow.is(':checked') ? '1' : '0'
             })
@@ -1259,7 +1291,8 @@
 
                     if (res.dokumen.revision_message != null) {
                         element_iframePreviewDokumen.css({
-                            'height': '60vh'
+                            // 'height': '60vh'
+                            'height': '100vh'
                         })
                         $('.container-revision-alert-cetak').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
@@ -1269,7 +1302,8 @@
                         `)
                     } else {
                         element_iframePreviewDokumen.css({
-                            'height': '80vh'
+                            // 'height': '80vh'
+                            'height': '100vh'
                         })
                         $('.container-revision-alert-cetak').html('')
                     }
@@ -1494,7 +1528,7 @@
 
             <table class="table table-bordered">
                 <thead>
-                    <tr>
+                    <tr class="sticky-header-1">
                         <td class="text-center"  style="width: 70%" colspan="3">Sasaran Program / Sasaran Kegiatan / Indikator</td>
                         <td class="text-center" style="width: 15%">
                             ${titleTheadTable}
@@ -1504,7 +1538,7 @@
                             Outcome
                         </td>
                     </tr>
-                    <tr style="font-size:10px">
+                    <tr style="font-size:10px" class="sticky-header-2">
                         <td class="text-center p-2 align-middle">
                             <input type="checkbox" name="form-checkall-row" checked />
                         </td>
@@ -1770,7 +1804,7 @@
                                         value="${ data.targetBalaiDefualtValue }"
                                         data-row-id="${ data.id }"
                                         onkeyup="return this.value = formatRupiah(this.value, '')"
-                                    >
+                                    readonly>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
                                     </div>
@@ -1788,9 +1822,14 @@
                                     value="${ data.targetDefualtValue }"
                                     data-row-id="${ data.id }"
                                     onkeyup="return this.value = formatRupiah(this.value, '')"
-                                >
+                                    readonly>
                                 <div class="input-group-append">
-                                    <span class="input-group-text">${ data.target_satuan }</span>
+                                     <select class="form-control select-target-satuan" data-row-id="${data.id}">
+            ${data.target_satuan.split(';').map(function(satuan) {
+                return `<option value="${satuan.trim()}">${satuan.trim()}</option>`;
+            }).join('')}
+         
+        </select>
                                 </div>
                             </div>
                         </td>
@@ -1840,7 +1879,7 @@
                             </td>
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title } 
-                            <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" data-dokid="${DocID||0}" data-indikator="${ data.title }" data-rowid="${data.id}">Paket <span class="label label-sm label-white ml-2 totalpaket">${data.paket.length}</span></button></td>
+                            <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" data-dokid="${DocID||0}" data-indikator="${ data.title }" data-rowid="${data.id}" data-outputsatuan="${data.target_satuan}" data-outcomesatuan="${data.outcome_satuan}">Paket <span class="label label-sm label-white ml-2 totalpaket">${data.paket.length}</span></button></td>
                             ${renderInputTarget}
                             <td class="${classDNoneOutcome}">
                                 <div class="input-group">
@@ -1851,7 +1890,7 @@
                                         value="${ data.outcomeDefaultValue }"
                                         data-row-id="${ data.id }"
                                         onkeyup="return this.value = formatRupiah(this.value, '')"
-                                    >
+                                        readonly>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>
                                     </div>
@@ -2136,6 +2175,8 @@
         let indikator = $(this).data('indikator');
         let docId = $(this).data('dokid');
         let indikatorID = $(this).data('rowid');
+        let output_satuan = $('.select-target-satuan[data-row-id=' + indikatorID + ']').val();
+        let outcome_satuan = $(this).data('outcomesatuan');
 
 
         $('#modalFormTitlePaket').html(``);
@@ -2165,14 +2206,14 @@
                 jsonData.forEach(function(balai, index) {
                     if (index === 0) {
                         tbody.append(`
-                    <tr style="background-color:#89CFF0">
+                    <tr style="background-color:#89CFF0" class="sticky-header-2">
                     <td>-</td>
                     <td colspan = "10"><strong>${balai.balai}</strong></td>
                     </tr>`);
                     }
                     tbody.append(`
                     
-                    <tr style="background-color:#b6dced">
+                    <tr style="background-color:#b6dced" class="sticky-header-3">
                     <td><strong>${balai.satkerid}</strong></td>
                     <td colspan = "10"><strong>${balai.satker}</strong></td>
                     </tr>
@@ -2215,12 +2256,12 @@
                             <td>
                             <div class="form-group form-group-last row">
 								<div class="form-group-sub">
-									<label class="form-control-label">Nilai :</label>
+									<label class="form-control-label">Vol Output :</label>
 									<input type="text" class="form-control target_nilai checkbox-click" name="target_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"}>
 								</div>
                                 <div class="form-group-sub">
-									<label class="form-control-label">Satuan :</label>
-									<input type="text" class="form-control target_satuan checkbox-click" name="target_satuan" placeholder="" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_satuan:"disabled"}>
+									<label class="form-control-label">Satuan Output :</label>
+									<input type="text" class="form-control target_satuan" name="target_satuan" placeholder="" value="${output_satuan}" disabled>
 								</div>
 							</div>
                             
@@ -2228,12 +2269,12 @@
                             <td>
                             <div class="form-group form-group-last row">
 								<div class="form-group-sub">
-									<label class="form-control-label center">Nilai :</label>
+									<label class="form-control-label center">Vol Outcome :</label>
 									<input type="text" class="form-control outcome_nilai checkbox-click" name="outcome_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_nilai:"disabled"}>
 								</div>
                                 <div class="form-group-sub">
-									<label class="form-control-label">Satuan :</label>
-									<input type="text" class="form-control outcome_satuan checkbox-click" name="outcome_satuan" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_satuan:"disabled"}>
+									<label class="form-control-label">Satuan Outcome :</label>
+									<input type="text" class="form-control outcome_satuan" name="outcome_satuan" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_satuan:"value="+outcome_satuan} disabled>
 								</div>
 							</div>
                             
@@ -2258,97 +2299,7 @@
                     });
 
 
-
-
-
-
-
-                    //                 trClass = '';
-                    //                 var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
-                    //                 if (paramsBtnPaket == "lihat") {
-                    //                     checkboxHtml += 'disabled';
-                    //                     $('.save-btn-paket').addClass('d-none');
-                    //                 } else {
-                    //                     $('.save-btn-paket').removeClass('d-none');
-                    //                 }
-                    //                 if (selectedItems.includes(paket.paketId)) {
-                    //                     checkboxHtml += ' checked'; // Set checked attribute
-                    //                     trClass = "style='background-color:#e0f2e9'"
-                    //                 }
-
-                    //                 checkboxHtml += '>';
-
-
-                    //                 tbody.append(`
-                    //   <tr ${trClass}>
-                    //     <td>${checkboxHtml}</td>
-                    //     <td>${paket.paketId}</td>
-                    //     <td>${paket.label}</td>
-                    //     <td>${paket.vol}</td>
-                    //     <td>${paket.satuan}</td>
-                    //     <td>${paket.paguDipa}</td>
-                    //     <td>${paket.realisasi}</td>
-                    //     <td>${paket.persenKeu}</td>
-                    //     <td>${paket.persenFis}</td>
-                    //   </tr>
-                    // `);
-
-
-
-
                 })
-
-
-                //     jsonData.forEach(function(balai) {
-                //         balai.paket.forEach(function(paket, index) {
-                //             if (index === 0) {
-                //                 tbody.append(`
-                //     <tr style="background-color:#89CFF0">
-                //     <td>-</td>
-                //     <td colspan = "8"><strong>${balai.balai}</strong></td>
-                //     </tr>
-                //     <tr style="background-color:#b6dced">
-                //     <td><strong>${balai.satkerid}</strong></td>
-
-                //     <td colspan = "8"><strong>${balai.satker}</strong></td>
-                //     </tr>
-
-                //     `);
-                //             } else {
-                //                 trClass = '';
-                //                 var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
-                //                 if (paramsBtnPaket == "lihat") {
-                //                     checkboxHtml += 'disabled';
-                //                     $('.save-btn-paket').addClass('d-none');
-                //                 } else {
-                //                     $('.save-btn-paket').removeClass('d-none');
-                //                 }
-                //                 if (selectedItems.includes(paket.paketId)) {
-                //                     checkboxHtml += ' checked'; // Set checked attribute
-                //                     trClass = "style='background-color:#e0f2e9'"
-                //                 }
-
-                //                 checkboxHtml += '>';
-
-
-                //                 tbody.append(`
-                //   <tr ${trClass}>
-                //     <td>${checkboxHtml}</td>
-                //     <td>${paket.paketId}</td>
-                //     <td>${paket.label}</td>
-                //     <td>${paket.vol}</td>
-                //     <td>${paket.satuan}</td>
-                //     <td>${paket.paguDipa}</td>
-                //     <td>${paket.realisasi}</td>
-                //     <td>${paket.persenKeu}</td>
-                //     <td>${paket.persenFis}</td>
-                //   </tr>
-                // `);
-
-                //             }
-                //         });
-                //     });
-
 
             }
         })
@@ -2366,6 +2317,8 @@
         indikatorId = $(this).attr("data-indikatorid");
         var selectedItems = [];
         var errorMessages = [];
+        var totalJumlahTarget = 0;
+        var totalJumlahOutcome = 0;
 
         $('.checkbox:checked').each(function() {
             var paketId = $(this).attr('val');
@@ -2396,6 +2349,17 @@
                     outcome_nilai: outcome_nilai,
                     outcome_satuan: outcome_satuan
                 });
+
+
+
+                target_nilai_number_remove_titik = target_nilai.replace('.', '');
+                outcome_nilai_number_remove_titik = outcome_nilai.replace('.', '');
+
+                target_nilai_number = parseFloat(target_nilai_number_remove_titik.replace(',', '.'));
+                outcome_nilai_number = parseFloat(outcome_nilai_number_remove_titik.replace(',', '.'));
+
+                totalJumlahTarget += target_nilai_number;
+                totalJumlahOutcome += outcome_nilai_number;
             }
 
         });
@@ -2408,6 +2372,24 @@
             localStorage.setItem(indikatorId, JSON.stringify(selectedItems));
             var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
             totalPaketElement.html(selectedItems.length);
+
+            var totalTarget_nilai = $('.__inputTemplateRow-target[data-row-id=' + indikatorId + ']')
+            var totalOutcome_nilai = $('.__inputTemplateRow-outcome[data-row-id=' + indikatorId + ']')
+
+            var jumlahDesimal_target = (totalJumlahTarget % 1 === 0) ? 0 : totalJumlahTarget.toString().split('.')[1].length;
+            var jumlahDesimal_outcome = (totalJumlahOutcome % 1 === 0) ? 0 : totalJumlahOutcome.toString().split('.')[1].length;
+
+            totalJumlahTargetDenganKoma = totalJumlahTarget.toLocaleString('id-ID', {
+                minimumFractionDigits: jumlahDesimal_target
+            });
+
+            totalJumlahOutcomeDenganKoma = totalJumlahOutcome.toLocaleString('id-ID', {
+                minimumFractionDigits: jumlahDesimal_outcome
+            });
+
+
+            totalTarget_nilai.val(totalJumlahTargetDenganKoma);
+            totalOutcome_nilai.val(totalJumlahOutcomeDenganKoma);
 
             $('#modalPilihPaket').modal('hide');
         } else {

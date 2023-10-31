@@ -9,8 +9,48 @@
     }
 
     td.disabled input[readonly],
+    td.disabled select[disabled],
     td.disabled span {
         background: #a8a8a8;
+    }
+
+    /* table {
+        width: 100%;
+        border-collapse: collapse;
+    } */
+
+    .sticky-header-1 {
+        position: sticky;
+        top: -15px;
+        background-color: #f9f9f9;
+        z-index: 2;
+        /* #a8b0ed */
+        /* Menentukan tingkat tumpukan */
+    }
+
+    .sticky-header-2 {
+        position: sticky;
+        top: 30px;
+        /* Sesuaikan dengan tinggi tiga baris */
+        background-color: #f9f9f9;
+        z-index: 1;
+        /* Menentukan tingkat tumpukan */
+    }
+
+    .sticky-header-3 {
+        position: sticky;
+        top: 69px;
+        /* Sesuaikan dengan tinggi tiga baris */
+        background-color: #f9f9f9;
+        z-index: 1;
+        /* Menentukan tingkat tumpukan */
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
     }
 </style>
 
@@ -240,7 +280,7 @@
                 Data Diambil Dari Emon pada 17 Agustus 2023
                 <table class="table">
                     <thead class="table-primary">
-                        <tr class=" text-center theader">
+                        <tr class="text-center theader sticky-header-1" style="background-color: #a8b0ed;">
                             <th></th>
                             <th class="tdKode">Kode</th>
                             <th class="tdLabel">Paket</th>
@@ -250,12 +290,12 @@
                             <th class="tdNilai">Realisasi</th>
                             <th class="tdPersen">%keu</th>
                             <th class="tdPersen">%fisik</th>
-                            <th class="tdPersen">Target</th>
+                            <th class="tdPersen">Output</th>
                             <th class="tdPersen">Outcome</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
-
+                        <!-- Data rows go here -->
                     </tbody>
                 </table>
 
@@ -296,17 +336,20 @@
 
 <!-- Modal Preview Cetak Dokumen -->
 <div class="modal fade" id="modal-preview-cetak" tabindex="-1" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content" style="height: 100% !important;">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Preview Dokumen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="d-flex">
+                    <button type="button" class="btn btn-modal-full"><i class="fas fa-external-link-alt"></i></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             </div>
             <div class="modal-body p-0">
                 <div class="container-revision-alert-cetak"></div>
-                <iframe width="100%" style="height: 80vh" frameborder="0"></iframe>
+                <iframe width="100%" style="height: 100vh !important" frameborder="0"></iframe>
             </div>
 
             <?php if ($isCanConfirm) { ?>

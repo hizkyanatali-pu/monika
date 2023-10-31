@@ -76,7 +76,7 @@ class Pulldata extends \App\Controllers\BaseController
         FROM monika_data_{$this->user['tahun']} md
 		LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
 		LEFT JOIN m_balai b ON b.balaiid=s.balaiid
-        " . ($w ? " WHERE $where" : '') . " ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
+        " . ($w ? " WHERE $where" : '') . " AND sat NOT IN ('dokumen','layanan','laporan','0')ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
 
 
         // Eksekusi query dan ambil hasil dari database

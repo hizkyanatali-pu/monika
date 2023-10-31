@@ -129,6 +129,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('imdata/(:segment)', '\Modules\Admin\Controllers\Importdata::imdata/$1');
                 $routes->get('pullimport/(:any)', '\Modules\Admin\Controllers\Importdata::pullimport/$1');
                 $routes->get('unduh/(:segment)/(:segment)', '\Modules\Admin\Controllers\Importdata::unduh/$1/$2');
+                $routes->get('create-table-template-pk', '\Modules\Admin\Controllers\Importdata::copyTableTemplatePK');
             });
 
             $routes->group('grafikdata', ['namespace' => 'App\Controllers'], function ($routes) {

@@ -381,7 +381,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 Data Diambil Dari Emon pada 17 Agustus 2023
                 <table class="table">
                     <thead class="table-primary">
-                        <tr class=" text-center theader">
+                        <tr class="text-center theader sticky-header-1" style="background-color: #a8b0ed;">
                             <th></th>
                             <th class="tdKode">Kode</th>
                             <th class="tdLabel">Paket</th>
@@ -391,7 +391,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                             <th class="tdNilai">Realisasi</th>
                             <th class="tdPersen">%keu</th>
                             <th class="tdPersen">%fisik</th>
-                            <th class="tdPersen">Target</th>
+                            <th class="tdPersen">Output</th>
                             <th class="tdPersen">Outcome</th>
                         </tr>
                     </thead>

@@ -20,18 +20,21 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $this->dokumenSatker = $this->db->table('dokumenpk_satker');
 
-        $this->dokumenPK               = $this->db->table('dokumen_pk_template');
-        $this->dokumenPK_row           = $this->db->table('dokumen_pk_template_row');
-        $this->dokumenPk_rowRumus      = $this->db->table('dokumen_pk_template_rowrumus');
-        $this->dokumenPK_kegiatan      = $this->db->table('dokumen_pk_template_kegiatan');
-        $this->dokumenPK_info          = $this->db->table('dokumen_pk_template_info');
-        $this->dokumenPK_akses         = $this->db->table('dokumen_pk_template_akses');
+        $this->tahun = session('userData.tahun');
+
+        $this->dokumenPK               = $this->db->table('dokumen_pk_template_' . $this->tahun);
+        $this->dokumenPK_row           = $this->db->table('dokumen_pk_template_row_' . $this->tahun);
+        $this->dokumenPk_rowRumus      = $this->db->table('dokumen_pk_template_rowrumus_' . $this->tahun);
+        $this->dokumenPK_kegiatan      = $this->db->table('dokumen_pk_template_kegiatan_' . $this->tahun);
+        $this->dokumenPK_info          = $this->db->table('dokumen_pk_template_info_' . $this->tahun);
+        $this->dokumenPK_akses         = $this->db->table('dokumen_pk_template_akses_' . $this->tahun);
         $this->tempExportBigdataColumn = $this->db->table("temp_export_bigdata_column");
         $this->tableSatker             = $this->db->table("m_satker");
         $this->tableBalai              = $this->db->table("m_balai");
         $this->tableKegiatan           = $this->db->table("tgiat");
         $this->tableProgram            = $this->db->table("tprogram");
-        $this->templateDokumen         = $this->db->table('dokumen_pk_template');
+        $this->templateDokumen         = $this->db->table('dokumen_pk_template_' . $this->tahun);
+
 
         $this->satker   = $this->db->table('m_satker');
         $this->balai    = $this->db->table('m_balai');
@@ -228,14 +231,14 @@ class Dokumenpk extends \App\Controllers\BaseController
                 break;
         }
 
-        $dataTemplate = $this->templateDokumen->select('dokumen_pk_template.*')
-            ->join('dokumen_pk_template_akses', 'dokumen_pk_template.id = dokumen_pk_template_akses.template_id', 'left')
-            ->where('dokumen_pk_template.status', '1')
-            ->where('dokumen_pk_template_akses.rev_id', $template_revID)
+        $dataTemplate = $this->templateDokumen->select('dokumen_pk_template_' . session('userData.tahun') . '.*')
+            ->join('dokumen_pk_template_akses_' . session('userData.tahun'), 'dokumen_pk_template_' . session('userData.tahun') . '.id = dokumen_pk_template_akses_' . session('userData.tahun') . '.template_id', 'left')
+            ->where('dokumen_pk_template_' . session('userData.tahun') . '.status', '1')
+            ->where('dokumen_pk_template_akses_' . session('userData.tahun') . '.rev_id', $template_revID)
             // ->where('dokumen_pk_template.type', $template_type)
-            ->where('dokumen_pk_template_akses.rev_table', $templae_revTable)
+            ->where('dokumen_pk_template_akses_' . session('userData.tahun') . '.rev_table', $templae_revTable)
             ->where("deleted_at is null")
-            ->groupBy('dokumen_pk_template.id')
+            ->groupBy('dokumen_pk_template_' . session('userData.tahun') . '.id')
             ->get()->getResult();
 
         if (!$dataTemplate) {
@@ -324,7 +327,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         return $this->respond([
             'template' => $this->dokumenPK->where('id', $_id)->get()->getRow(),
-            'rows'     => $this->dokumenPK_row->select('dokumen_pk_template_row.*, (SELECT COUNT(dokumen_pk_template_rowrumus.rowId) FROM dokumen_pk_template_rowrumus WHERE dokumen_pk_template_rowrumus.rowId=dokumen_pk_template_row.id) as rumusJml')->where('template_id', $_id)->get()->getResult(),
+            'rows'     => $this->dokumenPK_row->select('dokumen_pk_template_row_' . $this->tahun . '.*, (SELECT COUNT(dokumen_pk_template_rowrumus_' . $this->tahun . '.rowId) FROM dokumen_pk_template_rowrumus_' . $this->tahun . ' WHERE dokumen_pk_template_rowrumus_' . $this->tahun . '.rowId=dokumen_pk_template_row_' . $this->tahun . '.id) as rumusJml')->where('template_id', $_id)->get()->getResult(),
             'rowRumus' => $this->dokumenPk_rowRumus->where('template_id', $_id)->get()->getResult(),
             'kegiatan' => $this->dokumenPK_kegiatan->where('template_id', $_id)->get()->getResult(),
             'info'     => $this->dokumenPK_info->where('template_id', $_id)->get()->getResult(),
@@ -401,19 +404,19 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
         /* kegiatan */
-        // $this->dokumenPK_kegiatan->delete(['template_id' => $templateID]);
+        $this->dokumenPK_kegiatan->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_kegiatan($this->request->getPost(), $templateID);
         /** end-of: kegiatan */
 
 
         /* info */
-        // $this->dokumenPK_info->delete(['template_id' => $templateID]);
+        $this->dokumenPK_info->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_info($this->request->getPost(), $templateID);
         /** end-of: info */
 
 
         /** Akses */
-        // $this->dokumenPK_akses->delete(['template_id' => $templateID]);
+        $this->dokumenPK_akses->delete(['template_id' => $templateID]);
         $this->insertDokumenPK_akses($this->request->getPost(), $templateID, $input_dokumenType);
         /** end-of: Akses */
 
@@ -583,6 +586,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     private function insertDokumenPK_kegiatan($input, $templateID)
     {
+
         $records = [];
         foreach ($input['kegiatan_id'] as $key => $data) {
             array_push($records, [
@@ -739,7 +743,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         $itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['rowspan'] = 0;
 
                         $rumusIndikatorSp = $this->db->query("
-                        SELECT rumus FROM dokumen_pk_template_rowrumus WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
+                        SELECT rumus FROM dokumen_pk_template_rowrumus_$this->tahun WHERE template_id='" . $valueSp->template_id . "' and rowId='" . $valueIndicatorSp->id . "'
                         ")->getResult();
 
                         $itemTemp['rowspan']++;
@@ -754,13 +758,13 @@ class Dokumenpk extends \App\Controllers\BaseController
                                 SELECT 
                                     m_satker.*
                                 FROM 
-                                    dokumen_pk_template_rowrumus 
-                                    left join dokumen_pk_template on dokumen_pk_template_rowrumus.template_id = dokumen_pk_template.id
-                                    left join dokumen_pk_template_akses on dokumen_pk_template.id = dokumen_pk_template_akses.template_id
-                                    left join m_satker on dokumen_pk_template_akses.rev_id = m_satker.satkerid
+                                    dokumen_pk_template_rowrumus_$this->tahun 
+                                    left join dokumen_pk_template_$this->tahun on dokumen_pk_template_rowrumus_$this->tahun.template_id = dokumen_pk_template_$this->tahun.id
+                                    left join dokumen_pk_template_akses_$this->tahun on dokumen_pk_template_$this->tahun.id = dokumen_pk_template_akses_$this->tahun.template_id
+                                    left join m_satker on dokumen_pk_template_akses_$this->tahun.rev_id = m_satker.satkerid
                                 WHERE 
-                                    dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
-                                    and dokumen_pk_template_akses.rev_table='m_satker'
+                                    dokumen_pk_template_rowrumus_$this->tahun.rumus='" . $valueRumusIndikatorSp->rumus . "'
+                                    and dokumen_pk_template_akses_$this->tahun.rev_table='m_satker'
                                     and m_satker.balaiid = '" . $valueBalai->balaiid . "';
                             ")->getResult();
 
@@ -768,13 +772,13 @@ class Dokumenpk extends \App\Controllers\BaseController
                                 SELECT 
                                     m_balai.*
                                 FROM 
-                                dokumen_pk_template_rowrumus 
-                                    left join dokumen_pk_template on dokumen_pk_template_rowrumus.template_id = dokumen_pk_template.id
-                                    left join dokumen_pk_template_akses on dokumen_pk_template.id = dokumen_pk_template_akses.template_id
-                                    left join m_balai on dokumen_pk_template_akses.rev_id = m_balai.balaiid
+                                dokumen_pk_template_rowrumus_$this->tahun 
+                                    left join dokumen_pk_template_$this->tahun on dokumen_pk_template_rowrumus_$this->tahun.template_id = dokumen_pk_template_$this->tahun.id
+                                    left join dokumen_pk_template_akses_$this->tahun on dokumen_pk_template_$this->tahun.id = dokumen_pk_template_akses_$this->tahun.template_id
+                                    left join m_balai on dokumen_pk_template_akses_$this->tahun.rev_id = m_balai.balaiid
                                 WHERE 
-                                    dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
-                                    and dokumen_pk_template_akses.rev_table='m_balai'
+                                    dokumen_pk_template_rowrumus_$this->tahun.rumus='" . $valueRumusIndikatorSp->rumus . "'
+                                    and dokumen_pk_template_akses_$this->tahun.rev_table='m_balai'
                                     and m_balai.balaiid = '" . $valueBalai->balaiid . "';
                             ")->getResult();
 
@@ -801,40 +805,40 @@ class Dokumenpk extends \App\Controllers\BaseController
                                     $dataIndicatorSK = $this->db->query("
                                         SELECT 
                                             dokumen_pk_template_row.*,
-                                            dokumen_pk_template_rowrumus.rumus
+                                            dokumen_pk_template_rowrumus_$this->tahun.rumus
                                         FROM 
-                                            dokumen_pk_template_akses
-                                            left join dokumen_pk_template on 
-                                                dokumen_pk_template_akses.template_id = dokumen_pk_template.id
-                                            left join dokumen_pk_template_row ON
-                                                dokumen_pk_template.id = dokumen_pk_template_row.template_id
-                                            left join dokumen_pk_template_rowrumus ON
-                                                dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
+                                            dokumen_pk_template_akses_$this->tahun
+                                            left join dokumen_pk_template_$this->tahun on 
+                                                dokumen_pk_template_akses_$this->tahun.template_id = dokumen_pk_template_$this->tahun.id
+                                            left join dokumen_pk_template_row_$this->tahun ON
+                                                dokumen_pk_template.id = dokumen_pk_template_row_$this->tahun.template_id
+                                            left join dokumen_pk_template_rowrumus_$this->tahun ON
+                                                dokumen_pk_template_row_$this->tahun.id = dokumen_pk_template_rowrumus_$this->tahun.rowId
                                         where 
-                                            dokumen_pk_template_akses.rev_table='m_satker' 
-                                            and dokumen_pk_template_akses.rev_id='" . $valueDataSatker->satkerid . "'
-                                            and dokumen_pk_template_rowrumus.rumus='" . $valueRumusIndikatorSp->rumus . "'
-                                            and dokumen_pk_template.type='satker'
+                                            dokumen_pk_template_akses_$this->tahun.rev_table='m_satker' 
+                                            and dokumen_pk_template_akses_$this->tahun.rev_id='" . $valueDataSatker->satkerid . "'
+                                            and dokumen_pk_template_rowrumus_$this->tahun.rumus='" . $valueRumusIndikatorSp->rumus . "'
+                                            and dokumen_pk_template_$this->tahun.type='satker'
                                     ")->getRow();
 
                                     $dataSk = $this->db->query("
                                         SELECT 
-                                            dokumen_pk_template_row.*
+                                            dokumen_pk_template_row_$this->tahun.*
                                         FROM 
-                                            dokumen_pk_template_akses
-                                            left join dokumen_pk_template on 
-                                                dokumen_pk_template_akses.template_id = dokumen_pk_template.id
-                                            left join dokumen_pk_template_row ON
-                                                dokumen_pk_template.id = dokumen_pk_template_row.template_id
-                                            left join dokumen_pk_template_rowrumus ON
-                                                dokumen_pk_template_row.id = dokumen_pk_template_rowrumus.rowId
+                                            dokumen_pk_template_akses_$this->tahun
+                                            left join dokumen_pk_template_$this->tahun on 
+                                                dokumen_pk_template_akses_$this->tahun.template_id = dokumen_pk_template_$this->tahun.id
+                                            left join dokumen_pk_template_row_$this->tahun ON
+                                                dokumen_pk_template_$this->tahun.id = dokumen_pk_template_row_$this->tahun.template_id
+                                            left join dokumen_pk_template_rowrumus_$this->tahun ON
+                                                dokumen_pk_template_row_$this->tahun.id = dokumen_pk_template_rowrumus_$this->tahun.rowId
                                         where 
-                                            dokumen_pk_template_akses.rev_table='m_satker' 
-                                            and dokumen_pk_template_akses.rev_id='" . $valueDataSatker->satkerid . "'
-                                            and dokumen_pk_template.type='satker'
-                                            and dokumen_pk_template_row.type='section_title'
-                                            and dokumen_pk_template_row.id < '" . $dataIndicatorSK->id . "'
-                                        ORDER BY dokumen_pk_template_row.id DESC;
+                                            dokumen_pk_template_akses_$this->tahun.rev_table='m_satker' 
+                                            and dokumen_pk_template_akses_$this->tahun.rev_id='" . $valueDataSatker->satkerid . "'
+                                            and dokumen_pk_template_$this->tahun.type='satker'
+                                            and dokumen_pk_template_row_$this->tahun.type='section_title'
+                                            and dokumen_pk_template_row_$this->tahun.id < '" . $dataIndicatorSK->id . "'
+                                        ORDER BY dokumen_pk_template_row_$this->tahun.id DESC;
                                     ")->getRow();
 
                                     $findDataSatkerIndex = array_search($valueDataSatker->satker, array_column($itemTemp['sp'][$keySp]['indikatorSp'][$keyIndicatorSp]['satker'], 'namaSatker'));
