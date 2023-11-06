@@ -458,11 +458,19 @@ class Dokumenpk extends \App\Controllers\BaseController
         $templateDokumen = $this->templateDokumen->where('id', $id)->get()->getRow();
 
         $templateRows = array_map(function ($arr) use ($session_userType, $session_balaiId, $templateDokumen, $dokumenExistSameYear) {
-            $targetDefualtValue      = 0;
+            $outcomeSatkerValue      = 0;
             $Testing_Data            = 0;
             $targetBalaiDefualtValue = 0;
             $outcomeDefaultValue     = 0;
             $targetDefaultValue      = 0;
+            $targetSatkerValue      = 0;
+            $satkerList = array();
+            $rowPaket = array();
+            $targetSatuan = '';
+
+
+
+
 
             if ($dokumenExistSameYear) {
                 $rowDokumenExistsValue = $this->dokumenSatker_rows
@@ -478,14 +486,14 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             if ($session_userType == "satker") {
                 if ($dokumenExistSameYear) {
-                    $targetDefualtValue = $rowDokumenExistsValue->target_value ?? 0;
+                    $outcomeSatkerValue = $rowDokumenExistsValue->target_value ?? 0;
                     $outcomeDefaultValue = $rowDokumenExistsValue->outcome_value ?? 0;
                 }
             }
 
             if ($session_userType == "balai") {
                 if ($templateDokumen->type == 'satker') {
-                    $targetDefualtValue = $rowDokumenExistsValue->target_value ?? 0;
+                    $outcomeSatkerValue = $rowDokumenExistsValue->target_value ?? 0;
                     $outcomeDefaultValue = $rowDokumenExistsValue->outcome_value ?? 0;
                 } else {
                     if ($dokumenExistSameYear) {
@@ -496,7 +504,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                     $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
                     foreach ($templateRowRumus as $key => $data) {
                         $targetRumusOutcome = $this->dokumenSatker->select(
-                            'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id'
+                            'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
+                            dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,dokumenpk_satker_rows.target_sat'
                         )
                             ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
                             ->join('dokumen_pk_template_rowrumus_' . session('userData.tahun'), "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".rowId)", 'left')
@@ -509,48 +518,42 @@ class Dokumenpk extends \App\Controllers\BaseController
                             ->get()->getResult();
 
                         $outcomeRumus = 0;
-                        $targetValueRumus = 0;
+                        $outputRumus = 0;
+
                         foreach ($targetRumusOutcome as $keyOutcome => $dataOutcome) {
+                            $outputRumus += $dataOutcome ? ($dataOutcome->target_value != '' ? $dataOutcome->target_value : 0) : 0;
                             $outcomeRumus += $dataOutcome ? ($dataOutcome->outcome_value != '' ? $dataOutcome->outcome_value : 0) : 0;
-                            // if ($dataOutcome->template_row_id == '11004') {
-                            //     $targetValueRumus += $dataOutcome ? ($dataOutcome->target_value != '' ? $dataOutcome->target_value : 0) : 0;
-                            // }
-                        }
 
-                        if ($targetDefualtValue == '' && $outcomeRumus > 0) $targetDefualtValue = 0;
+                            if (!in_array($dataOutcome->satkerid, $satkerList)) {
+                                array_push($satkerList, $dataOutcome->satkerid);
+                            }
 
-                        if ($outcomeRumus > 0) {
-                            $targetDefualtValue += $outcomeRumus;
-                            //start
-                            $rowPaket = $this->dokumenSatker->select(
-                                'dokumenpk_satker_paket.idpaket, dokumenpk_satker_paket.template_row_id'
-                            )
-                                ->join('dokumenpk_satker_paket', 'dokumenpk_satker.id = dokumenpk_satker_paket.dokumen_id', 'left')
-                                ->join('dokumen_pk_template_rowrumus_' . session('userData.tahun'), "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".template_id AND dokumenpk_satker_paket.template_row_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".rowId)", 'left')
-                                ->where('dokumen_pk_template_rowrumus_' . session('userData.tahun') . '.rumus', $data->rumus)
-                                ->where('dokumenpk_satker.balaiid', $session_balaiId)
-                                ->where('dokumenpk_satker.status', 'setuju')
-                                ->where('dokumenpk_satker.deleted_at is null')
-                                ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+                            $hasilPaket = $this->dokumenSatker_paket->select('dokumenpk_satker_paket.*,dokumenpk_satker.satkerid')
+                                ->join('dokumenpk_satker', 'dokumenpk_satker.id = dokumenpk_satker_paket.dokumen_id', 'left')
+                                ->where('dokumen_id', $dataOutcome->id)
+                                ->where('template_row_id', $dataOutcome->template_row_id)
                                 ->get()->getResult();
 
+                            $targetSatuan = $dataOutcome->target_sat;
 
 
-
-                            // end
+                            $rowPaket = array_merge($rowPaket, $hasilPaket);
                         }
 
-                        // if ($arr->id == 291010) {
-                        //     if ($targetDefaultValue == '' && $targetValueRumus > 0) $targetDefaultValue = 0;
-                        //     if ($targetValueRumus > 0) $targetDefaultValue += $targetValueRumus;
-                        // }
+                        if ($outcomeSatkerValue == '' && $outcomeRumus > 0) $outcomeSatkerValue = 0;
+                        if ($targetSatkerValue == '' && $outputRumus > 0) $targetSatkerValue = 0;
 
-                        // var_dump($data);die;
+                        if ($outcomeRumus > 0) {
+                            $outcomeSatkerValue += $outcomeRumus;
+                        }
+
+                        if ($outputRumus > 0) {
+                            $targetSatkerValue  += $outputRumus;
+                        }
                     }
                 }
             }
 
-            // print_r($session_userType);exit;
 
             if ($templateDokumen->type == 'eselon1') {
                 $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResultArray();
@@ -602,7 +605,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     $targetRumus += $value ? ($value->target_value != '' ? $value->target_value : 0) : 0;
                 }
 
-                if ($targetDefualtValue == '' && $targetRumus > 0) $targetDefualtValue = 0;
+                if ($outcomeSatkerValue == '' && $targetRumus > 0) $outcomeSatkerValue = 0;
 
                 if ($rumusPersenBalai) {
                     $jumlahBalai = $this->balai->where('kota_penanda_tangan !=', '')->countAllResults();
@@ -610,7 +613,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     $rumusPersenBalai = false;
                 }
 
-                if ($targetRumus > 0) $targetDefualtValue += $targetRumus;
+                if ($targetRumus > 0) $outcomeSatkerValue += $targetRumus;
             }
 
 
@@ -623,11 +626,15 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'target_satuan'           => $arr->target_satuan,
                 'outcome_satuan'          => $arr->outcome_satuan,
                 'type'                    => $arr->type,
-                'targetDefualtValue'      => $targetDefualtValue,
+                'targetSatkerValue'       => $targetSatkerValue,
+                'outcomeSatkerValue'      => $outcomeSatkerValue,
+                'targetSatkerSatuan'       => $targetSatuan,
                 'target_balai_value'      => $targetDefaultValue,
                 'targetBalaiDefualtValue' => $targetBalaiDefualtValue,
                 'outcomeDefaultValue'     => $outcomeDefaultValue,
-                'paket'                 => $rowPaket ?? ''
+                'paket'                 => $rowPaket ?? '',
+                'listSatker'  => $satkerList
+
             ];
         }, $this->templateRow->where('template_id', $id)->get()->getResult());
 
@@ -742,6 +749,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ];
             }, $dataListRevision);
         }
+
+
+
 
         return $this->respond([
             'dokumen'      => $dataDokumen,
@@ -1087,7 +1097,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'dokumen_id'      => $_dokumenID,
                 'template_row_id' => $arr['id'],
                 'target_value'    => str_replace(',', '.', $arr['target']),
-                'target_sat'    => str_replace(',', '.', $arr['target_satuan']),
+                'target_sat'    =>  $arr['target_satuan'] ??  null,
                 'outcome_value'   => str_replace(',', '.', $arr['outcome']),
                 'is_checked'      => $arr['isChecked']
             ];

@@ -185,7 +185,7 @@ class App extends BaseConfig
 	*/
 	public $sessionDriver            = 'CodeIgniter\Session\Handlers\DatabaseHandler';
 	public $sessionCookieName        = 'Monika_session';
-	public $sessionExpiration        = 7200;
+	public $sessionExpiration        = 0;
 	// public $sessionSavePath          = WRITEPATH . 'session';
 	public $sessionSavePath          = 'ci_sessions';
 

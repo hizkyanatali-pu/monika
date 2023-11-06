@@ -53,6 +53,12 @@
 
 
     $(document).on('click', '.__opsi-template', function() {
+
+        if ($(this).data('type') == "uptBalai-add") {
+            paramsBtnPaket = "uptBalai-add";
+
+        }
+
         if ($(this).data('available') == true) {
             if ($(this).data('balai-create-satker') == undefined) {
                 $('#modalForm').modal('show')
@@ -145,6 +151,7 @@
             rowChild.find('button.paket').attr('disabled', 'true')
             rowChild.find('input').val('')
             rowChild.find('.totalpaket').html("0")
+
             localStorage.clear()
             // var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
             // totalPaketElement.html(selectedItems.length);
@@ -153,7 +160,11 @@
 
         } else {
             rowChild.removeClass('disabled')
-            rowChild.find('input').removeAttr('readonly')
+
+            if (rowChild.find('input[data-pktype]').attr('data-pktype') == "balai") {
+
+                rowChild.find('input').removeAttr('readonly')
+            }
             rowChild.find('select').removeAttr('disabled')
             rowChild.find('button.paket').removeAttr('disabled')
 
@@ -182,7 +193,10 @@
             // localStorage.clear()
         } else {
             element_parentsColumn.removeClass('disabled')
-            element_parentsColumn.find('input').removeAttr('readonly')
+
+            if (element_parentsColumn.find('input[data-pktype]').attr('data-pktype') == "balai") {
+                element_parentsColumn.find('input').removeAttr('readonly')
+            }
             element_parentsColumn.find('select').removeAttr('disabled')
             element_parentsColumn.find('button.paket').removeAttr('disabled')
 
@@ -567,7 +581,19 @@
 
 
     $(document).on('click', '.__lihat-dokumen', function() {
-        paramsBtnPaket = "lihat";
+
+        if ($(this).data('type') == "uptBalai-add") {
+            paramsBtnPaket = "uptBalai-add";
+
+        } else {
+
+            paramsBtnPaket = "lihat";
+        }
+
+        console.log();
+
+
+
         prepareRevisiDocument({
             dataId: $(this).data('id'),
             templateId: $(this).data('template-id'),
@@ -589,7 +615,13 @@
 
     $(document).on('click', '.__edit-dokumen', function() {
 
-        paramsBtnPaket = "edit";
+        if ($(this).data('type') == "uptBalai-add") {
+            paramsBtnPaket = "uptBalai-add";
+
+        } else {
+
+            paramsBtnPaket = "edit";
+        }
         let documentId = $(this).data('id')
 
         prepareRevisiDocument({
@@ -632,7 +664,14 @@
                         <small>${ res.template.title }</small>
                     `)
 
-                    resolve(dataId)
+                    resolve({
+
+                        dataId: dataId,
+                        templateRows: res.templateRow
+                    })
+
+
+
                 },
                 fail: (xhr) => {
                     alert("Terjadi kesalahan pada sistem")
@@ -643,13 +682,18 @@
         })
 
         promiseGetTemplate.then((res) => {
+
+            getRows = res.templateRows;
             $.ajax({
-                url: "<?php echo site_url('dokumenpk/detail/') ?>" + res,
+                url: "<?php echo site_url('dokumenpk/detail/') ?>" + res.dataId,
                 type: 'GET',
                 success: (res) => {
                     if (res.dokumen.revision_same_year_number != 0) {
                         $('input[name=revision_same_year]').val(1)
                     }
+
+
+                    satkerIdDefault = 0;
                     res.rows.forEach((data, key) => {
                         let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
                             elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
@@ -661,7 +705,47 @@
                         data.target_sat ? elementInput_target_satuan.val(data.target_sat) : ''
                         elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
+
+                        const idPaketArray = res.paket
+                            .filter(item => item.template_row_id == data.template_row_id)
+                            .map(item => {
+                                    return {
+                                        paketId: item.idpaket,
+                                        target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
+                                        target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
+                                        outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
+                                        outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                                    };
+                                }
+
+                            );
+
+                        selectedItems = idPaketArray;
+
+                        localStorage.setItem(data.template_row_id, JSON.stringify(idPaketArray));
+
+                        var totalPaketElement = $('[data-rowid="' + data.template_row_id + '"]').find('.totalpaket');
+
+                        //
+
+                        const foundRow = getRows.find(row => row.id === data.template_row_id);
+                        if (foundRow) {
+                            // Menggunakan nilai 'satkerid' dari 'getRows' jika ditemukan
+                            satkerIdDefault = foundRow.satkerid;
+                        }
+
+                        var elem = $('[data-rowid="' + data.template_row_id + '"]');
+                        elem.attr('data-satkerid', res.dokumen.satkerid || satkerIdDefault);
+
+
+                        totalPaketElement.html(selectedItems.length);
+
+
                         if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
+
+
+
+
                     })
 
 
@@ -734,6 +818,8 @@
 
                     params.beforeModalMount(res)
 
+
+                    $('.modal .btn-modal-full').trigger('click');
                     $('#modalForm').modal('show')
                 },
                 fail: (xhr) => {
@@ -1308,7 +1394,9 @@
                         $('.container-revision-alert-cetak').html('')
                     }
 
+
                     element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
+
                     element_modalPreviewCetakDokumen.modal('show')
 
                     if (_toConfirm) {
@@ -1331,6 +1419,7 @@
                         element_modalPreviewCetakDokumen.find('.modal-footer').empty()
                     }
                 }, 400)
+                $('.btn-modal-full').trigger('click')
             }
         })
     }
@@ -1464,7 +1553,8 @@
             classDNoneOutcome = '',
             titleTheadTable = '',
             theadBalaiTarget = '',
-            theadBalaiTargetNumber = ''
+            theadBalaiTargetNumber = '',
+            titleTheadTableOutcomeBalai = ''
 
 
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
@@ -1498,9 +1588,14 @@
 
         if (_data.template.type == 'master-balai' || _data.template.type == 'eselon1') {
             titleTheadTable = '';
+            titleTheadTableOutcomeBalai = '';
+            theadBalaiTargetNumber = '';
+            theadBalaiTargetNumber += '<td class="text-center p-2">(3)</td>';
             switch (_data.template.type) {
                 case 'master-balai':
-                    titleTheadTable = 'Target Dari Satker';
+                    titleTheadTableOutcomeBalai = '<td class="text-center" style="width: 10%">Target Satker</td>';
+                    titleTheadTable = '<td class="text-center" style="width: 10%">Outcome Satker</td>';
+                    theadBalaiTargetNumber += '<td class="text-center p-2">(4)</td>';
                     break;
 
                 case 'eselon1':
@@ -1509,11 +1604,12 @@
 
                 default:
                     titleTheadTable = '';
+                    titleTheadTableOutcomeBalai = '';
+
                     break;
             }
 
             theadBalaiTarget = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
-            theadBalaiTargetNumber = '<td class="text-center p-2">(3)</td>';
         } else {
             titleTheadTable = 'Target ' + <?php echo $sessionYear ?>
         }
@@ -1530,9 +1626,9 @@
                 <thead>
                     <tr class="sticky-header-1">
                         <td class="text-center"  style="width: 70%" colspan="3">Sasaran Program / Sasaran Kegiatan / Indikator</td>
-                        <td class="text-center" style="width: 15%">
-                            ${titleTheadTable}
-                        </td>
+                        ${titleTheadTableOutcomeBalai}
+                        ${titleTheadTable}
+                  
                         ${theadBalaiTarget}
                         <td class="text-center ${classDNoneOutcome}" style="width: 15%">
                             Outcome
@@ -1749,6 +1845,7 @@
             classDNoneOutcome = 'd-none'
         }
 
+
         _data.forEach((data, key) => {
             switch (data.type) {
                 case 'section_title':
@@ -1784,11 +1881,24 @@
 
 
                     if (_templateType == 'master-balai' || _templateType == 'eselon1') {
+
+
                         renderInputTarget = `
+
                             <td>
                                 <div class="input-group mr-3">
                                     <div class="input-group-append">
-                                        <span class="input-group-text">${ data.targetDefualtValue }</span>
+                                        <span class="input-group-text">${data.targetSatkerValue.toString().replaceAll('.',',')}</span>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">${data.targetSatkerSatuan}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group mr-3">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">${ data.outcomeSatkerValue.toString().replaceAll('.',',')}</span>
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
@@ -1804,7 +1914,7 @@
                                         value="${ data.targetBalaiDefualtValue }"
                                         data-row-id="${ data.id }"
                                         onkeyup="return this.value = formatRupiah(this.value, '')"
-                                    readonly>
+                                    data-pktype="balai">
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
                                     </div>
@@ -1819,9 +1929,9 @@
                                     type="text" 
                                     class="form-control __inputTemplateRow-target" 
                                     placeholder="Masukkan Nilai"
-                                    value="${ data.targetDefualtValue }"
+                                    value="${ data.outcomeSatkerValue }"
                                     data-row-id="${ data.id }"
-                                    onkeyup="return this.value = formatRupiah(this.value, '')"
+                                    onkeyup="return this.value = formatRupiah(this.value, '')" data-pktype="satker"
                                     readonly>
                                 <div class="input-group-append">
                                      <select class="form-control select-target-satuan" data-row-id="${data.id}">
@@ -1836,41 +1946,70 @@
                         `
                     }
 
-                    if (paramsBtnPaket == "lihat" || paramsBtnPaket == "edit") {
+                    // if (paramsBtnPaket == "lihat" || paramsBtnPaket == "edit") {
 
-                        $.ajax({
-                            url: "<?php echo site_url('dokumenpk/detail/') ?>" + DocID,
-                            type: 'GET',
-                            success: (res) => {
-                                if (res.paket) {
-                                    const idPaketArray = res.paket
-                                        .filter(item => item.template_row_id == data.id)
-                                        .map(item => {
-                                                return {
-                                                    paketId: item.idpaket,
-                                                    target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
-                                                    target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
-                                                    outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
-                                                    outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
-                                                };
-                                            }
+                    //     $.ajax({
+                    //         url: "<?php echo site_url('dokumenpk/detail/') ?>" + DocID,
+                    //         type: 'GET',
+                    //         success: (res) => {
+                    //             if (res.paket) {
 
-                                        );
+                    //                 const idPaketArray = res.paket
+                    //                     .filter(item => item.template_row_id == data.id)
+                    //                     .map(item => {
+                    //                             return {
+                    //                                 paketId: item.idpaket,
+                    //                                 target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
+                    //                                 target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
+                    //                                 outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
+                    //                                 outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                    //                             };
+                    //                         }
 
-                                    selectedItems = idPaketArray;
-                                    localStorage.setItem(data.id, JSON.stringify(idPaketArray));
+                    //                     );
 
-                                    var totalPaketElement = $('[data-rowid="' + data.id + '"]').find('.totalpaket');
-                                    var elem = $('[data-rowid="' + data.id + '"]');
+                    //                 selectedItems = idPaketArray;
 
-                                    elem.attr('data-satkerid', res.dokumen.satkerid ?? res.dokumen.balaiid);
-                                    totalPaketElement.html(selectedItems.length);
+                    //                 localStorage.setItem(data.id, JSON.stringify(idPaketArray));
 
+                    //                 var totalPaketElement = $('[data-rowid="' + data.id + '"]').find('.totalpaket');
+                    //                 var elem = $('[data-rowid="' + data.id + '"]');
+
+                    //                 elem.attr('data-satkerid', res.dokumen.satkerid ?? '0');
+                    //                 totalPaketElement.html(selectedItems.length);
+
+
+
+
+                    //             }
+
+                    //         }
+                    //     });
+
+
+                    // }
+
+                    if (paramsBtnPaket == "uptBalai-add") {
+
+                        const idPaketArray = data.paket
+                            .filter(item => data.listSatker.includes(item.satkerid))
+                            .map(item => {
+                                    return {
+                                        paketId: item.idpaket,
+                                        target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
+                                        target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
+                                        outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
+                                        outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                                    };
                                 }
-                            }
-                        });
 
+                            );
+
+                        selectedItems = idPaketArray;
+                        localStorage.setItem(data.id, JSON.stringify(idPaketArray));
                     }
+
+
 
                     rows += `
                         <tr>
@@ -1879,7 +2018,8 @@
                             </td>
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title } 
-                            <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" data-dokid="${DocID||0}" data-indikator="${ data.title }" data-rowid="${data.id}" data-outputsatuan="${data.target_satuan}" data-outcomesatuan="${data.outcome_satuan}">Paket <span class="label label-sm label-white ml-2 totalpaket">${data.paket.length}</span></button></td>
+                            <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" data-dokid="${DocID||0}" data-indikator="${ data.title }" data-rowid="${data.id}" data-outputsatuan="${data.target_satuan}" data-outcomesatuan="${data.outcome_satuan}" data-satkerid = "${data.listSatker.length === 0 ? _satkerId : data.listSatker}">Paket <span class="label label-sm label-white ml-2 totalpaket">
+                            ${paramsBtnPaket == "uptBalai-add" ? selectedItems.length:data.paket.length}</span></button></td>
                             ${renderInputTarget}
                             <td class="${classDNoneOutcome}">
                                 <div class="input-group">
@@ -1903,7 +2043,6 @@
 
 
             }
-
 
 
         });
@@ -2152,16 +2291,13 @@
 <script>
     $(document).on('click', '.paket', function() {
         var selectedItems = [];
-
         $('#modalPilihPaket').modal('show');
+        $('.modal.btn-modal-full').trigger('click');
 
-        let satkerId = $(this).data('satkerid') ?? "<?php
-                                                    $session = session();
-                                                    $this->user = $session->get('userData');
-                                                    $this->userUID = $this->user['satker_id'] ?? $this->user['balai_id'] ?? '';
-                                                    echo $this->userUID ?>";
+        let satkerId = $(this).data('satkerid');
 
         var balaiCreateSatker = $(".__opsi-template").attr("data-balai-create-satker");
+
 
 
         if (balaiCreateSatker != undefined) {
@@ -2194,55 +2330,69 @@
             selectedItems = JSON.parse(storedItems);
         }
 
+
         //get paket
         $.ajax({
-            url: "<?php echo site_url('api/getpaket') ?>" + "/" + satkerId,
+            url: "<?php echo site_url('api/getpaket') ?>",
             type: 'GET',
+            data: {
+                satkerId: satkerId
+            },
             success: (res) => {
-                const tbody = $('#tbody');
-                tbody.empty();
-                var jsonData = JSON.parse(res);
 
-                jsonData.forEach(function(balai, index) {
-                    if (index === 0) {
-                        tbody.append(`
+                if (res.message != 'tidak ada data') {
+                    const tbody = $('#tbody');
+                    tbody.empty();
+                    var jsonData = JSON.parse(res);
+
+                    jsonData.forEach(function(balai, index) {
+                        if (index === 0) {
+                            tbody.append(`
                     <tr style="background-color:#89CFF0" class="sticky-header-2">
                     <td>-</td>
                     <td colspan = "10"><strong>${balai.balai}</strong></td>
                     </tr>`);
-                    }
-                    tbody.append(`
+                        }
+                        tbody.append(`
                     
                     <tr style="background-color:#b6dced" class="sticky-header-3">
                     <td><strong>${balai.satkerid}</strong></td>
                     <td colspan = "10"><strong>${balai.satker}</strong></td>
                     </tr>
-                    
-
-
+                
 
                    `);
 
-                    balai.paket.forEach(function(paket, index) {
+                        balai.paket.forEach(function(paket, index) {
 
-                        trClass = '';
-                        var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
-                        if (paramsBtnPaket == "lihat") {
-                            checkboxHtml += 'disabled';
-                            $(".checkbox-click").attr("disabled", true)
-                            $('.save-btn-paket').addClass('d-none');
-                        } else {
-                            $('.save-btn-paket').removeClass('d-none');
-                        }
-                        // if (selectedItems.includes(paket.paketId)) {
-                        if (selectedItems.some(item => item.paketId === paket.paketId)) {
-                            checkboxHtml += ' checked'; // Set checked attribute
-                            trClass = "style='background-color:#e0f2e9'"
-                        }
+                            trClass = '';
+                            output_from_satrker = ''
+                            var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
+                            if (paramsBtnPaket == "lihat" || paramsBtnPaket == 'uptBalai-add') {
+                                checkboxHtml += 'disabled';
+                                $(".checkbox-click").attr("disabled", true)
+                                $('.save-btn-paket').addClass('d-none');
+                            } else {
+                                $('.save-btn-paket').removeClass('d-none');
+                            }
+                            // if (selectedItems.includes(paket.paketId)) {
+                            if (selectedItems.some(item => item.paketId === paket.paketId)) {
+                                checkboxHtml += ' checked'; // Set checked attribute
+                                trClass = "style='background-color:#e0f2e9'"
+                                // Cari objek yang sesuai dengan paket.paketId
+                                const selectedPaket = selectedItems.find(item => item.paketId === paket.paketId);
 
-                        checkboxHtml += '>';
+                                // Isi output_from_satrker dengan nilai target_satuan
+                                if (selectedPaket) {
+                                    output_from_satrker = selectedPaket.target_satuan;
+                                } else {
+                                    output_from_satrker = ''; // Atur ke nilai default jika tidak ditemukan
+                                }
+                            }
 
-                        tbody.append(`
+                            checkboxHtml += '>';
+
+                            tbody.append(`
                           <tr ${trClass}>
                           <td>${checkboxHtml}</td>
                             <td>${paket.paketId}</td>
@@ -2261,7 +2411,7 @@
 								</div>
                                 <div class="form-group-sub">
 									<label class="form-control-label">Satuan Output :</label>
-									<input type="text" class="form-control target_satuan" name="target_satuan" placeholder="" value="${output_satuan}" disabled>
+									<input type="text" class="form-control target_satuan" name="target_satuan" placeholder="" value="${output_satuan ?? output_from_satrker }" disabled>
 								</div>
 							</div>
                             
@@ -2282,25 +2432,25 @@
                           </tr>
                         `);
 
-                        // Mendengarkan perubahan status kotak centang
-                        $('input.checkbox').on('change', function() {
-                            if (this.checked) {
-                                // Kotak centang dicentang, maka menonaktifkan input dengan class "target_nilai"
-                                $(this).closest('tr').find('.checkbox-click').prop('disabled', false);
-                                $(this).closest('tr').attr('style', 'background-color:#e0f2e9');
+                            // Mendengarkan perubahan status kotak centang
+                            $('input.checkbox').on('change', function() {
+                                if (this.checked) {
+                                    // Kotak centang dicentang, maka menonaktifkan input dengan class "target_nilai"
+                                    $(this).closest('tr').find('.checkbox-click').prop('disabled', false);
+                                    $(this).closest('tr').attr('style', 'background-color:#e0f2e9');
 
-                            } else {
-                                // Kotak centang tidak dicentang, maka mengaktifkan kembali input dengan class "target_nilai"
-                                $(this).closest('tr').find('.checkbox-click').prop('disabled', true);
-                                $(this).closest('tr').removeAttr('style');
+                                } else {
+                                    // Kotak centang tidak dicentang, maka mengaktifkan kembali input dengan class "target_nilai"
+                                    $(this).closest('tr').find('.checkbox-click').prop('disabled', true);
+                                    $(this).closest('tr').removeAttr('style');
 
-                            }
+                                }
+                            });
                         });
-                    });
 
 
-                })
-
+                    })
+                }
             }
         })
 

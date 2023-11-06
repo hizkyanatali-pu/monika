@@ -327,18 +327,25 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
 <!-- Modal Form Detail -->
 <div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="d-flex">
-                    <button type="button" class="btn btn-default pr-2 d-none __back-pilih-dokumen">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <h5 class="modal-title pt-2 pl-2">Pilih Dokumen</h5>
+                <div class="clearfix w-100">
+                    <div class="float-left">
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-default pr-2 d-none __back-pilih-dokumen">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <h5 class="modal-title pt-2 pl-2">Pilih Dokumen</h5>
+                        </div>
+                    </div>
+                    <div class="float-right">
+                        <button type="button" class="btn btn-modal-full text-right" style="margin: -10px;"><i class="fas fa-external-link-alt"></i></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body p-0">
                 <div class="list-group" id="choose-template">
@@ -849,7 +856,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
     function getData(_status, instansi = '') {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>" + "/" + instansi + "?_=" + new Date().getTime(),
+            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>" + (instansi ? '/' + instansi : '') + "?_=" + new Date().getTime(),
             type: 'GET',
             success: (res) => {
                 renderTableRow(_status, res.data)

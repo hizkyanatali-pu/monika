@@ -44,16 +44,27 @@ class Pulldata extends \App\Controllers\BaseController
     }
 
 
-    function getPaketTagging($w = '')
+    function getPaketTagging()
     {
-        $getSatker = $this->db->query("SELECT * from m_satker WHERE satkerid=$w")->getRow();
-        $where = "md.kdsatker = $w";
 
-        if (empty($getSatker)) {
-            $getSatkerResult = $this->db->query("SELECT GROUP_CONCAT(satkerid) as satkerids from m_satker WHERE balaiid=$w")->getRow();
-            $getSatkerIds = $getSatkerResult->satkerids;
-            $where = "md.kdsatker IN ($getSatkerIds)";
+
+        $w = $this->request->getVar('satkerId');
+
+        if ($w == 0) {
+            $jsonResponse =  json_encode(["message" => "tidak ada data"]);
+            header('Content-Type: application/json');
+            echo $jsonResponse;
+            exit;
         }
+
+        $where = "md.kdsatker IN ($w)";
+
+        // $getSatker = $this->db->query("SELECT * from m_satker WHERE kdsatker IN ($w)")->getRow();
+        // if (empty($getSatker)) {
+        //     // $getSatkerResult = $this->db->query("SELECT GROUP_CONCAT(satkerid) as satkerids from m_satker WHERE balaiid=$w")->getRow();
+        //     // $getSatkerIds = $getSatkerResult->satkerids;
+        //     $where = "md. IN ($getSatkerIds)";
+        // }
 
 
         $q = "SELECT
@@ -75,12 +86,16 @@ class Pulldata extends \App\Controllers\BaseController
 
         FROM monika_data_{$this->user['tahun']} md
 		LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
-		LEFT JOIN m_balai b ON b.balaiid=s.balaiid
-        " . ($w ? " WHERE $where" : '') . " AND sat NOT IN ('dokumen','layanan','laporan','0')ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
+		LEFT JOIN m_balai b ON b.balaiid=s.balaiid WHERE sat NOT IN ('dokumen','layanan','laporan','0')
+        " . ($w ? " AND $where" : '') . " ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
+
 
 
         // Eksekusi query dan ambil hasil dari database
         $result =   $this->db->query($q)->getResultArray();
+
+        // if (!$result) {
+        // }
 
         $nestedData = array();
 
