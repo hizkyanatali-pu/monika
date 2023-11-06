@@ -1433,6 +1433,7 @@
         data: {},
         target: ''
     }) {
+
         element_btnSaveDokumen.attr('data-template-id', params.templateId)
         element_modalDialog.addClass('modal-xl')
         element_modalFooter.removeClass('d-none')
@@ -1611,7 +1612,7 @@
 
             theadBalaiTarget = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
         } else {
-            titleTheadTable = 'Target ' + <?php echo $sessionYear ?>
+            titleTheadTable = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
         }
 
 

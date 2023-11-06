@@ -99,7 +99,10 @@
                             $disabled = "";
                         }
                     ?>
-                        <button <?= (!isset($balaiCreateForSatker) ? ' data-type="uptBalai-add"' : '') ?> class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?> <?= $disabled ?>>
+                        <button class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php }
+                                                                                                                                                                                                                                    if (!isset($balaiCreateForSatker) and empty(session('userData.satker_id'))) {
+                                                                                                                                                                                                                                        echo "data-type=uptBalai-add";
+                                                                                                                                                                                                                                    } ?> <?= $disabled ?>>
                             <i class="fas fa-plus"></i> Buat Dokumen
                         </button>
                     <?php } ?>

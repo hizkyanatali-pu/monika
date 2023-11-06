@@ -639,9 +639,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         }, $this->templateRow->where('template_id', $id)->get()->getResult());
 
 
-        $valudasiCreatedDokumen = true;
+        $valudasiCreatedDokumen = false;
         $balai_checklistSatker = [];
-        if ($session_userType == 'balai') {
+        if ($session_userType == "balai") {
             $balai_checklistSatker = $this->satker->select("
                 m_satker.satker,
                 (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status='setuju' ) as iscreatedPK
@@ -651,7 +651,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $totalSatkerIsCreated = count(array_filter($balai_checklistSatker, function ($arr) {
                 return $arr->iscreatedPK > 0;
             }));
-            if (count($balai_checklistSatker) != $totalSatkerIsCreated) $valudasiCreatedDokumen = false;
+            if (count($balai_checklistSatker) == $totalSatkerIsCreated) $valudasiCreatedDokumen = true;
         }
 
 
