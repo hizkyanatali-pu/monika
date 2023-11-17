@@ -2,7 +2,7 @@
 
 <script>
     $(window).on('beforeunload', function() {
-        localStorage.clear();
+        sessionStorage.clear();
     });
 
     var paramsBtnPaket = "";
@@ -124,6 +124,20 @@
                     target: 'create'
                 })
             },
+            error: function(jqXHR, textStatus, errorThrown) {
+                Swal.fire({
+                    title: 'Gagal',
+                    icon: "warning",
+                    text: 'Ada Perubahan Data disatker, Coba Lagi !',
+                    type: 'confirm',
+                    confirmButtonText: 'Refresh Halaman',
+
+                }).then(result => {
+                    if (result.value) {
+                        location.reload();
+                    }
+                });
+            },
             fail: (xhr) => {
                 alert("Terjadi kesalahan pada sistem")
 
@@ -152,7 +166,7 @@
             rowChild.find('input').val('')
             rowChild.find('.totalpaket').html("0")
 
-            localStorage.clear()
+            sessionStorage.clear()
             // var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
             // totalPaketElement.html(selectedItems.length);
 
@@ -188,9 +202,9 @@
             element_parentsColumn.find('.totalpaket').html("0")
             rowid = element_parentsColumn.find('.paket').attr('data-rowid');
 
-            localStorage.removeItem(rowid);
+            sessionStorage.removeItem(rowid);
 
-            // localStorage.clear()
+            // sessionStorage.clear()
         } else {
             element_parentsColumn.removeClass('disabled')
 
@@ -487,95 +501,7 @@
             }
         })
 
-        // let dataID = $(this).data('id'),
-        //     templateID = $(this).data('template-id')
 
-        // const promiseGetTemplate = new Promise((resolve, reject) => {
-        //     $.ajax({
-        //         url: "<?php echo site_url('dokumenpk/get-template/') ?>" + templateID,
-        //         type: 'GET',
-        //         success: (res) => {
-        //             preapreForm_afterChooseTemplate({
-        //                 templateId: templateID,
-        //                 data      : res,
-        //                 target    : 'koreksi'
-        //             })
-
-        //             element_modalFormTitle.html(`
-        //                 <h6>Koreksi Dokumen</h6>
-        //                 <small>${ res.template.title }</small>
-        //             `)
-
-        //             resolve(dataID)
-        //         },
-        //         fail: (xhr) => {
-        //             alert("Terjadi kesalahan pada sistem")
-        //             console.log(xhr)
-        //             reject(then)
-        //         }
-        //     })
-        // })
-
-        // promiseGetTemplate.then((res) => {
-        //     $.ajax({
-        //         url: "<?php echo site_url('dokumenpk/detail/') ?>" + res,
-        //         type: 'GET',
-        //         success: (res) => {
-        //             res.rows.forEach((data, key) => {
-        //                 let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
-        //                     elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
-
-        //                 elementInput_target.val(data.target_value)
-        //                 elementInput_outcome.val(data.outcome_value)
-
-        //                 if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
-        //             })
-
-        //             res.kegiatan.forEach((data, key) => {
-        //                 let elementInput_target = $('tr[data-kegiatan-id='+data.id+']').find('input[name=kegiatan-anggaran]')
-        //                 elementInput_target.val(data.anggaran)
-        //             })
-
-        //             $('input[name=total-anggaran]').val(res.dokumen.total_anggaran)
-        //             $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
-        //             $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
-
-        //             $('.title-ttd-pihak1').text('KEPALA ' + res.dokumen.pihak1_initial)
-        //             $('.title-ttd-pihak2').text('KEPALA ' + res.dokumen.pihak2_initial)
-
-        //             if ($('input[name=ttd-pihak2-jabatan]').length) {
-        //                 $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
-        //             }
-
-        //             if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
-        //             if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
-
-        //             $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
-        //             $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
-        //             $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
-
-        //             if (res.dokumen.revision_message != null) {
-        //                 $('.container-revision-alert').html(`
-        //                     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-        //                         <h5 class="alert-heading">Perlu Di Koreksi !</h5>
-        //                         <p>${res.dokumen.revision_message}</p>
-        //                     </div>
-        //                 `)
-        //             }
-
-
-        //             render_prepare_btnSubmitToRevision({
-        //                 dokumenID: res.dokumen.id,
-        //                 dokumenMasterID: res.dokumen.revision_master_dokumen_id ?? res.dokumen.id
-        //             });
-        //             $('#modalForm').modal('show')
-        //         },
-        //         fail: (xhr) => {
-        //             alert("Terjadi kesalahan pada sistem")
-        //             console.log(xhr)
-        //         }
-        //     })
-        // })
     })
 
 
@@ -722,7 +648,7 @@
 
                         selectedItems = idPaketArray;
 
-                        localStorage.setItem(data.template_row_id, JSON.stringify(idPaketArray));
+                        sessionStorage.setItem(data.template_row_id, JSON.stringify(idPaketArray));
 
                         var totalPaketElement = $('[data-rowid="' + data.template_row_id + '"]').find('.totalpaket');
 
@@ -837,6 +763,7 @@
             url: "<?php echo site_url('dokumenpk/detail/') ?>" + dokumenId,
             type: 'GET',
             success: (res) => {
+                satkerIdDefault = 0;
                 res.rows.forEach((data, key) => {
                     let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
                         elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
@@ -845,6 +772,43 @@
                     elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
                     elementInput_target_satuan.val(data.target_sat)
                     elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
+
+
+                    const idPaketArray = res.paket
+                        .filter(item => item.template_row_id == data.template_row_id)
+                        .map(item => {
+                                return {
+                                    paketId: item.idpaket,
+                                    target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
+                                    target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
+                                    outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
+                                    outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                                };
+                            }
+
+                        );
+
+                    selectedItems = idPaketArray;
+
+                    sessionStorage.setItem(data.template_row_id, JSON.stringify(idPaketArray));
+
+                    var totalPaketElement = $('[data-rowid="' + data.template_row_id + '"]').find('.totalpaket');
+
+                    //
+
+                    const foundRow = getRows.find(row => row.id === data.template_row_id);
+                    if (foundRow) {
+                        // Menggunakan nilai 'satkerid' dari 'getRows' jika ditemukan
+                        satkerIdDefault = foundRow.satkerid;
+                    }
+
+                    var elem = $('[data-rowid="' + data.template_row_id + '"]');
+                    elem.attr('data-satkerid', res.dokumen.satkerid || satkerIdDefault);
+
+
+                    totalPaketElement.html(selectedItems.length);
+
+
 
                     if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
                 })
@@ -956,20 +920,36 @@
             success: (res) => {
                 let renderList = ''
                 res.data.forEach(data => {
-                    let renderCheck = ''
+                    // let renderCheck = ''
 
-                    if (data.iscreatedPK > 0) {
+                    // if (data.iscreatedPK > 0) {
+                    //     renderCheck = '<i class="fas fa-check"></i>'
+                    // } else if (data.iscreatedPKBeforeAcc > 0) {
+                    //     renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold ' + data.status_color + '"> ' + data.status_now + ' </span> <div > ';
+                    // }
+                    // renderList += `
+                    //     <li class="list-group-item d-flex justify-content-between">
+                    //         <label>${data.satker}</label>
+                    //         ${renderCheck}
+                    //     </li>
+                    // `
+                    let renderCheck = '<i class="fas fa-times" style="color: red;"></i>'
+                    if (data.satkerCheck == 'setuju') {
+
                         renderCheck = '<i class="fas fa-check"></i>'
-                    } else if (data.iscreatedPKBeforeAcc > 0) {
-                        renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold ' + data.status_color + '"> ' + data.status_now + ' </span> <div > ';
+
                     }
-                    renderList += `
-                        <li class="list-group-item d-flex justify-content-between">
+                    if (data.satkerCheck == 'hold' || data.satkerCheck == 'tolak') {
+                        renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold bg-secondary">Pending</span> <div > ';
+                    }
+                    renderList += `<li class="list-group-item d-flex justify-content-between">
                             <label>${data.satker}</label>
                             ${renderCheck}
-                        </li>
-                    `
+                        </li>`;
+
                 });
+
+
 
                 $('#modalSatkerListCreated').find('.list-group').html(renderList)
             }
@@ -1137,7 +1117,7 @@
 
             paket.push({
                 id: elementInput_target.data('row-id'),
-                paketId: localStorage.getItem(elementInput_target.data('row-id')),
+                paketId: sessionStorage.getItem(elementInput_target.data('row-id')),
                 isChecked: element_checkRow.is(':checked') ? '1' : '0'
             });
         })
@@ -1359,7 +1339,7 @@
         element_modalFormBackChooseTemplate.addClass('d-none')
         element_modalFormTitle.html('Pilih Dokumen')
         render_reset_btnSubmitToRevision()
-        localStorage.clear();
+        sessionStorage.clear();
     }
 
 
@@ -1419,7 +1399,7 @@
                         element_modalPreviewCetakDokumen.find('.modal-footer').empty()
                     }
                 }, 400)
-                $('.btn-modal-full').trigger('click')
+                // $('.btn-modal-full').trigger('click')
             }
         })
     }
@@ -1462,16 +1442,29 @@
 
             let renderCheckListSatkerBalai = ''
             params.data.balaiValidasiSatker.balaiChecklistSatker.forEach((data, index) => {
-                let renderCheck = ''
 
-                if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check mt-2"></i>'
+                // if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check mt-2"></i>'
 
-                renderCheckListSatkerBalai += `
-                    <li class="list-group-item d-flex justify-content-between">
-                        <label>${ data.satker }</label>
-                        ${renderCheck}
-                    </li>
-                `
+                // renderCheckListSatkerBalai += `
+                //     <li class="list-group-item d-flex justify-content-between">
+                //         <label>${ data.satker }</label>
+                //         ${renderCheck}
+                //     </li>
+                // `
+
+                let renderCheck = '<i class="fas fa-times" style="color: red;"></i>'
+                if (data.satkerCheck == 'setuju') {
+
+                    renderCheck = '<i class="fas fa-check"></i>'
+
+                }
+                if (data.satkerCheck == 'hold' || data.satkerCheck == 'tolak') {
+                    renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold bg-secondary">Pending</span> <div > ';
+                }
+                renderCheckListSatkerBalai += `<li class="list-group-item d-flex justify-content-between">
+                            <label>${data.satker}</label>
+                            ${renderCheck}
+                        </li>`;
             });
 
 
@@ -1668,7 +1661,7 @@
                                     <th class="text-center">Nama ${ capitalizeFirstLetter(template.info_title) }</th>
                                     <th class="text-center" width="250px">Nominal Anggaran</th>
                                     <th width="50px">
-                                        <button class="btn btn-sm btn-primary" id="__add-item-kegiatan" data-info = "${template.info_title}">
+                                        <button class="btn btn-sm btn-primary" id="__add-item-kegiatan" title="Tambah Kegiatan & Anggaran" data-info = "${template.info_title}">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </th>
@@ -1971,7 +1964,7 @@
 
                     //                 selectedItems = idPaketArray;
 
-                    //                 localStorage.setItem(data.id, JSON.stringify(idPaketArray));
+                    //                 sessionStorage.setItem(data.id, JSON.stringify(idPaketArray));
 
                     //                 var totalPaketElement = $('[data-rowid="' + data.id + '"]').find('.totalpaket');
                     //                 var elem = $('[data-rowid="' + data.id + '"]');
@@ -2007,7 +2000,7 @@
                             );
 
                         selectedItems = idPaketArray;
-                        localStorage.setItem(data.id, JSON.stringify(idPaketArray));
+                        sessionStorage.setItem(data.id, JSON.stringify(idPaketArray));
                     }
 
 
@@ -2019,7 +2012,7 @@
                             </td>
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title } 
-                            <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" data-dokid="${DocID||0}" data-indikator="${ data.title }" data-rowid="${data.id}" data-outputsatuan="${data.target_satuan}" data-outcomesatuan="${data.outcome_satuan}" data-satkerid = "${data.listSatker.length === 0 ? _satkerId : data.listSatker}">Paket <span class="label label-sm label-white ml-2 totalpaket">
+                            <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" title="pilih paket" data-dokid="${DocID||0}" data-indikator="${ data.title }" data-rowid="${data.id}" data-outputsatuan="${data.target_satuan}" data-outcomesatuan="${data.outcome_satuan}" data-satkerid = "${data.listSatker.length === 0 ? _satkerId : data.listSatker}">Paket <span class="label label-sm label-white ml-2 totalpaket">
                             ${paramsBtnPaket == "uptBalai-add" ? selectedItems.length:data.paket.length}</span></button></td>
                             ${renderInputTarget}
                             <td class="${classDNoneOutcome}">
@@ -2325,7 +2318,7 @@
         $('.save-btn-paket').attr("data-indikatorid", indikatorID)
 
 
-        var storedItems = localStorage.getItem(indikatorID);
+        var storedItems = sessionStorage.getItem(indikatorID);
 
         if (storedItems) {
             selectedItems = JSON.parse(storedItems);
@@ -2520,7 +2513,7 @@
                 Swal.fire('Peringatan', message, 'warning');
             });
         } else if (selectedItems.length > 0) {
-            localStorage.setItem(indikatorId, JSON.stringify(selectedItems));
+            sessionStorage.setItem(indikatorId, JSON.stringify(selectedItems));
             var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
             totalPaketElement.html(selectedItems.length);
 

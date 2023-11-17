@@ -99,10 +99,10 @@
                             $disabled = "";
                         }
                     ?>
-                        <button class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php }
-                                                                                                                                                                                                                                    if (!isset($balaiCreateForSatker) and empty(session('userData.satker_id'))) {
-                                                                                                                                                                                                                                        echo "data-type=uptBalai-add";
-                                                                                                                                                                                                                                    } ?> <?= $disabled ?>>
+                        <button class="btn btn-primary __opsi-template <?= $disabled ? "d-none" : "" ?>" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php }
+                                                                                                                                                                                                                                                                    if (!isset($balaiCreateForSatker) and empty(session('userData.satker_id'))) {
+                                                                                                                                                                                                                                                                        echo "data-type=uptBalai-add";
+                                                                                                                                                                                                                                                                    } ?>>
                             <i class="fas fa-plus"></i> Buat Dokumen
                         </button>
                     <?php } ?>
@@ -181,22 +181,23 @@
                                     <?php endif; ?>
                                 </div>
                             </td>
+
                             <td class="d-flex justify-content-center">
                                 <div class="btn-load mt-3">
-                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) ? ' data-type="uptBalai-add"' : '') ?>>
-                                        <i class="fas fa-eye"></i> <br /> Lihat
+                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Lihat">
+                                        <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true">
-                                        <i class="fas fa-print"></i> <br /> Cetak
+                                    <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true" title="Cetak">
+                                        <i class="fas fa-print"></i>
                                     </button>
                                     <?php if ($data->status == 'hold') { ?>
-                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) ? ' data-type="uptBalai-add"' : '') ?>>
-                                            <i class="fas fa-edit"></i> <br /> Edit
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
+                                            <i class="fas fa-edit"></i>
                                         </button>
                                     <?php } ?>
                                     <?php if ($data->status == 'setuju') { ?>
-                                        <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) ? ' data-type="uptBalai-add"' : '') ?>>
-                                            <i class="fas fa-edit"></i> <br /> Edit
+                                        <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
+                                            <i class="fas fa-edit"></i>
                                         </button>
                                     <?php } ?>
                                 </div>

@@ -2,3 +2,193 @@ ALTER TABLE `dokumenpk_satker_rows`
 ADD COLUMN `target_sat`  varchar(15) NULL AFTER `target_value`,
 ADD COLUMN `outcome_sat`  varchar(15) NULL AFTER `outcome_value`;
 
+
+1. Rename tabel yang mengandung kalimat template dokumen PK tambahi _tahun
+2. add data emon 2024
+
+CREATE TABLE `monika_data_2024` (
+  `idpull` int(11) NOT NULL DEFAULT '47',
+  `in_dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `tahun` year(4) NOT NULL,
+  `kdsatker` varchar(6) NOT NULL,
+  `kdprogram` varchar(2) NOT NULL,
+  `kdgiat` varchar(4) NOT NULL,
+  `kdoutput` varchar(3) NOT NULL,
+  `kdsoutput` varchar(3) NOT NULL,
+  `kdkmpnen` varchar(3) NOT NULL,
+  `kdpaket` varchar(100) NOT NULL,
+  `kdls` varchar(100) DEFAULT NULL,
+  `nmpaket` varchar(255) NOT NULL,
+  `pagu_51` decimal(16,0) NOT NULL,
+  `pagu_52` decimal(16,0) NOT NULL,
+  `pagu_53` decimal(16,0) NOT NULL,
+  `pagu_rpm` decimal(16,0) NOT NULL,
+  `pagu_sbsn` decimal(16,0) NOT NULL,
+  `pagu_phln` decimal(16,0) NOT NULL,
+  `pagu_total` decimal(16,0) NOT NULL,
+  `real_51` decimal(16,0) NOT NULL,
+  `real_52` decimal(16,0) NOT NULL,
+  `real_53` decimal(16,0) NOT NULL,
+  `real_rpm` decimal(16,0) NOT NULL,
+  `real_sbsn` decimal(16,0) NOT NULL,
+  `real_phln` decimal(16,0) NOT NULL,
+  `real_total` decimal(16,0) NOT NULL,
+  `progres_keuangan` decimal(16,2) NOT NULL,
+  `progres_fisik` decimal(16,2) NOT NULL,
+  `progres_keu_jan` decimal(16,2) NOT NULL,
+  `progres_keu_feb` decimal(16,2) NOT NULL,
+  `progres_keu_mar` decimal(16,2) NOT NULL,
+  `progres_keu_apr` decimal(16,2) NOT NULL,
+  `progres_keu_mei` decimal(16,2) NOT NULL,
+  `progres_keu_jun` decimal(16,2) NOT NULL,
+  `progres_keu_jul` decimal(16,2) NOT NULL,
+  `progres_keu_agu` decimal(16,2) NOT NULL,
+  `progres_keu_sep` decimal(16,2) NOT NULL,
+  `progres_keu_okt` decimal(16,2) NOT NULL,
+  `progres_keu_nov` decimal(16,2) NOT NULL,
+  `progres_keu_des` decimal(16,2) NOT NULL,
+  `progres_fisik_jan` decimal(16,2) NOT NULL,
+  `progres_fisik_feb` decimal(16,2) NOT NULL,
+  `progres_fisik_mar` decimal(16,2) NOT NULL,
+  `progres_fisik_apr` decimal(16,2) NOT NULL,
+  `progres_fisik_mei` decimal(16,2) NOT NULL,
+  `progres_fisik_jun` decimal(16,2) NOT NULL,
+  `progres_fisik_jul` decimal(16,2) NOT NULL,
+  `progres_fisik_agu` decimal(16,2) NOT NULL,
+  `progres_fisik_sep` decimal(16,2) NOT NULL,
+  `progres_fisik_okt` decimal(16,2) NOT NULL,
+  `progres_fisik_nov` decimal(16,2) NOT NULL,
+  `progres_fisik_des` decimal(16,2) NOT NULL,
+  `ren_keu_jan` decimal(16,2) NOT NULL,
+  `ren_keu_feb` decimal(16,2) NOT NULL,
+  `ren_keu_mar` decimal(16,2) NOT NULL,
+  `ren_keu_apr` decimal(16,2) NOT NULL,
+  `ren_keu_mei` decimal(16,2) NOT NULL,
+  `ren_keu_jun` decimal(16,2) NOT NULL,
+  `ren_keu_jul` decimal(16,2) NOT NULL,
+  `ren_keu_agu` decimal(16,2) NOT NULL,
+  `ren_keu_sep` decimal(16,2) NOT NULL,
+  `ren_keu_okt` decimal(16,2) NOT NULL,
+  `ren_keu_nov` decimal(16,2) NOT NULL,
+  `ren_keu_des` decimal(16,2) NOT NULL,
+  `ren_fis_jan` decimal(16,2) NOT NULL,
+  `ren_fis_feb` decimal(16,2) NOT NULL,
+  `ren_fis_mar` decimal(16,2) NOT NULL,
+  `ren_fis_apr` decimal(16,2) NOT NULL,
+  `ren_fis_mei` decimal(16,2) NOT NULL,
+  `ren_fis_jun` decimal(16,2) NOT NULL,
+  `ren_fis_jul` decimal(16,2) NOT NULL,
+  `ren_fis_agu` decimal(16,2) NOT NULL,
+  `ren_fis_sep` decimal(16,2) NOT NULL,
+  `ren_fis_okt` decimal(16,2) NOT NULL,
+  `ren_fis_nov` decimal(16,2) NOT NULL,
+  `ren_fis_des` decimal(16,2) NOT NULL,
+  `kdkabkota` varchar(8) DEFAULT NULL,
+  `kdlokasi` varchar(8) DEFAULT NULL,
+  `kdppk` varchar(100) DEFAULT NULL,
+  `kdskmpnen` varchar(100) DEFAULT NULL,
+  `sat` varchar(100) DEFAULT NULL,
+  `vol` varchar(100) DEFAULT NULL,
+  `pengadaan` varchar(30) DEFAULT NULL,
+  `verif_unor` varchar(30) DEFAULT NULL,
+  `tayang` varchar(30) DEFAULT NULL,
+  `ufis` decimal(16,2) DEFAULT NULL,
+  `pfis` decimal(16,2) DEFAULT NULL,
+  `prognosis` decimal(16,2) DEFAULT NULL,
+  `blokir` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `monika_kontrak_2024`
+--
+
+CREATE TABLE `monika_kontrak_2024` (
+  `idpull` varchar(11) DEFAULT NULL,
+  `tahun` int(11) DEFAULT NULL,
+  `kdsatker` varchar(50) DEFAULT NULL,
+  `kdprogram` varchar(50) DEFAULT NULL,
+  `kdgiat` varchar(50) DEFAULT NULL,
+  `kdoutput` varchar(50) DEFAULT NULL,
+  `kdsoutput` varchar(50) DEFAULT NULL,
+  `kdkmpnen` varchar(50) DEFAULT NULL,
+  `kdskmpnen` varchar(50) DEFAULT NULL,
+  `kdpaket` varchar(50) DEFAULT NULL,
+  `kdls` varchar(30) DEFAULT NULL,
+  `nmpaket` text,
+  `kdpengadaan` varchar(50) DEFAULT NULL,
+  `kdkategori` varchar(50) DEFAULT NULL,
+  `kdjnskon` varchar(50) DEFAULT NULL,
+  `rkn_nama` text,
+  `rkn_npwp` varchar(150) DEFAULT NULL,
+  `nomor_kontrak` varchar(150) DEFAULT NULL,
+  `nilai_kontrak` varchar(50) DEFAULT NULL,
+  `tanggal_kontrak` varchar(50) NOT NULL,
+  `tgl_spmk` varchar(50) DEFAULT NULL,
+  `waktu` varchar(11) DEFAULT NULL,
+  `status_tender` varchar(20) NOT NULL,
+  `tgl_rencana_lelang` varchar(30) DEFAULT NULL,
+  `jadwal_pengumuman` varchar(30) DEFAULT NULL,
+  `jadwal_pemenang` varchar(30) DEFAULT NULL,
+  `jadwal_kontrak` varchar(30) DEFAULT NULL,
+  `jadwal_tgl_kontrak` varchar(30) DEFAULT NULL,
+  `status_sipbj` varchar(50) DEFAULT NULL,
+  `ufis` decimal(16,2) DEFAULT NULL,
+  `pfis` decimal(16,2) DEFAULT NULL,
+  `verif_unor` varchar(5) NOT NULL,
+  `kdrup` varchar(20) NOT NULL,
+  `sumber_dana` varchar(30) DEFAULT NULL,
+  `blokir` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `monika_paket_register_2024`
+--
+
+CREATE TABLE `monika_paket_register_2024` (
+  `idpull` int(11) DEFAULT NULL,
+  `tahun` year(4) DEFAULT NULL,
+  `kode` varchar(80) DEFAULT NULL,
+  `kdregister` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `monika_rekap_unor_2024`
+--
+
+CREATE TABLE `monika_rekap_unor_2024` (
+  `idpull` varchar(11) DEFAULT NULL,
+  `status` varchar(100) DEFAULT NULL,
+  `kdunit` char(50) DEFAULT NULL,
+  `nmunit` varchar(100) DEFAULT NULL,
+  `pagu_rpm` decimal(20,3) DEFAULT NULL,
+  `pagu_sbsn` decimal(20,3) DEFAULT NULL,
+  `pagu_phln` decimal(20,3) DEFAULT NULL,
+  `pagu_total` decimal(20,3) DEFAULT NULL,
+  `real_rpm` decimal(20,3) DEFAULT NULL,
+  `real_sbsn` decimal(20,3) DEFAULT NULL,
+  `real_phln` decimal(20,3) DEFAULT NULL,
+  `real_total` decimal(20,3) DEFAULT NULL,
+  `progres_keu` decimal(20,2) DEFAULT NULL,
+  `progres_fisik` decimal(20,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `monika_data_2024`
+--
+ALTER TABLE `monika_data_2024`
+  ADD PRIMARY KEY (`kdpaket`),
+  ADD KEY `kdgiat` (`kdgiat`) USING BTREE,
+  ADD KEY `kdoutput` (`kdoutput`) USING BTREE,
+  ADD KEY `kdsoutput` (`kdsoutput`) USING BTREE,
+  ADD KEY `kdprogram` (`kdprogram`) USING BTREE;
+COMMIT;

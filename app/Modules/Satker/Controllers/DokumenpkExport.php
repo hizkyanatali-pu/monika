@@ -39,6 +39,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->templateDokumen = $this->db->table('dokumen_pk_template_' . session('userData.tahun'));
         $this->templateRow     = $this->db->table('dokumen_pk_template_row_' . session('userData.tahun'));
         $this->templateInfo    = $this->db->table('dokumen_pk_template_info_' . session('userData.tahun'));
+        $this->templateRowRumus = $this->db->table('dokumen_pk_template_rowrumus_' . session('userData.tahun'));
+
 
         $this->dokumenStatus = [
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
@@ -548,11 +550,50 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                         break;
 
+                        //balai
                     case 'output':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' .  $satuan_target;
-                        $rSeparator = explode('.', $data_targetValue['target_value']);
-                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_target;
+
+                        $sumOutputValue     = 0;
+                        $outputSatuan = '';
+
+
+                        $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $data['template_id'], 'rowId' =>  $data['id']])->get()->getResult();
+                        foreach ($templateRowRumus as $key => $dataRumus) {
+                            $rumus = $this->dokumenSatker->select(
+                                'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
+                                dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan'
+                            )
+                                ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                                ->join('dokumen_pk_template_row_' . session('userData.tahun'), "(dokumenpk_satker_rows.template_row_id=dokumen_pk_template_row_" . session('userData.tahun') . ".id)", 'left')
+                                ->join('dokumen_pk_template_rowrumus_' . session('userData.tahun'), "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".rowId)", 'left')
+                                ->where('dokumen_pk_template_rowrumus_' . session('userData.tahun') . '.rumus', $dataRumus->rumus)
+                                ->where('dokumenpk_satker.balaiid', $dataDokumen['balaiid'])
+                                ->where('dokumenpk_satker.status', 'setuju')
+                                ->where('dokumenpk_satker.satkerid is not null')
+                                ->where('dokumenpk_satker.deleted_at is null')
+                                ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+                                ->where('dokumenpk_satker_rows.is_checked', '1')
+                                ->get()->getResult();
+
+                            $outcomeRumus = 0;
+                            $outputRumus = 0;
+
+                            foreach ($rumus as $keyOutcome => $dataOutput) {
+                                $outputRumus += $dataOutput ? ($dataOutput->target_value != '' ? $dataOutput->target_value : 0) : 0;
+                                $outputSatuan = $dataOutput->target_sat ?? $dataOutput->target_satuan;
+                            }
+                            if ($sumOutputValue == '' && $outcomeRumus > 0) $sumOutputValue = 0;
+
+
+                            if ($outputRumus > 0) {
+                                $sumOutputValue  += $outputRumus;
+                            }
+                            $rSeparator = explode('.',  $sumOutputValue);
+                            $targetValue = number_format($sumOutputValue, strlen($rSeparator[1]), ',', '.') .  ' ' .  $outputSatuan;
+                        }
+
 
 
                         break;

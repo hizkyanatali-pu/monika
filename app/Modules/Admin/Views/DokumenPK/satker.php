@@ -924,25 +924,22 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     <button 
                         class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
                         data-id="${data.id}" data-createdat ="${data.created_at}"
-                        data-to-confirm="${buttonData_toConfirm}"
+                        data-to-confirm="${buttonData_toConfirm}" title="Cetak"
                     >
-                        <i class="fas fa-print"></i><br/>
-                        Cetak
+                        <i class="fas fa-print"></i>
                     </button>
                     <button 
                         class="btn btn-sm btn-outline-success __edit-dokumen"
                         data-id="${data.id}"
-                        data-template-id="${data.template_id}"
+                        data-template-id="${data.template_id}" title="Edit"
                     >
-                        <i class="fas fa-edit"></i><br/>
-                        Edit
+                        <i class="fas fa-edit"></i>
                     </button>
                     <button 
                         class="btn btn-sm btn-outline-danger __arsipkan-dokumen"
-                        data-id="${data.id}"
+                        data-id="${data.id}" title="Arsipkan"
                     >
-                        <i class="fas fa-trash"></i><br/>
-                        Arsipkan
+                        <i class="fas fa-trash"></i>
                     </button>
                 `
             }
@@ -970,10 +967,9 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                             class="btn btn-sm btn-outline-secondary __lihat-dokumen"
                             data-id="${data.id}"
                             data-template-id="${data.template_id}"
-                            data-to-confirm="${buttonData_toConfirm}"
+                            data-to-confirm="${buttonData_toConfirm}" title="Lihat"
                         >
-                            <i class="fas fa-eye"></i><br/>
-                            Lihat
+                            <i class="fas fa-eye"></i>
                         </button>
                         ${menuOptions}
                     </td>

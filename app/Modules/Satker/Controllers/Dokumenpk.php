@@ -363,30 +363,51 @@ class Dokumenpk extends \App\Controllers\BaseController
         }
 
         $balai_checklistSatker = [];
+        // $balai_checklistSatker = $this->satker->select("
+        //     m_satker.satker,
+        //     (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju'  order by created_at DESC limit 1 ) as iscreatedPKBeforeAcc,
+        //     (SELECT 
+        //         CASE
+        //             WHEN status = 'hold' THEN 'Menunggu Konfirmasi'
+        //             WHEN status = 'tolak' THEN 'Ditolak'
+        //             WHEN status = 'revision' THEN 'Telah Di Koreksi'
+        //         END
+        //     FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju' ORDER BY created_at DESC LIMIT 1 ) as status_now,
+        //     (SELECT 
+        //         CASE
+        //             WHEN status = 'hold' THEN 'bg-secondary'
+        //             WHEN status = 'tolak' THEN 'bg-danger text-white'
+        //             WHEN status = 'revision' THEN 'bg-dark text-white'
+        //         END
+        //         FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju'  ORDER BY created_at DESC LIMIT 1) as status_color,
+        //     (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status='setuju' ) as iscreatedPK
+        // ")
+        //     ->where('balaiid', $session_balaiId)->get()->getResult();
+
+
         $balai_checklistSatker = $this->satker->select("
-            m_satker.satker,
-            (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju'  order by created_at DESC limit 1 ) as iscreatedPKBeforeAcc,
-            (SELECT 
-                CASE
-                    WHEN status = 'hold' THEN 'Menunggu Konfirmasi'
-                    WHEN status = 'tolak' THEN 'Ditolak'
-                    WHEN status = 'revision' THEN 'Telah Di Koreksi'
-                END
-            FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju' ORDER BY created_at DESC LIMIT 1 ) as status_now,
-            (SELECT 
-                CASE
-                    WHEN status = 'hold' THEN 'bg-secondary'
-                    WHEN status = 'tolak' THEN 'bg-danger text-white'
-                    WHEN status = 'revision' THEN 'bg-dark text-white'
-                END
-                FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status!='setuju'  ORDER BY created_at DESC LIMIT 1) as status_color,
-            (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status='setuju' ) as iscreatedPK
+            m_satker.satker,m_satker.satkerid
         ")
             ->where('balaiid', $session_balaiId)->get()->getResult();
+        $list = [];
+        foreach ($balai_checklistSatker as $data) {
 
+            $dokPK = $this->dokumenSatker->select("satkerid,status")
+                ->where('tahun', $this->user['tahun'])
+                ->where('satkerid', $data->satkerid)
+                ->where('deleted_at', null)
+                ->where('status !=', 'revision')
+                ->orderBy('id', 'DESC')
+                ->get()->getRow();
+
+            $list[] = [
+                'satker' => $data->satker,
+                'satkerCheck' =>  $dokPK->status ?? ''
+            ];
+        }
 
         return $this->respond([
-            'data' => $balai_checklistSatker
+            'data' => $list
         ]);
     }
 
@@ -505,17 +526,22 @@ class Dokumenpk extends \App\Controllers\BaseController
                     foreach ($templateRowRumus as $key => $data) {
                         $targetRumusOutcome = $this->dokumenSatker->select(
                             'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
-                            dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,dokumenpk_satker_rows.target_sat'
+                            dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan'
                         )
                             ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                            ->join('dokumen_pk_template_row_' . session('userData.tahun'), "(dokumenpk_satker_rows.template_row_id=dokumen_pk_template_row_" . session('userData.tahun') . ".id)", 'left')
                             ->join('dokumen_pk_template_rowrumus_' . session('userData.tahun'), "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".rowId)", 'left')
                             ->where('dokumen_pk_template_rowrumus_' . session('userData.tahun') . '.rumus', $data->rumus)
                             ->where('dokumenpk_satker.balaiid', $session_balaiId)
                             ->where('dokumenpk_satker.status', 'setuju')
+                            ->where('dokumenpk_satker.satkerid is not null')
                             ->where('dokumenpk_satker.deleted_at is null')
                             ->where('dokumenpk_satker.tahun', $this->user['tahun'])
-                            ->where('dokumenpk_satker_rows.is_checked', '1')
+                            // ->where('dokumenpk_satker_rows.is_checked', '1')
                             ->get()->getResult();
+
+                        // print_r($this->db->getLastQuery());
+                        // exit;
 
                         $outcomeRumus = 0;
                         $outputRumus = 0;
@@ -534,7 +560,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                                 ->where('template_row_id', $dataOutcome->template_row_id)
                                 ->get()->getResult();
 
-                            $targetSatuan = $dataOutcome->target_sat;
+                            $targetSatuan = $dataOutcome->target_sat ?? $dataOutcome->target_satuan;
 
 
                             $rowPaket = array_merge($rowPaket, $hasilPaket);
@@ -639,19 +665,46 @@ class Dokumenpk extends \App\Controllers\BaseController
         }, $this->templateRow->where('template_id', $id)->get()->getResult());
 
 
-        $valudasiCreatedDokumen = false;
+        $valudasiCreatedDokumen = true;
         $balai_checklistSatker = [];
-        if ($session_userType == "balai") {
-            $balai_checklistSatker = $this->satker->select("
-                m_satker.satker,
-                (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status='setuju' ) as iscreatedPK
-            ")
-                ->where('balaiid', $session_balaiId)->get()->getResult();
+        $list = [];
 
-            $totalSatkerIsCreated = count(array_filter($balai_checklistSatker, function ($arr) {
-                return $arr->iscreatedPK > 0;
-            }));
-            if (count($balai_checklistSatker) == $totalSatkerIsCreated) $valudasiCreatedDokumen = true;
+        if ($session_userType == "balai") {
+            // $balai_checklistSatker = $this->satker->select("
+            //     m_satker.satker,
+            //     (SELECT count(id) FROM dokumenpk_satker WHERE satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun={$this->user['tahun']} and status='setuju' ) as iscreatedPK
+            // ")
+            //     ->where('balaiid', $session_balaiId)->get()->getResult();
+
+            // $totalSatkerIsCreated = count(array_filter($balai_checklistSatker, function ($arr) {
+            //     return $arr->iscreatedPK > 0;
+            // }));
+            // if (count($balai_checklistSatker) == $totalSatkerIsCreated) $valudasiCreatedDokumen = true;
+
+            $balai_checklistSatker = $this->satker->select("
+            m_satker.satker,m_satker.satkerid
+        ")
+                ->where('balaiid', $session_balaiId)->get()->getResult();
+            foreach ($balai_checklistSatker as $data) {
+
+                $dokPK = $this->dokumenSatker->select("satkerid,status")
+                    ->where('tahun', $this->user['tahun'])
+                    ->where('satkerid', $data->satkerid)
+                    ->where('deleted_at', null)
+                    ->where('status !=', 'revision')
+                    ->orderBy('id', 'DESC')
+                    ->get()->getRow();
+
+                $list[] = [
+                    'satker' => $data->satker,
+                    'satkerCheck' =>  $dokPK->status ?? ''
+                ];
+            }
+
+            $valudasiCreatedDokumen = !(in_array('', array_column($list, 'satkerCheck')) || in_array('hold', array_column($list, 'satkerCheck')) || in_array('tolak', array_column($list, 'satkerCheck')));
+
+            // $valudasiCreatedDokumen = array_search('setuju', array_column($list, 'satkerCheck')) === false;
+            // $valudasiCreatedDokumen = array_search('', array_column($list, 'satkerCheck')) !== false;
         }
 
 
@@ -678,8 +731,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'jabatanPihak2' => $jabatanPihak2
             ],
             'balaiValidasiSatker' => [
+                'balaiChecklistSatker'   => $list,
                 'valudasiCreatedDokumen' => $valudasiCreatedDokumen,
-                'balaiChecklistSatker'   => $balai_checklistSatker,
             ]
 
         ]);
@@ -944,7 +997,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             $inserted_dokumenSatker['pihak1_id']      = $session_balaiId;
             $inserted_dokumenSatker['pihak1_initial'] = $dataBalai->jabatan_penanda_tangan_pihak_1;
-            $inserted_dokumenSatker['dokumen_type']   = "balai";
+            $inserted_dokumenSatker['dokumen_type']   = 'balai';
             $inserted_dokumenSatker['balaiid']        = $session_balaiId;
         }
 
