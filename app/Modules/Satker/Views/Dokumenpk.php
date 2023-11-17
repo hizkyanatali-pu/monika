@@ -276,15 +276,18 @@
                 <h5 class="modal-title" id="modalFormTitlePaket">
                     Pilih Paket
                 </h5>
-                <div class="d-flex">
-                    <button type="button" class="btn btn-modal-full"><i class="fas fa-external-link-alt"></i></button>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div>
+                    <div class="d-flex">
+                        <button type="button" class="btn btn-modal-full ml-auto"><i class="fas fa-external-link-alt"></i></button>
+                        <button type="button" class="close  ml-0 text-right pl-0" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <small><b>* Terakhir Update Data Emon : </b></small> <small class="text-danger"><i> <?= (getLastUpdateData() ? getLastUpdateData() . " WIB" : 0);  ?></i></small>
                 </div>
+
             </div>
             <div class="modal-body">
-                Data Diambil Dari Emon pada 17 Agustus 2023
                 <table class="table">
                     <thead class="table-primary">
                         <tr class="text-center theader sticky-header-1" style="background-color: #a8b0ed;">

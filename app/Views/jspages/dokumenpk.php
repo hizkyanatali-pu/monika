@@ -2311,7 +2311,9 @@
 
         $('#modalFormTitlePaket').html(``);
         $('#modalFormTitlePaket').html(`<h6>Pilih Paket</h6>
-                        <small>Indikator : <b>${ indikator }</b></small>`);
+                        <small>Indikator : <b>${ indikator }</b></small>
+                       
+                        `);
 
 
         $('.save-btn-paket').removeAttr("data-indikatorid");
