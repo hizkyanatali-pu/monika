@@ -496,7 +496,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             if ($data['type'] == 'form') {
                 $targetValue = '';
                 $str = iconv('UTF-8', 'windows-1252', html_entity_decode("&sup3;"));
-                switch (strtolower($data_targetValue['target_sat'] ?? $data['target_satuan'])) {
+                switch (strtolower($data_targetValue['target_sat'] ??  trim(explode(";", $data['target_satuan'])[0]))) {
                     case 'm3/detik':
                         $satuan_target = 'M' . $str . "/Detik";
 
@@ -515,7 +515,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         $satuan_target = 'Miliar M' . $str;
                         break;
                     default:
-                        $satuan_target = $data_targetValue['target_sat'] ?? $data['target_satuan'];
+                        $satuan_target = $data_targetValue['target_sat'] ?? trim(explode(";", $data['target_satuan'])[0]);
                         break;
                 }
 

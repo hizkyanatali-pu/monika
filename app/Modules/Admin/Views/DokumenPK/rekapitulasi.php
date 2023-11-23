@@ -152,7 +152,7 @@
 
                             <th colspan="2" width="60%">&nbsp;</th>
 
-                            <th colspan="2">Output</th>
+                            <th colspan="2">Target</th>
                             <th colspan="4">Outcome</th>
 
 
@@ -161,9 +161,9 @@
                         <tr class="text-center">
                             <th width="10%">Unit Kerja</th>
                             <th width="50%">Indikator SK</th>
-                            <th width="5%">Nilai</th>
+                            <th width="5%">Vol</th>
                             <th width="10%">Satuan</th>
-                            <th width="10%">Nilai</th>
+                            <th width="10%">Vol</th>
                             <th width="5%">Satuan</th>
                             <th>Jenis PK</th>
                             <th>Verifikasi</th>

@@ -509,7 +509,7 @@ $chart_reject = ($reject / $jumlah_total) * 100;
                 <h5 class="kop-rekap">REKAPITULASI PENGIRIMAN DOKUMEN PERJANJIAN KINERJA (PK) ES II / UPT / SATUAN KERJA TA <?= $session_year ?>
                     <br>DITJEN SUMBER DAYA AIR
                     <br>STATUS
-                    <?= $tanggal ?> <?= $bulan ?> <?= $tahun ?>
+                    <?= $tanggal ?> <?= $bulan_status ?> <?= $tahun ?>
                     , <?= $jam ?> WIB
                 </h5>
                 <hr>
