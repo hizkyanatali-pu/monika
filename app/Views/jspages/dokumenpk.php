@@ -2012,7 +2012,7 @@
                             </td>
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title } 
-                            <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" title="pilih paket" data-dokid="${DocID||0}" data-indikator="${ data.title }" data-rowid="${data.id}" data-outputsatuan="${data.target_satuan}" data-outcomesatuan="${data.outcome_satuan}" data-satkerid = "${data.listSatker.length === 0 ? _satkerId : data.listSatker}">Paket <span class="label label-sm label-white ml-2 totalpaket">
+                            <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" title="pilih paket" data-dokid="${DocID||0}" data-templateid="${data.template_id}" data-indikator="${ data.title }" data-rowid="${data.id}" data-outputsatuan="${data.target_satuan}" data-outcomesatuan="${data.outcome_satuan}" data-satkerid = "${data.listSatker.length === 0 ? _satkerId : data.listSatker}">Paket <span class="label label-sm label-white ml-2 totalpaket">
                             ${paramsBtnPaket == "uptBalai-add" ? selectedItems.length:data.paket.length}</span></button></td>
                             ${renderInputTarget}
                             <td class="${classDNoneOutcome}">
@@ -2289,6 +2289,7 @@
         $('.modal.btn-modal-full').trigger('click');
 
         let satkerId = $(this).data('satkerid');
+        let templateId = $(this).data('templateid');
 
         var balaiCreateSatker = $(".__opsi-template").attr("data-balai-create-satker");
 
@@ -2332,7 +2333,8 @@
             url: "<?php echo site_url('api/getpaket') ?>",
             type: 'GET',
             data: {
-                satkerId: satkerId
+                satkerId: satkerId,
+                templateId: templateId
             },
             success: (res) => {
 

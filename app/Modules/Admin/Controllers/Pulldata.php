@@ -49,6 +49,7 @@ class Pulldata extends \App\Controllers\BaseController
 
 
         $w = $this->request->getVar('satkerId');
+        $templateid = $this->request->getVar('templateId');
 
         if ($w == 0) {
             $jsonResponse =  json_encode(["message" => "tidak ada data"]);
@@ -65,6 +66,12 @@ class Pulldata extends \App\Controllers\BaseController
         //     // $getSatkerIds = $getSatkerResult->satkerids;
         //     $where = "md. IN ($getSatkerIds)";
         // }
+        $validation = '';
+        if ($templateid == 1 || $templateid == 2 || $templateid == 3 || $templateid == 4 || $templateid == 8) {
+
+            $validation = "AND sat NOT IN ('dokumen','layanan','laporan','0')";
+        }
+
 
 
         $q = "SELECT
@@ -86,8 +93,8 @@ class Pulldata extends \App\Controllers\BaseController
 
         FROM monika_data_{$this->user['tahun']} md
 		LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
-		LEFT JOIN m_balai b ON b.balaiid=s.balaiid WHERE sat NOT IN ('dokumen','layanan','laporan','0')
-        " . ($w ? " AND $where" : '') . " ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
+		LEFT JOIN m_balai b ON b.balaiid=s.balaiid WHERE
+        " . ($w ? "$where" : '') . "$validation ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
 
 
 
