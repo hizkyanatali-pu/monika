@@ -28,8 +28,8 @@ class BigData extends \App\Controllers\BaseController
     }
 
 
-
-    function index()
+    // ini yang sudah pakai tabulator
+    function index_tabular()
     {
 
         return view('Modules\Admin\Views\Bigdata\bigdatapaket.php');
@@ -151,13 +151,14 @@ class BigData extends \App\Controllers\BaseController
 
 
     //ubah nama menjadi index jika ingin menerapkan yang lama
-    public function bigdatalama()
+    public function index()
     {
         $tahun = $this->user['tahun'];
         $column = $this->tableColumn();
 
-        $table  = 'monika_data_' . $this->user['tahun'];
-        $data   = $this->monikaData->select("
+        $table  = 'monika_data_' . $tahun;
+        $DBtable = $this->db->table($table);
+        $data   = $DBtable->select("
             $table.*, 
             m_satker.satker as nmsatker,
             tprogram.nmprogram,
@@ -395,16 +396,20 @@ class BigData extends \App\Controllers\BaseController
 
     private function getData($_filterData = [], $_limitData = null, $_offsetData = null, $_getTotal = false)
     {
-        $tahun = $this->user['tahun'];
+        $tahun = $_filterData['tahun'] ?? $this->user['tahun'];
         $table = 'monika_data_' . $tahun;
 
+        $satker = ($tahun >= 2020) ? "m_satker.satker as nmsatker" : "$table.nmsatker as nmsatker";
+        $giat = ($tahun >= 2020) ? "tgiat.nmgiat" : "$table.nmgiat as nmgiat";
+
+        $DBtable = $this->db->table($table);
         $select = "
             $table.*, 
-            m_satker.satker as nmsatker,
+            $satker,
             m_balai.balaiid as balai_id,
             m_balai.balai as nmbalai,
             tprogram.nmprogram,
-            tgiat.nmgiat,
+            $giat,
             toutput.nmoutput,
             tsoutput.nmro,
             tkabkota.nmkabkota,
@@ -413,7 +418,7 @@ class BigData extends \App\Controllers\BaseController
 
         if ($_getTotal) $select = "count($table.kdpaket) as total";
 
-        $data = $this->monikaData->select($select)
+        $data = $DBtable->select($select)
             ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
             ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
             ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
