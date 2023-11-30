@@ -59,10 +59,14 @@
 
 <!-- begin:: Content -->
 <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
-
+    <!-- <div>
+        <button id="download-csv">Download CSV</button>
+        <button id="download-json">Download JSON</button>
+        <button id="download-xlsx">Download XLSX</button>
+        <button id="download-pdf">Download PDF</button>
+        <button id="download-html">Download HTML</button>
+    </div> -->
     <div id="example-table"></div>
-
-
 
 </div>
 <!-- end:: Content -->
@@ -89,14 +93,31 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label class="col-form-label col-lg-3 col-sm-12">Kolom</label>
                         <div class="col-lg-9 col-md-9 col-sm-12">
                             <select name="filter-kolom" class="form-control select2" id="filter-kolom" multiple="multiple">
 
                             </select>
                         </div>
+                    </div> -->
+
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-3 col-sm-12 mr-4">Kolom</label>
+                        <div class="form-group">
+
+                            <div class="kt-checkbox-list">
+                                <label class="kt-checkbox kt-checkbox--brand">
+                                    <input type="checkbox">
+                                    <span></span>
+                                </label>
+
+                            </div>
+
+                        </div>
                     </div>
+
+
 
                 </div>
                 <div class="modal-footer">
@@ -108,6 +129,93 @@
     </div>
 </div>
 <!--end::Modal-->
+
+<!-- Modal Filter Data -->
+<div class="modal fade" id="modalFilterData" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Filter Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Opsi Data</label>
+                    <select class="form-control select2" name="filter-opsi-data">
+                        <option value="0" selected>Semua Data</option>
+                        <!-- <option value="1">Hanya Data Aktif</option> -->
+                        <option value="2">Hanya Data Di Blokir</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Satker</label>
+                    <select class="form-control select2" name="filter-satker">
+                        <option value="*">Semua</option>
+                        <?php foreach ($data['satker'] as $key => $value) : ?>
+                            <option value="<?php echo $value->id ?>"><?php echo $value->nama ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Program</label>
+                    <select class="form-control select2" name="filter-program">
+                        <option value="*">Semua</option>
+                        <?php foreach ($data['program'] as $key => $value) : ?>
+                            <option value="<?php echo $value->id ?>"><?php echo $value->nama ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Kegiatan</label>
+                    <select class="form-control select2" name="filter-kegiatan">
+                        <option value="*">Pilih Program Lebih Dahulu</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Output</label>
+                    <select class="form-control select2" name="filter-output">
+                        <option value="*">Pilih Kegiatan Lebih Dahulu</option>
+                        <?php foreach ($data['output'] as $key => $value) : ?>
+                            <option value="<?php echo $value->id ?>"><?php echo $value->nama ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Suboutput</label>
+                    <select class="form-control select2" name="filter-suboutput">
+                        <option value="*">Pilih Output Lebih Dahulu</option>
+                        <?php foreach ($data['suboutput'] as $key => $value) : ?>
+                            <option value="<?php echo $value->id ?>"><?php echo $value->nama ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Pagu Total</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Rp.</span>
+                        </div>
+                        <input type="text" id="filter-pagutotal-start" class="form-control" name="filter-pagutotal-start" placeholder="Min Pagu Total">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Hingga</span>
+                        </div>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Rp.</span>
+                        </div>
+                        <input type="text" id="filter-pagutotal-end" class="form-control" name="filter-pagutotal-end" placeholder="Max Pagu Total">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" name="act-filter-data" class="btn btn-primary">Terapkan</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal Filter Column -->
 
 <?= $this->endSection() ?>
 
@@ -121,7 +229,7 @@
 <link href="/plugins/tabulator/dist/css/tabulator_semanticui.min.css" rel="stylesheet">
 <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+<script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
 <!-- <script>
     var tabel = new Tabulator("#example-table", {
         ajaxURL: "http://localhost:8080/bigdata/sda_paket", // Ganti dengan URL ke file PHP
@@ -141,40 +249,112 @@
 
 <script>
     function loadColumn() {
-        $('#filter-kolom').select2({});
+        // Mengambil data kolom menggunakan Ajax
         $.getJSON("<?php echo site_url('/bigdata/sda_paket_column?year=') ?>" + $('#tahun').val(), function(data) {
             var table = "monika_data_" + $('#tahun').val();
-            // Data berisi nama-nama kolom dari backend
-            var namaKolom = data;
+            var namaKolom = data.kolom;
+            var defaultColumn = data.defaultColumn; // Ambil kolom default
 
-            // Misalnya, Anda dapat memuat nama kolom ke dalam elemen HTML, seperti elemen <select>
-            var selectElement = $('#filter-kolom');
-            selectElement.val('');
+            var checkboxContainer = $('.kt-checkbox-list');
+            checkboxContainer.empty();
 
-            // Inisialisasi variabel untuk menyimpan nilai default
-
-
+            // Iterasi melalui setiap nama kolom
             $.each(namaKolom, function(index, kolom) {
-                if (kolom !== "idpull" &&
-                    kolom !== "in_dt" &&
-                    kolom != "tayang" &&
-                    kolom !== "in_dt" &&
-                    kolom != "kdppk") {
-                    var option = new Option(kolom, table + "." + kolom);
-                    if (kolom === kolom) { // Gantilah "nilai_default" dengan nilai default yang Anda inginkan
-                        option.selected = true;
-                    }
-                    selectElement.append(option);
+                // Mengecualikan beberapa kolom yang tidak ingin ditampilkan
+                if (kolom.value !== "idpull" && kolom.value !== "no" && kolom.value !== "in_dt" && kolom.value !== "tayang" && kolom.value !== "kdppk") {
+                    // Membuat elemen checkbox untuk setiap kolom
+                    var isChecked = defaultColumn.includes(kolom.value); // Cek apakah kolom termasuk dalam defaultColumn
 
+                    var checkbox = $('<label class="kt-checkbox kt-checkbox--brand">' +
+                        '<input type="checkbox" name="selectedColumns[]" value="' + kolom.value + '"' + (isChecked ? ' checked' : '') + '>' +
+                        kolom.label +
+                        '<span></span>' +
+                        '</label>');
+
+                    // Menambahkan checkbox ke dalam container
+                    checkboxContainer.append(checkbox);
                 }
             });
 
-            // Inisialisasi atau perbarui elemen Select2 jika diperlukan
-            selectElement.select2({
-                scrollAfterSelect: true, // Aktifkan opsi scrollAfterSelect
-
+            // Menambahkan logika Select2 jika diperlukan
+            checkboxContainer.find('input[type="checkbox"]').on('change', function() {
+                // Lakukan sesuatu saat checkbox berubah
+                var isChecked = $(this).prop('checked');
+                var value = $(this).val();
+                // Lakukan sesuatu dengan nilai checkbox yang dipilih
             });
         });
+    }
+
+    function selectedColumns(year) {
+
+        var selectedColumns = $('input[name="selectedColumns[]"]:checked').map(function() {
+            var originalValue = $(this).val();
+
+            switch (true) {
+                case originalValue.includes("nmbalai"):
+                    return "m_balai.balai as " + originalValue;
+
+                case originalValue.includes("kdprogram"):
+                    return "monika_data_" + year + ".kdprogram as " + originalValue;
+
+                case originalValue.includes("kdgiat"):
+                    return "monika_data_" + year + ".kdgiat as " + originalValue;
+
+                case originalValue.includes("kdoutput"):
+                    return "monika_data_" + year + ".kdoutput as " + originalValue;
+
+                case originalValue.includes("kdsoutput"):
+                    return "monika_data_" + year + ".kdsoutput as " + originalValue;
+
+                case originalValue.includes("kdkmpnen"):
+                    return "monika_data_" + year + ".kdkmpnen as " + originalValue;
+
+                case originalValue.includes("kdskmpnen"):
+                    return "monika_data_" + year + ".kdskmpnen as " + originalValue;
+
+                case originalValue.includes("kdpaket"):
+                    return "monika_data_" + year + ".kdpaket as " + originalValue;
+
+                case originalValue.includes("balaiid"):
+                    return "m_balai.balaiid as " + originalValue;
+
+                case originalValue.includes("kdsatker"):
+                    return "monika_data_" + year + ".kdsatker as " + originalValue;
+
+                case originalValue.includes("nmpaket"):
+                    return "monika_data_" + year + ".nmpaket as " + originalValue;
+
+                case originalValue.includes("kdls"):
+                    return "monika_data_" + year + ".kdls as " + originalValue;
+
+                case originalValue.includes("ufis"):
+                    return "monika_data_" + year + ".ufis as " + originalValue;
+
+                case originalValue.includes("pfis"):
+                    return "monika_data_" + year + ".pfis as " + originalValue;
+
+
+                case originalValue.includes("blokir"):
+                    return "monika_data_" + year + ".blokir as " + originalValue;
+
+                case originalValue.includes("nmsatker"):
+                    if (year >= 2020) {
+                        return "m_satker.satker as " + originalValue;
+                    } else {
+                        return "nmsatker as " + originalValue;
+                    }
+
+
+
+                default:
+                    return originalValue;
+            }
+        }).get();
+
+        return selectedColumns
+
+
     }
 </script>
 
@@ -184,11 +364,27 @@
 <script>
     var table;
 
+    function getFilterDataValue() {
+        let value = {}
+
+        value.opsiData = $('select[name=filter-opsi-data]').val()
+        if ($('select[name=filter-satker]').val() != '*') value.kdsatker = $('select[name=filter-satker]').val()
+        if ($('select[name=filter-program]').val() != '*') value.kdprogram = $('select[name=filter-program').val()
+        if ($('select[name=filter-kegiatan]').val() != '*') value.kdgiat = $('select[name=filter-kegiatan]').val()
+        if ($('select[name=filter-output]').val() != '*') value.kdoutput = $('select[name=filter-output]').val()
+        if ($('select[name=filter-suboutput]').val() != '*') value.kdsoutput = $('select[name=filter-suboutput]').val()
+        if ($('input[name=filter-pagutotal-start]').val() != '') value.pagutotalStart = filterPagutotalStartMask.unmaskedValue
+        if ($('input[name=filter-pagutotal-end]').val() != '') value.pagutotalEnd = filterPagutotalEndMask.unmaskedValue
+
+        return value
+    }
+
     // Mendapatkan data respons JSON dari server
     function getData(page, size, column, year) {
         if (table) {
             table.destroy();
         }
+
         // Lakukan AJAX request ke URL Anda dengan parameter halaman dan ukuran
         $.ajax({
             url: "<?php echo site_url('bigdata/sda_paket') ?>",
@@ -197,7 +393,8 @@
                 "page": page,
                 "size": size,
                 "year": year,
-                "column": column
+                "filter": getFilterDataValue(),
+                "column": column,
             },
             success: function(response) {
                 // Mendapatkan kolom-kolom dari respons pertama
@@ -226,9 +423,34 @@
                         "page": page,
                         "size": size,
                         "year": year,
-                        "column": column
+                        "column": column,
+                        "filter": getFilterDataValue(),
+
                     },
                     columns: columns,
+                    ajaxResponse: function(url, params, response) {
+                        // Mendapatkan jumlah baris yang telah dimuat
+                        var rowCount = response.data.length;
+
+                        // Mendapatkan jumlah total baris dari respons (contoh: jika respons memiliki properti 'total')
+                        var totalRowCount = response.totalData || 0;
+
+                        // Menambahkan elemen tambahan
+                        var footerContents = document.querySelector('.tabulator-footer-contents');
+
+                        // Menghapus elemen sebelumnya jika ada
+                        var previousElement = document.querySelector('.custom-info');
+                        if (previousElement) {
+                            footerContents.removeChild(previousElement);
+                        }
+                        var additionalElement = document.createElement('span');
+                        additionalElement.className = 'custom-info';
+                        additionalElement.innerText = "Showing " + params.page + " to " + rowCount + " of " + totalRowCount + " entries ";
+                        footerContents.insertBefore(additionalElement, document.querySelector('.tabulator-paginator'));
+
+                        return response; // Perlu mengembalikan respons untuk membiarkan Tabulator melanjutkan pemrosesan
+                    }
+
                 });
                 // } else {
                 //     // Jika tabel sudah ada, update kolomnya
@@ -241,6 +463,29 @@
         });
     }
 
+
+
+    // document.getElementById("download-xlsx").addEventListener("click", function() {
+    //     console.log('wait');
+    //     // Mendapatkan semua baris dari tabel
+    //     table.getRows(true, 'data', function(rows) {
+    //         // Membuat array dari data baris
+    //         var data = rows.map(function(row) {
+    //             return row.getData();
+    //         });
+
+    //         // Membuat objek workbook menggunakan SheetJS
+    //         var wb = XLSX.utils.book_new();
+    //         var ws = XLSX.utils.json_to_sheet(data);
+
+    //         // Menyematkan sheet ke workbook
+    //         XLSX.utils.book_append_sheet(wb, ws, "Data Tabel");
+
+    //         // Mengunduh file
+    //         XLSX.writeFile(wb, "data_tabel.xlsx");
+    //     });
+    // });
+
     // Panggil fungsi getData saat halaman pertama kali dimuat
     // getData(1, 10);
 </script>
@@ -250,26 +495,27 @@
     $(document).ready(function() {
 
 
+
+
+
         $(".tampilkan").on("click", function() {
-            kolom = $('#filter-kolom').val();
-            year = $('#tahun').val();
-            getData(1, 10, kolom, year);
+            var year = $('#tahun').val();
+
+            var columns = selectedColumns(year);
+            getData(1, 10, columns, year);
 
 
         })
 
-        // $("select[name=filter-kolom]").on("change", function() {
-        //     console.log($(this).val());
 
-        // })
+
+
 
         $("#tahun").on("change", function() {
 
             loadColumn();
 
-            // $("select[name=filter-kolom]").trigger("change")
-
-            // $(".tampilkan").trigger("click")
+            $(".tampilkan").trigger("click")
         });
 
 
@@ -277,11 +523,14 @@
 
 
 
+        $(document).on('click', 'button[name=act-filter-data]', function() {
+            var year = $('#tahun').val();
+
+            var columns = selectedColumns(year);
+            getData(1, 10, columns, year);
 
 
-
-
-
-    });
+        })
+    })
 </script>
 <?= $this->endSection() ?>

@@ -29,10 +29,18 @@ class BigData extends \App\Controllers\BaseController
 
 
     // ini yang sudah pakai tabulator
-    function index_tabular()
+    function index()
     {
 
-        return view('Modules\Admin\Views\Bigdata\bigdatapaket.php');
+        return view('Modules\Admin\Views\Bigdata\bigdatapaket.php', [
+            'data'          => [
+                'satker'    => $this->satker->select('satkerid as id, satker as nama')->get()->getResult(),
+                'program'   => $this->program->select('kdprogram as id, nmprogram as nama')->get()->getResult(),
+                'kegiatan'  => $this->kegiatan->select('kdgiat as id, nmgiat as nama')->get()->getResult(),
+                'output'    => $this->output->select('kdoutput as id, nmoutput as nama')->get()->getResult(),
+                'suboutput' => $this->suboutput->select('kdro as id, nmro as nama')->get()->getResult(),
+            ]
+        ]);
     }
 
     function getDataMonikaData()
@@ -54,12 +62,32 @@ class BigData extends \App\Controllers\BaseController
         // Ambil parameter dari permintaan
         $page = $this->request->getVar('page') ?? 1;
         $perPage = $this->request->getVar('size') ?? 10;
-        $column = $this->request->getVar('column');
         $year = $this->request->getVar('year');
 
-        $listKolom = implode(',', $column);
 
-        $dataPaket = $this->getDataWithColumns($listKolom, $page, $perPage, $year);
+        $defaultKolom = [
+            "m_balai.balai as nmbalai",
+            "m_satker.satker as nmsatker",
+            "monika_data_$year.kdpaket",
+            "monika_data_$year.nmpaket",
+            "pagu_rpm",
+            "pagu_sbsn",
+            "pagu_phln",
+            "pagu_total",
+            "real_rpm",
+            "real_sbsn",
+            "real_phln",
+            "real_total",
+            "progres_keuangan",
+            "progres_fisik"
+        ];
+
+        $column = $this->request->getVar('column') ?? $defaultKolom;
+
+        $listKolom = implode(',', $column);
+        $filter = $this->request->getVar('filter');
+
+        $dataPaket = $this->getDataWithColumns($listKolom, $page, $perPage, $year, $filter);
         $resultArray = array();
 
 
@@ -77,6 +105,7 @@ class BigData extends \App\Controllers\BaseController
         return $this->respond(
             [
                 "last_page" => ceil($dataPaket['total'] / $perPage),
+                "totalData" => $dataPaket['total'],
                 "data" =>  $dataPaket['data'],
                 // "columns" => $resultArray,
                 // "page" => $page,
@@ -85,44 +114,124 @@ class BigData extends \App\Controllers\BaseController
     }
 
 
-    public function getDataWithColumns($kolom, $page, $perpage, $year)
+    public function getDataWithColumns($kolom, $page, $perpage, $year, $_filterData = [])
     {
+
+
         $table  = "monika_data_" .  $year;
         $offset = ($page - 1) * $perpage;
         $q  =  $this->db->table($table)->select($kolom)
             ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
+            ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
             ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
             ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran=$year", 'left')
             ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran=$year)", 'left')
             ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran=$year)", 'left')
-            ->limit($perpage, $offset)->get()->getResultArray();
-        $totalData = $this->db->table($table)->countAll();
-        return ["data" => $q, "total" => $totalData];
+            ->join("monika_kontrak_$year as kontrak", "$table.kdsatker = kontrak.kdsatker AND $table.kdprogram = kontrak.kdprogram AND 
+            $table.kdgiat = kontrak.kdgiat AND $table.kdprogram = kontrak.kdprogram AND $table.kdoutput = kontrak.kdoutput AND $table.kdsoutput = kontrak.kdsoutput
+            AND $table.kdkmpnen = kontrak.kdkmpnen AND  $table.kdskmpnen = kontrak.kdskmpnen", 'left')
+            ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
+            ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
+
+        $totalData = $this->db->table($table);
+
+
+        if (is_array($_filterData)) {
+            foreach ($_filterData as $key => $value) {
+                if ($key != 'opsiData' && $key != 'pagutotalStart' && $key != 'pagutotalEnd') {
+                    $q->where($table . '.' . $key, $value);
+                    $totalData->where($table . '.' . $key, $value);
+                }
+            }
+
+            if (array_key_exists('opsiData', $_filterData)) {
+                switch ($_filterData['opsiData']) {
+                    case '1':
+                        $q->where("$table.blokir", '0');
+                        $totalData->where("$table.blokir", '0');
+                        break;
+
+                    case '2':
+                        $q->where("$table.blokir >", '0');
+                        $totalData->where("$table.blokir >", '0');
+                        break;
+                }
+            }
+        }
+
+
+        $data = $q->limit($perpage, $offset)->get()->getResultArray();
+
+        // print_r($this->db->getLastQuery());
+        // exit;
+
+        $totalData = $totalData->countAllResults();
+
+        // Menyiapkan alias untuk response agar sesuai dengan function tableColumn()
+        $aliasQ = [];
+        foreach ($data as $row) {
+            $aliasRow = [];
+            foreach ($row as $key => $value) {
+                // Mencari label yang sesuai dengan key pada fungsi tableColumn()
+                $label = array_column($this->tableColumn(), 'label', 'value')[$key] ?? $key;
+                $aliasRow[$label] = $value;
+            }
+            $aliasQ[] = $aliasRow;
+        }
+
+
+        return ["data" => $aliasQ, "total" => $totalData];
     }
 
     function getColom()
     {
-        $year = $this->request->getVar('year') ?? 2023;
+        // $year = $this->request->getVar('year') ?? 2023;
 
-        $table = 'monika_data_' . $year;
+        // $table = 'monika_data_' . $year;
 
         // Gunakan metode select() untuk mengambil kolom-kolom dari tabel
-        $kolomValid = $this->db->table($table)->select("*")->limit(1)->get()->getResult();
+        // $kolomValid = $this->db->table($table)->select("*")->limit(1)->get()->getResult();
+
+        $kolom = $this->tableColumn();
 
         // Jika data berhasil diambil, ambil nama kolom dari array pertama
-        if (!empty($kolomValid)) {
-            $namaKolom = array_keys((array)$kolomValid[0]);
+        // if (!empty($kolomValid)) {
+        // $namaKolom = array_keys((array)$kolomValid[0]);
 
-            // Tambahkan nama tabel di depan setiap nama kolom
-            // $namaKolomDenganTabel = array_map(function ($kolom) use ($table) {
-            //     return $table . '.' . $kolom;
-            // }, $namaKolom);
+        // Tambahkan nama tabel di depan setiap nama kolom
+        // $namaKolomDenganTabel = array_map(function ($kolom) use ($table) {
+        //     return $table . '.' . $kolom;
+        // }, $namaKolom);
 
-            return $this->response->setJSON($namaKolom);
-        } else {
-            // Handle jika data tidak ditemukan
-            return $this->response->setStatusCode(404)->setJSON(['message' => 'Data tidak ditemukan']);
-        }
+        $responseArray = [
+            "kolom" => $kolom,
+            'defaultColumn' => [
+                'nmbalai',
+                'nmsatker',
+                'kdpaket',
+                'nmpaket',
+                'pagu_rpm',
+                'pagu_sbsn',
+                'pagu_phln',
+                'pagu_total',
+                'real_rpm',
+                'real_sbsn',
+                'real_phln',
+                'real_total',
+                'progres_keuangan',
+                'progres_fisik'
+            ],
+        ];
+
+        // Mengubah array menjadi format JSON
+        $jsonResult = json_encode($responseArray, JSON_PRETTY_PRINT);
+
+        // Mengembalikan hasil JSON
+        return $this->response->setJSON($jsonResult);
+        // } else {
+        //     // Handle jika data tidak ditemukan
+        //     return $this->response->setStatusCode(404)->setJSON(['message' => 'Data tidak ditemukan']);
+        // }
     }
 
     // public function getValidColumns()
@@ -151,7 +260,7 @@ class BigData extends \App\Controllers\BaseController
 
 
     //ubah nama menjadi index jika ingin menerapkan yang lama
-    public function index()
+    public function index_lama()
     {
         $tahun = $this->user['tahun'];
         $column = $this->tableColumn();
@@ -166,11 +275,13 @@ class BigData extends \App\Controllers\BaseController
             toutput.nmoutput,
             tsoutput.nmro
         ")
+
             ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
             ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
             ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
             ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
             ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left')
+            ->groupBy("$table.kdpaket")
             ->limit(1)
             ->get()
             ->getResultArray();
@@ -306,7 +417,7 @@ class BigData extends \App\Controllers\BaseController
                 $masterColumnCell = $masterColumn[$masterColumnKey];
                 $masterColumn_isNumberFormat = array_key_exists('isNumberFormat', $masterColumnCell) ? $masterColumnCell['isNumberFormat'] : false;
 
-                if ($masterColumn_isNumberFormat) $cellText = rupiahFormat($cellText, false);
+                if ($masterColumn_isNumberFormat) $cellText = $cellText ? rupiahFormat($cellText, false) : 0;
 
                 $sheet->setCellValueByColumnAndRow($cellIndex, $row, $cellText);
             }
@@ -401,11 +512,15 @@ class BigData extends \App\Controllers\BaseController
 
         $satker = ($tahun >= 2020) ? "m_satker.satker as nmsatker" : "$table.nmsatker as nmsatker";
         $giat = ($tahun >= 2020) ? "tgiat.nmgiat" : "$table.nmgiat as nmgiat";
+        $kontrak = ($tahun >= 2020) ? "kontrak.rkn_nama,rkn_npwp,nilai_kontrak,tanggal_kontrak,tgl_spmk,waktu,status_tender,tgl_rencana_lelang,jadwal_pengumuman,jadwal_pemenang,
+        jadwal_kontrak,jadwal_tgl_kontrak,status_sipbj,kdrup,sumber_dana" : "";
+
 
         $DBtable = $this->db->table($table);
         $select = "
             $table.*, 
             $satker,
+            $kontrak,
             m_balai.balaiid as balai_id,
             m_balai.balai as nmbalai,
             tprogram.nmprogram,
@@ -418,15 +533,30 @@ class BigData extends \App\Controllers\BaseController
 
         if ($_getTotal) $select = "count($table.kdpaket) as total";
 
-        $data = $DBtable->select($select)
-            ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
-            ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
-            ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
-            ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
-            ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
-            ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left')
-            ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
-            ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
+        if ($tahun >= 2020) {
+            $data = $DBtable->select($select)
+                ->join("monika_kontrak_$tahun as kontrak", "$table.kdsatker = kontrak.kdsatker AND $table.kdprogram = kontrak.kdprogram AND 
+        $table.kdgiat = kontrak.kdgiat AND $table.kdprogram = kontrak.kdprogram AND $table.kdoutput = kontrak.kdoutput AND $table.kdsoutput = kontrak.kdsoutput
+        AND $table.kdkmpnen = kontrak.kdkmpnen AND  $table.kdskmpnen = kontrak.kdskmpnen", 'left')
+                ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
+                ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
+                ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
+                ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
+                ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
+                ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left')
+                ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
+                ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
+        } else {
+            $data = $DBtable->select($select)
+                ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
+                ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
+                ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
+                ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran='$tahun'", 'left')
+                ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran='$tahun')", 'left')
+                ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran='$tahun')", 'left')
+                ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
+                ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
+        }
 
         if (array_key_exists('opsiData', $_filterData)) {
             switch ($_filterData['opsiData']) {
@@ -461,6 +591,7 @@ class BigData extends \App\Controllers\BaseController
         if (!empty($_limitData)) $data->limit($_limitData, $_offsetData);
 
         if ($_getTotal) return $data->get()->getRowArray();
+
         return $data->get()->getResultArray();
     }
 
@@ -476,7 +607,7 @@ class BigData extends \App\Controllers\BaseController
                 'align'       => 'center'
             ],
             [
-                'value'       => 'balai_id',
+                'value'       => 'balaiid',
                 'label'       => 'kode balai',
                 'widthColumn' => 80
             ],
@@ -657,12 +788,16 @@ class BigData extends \App\Controllers\BaseController
             [
                 'value'       => 'progres_keuangan',
                 'label'       => 'progres keuangan',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'          => 'right'
+
             ],
             [
                 'value'       => 'progres_fisik',
                 'label'       => 'progres fisik',
-                'widthColumn' => 150
+                'widthColumn' => 150,
+                'align'          => 'right',
+
             ],
             [
                 'value'       => 'progres_keu_jan',
@@ -974,7 +1109,106 @@ class BigData extends \App\Controllers\BaseController
                 'widthColumn'    => 150,
                 'align'          => 'right',
                 'isNumberFormat' => true
-            ]
+            ],
+
+            [
+                'value'          => 'rkn_nama',
+                'label'          => 'nama rekanan',
+                'widthColumn'    => 150,
+            ],
+
+            [
+                'value'          => 'rkn_npwp',
+                'label'          => 'NPWP Rekanan',
+                'widthColumn'    => 150,
+
+            ],
+
+            [
+                'value'          => 'nilai_kontrak',
+                'label'          => 'nilai kontrak',
+                'widthColumn'    => 150,
+                'align'          => 'right',
+                'isNumberFormat' => true
+
+            ],
+            [
+                'value'          => 'tanggal_kontrak',
+                'label'          => 'tanggal kontrak',
+                'widthColumn'    => 150,
+
+            ],
+            [
+                'value'          => 'tgl_spmk',
+                'label'          => 'tanggal spmk',
+                'widthColumn'    => 150,
+
+            ],
+            [
+                'value'          => 'waktu',
+                'label'          => 'waktu',
+                'widthColumn'    => 150,
+
+            ],
+
+            [
+                'value'          => 'status_tender',
+                'label'          => 'status tender',
+                'widthColumn'    => 150,
+
+            ],
+            [
+                'value'          => 'tgl_rencana_lelang',
+                'label'          => 'tgl rencana lelang',
+                'widthColumn'    => 150,
+
+            ],
+            [
+                'value'          => 'jadwal_pengumuman',
+                'label'          => 'jadwal pengumuman',
+                'widthColumn'    => 150,
+
+            ],
+            [
+                'value'          => 'jadwal_pemenang',
+                'label'          => 'jadwal pemenang',
+                'widthColumn'    => 150,
+
+            ],
+            [
+                'value'          => 'jadwal_kontrak',
+                'label'          => 'jadwal kontrak',
+                'widthColumn'    => 150,
+
+            ],
+            [
+                'value'          => 'jadwal_tgl_kontrak',
+                'label'          => 'jadwal tgl kontrak',
+                'widthColumn'    => 150,
+
+            ],
+            [
+                'value'          => 'status_sipbj',
+                'label'          => 'status sipbj',
+                'widthColumn'    => 150,
+
+            ],
+            [
+                'value'          => 'kdrup',
+                'label'          => 'kdrup',
+                'widthColumn'    => 150,
+
+            ],
+            [
+                'value'          => 'sumber_dana',
+                'label'          => 'sumber dana',
+                'widthColumn'    => 150,
+
+            ],
+
         ];
     }
 }
+
+
+// kontrak.rkn_nama,rkn_npwp,nilai_kontrak,tanggal_kontrak,tgl_spmk,waktu,status_tender,tgl_rencana_lelang,jadwal_pengumuman,jadwal_pemenang,jadwal_kontrak,jadwal_tgl_kontrak,status_sipbj,kdrup,sumber_dana

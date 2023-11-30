@@ -366,15 +366,19 @@ class Preferensi extends \App\Controllers\BaseController
             $countdata = $query->countAll();
             $query2 = $this->db1->query("SELECT * FROM monika_pull_sqlite ORDER BY idpull asc LIMIT 1");
             $result = $query2->getRow();
-            $fileDelete = $targetDir . DIRECTORY_SEPARATOR . $result->nmfile;
 
-            if ($countdata > 4) {
-                if (file_exists($fileDelete)) {
+            if ($result) {
 
-                    unlink($fileDelete);
+                $fileDelete = $targetDir . DIRECTORY_SEPARATOR . $result->nmfile;
 
-                    $query->where('nmfile', $result->nmfile);
-                    $query->delete();
+                if ($countdata > 30) {
+                    if (file_exists($fileDelete)) {
+
+                        unlink($fileDelete);
+
+                        $query->where('nmfile', $result->nmfile);
+                        $query->delete();
+                    }
                 }
             }
 
