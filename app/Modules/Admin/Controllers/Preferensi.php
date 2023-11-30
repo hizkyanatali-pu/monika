@@ -387,7 +387,7 @@ class Preferensi extends \App\Controllers\BaseController
             $post = [
                 'idpull' => null,
                 'nmfile' => $fileName,
-                'sizefile' =>  $_FILES["file"]["size"],
+                'sizefile' =>  $_FILES["file"]["size"] ?? '',
                 'in_dt' => date("ymdHis"),
                 'in_uid' => $this->user['uid'],
                 'nmfileoriginal' => $_REQUEST['name']
