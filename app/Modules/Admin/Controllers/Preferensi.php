@@ -390,7 +390,7 @@ class Preferensi extends \App\Controllers\BaseController
                 'sizefile' =>  $_FILES["file"]["size"] ?? '',
                 'in_dt' => date("ymdHis"),
                 'in_uid' => $this->user['uid'],
-                'nmfileoriginal' => $_REQUEST['name']
+                'nmfileoriginal' => $_REQUEST['name'] ?? ''
             ];
             $q = $this->ImportdataSqliteModel->save($post);
         }
