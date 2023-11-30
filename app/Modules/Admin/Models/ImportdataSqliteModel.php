@@ -29,6 +29,6 @@ class ImportdataSqliteModel extends Model
             ->select($this->table . ".nmfile")
             ->where($this->table . ".status_aktif", '1');
         $row = $query->get()->getRowArray();
-        return $row['nmfile'];
+        return $row['nmfile'] ?? '';
     }
 }
