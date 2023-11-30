@@ -491,9 +491,11 @@ class Preferensi extends \App\Controllers\BaseController
             if ($pullcount > 30) {
 
                 $query = $this->ImportdataModel->deleteFiles(["nmfile" => $namefile, "type" => $tabel]);
-
-                unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
-                unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
+                if (file_exists($targetDir . DIRECTORY_SEPARATOR . $namefile)) {
+                    // Hapus file hanya jika file tersebut ada
+                    unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
+                    unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
+                }
             }
 
 
