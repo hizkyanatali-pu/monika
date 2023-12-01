@@ -34,6 +34,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->tableKegiatan           = $this->db->table("tgiat");
         $this->tableProgram            = $this->db->table("tprogram");
         $this->templateDokumen         = $this->db->table('dokumen_pk_template_' . $this->tahun);
+        $this->dokumenSatker_paket     = $this->db->table('dokumenpk_satker_paket');
+
 
 
         $this->satker   = $this->db->table('m_satker');
@@ -1010,6 +1012,8 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function rekapitulasi()
     {
         $sessionTahun = $this->user['tahun'];
+        $rowPaket = [];
+        $satkerList = [];
 
         $q = "
         SELECT
@@ -1036,7 +1040,8 @@ class Dokumenpk extends \App\Controllers\BaseController
             SELECT MAX(created_at)
             FROM dokumenpk_satker
             WHERE 
-                balaiid = a.balaiid
+                a.status != 'revision'
+                AND balaiid = a.balaiid
                 AND satkerid = a.satkerid
                 AND tahun = $sessionTahun 
                 AND ISNULL(deleted_at)
@@ -1047,7 +1052,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         AND (a.balaiid, a.created_at) IN (
             SELECT balaiid, MAX(created_at)
             FROM dokumenpk_satker
-            WHERE dokumen_type = 'balai'
+            WHERE 
+            a.status != 'revision'
+            AND dokumen_type = 'balai'
                 AND tahun = $sessionTahun 
                 AND ISNULL(deleted_at)
             GROUP BY balaiid
@@ -1068,6 +1075,13 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             if ($row['satkerid'] != null) {
                 // jika satker
+                $hasilPaket = $this->db->table('dokumenpk_satker_paket')
+                    ->select('dokumenpk_satker_paket.*,dokumenpk_satker.satkerid')
+                    ->join('dokumenpk_satker', 'dokumenpk_satker.id = dokumenpk_satker_paket.dokumen_id', 'left')
+                    ->where('dokumen_id', $row['id'])
+                    ->where('template_row_id', $row['template_row_id'])
+                    ->get()->getResult();
+
                 $satker = instansi_name($row['satkerid'])->nama_instansi;
                 $targetValue =  $row['target_value'];
                 $outputSatuan = $row['target_sat'] ?? trim(explode(";", $row['target_satuan'])[0]);
@@ -1105,6 +1119,21 @@ class Dokumenpk extends \App\Controllers\BaseController
                     foreach ($rumus as $keyOutcome => $dataOutput) {
                         $outputRumus += $dataOutput ? ($dataOutput->target_value != '' ? $dataOutput->target_value : 0) : 0;
                         $outcomeSatuan = $dataOutput->target_sat ?? $dataOutput->target_satuan;
+
+                        if (!in_array($dataOutput->satkerid, $satkerList)) {
+                            array_push($satkerList,  $dataOutput->satkerid);
+                        }
+
+                        $hasilPaket = $this->dokumenSatker_paket->select('dokumenpk_satker_paket.*,dokumenpk_satker.satkerid')
+                            ->join('dokumenpk_satker', 'dokumenpk_satker.id = dokumenpk_satker_paket.dokumen_id', 'left')
+                            ->where('dokumen_id',  $dataOutput->id)
+                            ->where('template_row_id',  $dataOutput->template_row_id)
+                            ->get()->getResult();
+
+                        $targetSatuan =  $dataOutput->target_sat ??  $dataOutput->target_satuan;
+
+
+                        $rowPaket = array_merge($rowPaket, $hasilPaket);
                     }
                     if ($outcomeValue == '' && $outcomeRumus > 0) $outcomeValue = 0;
 
@@ -1120,12 +1149,15 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             $indikator = [
                 'indikator' => $row['indikator'],
+                'rowId' => $row['id'],
+                'template_row_id' => $row['template_row_id'],
                 'target_value' =>  str_replace('.', ',', $targetValue),
                 'target_satuan' => $outputSatuan,
                 'outcome_value' => str_replace('.', ',', $outcomeValue),
                 'outcome_satuan' => $outcomeSatuan,
                 'is_revision_same_year' => $row['is_revision_same_year'],
                 'status' => $row['status'] != 'setuju' ? 'Belum' : 'Sudah',
+                'paket' => $hasilPaket
             ];
 
             if (!isset($data[$satker])) {
@@ -1145,7 +1177,8 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
 
         $sessionTahun = $this->user['tahun'];
-
+        $satkerList = array();
+        $rowPaket = array();
 
         $q = "
         SELECT
@@ -1253,6 +1286,21 @@ class Dokumenpk extends \App\Controllers\BaseController
                     foreach ($rumus as $keyOutcome => $dataOutput) {
                         $outputRumus += $dataOutput ? ($dataOutput->target_value != '' ? $dataOutput->target_value : 0) : 0;
                         $outcomeSatuan = $dataOutput->target_sat ?? $dataOutput->target_satuan;
+
+                        if (!in_array($dataOutput->satkerid, $satkerList)) {
+                            array_push($satkerList, $dataOutput->satkerid);
+                        }
+
+                        $hasilPaket = $this->dokumenSatker_paket->select('dokumenpk_satker_paket.*,dokumenpk_satker.satkerid')
+                            ->join('dokumenpk_satker', 'dokumenpk_satker.id = dokumenpk_satker_paket.dokumen_id', 'left')
+                            ->where('dokumen_id', $dataOutput->id)
+                            ->where('template_row_id', $dataOutput->template_row_id)
+                            ->get()->getResult();
+
+                        $targetSatuan = $dataOutput->target_sat ?? $dataOutput->target_satuan;
+
+
+                        $rowPaket = array_merge($rowPaket, $hasilPaket);
                     }
                     if ($outcomeValue == '' && $outcomeRumus > 0) $outcomeValue = 0;
 

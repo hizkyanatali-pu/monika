@@ -446,3 +446,11 @@ function instansi_name($id)
 
     return $builder;
 }
+
+
+function paket_name($id, $tahun)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->query("SELECT nmpaket FROM monika_data_$tahun WHERE kdpaket='$id'")->getRow();
+    return $builder->nmpaket;
+}
