@@ -127,11 +127,16 @@ class BigData extends \App\Controllers\BaseController
             ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran=$year", 'left')
             ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran=$year)", 'left')
             ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran=$year)", 'left')
-            ->join("monika_kontrak_$year as kontrak", "$table.kdsatker = kontrak.kdsatker AND $table.kdprogram = kontrak.kdprogram AND 
-            $table.kdgiat = kontrak.kdgiat AND $table.kdprogram = kontrak.kdprogram AND $table.kdoutput = kontrak.kdoutput AND $table.kdsoutput = kontrak.kdsoutput
-            AND $table.kdkmpnen = kontrak.kdkmpnen AND  $table.kdskmpnen = kontrak.kdskmpnen", 'left')
+
             ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
             ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
+
+        if ($year >= 2020) {
+            $q->join("monika_kontrak_$year as kontrak", "$table.kdsatker = kontrak.kdsatker AND $table.kdprogram = kontrak.kdprogram AND 
+                $table.kdgiat = kontrak.kdgiat AND $table.kdprogram = kontrak.kdprogram AND $table.kdoutput = kontrak.kdoutput AND $table.kdsoutput = kontrak.kdsoutput
+                AND $table.kdkmpnen = kontrak.kdkmpnen AND  $table.kdskmpnen = kontrak.kdskmpnen", 'left');
+        }
+
 
         $totalData = $this->db->table($table);
 
@@ -173,7 +178,7 @@ class BigData extends \App\Controllers\BaseController
             $aliasRow = [];
             foreach ($row as $key => $value) {
                 // Mencari label yang sesuai dengan key pada fungsi tableColumn()
-                $label = array_column($this->tableColumn(), 'label', 'value')[$key] ?? $key;
+                $label = array_column($this->tableColumn($year), 'label', 'value')[$key] ?? $key;
                 $aliasRow[$label] = $value;
             }
             $aliasQ[] = $aliasRow;
@@ -185,14 +190,14 @@ class BigData extends \App\Controllers\BaseController
 
     function getColom()
     {
-        // $year = $this->request->getVar('year') ?? 2023;
+        $year = $this->request->getVar('year') ?? $this->user['tahun'];
 
         // $table = 'monika_data_' . $year;
 
         // Gunakan metode select() untuk mengambil kolom-kolom dari tabel
         // $kolomValid = $this->db->table($table)->select("*")->limit(1)->get()->getResult();
 
-        $kolom = $this->tableColumn();
+        $kolom = $this->tableColumn($year);
 
         // Jika data berhasil diambil, ambil nama kolom dari array pertama
         // if (!empty($kolomValid)) {
@@ -263,7 +268,7 @@ class BigData extends \App\Controllers\BaseController
     public function index_lama()
     {
         $tahun = $this->user['tahun'];
-        $column = $this->tableColumn();
+        $column = $this->tableColumn($tahun);
 
         $table  = 'monika_data_' . $tahun;
         $DBtable = $this->db->table($table);
@@ -326,7 +331,7 @@ class BigData extends \App\Controllers\BaseController
 
         $result = [
             'input'  => $this->request->getGet(),
-            'column' => $this->tableColumn(),
+            'column' => $this->tableColumn(2023),
             'data'   => $this->getData($filterData, $limitData, $offsetData)
         ];
 
@@ -368,7 +373,7 @@ class BigData extends \App\Controllers\BaseController
         $limitData    = null;
         $offsetData   = $this->request->getGet('fileNumber') - 1;
         $filterData   = $this->request->getGet('filter');
-        $masterColumn = $this->tableColumn();
+        $masterColumn = $this->tableColumn(2023);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -597,9 +602,9 @@ class BigData extends \App\Controllers\BaseController
 
 
 
-    private function tableColumn()
+    private function tableColumn($year)
     {
-        return [
+        $kolomA = [
             [
                 'value'       => 'no',
                 'label'       => 'No. ',
@@ -1109,104 +1114,117 @@ class BigData extends \App\Controllers\BaseController
                 'widthColumn'    => 150,
                 'align'          => 'right',
                 'isNumberFormat' => true
-            ],
-
-            [
-                'value'          => 'rkn_nama',
-                'label'          => 'nama rekanan',
-                'widthColumn'    => 150,
-            ],
-
-            [
-                'value'          => 'rkn_npwp',
-                'label'          => 'NPWP Rekanan',
-                'widthColumn'    => 150,
-
-            ],
-
-            [
-                'value'          => 'nilai_kontrak',
-                'label'          => 'nilai kontrak',
-                'widthColumn'    => 150,
-                'align'          => 'right',
-                'isNumberFormat' => true
-
-            ],
-            [
-                'value'          => 'tanggal_kontrak',
-                'label'          => 'tanggal kontrak',
-                'widthColumn'    => 150,
-
-            ],
-            [
-                'value'          => 'tgl_spmk',
-                'label'          => 'tanggal spmk',
-                'widthColumn'    => 150,
-
-            ],
-            [
-                'value'          => 'waktu',
-                'label'          => 'waktu',
-                'widthColumn'    => 150,
-
-            ],
-
-            [
-                'value'          => 'status_tender',
-                'label'          => 'status tender',
-                'widthColumn'    => 150,
-
-            ],
-            [
-                'value'          => 'tgl_rencana_lelang',
-                'label'          => 'tgl rencana lelang',
-                'widthColumn'    => 150,
-
-            ],
-            [
-                'value'          => 'jadwal_pengumuman',
-                'label'          => 'jadwal pengumuman',
-                'widthColumn'    => 150,
-
-            ],
-            [
-                'value'          => 'jadwal_pemenang',
-                'label'          => 'jadwal pemenang',
-                'widthColumn'    => 150,
-
-            ],
-            [
-                'value'          => 'jadwal_kontrak',
-                'label'          => 'jadwal kontrak',
-                'widthColumn'    => 150,
-
-            ],
-            [
-                'value'          => 'jadwal_tgl_kontrak',
-                'label'          => 'jadwal tgl kontrak',
-                'widthColumn'    => 150,
-
-            ],
-            [
-                'value'          => 'status_sipbj',
-                'label'          => 'status sipbj',
-                'widthColumn'    => 150,
-
-            ],
-            [
-                'value'          => 'kdrup',
-                'label'          => 'kdrup',
-                'widthColumn'    => 150,
-
-            ],
-            [
-                'value'          => 'sumber_dana',
-                'label'          => 'sumber dana',
-                'widthColumn'    => 150,
-
-            ],
-
+            ]
         ];
+
+        $kolomKontrak = [];
+
+        if ($year >= 2020) {
+
+
+
+            $kolomKontrak = [
+                [
+                    'value'          => 'rkn_nama',
+                    'label'          => 'nama rekanan',
+                    'widthColumn'    => 150,
+                ],
+
+                [
+                    'value'          => 'rkn_npwp',
+                    'label'          => 'NPWP Rekanan',
+                    'widthColumn'    => 150,
+
+                ],
+
+                [
+                    'value'          => 'nilai_kontrak',
+                    'label'          => 'nilai kontrak',
+                    'widthColumn'    => 150,
+                    'align'          => 'right',
+                    'isNumberFormat' => true
+
+                ],
+                [
+                    'value'          => 'tanggal_kontrak',
+                    'label'          => 'tanggal kontrak',
+                    'widthColumn'    => 150,
+
+                ],
+                [
+                    'value'          => 'tgl_spmk',
+                    'label'          => 'tanggal spmk',
+                    'widthColumn'    => 150,
+
+                ],
+                [
+                    'value'          => 'waktu',
+                    'label'          => 'waktu',
+                    'widthColumn'    => 150,
+
+                ],
+
+                [
+                    'value'          => 'status_tender',
+                    'label'          => 'status tender',
+                    'widthColumn'    => 150,
+
+                ],
+                [
+                    'value'          => 'tgl_rencana_lelang',
+                    'label'          => 'tgl rencana lelang',
+                    'widthColumn'    => 150,
+
+                ],
+                [
+                    'value'          => 'jadwal_pengumuman',
+                    'label'          => 'jadwal pengumuman',
+                    'widthColumn'    => 150,
+
+                ],
+                [
+                    'value'          => 'jadwal_pemenang',
+                    'label'          => 'jadwal pemenang',
+                    'widthColumn'    => 150,
+
+                ],
+                [
+                    'value'          => 'jadwal_kontrak',
+                    'label'          => 'jadwal kontrak',
+                    'widthColumn'    => 150,
+
+                ],
+                [
+                    'value'          => 'jadwal_tgl_kontrak',
+                    'label'          => 'jadwal tgl kontrak',
+                    'widthColumn'    => 150,
+
+                ],
+                [
+                    'value'          => 'status_sipbj',
+                    'label'          => 'status sipbj',
+                    'widthColumn'    => 150,
+
+                ],
+                [
+                    'value'          => 'kdrup',
+                    'label'          => 'kdrup',
+                    'widthColumn'    => 150,
+
+                ],
+                [
+                    'value'          => 'sumber_dana',
+                    'label'          => 'sumber dana',
+                    'widthColumn'    => 150,
+
+                ],
+
+            ];
+        }
+
+        $gabunganArray = array_merge($kolomA, $kolomKontrak);
+
+        return   $gabunganArray;
     }
 }
 
