@@ -221,7 +221,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
         // Kop Title 2
-        $pdf->SetFont('Times', 'B', 13);
+        // jika satker dinas jawatengah
+        $fontsize = ($dataDokumen['satkerid'] == '039428' ? '12' : '13');
+        $pdf->SetFont('Times', 'B', $fontsize);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
         // $pdf->SetX((300 - $width_kopTitle2) / 2);
         // $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
@@ -741,6 +743,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         switch ($_ttd['person2Title']) {
                 // merapikan ttd
             case 'KEPALA BALAI BESAR WILAYAH SUNGAI BENGAWAN SOLO':
+                $ttd = $_ttd['person2Title'];
                 $widthTitleJabatan = 85;
                 $widthNamaPejabat = 122;
                 break;
@@ -756,6 +759,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 //     $widthTitleJabatan = 85;
                 //     $widthNamaPejabat = 122;
                 //     break;
+
+            case 'KEPALA SKPD TP-OP DINAS PEKERJAAN UMUM SUMBER DAYA AIR DAN PENATAAN RUANG PROVINSI JAWA TENGAH':
+                $ttd = $_ttd['person2Title'];
+                $widthTitleJabatan = 115;
+                $widthNamaPejabat = 150;
+                break;
 
             default:
                 $widthTitleJabatan = 95;
