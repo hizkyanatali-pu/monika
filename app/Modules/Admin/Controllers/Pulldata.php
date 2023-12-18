@@ -5,10 +5,13 @@ namespace Modules\Admin\Controllers;
 use Modules\Admin\Models\AksesModel;
 use Modules\Admin\Models\PulldataModel;
 use Modules\Admin\Models\RekapUnorModel;
+use CodeIgniter\API\ResponseTrait;
+
 
 
 class Pulldata extends \App\Controllers\BaseController
 {
+    use ResponseTrait;
     public function __construct()
     {
         $this->db = \Config\Database::connect();
@@ -158,6 +161,71 @@ class Pulldata extends \App\Controllers\BaseController
         );
         //dd($data);
         return view('Modules\Admin\Views\Paket\Format_2', $data);
+    }
+
+
+    function getPaketTematik()
+    {
+        $page = $this->request->getVar('page') ?? 1;
+        $perPage = $this->request->getVar('size') ?? 10;
+        $year = $this->request->getVar('year') ?? 2023;
+        $table  = "monika_data_" .  $year;
+        $offset = ($page - 1) * $perPage;
+
+        $filter = $this->request->getVar('filter') ?? '';
+
+
+
+        $q  =  $this->db->table($table)->select(" $table.kdsatker as satkerid, s.satker,
+         $table.kdprogram as programid,  $table.kdgiat as giatid,  $table.kdoutput as outputid,  $table.kdsoutput as soutputid,  $table.kdkmpnen as komponenid,
+         $table.kdpaket as id,  $table.nmpaket as label, 
+       
+         $table.vol,
+        SUBSTRING_INDEX(SUBSTRING_INDEX( $table.nmpaket,';',3),';',-1) as lokasi, 
+        SUBSTRING_INDEX(SUBSTRING_INDEX( $table.nmpaket,';',6),';',-1) as jenis_paket, SUBSTRING_INDEX(SUBSTRING_INDEX( $table.nmpaket,';',7),';',-1) as metode_pemilihan,
+         $table.sat,
+         $table.pagu_rpm as pagu_rpm,
+         $table.pagu_sbsn as pagu_sbsn,
+         $table.pagu_phln as pagu_phln,
+         $table.pagu_total as pagu_total,
+         $table.real_rpm as real_rpm,
+         $table.real_sbsn as real_sbsn,
+         $table.real_phln as real_phln,
+         $table.real_total as real_total,
+         $table.progres_keuangan,
+         $table.progres_fisik,
+
+
+         $table.real_total as real_total,  $table.progres_keuangan,  $table.progres_fisik")
+            ->join('m_satker as s', "$table.kdsatker =  s.satkerid", 'left')
+            ->join('m_balai', " s.balaiid = m_balai.balaiid", 'left')
+            ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
+            ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran=$year", 'left')
+            ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran=$year)", 'left')
+            ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran=$year)", 'left')
+            ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
+            ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
+        $totalData = $this->db->table($table);
+
+
+        if (isset($filter['satker'])) {
+            $q->where("$table.kdsatker", $filter['satker']);
+            $totalData->where("$table.kdsatker", $filter['satker']);
+        }
+
+        $data = $q->limit($perPage, $offset)->get()->getResultArray();
+        $totalData = $totalData->countAllResults();
+
+
+        return $this->respond(
+            [
+                "last_page" => ceil($totalData / $perPage),
+                "totalData" =>  $totalData,
+                "data" =>  $data,
+                // "columns" => $resultArray,
+                // "page" => $page,
+            ]
+        );
     }
 
     public function cetak_ditjensda()

@@ -454,3 +454,17 @@ function paket_name($id, $tahun)
     $builder = $db->query("SELECT nmpaket FROM monika_data_$tahun WHERE kdpaket='$id'")->getRow();
     return $builder->nmpaket;
 }
+
+function tematik_name($id)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->query("SELECT tematik FROM m_tematik WHERE tematikid='$id'")->getRow();
+    return $builder->tematik;
+}
+
+function subtematik_name($id)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->query("SELECT subtematik FROM m_subtematik WHERE subtematikid='$id'")->getRow();
+    return $builder->subtematik;
+}

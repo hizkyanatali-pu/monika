@@ -28,7 +28,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->dokumenYear   = $this->user['tahun'];
         $this->dokumenLokasi = 'JAKARTA';
         $this->dokumenBulan  = '';
-        $this->day = '';
+        $this->tanggal = '';
         $this->bulan         = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         $this->db            = \Config\Database::connect();
 

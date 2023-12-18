@@ -8,6 +8,17 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('api', ['namespace' => 'App\Controllers'], function ($routes) {
         //$routes->post('datadukung', '\Modules\Admin\Controllers\Api::index');
         $routes->get('getpaket', '\Modules\Admin\Controllers\Pulldata::getPaketTagging');
+        $routes->get('get-paket-tematik', '\Modules\Admin\Controllers\Pulldata::getPaketTematik');
+        $routes->get('m-tematik-list', '\Modules\Admin\Controllers\Tematik::mTematikList');
+        $routes->post('m-tematik-insert', '\Modules\Admin\Controllers\Tematik::mTematikInsert');
+
+        $routes->get('m-subtematik-list', '\Modules\Admin\Controllers\Tematik::mSubTematikList');
+        $routes->post('m-subtematik-insert', '\Modules\Admin\Controllers\Tematik::mSubTematikInsert');
+
+
+        $routes->post('data-tematik-insert', '\Modules\Admin\Controllers\Tematik::addDataTematik');
+        $routes->get('data-tematik-list', '\Modules\Admin\Controllers\Tematik::DataTematik');
+
 
         $routes->get('cron-tarik-data/(:any)', '\Modules\Admin\Controllers\CronJob::dataPaket/$1');
 
@@ -192,6 +203,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             });
 
             $routes->group('tematik', ['namespace' => 'App\Controllers'], function ($routes) {
+                $routes->get('/', '\Modules\Admin\Controllers\Tematik::index');
+                $routes->get('add', '\Modules\Admin\Controllers\Tematik::addForm');
                 $routes->get('food-estate', '\Modules\Admin\Controllers\Tematik::pageFoodEstate');
                 $routes->get('kawasan-industri', '\Modules\Admin\Controllers\Tematik::pageKawasanIndustri');
                 $routes->get('kspn/(:any)', '\Modules\Admin\Controllers\Tematik::pageKspn/$1');
