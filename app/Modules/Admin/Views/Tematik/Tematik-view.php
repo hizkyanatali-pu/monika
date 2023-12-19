@@ -158,6 +158,21 @@
     var table = new Tabulator("#example-table", {
         ajaxURL: "/api/data-tematik-list",
         groupBy: ["tematik", "subtematik", "tahun"],
+        groupHeader: function(value, count, data, group) {
+
+            var totalItem = data.reduce(function(acc, item) {
+                if (item.nmpaket) {
+                    // Pisahkan nilai menggunakan koma sebagai pemisah
+                    var nilaiArray = item.nmpaket.split('$$');
+                    // Tambahkan jumlah item setelah split
+                    return acc + nilaiArray.length;
+                }
+                return acc;
+            }, 0);
+
+            // Menampilkan teks grup dengan total item
+            return value + "<span style='color:#d00; margin-left:10px;'>(" + totalItem + " item)</span>";
+        },
         columns: [{
                 title: "ID",
                 field: "kdpaket",

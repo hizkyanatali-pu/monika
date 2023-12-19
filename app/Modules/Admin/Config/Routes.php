@@ -18,6 +18,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
         $routes->post('data-tematik-insert', '\Modules\Admin\Controllers\Tematik::addDataTematik');
         $routes->get('data-tematik-list', '\Modules\Admin\Controllers\Tematik::DataTematik');
+        $routes->get('check-data-tematik', '\Modules\Admin\Controllers\Tematik::checkDataTematik');
 
 
         $routes->get('cron-tarik-data/(:any)', '\Modules\Admin\Controllers\CronJob::dataPaket/$1');

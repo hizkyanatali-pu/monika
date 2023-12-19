@@ -96,8 +96,8 @@
                     <div class="row">
                         <div class="col-lg-2"></div>
                         <div class="col-lg-2">
-                            <button type="button" class="btn btn-success simpan">Simpan</button>
-                            <button type="reset" class="btn btn-secondary">Cancel</button>
+                            <button type="button" class="btn btn-success simpan" data-update="false">Simpan</button>
+                            <a href="javascript:history.back()" class="btn btn-secondary"> Batal </a>
                         </div>
                     </div>
                 </div>
@@ -280,7 +280,7 @@
 
                     </div>
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="search" name="search">
+                        <input type="text" class="form-control" id="search" name="search" placeholder="cari">
                     </div>
                 </div>
                 <div id="table-paket"></div>
@@ -353,7 +353,10 @@
                     "tematik": tematik
                 },
                 success: function(response) {
-
+                    response.unshift({
+                        id: "",
+                        text: "Pilih SubTematik"
+                    });
                     $('.subTematikList').select2({
                         data: response,
                         placeholder: "Pilih SubTematik",
@@ -444,14 +447,119 @@
         // Temukan tombol "Add" berdasarkan kelas atau atribut lain yang sesuai
         $(".addPaket").click(function() {
             // Panggil modal dengan ID "modalPilihPaket"
-            $("#modalPilihPaket").modal("show");
+            var data = {
+                tematikid: $("#tematikList").val(),
+                subtematikid: $("#subTematikList").val(),
+                tahun: $("#tahun").val(),
+            };
 
+            $.ajax({
+                type: "GET",
+                data: data,
+                url: "/api/check-data-tematik",
+                success: function(response) {
+
+                    if (response.length > 0) {
+
+
+                        response.forEach(function(selectedRow) {
+                            // console.log("Mencoba memilih kembali baris dengan ID:", selectedRow.pagu_total);
+
+                            // Pastikan ada nilai ID yang valid
+                            if (selectedRow.id && selectedRow.pagu_total) {
+                                // Gunakan metode getRows() untuk mendapatkan semua baris dalam tabel
+                                var allRows = table.getRows();
+
+                                // Gunakan filter untuk mencari baris yang sesuai dengan kondisi tertentu
+                                var filteredRows = allRows.filter(function(row) {
+                                    // Tambahkan kondisi-kondisi tambahan di sini
+                                    return row.getData().id === selectedRow.id && row.getData().pagu_total === selectedRow.pagu_total;
+                                });
+
+                                // Periksa apakah baris ditemukan
+                                if (filteredRows.length > 0) {
+                                    // Pilih kembali baris yang sesuai dengan kondisi
+                                    filteredRows[0].select();
+                                    // console.log("Berhasil memilih kembali baris dengan ID:", selectedRow.id);
+                                } else {
+                                    // console.warn("Baris dengan ID " + selectedRow.id + " tidak ditemukan.");
+                                    selectedRows = [];
+                                    $(".count").html(selectedRows.length);
+                                }
+                            } else {
+                                // console.warn("ID baris tidak valid.");
+                            }
+                        });
+
+                        $(".count").html(response.length);
+                        $(".simpan").html('Perbaruhi Data').attr('data-update', true)
+                        $(".simpan").attr('data-id', response[0].datatematikid)
+
+                    } else {
+
+                        $(".count").html(response.length);
+                        $(".simpan").html('Simpan').attr('data-update', false)
+
+
+                    }
+
+
+                }
+            });
+            $("#modalPilihPaket").modal("show");
         });
 
         tableParams = "monika_data_" + $('#tahun').val();
 
         // Mendapatkan data respons JSON dari server
         function initializeTable(page, size, year, filter = []) {
+            //define column header menu as column visibility toggle
+            var headerMenu = function() {
+                var menu = [];
+                var columns = this.getColumns();
+
+                for (let column of columns) {
+                    if (column.getDefinition().formatter !== "rowSelection") {
+                        //create checkbox element using font awesome icons
+                        let icon = document.createElement("i");
+                        icon.classList.add("fas");
+                        icon.classList.add(column.isVisible() ? "fa-check-square" : "fa-square");
+
+                        //build label
+                        let label = document.createElement("span");
+                        let title = document.createElement("span");
+
+                        title.textContent = " " + column.getDefinition().title;
+
+                        label.appendChild(icon);
+                        label.appendChild(title);
+
+                        //create menu item
+                        menu.push({
+                            label: label,
+                            action: function(e) {
+                                //prevent menu closing
+                                e.stopPropagation();
+
+                                //toggle current column visibility
+                                column.toggle();
+
+                                //change menu item icon
+                                if (column.isVisible()) {
+                                    icon.classList.remove("fa-square");
+                                    icon.classList.add("fa-check-square");
+                                } else {
+                                    icon.classList.remove("fa-check-square");
+                                    icon.classList.add("fa-square");
+                                }
+                            }
+                        });
+                    }
+                }
+
+                return menu;
+            };
+
 
             table = new Tabulator("#table-paket", {
                 pagination: true,
@@ -469,6 +577,7 @@
                 layout: "fitColumns",
                 resizableColumnFit: true,
                 selectable: true,
+
                 columns: [{
                         formatter: "rowSelection",
                         titleFormatter: "rowSelection",
@@ -476,35 +585,43 @@
                         headerSort: false,
                         cellClick: function(e, cell) {
                             cell.getRow().toggleSelect();
-                        }
+                        },
+
+
                     },
                     {
                         title: "Unit Kerja",
                         field: "satker",
+                        headerMenu: headerMenu
                     },
                     {
                         title: "kode Paket",
                         field: "id",
+                        headerMenu: headerMenu
                     },
                     {
                         title: "Paket",
                         field: "label",
+                        headerMenu: headerMenu
                     },
                     {
                         title: "vol",
                         field: "vol",
                         hozAlign: "center",
-                        width: 80
+                        width: 80,
+                        headerMenu: headerMenu
                     },
                     {
                         title: "Satuan",
-                        field: "sat"
+                        field: "sat",
+                        headerMenu: headerMenu
                     },
                     {
                         title: "pagu",
                         field: "pagu_total",
                         hozAlign: "right",
                         sorter: "number",
+                        headerMenu: headerMenu,
                         formatter: function(cell, formatterParams, onRendered) {
 
                             if (cell.getValue()) {
@@ -519,6 +636,7 @@
                         field: "real_total",
                         hozAlign: "right",
                         sorter: "number",
+                        headerMenu: headerMenu,
                         formatter: function(cell, formatterParams, onRendered) {
 
                             if (cell.getValue()) {
@@ -533,6 +651,7 @@
                         field: "progres_keuangan",
                         hozAlign: "right",
                         sorter: "number",
+                        headerMenu: headerMenu,
                         formatter: function(cell, formatterParams, onRendered) {
 
                             if (cell.getValue()) {
@@ -547,6 +666,7 @@
                         field: "progres_fisik",
                         hozAlign: "right",
                         sorter: "number",
+                        headerMenu: headerMenu,
                         formatter: function(cell, formatterParams, onRendered) {
 
                             if (cell.getValue()) {
@@ -586,25 +706,41 @@
             });
 
             table.on("renderComplete", function() {
+
                 // Proses pencarian dan pemilihan kembali baris di sini
                 selectedRows.forEach(function(selectedRow) {
-                    // console.log("Mencoba memilih kembali baris dengan ID:", selectedRow.id);
+                    // console.log("Mencoba memilih kembali baris dengan ID:", selectedRow.pagu_total);
 
                     // Pastikan ada nilai ID yang valid
-                    if (selectedRow.id) {
-                        var row = table.getRow(selectedRow.id);
+                    if (selectedRow.id && selectedRow.pagu_total) {
+                        // Gunakan metode getRows() untuk mendapatkan semua baris dalam tabel
+                        var allRows = table.getRows();
+
+                        // Gunakan filter untuk mencari baris yang sesuai dengan kondisi tertentu
+                        var filteredRows = allRows.filter(function(row) {
+                            // Tambahkan kondisi-kondisi tambahan di sini
+                            return row.getData().id === selectedRow.id && row.getData().pagu_total === selectedRow.pagu_total;
+                        });
+
                         // Periksa apakah baris ditemukan
-                        if (row) {
-                            row.select();
+                        if (filteredRows.length > 0) {
+                            // Pilih kembali baris yang sesuai dengan kondisi
+                            filteredRows[0].select();
                             // console.log("Berhasil memilih kembali baris dengan ID:", selectedRow.id);
                         } else {
                             // console.warn("Baris dengan ID " + selectedRow.id + " tidak ditemukan.");
+                            selectedRows = [];
+                            $(".count").html(selectedRows.length);
                         }
                     } else {
                         // console.warn("ID baris tidak valid.");
                     }
                 });
+
+                $(".count").html(selectedRows.length);
+
             });
+
 
 
 
@@ -636,15 +772,19 @@
         initializeTable(1, 10, $('#tahun').val());
 
         $('#tahun').change(function() {
+            selectedRows = [];
+            $(".count").html(selectedRows.length);
 
             var selectedYear = $(this).val();
             initializeTable(1, 10, selectedYear);
+
+
         });
 
 
         // Menangani perubahan pada dropdown menggunakan jQuery
         $('#filter-field').change(function() {
-
+            $(".count").html(0);
             var selectedSatker = $(this).val();
             initializeTable(1, 10, $('#tahun').val(), {
                 "satker": selectedSatker
@@ -652,7 +792,7 @@
         });
 
         $('#search').keyup(function() {
-
+            $(".count").html(0);
             var search = $(this).val();
             initializeTable(1, 10, $('#tahun').val(), {
                 "search": search
@@ -666,11 +806,17 @@
 
         });
         $(".simpan").click(function() {
+
+            actionUpdate = $(this).data('update');
+            idData = $(this).data('id');
+
             var data = {
                 tematikID: $("#tematikList").val(),
                 subTematikID: $("#subTematikList").val(),
                 tahun: $("#tahun").val(),
-                paket: selectedRows
+                paket: selectedRows,
+                actionupdate: actionUpdate,
+                iddata: idData
             };
 
             $.ajax({
@@ -709,6 +855,9 @@
 
 
         });
+
+
+
 
 
 

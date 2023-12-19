@@ -192,6 +192,9 @@ class Tematik extends \App\Controllers\BaseController
 
         $paket = $this->request->getPost('paket');
 
+        $update = $this->request->getPost('actionupdate');
+        $id = $this->request->getPost('iddata');
+
 
 
         // Validasi data jika diperlukan
@@ -228,8 +231,37 @@ class Tematik extends \App\Controllers\BaseController
 
         $tableTematik = $this->db->table('data_tematik');
         $tabletematikPaket = $this->db->table('data_tematik_paket');
-        $tableTematik->insert($data);
-        $insertedID = $this->db->insertID();
+
+        if ($update == "false") {
+
+            $tableTematik->insert($data);
+            $insertedID = $this->db->insertID();
+        } else {
+            $validation->setRules(
+                [
+                    'iddata' => 'required',
+                ],
+                [
+                    'ID' => [
+                        'required' => 'Tidak ada ID',
+                    ]
+
+                ]
+            );
+
+            if (!$validation->withRequest($this->request)->run()) {
+                // Jika validasi gagal, kirim respons dengan pesan kesalahan
+                return $this->response->setJSON(['status' => 'error', 'message' => $validation->getErrors()]);
+            }
+
+            $tabletematikPaket->where('datatematikid', $id);
+            $tabletematikPaket->delete();
+            $tableTematik->insert($data);
+            $insertedID = $this->db->insertID();
+        }
+
+
+
 
 
 
@@ -257,7 +289,13 @@ class Tematik extends \App\Controllers\BaseController
 
             ];
 
-            $tabletematikPaket->insert($dataPaket);
+            if ($update == "false") {
+                $tabletematikPaket->insert($dataPaket);
+            } else {
+                $tabletematikPaket->where('datatematikid', $id);
+                $tabletematikPaket->delete();
+                $tabletematikPaket->insert($dataPaket);
+            }
         }
 
         return $this->respond(['status' => 'success', 'message' => 'Data berhasil disimpan']);
@@ -277,6 +315,31 @@ class Tematik extends \App\Controllers\BaseController
             ->select('data_tematik.*, GROUP_CONCAT(data_tematik_paket.kdpaket SEPARATOR "$$") as kdpaket,GROUP_CONCAT(data_tematik_paket.nmpaket SEPARATOR "$$") as nmpaket,GROUP_CONCAT(data_tematik_paket.pagu_total SEPARATOR "$$") as pagu_total,GROUP_CONCAT(data_tematik_paket.real_total SEPARATOR "$$") as real_total,GROUP_CONCAT(data_tematik_paket.progres_keuangan SEPARATOR "$$") progres_keuangan,GROUP_CONCAT(data_tematik_paket.progres_fisik SEPARATOR "$$") progres_fisik')
             ->get()
             ->getResultArray();
+        return $this->respond($data);
+    }
+
+
+    function checkDataTematik()
+    {
+        $tematikid = $this->request->getVar('tematikid') ?? '';
+        $subtematikid = $this->request->getVar('subtematikid') ?? '';
+        $tahun = $this->request->getVar('tahun') ?? '';
+
+
+
+
+        $tableTematik = $this->db->table('data_tematik');
+
+        $data = $tableTematik->select('data_tematik.tematikid,kdpaket as id,pagu_total,data_tematik.id as datatematikid')
+            ->join('data_tematik_paket', 'data_tematik.id = data_tematik_paket.datatematikid')
+            ->where('tematikid', $tematikid)
+            ->where('subtematikid', $subtematikid)
+            ->where('tahun', $tahun)
+            ->get()
+            ->getResultArray();
+
+
+
         return $this->respond($data);
     }
 
