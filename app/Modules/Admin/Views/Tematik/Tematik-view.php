@@ -194,6 +194,8 @@
             {
                 title: "Pagu",
                 field: "pagu_total",
+                hozAlign: "right",
+
                 formatter: function(cell, formatterParams, onRendered) {
 
                     if (cell.getValue()) {
@@ -214,6 +216,8 @@
             {
                 title: "Realisasi",
                 field: "real_total",
+                hozAlign: "right",
+
                 formatter: function(cell, formatterParams, onRendered) {
 
                     if (cell.getValue()) {
@@ -233,6 +237,8 @@
             {
                 title: "% Keuangan",
                 field: "progres_keuangan",
+                hozAlign: "right",
+
                 formatter: function(cell, formatterParams, onRendered) {
 
                     if (cell.getValue()) {
@@ -254,6 +260,8 @@
             {
                 title: "% Fisik",
                 field: "progres_fisik",
+
+                hozAlign: "right",
                 formatter: function(cell, formatterParams, onRendered) {
 
                     if (cell.getValue()) {
