@@ -268,17 +268,21 @@
 
             </div>
             <div class="modal-body">
-                <div class="col-md-6">
-                    <select id="filter-field" class="form-control">
-                        <option value="">Pilih Satker</option>
-                        <?php
-                        foreach ($unit_kerja as $key => $value) { ?>
-                            <option value="<?= $value['satkerid'] ?>"><?= $value['satker'] ?> </option>
-                        <?php } ?>
-                    </select>
+                <div class="row">
+                    <div class="col-md-6">
+                        <select id="filter-field" class="form-control">
+                            <option value="">Pilih Satker</option>
+                            <?php
+                            foreach ($unit_kerja as $key => $value) { ?>
+                                <option value="<?= $value['satkerid'] ?>"><?= $value['satker'] ?> </option>
+                            <?php } ?>
+                        </select>
 
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="search" name="search">
+                    </div>
                 </div>
-
                 <div id="table-paket"></div>
 
 
@@ -500,25 +504,57 @@
                         title: "pagu",
                         field: "pagu_total",
                         hozAlign: "right",
-                        sorter: "number"
+                        sorter: "number",
+                        formatter: function(cell, formatterParams, onRendered) {
+
+                            if (cell.getValue()) {
+
+                                return formatRupiah(cell.getValue())
+                            }
+                            return "";
+                        }
                     },
                     {
                         title: "realisasi",
                         field: "real_total",
                         hozAlign: "right",
-                        sorter: "number"
+                        sorter: "number",
+                        formatter: function(cell, formatterParams, onRendered) {
+
+                            if (cell.getValue()) {
+
+                                return formatRupiah(cell.getValue())
+                            }
+                            return "";
+                        }
                     },
                     {
                         title: "progres keuangan",
                         field: "progres_keuangan",
                         hozAlign: "right",
-                        sorter: "number"
+                        sorter: "number",
+                        formatter: function(cell, formatterParams, onRendered) {
+
+                            if (cell.getValue()) {
+
+                                return cell.getValue().replace(/\./g, ',');
+                            }
+                            return "";
+                        }
                     },
                     {
                         title: "progres fisik",
                         field: "progres_fisik",
                         hozAlign: "right",
-                        sorter: "number"
+                        sorter: "number",
+                        formatter: function(cell, formatterParams, onRendered) {
+
+                            if (cell.getValue()) {
+
+                                return cell.getValue().replace(/\./g, ',');
+                            }
+                            return "";
+                        }
                     },
                 ],
 
@@ -612,6 +648,14 @@
             var selectedSatker = $(this).val();
             initializeTable(1, 10, $('#tahun').val(), {
                 "satker": selectedSatker
+            });
+        });
+
+        $('#search').keyup(function() {
+
+            var search = $(this).val();
+            initializeTable(1, 10, $('#tahun').val(), {
+                "search": search
             });
         });
 

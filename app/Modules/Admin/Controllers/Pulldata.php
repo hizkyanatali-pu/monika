@@ -213,6 +213,11 @@ class Pulldata extends \App\Controllers\BaseController
             $totalData->where("$table.kdsatker", $filter['satker']);
         }
 
+        if (isset($filter['search'])) {
+            $q->like("$table.nmpaket", $filter['search'])->orLike("$table.kdpaket", $filter['search']);
+            $totalData->like("$table.nmpaket", $filter['search'])->orLike("$table.kdpaket", $filter['search']);
+        }
+
         $data = $q->limit($perPage, $offset)->get()->getResultArray();
         $totalData = $totalData->countAllResults();
 
