@@ -108,11 +108,11 @@ class Importdata extends \App\Controllers\BaseController
         // ) {
         // exit;
         if ($type == 'paket') {
-            $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket?thang=" . $tahunAnggaran);
+            $data = file_get_contents(getenv('API_EMON') . "ws_sda/paket?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_paket_' . $tahunAnggaran;
             $regex = preg_replace('/\s+/', ' ', $data);
         } else if ($type == 'kontrak') {
-            $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/kontrak?thang=" . $tahunAnggaran);
+            $data = file_get_contents(getenv('API_EMON') . "ws_sda/kontrak?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_kontrak_' . $tahunAnggaran;
             $regex = preg_replace('/\s+/', ' ', $data);
             $regex = preg_replace('/"+"/', '"', $regex);
@@ -122,12 +122,12 @@ class Importdata extends \App\Controllers\BaseController
             // $regex = preg_replace('/"",/', '"NULL",', $regex);
             // $regex = preg_replace('/"",/', '"', $regex);
         } else if ($type == 'paket_register') {
-            $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket_register?thang=" . $tahunAnggaran);
+            $data = file_get_contents(getenv('API_EMON') . "ws_sda/paket_register?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_paket_register_' . $tahunAnggaran;
             $regex = preg_replace('/\s+/', ' ', $data);
         } else {
 
-            $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/rekap_unor?thang=" . $tahunAnggaran);
+            $data = file_get_contents(getenv('API_EMON') . "ws_sda/rekap_unor?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_rekap_unor_' . $tahunAnggaran;
             $regex = preg_replace('/\s+/', ' ', $data);
         }

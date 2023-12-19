@@ -200,8 +200,13 @@
                         // Pisahkan nilai menggunakan koma sebagai pemisah
                         var nilaiArray = cell.getValue().split('$$');
 
+                        // Format nilai ke format rupiah
+                        var formattedArray = nilaiArray.map(function(nilai) {
+                            return formatRupiah(nilai); // Gunakan fungsi formatRupiah untuk mengubah nilai ke format rupiah
+                        });
+
                         // Kembalikan nilai dalam format yang diinginkan
-                        return nilaiArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
+                        return formattedArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
                     }
                     return "";
                 }
@@ -214,9 +219,13 @@
                     if (cell.getValue()) {
                         // Pisahkan nilai menggunakan koma sebagai pemisah
                         var nilaiArray = cell.getValue().split('$$');
+                        // Format nilai ke format rupiah
+                        var formattedArray = nilaiArray.map(function(nilai) {
+                            return formatRupiah(nilai); // Gunakan fungsi formatRupiah untuk mengubah nilai ke format rupiah
+                        });
 
                         // Kembalikan nilai dalam format yang diinginkan
-                        return nilaiArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
+                        return formattedArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
                     }
                     return "";
                 }
@@ -230,8 +239,14 @@
                         // Pisahkan nilai menggunakan koma sebagai pemisah
                         var nilaiArray = cell.getValue().split('$$');
 
+
+                        // Ganti titik dengan koma pada setiap nilai
+                        var modifiedArray = nilaiArray.map(function(nilai) {
+                            return nilai.replace(/\./g, ','); // Mengganti titik dengan koma
+                        });
+
                         // Kembalikan nilai dalam format yang diinginkan
-                        return nilaiArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
+                        return modifiedArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
                     }
                     return "";
                 }
@@ -245,8 +260,13 @@
                         // Pisahkan nilai menggunakan koma sebagai pemisah
                         var nilaiArray = cell.getValue().split('$$');
 
+                        // Ganti titik dengan koma pada setiap nilai
+                        var modifiedArray = nilaiArray.map(function(nilai) {
+                            return nilai.replace(/\./g, ','); // Mengganti titik dengan koma
+                        });
+
                         // Kembalikan nilai dalam format yang diinginkan
-                        return nilaiArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
+                        return modifiedArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
                     }
                     return "";
                 }

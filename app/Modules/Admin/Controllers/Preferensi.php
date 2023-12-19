@@ -61,7 +61,7 @@ class Preferensi extends \App\Controllers\BaseController
         $builder = $this->db1->table('monika_data');
 
 
-        $url = 'https://emonitoring.pu.go.id/ws_sda';
+        $url = getenv('API_EMON') . 'ws_sda';
 
         $ch = curl_init();
         $options = [
