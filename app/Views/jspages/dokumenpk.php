@@ -1535,7 +1535,7 @@
         let template = _data.template,
             value_dataId = _dataId ?? last_dokumen_id,
             templateExtraData = _data.templateExtraData,
-            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type, _data.satkerid, value_dataId),
+            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type, _data.satkerid, value_dataId, _data.tahun),
             render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
             render_listInfo = renderFormTemplate_listInfo(_data.templateInfo),
             render_ttdPihak2 = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2, templateExtraData.jabatanPihak2),
@@ -1821,7 +1821,7 @@
 
 
 
-    function renderFormTemplate_rowTable(_data, _templateType, _satkerId, DocID) {
+    function renderFormTemplate_rowTable(_data, _templateType, _satkerId, DocID, _tahun) {
 
 
         let rows = '',
@@ -1926,7 +1926,7 @@
                                     value="${ data.outcomeSatkerValue }"
                                     data-row-id="${ data.id }"
                                     onkeyup="return this.value = formatRupiah(this.value, '')" data-pktype="satker"
-                                    readonly>
+                                    ${data.template_id === '6' || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'readonly' }>
                                 <div class="input-group-append">
                                      <select class="form-control select-target-satuan" data-row-id="${data.id}">
             ${data.target_satuan.split(';').map(function(satuan) {
@@ -2003,8 +2003,6 @@
                         sessionStorage.setItem(data.id, JSON.stringify(idPaketArray));
                     }
 
-
-
                     rows += `
                         <tr>
                             <td class="text-center align-middle" width="50px">
@@ -2012,9 +2010,32 @@
                             </td>
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title } 
-                            <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" title="pilih paket" data-dokid="${DocID||0}" data-templateid="${data.template_id}" data-indikator="${ data.title }" data-rowid="${data.id}" data-outputsatuan="${data.target_satuan}" data-outcomesatuan="${data.outcome_satuan}" data-satkerid = "${data.listSatker.length === 0 ? _satkerId : data.listSatker}">Paket <span class="label label-sm label-white ml-2 totalpaket">
-                            ${paramsBtnPaket == "uptBalai-add" ? selectedItems.length:data.paket.length}</span></button></td>
+
+                                            ${data.template_id === '6' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' : `
+                <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" 
+                        title="pilih paket" 
+                        data-dokid="${DocID || 0}" 
+                        data-templateid="${data.template_id}" 
+                        data-indikator="${data.title}" 
+                        data-rowid="${data.id}" 
+                        data-outputsatuan="${data.target_satuan}" 
+                        data-outcomesatuan="${data.outcome_satuan}" 
+                        data-satkerid="${data.listSatker.length === 0 ? _satkerId : data.listSatker}">
+                    Paket 
+                    <span class="label label-sm label-white ml-2 totalpaket">
+                    ${paramsBtnPaket === "uptBalai-add" ? selectedItems.length : data.paket.length}
+                    </span>
+                </button>
+                `}
+
+
+                           
+                            
+
+                            
+                            </td>
                             ${renderInputTarget}
+                            
                             <td class="${classDNoneOutcome}">
                                 <div class="input-group">
                                     <input 

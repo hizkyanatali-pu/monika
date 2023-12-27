@@ -414,7 +414,7 @@
                 $('._list-opsi-satker._list-satker').removeClass('d-none');
                 $('._list-opsi-balai').addClass('d-none');
 
-                location.reload()
+                // location.reload()
             }, 400)
         })
     })
@@ -877,6 +877,7 @@
                 }
             } else {
 
+
                 if (_data.rowRumus) {
                     // Menemukan data rumus yang sesuai dengan ID baris
                     const rumusBaris = _data.rowRumus.find(rumus => rumus.rowId === data.id);
@@ -901,8 +902,18 @@
                                 $('input._rumus:last').val(rumusBaris.rumus);
                             }
                         }
+                    } else {
+                        element_formTable.append(render_rowForm({
+                            namaItem: data.title,
+                            targetSatuan: data.target_satuan,
+                            outcomeSatuan: data.outcome_satuan,
+                            idRow: data.id,
+                            no_urut: data.no_urut,
+                        }))
+
                     }
                 }
+
 
             }
         })

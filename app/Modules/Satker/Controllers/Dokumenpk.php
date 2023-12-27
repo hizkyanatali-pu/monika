@@ -1113,12 +1113,17 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->dokumenSatker->update($inserted_dokumenSatker);
         /** end-of: dokumen */
 
+        $_templateID = $this->request->getPost('templateID');
+        if ($this->user['tahun'] != 2023) {
+            if (!in_array($_templateID, ['6', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '31', '32', '33', '34', '35', '36', '37', '38', '40', '42'])) {
 
-        /* dokumen paket */
-        $this->dokumenSatker_paket->where('dokumen_id', $dokumenID);
-        $this->dokumenSatker_paket->delete();
-        $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
-        /** end-of: dokumen rows */
+                /* dokumen paket */
+                $this->dokumenSatker_paket->where('dokumen_id', $dokumenID);
+                $this->dokumenSatker_paket->delete();
+                $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
+                /** end-of: dokumen rows */
+            }
+        }
 
         /* dokumen rows */
         $this->dokumenSatker_rows->where('dokumen_id', $dokumenID);
