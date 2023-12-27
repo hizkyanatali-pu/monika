@@ -330,7 +330,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
         return $this->respond([
             'template' => $this->dokumenPK->where('id', $_id)->get()->getRow(),
-            'rows'     => $this->dokumenPK_row->select('dokumen_pk_template_row_' . $this->tahun . '.*, (SELECT COUNT(dokumen_pk_template_rowrumus_' . $this->tahun . '.rowId) FROM dokumen_pk_template_rowrumus_' . $this->tahun . ' WHERE dokumen_pk_template_rowrumus_' . $this->tahun . '.rowId=dokumen_pk_template_row_' . $this->tahun . '.id) as rumusJml')->where('template_id', $_id)->get()->getResult(),
+            'rows'     => $this->dokumenPK_row->select('dokumen_pk_template_row_' . $this->tahun . '.*, (SELECT COUNT(dokumen_pk_template_rowrumus_' . $this->tahun . '.rowId) FROM dokumen_pk_template_rowrumus_' . $this->tahun . ' WHERE dokumen_pk_template_rowrumus_' . $this->tahun . '.rowId=dokumen_pk_template_row_' . $this->tahun . '.id) as rumusJml')->where('template_id', $_id)->orderBy('no_urut')->get()->getResult(),
             'rowRumus' => $this->dokumenPk_rowRumus->where('template_id', $_id)->get()->getResult(),
             'kegiatan' => $this->dokumenPK_kegiatan->where('template_id', $_id)->get()->getResult(),
             'info'     => $this->dokumenPK_info->where('template_id', $_id)->get()->getResult(),

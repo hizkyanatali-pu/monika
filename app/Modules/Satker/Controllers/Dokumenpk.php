@@ -662,7 +662,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'listSatker'  => $satkerList
 
             ];
-        }, $this->templateRow->where('template_id', $id)->get()->getResult());
+        }, $this->templateRow->where('template_id', $id)->orderBy('no_urut')->get()->getResult());
 
 
         $valudasiCreatedDokumen = true;

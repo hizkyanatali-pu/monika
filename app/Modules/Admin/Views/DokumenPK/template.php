@@ -876,31 +876,34 @@
                     }))
                 }
             } else {
-                if (_data.rowRumus[indexDataRumus]) {
-                    element_formTable.append(render_rowForm({
-                        namaItem: data.title,
-                        targetSatuan: data.target_satuan,
-                        outcomeSatuan: data.outcome_satuan,
-                        idRow: data.id,
-                        no_urut: data.no_urut,
-                        rumus: _data.rowRumus[indexDataRumus].rumus
 
-                    }))
+                if (_data.rowRumus) {
+                    // Menemukan data rumus yang sesuai dengan ID baris
+                    const rumusBaris = _data.rowRumus.find(rumus => rumus.rowId === data.id);
 
-                    if (parseInt(data.rumusJml) > 0) {
-                        $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
-                        indexDataRumus++
+                    if (rumusBaris) {
+                        // Jika ditemukan, tambahkan data ke formulir
+                        element_formTable.append(render_rowForm({
+                            namaItem: data.title,
+                            targetSatuan: data.target_satuan,
+                            outcomeSatuan: data.outcome_satuan,
+                            idRow: data.id,
+                            no_urut: data.no_urut,
+                            rumus: rumusBaris.rumus
+                        }));
 
-                        for (let index = 1; index < parseInt(data.rumusJml); index++) {
-                            $('.__tambah_row-form-rumus-item:last').trigger('click')
+                        if (parseInt(data.rumusJml) > 0) {
+                            // Jika jumlah rumus pada baris lebih dari 0, isi input dan tambahkan jika diperlukan
+                            $('input._rumus:last').val(rumusBaris.rumus);
 
-                            $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
-                            indexDataRumus++
+                            for (let index = 1; index < parseInt(data.rumusJml); index++) {
+                                $('.__tambah_row-form-rumus-item:last').trigger('click');
+                                $('input._rumus:last').val(rumusBaris.rumus);
+                            }
                         }
-                        // $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
-                        // indexDataRumus++
                     }
                 }
+
             }
         })
 
