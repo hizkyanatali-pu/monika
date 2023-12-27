@@ -262,9 +262,9 @@
                     <i class="fas fa-save"></i> Simpan
                 </button>
 
-                <button type="button" name="update-document" class="btn btn-success d-none">
+                <!-- <button type="button" name="update-document" class="btn btn-success d-none">
                     <i class="fas fa-edit"></i> Simpan Perubahan
-                </button>
+                </button> -->
             </div>
         </div>
     </div>
@@ -673,9 +673,9 @@
     function set_formInputValue(_data) {
         element_formTable.empty()
         element_checkboxOpsiAksesDokumenShowed.prop('checked', false)
-        
+
         $('input[name=judul-dokumen]').val(_data.template.title)
-        
+
         let indexDataRumus = 0
         _data.rows.forEach((data, key) => {
             if (data.type == "section_title") {
@@ -685,27 +685,62 @@
                     idRow: data.id
                 }))
             } else {
-                if(_data.rowRumus[indexDataRumus]) {
-                    element_formTable.append(render_rowForm({
-                        namaItem: data.title,
-                        targetSatuan: data.target_satuan,
-                        outcomeSatuan: data.outcome_satuan,
-                        rumudJml: data.rumusJml,
-                        no_urut: data.no_urut,
-                        idRow: data.id,
-                        rumus: _data.rowRumus[indexDataRumus].rumus
-                    }))
-    
-                    if (parseInt(data.rumusJml) > 0) {
-                        $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
-                        indexDataRumus++
-    
-                        for (let index = 1; index < parseInt(data.rumusJml); index++) {
-                            $('.__tambah_row-form-rumus-item:last').trigger('click')
-    
-                            $('input._rumus:last').attr('value',_data.rowRumus[indexDataRumus].rumus)
-                            indexDataRumus++
+                // if(_data.rowRumus[indexDataRumus]) {
+                //     element_formTable.append(render_rowForm({
+                //         namaItem: data.title,
+                //         targetSatuan: data.target_satuan,
+                //         outcomeSatuan: data.outcome_satuan,
+                //         rumudJml: data.rumusJml,
+                //         no_urut: data.no_urut,
+                //         idRow: data.id,
+                //         rumus: _data.rowRumus[indexDataRumus].rumus
+                //     }))
+
+                //     if (parseInt(data.rumusJml) > 0) {
+                //         $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
+                //         indexDataRumus++
+
+                //         for (let index = 1; index < parseInt(data.rumusJml); index++) {
+                //             $('.__tambah_row-form-rumus-item:last').trigger('click')
+
+                //             $('input._rumus:last').attr('value',_data.rowRumus[indexDataRumus].rumus)
+                //             indexDataRumus++
+                //         }
+                //     }
+                // }
+                if (_data.rowRumus) {
+                    // Menemukan data rumus yang sesuai dengan ID baris
+                    const rumusBaris = _data.rowRumus.find(rumus => rumus.rowId === data.id);
+
+                    if (rumusBaris) {
+                        // Jika ditemukan, tambahkan data ke formulir
+                        element_formTable.append(render_rowForm({
+                            namaItem: data.title,
+                            targetSatuan: data.target_satuan,
+                            outcomeSatuan: data.outcome_satuan,
+                            idRow: data.id,
+                            no_urut: data.no_urut,
+                            rumus: rumusBaris.rumus
+                        }));
+
+                        if (parseInt(data.rumusJml) > 0) {
+                            // Jika jumlah rumus pada baris lebih dari 0, isi input dan tambahkan jika diperlukan
+                            $('input._rumus:last').val(rumusBaris.rumus);
+
+                            for (let index = 1; index < parseInt(data.rumusJml); index++) {
+                                $('.__tambah_row-form-rumus-item:last').trigger('click');
+                                $('input._rumus:last').val(rumusBaris.rumus);
+                            }
                         }
+                    } else {
+                        element_formTable.append(render_rowForm({
+                            namaItem: data.title,
+                            targetSatuan: data.target_satuan,
+                            outcomeSatuan: data.outcome_satuan,
+                            idRow: data.id,
+                            no_urut: data.no_urut,
+                        }))
+
                     }
                 }
             }
@@ -738,7 +773,7 @@
                 outcome_satuan = '',
                 rumus = [],
                 idRow = '',
-            type = ''
+                type = ''
 
             if ($(element).hasClass('_title-section')) {
                 prefixTitle = $(element).find('select[name=prefix-title-section]').val()
@@ -910,12 +945,12 @@
 
 
     function render_dragdrop() {
-        
+
         var columns = document.querySelectorAll('._row-form');
         var draggingClass = 'dragging';
         var dragSource;
-    
-        Array.prototype.forEach.call(columns, function (col) {
+
+        Array.prototype.forEach.call(columns, function(col) {
             col.addEventListener('dragstart', handleDragStart, false);
             col.addEventListener('dragenter', handleDragEnter, false)
             col.addEventListener('dragover', handleDragOver, false);
@@ -924,42 +959,42 @@
             col.addEventListener('dragend', handleDragEnd, false);
         });
 
-        function handleDragStart (evt) {
+        function handleDragStart(evt) {
             dragSource = this;
             evt.target.classList.add(draggingClass);
             evt.dataTransfer.effectAllowed = 'move';
             evt.dataTransfer.setData('text/html', this.innerHTML);
         }
-    
-        function handleDragOver (evt) {
+
+        function handleDragOver(evt) {
             evt.dataTransfer.dropEffect = 'move';
             evt.preventDefault();
         }
-    
-        function handleDragEnter (evt) {
+
+        function handleDragEnter(evt) {
             this.classList.add('over');
         }
-    
-        function handleDragLeave (evt) {
+
+        function handleDragLeave(evt) {
             this.classList.remove('over');
         }
-    
-        function handleDrop (evt) {
+
+        function handleDrop(evt) {
             evt.stopPropagation();
-            
+
             if (dragSource !== this) {
                 dragSource.innerHTML = this.innerHTML;
                 this.innerHTML = evt.dataTransfer.getData('text/html');
                 // this.parentNode.innerHTML = evt.dataTransfer.getData('text/html');
             }
-            
+
             evt.preventDefault();
         }
-    
-        function handleDragEnd (evt) {
-            Array.prototype.forEach.call(columns, function (col) {
-                ['over', 'dragging'].forEach(function (className) {
-                col.classList.remove(className);
+
+        function handleDragEnd(evt) {
+            Array.prototype.forEach.call(columns, function(col) {
+                ['over', 'dragging'].forEach(function(className) {
+                    col.classList.remove(className);
                 });
             });
         }

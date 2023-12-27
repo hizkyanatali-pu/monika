@@ -273,7 +273,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ->where('type', 'satker')
                 ->orWhere('type', 'balai')
                 ->groupEnd()
-                ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
+                ->where('deleted_at is NULL')->get()->getResult(),
             'defaultType' => 'satker',
         ]);
     }
@@ -285,7 +285,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         return $this->pageTemplate([
             'title' => 'Template Perjanjian Kinerja - Eselon 2',
             'data' => $this->dokumenPK->where('type', 'eselon2')
-                ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
+                ->where('deleted_at is NULL')->get()->getResult(),
             'defaultType' => 'eselon2'
         ]);
     }
@@ -297,7 +297,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         return $this->pageTemplate([
             'title' => 'Template Perjanjian Kinerja - Eselon 1',
             'data' => $this->dokumenPK->where('type', 'eselon1')
-                ->where('deleted_at is NULL', NULL, false)->get()->getResult(),
+                ->where('deleted_at is NULL')->get()->getResult(),
             'defaultType' => 'eselon1'
         ]);
     }
