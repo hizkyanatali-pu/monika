@@ -1926,7 +1926,7 @@
                                     value="${ data.outcomeSatkerValue }"
                                     data-row-id="${ data.id }"
                                     onkeyup="return this.value = formatRupiah(this.value, '')" data-pktype="satker"
-                                    ${data.template_id === '5' || data.template_id === '6' || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'readonly' }>
+                                    ${data.template_id === '5' || data.template_id === '6' || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'readonly' }>
                                 <div class="input-group-append">
                                      <select class="form-control select-target-satuan" data-row-id="${data.id}">
             ${data.target_satuan.split(';').map(function(satuan) {
@@ -2011,7 +2011,7 @@
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title } 
 
-                                            ${data.template_id === '5' || data.template_id === '6' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' : `
+                                            ${data.template_id === '5' || data.template_id === '6' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' : `
                 <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" 
                         title="pilih paket" 
                         data-dokid="${DocID || 0}" 

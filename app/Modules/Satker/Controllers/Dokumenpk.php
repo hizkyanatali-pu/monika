@@ -1115,7 +1115,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $_templateID = $this->request->getPost('templateID');
         if ($this->user['tahun'] != 2023) {
-            if (!in_array($_templateID, ['5', '6', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '31', '32', '33', '34', '35', '36', '37', '38', '40', '42'])) {
+            if (!in_array($_templateID, ['5', '6', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '29', '31', '32', '33', '34', '35', '36', '37', '38', '40', '42'])) {
 
                 /* dokumen paket */
                 $this->dokumenSatker_paket->where('dokumen_id', $dokumenID);
