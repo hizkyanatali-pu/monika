@@ -157,15 +157,24 @@
         let rowChild = $('input:checkbox[name=form-check-row]').parents('tr').find('td')
 
         $('input:checkbox[name=form-check-row]').prop('checked', this.checked);
-
+        let rowid = rowChild.find('.paket').attr('data-rowid');
         if (!this.checked) {
-            rowChild.addClass('disabled')
-            rowChild.find('input').attr('readonly', 'readonly')
-            rowChild.find('select').attr('disabled', 'disabled')
-            rowChild.find('button.paket').attr('disabled', 'true')
-            rowChild.find('input').val('')
-            rowChild.find('.totalpaket').html("0")
 
+
+            if (typeof rowid === 'undefined') {
+                rowChild.addClass('disabled')
+                rowChild.find('input').attr('readonly', 'readonly')
+                rowChild.find('input').val('')
+            } else {
+
+                rowChild.addClass('disabled')
+                rowChild.find('input').attr('readonly', 'readonly')
+                rowChild.find('select').attr('disabled', 'disabled')
+                rowChild.find('button.paket').attr('disabled', 'true')
+                rowChild.find('input').val('')
+                rowChild.find('.totalpaket').html("0")
+
+            }
             sessionStorage.clear()
             // var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
             // totalPaketElement.html(selectedItems.length);
@@ -173,14 +182,20 @@
 
 
         } else {
-            rowChild.removeClass('disabled')
-
-            if (rowChild.find('input[data-pktype]').attr('data-pktype') == "balai") {
-
+            if (typeof rowid === 'undefined') {
+                rowChild.removeClass('disabled')
                 rowChild.find('input').removeAttr('readonly')
+            } else {
+                rowChild.removeClass('disabled')
+
+                if (rowChild.find('input[data-pktype]').attr('data-pktype') == "balai") {
+
+                    rowChild.find('input').removeAttr('readonly')
+                }
+                rowChild.find('select').removeAttr('disabled')
+                rowChild.find('button.paket').removeAttr('disabled')
             }
-            rowChild.find('select').removeAttr('disabled')
-            rowChild.find('button.paket').removeAttr('disabled')
+
 
 
         }
@@ -191,29 +206,44 @@
     $(document).on('change', 'input:checkbox[name=form-check-row]', function() {
         let element_checkAll = $('input:checkbox[name=form-checkall-row]'),
             isAllChecked = false,
-            element_parentsColumn = $(this).parents('tr').find('td')
+            element_parentsColumn = $(this).parents('tr').find('td');
+        let rowid = element_parentsColumn.find('.paket').attr('data-rowid');
 
         if (!$(this).is(':checked')) {
-            element_parentsColumn.addClass('disabled')
-            element_parentsColumn.find('input').attr('readonly', 'readonly')
-            element_parentsColumn.find('select').attr('disabled', 'disabled')
-            element_parentsColumn.find('button.paket').attr('disabled', 'true')
-            element_parentsColumn.find('input').val('')
-            element_parentsColumn.find('.totalpaket').html("0")
-            rowid = element_parentsColumn.find('.paket').attr('data-rowid');
+
+            if (typeof rowid === 'undefined') {
+                element_parentsColumn.addClass('disabled')
+                element_parentsColumn.find('input').attr('readonly', 'readonly')
+                element_parentsColumn.find('input').val('')
+            } else {
+                element_parentsColumn.addClass('disabled')
+                element_parentsColumn.find('input').attr('readonly', 'readonly')
+                element_parentsColumn.find('select').attr('disabled', 'disabled')
+                element_parentsColumn.find('button.paket').attr('disabled', 'true')
+                element_parentsColumn.find('input').val('')
+                element_parentsColumn.find('.totalpaket').html("0")
+            }
+
+
+
 
             sessionStorage.removeItem(rowid);
 
             // sessionStorage.clear()
         } else {
-            element_parentsColumn.removeClass('disabled')
-
-            if (element_parentsColumn.find('input[data-pktype]').attr('data-pktype') == "balai") {
+            if (typeof rowid === 'undefined') {
+                element_parentsColumn.removeClass('disabled')
                 element_parentsColumn.find('input').removeAttr('readonly')
-            }
-            element_parentsColumn.find('select').removeAttr('disabled')
-            element_parentsColumn.find('button.paket').removeAttr('disabled')
+            } else {
+                element_parentsColumn.removeClass('disabled')
 
+                if (element_parentsColumn.find('input[data-pktype]').attr('data-pktype') == "balai") {
+                    element_parentsColumn.find('input').removeAttr('readonly')
+                }
+                element_parentsColumn.find('select').removeAttr('disabled')
+                element_parentsColumn.find('button.paket').removeAttr('disabled')
+
+            }
         }
 
         if ($('input:checkbox[name=form-check-row]:checked').length == $('input:checkbox[name=form-check-row]').length) {
@@ -1925,21 +1955,26 @@
                                     placeholder="Masukkan Nilai"
                                     value="${ data.outcomeSatkerValue }"
                                     data-row-id="${ data.id }"
+                                    data-targetSatuan = "${ data.target_satuan}"
                                     onkeyup="return this.value = formatRupiah(this.value, '')" data-pktype="satker"
                                     ${data.template_id === '5' || data.template_id === '6' || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'readonly' }>
-                                <div class="input-group-append">
-                                     <select class="form-control select-target-satuan" data-row-id="${data.id}">
-            ${data.target_satuan.split(';').map(function(satuan) {
-                return `<option value="${satuan.trim()}">${satuan.trim()}</option>`;
-            }).join('')}
-         
-        </select>
-                                </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">${ data.target_satuan.split(';')[0]}</span>
+                                    </div>
                             </div>
                         </td>
                         `
                     }
 
+
+                    //             <div class="input-group-append">
+                    //                              <select class="form-control select-target-satuan" data-row-id="${data.id}">
+                    //         ${data.target_satuan.split(';').map(function(satuan) {
+                    //         return `<option value="${satuan.trim()}">${satuan.trim()}</option>`;
+                    //     }).join('')}
+
+                    // </select>
+                    //                         </div>
                     // if (paramsBtnPaket == "lihat" || paramsBtnPaket == "edit") {
 
                     //     $.ajax({
@@ -2047,7 +2082,8 @@
                                         value="${ data.outcomeDefaultValue }"
                                         data-row-id="${ data.id }"
                                         onkeyup="return this.value = formatRupiah(this.value, '')"
-                                        readonly>
+                                        ${data.template_id === '5' || data.template_id === '6' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
+                                        >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>
                                     </div>
@@ -2329,7 +2365,8 @@
         let indikator = $(this).data('indikator');
         let docId = $(this).data('dokid');
         let indikatorID = $(this).data('rowid');
-        let output_satuan = $('.select-target-satuan[data-row-id=' + indikatorID + ']').val();
+        // let output_satuan = $('.select-target-satuan[data-row-id=' + indikatorID + ']').val();
+        let output_satuan = $(this).data('outputsatuan');
         let outcome_satuan = $(this).data('outcomesatuan');
 
 
@@ -2432,7 +2469,17 @@
 								</div>
                                 <div class="form-group-sub">
 									<label class="form-control-label">Satuan Output :</label>
-									<input type="text" class="form-control target_satuan" name="target_satuan" placeholder="" value="${output_satuan ?? output_from_satrker }" disabled>
+                                                <div class="input-group-append">
+                                                <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"} name="target_satuan">
+    ${output_satuan.split(';').map(function(satuan) {
+        const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.target_satuan === satuan.trim());
+        return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
+    }).join('')}
+</select>
+                                            </div>
+
+
+
 								</div>
 							</div>
                             
@@ -2495,7 +2542,7 @@
         $('.checkbox:checked').each(function() {
             var paketId = $(this).attr('val');
             var target_nilai = $(this).closest('tr').find('input[name=target_nilai]').val();
-            var target_satuan = $(this).closest('tr').find('input[name=target_satuan]').val();
+            var target_satuan = $(this).closest('tr').find('select[name=target_satuan]').val();
             var outcome_nilai = $(this).closest('tr').find('input[name=outcome_nilai]').val();
             var outcome_satuan = $(this).closest('tr').find('input[name=outcome_satuan]').val();
 
@@ -2529,9 +2576,14 @@
 
                 target_nilai_number = parseFloat(target_nilai_number_remove_titik.replace(',', '.'));
                 outcome_nilai_number = parseFloat(outcome_nilai_number_remove_titik.replace(',', '.'));
+                let elm_output_satuan_indikator = $('.__inputTemplateRow-target[data-row-id=' + indikatorId + ']').data('targetsatuan');
+                let output_satuan_indikator = elm_output_satuan_indikator.split(";")[0];
 
-                totalJumlahTarget += target_nilai_number;
-                totalJumlahOutcome += outcome_nilai_number;
+                if (target_satuan == output_satuan_indikator) {
+
+                    totalJumlahTarget += target_nilai_number;
+                    totalJumlahOutcome += outcome_nilai_number;
+                }
             }
 
         });
