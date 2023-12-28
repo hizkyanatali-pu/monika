@@ -262,9 +262,9 @@
                     <i class="fas fa-save"></i> Simpan
                 </button>
 
-                <!-- <button type="button" name="update-document" class="btn btn-success d-none">
+                <button type="button" name="update-document" class="btn btn-success d-none">
                     <i class="fas fa-edit"></i> Simpan Perubahan
-                </button> -->
+                </button>
             </div>
         </div>
     </div>
