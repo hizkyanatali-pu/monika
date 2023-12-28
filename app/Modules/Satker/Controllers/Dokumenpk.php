@@ -421,7 +421,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         if ($this->user['user_type'] == 'other' || isset($checkCreateFromBalai)) {
 
             $idbalai = $this->dokumenSatker->select("
-            balaiid
+            balaiid,satkerid
         ")
                 ->where('id', $iddoc)
                 ->where("status != ", 'revision')
@@ -433,7 +433,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $session_userType   = $createByAdmin['byAdmin_user_type'] ?? "balai";
             $session_satkerNama = $createByAdmin['byAdmin_satker_nama'] ?? null;
             $session_balaiNama  = $createByAdmin['byAdmin_balai_nama'] ?? null;
-            $session_satkerId   = $createByAdmin['byAdmin_satker_id'] ?? null;
+            $session_satkerId   = $createByAdmin['byAdmin_satker_id'] ?? $idbalai->satkerid;
             $session_balaiId    = $createByAdmin['byAdmin_balai_id'] ?? $idbalai->balaiid;
         } else {
             $session_userType   = $this->user['user_type'];

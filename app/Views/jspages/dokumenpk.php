@@ -2020,7 +2020,9 @@
                         data-rowid="${data.id}" 
                         data-outputsatuan="${data.target_satuan}" 
                         data-outcomesatuan="${data.outcome_satuan}" 
-                        data-satkerid="${data.listSatker.length === 0 ? _satkerId : data.listSatker}">
+                     
+
+                       data-satkerid="${_satkerId}">
                     Paket 
                     <span class="label label-sm label-white ml-2 totalpaket">
                     ${paramsBtnPaket === "uptBalai-add" ? selectedItems.length : data.paket.length}
@@ -2443,7 +2445,8 @@
 								</div>
                                 <div class="form-group-sub">
 									<label class="form-control-label">Satuan Outcome :</label>
-									<input type="text" class="form-control outcome_satuan" name="outcome_satuan" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_satuan:"value="+outcome_satuan} disabled>
+								
+									<input type="text" class="form-control outcome_satuan" name="outcome_satuan" value="${selectedItems.some(item => item.paketId === paket.paketId) ? selectedItems.find(item => item.paketId === paket.paketId).outcome_satuan : outcome_satuan} " disabled>
 								</div>
 							</div>
                             
