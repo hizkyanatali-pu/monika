@@ -1063,10 +1063,15 @@ class Dokumenpk extends \App\Controllers\BaseController
             $this->dokumenSatker->insert($inserted_dokumenSatker);
             $dokumenID = $this->db->insertID();
             /** end-of: dokumen */
+            $_templateID = $this->request->getPost('templateID');
+            if ($this->user['tahun'] != 2023) {
+                if (!in_array($_templateID, ['5', '6', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '29', '31', '32', '33', '34', '35', '36', '37', '38', '40', '42'])) {
 
-            /* dokumen paket */
-            $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
-            /** end-of: dokumen rows */
+                    /* dokumen paket */
+                    $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
+                    /** end-of: dokumen rows */
+                }
+            }
 
             /* dokumen rows */
             $this->insertDokumenSatker_rows($this->request->getPost(), $dokumenID);
@@ -1167,7 +1172,7 @@ class Dokumenpk extends \App\Controllers\BaseController
     {
 
         $data = $this->request->getPost('paket');
-
+        $dataPaket = [];
         foreach ($input['paket'] as $item) {
 
             if (isset($item['paketId']) && !empty($item['paketId'])) {
@@ -1203,6 +1208,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                 // 'is_checked'      => $arr['isChecked']
             ];
         }, $dataPaket);
+
+
 
         $this->dokumenSatker_paket->insertBatch($rows);
     }
