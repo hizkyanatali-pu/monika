@@ -28,6 +28,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->dokumenYear   = $this->user['tahun'];
         $this->dokumenLokasi = 'JAKARTA';
         $this->dokumenBulan  = '';
+        $this->tanggal = '';
         $this->bulan         = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         $this->db            = \Config\Database::connect();
 
@@ -35,9 +36,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->dokumenSatker_rows     = $this->db->table('dokumenpk_satker_rows');
         $this->dokumenSatker_kegiatan = $this->db->table('dokumenpk_satker_kegiatan');
 
-        $this->templateDokumen = $this->db->table('dokumen_pk_template');
-        $this->templateRow     = $this->db->table('dokumen_pk_template_row');
-        $this->templateInfo    = $this->db->table('dokumen_pk_template_info');
+        $this->templateDokumen = $this->db->table('dokumen_pk_template_' . session('userData.tahun'));
+        $this->templateRow     = $this->db->table('dokumen_pk_template_row_' . session('userData.tahun'));
+        $this->templateInfo    = $this->db->table('dokumen_pk_template_info_' . session('userData.tahun'));
+        $this->templateRowRumus = $this->db->table('dokumen_pk_template_rowrumus_' . session('userData.tahun'));
+
 
         $this->dokumenStatus = [
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
@@ -93,10 +96,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $dataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.*,
             tkabkota.*,
-            dokumen_pk_template.keterangan,
-            dokumen_pk_template.info_title
+            dokumen_pk_template_' . session('userData.tahun') . '.keterangan,
+            dokumen_pk_template_' . session('userData.tahun') . '.info_title
         ')
-            ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+            ->join('dokumen_pk_template_' . session('userData.tahun'), 'dokumenpk_satker.template_id = dokumen_pk_template_' . session('userData.tahun') . '.id', 'left')
             ->join('tkabkota', "(SUBSTRING_INDEX(dokumenpk_satker.kota, '-', 1) = tkabkota.kdlokasi AND SUBSTRING_INDEX(dokumenpk_satker.kota, '-', -1) = tkabkota.kdkabkota)", 'left')
             ->where('dokumenpk_satker.id', $_dokumenSatkerID)
             ->get()
@@ -118,6 +121,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             }
 
             if ($dataDokumen['bulan'] != '') $this->dokumenBulan = $this->bulan[$dataDokumen['bulan'] - 1];
+            if ($dataDokumen['tanggal'] != '') $this->tanggal = $dataDokumen['tanggal'];
         }
         // $watermaskRevisi       = $dataDokumen['is_revision_same_year'] == '1' ? 'revision-same-year' : $dataDokumen['status'];
         // $watermarkRevisiNumber = $dataDokumen['is_revision_same_year'] == '1' ? $dataDokumen['revision_same_year_number'] : $dataDokumen['revision_number'];
@@ -217,7 +221,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
         // Kop Title 2
-        $pdf->SetFont('Times', 'B', 13);
+        // jika satker dinas jawatengah
+        $fontsize = ($dataDokumen['satkerid'] == '039428' ? '12' : '13');
+        $pdf->SetFont('Times', 'B', $fontsize);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
         // $pdf->SetX((300 - $width_kopTitle2) / 2);
         // $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
@@ -296,7 +302,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // title ttd 2
         $pdf->SetFont($this->fontFamily, '', 12);
         $pdf->SetX(149);
-        $pdf->Cell(144, 4, $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
+        $pdf->Cell(144, 4, $this->dokumenLokasi . ',   ' . $this->tanggal . ' ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
         $pdf->Ln();
         $pdf->SetFont($this->fontFamily, 'B', 12);
         $pdf->SetX(167);
@@ -451,6 +457,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Data
         $pdf->SetFont($this->fontFamily, '', 8);
         $rowNUmber = 0;
+
         foreach ($tableData as $key => $data) {
             // $celTableDataFill = $this->dokumenLoadedStatus == 'setuju' ? true : false;
             $celTableDataFill = true;
@@ -491,8 +498,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             if ($data['type'] == 'form') {
                 $targetValue = '';
                 $str = iconv('UTF-8', 'windows-1252', html_entity_decode("&sup3;"));
-
-                switch (strtolower($data['target_satuan'])) {
+                switch (strtolower($data_targetValue['target_sat'] ??  trim(explode(";", $data['target_satuan'])[0]))) {
                     case 'm3/detik':
                         $satuan_target = 'M' . $str . "/Detik";
 
@@ -511,7 +517,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         $satuan_target = 'Miliar M' . $str;
                         break;
                     default:
-                        $satuan_target = $data['target_satuan'];
+                        $satuan_target = $data_targetValue['target_sat'] ?? trim(explode(";", $data['target_satuan'])[0]);
                         break;
                 }
 
@@ -546,11 +552,50 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                         break;
 
+                        //balai
                     case 'output':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' .  $satuan_target;
-                        $rSeparator = explode('.', $data_targetValue['target_value']);
-                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_target;
+
+                        $sumOutputValue     = 0;
+                        $outputSatuan = '';
+
+
+                        $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $data['template_id'], 'rowId' =>  $data['id']])->get()->getResult();
+                        foreach ($templateRowRumus as $key => $dataRumus) {
+                            $rumus = $this->dokumenSatker->select(
+                                'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
+                                dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan'
+                            )
+                                ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                                ->join('dokumen_pk_template_row_' . session('userData.tahun'), "(dokumenpk_satker_rows.template_row_id=dokumen_pk_template_row_" . session('userData.tahun') . ".id)", 'left')
+                                ->join('dokumen_pk_template_rowrumus_' . session('userData.tahun'), "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".rowId)", 'left')
+                                ->where('dokumen_pk_template_rowrumus_' . session('userData.tahun') . '.rumus', $dataRumus->rumus)
+                                ->where('dokumenpk_satker.balaiid', $dataDokumen['balaiid'])
+                                ->where('dokumenpk_satker.status', 'setuju')
+                                ->where('dokumenpk_satker.satkerid is not null')
+                                ->where('dokumenpk_satker.deleted_at is null')
+                                ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+                                ->where('dokumenpk_satker_rows.is_checked', '1')
+                                ->get()->getResult();
+
+                            $outcomeRumus = 0;
+                            $outputRumus = 0;
+
+                            foreach ($rumus as $keyOutcome => $dataOutput) {
+                                $outputRumus += $dataOutput ? ($dataOutput->target_value != '' ? $dataOutput->target_value : 0) : 0;
+                                $outputSatuan = $dataOutput->target_sat ?? $dataOutput->target_satuan;
+                            }
+                            if ($sumOutputValue == '' && $outcomeRumus > 0) $sumOutputValue = 0;
+
+
+                            if ($outputRumus > 0) {
+                                $sumOutputValue  += $outputRumus;
+                            }
+                            $rSeparator = explode('.',  $sumOutputValue);
+                            $targetValue = number_format($sumOutputValue, strlen($rSeparator[1]), ',', '.') .  ' ' .  $outputSatuan;
+                        }
+
 
 
                         break;
@@ -674,7 +719,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
             'person1Title' => $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial'],
             'person1Name'  => $dataDokumen['pihak2_ttd'],
-            'person2Date'  => $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear,
+            'person2Date'  => $this->dokumenLokasi . ',   ' . $this->tanggal . ' '  . $this->dokumenBulan . ' ' . $this->dokumenYear,
             // 'person2Title' => $jabatanPihak1_isPlt . $dokumenKopTitle1_prefix . $dataDokumen['pihak1_initial'],
             'person2Title' => $jabatanPihak1_isPlt . $dataDokumen['pihak1_initial'],
             'person2Name'  => $dataDokumen['pihak1_ttd'],
@@ -698,6 +743,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         switch ($_ttd['person2Title']) {
                 // merapikan ttd
             case 'KEPALA BALAI BESAR WILAYAH SUNGAI BENGAWAN SOLO':
+                $ttd = $_ttd['person2Title'];
                 $widthTitleJabatan = 85;
                 $widthNamaPejabat = 122;
                 break;
@@ -706,6 +752,18 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $ttd =  str_replace('SEKRETARIAT', 'SEKRETARIS', str_replace('KEPALA', '', $_ttd['person2Title']));
                 $widthTitleJabatan = 78;
                 $widthNamaPejabat = 115;
+                break;
+
+                // case 'KEPALA SNVT PEMBANGUNAN BENDUNGAN BWS NUSA TENGGARA I':
+                //     $ttd = $_ttd['person2Title'];
+                //     $widthTitleJabatan = 85;
+                //     $widthNamaPejabat = 122;
+                //     break;
+
+            case 'KEPALA SKPD TP-OP DINAS PEKERJAAN UMUM SUMBER DAYA AIR DAN PENATAAN RUANG PROVINSI JAWA TENGAH':
+                $ttd = $_ttd['person2Title'];
+                $widthTitleJabatan = 115;
+                $widthNamaPejabat = 150;
                 break;
 
             default:
@@ -904,6 +962,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         $tableData = $this->templateRow
             ->where('template_id', $templateId)
+            ->orderBy('no_urut')
             ->get()
             ->getResultArray();
 

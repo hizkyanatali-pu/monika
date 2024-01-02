@@ -119,32 +119,7 @@
                     <a href="<?php echo site_url('dokumenpk/rekapitulasi/export-excel'); ?>" target="_blank" class="btn btn-success btn-sm btn-rekap-all"><i class="fa fa-file-excel"></i> Rekap Excel</a>
                 </div>
             </div>
-            <!-- <table>
-                <tr>
-                    <th rowspan="2">Satker</th>
-                    <th colspan="2">Target</th>
-                    <th colspan="2">Outcome</th>
-                </tr>
-                <tr>
-                    <th>Indikator</th>
-                    <th>Value</th>
-                    <th>Value</th>
-                    <th>Satuan</th>
-                </tr>
-                <?php foreach ($data as $satkerData) : ?>
-                    <tr>
-                        <td rowspan="<?= count($satkerData['indikators']) + 1 ?>"><?= $satkerData['satker'] ?></td>
-                    </tr>
-                    <?php foreach ($satkerData['indikators'] as $indikator) : ?>
-                        <tr>
-                            <td><?= $indikator['indikator'] ?></td>
-                            <td><?= $indikator['target_value'] ?></td>
-                            <td><?= $indikator['outcome_value'] ?></td>
-                            <td><?= $indikator['outcome_satuan'] ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endforeach; ?>
-            </table> -->
+
             <div class="table-responsive tableFixHead">
                 <table class="table table-bordered w-100 mb-0">
                     <thead class="table-primary">
@@ -152,7 +127,7 @@
 
                             <th colspan="2" width="60%">&nbsp;</th>
 
-                            <th colspan="2">Output</th>
+                            <th colspan="2">Target</th>
                             <th colspan="4">Outcome</th>
 
 
@@ -161,9 +136,9 @@
                         <tr class="text-center">
                             <th width="10%">Unit Kerja</th>
                             <th width="50%">Indikator SK</th>
-                            <th width="5%">Nilai</th>
+                            <th width="5%">Vol</th>
                             <th width="10%">Satuan</th>
-                            <th width="10%">Nilai</th>
+                            <th width="10%">Vol</th>
                             <th width="5%">Satuan</th>
                             <th>Jenis PK</th>
                             <th>Verifikasi</th>
@@ -176,8 +151,14 @@
                                     <a href="<?= base_url() . '/api/showpdf/tampilkan/' . $satkerData['idDoc'] . '?preview=true' ?>" target="_blank"><img src="https://icons.iconarchive.com/icons/vexels/office/256/document-search-icon.png" style="width:42px;height:42px;"></a>
                                 </td>
                             </tr>
-                            <?php foreach ($satkerData['indikators'] as $indikator) : ?>
-                                <tr>
+                            <?php foreach ($satkerData['indikators'] as $indikator) :
+
+
+
+
+
+                            ?>
+                                <tr style="font-weight: bold;background-color: #e5e5e5;">
                                     <td>&nbsp;</td>
                                     <td width="50%"><?= $indikator['indikator'] ?></td>
                                     <td class="text-right"><?= $indikator['target_value'] ?></td>
@@ -187,6 +168,25 @@
                                     <td><?= $indikator['is_revision_same_year'] > 0 ? "REVISI" : "AWAL" ?></td>
                                     <td><?= $indikator['status'] ?></td>
                                 </tr>
+                                <?php
+                                if (!empty($indikator['paket'])) : ?>
+                                    <?php foreach ($indikator['paket'] as $paketItem) : ?>
+                                        <tr>
+                                            <!-- <td colspan="1">&nbsp;</td> -->
+                                            <td><?= $paketItem->idpaket ?></td>
+                                            <td>&nbsp; - <?= paket_name($paketItem->idpaket, session('userData.tahun')) ?></td>
+                                            <td class="text-right"><?= $paketItem->target_value ?></td>
+                                            <td><?= $paketItem->target_unit ?></td>
+                                            <td class="text-right"><?= $paketItem->output_value ?></td>
+                                            <td><?= $paketItem->output_unit ?></td>
+                                            <td></td>
+                                            <td></td>
+
+                                            <!-- Tambahkan kolom-kolom lain sesuai kebutuhan -->
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
                             <?php endforeach; ?>
                         <?php endforeach; ?>
                     </tbody>

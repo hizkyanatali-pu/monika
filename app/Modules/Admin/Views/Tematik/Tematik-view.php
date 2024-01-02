@@ -26,8 +26,7 @@
             <!--begin::Section-->
             <div class="kt-section">
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="mb-0"><?php echo $filterTitle ?></label>
+                    <!-- <div class="col-md-6">
                         <div class="input-group" style="width:200px !important">
                             <select class="form-control" id="listmonth" name="month" disabled>
                                 <option><?= session('userData.tahun') ?></option>
@@ -108,100 +107,18 @@
                                 </div>
                             </div>
                         </div>
+                    </div> -->
+
+                    <div class="col-md-6">
+                        <a href="/tematik/add" class="btn btn-info">Tambah</a>
                     </div>
                     <div class="col-md-6 text-right mt-3">
-                        <div class="form-group">
-                            <a class="btn btn-warning btn-sm text-white pdf-report"><i class="fa fa-file-pdf"></i>PDF</a>
-                            <a href="<?php echo site_url('tematik/excel/' . $exportCode) ?>" class="btn btn-success btn-sm text-white" target="_blank">
-                                <i class="fa fa-file-excel"></i>Excel
-                            </a>
-                        </div>
                         <i><b>*Dalam Ribuan</b></i>
                     </div>
                 </div>
 
-                <div class="table-responsive tableFixHead">
-                    <?php $colspan = 8; ?>
-                    <table class="table table-bordered mb-0 table-striped" id="table">
-                        <thead>
-                            <tr class=" text-center bg-purple">
-                                <th>No</th>
-                                <th class="satker">Satker / Paket</th>
-                                <th class="vol">Vol</th>
-                                <th class="satuan">Satuan</th>
-                                <th class="provinsi">Provinsi</th>
-                                <th class="lokasi">Lokasi</th>
-                                <th class="pengadaan">Pengadaan</th>
-                                <th class="pagu">Pagu</th>
-                                <th class="realisasi">Realisasi</th>
-                                <th class="p_keu">% Keu</th>
-                                <th class="p_fis">% Fis</th>
-                            </tr>
-                        </thead>
+                <div id="example-table"></div>
 
-                        <tbody id="tbody-utama">
-                            <?php
-                            $no = 1;
-                            if (empty($data)) {
-                                echo "<tr><td colspan='13'>Tidak Ada Data</td></tr>
-                                
-                                ";
-                            }
-
-                            $totalVol       = 0;
-                            $totalPagu      = 0;
-                            $totalRealisasi = 0;
-                            $totalKeu       = 0;
-                            $totalFis       = 0;
-
-                            foreach ($data as $key => $value) :
-                            ?>
-                                <tr>
-                                    <td colspan="11" class="tdprogram">
-                                        <?php echo $value->idSatker ?> - 
-                                        <?php echo $value->satker ?>
-                                    </td>
-                                </tr>
-                                <?php 
-                                    foreach ($value->paketList as $key => $value) :
-                                        $totalVol       += $value->vol;
-                                        $totalPagu      += $value->pagu;
-                                        $totalRealisasi += $value->realisasi;
-                                        $totalKeu       += $value->persen_keu;
-                                        $totalFis       += $value->persen_fis; 
-                                ?>
-                                    <tr>
-                                        <td><?php echo $no++ ?></td>
-                                        <td co class="col-satker">
-                                            <?php echo $value->nmpaket ?>
-                                        </td>
-                                        <td class="col-vol"><?php echo ($value->vol) ?></td>
-                                        <td class="col-satuan"><?php echo $value->satuan ?></td>
-                                        <td class="col-provinsi"><?php echo $value->provinsi ?></td>
-                                        <td class="col-lokasi"><?php echo $value->lokasi ?></td>
-                                        <td class="col-pengadaan"><?php echo $value->pengadaan ?></td>
-                                        <td class="col-pagu"><?php echo toRupiah($value->pagu, false) ?></td>
-                                        <td class="col-realisasi"><?php echo toRupiah($value->realisasi, false) ?></td>
-                                        <td class="col-p_keu"><?php echo onlyTwoDecimal($value->persen_keu) ?></td>
-                                        <td class="col-p_fis"><?php echo onlyTwoDecimal($value->persen_fis) ?></td>
-                                    </tr>
-                                <?php endforeach ?>
-                            <?php endforeach ?>
-                        </tbody>
-
-                        <tfoot>
-                            <tr>
-                                <th colspan="2">TOTAL</th>
-                                <th><?php echo $totalVol ?></th>
-                                <th colspan="4">&nbsp</th>
-                                <th><?php echo toRupiah($totalPagu, false) ?></th>
-                                <th><?php echo toRupiah($totalRealisasi, false) ?></th>
-                                <th><?php echo onlyTwoDecimal($totalKeu) ?></th>
-                                <th><?php echo onlyTwoDecimal($totalFis) ?></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
 
             </div>
 
@@ -215,91 +132,173 @@
 <!-- end:: Content -->
 <?= $this->endSection() ?>
 <?= $this->section('footer_js') ?>
+<link href="/plugins/tabulator/dist/css/tabulator_semanticui.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
+
 <script>
-    var $th = $('.tableFixHead1').find('thead th')
-    $('.tableFixHead1').on('scroll', function() {
-        $th.css('transform', 'translateY(' + this.scrollTop + 'px)');
-    })
+    // var $th = $('.tableFixHead1').find('thead th')
+    // $('.tableFixHead1').on('scroll', function() {
+    //     $th.css('transform', 'translateY(' + this.scrollTop + 'px)');
+    // })
 
-    $("#search").click(function() {
-        window.location.href = "<?= site_url('Kinerja-Output-Bulanan/') ?>" + $('#listmonth').val();
+    // $("#search").click(function() {
+    //     window.location.href = "<?= site_url('Kinerja-Output-Bulanan/') ?>" + $('#listmonth').val();
+    // });
+
+
+    // $.ajax({
+    //     type: "GET",
+    //     url: "/api/data-tematik-list",
+    //     // data: "data",
+    //     // dataType: "dataType",
+    //     success: function(response) {
+
+    var table = new Tabulator("#example-table", {
+        ajaxURL: "/api/data-tematik-list",
+        groupBy: ["tematik", "subtematik", "tahun"],
+        groupHeader: function(value, count, data, group) {
+
+            var totalItem = data.reduce(function(acc, item) {
+                if (item.nmpaket) {
+                    // Pisahkan nilai menggunakan koma sebagai pemisah
+                    var nilaiArray = item.nmpaket.split('$$');
+                    // Tambahkan jumlah item setelah split
+                    return acc + nilaiArray.length;
+                }
+                return acc;
+            }, 0);
+
+            // Menampilkan teks grup dengan total item
+            return value + "<span style='color:#d00; margin-left:10px;'>(" + totalItem + " item)</span>";
+        },
+        columns: [{
+                title: "ID",
+                field: "kdpaket",
+                formatter: function(cell, formatterParams, onRendered) {
+
+                    // Periksa apakah nilai tidak kosong
+                    if (cell.getValue()) {
+                        // Pisahkan nilai menggunakan koma sebagai pemisah
+                        var nilaiArray = cell.getValue().split('$$');
+
+                        // Kembalikan nilai dalam format yang diinginkan
+                        return nilaiArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
+                    }
+                    return "";
+                }
+
+            }, {
+
+                title: "Tematik/Subtematik/Tahun/Paket",
+                field: "nmpaket",
+                formatter: function(cell, formatterParams, onRendered) {
+
+                    if (cell.getValue()) {
+                        // Pisahkan nilai menggunakan koma sebagai pemisah
+                        var nilaiArray = cell.getValue().split('$$');
+
+                        // Kembalikan nilai dalam format yang diinginkan
+                        return nilaiArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
+                    }
+                    return "";
+                }
+
+            },
+            {
+                title: "Pagu",
+                field: "pagu_total",
+                hozAlign: "right",
+
+                formatter: function(cell, formatterParams, onRendered) {
+
+                    if (cell.getValue()) {
+                        // Pisahkan nilai menggunakan koma sebagai pemisah
+                        var nilaiArray = cell.getValue().split('$$');
+
+                        // Format nilai ke format rupiah
+                        var formattedArray = nilaiArray.map(function(nilai) {
+                            return formatRupiah(nilai); // Gunakan fungsi formatRupiah untuk mengubah nilai ke format rupiah
+                        });
+
+                        // Kembalikan nilai dalam format yang diinginkan
+                        return formattedArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
+                    }
+                    return "";
+                }
+            },
+            {
+                title: "Realisasi",
+                field: "real_total",
+                hozAlign: "right",
+
+                formatter: function(cell, formatterParams, onRendered) {
+
+                    if (cell.getValue()) {
+                        // Pisahkan nilai menggunakan koma sebagai pemisah
+                        var nilaiArray = cell.getValue().split('$$');
+                        // Format nilai ke format rupiah
+                        var formattedArray = nilaiArray.map(function(nilai) {
+                            return formatRupiah(nilai); // Gunakan fungsi formatRupiah untuk mengubah nilai ke format rupiah
+                        });
+
+                        // Kembalikan nilai dalam format yang diinginkan
+                        return formattedArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
+                    }
+                    return "";
+                }
+            },
+            {
+                title: "% Keuangan",
+                field: "progres_keuangan",
+                hozAlign: "right",
+
+                formatter: function(cell, formatterParams, onRendered) {
+
+                    if (cell.getValue()) {
+                        // Pisahkan nilai menggunakan koma sebagai pemisah
+                        var nilaiArray = cell.getValue().split('$$');
+
+
+                        // Ganti titik dengan koma pada setiap nilai
+                        var modifiedArray = nilaiArray.map(function(nilai) {
+                            return nilai.replace(/\./g, ','); // Mengganti titik dengan koma
+                        });
+
+                        // Kembalikan nilai dalam format yang diinginkan
+                        return modifiedArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
+                    }
+                    return "";
+                }
+            },
+            {
+                title: "% Fisik",
+                field: "progres_fisik",
+
+                hozAlign: "right",
+                formatter: function(cell, formatterParams, onRendered) {
+
+                    if (cell.getValue()) {
+                        // Pisahkan nilai menggunakan koma sebagai pemisah
+                        var nilaiArray = cell.getValue().split('$$');
+
+                        // Ganti titik dengan koma pada setiap nilai
+                        var modifiedArray = nilaiArray.map(function(nilai) {
+                            return nilai.replace(/\./g, ','); // Mengganti titik dengan koma
+                        });
+
+                        // Kembalikan nilai dalam format yang diinginkan
+                        return modifiedArray.join('<hr>'); // Anda dapat mengganti <br> dengan karakter pemisah yang sesuai
+                    }
+                    return "";
+                }
+            }
+
+
+        ],
     });
-
-    let report_open = true
-    let checkbox = $("input:checkbox")
-    $("input:checkbox").prop("checked", true)
-    $("input:checkbox").click(function() {
-
-        //checking checked checkbox for report button
-        if ((checkbox.length - checkbox.filter(":checked").length) == checkbox.length) {
-
-            report_open = false
-        } else {
-
-            report_open = true
-        }
-
-        var column = "table ." + $(this).attr("name")
-        var columns = "table .col-" + $(this).attr("name")
-        $(column).toggle();
-        $(columns).toggle();
-    });
-
-    $(".pdf-report").click(function() {
-
-        let arr = [];
-
-        if (!$("input[name=satker]").prop("checked")) {
-
-            arr.push("satker")
-        }
-        if (!$("input[name=vol]").prop("checked")) {
-
-            arr.push("vol")
-        }
-        if (!$("input[name=satuan]").prop("checked")) {
-
-            arr.push("satuan")
-        }
-        if (!$("input[name=provinsi]").prop("checked")) {
-
-            arr.push("provinsi")
-        }
-        if (!$("input[name=lokasi]").prop("checked")) {
-
-            arr.push("lokasi")
-        }
-        if (!$("input[name=pengadaan]").prop("checked")) {
-
-            arr.push("pengadaan")
-        }
-        if (!$("input[name=pagu]").prop("checked")) {
-
-            arr.push("pagu")
-        }
-        if (!$("input[name=realisasi]").prop("checked")) {
-
-            arr.push("realisasi")
-        }
-        if (!$("input[name=p_keu]").prop("checked")) {
-
-            arr.push("p_keu")
-        }
-        if (!$("input[name=p_fis]").prop("checked")) {
-
-            arr.push("p_fis")
-        }
-
-        //condition for report button
-        if (report_open) {
-
-            $(this).attr("href", "<?= $id_report_pdf ?>?filter=" + arr.join(','))
-            $(this).attr("target", "_blank")
-        } else {
-
-            $(this).removeAttr("href")
-            $(this).removeAttr("target")
-        }
-    })
+    //     }
+    // });
 </script>
 <?= $this->endSection() ?>

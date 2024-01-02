@@ -20,7 +20,7 @@ class DokumenpkBalai extends \App\Controllers\BaseController
 
         $this->dokumenSatker = $this->db->table('dokumenpk_satker');
 
-        $this->dokumenPK          = $this->db->table('dokumen_pk_template');
+        $this->dokumenPK          = $this->db->table('dokumen_pk_template_' . session('userData.tahun'));
         $this->dokumenPK_row      = $this->db->table('dokumen_pk_template_row');
         $this->dokumenPk_rowRumus = $this->db->table('dokumen_pk_template_rowrumus');
         $this->dokumenPK_kegiatan = $this->db->table('dokumen_pk_template_kegiatan');

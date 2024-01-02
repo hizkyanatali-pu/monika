@@ -27,7 +27,7 @@
             <div class="kt-section p-0">
                 <div class="row mb-3 p-0">
                     <div class="col-md-12 p-0">
-                        <iframe src="https://emonitoring.pu.go.id/api_pep/sisa_lelang_sda" title="emon sis lelang" style="width: 100%; height: 60vh; padding: 20px; border: none"></iframe>
+                        <iframe src="<?= getenv('API_EMON') ?>api_pep/sisa_lelang_sda" title="emon sis lelang" style="width: 100%; height: 60vh; padding: 20px; border: none"></iframe>
                     </div>
                 </div>
 

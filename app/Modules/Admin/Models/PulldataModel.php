@@ -369,19 +369,19 @@ class PulldataModel extends Model
             (object)[
                 'title' => 'RPM',
                 'progresKeu' => round($dataProgresKeu[0]->rpm, 2),
-                'progresFis' => round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->rpm, 2)/100,
+                'progresFis' => round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->rpm, 2) / 100,
                 'totalPagu' =>  $dataTotalPagu[0]->rpm
             ],
             (object)[
                 'title' => 'SBSN',
                 'progresKeu' =>  round($dataProgresKeu[0]->sbsn, 2),
-                'progresFis' =>  round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->sbsn, 2)/100,
+                'progresFis' =>  round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->sbsn, 2) / 100,
                 'totalPagu' =>  $dataTotalPagu[0]->sbsn, 2
             ],
             (object)[
                 'title' => 'PHLN',
                 'progresKeu' =>  round($dataProgresKeu[0]->phln, 2),
-                'progresFis' =>  round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->phln, 2)/100,
+                'progresFis' =>  round($dataProgresKeu[0]->progres_fisik * $dataProgresKeu[0]->phln, 2) / 100,
                 'totalPagu' =>  $dataTotalPagu[0]->phln
             ]
         ];

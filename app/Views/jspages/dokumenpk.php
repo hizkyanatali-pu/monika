@@ -1,5 +1,12 @@
 <script src="https://unpkg.com/imask"></script>
+
 <script>
+    $(window).on('beforeunload', function() {
+        sessionStorage.clear();
+    });
+
+    var paramsBtnPaket = "";
+
     var date = new Date(),
         element_modalForm = $('#modalForm'),
         element_modalDialog = element_modalForm.find('.modal-dialog'),
@@ -10,14 +17,14 @@
         element_modalFormBackChooseTemplate = element_modalForm.find('.__back-pilih-dokumen'),
         element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
         element_btnSaveDokumen = $('.__save-dokumen'),
-        element_btnSaveEditDokumen = $('.__save-update-dokumen')
+        element_btnSaveEditDokumen = $('.__save-update-dokumen'),
+        element_btnChoosePaket = $('.paket')
 
     $(document).ready(function() {
         $('#table').DataTable({
             ordering: false,
             scrollX: true
         })
-
         $('#modalForm').on('hidden.bs.modal', function() {
             $('.__save-dokumen').removeClass('d-none')
             $('.__save-update-dokumen').addClass('d-none')
@@ -31,6 +38,12 @@
 
     })
 
+    // $(document).on('change', '.select-target-satuan', function() {
+    //     // Mengambil nilai terpilih dari elemen select
+    //     var nilaiTerpilih = $(this).val();
+    //     // Memasukkan nilai ke dalam atribut data-outputsatuan pada tombol
+    //     $('.paket').attr('data-outputsatuan', nilaiTerpilih);
+    // });
 
 
     $(document).on('change', 'select[name=filter-satker]', function() {
@@ -40,6 +53,12 @@
 
 
     $(document).on('click', '.__opsi-template', function() {
+
+        if ($(this).data('type') == "uptBalai-add") {
+            paramsBtnPaket = "uptBalai-add";
+
+        }
+
         if ($(this).data('available') == true) {
             if ($(this).data('balai-create-satker') == undefined) {
                 $('#modalForm').modal('show')
@@ -105,6 +124,20 @@
                     target: 'create'
                 })
             },
+            error: function(jqXHR, textStatus, errorThrown) {
+                Swal.fire({
+                    title: 'Gagal',
+                    icon: "warning",
+                    text: 'Ada Perubahan Data disatker, Coba Lagi !',
+                    type: 'confirm',
+                    confirmButtonText: 'Refresh Halaman',
+
+                }).then(result => {
+                    if (result.value) {
+                        location.reload();
+                    }
+                });
+            },
             fail: (xhr) => {
                 alert("Terjadi kesalahan pada sistem")
 
@@ -124,14 +157,46 @@
         let rowChild = $('input:checkbox[name=form-check-row]').parents('tr').find('td')
 
         $('input:checkbox[name=form-check-row]').prop('checked', this.checked);
-
+        let rowid = rowChild.find('.paket').attr('data-rowid');
         if (!this.checked) {
-            rowChild.addClass('disabled')
-            rowChild.find('input').attr('readonly', 'readonly')
-            rowChild.find('input').val('')
+
+
+            if (typeof rowid === 'undefined') {
+                rowChild.addClass('disabled')
+                rowChild.find('input').attr('readonly', 'readonly')
+                rowChild.find('input').val('')
+            } else {
+
+                rowChild.addClass('disabled')
+                rowChild.find('input').attr('readonly', 'readonly')
+                rowChild.find('select').attr('disabled', 'disabled')
+                rowChild.find('button.paket').attr('disabled', 'true')
+                rowChild.find('input').val('')
+                rowChild.find('.totalpaket').html("0")
+
+            }
+            sessionStorage.clear()
+            // var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
+            // totalPaketElement.html(selectedItems.length);
+
+
+
         } else {
-            rowChild.removeClass('disabled')
-            rowChild.find('input').removeAttr('readonly')
+            if (typeof rowid === 'undefined') {
+                rowChild.removeClass('disabled')
+                rowChild.find('input').removeAttr('readonly')
+            } else {
+                rowChild.removeClass('disabled')
+
+                if (rowChild.find('input[data-pktype]').attr('data-pktype') == "balai") {
+
+                    rowChild.find('input').removeAttr('readonly')
+                }
+                rowChild.find('select').removeAttr('disabled')
+                rowChild.find('button.paket').removeAttr('disabled')
+            }
+
+
 
         }
     });
@@ -141,15 +206,44 @@
     $(document).on('change', 'input:checkbox[name=form-check-row]', function() {
         let element_checkAll = $('input:checkbox[name=form-checkall-row]'),
             isAllChecked = false,
-            element_parentsColumn = $(this).parents('tr').find('td')
+            element_parentsColumn = $(this).parents('tr').find('td');
+        let rowid = element_parentsColumn.find('.paket').attr('data-rowid');
 
         if (!$(this).is(':checked')) {
-            element_parentsColumn.addClass('disabled')
-            element_parentsColumn.find('input').attr('readonly', 'readonly')
-            element_parentsColumn.find('input').val('')
+
+            if (typeof rowid === 'undefined') {
+                element_parentsColumn.addClass('disabled')
+                element_parentsColumn.find('input').attr('readonly', 'readonly')
+                element_parentsColumn.find('input').val('')
+            } else {
+                element_parentsColumn.addClass('disabled')
+                element_parentsColumn.find('input').attr('readonly', 'readonly')
+                element_parentsColumn.find('select').attr('disabled', 'disabled')
+                element_parentsColumn.find('button.paket').attr('disabled', 'true')
+                element_parentsColumn.find('input').val('')
+                element_parentsColumn.find('.totalpaket').html("0")
+            }
+
+
+
+
+            sessionStorage.removeItem(rowid);
+
+            // sessionStorage.clear()
         } else {
-            element_parentsColumn.removeClass('disabled')
-            element_parentsColumn.find('input').removeAttr('readonly')
+            if (typeof rowid === 'undefined') {
+                element_parentsColumn.removeClass('disabled')
+                element_parentsColumn.find('input').removeAttr('readonly')
+            } else {
+                element_parentsColumn.removeClass('disabled')
+
+                if (element_parentsColumn.find('input[data-pktype]').attr('data-pktype') == "balai") {
+                    element_parentsColumn.find('input').removeAttr('readonly')
+                }
+                element_parentsColumn.find('select').removeAttr('disabled')
+                element_parentsColumn.find('button.paket').removeAttr('disabled')
+
+            }
         }
 
         if ($('input:checkbox[name=form-check-row]:checked').length == $('input:checkbox[name=form-check-row]').length) {
@@ -214,7 +308,7 @@
                             render_warningDokumenYearRevisoin = `
                                 <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                                     <h5 class="alert-heading">Informasi</h5>
-                                    <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
+                                    <p>Dokumen perjanjian kinerja dapat dibuat/diedit setelah seluruh satker menginputkan perjanjian kinerja masing-masing. Daftar satker dapat dilihat di bagian bawah formulir.</p>
                                 </div>
                             `
                         }
@@ -237,87 +331,96 @@
 
 
     element_btnSaveDokumen.on('click', function() {
-        CheckConnection().then(result => {
-            if (saveDokumenValidation()) {
-                let oldButtonText = element_btnSaveDokumen.text()
-                element_btnSaveDokumen.addClass('d-none')
-                element_btnSaveDokumen.parent().append('<center>menyimpan dokumen</center>')
+        // CheckConnection().then(result => {
+        if (saveDokumenValidation()) {
+            let oldButtonText = element_btnSaveDokumen.text()
+            element_btnSaveDokumen.addClass('d-none');
 
-                $('input[name=total-anggaran]').prop("disabled", false)
-                let formData = getFormValue();
+            // Simpan referensi ke elemen penyimpanan pesan
+            let savingMessageElement = $('<center>menyimpan dokumen</center>');
+            element_btnSaveDokumen.parent().append(savingMessageElement);
 
 
-                if ($(this).attr('data-dokumen-id')) {
-                    formData['revision_dokumen_id'] = $(this).data('dokumen-id')
-                    formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
-                    Swal.fire({
-                        title: "Anda yakin akan mengedit dokumen ini ?",
-                        html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan"></textarea>`,
-                        confirmButtonText: "Kirim",
-                        cancelButtonText: "Batal",
-                        showLoaderOnConfirm: true,
-                        showCancelButton: true,
-                        preConfirm: () => {
-                            const pesanRevisi = $('textarea[name=pesan-koreksi-dokumen]').val();
+            $('input[name=total-anggaran]').prop("disabled", false)
+            let formData = getFormValue();
 
-                            if (!pesanRevisi) {
-                                Swal.showValidationMessage('Pesan harus diisi');
-                                return false;
-                            }
-                            formData['revision_message'] = $('textarea[name=pesan-koreksi-dokumen]').val();
-                            $.ajax({
-                                url: "<?php echo site_url('dokumenpk/create') ?>",
-                                type: 'POST',
-                                data: formData,
-                                success: (res) => {
-                                    if (res.status) {
+            if ($(this).attr('data-dokumen-id')) {
+                formData['revision_dokumen_id'] = $(this).data('dokumen-id')
+                formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
+
+                Swal.fire({
+                    title: "Anda yakin akan mengedit dokumen ini ?",
+                    html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan"></textarea>`,
+                    confirmButtonText: "Kirim",
+                    cancelButtonText: "Batal",
+                    showLoaderOnConfirm: true,
+                    showCancelButton: true,
+                    onCancel: () => {
+                        element_btnSaveDokumen.removeClass('d-none');
+
+                    },
+                    preConfirm: () => {
+                        const pesanRevisi = $('textarea[name=pesan-koreksi-dokumen]').val();
+
+                        if (!pesanRevisi) {
+                            Swal.showValidationMessage('Pesan harus diisi');
+                            return false;
+                        }
+
+                        formData['revision_message'] = $('textarea[name=pesan-koreksi-dokumen]').val();
+                        $.ajax({
+                            url: "<?php echo site_url('dokumenpk/create') ?>",
+                            type: 'POST',
+                            data: formData,
+                            success: (res) => {
+                                if (res.status) {
+                                    location.reload()
+                                } else {
+                                    Swal.fire(
+                                        'Gagal',
+                                        res.message,
+                                        'error'
+                                    ).then(result => {
                                         location.reload()
-                                    } else {
-                                        Swal.fire(
-                                            'Gagal',
-                                            res.message,
-                                            'error'
-                                        ).then(result => {
-                                            location.reload()
-                                        })
-                                    }
-                                },
-                                fail: (xhr) => {
-                                    alert('Terjadi kesalahan pada sistem')
-                                    console.log(xhr)
+                                    })
                                 }
+                            },
+                            fail: (xhr) => {
+                                alert('Terjadi kesalahan pada sistem')
+                                console.log(xhr)
+                            }
+                        })
+                    }
+                })
+            } else {
+                $.ajax({
+                    url: "<?php echo site_url('dokumenpk/create') ?>",
+                    type: 'POST',
+                    data: formData,
+                    success: (res) => {
+                        if (res.status) {
+                            location.reload()
+                        } else {
+                            Swal.fire(
+                                'Gagal',
+                                res.message,
+                                'error'
+                            ).then(result => {
+                                location.reload()
                             })
                         }
-                    })
-                } else {
-                    $.ajax({
-                        url: "<?php echo site_url('dokumenpk/create') ?>",
-                        type: 'POST',
-                        data: formData,
-                        success: (res) => {
-                            if (res.status) {
-                                location.reload()
-                            } else {
-                                Swal.fire(
-                                    'Gagal',
-                                    res.message,
-                                    'error'
-                                ).then(result => {
-                                    location.reload()
-                                })
-                            }
-                        },
-                        fail: (xhr) => {
-                            alert('Terjadi kesalahan pada sistem')
-                            console.log(xhr)
-                        }
-                    })
-                }
-
+                    },
+                    fail: (xhr) => {
+                        alert('Terjadi kesalahan pada sistem')
+                        console.log(xhr)
+                    }
+                })
             }
-        }).catch(error => {
-            alert("Youre internet connection  cs slow");
-        });
+
+        }
+        // }).catch(error => {
+        //     alert("Youre internet connection  cs slow");
+        // });
     })
 
 
@@ -354,37 +457,41 @@
                         newStatus: 'hold'
                     },
                     success: (res) => {
-                        CheckConnection().then(result => {
-                            if (saveDokumenValidation()) {
+                        // CheckConnection().then(result => {
 
-                                let oldButtonText = element_btnSaveEditDokumen.text()
-                                element_btnSaveEditDokumen.addClass('d-none')
-                                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+                        if (saveDokumenValidation()) {
 
-                                let formData = getFormValue(),
-                                    dataId = $(this).data('id')
+                            let oldButtonText = element_btnSaveEditDokumen.text()
+                            element_btnSaveEditDokumen.addClass('d-none')
+                            element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
 
-                                formData['id'] = $(this).data('id')
-                                formData['csrf_test_name'] = res.token
+                            let formData = getFormValue(),
+                                dataId = $(this).data('id')
 
-                                $.ajax({
-                                    url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
-                                    type: "POST",
-                                    data: formData,
-                                    success: (res) => {
-                                        if (res.status) {
-                                            location.reload()
-                                        }
-                                    },
-                                    fail: (xhr) => {
-                                        alert('Terjadi kesalahan pada sistem')
-                                        console.log(xhr)
+                            formData['id'] = $(this).data('id')
+                            formData['csrf_test_name'] = res.token
+
+
+                            $.ajax({
+                                url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
+                                type: "POST",
+                                data: formData,
+                                success: (res) => {
+
+                                    if (res.status) {
+                                        location.reload()
+
                                     }
-                                })
-                            }
-                        }).catch(error => {
-                            alert("Youre internet connection  cs slow");
-                        });
+                                },
+                                fail: (xhr) => {
+                                    alert('Terjadi kesalahan pada sistem')
+                                    console.log(xhr)
+                                }
+                            })
+                        }
+                        // }).catch(error => {
+                        //     alert("Youre internet connection  cs slow");
+                        // });
                     }
                 })
             }
@@ -395,6 +502,8 @@
 
 
     $(document).on('click', '.__prepare-revisi-dokumen', function() {
+        paramsBtnPaket = "edit";
+
         let document_id = $(this).data('id')
         element_btnSaveEditDokumen.data('id', document_id)
 
@@ -422,100 +531,25 @@
             }
         })
 
-        // let dataID = $(this).data('id'),
-        //     templateID = $(this).data('template-id')
 
-        // const promiseGetTemplate = new Promise((resolve, reject) => {
-        //     $.ajax({
-        //         url: "<?php echo site_url('dokumenpk/get-template/') ?>" + templateID,
-        //         type: 'GET',
-        //         success: (res) => {
-        //             preapreForm_afterChooseTemplate({
-        //                 templateId: templateID,
-        //                 data      : res,
-        //                 target    : 'koreksi'
-        //             })
-
-        //             element_modalFormTitle.html(`
-        //                 <h6>Koreksi Dokumen</h6>
-        //                 <small>${ res.template.title }</small>
-        //             `)
-
-        //             resolve(dataID)
-        //         },
-        //         fail: (xhr) => {
-        //             alert("Terjadi kesalahan pada sistem")
-        //             console.log(xhr)
-        //             reject(then)
-        //         }
-        //     })
-        // })
-
-        // promiseGetTemplate.then((res) => {
-        //     $.ajax({
-        //         url: "<?php echo site_url('dokumenpk/detail/') ?>" + res,
-        //         type: 'GET',
-        //         success: (res) => {
-        //             res.rows.forEach((data, key) => {
-        //                 let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
-        //                     elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
-
-        //                 elementInput_target.val(data.target_value)
-        //                 elementInput_outcome.val(data.outcome_value)
-
-        //                 if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
-        //             })
-
-        //             res.kegiatan.forEach((data, key) => {
-        //                 let elementInput_target = $('tr[data-kegiatan-id='+data.id+']').find('input[name=kegiatan-anggaran]')
-        //                 elementInput_target.val(data.anggaran)
-        //             })
-
-        //             $('input[name=total-anggaran]').val(res.dokumen.total_anggaran)
-        //             $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
-        //             $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
-
-        //             $('.title-ttd-pihak1').text('KEPALA ' + res.dokumen.pihak1_initial)
-        //             $('.title-ttd-pihak2').text('KEPALA ' + res.dokumen.pihak2_initial)
-
-        //             if ($('input[name=ttd-pihak2-jabatan]').length) {
-        //                 $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
-        //             }
-
-        //             if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
-        //             if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
-
-        //             $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
-        //             $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
-        //             $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
-
-        //             if (res.dokumen.revision_message != null) {
-        //                 $('.container-revision-alert').html(`
-        //                     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-        //                         <h5 class="alert-heading">Perlu Di Koreksi !</h5>
-        //                         <p>${res.dokumen.revision_message}</p>
-        //                     </div>
-        //                 `)
-        //             }
-
-
-        //             render_prepare_btnSubmitToRevision({
-        //                 dokumenID: res.dokumen.id,
-        //                 dokumenMasterID: res.dokumen.revision_master_dokumen_id ?? res.dokumen.id
-        //             });
-        //             $('#modalForm').modal('show')
-        //         },
-        //         fail: (xhr) => {
-        //             alert("Terjadi kesalahan pada sistem")
-        //             console.log(xhr)
-        //         }
-        //     })
-        // })
     })
 
 
 
     $(document).on('click', '.__lihat-dokumen', function() {
+
+        if ($(this).data('type') == "uptBalai-add") {
+            paramsBtnPaket = "uptBalai-add";
+
+        } else {
+
+            paramsBtnPaket = "lihat";
+        }
+
+        console.log();
+
+
+
         prepareRevisiDocument({
             dataId: $(this).data('id'),
             templateId: $(this).data('template-id'),
@@ -527,13 +561,23 @@
 
                 $('#modalForm').find('.__remove-item-kegiatan').addClass('d-none')
                 $('#modalForm').find('#__add-item-kegiatan').addClass('d-none')
+
             }
         })
+
     })
 
 
 
     $(document).on('click', '.__edit-dokumen', function() {
+
+        if ($(this).data('type') == "uptBalai-add") {
+            paramsBtnPaket = "uptBalai-add";
+
+        } else {
+
+            paramsBtnPaket = "edit";
+        }
         let documentId = $(this).data('id')
 
         prepareRevisiDocument({
@@ -561,7 +605,7 @@
                 dataId = params.dataId
 
             $.ajax({
-                url: "<?php echo site_url('dokumenpk/get-template/') ?>" + templateId,
+                url: "<?php echo site_url('dokumenpk/get-template/') ?>" + templateId + "/" + dataId,
                 type: 'GET',
                 success: (res) => {
                     preapreForm_afterChooseTemplate({
@@ -576,7 +620,14 @@
                         <small>${ res.template.title }</small>
                     `)
 
-                    resolve(dataId)
+                    resolve({
+
+                        dataId: dataId,
+                        templateRows: res.templateRow
+                    })
+
+
+
                 },
                 fail: (xhr) => {
                     alert("Terjadi kesalahan pada sistem")
@@ -587,23 +638,70 @@
         })
 
         promiseGetTemplate.then((res) => {
+
+            getRows = res.templateRows;
             $.ajax({
-                url: "<?php echo site_url('dokumenpk/detail/') ?>" + res,
+                url: "<?php echo site_url('dokumenpk/detail/') ?>" + res.dataId,
                 type: 'GET',
                 success: (res) => {
                     if (res.dokumen.revision_same_year_number != 0) {
                         $('input[name=revision_same_year]').val(1)
                     }
+
+
+                    satkerIdDefault = 0;
                     res.rows.forEach((data, key) => {
                         let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
+                            elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
                             elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
                         // elementInput_target.val(data.target_value)
                         // elementInput_outcome.val(data.outcome_value)
                         elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                        data.target_sat ? elementInput_target_satuan.val(data.target_sat) : ''
                         elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
+
+                        const idPaketArray = res.paket
+                            .filter(item => item.template_row_id == data.template_row_id)
+                            .map(item => {
+                                    return {
+                                        paketId: item.idpaket,
+                                        target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
+                                        target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
+                                        outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
+                                        outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                                    };
+                                }
+
+                            );
+
+                        selectedItems = idPaketArray;
+
+                        sessionStorage.setItem(data.template_row_id, JSON.stringify(idPaketArray));
+
+                        var totalPaketElement = $('[data-rowid="' + data.template_row_id + '"]').find('.totalpaket');
+
+                        //
+
+                        const foundRow = getRows.find(row => row.id === data.template_row_id);
+                        if (foundRow) {
+                            // Menggunakan nilai 'satkerid' dari 'getRows' jika ditemukan
+                            satkerIdDefault = foundRow.satkerid;
+                        }
+
+                        var elem = $('[data-rowid="' + data.template_row_id + '"]');
+                        elem.attr('data-satkerid', res.dokumen.satkerid || satkerIdDefault);
+
+
+                        totalPaketElement.html(selectedItems.length);
+
+
                         if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
+
+
+
+
                     })
 
 
@@ -642,6 +740,7 @@
                     $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
                     $('input[name=created-kota-nama]').val(res.dokumen.kota_nama)
                     $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
+                    $('select[name=created-day]').val(res.dokumen.tanggal).trigger('change')
                     $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
 
                     if (res.dokumen.revision_message != null) {
@@ -675,6 +774,8 @@
 
                     params.beforeModalMount(res)
 
+
+                    $('.modal .btn-modal-full').trigger('click');
                     $('#modalForm').modal('show')
                 },
                 fail: (xhr) => {
@@ -692,12 +793,52 @@
             url: "<?php echo site_url('dokumenpk/detail/') ?>" + dokumenId,
             type: 'GET',
             success: (res) => {
+                satkerIdDefault = 0;
                 res.rows.forEach((data, key) => {
                     let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
+                        elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
                         elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
                     elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                    elementInput_target_satuan.val(data.target_sat)
                     elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
+
+
+                    const idPaketArray = res.paket
+                        .filter(item => item.template_row_id == data.template_row_id)
+                        .map(item => {
+                                return {
+                                    paketId: item.idpaket,
+                                    target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
+                                    target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
+                                    outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
+                                    outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                                };
+                            }
+
+                        );
+
+                    selectedItems = idPaketArray;
+
+                    sessionStorage.setItem(data.template_row_id, JSON.stringify(idPaketArray));
+
+                    var totalPaketElement = $('[data-rowid="' + data.template_row_id + '"]').find('.totalpaket');
+
+                    //
+
+                    const foundRow = getRows.find(row => row.id === data.template_row_id);
+                    if (foundRow) {
+                        // Menggunakan nilai 'satkerid' dari 'getRows' jika ditemukan
+                        satkerIdDefault = foundRow.satkerid;
+                    }
+
+                    var elem = $('[data-rowid="' + data.template_row_id + '"]');
+                    elem.attr('data-satkerid', res.dokumen.satkerid || satkerIdDefault);
+
+
+                    totalPaketElement.html(selectedItems.length);
+
+
 
                     if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
                 })
@@ -809,20 +950,36 @@
             success: (res) => {
                 let renderList = ''
                 res.data.forEach(data => {
-                    let renderCheck = ''
+                    // let renderCheck = ''
 
-                    if (data.iscreatedPK > 0) {
+                    // if (data.iscreatedPK > 0) {
+                    //     renderCheck = '<i class="fas fa-check"></i>'
+                    // } else if (data.iscreatedPKBeforeAcc > 0) {
+                    //     renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold ' + data.status_color + '"> ' + data.status_now + ' </span> <div > ';
+                    // }
+                    // renderList += `
+                    //     <li class="list-group-item d-flex justify-content-between">
+                    //         <label>${data.satker}</label>
+                    //         ${renderCheck}
+                    //     </li>
+                    // `
+                    let renderCheck = '<i class="fas fa-times" style="color: red;"></i>'
+                    if (data.satkerCheck == 'setuju') {
+
                         renderCheck = '<i class="fas fa-check"></i>'
-                    } else if (data.iscreatedPKBeforeAcc > 0) {
-                        renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold ' + data.status_color + '"> ' + data.status_now + ' </span> <div > ';
+
                     }
-                    renderList += `
-                        <li class="list-group-item d-flex justify-content-between">
+                    if (data.satkerCheck == 'hold' || data.satkerCheck == 'tolak') {
+                        renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold bg-secondary">Pending</span> <div > ';
+                    }
+                    renderList += `<li class="list-group-item d-flex justify-content-between">
                             <label>${data.satker}</label>
                             ${renderCheck}
-                        </li>
-                    `
+                        </li>`;
+
                 });
+
+
 
                 $('#modalSatkerListCreated').find('.list-group').html(renderList)
             }
@@ -889,21 +1046,40 @@
         let element_kegiatanTable = $('.__table-kegiatan').find('tbody'),
             element_rowItem_kegiatanTable = $('.__table-kegiatan').find('tbody').find('tr'),
             element_rowItem_anggaran_kegiatan = $('.__table-kegiatan').find('tbody tr').last().find("input[name='kegiatan-anggaran']").val(),
+            element_rowItem_nama_kegiatan_fill = $('.__table-kegiatan').find('tbody tr').last().attr("data-kegiatan-nama"),
+            element_rowItem_nama_kegiatan = $('.__table-kegiatan').find('tbody tr').last().find("select").val(),
             kegiatan = []
 
         info = $(this).data("info");
 
         if (element_rowItem_anggaran_kegiatan != undefined) {
 
-            if (element_rowItem_anggaran_kegiatan == 0 || element_rowItem_anggaran_kegiatan == null) {
 
-                Swal.fire(
-                    'Peringatan',
-                    'Nama dan Anggaran belum terisi',
-                    'warning'
-                )
-                return false
+
+            if (element_rowItem_nama_kegiatan_fill == '-') {
+                if (element_rowItem_nama_kegiatan == 0 || element_rowItem_nama_kegiatan == null || element_rowItem_nama_kegiatan == '') {
+
+                    Swal.fire(
+                        'Peringatan',
+                        'Nama Kegiatan belum terisi',
+                        'warning'
+                    )
+                    return false
+                }
+
+                if (element_rowItem_anggaran_kegiatan == 0 || element_rowItem_anggaran_kegiatan == null || element_rowItem_anggaran_kegiatan == '') {
+
+                    Swal.fire(
+                        'Peringatan',
+                        'Anggaran Kegiatan belum terisi',
+                        'warning'
+                    )
+                    return false
+                }
+
             }
+
+
         }
 
 
@@ -952,19 +1128,28 @@
 
     function getFormValue() {
         let rows = [],
+            paket = [],
             kegiatan = []
 
         $('.__inputTemplateRow-target').each((key, element) => {
             let elementInput_target = $(element),
+                elementInput_target_satuan = $('.select-target-satuan').eq(key),
                 elementInput_outcome = $('.__inputTemplateRow-outcome').eq(key),
                 element_checkRow = $('input:checkbox[name=form-check-row]').eq(key)
 
             rows.push({
                 id: elementInput_target.data('row-id'),
                 target: elementInput_target.val().replace('.', ''),
+                target_satuan: elementInput_target_satuan.val(),
                 outcome: elementInput_outcome.val().replace('.', ''),
                 isChecked: element_checkRow.is(':checked') ? '1' : '0'
             })
+
+            paket.push({
+                id: elementInput_target.data('row-id'),
+                paketId: sessionStorage.getItem(elementInput_target.data('row-id')),
+                isChecked: element_checkRow.is(':checked') ? '1' : '0'
+            });
         })
 
         $('.__table-kegiatan').find('tbody').find('tr').each((key, element) => {
@@ -983,6 +1168,7 @@
             revisionSameYear: $('input[name=revision_same_year]').val(),
             templateID: element_btnSaveDokumen.data('template-id'),
             rows: rows,
+            paket: paket,
             kegiatan: kegiatan,
             totalAnggaran: $('input[name=total-anggaran]').val(),
             ttdPihak1: $('input[name=ttd-pihak1]').val(),
@@ -992,6 +1178,7 @@
             kota: $('select[name=created-kota]').val(),
             kotaNama: $('input[name=created-kota-nama]').val(),
             bulan: $('select[name=created-bulan]').val(),
+            tanggal: $('select[name=created-day]').val(),
             tahun: $('select[name=created-tahun]').val()
         }
         if ($('input[name=ttd-pihak2-jabatan]').length) inputValue.ttdPihak2Jabatan = $('input[name=ttd-pihak2-jabatan]').val()
@@ -1005,7 +1192,23 @@
         let checkInputKegiatanAnggatan = true,
             checkInputKegiatanManual = true,
             checkInputTarget = true,
-            checkInputOutcome = true
+            checkInputOutcome = true,
+            checkPaket = true
+
+        $('.paket').each((index, element) => {
+
+            let element_rowParent = $(element).parents('tr').find('td'),
+                checlist = element_rowParent.find('input:checkbox[name=form-check-row]').is(':checked')
+
+            if (checlist) {
+                if ($(element).find('.totalpaket').text() > 0) {
+                    checkPaket = true
+                } else {
+                    checkPaket = false
+                }
+            }
+
+        })
 
         $('.__inputTemplateRow-target').each((index, element) => {
             let element_rowParent = $(element).parents('tr').find('td'),
@@ -1037,6 +1240,8 @@
 
 
 
+
+
         $('input[name=kegiatan-anggaran]').each((index, element) => {
             if ($(element).val().replaceAll(".", '').replaceAll(',', '.') > 0 && checkInputKegiatanAnggatan == true) {
                 checkInputKegiatanAnggatan = true
@@ -1052,6 +1257,15 @@
                 checkInputKegiatanManual = false
             }
         })
+
+        if (checkPaket == false) {
+            Swal.fire(
+                'Peringatan',
+                'Terdapat paket yang belum dipilih pada indikator',
+                'warning'
+            )
+            return false
+        }
 
         if (checkInputTarget == false) {
             Swal.fire(
@@ -1155,6 +1369,7 @@
         element_modalFormBackChooseTemplate.addClass('d-none')
         element_modalFormTitle.html('Pilih Dokumen')
         render_reset_btnSubmitToRevision()
+        sessionStorage.clear();
     }
 
 
@@ -1172,7 +1387,8 @@
 
                     if (res.dokumen.revision_message != null) {
                         element_iframePreviewDokumen.css({
-                            'height': '60vh'
+                            // 'height': '60vh'
+                            'height': '100vh'
                         })
                         $('.container-revision-alert-cetak').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
@@ -1182,12 +1398,15 @@
                         `)
                     } else {
                         element_iframePreviewDokumen.css({
-                            'height': '80vh'
+                            // 'height': '80vh'
+                            'height': '100vh'
                         })
                         $('.container-revision-alert-cetak').html('')
                     }
 
+
                     element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
+
                     element_modalPreviewCetakDokumen.modal('show')
 
                     if (_toConfirm) {
@@ -1210,6 +1429,7 @@
                         element_modalPreviewCetakDokumen.find('.modal-footer').empty()
                     }
                 }, 400)
+                // $('.btn-modal-full').trigger('click')
             }
         })
     }
@@ -1223,6 +1443,7 @@
         data: {},
         target: ''
     }) {
+
         element_btnSaveDokumen.attr('data-template-id', params.templateId)
         element_modalDialog.addClass('modal-xl')
         element_modalFooter.removeClass('d-none')
@@ -1251,16 +1472,29 @@
 
             let renderCheckListSatkerBalai = ''
             params.data.balaiValidasiSatker.balaiChecklistSatker.forEach((data, index) => {
-                let renderCheck = ''
 
-                if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check mt-2"></i>'
+                // if (data.iscreatedPK > 0) renderCheck = '<i class="fas fa-check mt-2"></i>'
 
-                renderCheckListSatkerBalai += `
-                    <li class="list-group-item d-flex justify-content-between">
-                        <label>${ data.satker }</label>
-                        ${renderCheck}
-                    </li>
-                `
+                // renderCheckListSatkerBalai += `
+                //     <li class="list-group-item d-flex justify-content-between">
+                //         <label>${ data.satker }</label>
+                //         ${renderCheck}
+                //     </li>
+                // `
+
+                let renderCheck = '<i class="fas fa-times" style="color: red;"></i>'
+                if (data.satkerCheck == 'setuju') {
+
+                    renderCheck = '<i class="fas fa-check"></i>'
+
+                }
+                if (data.satkerCheck == 'hold' || data.satkerCheck == 'tolak') {
+                    renderCheck = '<div class="d-flex justify-content-between align-items-center"><span class = "badge badge-pill px-3 font-weight-bold bg-secondary">Pending</span> <div > ';
+                }
+                renderCheckListSatkerBalai += `<li class="list-group-item d-flex justify-content-between">
+                            <label>${data.satker}</label>
+                            ${renderCheck}
+                        </li>`;
             });
 
 
@@ -1268,7 +1502,7 @@
                 $('.container-revision-alert').append(`
                     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                         <h5 class="alert-heading">Informasi</h5>
-                        <p>Pembuatan dokumen perjanjian kinerja dapat di buat jika satker-satker sudah menginputkan dokumen perjanjian kinerja. Daftar satker dapat dilihat pada bagian bawah form</p>
+                        <p>Dokumen perjanjian kinerja dapat dibuat/diedit setelah seluruh satker menginputkan perjanjian kinerja masing-masing. Daftar satker dapat dilihat di bagian bawah formulir.</p>
                     </div>
                 `)
 
@@ -1322,10 +1556,16 @@
 
 
     function renderFormTemplate(_dataId, _data, _target) {
+        last_dokumen_id = '';
+        if (_target == 'create' && _data.dokumenExistSameYear != null) {
+            paramsBtnPaket = "edit";
+            last_dokumen_id = _data.dokumenExistSameYear.last_dokumen_id;
+        }
+
         let template = _data.template,
-            value_dataId = _dataId,
+            value_dataId = _dataId ?? last_dokumen_id,
             templateExtraData = _data.templateExtraData,
-            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type),
+            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type, _data.satkerid, value_dataId, _data.tahun),
             render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
             render_listInfo = renderFormTemplate_listInfo(_data.templateInfo),
             render_ttdPihak2 = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2, templateExtraData.jabatanPihak2),
@@ -1337,7 +1577,9 @@
             classDNoneOutcome = '',
             titleTheadTable = '',
             theadBalaiTarget = '',
-            theadBalaiTargetNumber = ''
+            theadBalaiTargetNumber = '',
+            titleTheadTableOutcomeBalai = ''
+
 
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
             render_warningDokumenYearRevisoin = `
@@ -1370,9 +1612,14 @@
 
         if (_data.template.type == 'master-balai' || _data.template.type == 'eselon1') {
             titleTheadTable = '';
+            titleTheadTableOutcomeBalai = '';
+            theadBalaiTargetNumber = '';
+            theadBalaiTargetNumber += '<td class="text-center p-2">(3)</td>';
             switch (_data.template.type) {
                 case 'master-balai':
-                    titleTheadTable = 'Target Dari Satker';
+                    titleTheadTableOutcomeBalai = '<td class="text-center" style="width: 10%">Target Satker</td>';
+                    titleTheadTable = '<td class="text-center" style="width: 10%">Outcome Satker</td>';
+                    theadBalaiTargetNumber += '<td class="text-center p-2">(4)</td>';
                     break;
 
                 case 'eselon1':
@@ -1381,14 +1628,16 @@
 
                 default:
                     titleTheadTable = '';
+                    titleTheadTableOutcomeBalai = '';
+
                     break;
             }
 
-            theadBalaiTarget = '<td class="text-center" style="width: 250px">Target ' + <?php echo $sessionYear ?> + '</td>';
-            theadBalaiTargetNumber = '<td class="text-center p-2">(3)</td>';
+            theadBalaiTarget = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
         } else {
-            titleTheadTable = 'Target ' + <?php echo $sessionYear ?>
+            titleTheadTable = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
         }
+
 
         let render = `
             <input type="hidden" name="revision_same_year" value="${inputValue_revisionSameYear}" />
@@ -1399,17 +1648,17 @@
 
             <table class="table table-bordered">
                 <thead>
-                    <tr>
-                        <td class="text-center" colspan="3">Sasaran Program / Sasaran Kegiatan / Indikator</td>
-                        <td class="text-center" style="width: 250px">
-                            ${titleTheadTable}
-                        </td>
+                    <tr class="sticky-header-1">
+                        <td class="text-center"  style="width: 70%" colspan="3">Sasaran Program / Sasaran Kegiatan / Indikator</td>
+                        ${titleTheadTableOutcomeBalai}
+                        ${titleTheadTable}
+                  
                         ${theadBalaiTarget}
-                        <td class="text-center ${classDNoneOutcome}" style="width: 250px">
+                        <td class="text-center ${classDNoneOutcome}" style="width: 15%">
                             Outcome
                         </td>
                     </tr>
-                    <tr style="font-size:10px">
+                    <tr style="font-size:10px" class="sticky-header-2">
                         <td class="text-center p-2 align-middle">
                             <input type="checkbox" name="form-checkall-row" checked />
                         </td>
@@ -1442,7 +1691,7 @@
                                     <th class="text-center">Nama ${ capitalizeFirstLetter(template.info_title) }</th>
                                     <th class="text-center" width="250px">Nominal Anggaran</th>
                                     <th width="50px">
-                                        <button class="btn btn-sm btn-primary" id="__add-item-kegiatan" data-info = "${template.info_title}">
+                                        <button class="btn btn-sm btn-primary" id="__add-item-kegiatan" title="Tambah Kegiatan & Anggaran" data-info = "${template.info_title}">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </th>
@@ -1454,7 +1703,7 @@
                             <tfoot>
                                 <tr>
                                     <td class="align-middle"> <strong>Total Anggaran</strong></td>
-                                    <td class="align-middle" colspan="2"> 
+                                    <td class="align-middle"> 
                                         <div class="input-group mt-2">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">Rp. </span>
@@ -1493,8 +1742,17 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Bulan</label>
                             <div class="col-sm-5">
-                                <select class="form-control" name="created-bulan">
+                                <select class="form-control opsi-bulan" name="created-bulan">
                                     ${render_opsiBulan}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Tanggal</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="created-day">
+                                <option value="">Pilih Tanggal</option>
                                 </select>
                             </div>
                         </div>
@@ -1593,7 +1851,9 @@
 
 
 
-    function renderFormTemplate_rowTable(_data, _templateType) {
+    function renderFormTemplate_rowTable(_data, _templateType, _satkerId, DocID, _tahun) {
+
+
         let rows = '',
             rowNumber = 1,
             colspanSectionTitle = 3,
@@ -1608,6 +1868,7 @@
             colspanSectionTitle = 2
             classDNoneOutcome = 'd-none'
         }
+
 
         _data.forEach((data, key) => {
             switch (data.type) {
@@ -1641,18 +1902,27 @@
 
                 case 'form':
                     let renderInputTarget = '';
-                    if (data.id == "291010") {
-                        data_value = data.target_balai_value;
-                    } else {
-                        data_value = data.targetDefualtValue;
-                    }
+
 
                     if (_templateType == 'master-balai' || _templateType == 'eselon1') {
+
+
                         renderInputTarget = `
+
                             <td>
                                 <div class="input-group mr-3">
                                     <div class="input-group-append">
-                                        <span class="input-group-text" style="width: 80px">${ data_value }</span>
+                                        <span class="input-group-text">${data.targetSatkerValue.toString().replaceAll('.',',')}</span>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">${data.targetSatkerSatuan}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group mr-3">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">${ data.outcomeSatkerValue.toString().replaceAll('.',',')}</span>
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
@@ -1668,7 +1938,7 @@
                                         value="${ data.targetBalaiDefualtValue }"
                                         data-row-id="${ data.id }"
                                         onkeyup="return this.value = formatRupiah(this.value, '')"
-                                    >
+                                    data-pktype="balai">
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
                                     </div>
@@ -1683,16 +1953,89 @@
                                     type="text" 
                                     class="form-control __inputTemplateRow-target" 
                                     placeholder="Masukkan Nilai"
-                                    value="${ data.targetDefualtValue }"
+                                    value="${ data.outcomeSatkerValue }"
                                     data-row-id="${ data.id }"
-                                    onkeyup="return this.value = formatRupiah(this.value, '')"
-                                >
-                                <div class="input-group-append">
-                                    <span class="input-group-text">${ data.target_satuan }</span>
-                                </div>
+                                    data-targetSatuan = "${ data.target_satuan}"
+                                    onkeyup="return this.value = formatRupiah(this.value, '')" data-pktype="satker"
+                                    ${data.template_id === '5' || data.template_id === '6' || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'readonly' }>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">${ data.target_satuan.split(';')[0]}</span>
+                                    </div>
                             </div>
                         </td>
                         `
+                    }
+
+
+                    //             <div class="input-group-append">
+                    //                              <select class="form-control select-target-satuan" data-row-id="${data.id}">
+                    //         ${data.target_satuan.split(';').map(function(satuan) {
+                    //         return `<option value="${satuan.trim()}">${satuan.trim()}</option>`;
+                    //     }).join('')}
+
+                    // </select>
+                    //                         </div>
+                    // if (paramsBtnPaket == "lihat" || paramsBtnPaket == "edit") {
+
+                    //     $.ajax({
+                    //         url: "<?php echo site_url('dokumenpk/detail/') ?>" + DocID,
+                    //         type: 'GET',
+                    //         success: (res) => {
+                    //             if (res.paket) {
+
+                    //                 const idPaketArray = res.paket
+                    //                     .filter(item => item.template_row_id == data.id)
+                    //                     .map(item => {
+                    //                             return {
+                    //                                 paketId: item.idpaket,
+                    //                                 target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
+                    //                                 target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
+                    //                                 outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
+                    //                                 outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                    //                             };
+                    //                         }
+
+                    //                     );
+
+                    //                 selectedItems = idPaketArray;
+
+                    //                 sessionStorage.setItem(data.id, JSON.stringify(idPaketArray));
+
+                    //                 var totalPaketElement = $('[data-rowid="' + data.id + '"]').find('.totalpaket');
+                    //                 var elem = $('[data-rowid="' + data.id + '"]');
+
+                    //                 elem.attr('data-satkerid', res.dokumen.satkerid ?? '0');
+                    //                 totalPaketElement.html(selectedItems.length);
+
+
+
+
+                    //             }
+
+                    //         }
+                    //     });
+
+
+                    // }
+
+                    if (paramsBtnPaket == "uptBalai-add") {
+
+                        const idPaketArray = data.paket
+                            .filter(item => data.listSatker.includes(item.satkerid))
+                            .map(item => {
+                                    return {
+                                        paketId: item.idpaket,
+                                        target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
+                                        target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
+                                        outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
+                                        outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                                    };
+                                }
+
+                            );
+
+                        selectedItems = idPaketArray;
+                        sessionStorage.setItem(data.id, JSON.stringify(idPaketArray));
                     }
 
                     rows += `
@@ -1701,8 +2044,35 @@
                                 <input type="checkbox" name="form-check-row" checked />
                             </td>
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
-                            <td class="align-middle">${ data.title }</td>
+                            <td class="align-middle">${ data.title } 
+
+                                            ${data.template_id === '5' || data.template_id === '6' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' : `
+                <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" 
+                        title="pilih paket" 
+                        data-dokid="${DocID || 0}" 
+                        data-templateid="${data.template_id}" 
+                        data-indikator="${data.title}" 
+                        data-rowid="${data.id}" 
+                        data-outputsatuan="${data.target_satuan}" 
+                        data-outcomesatuan="${data.outcome_satuan}" 
+                     
+
+                       data-satkerid="${_satkerId}">
+                    Paket 
+                    <span class="label label-sm label-white ml-2 totalpaket">
+                    ${paramsBtnPaket === "uptBalai-add" ? selectedItems.length : data.paket.length}
+                    </span>
+                </button>
+                `}
+
+
+                           
+                            
+
+                            
+                            </td>
                             ${renderInputTarget}
+                            
                             <td class="${classDNoneOutcome}">
                                 <div class="input-group">
                                     <input 
@@ -1712,7 +2082,8 @@
                                         value="${ data.outcomeDefaultValue }"
                                         data-row-id="${ data.id }"
                                         onkeyup="return this.value = formatRupiah(this.value, '')"
-                                    >
+                                        ${data.template_id === '5' || data.template_id === '6' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
+                                        >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>
                                     </div>
@@ -1721,8 +2092,16 @@
                         </tr>
                     `
                     break;
+
+
+
             }
+
+
         });
+
+
+
 
         return rows
     }
@@ -1916,6 +2295,25 @@
         return renderOptions
     }
 
+    $(document).on('change', '.opsi-bulan', function(e) {
+        var bulan = $(this).val();
+        var tahun = $("select[name=created-tahun]").val();
+        var tanggalDropdown = $("select[name=created-day");
+
+        // Membuat objek Date dengan bulan dan tahun yang dipilih
+        var tanggalMaksimum = new Date(tahun, bulan, 0);
+
+        // Mendapatkan tanggal maksimum untuk bulan dan tahun tersebut
+        var tanggalMaksimumFormatted = tanggalMaksimum.getDate();
+
+        // Mengosongkan pilihan tanggal sebelum menambahkan yang baru
+        tanggalDropdown.empty();
+        tanggalDropdown.append(`<option value="">Pilih Tanggal</option>`);
+        for (let iTanggal = 1; iTanggal <= tanggalMaksimumFormatted; iTanggal++) {
+            tanggalDropdown.append(`<option value="${iTanggal}">${iTanggal}</option>`);
+        }
+    });
+
 
 
     function renderFormTemplate_opsiTahun(_data) {
@@ -1940,4 +2338,294 @@
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     }
+</script>
+<!-- modal render pilih paket -->
+
+<script>
+    $(document).on('click', '.paket', function() {
+        var selectedItems = [];
+        $('#modalPilihPaket').modal('show');
+        $('.modal.btn-modal-full').trigger('click');
+
+        let satkerId = $(this).data('satkerid');
+        let templateId = $(this).data('templateid');
+
+        var balaiCreateSatker = $(".__opsi-template").attr("data-balai-create-satker");
+
+
+
+        if (balaiCreateSatker != undefined) {
+
+            satkerId = balaiCreateSatker;
+
+        }
+
+
+
+        let indikator = $(this).data('indikator');
+        let docId = $(this).data('dokid');
+        let indikatorID = $(this).data('rowid');
+        // let output_satuan = $('.select-target-satuan[data-row-id=' + indikatorID + ']').val();
+        let output_satuan = $(this).data('outputsatuan');
+        let outcome_satuan = $(this).data('outcomesatuan');
+
+
+        $('#modalFormTitlePaket').html(``);
+        $('#modalFormTitlePaket').html(`<h6>Pilih Paket</h6>
+                        <small>Indikator : <b>${ indikator }</b></small>
+                       
+                        `);
+
+
+        $('.save-btn-paket').removeAttr("data-indikatorid");
+        $('.save-btn-paket').attr("data-indikatorid", indikatorID)
+
+
+        var storedItems = sessionStorage.getItem(indikatorID);
+
+        if (storedItems) {
+            selectedItems = JSON.parse(storedItems);
+        }
+
+
+        //get paket
+        $.ajax({
+            url: "<?php echo site_url('api/getpaket') ?>",
+            type: 'GET',
+            data: {
+                satkerId: satkerId,
+                templateId: templateId
+            },
+            success: (res) => {
+
+                if (res.message != 'tidak ada data') {
+                    const tbody = $('#tbody');
+                    tbody.empty();
+                    var jsonData = JSON.parse(res);
+
+                    jsonData.forEach(function(balai, index) {
+                        if (index === 0) {
+                            tbody.append(`
+                    <tr style="background-color:#89CFF0" class="sticky-header-2">
+                    <td>-</td>
+                    <td colspan = "10"><strong>${balai.balai}</strong></td>
+                    </tr>`);
+                        }
+                        tbody.append(`
+                    
+                    <tr style="background-color:#b6dced" class="sticky-header-3">
+                    <td><strong>${balai.satkerid}</strong></td>
+                    <td colspan = "10"><strong>${balai.satker}</strong></td>
+                    </tr>
+                
+
+                   `);
+
+                        balai.paket.forEach(function(paket, index) {
+
+                            trClass = '';
+                            output_from_satrker = ''
+                            var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
+                            if (paramsBtnPaket == "lihat" || paramsBtnPaket == 'uptBalai-add') {
+                                checkboxHtml += 'disabled';
+                                $(".checkbox-click").attr("disabled", true)
+                                $('.save-btn-paket').addClass('d-none');
+                            } else {
+                                $('.save-btn-paket').removeClass('d-none');
+                            }
+                            // if (selectedItems.includes(paket.paketId)) {
+                            if (selectedItems.some(item => item.paketId === paket.paketId)) {
+                                checkboxHtml += ' checked'; // Set checked attribute
+                                trClass = "style='background-color:#e0f2e9'"
+                                // Cari objek yang sesuai dengan paket.paketId
+                                const selectedPaket = selectedItems.find(item => item.paketId === paket.paketId);
+
+                                // Isi output_from_satrker dengan nilai target_satuan
+                                if (selectedPaket) {
+                                    output_from_satrker = selectedPaket.target_satuan;
+                                } else {
+                                    output_from_satrker = ''; // Atur ke nilai default jika tidak ditemukan
+                                }
+                            }
+
+                            checkboxHtml += '>';
+
+                            tbody.append(`
+                          <tr ${trClass}>
+                          <td>${checkboxHtml}</td>
+                            <td>${paket.paketId}</td>
+                            <td>${paket.label}</td>
+                            <td>${paket.vol}</td>
+                            <td>${paket.satuan}</td>
+                            <td>${paket.paguDipa}</td>
+                            <td>${paket.realisasi}</td>
+                            <td>${paket.persenKeu}</td>
+                            <td>${paket.persenFis}</td>
+                            <td>
+                            <div class="form-group form-group-last row">
+								<div class="form-group-sub">
+									<label class="form-control-label">Vol Output :</label>
+									<input type="text" class="form-control target_nilai checkbox-click" name="target_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"}>
+								</div>
+                                <div class="form-group-sub">
+									<label class="form-control-label">Satuan Output :</label>
+                                                <div class="input-group-append">
+                                                <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"} name="target_satuan">
+    ${output_satuan.split(';').map(function(satuan) {
+        const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.target_satuan === satuan.trim());
+        return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
+    }).join('')}
+</select>
+                                            </div>
+
+
+
+								</div>
+							</div>
+                            
+                            </td>
+                            <td>
+                            <div class="form-group form-group-last row">
+								<div class="form-group-sub">
+									<label class="form-control-label center">Vol Outcome :</label>
+									<input type="text" class="form-control outcome_nilai checkbox-click" name="outcome_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_nilai:"disabled"}>
+								</div>
+                                <div class="form-group-sub">
+									<label class="form-control-label">Satuan Outcome :</label>
+								
+									<input type="text" class="form-control outcome_satuan" name="outcome_satuan" value="${selectedItems.some(item => item.paketId === paket.paketId) ? selectedItems.find(item => item.paketId === paket.paketId).outcome_satuan : outcome_satuan} " disabled>
+								</div>
+							</div>
+                            
+                            </td>
+                          </tr>
+                        `);
+
+                            // Mendengarkan perubahan status kotak centang
+                            $('input.checkbox').on('change', function() {
+                                if (this.checked) {
+                                    // Kotak centang dicentang, maka menonaktifkan input dengan class "target_nilai"
+                                    $(this).closest('tr').find('.checkbox-click').prop('disabled', false);
+                                    $(this).closest('tr').attr('style', 'background-color:#e0f2e9');
+
+                                } else {
+                                    // Kotak centang tidak dicentang, maka mengaktifkan kembali input dengan class "target_nilai"
+                                    $(this).closest('tr').find('.checkbox-click').prop('disabled', true);
+                                    $(this).closest('tr').removeAttr('style');
+
+                                }
+                            });
+                        });
+
+
+                    })
+                }
+            }
+        })
+
+
+
+
+
+    });
+</script>
+
+<script>
+    $(document).on('click', '.save-btn-paket', function(e) {
+        e.preventDefault();
+        indikatorId = $(this).attr("data-indikatorid");
+        var selectedItems = [];
+        var errorMessages = [];
+        var totalJumlahTarget = 0;
+        var totalJumlahOutcome = 0;
+
+        $('.checkbox:checked').each(function() {
+            var paketId = $(this).attr('val');
+            var target_nilai = $(this).closest('tr').find('input[name=target_nilai]').val();
+            var target_satuan = $(this).closest('tr').find('select[name=target_satuan]').val();
+            var outcome_nilai = $(this).closest('tr').find('input[name=outcome_nilai]').val();
+            var outcome_satuan = $(this).closest('tr').find('input[name=outcome_satuan]').val();
+
+            if (target_nilai.trim() === '') {
+                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
+            } else if (target_satuan.trim() === '') {
+                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Satuan yang belum diisi.');
+
+
+            } else if (outcome_nilai.trim() === '') {
+                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Outcome Nilai yang belum diisi.');
+
+
+            } else if (outcome_satuan.trim() === '') {
+                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Outcome Satuan yang belum diisi.');
+
+
+            } else {
+                selectedItems.push({
+                    paketId: paketId,
+                    target_nilai: target_nilai,
+                    target_satuan: target_satuan,
+                    outcome_nilai: outcome_nilai,
+                    outcome_satuan: outcome_satuan
+                });
+
+
+
+                target_nilai_number_remove_titik = target_nilai.replace('.', '');
+                outcome_nilai_number_remove_titik = outcome_nilai.replace('.', '');
+
+                target_nilai_number = parseFloat(target_nilai_number_remove_titik.replace(',', '.'));
+                outcome_nilai_number = parseFloat(outcome_nilai_number_remove_titik.replace(',', '.'));
+                let elm_output_satuan_indikator = $('.__inputTemplateRow-target[data-row-id=' + indikatorId + ']').data('targetsatuan');
+                let output_satuan_indikator = elm_output_satuan_indikator.split(";")[0];
+
+                if (target_satuan == output_satuan_indikator) {
+
+                    totalJumlahTarget += target_nilai_number;
+                    totalJumlahOutcome += outcome_nilai_number;
+                }
+            }
+
+        });
+        if (errorMessages.length > 0) {
+            // Menampilkan pesan kesalahan jika ada
+            errorMessages.forEach(function(message) {
+                Swal.fire('Peringatan', message, 'warning');
+            });
+        } else if (selectedItems.length > 0) {
+            sessionStorage.setItem(indikatorId, JSON.stringify(selectedItems));
+            var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
+            totalPaketElement.html(selectedItems.length);
+
+            var totalTarget_nilai = $('.__inputTemplateRow-target[data-row-id=' + indikatorId + ']')
+            var totalOutcome_nilai = $('.__inputTemplateRow-outcome[data-row-id=' + indikatorId + ']')
+
+            var jumlahDesimal_target = (totalJumlahTarget % 1 === 0) ? 0 : totalJumlahTarget.toString().split('.')[1].length;
+            var jumlahDesimal_outcome = (totalJumlahOutcome % 1 === 0) ? 0 : totalJumlahOutcome.toString().split('.')[1].length;
+
+            totalJumlahTargetDenganKoma = totalJumlahTarget.toLocaleString('id-ID', {
+                minimumFractionDigits: jumlahDesimal_target
+            });
+
+            totalJumlahOutcomeDenganKoma = totalJumlahOutcome.toLocaleString('id-ID', {
+                minimumFractionDigits: jumlahDesimal_outcome
+            });
+
+
+            totalTarget_nilai.val(totalJumlahTargetDenganKoma);
+            totalOutcome_nilai.val(totalJumlahOutcomeDenganKoma);
+
+            $('#modalPilihPaket').modal('hide');
+        } else {
+            Swal.fire(
+                'Gagal Menyimpan',
+                'Tidak ada paket yang dipilih !',
+                'warning'
+            )
+        }
+
+
+
+
+    });
 </script>

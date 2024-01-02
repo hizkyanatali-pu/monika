@@ -7,7 +7,19 @@
 $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->group('api', ['namespace' => 'App\Controllers'], function ($routes) {
         //$routes->post('datadukung', '\Modules\Admin\Controllers\Api::index');
-        $routes->get('getpaket/(:any)', '\Modules\Admin\Controllers\Pulldata::getPaketTagging/$1');
+        $routes->get('getpaket', '\Modules\Admin\Controllers\Pulldata::getPaketTagging');
+        $routes->get('get-paket-tematik', '\Modules\Admin\Controllers\Pulldata::getPaketTematik');
+        $routes->get('m-tematik-list', '\Modules\Admin\Controllers\Tematik::mTematikList');
+        $routes->post('m-tematik-insert', '\Modules\Admin\Controllers\Tematik::mTematikInsert');
+
+        $routes->get('m-subtematik-list', '\Modules\Admin\Controllers\Tematik::mSubTematikList');
+        $routes->post('m-subtematik-insert', '\Modules\Admin\Controllers\Tematik::mSubTematikInsert');
+
+
+        $routes->post('data-tematik-insert', '\Modules\Admin\Controllers\Tematik::addDataTematik');
+        $routes->get('data-tematik-list', '\Modules\Admin\Controllers\Tematik::DataTematik');
+        $routes->get('check-data-tematik', '\Modules\Admin\Controllers\Tematik::checkDataTematik');
+
 
         $routes->get('cron-tarik-data/(:any)', '\Modules\Admin\Controllers\CronJob::dataPaket/$1');
 
@@ -129,6 +141,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('imdata/(:segment)', '\Modules\Admin\Controllers\Importdata::imdata/$1');
                 $routes->get('pullimport/(:any)', '\Modules\Admin\Controllers\Importdata::pullimport/$1');
                 $routes->get('unduh/(:segment)/(:segment)', '\Modules\Admin\Controllers\Importdata::unduh/$1/$2');
+                $routes->get('create-table-template-pk', '\Modules\Admin\Controllers\Importdata::copyTableTemplatePK');
             });
 
             $routes->group('grafikdata', ['namespace' => 'App\Controllers'], function ($routes) {
@@ -191,6 +204,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             });
 
             $routes->group('tematik', ['namespace' => 'App\Controllers'], function ($routes) {
+                $routes->get('/', '\Modules\Admin\Controllers\Tematik::index');
+                $routes->get('add', '\Modules\Admin\Controllers\Tematik::addForm');
                 $routes->get('food-estate', '\Modules\Admin\Controllers\Tematik::pageFoodEstate');
                 $routes->get('kawasan-industri', '\Modules\Admin\Controllers\Tematik::pageKawasanIndustri');
                 $routes->get('kspn/(:any)', '\Modules\Admin\Controllers\Tematik::pageKspn/$1');
@@ -227,6 +242,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
             $routes->group('bigdata', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('/', '\Modules\Admin\Controllers\BigData::index');
+                $routes->get('sda_paket', '\Modules\Admin\Controllers\BigData::getDataMonikaData');
+                $routes->get('sda_paket_column', '\Modules\Admin\Controllers\BigData::getColom');
+
                 $routes->get('load-data', '\Modules\Admin\Controllers\BigData::loadData');
                 $routes->get('filter-select-lookup', '\Modules\Admin\Controllers\BigData::filterSelectLookup');
 
@@ -353,6 +371,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Satker\Controllers\Dokumenpk::balaiSatker/$1');
             $routes->get('dokumenpk-download-log/(:any)', '\Modules\Satker\Controllers\Dokumenpk::logKoreksi/$1');
             $routes->get('panduan', '\Modules\Satker\Controllers\Dokumenpk::panduanpk');
+            $routes->get('instansi-list/(:any)', '\Modules\Admin\Controllers\Dokumenpk::instansiList/$1');
         }
     }
 });
