@@ -546,9 +546,6 @@
             paramsBtnPaket = "lihat";
         }
 
-        console.log();
-
-
 
         prepareRevisiDocument({
             dataId: $(this).data('id'),
@@ -793,6 +790,9 @@
             url: "<?php echo site_url('dokumenpk/detail/') ?>" + dokumenId,
             type: 'GET',
             success: (res) => {
+
+                getRows = res.rows;
+
                 satkerIdDefault = 0;
                 res.rows.forEach((data, key) => {
                     let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
