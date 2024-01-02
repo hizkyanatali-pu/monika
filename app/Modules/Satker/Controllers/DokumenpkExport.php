@@ -584,7 +584,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                             foreach ($rumus as $keyOutcome => $dataOutput) {
                                 $outputRumus += $dataOutput ? ($dataOutput->target_value != '' ? $dataOutput->target_value : 0) : 0;
-                                $outputSatuan = $dataOutput->target_sat ?? $dataOutput->target_satuan;
+                                $outputSatuan = $dataOutput->target_sat ?? trim(explode(";", $dataOutput->target_satuan)[0]);
                             }
                             if ($sumOutputValue == '' && $outcomeRumus > 0) $sumOutputValue = 0;
 

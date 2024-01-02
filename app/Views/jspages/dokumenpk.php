@@ -1915,7 +1915,9 @@
                                         <span class="input-group-text">${data.targetSatkerValue.toString().replaceAll('.',',')}</span>
                                     </div>
                                     <div class="input-group-append">
-                                        <span class="input-group-text">${data.targetSatkerSatuan}</span>
+                                        <span class="input-group-text">
+                                        ${ data.targetSatkerSatuan.split(';')[0]}
+                                     </span>
                                     </div>
                                 </div>
                             </td>
