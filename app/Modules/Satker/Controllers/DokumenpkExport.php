@@ -128,7 +128,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
 
-        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen);
+        // $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen);
 
         $this->dokumenLoadedStatus = $dataDokumen['status'];
 
@@ -176,6 +176,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenOpening($pdf, $dataDokumen)
     {
+        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen, 16, 20);
+
         $pdf->SetMargins(30, 10, 30, 0);
         $pdf->AddPage('L', 'A4');
 
@@ -361,6 +363,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType, $qrcode)
     {
+        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen, 6, 10);
+
         // header('Content-Type: text/html; charset=utf-8');
         $pdf->SetMargins(0, 16, 0, 0);
         $pdf->AddPage('L', 'A4');
@@ -403,7 +407,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $divisiPihak2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
         $divisiPihak2 = str_replace('MENTERI', 'KEMENTERIAN', $divisiPihak2);
         $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
-
+        // Set top margin (adjust the value as needed)
+        $topMargin = 2;
+        $pdf->SetY($topMargin);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetFillColor(255);
         $pdf->SetTextColor(0);
@@ -556,6 +562,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     case 'output':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' .  $satuan_target;
+                        $targetValue = 0 . " %";
 
                         $sumOutputValue     = 0;
                         $outputSatuan = '';
@@ -600,7 +607,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                         break;
                     default:
-                        $targetValue = '';
+                        $targetValue = 0;
                         break;
                 }
 
@@ -806,7 +813,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell($widthNamaPejabat, 4, strtoupper($_ttd['person2Name']), 0, 0, 'C');
     }
 
-    private function pdf_renderWatermarkKonsep($pdf, $_dataDokumen)
+    private function pdf_renderWatermarkKonsep($pdf, $_dataDokumen, $topBorder, $topWatermark)
     {
 
 
@@ -852,12 +859,16 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $pdf->watermarkOffsetLeft        = 254.5;
                 $pdf->watermarkBorder_width      = 24;
                 $pdf->watermarkBorder_offsetLeft = 250;
+                $pdf->watermarkBorder_offsetTop = $topBorder;
+                $pdf->watermarkOffsetTop        = $topWatermark;
             }
             if (($_dataDokumen['status'] == 'revision' && $_dataDokumen['acc_by'] == null) || ($rev_number['revision_number'] != $_dataDokumen['revision_number'])) {
                 $pdf->watermarkText = 'KOREKSI';
                 $pdf->watermarkOffsetLeft        = 202.5;
                 $pdf->watermarkBorder_width      = 24;
                 $pdf->watermarkBorder_offsetLeft = 200;
+                $pdf->watermarkBorder_offsetTop = $topBorder;
+                $pdf->watermarkOffsetTop        = $topWatermark;
             }
         }
 
@@ -867,6 +878,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $pdf->watermarkOffsetLeft        = 246;
             $pdf->watermarkBorder_width      = 24;
             $pdf->watermarkBorder_offsetLeft = 240;
+            $pdf->watermarkBorder_offsetTop = $topBorder;
+            $pdf->watermarkOffsetTop        = $topWatermark;
         }
     }
 
@@ -1007,10 +1020,12 @@ class PDF extends FPDF
     public $watermarkText              = '';
     public $watermarkSubText           = '';
     public $watermarkOffsetLeft        = 70;
+    public $watermarkOffsetTop       = 0;
     public $watermarkSubTextOffsetLeft = 95;
     public $watermarkBorder_width      = 0;
     public $watermarkBorder_offsetLeft = 0;
     public $watermarkBorder_offsetRight = 0;
+    public $watermarkBorder_offsetTop = 0;
 
     var $widths;
     var $aligns;
@@ -1101,7 +1116,8 @@ class PDF extends FPDF
 
             //bg hitam
             $this->SetDrawColor(0, 0, 0);
-            $this->Rect($this->watermarkBorder_offsetLeft, 16, $this->watermarkBorder_width, 5, 'D');
+            // $this->Rect($this->watermarkBorder_offsetLeft, 16, $this->watermarkBorder_width, 5, 'D');
+            $this->Rect($this->watermarkBorder_offsetLeft, $this->watermarkBorder_offsetTop, $this->watermarkBorder_width, 5, 'D');
 
             //Put the watermark
             $this->SetFont('Times', 'B', 11);
@@ -1109,7 +1125,8 @@ class PDF extends FPDF
             //$this->RotatedText($this->watermarkOffsetLeft, 110, $this->watermarkText, 0);
             // $this->SetTextColor(220,20,60); //text merah
             $this->SetTextColor(0, 0, 0); //text hitam
-            $this->RotatedText($this->watermarkOffsetLeft, 20, $this->watermarkText, 0);
+            // $this->RotatedText($this->watermarkOffsetLeft, 20, $this->watermarkText, 0);
+            $this->RotatedText($this->watermarkOffsetLeft, $this->watermarkOffsetTop, $this->watermarkText, 0);
 
 
             $this->SetFont('Times', 'B', 40);
