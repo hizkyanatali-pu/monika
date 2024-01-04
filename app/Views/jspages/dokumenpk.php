@@ -2584,8 +2584,9 @@
                 if (target_satuan == output_satuan_indikator) {
 
                     totalJumlahTarget += target_nilai_number;
-                    totalJumlahOutcome += outcome_nilai_number;
                 }
+                totalJumlahOutcome += outcome_nilai_number;
+
             }
 
         });
