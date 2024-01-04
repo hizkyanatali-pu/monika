@@ -49,7 +49,7 @@ $title = $title ?? '';
 
     <?php echo link_tag('css/skins/aside/light.css'); ?>
 
-    <?php echo link_tag('css/custom.css'); ?>
+    <?php echo link_tag('css/custom.css?9888'); ?>
     <!--end::Layout Skins -->
 
 </head>
