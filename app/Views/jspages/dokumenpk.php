@@ -2606,11 +2606,12 @@
             var jumlahDesimal_outcome = (totalJumlahOutcome % 1 === 0) ? 0 : totalJumlahOutcome.toString().split('.')[1].length;
 
             totalJumlahTargetDenganKoma = totalJumlahTarget.toLocaleString('id-ID', {
-                minimumFractionDigits: jumlahDesimal_target
+                // minimumFractionDigits: jumlahDesimal_target
+                minimumFractionDigits: 2
             });
 
             totalJumlahOutcomeDenganKoma = totalJumlahOutcome.toLocaleString('id-ID', {
-                minimumFractionDigits: jumlahDesimal_outcome
+                minimumFractionDigits: 2
             });
 
 
