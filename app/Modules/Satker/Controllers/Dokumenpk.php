@@ -428,12 +428,23 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ->where("deleted_at is null")
                 ->where("tahun", $sessionYear)->orderBy('id', 'desc')->get()->getRow();
 
+            // kode satker 498077 = PJSA BATANGHARI 2024 ganti kode ke 633074
+            // kode satker 498366 = Bendungan Cimanuk 2024 ganti kode ke 690690
+
+            if ($idbalai->satkerid == "498077" and $sessionYear > 2023) {
+                $idsatker = "633074";
+            } elseif ($idbalai->satkerid == "498077" and $sessionYear > 2023) {
+                $idsatker = "690690";
+            } else {
+
+                $idsatker =  $idbalai->satkerid;
+            }
 
             $createByAdmin = $this->session->get('createDokumenByAdmin');
             $session_userType   = $createByAdmin['byAdmin_user_type'] ?? "balai";
             $session_satkerNama = $createByAdmin['byAdmin_satker_nama'] ?? null;
             $session_balaiNama  = $createByAdmin['byAdmin_balai_nama'] ?? null;
-            $session_satkerId   = $createByAdmin['byAdmin_satker_id'] ?? $idbalai->satkerid;
+            $session_satkerId   = $createByAdmin['byAdmin_satker_id'] ??  $idsatker;
             $session_balaiId    = $createByAdmin['byAdmin_balai_id'] ?? $idbalai->balaiid;
         } else {
             $session_userType   = $this->user['user_type'];
