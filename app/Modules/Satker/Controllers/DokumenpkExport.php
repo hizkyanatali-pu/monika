@@ -363,7 +363,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType, $qrcode)
     {
-        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen, 6, 10);
+        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen, 8, 12);
 
         // header('Content-Type: text/html; charset=utf-8');
         $pdf->SetMargins(0, 16, 0, 0);
@@ -408,7 +408,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $divisiPihak2 = str_replace('MENTERI', 'KEMENTERIAN', $divisiPihak2);
         $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
         // Set top margin (adjust the value as needed)
-        $topMargin = 2;
+        $topMargin = 6;
         $pdf->SetY($topMargin);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetFillColor(255);
