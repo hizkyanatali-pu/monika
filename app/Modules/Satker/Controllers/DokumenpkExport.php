@@ -363,7 +363,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType, $qrcode)
     {
-        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen, 8, 12);
+        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen, 6, 10);
 
         // header('Content-Type: text/html; charset=utf-8');
         $pdf->SetMargins(0, 16, 0, 0);
