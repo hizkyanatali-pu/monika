@@ -434,7 +434,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             if ($idbalai->satkerid == "498077" and $sessionYear > 2023) {
                 $idsatker = "633074";
             } elseif ($idbalai->satkerid == "498077" and $sessionYear > 2023) {
-                $idsatker = "690690";
+                $idsatker = "690680";
             } else {
 
                 $idsatker =  $idbalai->satkerid;
