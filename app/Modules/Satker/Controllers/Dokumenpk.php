@@ -389,21 +389,42 @@ class Dokumenpk extends \App\Controllers\BaseController
             m_satker.satker,m_satker.satkerid
         ")
             ->where('balaiid', $session_balaiId)->get()->getResult();
+
+
+
         $list = [];
         foreach ($balai_checklistSatker as $data) {
+            // perubahan kode satker SNVT PELAKSANAAN JARINGAN SUMBER AIR WS BATANGHARI PROVINSI SUMATERA BARAT dan SNVT PEMBANGUNAN BENDUNGAN BBWS CIMANUK CISANGGARUNG (2024)
+            if (($data->satkerid != "498366" and $data->satkerid != "498077") and $this->user['tahun'] > 2023) {
 
-            $dokPK = $this->dokumenSatker->select("satkerid,status")
-                ->where('tahun', $this->user['tahun'])
-                ->where('satkerid', $data->satkerid)
-                ->where('deleted_at', null)
-                ->where('status !=', 'revision')
-                ->orderBy('id', 'DESC')
-                ->get()->getRow();
+                $dokPK = $this->dokumenSatker->select("satkerid,status")
+                    ->where('tahun', $this->user['tahun'])
+                    ->where('satkerid', $data->satkerid)
+                    ->where('deleted_at', null)
+                    ->where('status !=', 'revision')
+                    ->orderBy('id', 'DESC')
+                    ->get()->getRow();
 
-            $list[] = [
-                'satker' => $data->satker,
-                'satkerCheck' =>  $dokPK->status ?? ''
-            ];
+                $list[] = [
+                    'satker' => $data->satker,
+                    'satkerCheck' =>  $dokPK->status ?? ''
+                ];
+            } elseif (
+                ($data->satkerid != "690680" and $data->satkerid != "633074" and $this->user['tahun'] < 2024)
+            ) {
+                $dokPK = $this->dokumenSatker->select("satkerid,status")
+                    ->where('tahun', $this->user['tahun'])
+                    ->where('satkerid', $data->satkerid)
+                    ->where('deleted_at', null)
+                    ->where('status !=', 'revision')
+                    ->orderBy('id', 'DESC')
+                    ->get()->getRow();
+
+                $list[] = [
+                    'satker' => $data->satker,
+                    'satkerCheck' =>  $dokPK->status ?? ''
+                ];
+            }
         }
 
         return $this->respond([
@@ -696,20 +717,54 @@ class Dokumenpk extends \App\Controllers\BaseController
             m_satker.satker,m_satker.satkerid
         ")
                 ->where('balaiid', $session_balaiId)->get()->getResult();
+            // foreach ($balai_checklistSatker as $data) {
+
+            //     $dokPK = $this->dokumenSatker->select("satkerid,status")
+            //         ->where('tahun', $this->user['tahun'])
+            //         ->where('satkerid', $data->satkerid)
+            //         ->where('deleted_at', null)
+            //         ->where('status !=', 'revision')
+            //         ->orderBy('id', 'DESC')
+            //         ->get()->getRow();
+
+            //     $list[] = [
+            //         'satker' => $data->satker,
+            //         'satkerCheck' =>  $dokPK->status ?? ''
+            //     ];
+            // }
+
             foreach ($balai_checklistSatker as $data) {
+                // perubahan kode satker SNVT PELAKSANAAN JARINGAN SUMBER AIR WS BATANGHARI PROVINSI SUMATERA BARAT dan SNVT PEMBANGUNAN BENDUNGAN BBWS CIMANUK CISANGGARUNG (2024)
+                if (($data->satkerid != "498366" and $data->satkerid != "498077") and $this->user['tahun'] > 2023) {
 
-                $dokPK = $this->dokumenSatker->select("satkerid,status")
-                    ->where('tahun', $this->user['tahun'])
-                    ->where('satkerid', $data->satkerid)
-                    ->where('deleted_at', null)
-                    ->where('status !=', 'revision')
-                    ->orderBy('id', 'DESC')
-                    ->get()->getRow();
+                    $dokPK = $this->dokumenSatker->select("satkerid,status")
+                        ->where('tahun', $this->user['tahun'])
+                        ->where('satkerid', $data->satkerid)
+                        ->where('deleted_at', null)
+                        ->where('status !=', 'revision')
+                        ->orderBy('id', 'DESC')
+                        ->get()->getRow();
 
-                $list[] = [
-                    'satker' => $data->satker,
-                    'satkerCheck' =>  $dokPK->status ?? ''
-                ];
+                    $list[] = [
+                        'satker' => $data->satker,
+                        'satkerCheck' =>  $dokPK->status ?? ''
+                    ];
+                } elseif (
+                    ($data->satkerid != "690680" and $data->satkerid != "633074" and $this->user['tahun'] < 2024)
+                ) {
+                    $dokPK = $this->dokumenSatker->select("satkerid,status")
+                        ->where('tahun', $this->user['tahun'])
+                        ->where('satkerid', $data->satkerid)
+                        ->where('deleted_at', null)
+                        ->where('status !=', 'revision')
+                        ->orderBy('id', 'DESC')
+                        ->get()->getRow();
+
+                    $list[] = [
+                        'satker' => $data->satker,
+                        'satkerCheck' =>  $dokPK->status ?? ''
+                    ];
+                }
             }
 
             $valudasiCreatedDokumen = !(in_array('', array_column($list, 'satkerCheck')) || in_array('hold', array_column($list, 'satkerCheck')) || in_array('tolak', array_column($list, 'satkerCheck')));
