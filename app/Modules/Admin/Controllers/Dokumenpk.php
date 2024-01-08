@@ -555,12 +555,14 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     private function updateDokumenPK_row($input, $templateID)
     {
-        // echo json_encode($input);die;
+
         $rows = [];
         $input_rowRumus = [];
         $rowsNumber = 1000;
+        $this->dokumenPk_rowRumus->delete(['template_id' => $templateID]);
+
         foreach ($input['formTable_title'] as $key_rowTitle => $data_rowTitle) {
-            // $rowId = $input['formTable_idRow'][$key_rowTitle];
+            $rowId = $input['formTable_idRow'][$key_rowTitle];
 
             array_push($rows, [
                 'id'             => $input['formTable_idRow'][$key_rowTitle],
@@ -573,12 +575,19 @@ class Dokumenpk extends \App\Controllers\BaseController
             ]);
 
 
+            // print_r($input);
+            // die;
+
+            // if ($input['formTable_rumus'][$key_rowTitle]) {
+            //     array_push($input_rowRumus, [
+            //         'rowId'     => $input['formTable_idRow'][$key_rowTitle],
+            //         'rumus'     => $input['formTable_rumus'][$key_rowTitle]
+            //     ]);
+            //     $this->updateDokumenPK_rowRumus($input_rowRumus, $templateID);
+            // }
+
             if ($input['formTable_rumus'][$key_rowTitle]) {
-                array_push($input_rowRumus, [
-                    'rowId'     => $input['formTable_idRow'][$key_rowTitle],
-                    'rumus'     => $input['formTable_rumus'][$key_rowTitle]
-                ]);
-                $this->updateDokumenPK_rowRumus($input_rowRumus, $templateID);
+                $this->insertDokumenPK_rowRumus(explode(',', $input['formTable_rumus'][$key_rowTitle]), $rowId, $templateID);
             }
         }
         // var_dump($rows[0]['id']);die;
