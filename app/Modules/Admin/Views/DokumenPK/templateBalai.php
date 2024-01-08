@@ -685,64 +685,67 @@
                     idRow: data.id
                 }))
             } else {
-                // if(_data.rowRumus[indexDataRumus]) {
-                //     element_formTable.append(render_rowForm({
-                //         namaItem: data.title,
-                //         targetSatuan: data.target_satuan,
-                //         outcomeSatuan: data.outcome_satuan,
-                //         rumudJml: data.rumusJml,
-                //         no_urut: data.no_urut,
-                //         idRow: data.id,
-                //         rumus: _data.rowRumus[indexDataRumus].rumus
-                //     }))
+                if (_data.rowRumus[indexDataRumus]) {
+                    element_formTable.append(render_rowForm({
+                        namaItem: data.title,
+                        targetSatuan: data.target_satuan,
+                        outcomeSatuan: data.outcome_satuan,
+                        rumudJml: data.rumusJml,
+                        no_urut: data.no_urut,
+                        idRow: data.id,
+                        rumus: _data.rowRumus[indexDataRumus].rumus
+                    }))
 
-                //     if (parseInt(data.rumusJml) > 0) {
-                //         $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
-                //         indexDataRumus++
+                    if (parseInt(data.rumusJml) > 0) {
+                        $('input._rumus:last').val(_data.rowRumus[indexDataRumus].rumus)
+                        indexDataRumus++
 
-                //         for (let index = 1; index < parseInt(data.rumusJml); index++) {
-                //             $('.__tambah_row-form-rumus-item:last').trigger('click')
+                        for (let index = 1; index < parseInt(data.rumusJml); index++) {
+                            $('.__tambah_row-form-rumus-item:last').trigger('click')
 
-                //             $('input._rumus:last').attr('value',_data.rowRumus[indexDataRumus].rumus)
-                //             indexDataRumus++
+                            $('input._rumus:last').attr('value', _data.rowRumus[indexDataRumus].rumus)
+                            indexDataRumus++
+                        }
+                    }
+                }
+
+                // if (data.template_id != 29) {
+                //     if (_data.rowRumus) {
+                //         // Menemukan data rumus yang sesuai dengan ID baris
+                //         const rumusBaris = _data.rowRumus.find(rumus => rumus.rowId === data.id);
+                //         if (rumusBaris) {
+                //             // Jika ditemukan, tambahkan data ke formulir
+                //             element_formTable.append(render_rowForm({
+                //                 namaItem: data.title,
+                //                 targetSatuan: data.target_satuan,
+                //                 outcomeSatuan: data.outcome_satuan,
+                //                 idRow: data.id,
+                //                 no_urut: data.no_urut,
+                //                 rumus: rumusBaris.rumus
+                //             }));
+
+                //             if (parseInt(data.rumusJml) > 0) {
+                //                 // Jika jumlah rumus pada baris lebih dari 0, isi input dan tambahkan jika diperlukan
+                //                 $('input._rumus:last').val(rumusBaris.rumus);
+
+                //                 for (let index = 1; index < parseInt(data.rumusJml); index++) {
+                //                     $('.__tambah_row-form-rumus-item:last').trigger('click');
+                //                     $('input._rumus:last').val(rumusBaris.rumus);
+                //                 }
+                //             }
+                //         } else {
+                //             element_formTable.append(render_rowForm({
+                //                 namaItem: data.title,
+                //                 targetSatuan: data.target_satuan,
+                //                 outcomeSatuan: data.outcome_satuan,
+                //                 idRow: data.id,
+                //                 no_urut: data.no_urut,
+                //             }))
+
                 //         }
                 //     }
                 // }
-                if (_data.rowRumus) {
-                    // Menemukan data rumus yang sesuai dengan ID baris
-                    const rumusBaris = _data.rowRumus.find(rumus => rumus.rowId === data.id);
 
-                    if (rumusBaris) {
-                        // Jika ditemukan, tambahkan data ke formulir
-                        element_formTable.append(render_rowForm({
-                            namaItem: data.title,
-                            targetSatuan: data.target_satuan,
-                            outcomeSatuan: data.outcome_satuan,
-                            idRow: data.id,
-                            no_urut: data.no_urut,
-                            rumus: rumusBaris.rumus
-                        }));
-
-                        if (parseInt(data.rumusJml) > 0) {
-                            // Jika jumlah rumus pada baris lebih dari 0, isi input dan tambahkan jika diperlukan
-                            $('input._rumus:last').val(rumusBaris.rumus);
-
-                            for (let index = 1; index < parseInt(data.rumusJml); index++) {
-                                $('.__tambah_row-form-rumus-item:last').trigger('click');
-                                $('input._rumus:last').val(rumusBaris.rumus);
-                            }
-                        }
-                    } else {
-                        element_formTable.append(render_rowForm({
-                            namaItem: data.title,
-                            targetSatuan: data.target_satuan,
-                            outcomeSatuan: data.outcome_satuan,
-                            idRow: data.id,
-                            no_urut: data.no_urut,
-                        }))
-
-                    }
-                }
             }
         })
 
