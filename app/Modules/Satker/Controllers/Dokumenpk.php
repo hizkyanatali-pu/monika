@@ -1071,6 +1071,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             $inserted_dokumenSatker['pihak1_id']      = $session_balaiId;
             $inserted_dokumenSatker['pihak1_initial'] = $dataBalai->jabatan_penanda_tangan_pihak_1;
+            $inserted_dokumenSatker['pihak2_initial'] = $dataBalai->jabatan_penanda_tangan_pihak_2;
             $inserted_dokumenSatker['dokumen_type']   = 'balai';
             $inserted_dokumenSatker['balaiid']        = $session_balaiId;
         }
