@@ -451,14 +451,15 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             // kode satker 498077 = PJSA BATANGHARI 2024 ganti kode ke 633074
             // kode satker 498366 = Bendungan Cimanuk 2024 ganti kode ke 690690
+            if ($idbalai) {
+                if ($idbalai->satkerid == "498077" and $sessionYear > 2023) {
+                    $idsatker = "633074";
+                } elseif ($idbalai->satkerid == "498077" and $sessionYear > 2023) {
+                    $idsatker = "690680";
+                } else {
 
-            if ($idbalai->satkerid == "498077" and $sessionYear > 2023) {
-                $idsatker = "633074";
-            } elseif ($idbalai->satkerid == "498077" and $sessionYear > 2023) {
-                $idsatker = "690680";
-            } else {
-
-                $idsatker =  $idbalai->satkerid;
+                    $idsatker =  $idbalai->satkerid;
+                }
             }
 
             $createByAdmin = $this->session->get('createDokumenByAdmin');
@@ -607,7 +608,13 @@ class Dokumenpk extends \App\Controllers\BaseController
                         }
 
                         if ($outputRumus > 0) {
-                            $targetSatkerValue  += $outputRumus;
+                            $target_array = explode(';', $targetSatuan);
+                            $targetSatuan = $target_array[0];
+
+
+                            if (strtolower($targetSatuan)  == strtolower($arr->outcome_satuan)) {
+                                $targetSatkerValue  += $outputRumus;
+                            }
                         }
                     }
                 }

@@ -302,14 +302,27 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
 
 <!-- Modal Preview Cetak Dokumen -->
-<div class="modal fade" id="modal-preview-cetak" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+<div class="modal fade" id="modal-preview-cetak" tabindex="-1" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Preview Dokumen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="clearfix w-100">
+                    <div class="float-left">
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-default pr-2 d-none __back-pilih-dokumen">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <h5 class="modal-title" id="exampleModalLongTitle">Preview Dokumen</h5>
+                            <!-- <h5 class="modal-title pt-2 pl-2">Pilih Dokumen</h5> -->
+                        </div>
+                    </div>
+                    <div class="float-right">
+                        <button type="button" class="btn btn-modal-full text-right" style="margin: -10px;"><i class="fas fa-external-link-alt"></i></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="modal-body p-0">
                 <div class="container-revision-alert-cetak"></div>
