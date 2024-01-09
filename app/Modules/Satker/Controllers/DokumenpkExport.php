@@ -572,7 +572,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         foreach ($templateRowRumus as $key => $dataRumus) {
                             $rumus = $this->dokumenSatker->select(
                                 'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
-                                dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan'
+                                dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan,target_satuan'
                             )
                                 ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
                                 ->join('dokumen_pk_template_row_' . session('userData.tahun'), "(dokumenpk_satker_rows.template_row_id=dokumen_pk_template_row_" . session('userData.tahun') . ".id)", 'left')
@@ -583,7 +583,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                                 ->where('dokumenpk_satker.satkerid is not null')
                                 ->where('dokumenpk_satker.deleted_at is null')
                                 ->where('dokumenpk_satker.tahun', $this->user['tahun'])
-                                ->where('dokumenpk_satker_rows.is_checked', '1')
+                                // ->where('dokumenpk_satker_rows.is_checked', '1')
                                 ->get()->getResult();
 
                             $outcomeRumus = 0;
@@ -591,7 +591,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                             foreach ($rumus as $keyOutcome => $dataOutput) {
                                 $outputRumus += $dataOutput ? ($dataOutput->target_value != '' ? $dataOutput->target_value : 0) : 0;
-                                $outputSatuan = $dataOutput->target_sat ?? trim(explode(";", $dataOutput->target_satuan)[0]);
+                                // $outputSatuan = $dataOutput->target_sat ?? trim(explode(";", $dataOutput->target_satuan)[0]);
+                                $outputSatuan = $data['outcome_satuan'];
                             }
                             if ($sumOutputValue == '' && $outcomeRumus > 0) $sumOutputValue = 0;
 

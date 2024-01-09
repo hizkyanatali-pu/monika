@@ -1916,7 +1916,7 @@
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
-                                        ${ data.targetSatkerSatuan.split(';')[0]}
+                                        ${ data.outcome_satuan.split(';')[0]}
                                      </span>
                                     </div>
                                 </div>
