@@ -660,12 +660,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Info title
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX((297 - array_sum($tableDataWidth)) / 2);
-        $pdf->Cell(100, 7, $dataDokumen['info_title'], 0, 0, 'L');
+        $pdf->Cell(100, 4, $dataDokumen['info_title'], 0, 0, 'L');
 
         // anggaran title
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(183);
-        $pdf->Cell(85, 7, 'Anggaran', 0, 0, 'R');
+        $pdf->Cell(85, 4, 'Anggaran', 0, 0, 'R');
         $pdf->Ln(5);
 
 
@@ -674,19 +674,19 @@ class DokumenpkExport extends \App\Controllers\BaseController
         foreach ($dataDokumenKegiatan as $key_kegiatan => $data_kegiatan) {
             $pdf->SetFont($this->fontFamily, '', 8);
             $pdf->SetX((310 - array_sum($tableDataWidth)) / 2);
-            $pdf->Cell(100, 7, ++$key_kegiatan . ". " . ltrim($data_kegiatan['nama']), 0, 0, 'L');
+            $pdf->Cell(100, 3, ++$key_kegiatan . ". " . ltrim($data_kegiatan['nama']), 0, 0, 'L');
 
             // anggaran perkegiatan value
             $pdf->SetFont($this->fontFamily, 'B', 8);
             $pdf->SetX(170);
-            $pdf->Cell(80, 7, "Rp", 0, 0, 'R');
+            $pdf->Cell(80, 3, "Rp", 0, 0, 'R');
 
             // anggaran value
             $pdf->SetFont($this->fontFamily, '', 8);
             $pdf->SetX(183);
-            $pdf->Cell(100, 7, rupiahFormat($data_kegiatan['anggaran'], false, 2), 0, 0, 'R');
+            $pdf->Cell(100, 3, rupiahFormat($data_kegiatan['anggaran'], false, 2), 0, 0, 'R');
 
-            $pdf->Ln(5);
+            $pdf->Ln(4);
         }
         // $pdf->Ln(2);
 
@@ -700,14 +700,14 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetFont($this->fontFamily, 'B', 8);
         $pdf->SetX(170);
         // $pdf->Cell(80, 7, "JUMLAH : \t \t \t \t \t \t \t Rp", 0, 0, 'R');
-        $pdf->Cell(80, 7, "Rp", 0, 0, 'R');
+        $pdf->Cell(80, 3, "Rp", 0, 0, 'R');
 
 
 
         // total anggaran value
         $pdf->SetFont($this->fontFamily, 'B', 8);
         $pdf->SetX(183);
-        $pdf->Cell(100, 7, rupiahFormat($dataDokumen['total_anggaran'], false, 2), 0, 0, 'R');
+        $pdf->Cell(100, 3, rupiahFormat($dataDokumen['total_anggaran'], false, 2), 0, 0, 'R');
 
         // info
         // foreach ($dataDokumenInfo as $key_info => $data_info) {
@@ -719,7 +719,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         /** TTD Section */
-        $pdf->Ln(10);
+        $pdf->Ln(5);
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
         // $dokumenKopTitle1_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
