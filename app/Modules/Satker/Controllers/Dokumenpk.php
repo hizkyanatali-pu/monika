@@ -493,6 +493,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $pihak1 = $dataBalai->jabatan_penanda_tangan_pihak_1;
             $kotaNama = $dataBalai->kota_penanda_tangan;
             $jabatanPihak2 = $dataBalai->jabatan_penanda_tangan_pihak_2;
+            $pihak2 = $dataBalai->jabatan_penanda_tangan_pihak_2;
             // $sessions = array("balaiid" => $session_balaiId);
         }
 
