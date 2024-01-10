@@ -139,6 +139,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         returnSection:
 
         return view('Modules\Satker\Views\Dokumenpk.php', [
+            'user_type'             =>  $this->user['user_type'] ?? "",
             'title'             => "Perjanjian Kinerja Balai",
             'sessionYear'       => $this->user['tahun'],
             'templateDokumen'   => $dataTemplate,
@@ -220,6 +221,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         return view('Modules\Satker\Views\Dokumenpk.php', [
             'title' => 'Perjanjian Kinerja Satker',
 
+
+            'user_type'             =>  $this->user['user_type'] ?? "",
             'sessionYear'             => $this->user['tahun'],
             'templateDokumen'         => $dataTemplate,
             'templateAvailable'       => count($dataTemplate) > 0 ? 'true' : 'false',
