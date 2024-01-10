@@ -99,12 +99,15 @@
                             $disabled = "";
                         }
                     ?>
-                        <button class="btn btn-primary __opsi-template <?= $disabled ? "d-none" : "" ?>" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php }
-                                                                                                                                                                                                                                                                    if (!isset($balaiCreateForSatker) and empty(session('userData.satker_id'))) {
-                                                                                                                                                                                                                                                                        echo "data-type=uptBalai-add";
-                                                                                                                                                                                                                                                                    } ?>>
-                            <i class="fas fa-plus"></i> Buat Dokumen
-                        </button>
+
+                        <?php if (!isset($balaiCreateForSatker)) { ?>
+                            <button class="btn btn-primary __opsi-template <?= $disabled ? "d-none" : "" ?>" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php }
+                                                                                                                                                                                                                                                                        if (!isset($balaiCreateForSatker) and empty(session('userData.satker_id'))) {
+                                                                                                                                                                                                                                                                            echo "data-type=uptBalai-add";
+                                                                                                                                                                                                                                                                        } ?>>
+                                <i class="fas fa-plus"></i> Buat Dokumen
+                            </button> <?php } ?>
+
                     <?php } ?>
                 </div>
             </div>
@@ -174,7 +177,7 @@
                                     </span>
 
 
-                                    <?php if ($data->status == 'tolak') : ?>
+                                    <?php if ($data->status == 'tolak'  and (!isset($balaiCreateForSatker))) : ?>
                                         <button class="ml-2 btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
                                             <i class="fas fa-edit"></i>Koreksi
                                         </button>
@@ -190,12 +193,12 @@
                                     <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true" title="Cetak">
                                         <i class="fas fa-print"></i>
                                     </button>
-                                    <?php if ($data->status == 'hold') { ?>
+                                    <?php if ($data->status == 'hold' and (!isset($balaiCreateForSatker))) { ?>
                                         <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     <?php } ?>
-                                    <?php if ($data->status == 'setuju') { ?>
+                                    <?php if ($data->status == 'setuju'  and (!isset($balaiCreateForSatker))) { ?>
                                         <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
