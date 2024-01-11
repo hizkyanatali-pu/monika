@@ -366,6 +366,131 @@ class BigData extends \App\Controllers\BaseController
 
 
 
+    public function downloadExcelBigDataNew()
+    {
+
+
+        $year = $this->request->getPost('year');
+
+        // print_r($this->request->getVar('columns'));
+        // exit;
+
+        $defaultKolom = [
+            "m_balai.balai as nmbalai",
+            "m_satker.satker as nmsatker",
+            "monika_data_$year.kdpaket",
+            "monika_data_$year.nmpaket",
+            "pagu_rpm",
+            "pagu_sbsn",
+            "pagu_phln",
+            "pagu_total",
+            "real_rpm",
+            "real_sbsn",
+            "real_phln",
+            "real_total",
+            "progres_keuangan",
+            "progres_fisik"
+        ];
+
+        // $listKolom = $this->request->getVar('columns') ?? $defaultKolom;
+        $listKolom = $this->request->getVar('columns') ? explode(",", $this->request->getVar('columns')) : $defaultKolom;
+
+        $kolom = implode(',', $listKolom);
+
+        $_filterData = $this->request->getVar('filter');
+
+        $table  = "monika_data_" .  $year;
+
+        $q  =  $this->db->table($table)->select($kolom)
+            ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
+            ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
+            ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
+            ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran=$year", 'left')
+            ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran=$year)", 'left')
+            ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran=$year)", 'left')
+            ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
+            ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
+
+        if ($year >= 2020) {
+            $q->join("monika_kontrak_$year as kontrak", "$table.kdsatker = kontrak.kdsatker AND $table.kdprogram = kontrak.kdprogram AND 
+            $table.kdgiat = kontrak.kdgiat AND $table.kdprogram = kontrak.kdprogram AND $table.kdoutput = kontrak.kdoutput AND $table.kdsoutput = kontrak.kdsoutput
+            AND $table.kdkmpnen = kontrak.kdkmpnen AND  $table.kdskmpnen = kontrak.kdskmpnen", 'left');
+        }
+
+
+        $totalData = $this->db->table($table);
+
+
+        if (is_array($_filterData)) {
+            foreach ($_filterData as $key => $value) {
+                if ($key != 'opsiData' && $key != 'pagutotalStart' && $key != 'pagutotalEnd') {
+                    $q->where($table . '.' . $key, $value);
+                    $totalData->where($table . '.' . $key, $value);
+                }
+            }
+
+            if (array_key_exists('opsiData', $_filterData)) {
+                switch ($_filterData['opsiData']) {
+                    case '1':
+                        $q->where("$table.blokir", '0');
+                        $totalData->where("$table.blokir", '0');
+                        break;
+
+                    case '2':
+                        $q->where("$table.blokir >", '0');
+                        $totalData->where("$table.blokir >", '0');
+                        break;
+                }
+            }
+        }
+
+
+        $data = $q->groupBy($table . ".kdpaket")->get()->getResultArray();
+        $kolom_nama = array_keys($data[0]);
+
+
+        // Membuat objek PhpSpreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Menulis header kolom
+        $headerRow = 1;
+        foreach ($kolom_nama as $index => $kolom) {
+
+            $sheet->setCellValueByColumnAndRow($index + 1, $headerRow, $kolom);
+        }
+
+        $dataRow = $headerRow + 1;
+
+        foreach ($data as $rowData) {
+
+            if (!empty($rowData)) { // Periksa apakah array tidak kosong
+                foreach ($kolom_nama as $index => $kolom) {
+                    $sheet->setCellValueByColumnAndRow($index + 1, $dataRow, $rowData[$kolom] ?? ''); // Menggunakan null coalescing untuk mengatasi Undefined offset
+                }
+                $dataRow++;
+            }
+        }
+
+
+        // Membuat nama file Excel
+        $filename = $this->user['tahun'] . '-MONIKA-IMON' . "-" . date('Y-m-d-His') . ".xlsx";
+
+
+        // Simpan ke file Excel
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        // $writer->save(ROOTPATH . 'public/' . $filename);
+
+        // Output ke browser sebagai file Excel
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        ob_end_clean();
+        $writer->save('php://output');
+        exit;
+    }
+
+
     public function downloadExcelBigData()
     {
         // $limitData    = 1000;
@@ -449,7 +574,7 @@ class BigData extends \App\Controllers\BaseController
         // $filename = $this->user['tahun'].'-Data Kegiatan-'.date('Y-m-d-His');
 
         // $filename = 'monika-bigdata-part-' . $this->request->getGet('fileNumber');
-        $filename = 'monika-bigdata-' . date('Y-m-d-His');
+        $filename = 'MONIKA-IMON-' . $this->user['tahun'] . "-" . date('Y-m-d-His');
 
         // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         // header('Content-Disposition: attachment;filename=' . $filename . '.xlsx');

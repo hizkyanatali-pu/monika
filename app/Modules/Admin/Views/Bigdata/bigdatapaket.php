@@ -40,7 +40,7 @@
                     <button class="btn btn-default" data-toggle="modal" data-target="#modalFilterData">
                         <i class="fas fa-filter"></i> Filter Data
                     </button>
-                    <button class="btn btn-default columnList" data-toggle="modal" data-target="#select2_modal">
+                    <button class="btn btn-default columnList" data-toggle="modal" data-target="#ModalFKolom">
                         <i class="fas fa-filter"></i> Kolom Tabel
                     </button>
                     <button class="btn btn-success" name="prepare-download-bigdata">
@@ -66,13 +66,21 @@
         <button id="download-pdf">Download PDF</button>
         <button id="download-html">Download HTML</button>
     </div> -->
+    <!-- Form tersembunyi untuk mengirimkan permintaan ke server -->
+    <form id="downloadData" action="<?= site_url('bigdata/unduh'); ?>" method="post" target="_blank">
+        <!-- Tambahkan input tersembunyi untuk data yang dikirimkan -->
+        <input type="hidden" name="year" id="year" value="">
+        <input type="hidden" name="filter" id="filter" value="">
+        <input type="hidden" name="columns" id="columns" value="">
+    </form>
+
     <div id="example-table"></div>
 
 </div>
 <!-- end:: Content -->
 
 <!--begin::Modal-->
-<div class="modal fade" id="select2_modal" role="dialog" aria-labelledby="" aria-hidden="true">
+<div class="modal fade ModalFKolom" id="ModalFKolom" role="dialog" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -338,6 +346,13 @@
                 case originalValue.includes("blokir"):
                     return "monika_data_" + year + ".blokir as " + originalValue;
 
+                case originalValue.includes("kdkabkota"):
+                    return "monika_data_" + year + ".kdkabkota as " + originalValue;
+                case originalValue.includes("kdlokasi"):
+                    return "monika_data_" + year + ".kdlokasi as " + originalValue;
+                case originalValue.includes("sat"):
+                    return "monika_data_" + year + ".sat as " + originalValue;
+
                 case originalValue.includes("nmsatker"):
                     if (year >= 2020) {
                         return "m_satker.satker as " + originalValue;
@@ -463,6 +478,21 @@
         });
     }
 
+    $('button[name=prepare-download-bigdata]').click(function() {
+        var year = $('#tahun').val();
+
+        var columns = selectedColumns(year);
+
+
+        $('#year').val(year);
+        $('#filter').val(getFilterDataValue());
+        $('#columns').val(columns);
+
+        // Submit form tersembunyi
+        $('#downloadData').submit();
+    })
+
+
 
 
     // document.getElementById("download-xlsx").addEventListener("click", function() {
@@ -504,6 +534,7 @@
             var columns = selectedColumns(year);
             getData(1, 10, columns, year);
 
+            $("#ModalFKolom").modal("hide")
 
         })
 
@@ -528,7 +559,7 @@
 
             var columns = selectedColumns(year);
             getData(1, 10, columns, year);
-
+            $("#modalFilterData").modal("hide")
 
         })
     })
