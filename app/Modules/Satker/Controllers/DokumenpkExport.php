@@ -566,6 +566,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                         $sumOutputValue     = 0;
                         $outputSatuan = '';
+                        $average = 0;
 
 
                         $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $data['template_id'], 'rowId' =>  $data['id']])->get()->getResult();
@@ -601,7 +602,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                                 $sumOutputValue  += $outputRumus;
                             }
                             $rSeparator = explode('.',  $sumOutputValue);
-                            $targetValue = number_format($sumOutputValue, strlen($rSeparator[1]), ',', '.') .  ' ' .  $outputSatuan;
+                            $targetValue = number_format($data['id'] == "291011" ? ($sumOutputValue / 3) : $sumOutputValue, strlen($rSeparator[1]), ',', '.') .  ' ' .  $outputSatuan;
                         }
 
 
