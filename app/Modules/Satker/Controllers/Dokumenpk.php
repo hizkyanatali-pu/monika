@@ -525,6 +525,8 @@ class Dokumenpk extends \App\Controllers\BaseController
             $satkerList = array();
             $rowPaket = array();
             $targetSatuan = '';
+            $average = 0;
+
 
 
 
@@ -600,6 +602,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                             $targetSatuan = $dataOutcome->target_sat ?? $dataOutcome->target_satuan;
 
 
+
+
                             $rowPaket = array_merge($rowPaket, $hasilPaket);
                         }
 
@@ -608,15 +612,26 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                         if ($outcomeRumus > 0) {
                             $outcomeSatkerValue += $outcomeRumus;
+                            //indikator dukman
+                            if ($arr->id == "291011") {
+                                // 1 tandanya on 
+                                $average  = 1;
+                            }
                         }
 
                         if ($outputRumus > 0) {
                             $target_array = explode(';', $targetSatuan);
                             $targetSatuan = $target_array[0];
 
-
+                            // target satker yang dijumlahkan hanya satuannya yang sama dengan satuan yang di balai
                             if (strtolower($targetSatuan)  == strtolower($arr->outcome_satuan)) {
                                 $targetSatkerValue  += $outputRumus;
+                            }
+
+                            //indikator dukman
+                            if ($arr->id == "291011") {
+
+                                $targetSatkerValue = 0;
                             }
                         }
                     }
@@ -696,7 +711,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'outcome_satuan'          => $arr->outcome_satuan,
                 'type'                    => $arr->type,
                 'targetSatkerValue'       => $targetSatkerValue,
-                'outcomeSatkerValue'      => $outcomeSatkerValue,
+                'outcomeSatkerValue'      => ($average == 1 ? ($outcomeSatkerValue / 3) : $outcomeSatkerValue),
                 'targetSatkerSatuan'       => $targetSatuan,
                 'target_balai_value'      => $targetDefaultValue,
                 'targetBalaiDefualtValue' => $targetBalaiDefualtValue,
