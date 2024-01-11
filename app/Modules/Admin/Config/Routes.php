@@ -248,6 +248,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('load-data', '\Modules\Admin\Controllers\BigData::loadData');
                 $routes->get('filter-select-lookup', '\Modules\Admin\Controllers\BigData::filterSelectLookup');
 
+                $routes->group('unduh', ['namespace' => 'App\Controllers'], function ($routes) {
+                    $routes->post('/', '\Modules\Admin\Controllers\BigData::downloadExcelBigDataNew');
+                });
+
                 $routes->group('download', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\BigData::downloadExcelBigData');
                     $routes->get('prepare', '\Modules\Admin\Controllers\BigData::prepareToDownload');
