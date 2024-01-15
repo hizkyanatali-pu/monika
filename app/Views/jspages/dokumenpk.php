@@ -2540,6 +2540,8 @@
         var errorMessages = [];
         var totalJumlahTarget = 0;
         var totalJumlahOutcome = 0;
+        var TargetlengthFix = 2;
+        var OutcomelengthFix = 2;
 
         $('.checkbox:checked').each(function() {
             var paketId = $(this).attr('val');
@@ -2578,12 +2580,25 @@
 
                 target_nilai_number = parseFloat(target_nilai_number_remove_titik.replace(',', '.'));
                 outcome_nilai_number = parseFloat(outcome_nilai_number_remove_titik.replace(',', '.'));
+
+
                 let elm_output_satuan_indikator = $('.__inputTemplateRow-target[data-row-id=' + indikatorId + ']').data('targetsatuan');
                 let output_satuan_indikator = elm_output_satuan_indikator.split(";")[0];
 
                 if (target_satuan == output_satuan_indikator) {
-
                     totalJumlahTarget += target_nilai_number;
+                }
+
+
+                if (target_satuan.trim().toLowerCase() === "m3/detik") {
+
+                    TargetlengthFix = 4;
+                }
+
+
+                if (outcome_satuan.trim().toLowerCase() === "m3/detik") {
+
+                    OutcomelengthFix = 4;
                 }
                 totalJumlahOutcome += outcome_nilai_number;
 
@@ -2600,22 +2615,24 @@
             var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
             totalPaketElement.html(selectedItems.length);
 
-            var totalTarget_nilai = $('.__inputTemplateRow-target[data-row-id=' + indikatorId + ']')
-            var totalOutcome_nilai = $('.__inputTemplateRow-outcome[data-row-id=' + indikatorId + ']')
 
-            var jumlahDesimal_target = (totalJumlahTarget % 1 === 0) ? 0 : totalJumlahTarget.toString().split('.')[1].length;
-            var jumlahDesimal_outcome = (totalJumlahOutcome % 1 === 0) ? 0 : totalJumlahOutcome.toString().split('.')[1].length;
+
+            var jumlahDesimal_target = (totalJumlahTarget % 1 === 0) ? 0 : totalJumlahTarget.toFixed(TargetlengthFix).toString().split('.')[1].length;
+            var jumlahDesimal_outcome = (totalJumlahOutcome % 1 === 0) ? 0 : totalJumlahOutcome.toFixed(OutcomelengthFix).toString().split('.')[1].length;
+
+            console.log(jumlahDesimal_outcome);
 
             totalJumlahTargetDenganKoma = totalJumlahTarget.toLocaleString('id-ID', {
                 // minimumFractionDigits: jumlahDesimal_target
-                minimumFractionDigits: 2
+                minimumFractionDigits: jumlahDesimal_target
             });
 
             totalJumlahOutcomeDenganKoma = totalJumlahOutcome.toLocaleString('id-ID', {
-                minimumFractionDigits: 2
+                minimumFractionDigits: jumlahDesimal_outcome
             });
 
-
+            var totalTarget_nilai = $('.__inputTemplateRow-target[data-row-id=' + indikatorId + ']')
+            var totalOutcome_nilai = $('.__inputTemplateRow-outcome[data-row-id=' + indikatorId + ']')
             totalTarget_nilai.val(totalJumlahTargetDenganKoma);
             totalOutcome_nilai.val(totalJumlahOutcomeDenganKoma);
 
