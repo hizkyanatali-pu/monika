@@ -565,7 +565,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     foreach ($templateRowRumus as $key => $data) {
                         $targetRumusOutcome = $this->dokumenSatker->select(
                             'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
-                            dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan'
+                            dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan,dokumenpk_satker_rows.outcome_sat,outcome_satuan'
                         )
                             ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
                             ->join('dokumen_pk_template_row_' . session('userData.tahun'), "(dokumenpk_satker_rows.template_row_id=dokumen_pk_template_row_" . session('userData.tahun') . ".id)", 'left')
@@ -589,6 +589,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                             $outputRumus += $dataOutcome ? ($dataOutcome->target_value != '' ? $dataOutcome->target_value : 0) : 0;
                             $outcomeRumus += $dataOutcome ? ($dataOutcome->outcome_value != '' ? $dataOutcome->outcome_value : 0) : 0;
 
+                            // print_r($outcomeRumus . " , \n");
+
+
                             if (!in_array($dataOutcome->satkerid, $satkerList)) {
                                 array_push($satkerList, $dataOutcome->satkerid);
                             }
@@ -599,7 +602,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                                 ->where('template_row_id', $dataOutcome->template_row_id)
                                 ->get()->getResult();
 
+                            //satuan satker
                             $targetSatuan = $dataOutcome->target_sat ?? $dataOutcome->target_satuan;
+                            $outcomeSatuan = $dataOutcome->outcome_sat ?? $dataOutcome->outcome_satuan;
 
 
 
@@ -611,7 +616,12 @@ class Dokumenpk extends \App\Controllers\BaseController
                         if ($targetSatkerValue == '' && $outputRumus > 0) $targetSatkerValue = 0;
 
                         if ($outcomeRumus > 0) {
-                            $outcomeSatkerValue += $outcomeRumus;
+                            // $outcomeSatkerValue += $outcomeRumus;
+                            $satuanOutcomeFix = (strtolower($outcomeSatuan) == "hektar" ? "ha" : strtolower($outcomeSatuan));
+
+                            if ($satuanOutcomeFix == strtolower($arr->target_satuan)) {
+                                $outcomeSatkerValue += $outcomeRumus;
+                            }
                             //indikator dukman
                             if ($arr->id == "291011") {
                                 // 1 tandanya on 
@@ -622,6 +632,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         if ($outputRumus > 0) {
                             $target_array = explode(';', $targetSatuan);
                             $targetSatuan = $target_array[0];
+
 
                             // target satker yang dijumlahkan hanya satuannya yang sama dengan satuan yang di balai
                             if (strtolower($targetSatuan)  == strtolower($arr->outcome_satuan)) {
