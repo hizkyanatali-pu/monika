@@ -213,27 +213,28 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
         $dokumenKopTitle2 = $dokumenKopTitle2;
         $dokumenKopTitle3 = $dokumenKopTitle3;
+        // dinamis font size
+        $fontsize = ($dataDokumen['satkerid'] == '049136' ? '10.8' : '12');
 
-        $pdf->SetFont('Times', 'B', 15);
+        $pdf->SetFont('Times', 'B', 13);
         $pdf->SetFillColor(255);
         $pdf->SetTextColor(0);
+
         // Kop Title 1
         $width_kopTitle1 = $pdf->GetStringWidth($dokumenKopTitle1) + 6;
         $pdf->SetX((300 - $width_kopTitle1) / 2);
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
         // Kop Title 2
-        // jika satker dinas jawatengah
-        $fontsize = ($dataDokumen['satkerid'] == '039428' ? '12' : '13');
         $pdf->SetFont('Times', 'B', $fontsize);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
-        $pdf->SetX((300 - $width_kopTitle2) / 2);
+        // $pdf->SetX((300 - $width_kopTitle2) / 2);
         // $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
-        $pdf->MultiCell($width_kopTitle2, 4, $dokumenKopTitle2, 0, 'C');
+        $pdf->MultiCell(0, 4, $dokumenKopTitle2, 0, 'C');
 
         // Kop Title 3
         $kopTitle3 = $dokumenKopTitle3;
-        $pdf->SetFont('Times', 'B', 13);
+        $pdf->SetFont('Times', 'B', 12);
         $width_kopTitle3 = $pdf->GetStringWidth($dokumenKopTitle3) + 6;
         $pdf->SetX((300 - $width_kopTitle3) / 2);
         $pdf->Cell($width_kopTitle3, 6, $kopTitle3, 0, 1, 'C');
