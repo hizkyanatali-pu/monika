@@ -227,9 +227,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $fontsize = ($dataDokumen['satkerid'] == '039428' ? '12' : '13');
         $pdf->SetFont('Times', 'B', $fontsize);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
-        // $pdf->SetX((300 - $width_kopTitle2) / 2);
+        $pdf->SetX((300 - $width_kopTitle2) / 2);
         // $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
-        $pdf->MultiCell(0, 4, $dokumenKopTitle2, 0, 'C');
+        $pdf->MultiCell($width_kopTitle2, 4, $dokumenKopTitle2, 0, 'C');
 
         // Kop Title 3
         $kopTitle3 = $dokumenKopTitle3;
