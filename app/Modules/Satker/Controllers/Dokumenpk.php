@@ -562,6 +562,9 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
                     $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $arr->template_id, 'rowId' => $arr->id])->get()->getResult();
+                    // print_r($this->db->getLastQuery());
+                    // exit;
+
                     foreach ($templateRowRumus as $key => $data) {
                         $targetRumusOutcome = $this->dokumenSatker->select(
                             'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
@@ -576,7 +579,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                             ->where('dokumenpk_satker.satkerid is not null')
                             ->where('dokumenpk_satker.deleted_at is null')
                             ->where('dokumenpk_satker.tahun', $this->user['tahun'])
-                            // ->where('dokumenpk_satker_rows.is_checked', '1')
+                            ->where('dokumenpk_satker_rows.is_checked', '1')
                             ->get()->getResult();
 
                         // print_r($this->db->getLastQuery());
@@ -619,7 +622,11 @@ class Dokumenpk extends \App\Controllers\BaseController
                             // $outcomeSatkerValue += $outcomeRumus;
                             $satuanOutcomeFix = (strtolower($outcomeSatuan) == "hektar" ? "ha" : strtolower($outcomeSatuan));
 
+
+
+
                             if ($satuanOutcomeFix == strtolower($arr->target_satuan)) {
+                                // print_r($satuanOutcomeFix . " - " . strtolower($arr->target_satuan));
                                 $outcomeSatkerValue += $outcomeRumus;
                             }
                             //indikator dukman
