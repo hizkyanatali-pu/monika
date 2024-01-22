@@ -1562,6 +1562,7 @@
             last_dokumen_id = _data.dokumenExistSameYear.last_dokumen_id;
         }
 
+
         let template = _data.template,
             value_dataId = _dataId ?? last_dokumen_id,
             templateExtraData = _data.templateExtraData,
@@ -1599,6 +1600,15 @@
 
             setDetailDataInForm(_data.dokumenExistSameYear.last_dokumen_id)
         }
+
+        if (_data && _data.dokumenExistSameYear && _data.dokumenExistSameYear.is_revision_same_year !== undefined) {
+            if (_data.dokumenExistSameYear.is_revision_same_year != 0) {
+                inputValue_revisionSameYear = 1;
+            }
+        }
+
+
+
 
 
 
