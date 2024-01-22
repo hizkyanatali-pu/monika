@@ -504,7 +504,8 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $dokumenExistSameYear = $this->dokumenSatker->select("
             id as last_dokumen_id,
-            IFNULL (revision_master_dokumen_id, id) AS revision_master_dokumen_id
+            IFNULL (revision_master_dokumen_id, id) AS revision_master_dokumen_id,
+            is_revision_same_year
         ")
             ->where('template_id', $id)
             ->where('satkerid', $session_satkerId)
