@@ -2094,7 +2094,7 @@
                                         value="${ data.outcomeDefaultValue }"
                                         data-row-id="${ data.id }"
                                         onkeyup="return this.value = formatRupiah(this.value, '')"
-                                        ${data.template_id === '5' || data.template_id === '6' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
+                                        ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
                                         >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>
