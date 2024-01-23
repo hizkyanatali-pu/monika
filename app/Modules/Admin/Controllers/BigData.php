@@ -446,8 +446,11 @@ class BigData extends \App\Controllers\BaseController
             }
         }
 
-
-        $data = $q->groupBy($table . ".kdpaket")->get()->getResultArray();
+        if ($year >= 2020) {
+            $data = $q->groupBy($table . ".kdpaket")->get()->getResultArray();
+        } else {
+            $data = $q->get()->getResultArray();
+        }
         $kolom_nama = array_keys($data[0]);
 
 
