@@ -602,8 +602,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
                             if ($outputRumus > 0) {
                                 $sumOutputValue  += $outputRumus;
                             }
-                            $rSeparator = explode('.',  $sumOutputValue);
-                            $targetValue = number_format($data['id'] == "291011" ? ($sumOutputValue / 3) : $sumOutputValue, strlen($rSeparator[1]), ',', '.') .  ' ' .  $outputSatuan;
+                            $rSeparator = explode('.', $data['id'] != "291011" ?  $sumOutputValue : ($sumOutputValue / 3));
+                            $decimalLength = min(2, strlen($rSeparator[1])); // Mengambil panjang maksimum 2 karakter
+                            $targetValue = number_format(($data['id'] == "291011" ? ($sumOutputValue / 3) : $sumOutputValue), $decimalLength, ',', '.') .  ' ' .  $outputSatuan;
                         }
 
 
