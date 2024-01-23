@@ -664,10 +664,10 @@
                             .map(item => {
                                     return {
                                         paketId: item.idpaket,
-                                        target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
-                                        target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
-                                        outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
-                                        outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                                        target_nilai: item.target_value,
+                                        target_satuan: item.target_unit,
+                                        outcome_nilai: item.output_value,
+                                        outcome_satuan: item.output_unit
                                     };
                                 }
 
@@ -2037,10 +2037,10 @@
                             .map(item => {
                                     return {
                                         paketId: item.idpaket,
-                                        target_nilai: item.target_value, // Isi dengan nilai target_nilai yang sesuai
-                                        target_satuan: item.target_unit, // Isi dengan nilai target_satuan yang sesuai
-                                        outcome_nilai: item.output_value, // Isi dengan nilai outcome_nilai yang sesuai
-                                        outcome_satuan: item.output_unit // Isi dengan nilai outcome_satuan yang sesuai
+                                        target_nilai: item.target_value,
+                                        target_satuan: item.target_unit,
+                                        outcome_nilai: item.output_value,
+                                        outcome_satuan: item.output_unit
                                     };
                                 }
 
