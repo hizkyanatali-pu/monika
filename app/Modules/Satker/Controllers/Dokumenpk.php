@@ -505,7 +505,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $dokumenExistSameYear = $this->dokumenSatker->select("
             id as last_dokumen_id,
             IFNULL (revision_master_dokumen_id, id) AS revision_master_dokumen_id,
-            is_revision_same_year
+            is_revision_same_year,
+            tahun_ttd
         ")
             ->where('template_id', $id)
             ->where('satkerid', $session_satkerId)
@@ -527,7 +528,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $rowPaket = array();
             $targetSatuan = '';
             $average = 0;
-            $outcomeSatkerValueFix = 0;
+
 
 
 
@@ -630,16 +631,6 @@ class Dokumenpk extends \App\Controllers\BaseController
                             if ($satuanOutcomeFix == strtolower($arr->target_satuan)) {
                                 // print_r($satuanOutcomeFix . " - " . strtolower($arr->target_satuan));
                                 $outcomeSatkerValue += $outcomeRumus;
-                                $rSeparator = explode('.', $average == 1 ?  ($outcomeSatkerValue / 3) :  $outcomeSatkerValue);
-
-                                // Inisialisasi $decimalLength dengan nilai default
-                                $decimalLength = 0;
-
-                                // Memeriksa apakah indeks 1 ada dalam array $rSeparator
-                                if (isset($rSeparator[1])) {
-                                    $decimalLength = min(2, strlen($rSeparator[1]));
-                                }
-                                $outcomeSatkerValue = number_format(($average == 1 ?  ($outcomeSatkerValue / 3) : $outcomeSatkerValue), $decimalLength, ',', '.');
                             }
                             //indikator dukman
                             if ($arr->id == "291011") {
@@ -731,6 +722,20 @@ class Dokumenpk extends \App\Controllers\BaseController
             }
 
 
+
+            if ($templateDokumen->type === "master-balai" || $templateDokumen->type === "balai") {
+
+                $rSeparator = explode('.', $average == 1 ?  ($outcomeSatkerValue / 3) :  $outcomeSatkerValue);
+
+                // Inisialisasi $decimalLength dengan nilai default
+                $decimalLength = 0;
+
+                // Memeriksa apakah indeks 1 ada dalam array $rSeparator
+                if (isset($rSeparator[1])) {
+                    $decimalLength = min(2, strlen($rSeparator[1]));
+                }
+                $outcomeSatkerValue = number_format(($average == 1 ?  ($outcomeSatkerValue / 3) : $outcomeSatkerValue), $decimalLength, ',', '.');
+            }
 
 
             return [
@@ -849,7 +854,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'satkerid' => $session_satkerId,
             'kota'  => $this->kota->get()->getResult(),
             'bulan' => ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-            'tahun' => $this->user['tahun'],
+            'tahun' => $dokumenExistSameYear->tahun_ttd ?? $this->user['tahun'],
             'templateExtraData' => [
                 'kotaNama'      => $kotaNama,
                 'jabatanPihak2' => $jabatanPihak2

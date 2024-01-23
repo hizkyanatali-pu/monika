@@ -738,7 +738,7 @@
                     $('input[name=created-kota-nama]').val(res.dokumen.kota_nama)
                     $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
                     $('select[name=created-day]').val(res.dokumen.tanggal).trigger('change')
-                    $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
+                    $('select[name=created-tahun]').val(res.dokumen.tahun_ttd ?? res.dokumen.tahun).trigger('change')
 
                     if (res.dokumen.revision_message != null) {
                         $('.container-revision-alert').html(`
@@ -879,7 +879,7 @@
                 $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
                 $('input[name=created-kota-nama]').val(res.dokumen.kota_nama)
                 $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
-                $('select[name=created-tahun]').val(res.dokumen.tahun).trigger('change')
+                $('select[name=created-tahun]').val(res.dokumen.tahun_ttd ?? res.dokumen.tahun).trigger('change')
             },
             fail: (xhr) => {
                 alert("Terjadi kesalahan pada sistem")
@@ -1562,7 +1562,7 @@
             last_dokumen_id = _data.dokumenExistSameYear.last_dokumen_id;
         }
 
-
+        console.log(_data);
         let template = _data.template,
             value_dataId = _dataId ?? last_dokumen_id,
             templateExtraData = _data.templateExtraData,
@@ -2332,10 +2332,17 @@
         let renderOptions = ''
 
         for (let iTahun = (parseInt(_data)); iTahun <= (parseInt(_data)); iTahun++) {
-            let isSelected = iTahun == date.getFullYear() ? 'selected' : ''
+
+            let isSelected = (iTahun == parseInt(_data) ? 'selected' : '')
 
             renderOptions += `<option ${isSelected}>${iTahun}</option>`
         }
+        // for (let iTahun = (parseInt(_data)); iTahun <= (parseInt(_data)); iTahun++) {
+
+        //     let isSelected = iTahun == date.getFullYear() ? 'selected' : ''
+
+        //     renderOptions += `<option ${isSelected}>${iTahun}</option>`
+        // }
 
         // for (let iTahun = _data; iTahun <= (parseInt(_data)+3); iTahun++) {
         //     let selected = iTahun == _data ? 'selected=selected' : ''
