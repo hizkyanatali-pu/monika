@@ -1223,7 +1223,8 @@ class Dokumenpk extends \App\Controllers\BaseController
             'kota_nama'             => $this->request->getPost('kotaNama'),
             'bulan'                 => $this->request->getPost('bulan'),
             'tanggal'               => $this->request->getPost('tanggal'),
-            'tahun'                 => $this->request->getPost('tahun')
+            'tahun'                 => $this->request->getPost('tahun'),
+            'created_at'            => date('Y-m-d H:i:s')
         ];
 
         if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
