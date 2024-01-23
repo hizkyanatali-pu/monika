@@ -346,6 +346,9 @@
                 case originalValue.includes("blokir"):
                     return "monika_data_" + year + ".blokir as " + originalValue;
 
+                case originalValue.includes("jenis_kontrak"):
+                    return "CASE WHEN monika_data_" + year + ".nmpaket LIKE '%SYC%' THEN 'SYC' WHEN monika_data_" + year + ".nmpaket LIKE '%MYC%' THEN 'MYC' ELSE NULL END AS jenis_kontrak";
+
                 case originalValue.includes("kdkabkota"):
                     return "monika_data_" + year + ".kdkabkota as " + originalValue;
                 case originalValue.includes("kdlokasi"):

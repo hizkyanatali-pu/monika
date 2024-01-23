@@ -120,6 +120,8 @@ class BigData extends \App\Controllers\BaseController
 
         $table  = "monika_data_" .  $year;
         $offset = ($page - 1) * $perpage;
+
+
         $q  =  $this->db->table($table)->select($kolom)
             ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
             ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
@@ -658,7 +660,13 @@ class BigData extends \App\Controllers\BaseController
             toutput.nmoutput,
             tsoutput.nmro,
             tkabkota.nmkabkota,
-            tlokasi.nmlokasi
+            tlokasi.nmlokasi,
+                
+        CASE 
+            WHEN nmpaket LIKE '%SYC%' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(nmpaket, ';', -1), ';', 1)
+                WHEN nmpaket LIKE '%MYC%' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(nmpaket, ';', -1), ';', 1)
+            ELSE NULL
+        END AS jenis_kontrak
         ";
 
         if ($_getTotal) $select = "count($table.kdpaket) as total";
@@ -1239,7 +1247,14 @@ class BigData extends \App\Controllers\BaseController
                 'widthColumn'    => 150,
                 'align'          => 'right',
                 'isNumberFormat' => true
-            ]
+            ],
+            [
+                'value'          => "jenis_kontrak",
+                'label'          => 'jenis kontrak (MYC/SYC)',
+                'widthColumn'    => 150,
+                // 'align'          => 'right',
+                // 'isNumberFormat' => true
+            ],
         ];
 
         $kolomKontrak = [];
