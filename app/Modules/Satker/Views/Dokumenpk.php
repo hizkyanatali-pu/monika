@@ -96,7 +96,7 @@
                         if (count($dataDokumen) > 0) {
                             // matikan membuat revisi 18012024
                             // $disabled = $dataDokumen[0]->status != "setuju" ? "disabled" : "";
-                            $disabled = ($dataDokumen[0]->status == "setuju" || $dataDokumen[0]->status == "hold" || $dataDokumen[0]->status == "tolak") ? "disabled" : "";
+                            $disabled = (($dataDokumen[0]->status == "setuju" || $dataDokumen[0]->status == "hold" || $dataDokumen[0]->status == "tolak") and session('userData.tahun') == 2024) ? "disabled" : "";
                         } else {
                             $disabled = "";
                         }
