@@ -527,6 +527,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $rowPaket = array();
             $targetSatuan = '';
             $average = 0;
+            $outcomeSatkerValueFix = 0;
 
 
 
@@ -719,7 +720,16 @@ class Dokumenpk extends \App\Controllers\BaseController
                 if ($targetRumus > 0) $outcomeSatkerValue += $targetRumus;
             }
 
+            $rSeparator = explode('.', $average == 1 ?  ($outcomeSatkerValue / 3) :  $outcomeSatkerValue);
 
+            // Inisialisasi $decimalLength dengan nilai default
+            $decimalLength = 0;
+
+            // Memeriksa apakah indeks 1 ada dalam array $rSeparator
+            if (isset($rSeparator[1])) {
+                $decimalLength = min(2, strlen($rSeparator[1]));
+            }
+            $outcomeSatkerValueFix = number_format(($average == 1 ?  ($outcomeSatkerValue / 3) : $outcomeSatkerValue), $decimalLength, ',', '.');
 
             return [
                 'id'                      => $arr->id,
@@ -730,7 +740,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'outcome_satuan'          => $arr->outcome_satuan,
                 'type'                    => $arr->type,
                 'targetSatkerValue'       => $targetSatkerValue,
-                'outcomeSatkerValue'      => ($average == 1 ? ($outcomeSatkerValue / 3) : $outcomeSatkerValue),
+                // 'outcomeSatkerValue'      => ($average == 1 ? ($outcomeSatkerValue / 3) : $outcomeSatkerValue),
+                'outcomeSatkerValue'      => $outcomeSatkerValueFix,
                 'targetSatkerSatuan'       => $targetSatuan,
                 'target_balai_value'      => $targetDefaultValue,
                 'targetBalaiDefualtValue' => $targetBalaiDefualtValue,
