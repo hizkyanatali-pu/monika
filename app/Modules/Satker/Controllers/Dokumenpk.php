@@ -1112,10 +1112,14 @@ class Dokumenpk extends \App\Controllers\BaseController
             'kota'                  => $this->request->getPost('kota'),
             'kota_nama'             => $this->request->getPost('kotaNama'),
             'bulan'                 => $this->request->getPost('bulan'),
-            'tanggal'                 => $this->request->getPost('tanggal'),
+            'tanggal'               => $this->request->getPost('tanggal'),
             // 'tahun'                 => $this->request->getPost('tahun')
             'tahun'                 =>  $this->user['tahun']
         ];
+
+        if ($this->request->getPost('tahun') != $this->user['tahun']) {
+            $inserted_dokumenSatker['tahun_ttd']  = $this->request->getPost('tahun');
+        }
 
         if ($session_userType == "satker") {
             $dataSatker = $this->satker->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('satkerid', $session_satkerId)->get()->getRow();
