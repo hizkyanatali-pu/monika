@@ -1562,7 +1562,6 @@
             last_dokumen_id = _data.dokumenExistSameYear.last_dokumen_id;
         }
 
-        console.log(_data);
         let template = _data.template,
             value_dataId = _dataId ?? last_dokumen_id,
             templateExtraData = _data.templateExtraData,
@@ -2637,7 +2636,7 @@
             var jumlahDesimal_target = (totalJumlahTarget % 1 === 0) ? 0 : totalJumlahTarget.toFixed(TargetlengthFix).toString().split('.')[1].length;
             var jumlahDesimal_outcome = (totalJumlahOutcome % 1 === 0) ? 0 : totalJumlahOutcome.toFixed(OutcomelengthFix).toString().split('.')[1].length;
 
-            // console.log(jumlahDesimal_outcome);
+
 
             totalJumlahTargetDenganKoma = totalJumlahTarget.toLocaleString('id-ID', {
                 // minimumFractionDigits: jumlahDesimal_target

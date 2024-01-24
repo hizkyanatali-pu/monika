@@ -733,6 +733,11 @@ class Dokumenpk extends \App\Controllers\BaseController
                 // Memeriksa apakah indeks 1 ada dalam array $rSeparator
                 if (isset($rSeparator[1])) {
                     $decimalLength = min(2, strlen($rSeparator[1]));
+
+                    if (strtolower($arr->target_satuan) == "m3/detik") {
+
+                        $decimalLength = 4;
+                    }
                 }
                 $outcomeSatkerValue = number_format(($average == 1 ?  ($outcomeSatkerValue / 3) : $outcomeSatkerValue), $decimalLength, ',', '.');
             }
