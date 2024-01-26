@@ -1921,7 +1921,7 @@
                             <td>
                                 <div class="input-group mr-3">
                                     <div class="input-group-append">
-                                        <span class="input-group-text">${formatRupiah(data.targetSatkerValue.toString())}</span>
+                                        <span class="input-group-text">${formatRupiah(data.targetSatkerValue.toString().replaceAll('.',','))}</span>
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
