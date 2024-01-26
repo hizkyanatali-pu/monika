@@ -860,6 +860,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             'kota'  => $this->kota->get()->getResult(),
             'bulan' => ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
             'tahun' => $dokumenExistSameYear->tahun_ttd ?? $this->user['tahun'],
+            'tahun_dokumen' => $this->user['tahun'],
             'templateExtraData' => [
                 'kotaNama'      => $kotaNama,
                 'jabatanPihak2' => $jabatanPihak2
