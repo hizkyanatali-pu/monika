@@ -738,10 +738,8 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                         $decimalLength = 4;
                     }
-                    $outcomeSatkerValue = number_format(($average == 1 ?  ($outcomeSatkerValue / 3) : $outcomeSatkerValue), $decimalLength, ',', '.');
-                } else {
-                    $outcomeSatkerValue = ($average == 1 ?  ($outcomeSatkerValue / 3) : $outcomeSatkerValue);
                 }
+                $outcomeSatkerValue = number_format(($average == 1 ?  ($outcomeSatkerValue / 3) : $outcomeSatkerValue), $decimalLength, ',', '.');
             }
 
 
