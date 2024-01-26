@@ -1921,7 +1921,7 @@
                             <td>
                                 <div class="input-group mr-3">
                                     <div class="input-group-append">
-                                        <span class="input-group-text">${data.targetSatkerValue.toString().replaceAll('.',',')}</span>
+                                        <span class="input-group-text">${formatRupiah(data.targetSatkerValue.toString().replaceAll('.',','))}</span>
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -1933,7 +1933,7 @@
                             <td>
                                 <div class="input-group mr-3">
                                     <div class="input-group-append">
-                                        <span class="input-group-text">${ data.outcomeSatkerValue.toString().replaceAll('.',',')}</span>
+                                        <span class="input-group-text">${ formatRupiah(data.outcomeSatkerValue.toString().replaceAll('.',','))}</span>
                                     </div>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
