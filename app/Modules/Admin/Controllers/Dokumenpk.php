@@ -1367,13 +1367,13 @@ class Dokumenpk extends \App\Controllers\BaseController
                 foreach ($hasilPaketSheet as $indx => $value) {
 
                     $sheetPaket->setCellValue('A' .  $PaketrowNumber, ($PaketrowNumber - 1))
-                        ->setCellValue('B' .  $PaketrowNumber, ($value->satkerid != "352611" and $value->satkerid != "654097") ? instansi_name($value->balaiid)->nama_instansi : "")
+                        ->setCellValue('B' .  $PaketrowNumber, ($value->satkerid != "352611" and $value->satkerid != "654097") ? instansi_name($value->balaiid)->nama_instansi : "Pusat Pengendalian Lumpur Lapindo")
                         ->setCellValue('C' .  $PaketrowNumber, instansi_name($value->satkerid)->nama_instansi)
                         ->setCellValue('D' .  $PaketrowNumber,  indikatorPK_name($value->template_row_id, $this->user['tahun']))
                         ->setCellValue('E' .  $PaketrowNumber, paket_name($value->idpaket, $this->user['tahun']))
-                        ->setCellValue('F' .  $PaketrowNumber, $value->target_value)
+                        ->setCellValue('F' .  $PaketrowNumber, str_replace(',', '.', str_replace('.', "", $value->target_value)))
                         ->setCellValue('G' .  $PaketrowNumber,  $value->target_unit)
-                        ->setCellValue('H' .  $PaketrowNumber, $value->output_value)
+                        ->setCellValue('H' .  $PaketrowNumber, str_replace(',', '.', str_replace('.', "", $value->output_value)))
                         ->setCellValue('I' .  $PaketrowNumber,  $value->output_unit);
 
 
