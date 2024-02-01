@@ -121,7 +121,6 @@ class BigData extends \App\Controllers\BaseController
         $table  = "monika_data_" .  $year;
         $offset = ($page - 1) * $perpage;
 
-
         $q  =  $this->db->table($table)->select($kolom)
             ->join('m_satker', "$table.kdsatker = m_satker.satkerid", 'left')
             ->join('m_balai', "m_satker.balaiid = m_balai.balaiid", 'left')
@@ -399,7 +398,8 @@ class BigData extends \App\Controllers\BaseController
 
         $kolom = implode(',', $listKolom);
 
-        $_filterData = $this->request->getVar('filter');
+        $_filterData = json_decode($this->request->getVar('filter'), true);
+
 
         $table  = "monika_data_" .  $year;
 

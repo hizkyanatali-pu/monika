@@ -2,7 +2,7 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <?= $this->section('content') ?>
-<style>
+<!-- <style>
     select,
     .select2 {
         width: 90%;
@@ -24,7 +24,7 @@
         font-size: 14p;
         border: 1px solid #fafafa;
     }
-</style>
+</style> -->
 <!-- begin:: Subheader -->
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
@@ -298,7 +298,7 @@
 
         var selectedColumns = $('input[name="selectedColumns[]"]:checked').map(function() {
             var originalValue = $(this).val();
-
+            console.log(originalValue);
             switch (true) {
                 case originalValue.includes("nmbalai"):
                     return "m_balai.balai as " + originalValue;
@@ -353,7 +353,8 @@
                     return "monika_data_" + year + ".kdkabkota as " + originalValue;
                 case originalValue.includes("kdlokasi"):
                     return "monika_data_" + year + ".kdlokasi as " + originalValue;
-                case originalValue.includes("sat"):
+
+                case originalValue === "sat":
                     return "monika_data_" + year + ".sat as " + originalValue;
 
                 case originalValue.includes("nmsatker"):
@@ -485,10 +486,11 @@
         var year = $('#tahun').val();
 
         var columns = selectedColumns(year);
-
+        var filterData = getFilterDataValue();
 
         $('#year').val(year);
-        $('#filter').val(getFilterDataValue());
+        $('#filter').val(JSON.stringify(filterData));
+        console.log($('#filter').val());
         $('#columns').val(columns);
 
         // Submit form tersembunyi
@@ -528,7 +530,7 @@
     $(document).ready(function() {
 
 
-
+        $(".select2").select2();
 
 
         $(".tampilkan").on("click", function() {
