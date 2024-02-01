@@ -1268,7 +1268,9 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->setCellValue('D1', 'Indikator')
             ->setCellValue('E1', 'Paket')
             ->setCellValue('F1', 'Output')
-            ->setCellValue('G1', 'Outcome');
+            ->setCellValue('G1', 'Output Satuan')
+            ->setCellValue('H1', 'Outcome')
+            ->setCellValue('I1', 'Outcome  Satuan');
 
 
         // Fill data from query into rows
@@ -1369,8 +1371,10 @@ class Dokumenpk extends \App\Controllers\BaseController
                         ->setCellValue('C' .  $PaketrowNumber, instansi_name($value->satkerid)->nama_instansi)
                         ->setCellValue('D' .  $PaketrowNumber,  indikatorPK_name($value->template_row_id, $this->user['tahun']))
                         ->setCellValue('E' .  $PaketrowNumber, paket_name($value->idpaket, $this->user['tahun']))
-                        ->setCellValue('F' .  $PaketrowNumber, $value->target_value . " " . $value->target_unit)
-                        ->setCellValue('G' .  $PaketrowNumber, $value->output_value . " " . $value->output_unit);
+                        ->setCellValue('F' .  $PaketrowNumber, $value->target_value)
+                        ->setCellValue('G' .  $PaketrowNumber,  $value->target_unit)
+                        ->setCellValue('H' .  $PaketrowNumber, $value->output_value)
+                        ->setCellValue('I' .  $PaketrowNumber,  $value->output_unit);
 
 
                     $PaketrowNumber++;
