@@ -1188,6 +1188,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $sessionTahun = $this->user['tahun'];
         $satkerList = array();
         $rowPaket = array();
+        $currentSheetNumber = 1;
 
         $q = "
         SELECT
@@ -1240,6 +1241,14 @@ class Dokumenpk extends \App\Controllers\BaseController
         // Create new Spreadsheet object
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Rekap');
+
+        // Tambahkan sheet baru untuk data paket
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex($currentSheetNumber);
+        $sheetPaket = $spreadsheet->getActiveSheet();
+        $sheetPaket->setTitle('Daftar Paket'); // Ganti 'SheetPaket' dengan nama yang diinginkan
+
 
         // Set header row
         $sheet->setCellValue('A1', 'No')
@@ -1252,8 +1261,19 @@ class Dokumenpk extends \App\Controllers\BaseController
             ->setCellValue('H1', 'Jenis PK')
             ->setCellValue('I1', 'Verifikasi');
 
+        // Set header paket
+        $sheetPaket->setCellValue('A1', 'No')
+            ->setCellValue('B1', 'Balai')
+            ->setCellValue('C1', 'Satker')
+            ->setCellValue('D1', 'Indikator')
+            ->setCellValue('E1', 'Paket')
+            ->setCellValue('F1', 'Output')
+            ->setCellValue('G1', 'Outcome');
+
+
         // Fill data from query into rows
         $rowNumber = 2;
+        $PaketrowNumber = 2;
         foreach ($queryResult as $row) {
 
             if ($row['satkerid'] != null) {
@@ -1332,6 +1352,30 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ->setCellValue('I' . $rowNumber, $row['status'] != 'setuju' ? 'Belum' : 'Sudah');
 
             $rowNumber++;
+
+
+            $hasilPaketSheet = $this->dokumenSatker_paket->select("dokumenpk_satker_paket.*,dokumenpk_satker.satkerid,dokumenpk_satker.balaiid")
+                ->join('dokumenpk_satker', 'dokumenpk_satker.id = dokumenpk_satker_paket.dokumen_id', 'left')
+                ->where('dokumen_id', $row['id'])
+                ->where('template_row_id', $row['template_row_id'])
+                ->get()->getResult();
+
+            if ($hasilPaketSheet) {
+
+                foreach ($hasilPaketSheet as $indx => $value) {
+
+                    $sheetPaket->setCellValue('A' .  $PaketrowNumber, ($PaketrowNumber - 1))
+                        ->setCellValue('B' .  $PaketrowNumber, instansi_name($value->balaiid)->nama_instansi)
+                        ->setCellValue('C' .  $PaketrowNumber, instansi_name($value->satkerid)->nama_instansi)
+                        ->setCellValue('D' .  $PaketrowNumber,  indikatorPK_name($value->template_row_id, $this->user['tahun']))
+                        ->setCellValue('E' .  $PaketrowNumber, paket_name($value->idpaket, $this->user['tahun']))
+                        ->setCellValue('F' .  $PaketrowNumber, $value->target_value . " " . $value->target_unit)
+                        ->setCellValue('G' .  $PaketrowNumber, $value->output_value . " " . $value->output_unit);
+
+
+                    $PaketrowNumber++;
+                }
+            }
         }
 
         try {
