@@ -455,6 +455,13 @@ function paket_name($id, $tahun)
     return $builder->nmpaket;
 }
 
+function indikatorPK_name($id, $tahun)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->query("SELECT title FROM dokumen_pk_template_row_$tahun WHERE id='$id'")->getRow();
+    return $builder->title;
+}
+
 function tematik_name($id)
 {
     $db      = \Config\Database::connect();
