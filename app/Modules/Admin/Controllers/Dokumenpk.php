@@ -1367,7 +1367,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 foreach ($hasilPaketSheet as $indx => $value) {
 
                     $sheetPaket->setCellValue('A' .  $PaketrowNumber, ($PaketrowNumber - 1))
-                        ->setCellValue('B' .  $PaketrowNumber, instansi_name($value->balaiid)->nama_instansi)
+                        ->setCellValue('B' .  $PaketrowNumber, ($value->satkerid != "352611" and $value->satkerid != "654097") ? instansi_name($value->balaiid)->nama_instansi : "")
                         ->setCellValue('C' .  $PaketrowNumber, instansi_name($value->satkerid)->nama_instansi)
                         ->setCellValue('D' .  $PaketrowNumber,  indikatorPK_name($value->template_row_id, $this->user['tahun']))
                         ->setCellValue('E' .  $PaketrowNumber, paket_name($value->idpaket, $this->user['tahun']))
