@@ -54,10 +54,13 @@
 									<div class="input-group-text bg-green mr-3">
 										<i class="text-white fas fa-calendar"></i>
 									</div>
+
+
+
 									<select class="form-control" name="tahun">
-										<?php for ($date = 2020; $date <= date("Y")+1; $date++) {
+										<?php for ($date = 2020; $date <= (date("m") > 11 ? date("Y") + 1 : date("Y")); $date++) {
 										?>
-											<option value="<?= $date ?>" <?=($date == date("Y"))?'selected':'';?>><?= $date ?></option>
+											<option value="<?= $date ?>" <?= ($date == date("Y")) ? 'selected' : ''; ?>><?= $date ?></option>
 										<?php } ?>
 									</select>
 								</div>
