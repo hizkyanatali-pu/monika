@@ -204,6 +204,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         // $dokumenKopTitle2 = str_replace('KEPALA', '', $dokumenKopTitle2_prefix . $dataDokumen['pihak1_initial']);
         $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial']));
+        $dokumenKopTitle2 = str_replace('SEKRETARIS', 'SEKRETARIAT', $dokumenKopTitle2);
 
         $dokumenKopTitle3 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
         $dokumenKopTitle3 = str_replace('MENTERI', 'KEMENTERIAN', $dokumenKopTitle3);
@@ -419,11 +420,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetX((300 - $width_kopTitle1) / 2);
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
-
+        //satker SKPDTPOP PERMUKIMAN PROVINSI KEPULAUAN BANGKA BELITUNG
         if ($dataDokumen['satkerid'] == 309214) {
             $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . chr(10) . $divisiPihak2;
+            $dokumenKopTitle2 = str_replace('SEKRETARIS', 'SEKRETARIAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . chr(10) . $divisiPihak2;
         } else {
             $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
+            $dokumenKopTitle2 = str_replace('SEKRETARIS', 'SEKRETARIAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
         }
 
         // Kop Title 2
