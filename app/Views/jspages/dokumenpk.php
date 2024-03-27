@@ -2611,10 +2611,21 @@
                     TargetlengthFix = 4;
                 }
 
+                if (target_satuan.trim().toLowerCase() === "juta m3") {
+
+                    TargetlengthFix = 6;
+                }
+
+
 
                 if (outcome_satuan.trim().toLowerCase() === "m3/detik") {
 
                     OutcomelengthFix = 4;
+                }
+
+                if (outcome_satuan.trim().toLowerCase() === "juta m3") {
+
+                    OutcomelengthFix = 6;
                 }
                 totalJumlahOutcome += outcome_nilai_number;
 

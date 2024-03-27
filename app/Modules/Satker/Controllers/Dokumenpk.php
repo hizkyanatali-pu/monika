@@ -738,6 +738,11 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                         $decimalLength = 4;
                     }
+
+                    if (strtolower($arr->target_satuan) == "juta m3") {
+
+                        $decimalLength = 6;
+                    }
                 }
                 $outcomeSatkerValue = number_format(($average == 1 ?  ($outcomeSatkerValue / 3) : $outcomeSatkerValue), $decimalLength, ',', '.');
             }
