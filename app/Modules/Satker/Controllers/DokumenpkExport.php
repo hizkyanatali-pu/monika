@@ -28,6 +28,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->dokumenYear   = $this->user['tahun'];
         $this->dokumenLokasi = 'JAKARTA';
         $this->dokumenBulan  = '';
+        $this->tanggal = '';
         $this->bulan         = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         $this->db            = \Config\Database::connect();
 
@@ -35,9 +36,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->dokumenSatker_rows     = $this->db->table('dokumenpk_satker_rows');
         $this->dokumenSatker_kegiatan = $this->db->table('dokumenpk_satker_kegiatan');
 
-        $this->templateDokumen = $this->db->table('dokumen_pk_template');
-        $this->templateRow     = $this->db->table('dokumen_pk_template_row');
-        $this->templateInfo    = $this->db->table('dokumen_pk_template_info');
+        $this->templateDokumen = $this->db->table('dokumen_pk_template_' . session('userData.tahun'));
+        $this->templateRow     = $this->db->table('dokumen_pk_template_row_' . session('userData.tahun'));
+        $this->templateInfo    = $this->db->table('dokumen_pk_template_info_' . session('userData.tahun'));
+        $this->templateRowRumus = $this->db->table('dokumen_pk_template_rowrumus_' . session('userData.tahun'));
+
 
         $this->dokumenStatus = [
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
@@ -93,10 +96,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $dataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.*,
             tkabkota.*,
-            dokumen_pk_template.keterangan,
-            dokumen_pk_template.info_title
+            dokumen_pk_template_' . session('userData.tahun') . '.keterangan,
+            dokumen_pk_template_' . session('userData.tahun') . '.info_title
         ')
-            ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+            ->join('dokumen_pk_template_' . session('userData.tahun'), 'dokumenpk_satker.template_id = dokumen_pk_template_' . session('userData.tahun') . '.id', 'left')
             ->join('tkabkota', "(SUBSTRING_INDEX(dokumenpk_satker.kota, '-', 1) = tkabkota.kdlokasi AND SUBSTRING_INDEX(dokumenpk_satker.kota, '-', -1) = tkabkota.kdkabkota)", 'left')
             ->where('dokumenpk_satker.id', $_dokumenSatkerID)
             ->get()
@@ -118,13 +121,14 @@ class DokumenpkExport extends \App\Controllers\BaseController
             }
 
             if ($dataDokumen['bulan'] != '') $this->dokumenBulan = $this->bulan[$dataDokumen['bulan'] - 1];
+            if ($dataDokumen['tanggal'] != '') $this->tanggal = $dataDokumen['tanggal'];
         }
         // $watermaskRevisi       = $dataDokumen['is_revision_same_year'] == '1' ? 'revision-same-year' : $dataDokumen['status'];
         // $watermarkRevisiNumber = $dataDokumen['is_revision_same_year'] == '1' ? $dataDokumen['revision_same_year_number'] : $dataDokumen['revision_number'];
 
 
 
-        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen);
+        // $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen);
 
         $this->dokumenLoadedStatus = $dataDokumen['status'];
 
@@ -172,6 +176,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenOpening($pdf, $dataDokumen)
     {
+        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen, 16, 20);
+
         $pdf->SetMargins(30, 10, 30, 0);
         $pdf->AddPage('L', 'A4');
 
@@ -198,6 +204,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         // $dokumenKopTitle2 = str_replace('KEPALA', '', $dokumenKopTitle2_prefix . $dataDokumen['pihak1_initial']);
         $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial']));
+        $dokumenKopTitle2 = str_replace('SEKRETARIS', 'SEKRETARIAT', $dokumenKopTitle2);
 
         $dokumenKopTitle3 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
         $dokumenKopTitle3 = str_replace('MENTERI', 'KEMENTERIAN', $dokumenKopTitle3);
@@ -207,17 +214,20 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $dokumenKopTitle1 = 'PERJANJIAN KINERJA TAHUN ' . $this->dokumenYear;
         $dokumenKopTitle2 = $dokumenKopTitle2;
         $dokumenKopTitle3 = $dokumenKopTitle3;
+        // dinamis font size
+        $fontsize = ($dataDokumen['satkerid'] == '049136' ? '10.8' : '12');
 
-        $pdf->SetFont('Times', 'B', 15);
+        $pdf->SetFont('Times', 'B', 13);
         $pdf->SetFillColor(255);
         $pdf->SetTextColor(0);
+
         // Kop Title 1
         $width_kopTitle1 = $pdf->GetStringWidth($dokumenKopTitle1) + 6;
         $pdf->SetX((300 - $width_kopTitle1) / 2);
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
         // Kop Title 2
-        $pdf->SetFont('Times', 'B', 13);
+        $pdf->SetFont('Times', 'B', $fontsize);
         $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
         // $pdf->SetX((300 - $width_kopTitle2) / 2);
         // $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
@@ -225,7 +235,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         // Kop Title 3
         $kopTitle3 = $dokumenKopTitle3;
-        $pdf->SetFont('Times', 'B', 13);
+        $pdf->SetFont('Times', 'B', 12);
         $width_kopTitle3 = $pdf->GetStringWidth($dokumenKopTitle3) + 6;
         $pdf->SetX((300 - $width_kopTitle3) / 2);
         $pdf->Cell($width_kopTitle3, 6, $kopTitle3, 0, 1, 'C');
@@ -296,7 +306,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // title ttd 2
         $pdf->SetFont($this->fontFamily, '', 12);
         $pdf->SetX(149);
-        $pdf->Cell(144, 4, $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear, 0, 0, 'C');
+        $pdf->Cell(144, 4, $this->dokumenLokasi . ',   ' . $this->tanggal . ' ' . $this->dokumenBulan . ' ' . ($dataDokumen['tahun_ttd'] != '' ?  $dataDokumen['tahun_ttd'] : $this->dokumenYear), 0, 0, 'C');
         $pdf->Ln();
         $pdf->SetFont($this->fontFamily, 'B', 12);
         $pdf->SetX(167);
@@ -355,6 +365,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType, $qrcode)
     {
+        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen, 6, 10);
+
         // header('Content-Type: text/html; charset=utf-8');
         $pdf->SetMargins(0, 16, 0, 0);
         $pdf->AddPage('L', 'A4');
@@ -397,7 +409,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $divisiPihak2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
         $divisiPihak2 = str_replace('MENTERI', 'KEMENTERIAN', $divisiPihak2);
         $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
-
+        // Set top margin (adjust the value as needed)
+        $topMargin = 6;
+        $pdf->SetY($topMargin);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetFillColor(255);
         $pdf->SetTextColor(0);
@@ -406,11 +420,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetX((300 - $width_kopTitle1) / 2);
         $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
 
-
+        //satker SKPDTPOP PERMUKIMAN PROVINSI KEPULAUAN BANGKA BELITUNG
         if ($dataDokumen['satkerid'] == 309214) {
             $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . chr(10) . $divisiPihak2;
+            $dokumenKopTitle2 = str_replace('SEKRETARIS', 'SEKRETARIAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . chr(10) . $divisiPihak2;
         } else {
             $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
+            $dokumenKopTitle2 = str_replace('SEKRETARIS', 'SEKRETARIAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
         }
 
         // Kop Title 2
@@ -451,6 +467,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Data
         $pdf->SetFont($this->fontFamily, '', 8);
         $rowNUmber = 0;
+
         foreach ($tableData as $key => $data) {
             // $celTableDataFill = $this->dokumenLoadedStatus == 'setuju' ? true : false;
             $celTableDataFill = true;
@@ -491,8 +508,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             if ($data['type'] == 'form') {
                 $targetValue = '';
                 $str = iconv('UTF-8', 'windows-1252', html_entity_decode("&sup3;"));
-
-                switch (strtolower($data['target_satuan'])) {
+                switch (strtolower($data_targetValue['target_sat'] ??  trim(explode(";", $data['target_satuan'])[0]))) {
                     case 'm3/detik':
                         $satuan_target = 'M' . $str . "/Detik";
 
@@ -511,7 +527,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         $satuan_target = 'Miliar M' . $str;
                         break;
                     default:
-                        $satuan_target = $data['target_satuan'];
+                        $satuan_target = $data_targetValue['target_sat'] ?? trim(explode(";", $data['target_satuan'])[0]);
                         break;
                 }
 
@@ -546,16 +562,59 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                         break;
 
+                        //balai
                     case 'output':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' .  $satuan_target;
-                        $rSeparator = explode('.', $data_targetValue['target_value']);
-                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_target;
+                        $targetValue = 0 . " %";
+
+                        $sumOutputValue     = 0;
+                        $outputSatuan = '';
+                        $average = 0;
+
+
+                        $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $data['template_id'], 'rowId' =>  $data['id']])->get()->getResult();
+                        foreach ($templateRowRumus as $key => $dataRumus) {
+                            $rumus = $this->dokumenSatker->select(
+                                'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
+                                dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan,target_satuan'
+                            )
+                                ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                                ->join('dokumen_pk_template_row_' . session('userData.tahun'), "(dokumenpk_satker_rows.template_row_id=dokumen_pk_template_row_" . session('userData.tahun') . ".id)", 'left')
+                                ->join('dokumen_pk_template_rowrumus_' . session('userData.tahun'), "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".rowId)", 'left')
+                                ->where('dokumen_pk_template_rowrumus_' . session('userData.tahun') . '.rumus', $dataRumus->rumus)
+                                ->where('dokumenpk_satker.balaiid', $dataDokumen['balaiid'])
+                                ->where('dokumenpk_satker.status', 'setuju')
+                                ->where('dokumenpk_satker.satkerid is not null')
+                                ->where('dokumenpk_satker.deleted_at is null')
+                                ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+                                // ->where('dokumenpk_satker_rows.is_checked', '1')
+                                ->get()->getResult();
+
+                            $outcomeRumus = 0;
+                            $outputRumus = 0;
+
+                            foreach ($rumus as $keyOutcome => $dataOutput) {
+                                $outputRumus += $dataOutput ? ($dataOutput->target_value != '' ? $dataOutput->target_value : 0) : 0;
+                                // $outputSatuan = $dataOutput->target_sat ?? trim(explode(";", $dataOutput->target_satuan)[0]);
+                                $outputSatuan = $data['outcome_satuan'];
+                            }
+                            if ($sumOutputValue == '' && $outcomeRumus > 0) $sumOutputValue = 0;
+
+
+                            if ($outputRumus > 0) {
+                                $sumOutputValue  += $outputRumus;
+                            }
+                            $rSeparator = explode('.', $data['id'] != "291011" ?  $sumOutputValue : ($sumOutputValue / 3));
+                            $decimalLength = min(2, strlen($rSeparator[1])); // Mengambil panjang maksimum 2 karakter
+                            $targetValue = number_format(($data['id'] == "291011" ? ($sumOutputValue / 3) : $sumOutputValue), $decimalLength, ',', '.') .  ' ' .  $outputSatuan;
+                        }
+
 
 
                         break;
                     default:
-                        $targetValue = '';
+                        $targetValue = 0;
                         break;
                 }
 
@@ -608,12 +667,12 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // Info title
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX((297 - array_sum($tableDataWidth)) / 2);
-        $pdf->Cell(100, 7, $dataDokumen['info_title'], 0, 0, 'L');
+        $pdf->Cell(100, 4, $dataDokumen['info_title'], 0, 0, 'L');
 
         // anggaran title
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(183);
-        $pdf->Cell(85, 7, 'Anggaran', 0, 0, 'R');
+        $pdf->Cell(85, 4, 'Anggaran', 0, 0, 'R');
         $pdf->Ln(5);
 
 
@@ -622,19 +681,19 @@ class DokumenpkExport extends \App\Controllers\BaseController
         foreach ($dataDokumenKegiatan as $key_kegiatan => $data_kegiatan) {
             $pdf->SetFont($this->fontFamily, '', 8);
             $pdf->SetX((310 - array_sum($tableDataWidth)) / 2);
-            $pdf->Cell(100, 7, ++$key_kegiatan . ". " . ltrim($data_kegiatan['nama']), 0, 0, 'L');
+            $pdf->Cell(100, 3, ++$key_kegiatan . ". " . ltrim($data_kegiatan['nama']), 0, 0, 'L');
 
             // anggaran perkegiatan value
             $pdf->SetFont($this->fontFamily, 'B', 8);
             $pdf->SetX(170);
-            $pdf->Cell(80, 7, "Rp", 0, 0, 'R');
+            $pdf->Cell(80, 3, "Rp", 0, 0, 'R');
 
             // anggaran value
             $pdf->SetFont($this->fontFamily, '', 8);
             $pdf->SetX(183);
-            $pdf->Cell(100, 7, rupiahFormat($data_kegiatan['anggaran'], false, 2), 0, 0, 'R');
+            $pdf->Cell(100, 3, rupiahFormat($data_kegiatan['anggaran'], false, 2), 0, 0, 'R');
 
-            $pdf->Ln(5);
+            $pdf->Ln(4);
         }
         // $pdf->Ln(2);
 
@@ -648,14 +707,14 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetFont($this->fontFamily, 'B', 8);
         $pdf->SetX(170);
         // $pdf->Cell(80, 7, "JUMLAH : \t \t \t \t \t \t \t Rp", 0, 0, 'R');
-        $pdf->Cell(80, 7, "Rp", 0, 0, 'R');
+        $pdf->Cell(80, 3, "Rp", 0, 0, 'R');
 
 
 
         // total anggaran value
         $pdf->SetFont($this->fontFamily, 'B', 8);
         $pdf->SetX(183);
-        $pdf->Cell(100, 7, rupiahFormat($dataDokumen['total_anggaran'], false, 2), 0, 0, 'R');
+        $pdf->Cell(100, 3, rupiahFormat($dataDokumen['total_anggaran'], false, 2), 0, 0, 'R');
 
         // info
         // foreach ($dataDokumenInfo as $key_info => $data_info) {
@@ -667,14 +726,14 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
 
         /** TTD Section */
-        $pdf->Ln(10);
+        $pdf->Ln(5);
         $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
         $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
         // $dokumenKopTitle1_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
             'person1Title' => $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial'],
             'person1Name'  => $dataDokumen['pihak2_ttd'],
-            'person2Date'  => $this->dokumenLokasi . ',          ' . $this->dokumenBulan . ' ' . $this->dokumenYear,
+            'person2Date'  => $this->dokumenLokasi . ',   ' . $this->tanggal . ' '  . $this->dokumenBulan . ' ' . ($dataDokumen['tahun_ttd'] != '' ? $dataDokumen['tahun_ttd'] : $this->dokumenYear),
             // 'person2Title' => $jabatanPihak1_isPlt . $dokumenKopTitle1_prefix . $dataDokumen['pihak1_initial'],
             'person2Title' => $jabatanPihak1_isPlt . $dataDokumen['pihak1_initial'],
             'person2Name'  => $dataDokumen['pihak1_ttd'],
@@ -698,6 +757,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         switch ($_ttd['person2Title']) {
                 // merapikan ttd
             case 'KEPALA BALAI BESAR WILAYAH SUNGAI BENGAWAN SOLO':
+                $ttd = $_ttd['person2Title'];
                 $widthTitleJabatan = 85;
                 $widthNamaPejabat = 122;
                 break;
@@ -706,6 +766,18 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $ttd =  str_replace('SEKRETARIAT', 'SEKRETARIS', str_replace('KEPALA', '', $_ttd['person2Title']));
                 $widthTitleJabatan = 78;
                 $widthNamaPejabat = 115;
+                break;
+
+                // case 'KEPALA SNVT PEMBANGUNAN BENDUNGAN BWS NUSA TENGGARA I':
+                //     $ttd = $_ttd['person2Title'];
+                //     $widthTitleJabatan = 85;
+                //     $widthNamaPejabat = 122;
+                //     break;
+
+            case 'KEPALA SKPD TP-OP DINAS PEKERJAAN UMUM SUMBER DAYA AIR DAN PENATAAN RUANG PROVINSI JAWA TENGAH':
+                $ttd = $_ttd['person2Title'];
+                $widthTitleJabatan = 115;
+                $widthNamaPejabat = 150;
                 break;
 
             default:
@@ -748,7 +820,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell($widthNamaPejabat, 4, strtoupper($_ttd['person2Name']), 0, 0, 'C');
     }
 
-    private function pdf_renderWatermarkKonsep($pdf, $_dataDokumen)
+    private function pdf_renderWatermarkKonsep($pdf, $_dataDokumen, $topBorder, $topWatermark)
     {
 
 
@@ -794,12 +866,16 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $pdf->watermarkOffsetLeft        = 254.5;
                 $pdf->watermarkBorder_width      = 24;
                 $pdf->watermarkBorder_offsetLeft = 250;
+                $pdf->watermarkBorder_offsetTop = $topBorder;
+                $pdf->watermarkOffsetTop        = $topWatermark;
             }
             if (($_dataDokumen['status'] == 'revision' && $_dataDokumen['acc_by'] == null) || ($rev_number['revision_number'] != $_dataDokumen['revision_number'])) {
                 $pdf->watermarkText = 'KOREKSI';
                 $pdf->watermarkOffsetLeft        = 202.5;
                 $pdf->watermarkBorder_width      = 24;
                 $pdf->watermarkBorder_offsetLeft = 200;
+                $pdf->watermarkBorder_offsetTop = $topBorder;
+                $pdf->watermarkOffsetTop        = $topWatermark;
             }
         }
 
@@ -809,6 +885,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $pdf->watermarkOffsetLeft        = 246;
             $pdf->watermarkBorder_width      = 24;
             $pdf->watermarkBorder_offsetLeft = 240;
+            $pdf->watermarkBorder_offsetTop = $topBorder;
+            $pdf->watermarkOffsetTop        = $topWatermark;
         }
     }
 
@@ -904,6 +982,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         $tableData = $this->templateRow
             ->where('template_id', $templateId)
+            ->orderBy('no_urut')
             ->get()
             ->getResultArray();
 
@@ -948,10 +1027,12 @@ class PDF extends FPDF
     public $watermarkText              = '';
     public $watermarkSubText           = '';
     public $watermarkOffsetLeft        = 70;
+    public $watermarkOffsetTop       = 0;
     public $watermarkSubTextOffsetLeft = 95;
     public $watermarkBorder_width      = 0;
     public $watermarkBorder_offsetLeft = 0;
     public $watermarkBorder_offsetRight = 0;
+    public $watermarkBorder_offsetTop = 0;
 
     var $widths;
     var $aligns;
@@ -1042,7 +1123,8 @@ class PDF extends FPDF
 
             //bg hitam
             $this->SetDrawColor(0, 0, 0);
-            $this->Rect($this->watermarkBorder_offsetLeft, 16, $this->watermarkBorder_width, 5, 'D');
+            // $this->Rect($this->watermarkBorder_offsetLeft, 16, $this->watermarkBorder_width, 5, 'D');
+            $this->Rect($this->watermarkBorder_offsetLeft, $this->watermarkBorder_offsetTop, $this->watermarkBorder_width, 5, 'D');
 
             //Put the watermark
             $this->SetFont('Times', 'B', 11);
@@ -1050,7 +1132,8 @@ class PDF extends FPDF
             //$this->RotatedText($this->watermarkOffsetLeft, 110, $this->watermarkText, 0);
             // $this->SetTextColor(220,20,60); //text merah
             $this->SetTextColor(0, 0, 0); //text hitam
-            $this->RotatedText($this->watermarkOffsetLeft, 20, $this->watermarkText, 0);
+            // $this->RotatedText($this->watermarkOffsetLeft, 20, $this->watermarkText, 0);
+            $this->RotatedText($this->watermarkOffsetLeft, $this->watermarkOffsetTop, $this->watermarkText, 0);
 
 
             $this->SetFont('Times', 'B', 40);

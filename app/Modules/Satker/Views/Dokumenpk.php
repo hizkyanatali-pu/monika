@@ -9,8 +9,48 @@
     }
 
     td.disabled input[readonly],
+    td.disabled select[disabled],
     td.disabled span {
         background: #a8a8a8;
+    }
+
+    /* table {
+        width: 100%;
+        border-collapse: collapse;
+    } */
+
+    .sticky-header-1 {
+        position: sticky;
+        top: -15px;
+        background-color: #f9f9f9;
+        z-index: 2;
+        /* #a8b0ed */
+        /* Menentukan tingkat tumpukan */
+    }
+
+    .sticky-header-2 {
+        position: sticky;
+        top: 30px;
+        /* Sesuaikan dengan tinggi tiga baris */
+        background-color: #f9f9f9;
+        z-index: 1;
+        /* Menentukan tingkat tumpukan */
+    }
+
+    .sticky-header-3 {
+        position: sticky;
+        top: 69px;
+        /* Sesuaikan dengan tinggi tiga baris */
+        background-color: #f9f9f9;
+        z-index: 1;
+        /* Menentukan tingkat tumpukan */
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
     }
 </style>
 
@@ -54,14 +94,22 @@
 
                     <?php if ($isCanCreated) {
                         if (count($dataDokumen) > 0) {
+                            // matikan membuat revisi 18012024
                             $disabled = $dataDokumen[0]->status != "setuju" ? "disabled" : "";
+                            // $disabled = (($dataDokumen[0]->status == "setuju" || $dataDokumen[0]->status == "hold" || $dataDokumen[0]->status == "tolak") and session('userData.tahun') == 2024) ? "disabled" : "";
                         } else {
                             $disabled = "";
                         }
                     ?>
-                        <button class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?> <?= $disabled ?>>
-                            <i class="fas fa-plus"></i> Buat Dokumen
-                        </button>
+
+                        <?php if (!isset($balaiCreateForSatker)) { ?>
+                            <button class="btn btn-primary __opsi-template <?= $disabled ? "d-none" : "" ?>" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php }
+                                                                                                                                                                                                                                                                        if (!isset($balaiCreateForSatker) and empty(session('userData.satker_id'))) {
+                                                                                                                                                                                                                                                                            echo "data-type=uptBalai-add";
+                                                                                                                                                                                                                                                                        } ?>>
+                                <i class="fas fa-plus"></i> Buat Dokumen
+                            </button> <?php } ?>
+
                     <?php } ?>
                 </div>
             </div>
@@ -79,12 +127,12 @@
             <table class="table" id="table">
                 <thead>
                     <tr>
-                        <th width="100px">No. Dokumen</td>
-                        <th>Dokumen</td>
-                        <th width="150px">Tanggal Kirim</th>
-                        <th width="150px">Tanggal Disetujui / Ditolak</th>
-                        <th width="250px">Status</th>
-                        <th width="70px">Aksi</th>
+                        <th width="8%" class="text-center">No. Dokumen</td>
+                        <th width="50%" class="text-center">Dokumen</td>
+                        <th width="10%" class="text-center">Tanggal Kirim</th>
+                        <th width="10%" class="text-center">Tanggal Disetujui / Ditolak</th>
+                        <th width="5%" class="text-center">Status</th>
+                        <th width="17%" class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -131,29 +179,30 @@
                                     </span>
 
 
-                                    <?php if ($data->status == 'tolak') : ?>
-                                        <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
-                                            <i class="fas fa-edit"></i> Koreksi
+                                    <?php if ($data->status == 'tolak'  and (!isset($balaiCreateForSatker))) : ?>
+                                        <button class="ml-2 btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
+                                            <i class="fas fa-edit"></i>Koreksi
                                         </button>
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td class="d-flex justify-content-start">
-                                <div class="btn-load">
-                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
-                                        <i class="fas fa-eye"></i> <br /> Lihat
+
+                            <td class="d-flex justify-content-center">
+                                <div class="btn-load mt-3">
+                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Lihat">
+                                        <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true">
-                                        <i class="fas fa-print"></i> <br /> Cetak
+                                    <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true" title="Cetak">
+                                        <i class="fas fa-print"></i>
                                     </button>
-                                    <?php if ($data->status == 'hold') { ?>
-                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true">
-                                            <i class="fas fa-edit"></i> <br /> Edit
+                                    <?php if ($data->status == 'hold' and (!isset($balaiCreateForSatker))) { ?>
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
+                                            <i class="fas fa-edit"></i>
                                         </button>
                                     <?php } ?>
-                                    <?php if ($data->status == 'setuju') { ?>
-                                        <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
-                                            <i class="fas fa-edit"></i> <br /> Edit
+                                    <?php if ($data->status == 'setuju'  and (!isset($balaiCreateForSatker))) { ?>
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
+                                            <i class="fas fa-edit"></i>
                                         </button>
                                     <?php } ?>
                                 </div>
@@ -171,7 +220,7 @@
 
 <!-- Modal Form -->
 <div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="d-flex">
@@ -180,9 +229,12 @@
                     </button>
                     <h5 class="modal-title pt-2 pl-2">Pilih Dokumen</h5>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="float-right">
+                    <button type="button" class="btn btn-modal-full text-right" style="margin: -10px;"><i class="fas fa-external-link-alt"></i></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             </div>
             <div class="modal-body p-0">
                 <div class="list-group" id="choose-template">
@@ -211,6 +263,7 @@
                     <?php }*/ ?>
             </div>
             <div class="modal-footer d-none">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Batal</button>
                 <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
                 <button type="button" class="btn btn-success __save-update-dokumen d-none">Simpan Dokumen</button>
             </div>
@@ -218,6 +271,60 @@
     </div>
 </div>
 <!-- end-of: Modal Form -->
+
+
+<!-- Modal Pilih Paket -->
+<div class="modal fade" id="modalPilihPaket" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content" style="height: 100% !important;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalFormTitlePaket">
+                    Pilih Paket
+                </h5>
+                <div>
+                    <div class="d-flex">
+                        <button type="button" class="btn btn-modal-full ml-auto"><i class="fas fa-external-link-alt"></i></button>
+                        <button type="button" class="close  ml-0 text-right pl-0" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <small><b>* Terakhir Update Data Emon : </b></small> <small class="text-danger"><i> <?= (getLastUpdateData() ? getLastUpdateData() . " WIB" : 0);  ?></i></small>
+                </div>
+
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead class="table-primary">
+                        <tr class="text-center theader sticky-header-1" style="background-color: #a8b0ed;">
+                            <th></th>
+                            <th class="tdKode">Kode</th>
+                            <th class="tdLabel">Paket</th>
+                            <th class="tdvol">Vol</th>
+                            <th class="tdSatuan">Satuan</th>
+                            <th class="tdNilai">Pagu Dipa</th>
+                            <th class="tdNilai">Realisasi</th>
+                            <th class="tdPersen">%keu</th>
+                            <th class="tdPersen">%fisik</th>
+                            <th class="tdPersen">Output</th>
+                            <th class="tdPersen">Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <!-- Data rows go here -->
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <!-- Footer Modal Pertama -->
+                <button class="btn btn-success save-btn-paket"> Simpan Paket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal Pilih Paket -->
+
+
 
 
 
@@ -244,17 +351,20 @@
 
 <!-- Modal Preview Cetak Dokumen -->
 <div class="modal fade" id="modal-preview-cetak" tabindex="-1" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content" style="height: 100% !important;">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Preview Dokumen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="d-flex">
+                    <button type="button" class="btn btn-modal-full"><i class="fas fa-external-link-alt"></i></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             </div>
             <div class="modal-body p-0">
                 <div class="container-revision-alert-cetak"></div>
-                <iframe width="100%" style="height: 80vh" frameborder="0"></iframe>
+                <iframe width="100%" style="height: 100vh !important" frameborder="0"></iframe>
             </div>
 
             <?php if ($isCanConfirm) { ?>

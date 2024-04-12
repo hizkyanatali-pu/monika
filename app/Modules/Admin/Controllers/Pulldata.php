@@ -5,10 +5,13 @@ namespace Modules\Admin\Controllers;
 use Modules\Admin\Models\AksesModel;
 use Modules\Admin\Models\PulldataModel;
 use Modules\Admin\Models\RekapUnorModel;
+use CodeIgniter\API\ResponseTrait;
+
 
 
 class Pulldata extends \App\Controllers\BaseController
 {
+    use ResponseTrait;
     public function __construct()
     {
         $this->db = \Config\Database::connect();
@@ -43,6 +46,104 @@ class Pulldata extends \App\Controllers\BaseController
         die();
     }
 
+
+    function getPaketTagging()
+    {
+
+
+        $w = $this->request->getVar('satkerId');
+        $templateid = $this->request->getVar('templateId');
+
+        if ($w == 0) {
+            $jsonResponse =  json_encode(["message" => "tidak ada data"]);
+            header('Content-Type: application/json');
+            echo $jsonResponse;
+            exit;
+        }
+
+        $where = "md.kdsatker IN ($w)";
+
+        // $getSatker = $this->db->query("SELECT * from m_satker WHERE kdsatker IN ($w)")->getRow();
+        // if (empty($getSatker)) {
+        //     // $getSatkerResult = $this->db->query("SELECT GROUP_CONCAT(satkerid) as satkerids from m_satker WHERE balaiid=$w")->getRow();
+        //     // $getSatkerIds = $getSatkerResult->satkerids;
+        //     $where = "md. IN ($getSatkerIds)";
+        // }
+        $validation = '';
+        if ($templateid == 1 || $templateid == 2 || $templateid == 3 || $templateid == 4 || $templateid == 8) {
+
+            $validation = "AND sat NOT IN ('dokumen','layanan','laporan','0')";
+        }
+
+
+
+        $q = "SELECT
+        b.balaiid, b.balai,
+		md.kdsatker as satkerid, s.satker,
+        md.kdprogram as programid, md.kdgiat as giatid, md.kdoutput as outputid, md.kdsoutput as soutputid, md.kdkmpnen as komponenid,
+        md.kdpaket as id, md.nmpaket as label, 
+       
+        md.vol,
+        SUBSTRING_INDEX(SUBSTRING_INDEX(md.nmpaket,';',3),';',-1) as lokasi, 
+        SUBSTRING_INDEX(SUBSTRING_INDEX(md.nmpaket,';',6),';',-1) as jenis_paket, SUBSTRING_INDEX(SUBSTRING_INDEX(md.nmpaket,';',7),';',-1) as metode_pemilihan,
+        md.sat,
+        md.pagu_rpm as pagu_rpm,
+        md.pagu_sbsn as pagu_sbsn,
+        md.pagu_phln as pagu_phln,
+        md.pagu_total as pagu_total,
+
+        md.real_total as real_total, md.progres_keuangan, md.progres_fisik
+
+        FROM monika_data_{$this->user['tahun']} md
+		LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
+		LEFT JOIN m_balai b ON b.balaiid=s.balaiid WHERE
+        " . ($w ? "$where" : '') . "$validation ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
+
+
+
+        // Eksekusi query dan ambil hasil dari database
+        $result =   $this->db->query($q)->getResultArray();
+
+        // if (!$result) {
+        // }
+
+        $nestedData = array();
+
+        foreach ($result as $row) {
+            $satkerid = $row['satkerid'];
+            $id = $row['id'];
+
+            // Jika belum ada data untuk satker ini, inisialisasi array kosong
+            if (!isset($nestedData[$satkerid])) {
+                $nestedData[$satkerid] = array(
+                    'balai' => $row['balai'],
+                    'satkerid' => $satkerid,
+                    'satker' => $row['satker'],
+                    'paket' => array()
+                );
+            }
+
+            // Menambahkan data paket ke dalam array paket
+            $nestedData[$satkerid]['paket'][] = array(
+                'paketId' => $id,
+                'label' => $row['label'],
+                'vol' => $row['vol'],
+                'satuan' => $row['sat'],
+                'paguDipa' => rupiahFormat($row['pagu_total'], false),
+                'realisasi' => rupiahFormat($row['real_total'], false),
+                'persenKeu' => $row['progres_keuangan'],
+                'persenFis' => $row['progres_fisik']
+            );
+        }
+
+        // Konversi array ke format JSON
+        $jsonResponse = json_encode(array_values($nestedData), JSON_PRETTY_PRINT);
+
+        // Menampilkan response JSON
+        header('Content-Type: application/json');
+        echo $jsonResponse;
+    }
+
     //format satu-satu
     public function unitkerja($slug = '')
     {
@@ -60,6 +161,76 @@ class Pulldata extends \App\Controllers\BaseController
         );
         //dd($data);
         return view('Modules\Admin\Views\Paket\Format_2', $data);
+    }
+
+
+    function getPaketTematik()
+    {
+        $page = $this->request->getVar('page') ?? 1;
+        $perPage = $this->request->getVar('size') ?? 10;
+        $year = $this->request->getVar('year') ?? 2023;
+        $table  = "monika_data_" .  $year;
+        $offset = ($page - 1) * $perPage;
+
+        $filter = $this->request->getVar('filter') ?? '';
+
+
+
+        $q  =  $this->db->table($table)->select(" $table.kdsatker as satkerid, s.satker,
+         $table.kdprogram as programid,  $table.kdgiat as giatid,  $table.kdoutput as outputid,  $table.kdsoutput as soutputid,  $table.kdkmpnen as komponenid,
+         $table.kdpaket as id,  $table.nmpaket as label, 
+       
+         $table.vol,
+        SUBSTRING_INDEX(SUBSTRING_INDEX( $table.nmpaket,';',3),';',-1) as lokasi, 
+        SUBSTRING_INDEX(SUBSTRING_INDEX( $table.nmpaket,';',6),';',-1) as jenis_paket, SUBSTRING_INDEX(SUBSTRING_INDEX( $table.nmpaket,';',7),';',-1) as metode_pemilihan,
+         $table.sat,
+         $table.pagu_rpm as pagu_rpm,
+         $table.pagu_sbsn as pagu_sbsn,
+         $table.pagu_phln as pagu_phln,
+         $table.pagu_total as pagu_total,
+         $table.real_rpm as real_rpm,
+         $table.real_sbsn as real_sbsn,
+         $table.real_phln as real_phln,
+         $table.real_total as real_total,
+         $table.progres_keuangan,
+         $table.progres_fisik,
+
+
+         $table.real_total as real_total,  $table.progres_keuangan,  $table.progres_fisik")
+            ->join('m_satker as s', "$table.kdsatker =  s.satkerid", 'left')
+            ->join('m_balai', " s.balaiid = m_balai.balaiid", 'left')
+            ->join('tprogram', "$table.kdprogram = tprogram.kdprogram", 'left')
+            ->join('tgiat', "$table.kdgiat = tgiat.kdgiat AND tgiat.tahun_anggaran=$year", 'left')
+            ->join('toutput', "($table.kdgiat = toutput.kdgiat AND $table.kdoutput = toutput.kdoutput AND toutput.tahun_anggaran=$year)", 'left')
+            ->join('tsoutput', "($table.kdgiat = tsoutput.kdgiat AND $table.kdoutput = tsoutput.kdkro AND $table.kdsoutput = tsoutput.kdro AND tsoutput.tahun_anggaran=$year)", 'left')
+            ->join('tkabkota', "($table.kdkabkota=tkabkota.kdkabkota AND $table.kdlokasi=tkabkota.kdlokasi)", 'left')
+            ->join('tlokasi', "$table.kdlokasi=tlokasi.kdlokasi", 'left');
+        $totalData = $this->db->table($table);
+
+
+        if (isset($filter['satker'])) {
+            $q->where("$table.kdsatker", $filter['satker']);
+            $totalData->where("$table.kdsatker", $filter['satker']);
+        }
+
+        if (isset($filter['search'])) {
+            $q->like("$table.nmpaket", $filter['search'])->orLike("$table.kdpaket", $filter['search']);
+            $totalData->like("$table.nmpaket", $filter['search'])->orLike("$table.kdpaket", $filter['search']);
+        }
+
+        $data = $q->limit($perPage, $offset)->get()->getResultArray();
+        $totalData = $totalData->countAllResults();
+
+
+        return $this->respond(
+            [
+                "last_page" => ceil($totalData / $perPage),
+                "totalData" =>  $totalData,
+                "data" =>  $data,
+                // "columns" => $resultArray,
+                // "page" => $page,
+            ]
+        );
     }
 
     public function cetak_ditjensda()
@@ -419,9 +590,9 @@ class Pulldata extends \App\Controllers\BaseController
         ];
         return view('Modules\Admin\Views\Paket\cetak\Format_cetak_satker', $data);
     }
-    
-    
-    
+
+
+
     public function progresPerProvinsi()
     {
         $pageData = [];
@@ -450,7 +621,7 @@ class Pulldata extends \App\Controllers\BaseController
             ]);
 
             $dataPaket = $this->PulldataModel->getBalaiPaket(
-                "satker", 
+                "satker",
                 "md.tahun= " . session('userData.tahun') . " AND kdlokasi= " . $data->kdlokasi
             );
             foreach ($dataPaket as $keyPaket => $dataPaket) {
@@ -490,11 +661,11 @@ class Pulldata extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\Paket\Format_2', $data);
         // return view('Modules\Admin\Views\Paket\Progres_per_provinsi', []);
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     //pindah ya!
     // function simpandata(){
     //     $this->akses->goakses('add', $this->InModul);
@@ -608,10 +779,10 @@ class Pulldata extends \App\Controllers\BaseController
         $hal['paket']     = ['pg' => 'paket', 'idk' => $_GET['idk'], 'label' => $_GET['label'], 'label2' => (!empty($_GET['label2']) ? $_GET['label2'] : ''), 'format' => (!empty($_GET['format']) ? $_GET['format'] : ''), 'filter' => 'satker', 'where' => "md.kdsatker='{$_GET['idks']}'", 'title' => 'Paket'];
         $hal['balaiteknik']     = ['pg' => 'balaiteknik', 'idk' => $_GET['idk'], 'label' => $_GET['label'], 'filter' => 'satker', 'where' => "b.balaiid='{$_GET['idk']}'", 'title' => 'Balai Teknik'];
         $hal['semuasatker']     = ['pg' => 'balaiteknik', 'idk' => '', 'label' => $_GET['label'], 'filter' => 'satker', 'where' => "", 'title' => 'Semua Satker'];
-        
+
         $hal['satkerterendah']     = [
-            'pg' => 'balaiteknik', 
-            'idk' => '', 
+            'pg' => 'balaiteknik',
+            'idk' => '',
             'label' => $_GET['label'],
             'getData' => [
                 [
@@ -625,8 +796,8 @@ class Pulldata extends \App\Controllers\BaseController
         ];
 
         $hal['satkertertinggi']     = [
-            'pg' => 'balaiteknik', 
-            'idk' => '', 
+            'pg' => 'balaiteknik',
+            'idk' => '',
             'label' => $_GET['label'],
             'getData' => [
                 [
@@ -640,9 +811,9 @@ class Pulldata extends \App\Controllers\BaseController
         ];
 
         $hal['satkerdeviasiterbesar']     = [
-            'pg' => 'balaiteknik', 
-            'idk' => '', 
-            'label' => $_GET['label'], 
+            'pg' => 'balaiteknik',
+            'idk' => '',
+            'label' => $_GET['label'],
             'getData' => [
                 [
                     'title' => 'Nominal Deviasi Terbesar',
@@ -698,8 +869,7 @@ class Pulldata extends \App\Controllers\BaseController
         if (in_array($pg, $useSatkerFormat)) {
             $data['qdata'] = $hal[$pg]['getData'];
             $pgview = "Rekap-satker";
-        }
-        else {
+        } else {
             $data['qdata'] = ($pg == "paket" ? $this->PulldataModel->getPaket($hal[$pg]['where']) : ($hal[$pg]['where'] == null ? $this->PulldataModel->getBalaiPaket($hal[$pg]['filter']) : $this->PulldataModel->getBalaiPaket($hal[$pg]['filter'], $hal[$pg]['where'])));
         }
         // dd($data);
@@ -747,7 +917,7 @@ class Pulldata extends \App\Controllers\BaseController
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header("Expires: 0");
         }
-        
+
         $pageData = [];
         $dataProvinsi = $this->tableProvinsi->get()->getResult();
         foreach ($dataProvinsi as $key => $data) {
@@ -774,7 +944,7 @@ class Pulldata extends \App\Controllers\BaseController
             ]);
 
             $dataPaket = $this->PulldataModel->getBalaiPaket(
-                "satker", 
+                "satker",
                 "md.tahun= " . session('userData.tahun') . " AND kdlokasi= " . $data->kdlokasi
             );
             foreach ($dataPaket as $keyPaket => $dataPaket) {

@@ -11353,3 +11353,27 @@ KTUtil.ready(function () {
     KTQuickSearchOffcanvas().init(KTUtil.get("kt_quick_search_offcanvas"));
   }
 });
+
+$(document).on("click", ".modal .btn-modal-full", function (e) {
+  e.preventDefault();
+  $(this).parents(".modal-dialog").toggleClass("modal-full my-0");
+  $(this).parents(".modal").toggleClass("p-0");
+  $(this).find("i").toggleClass("fa-external-link-alt");
+  $(this).find("i").toggleClass("fa-compress-arrows-alt");
+});
+
+function encryptData(number) {
+  const numberStr = number.toString();
+  let encrypted = "";
+  for (let i = 0; i < numberStr.length; i++) {
+    const charCode = numberStr.charCodeAt(i);
+    encrypted += String.fromCharCode(charCode + 1); // Menggeser kode karakter
+  }
+
+  const letters = "abcdefghijklmnopqrstuvwxyz"; // Huruf-huruf kombinasi
+  for (let i = 0; i < letters.length; i++) {
+    encrypted += letters.charAt(Math.floor(Math.random() * letters.length));
+  }
+
+  return encrypted;
+}

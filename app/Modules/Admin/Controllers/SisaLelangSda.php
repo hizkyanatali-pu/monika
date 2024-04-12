@@ -61,7 +61,7 @@ class SisaLelangSda extends \App\Controllers\BaseController
         $this->tarikTable->truncate();
         $this->satkerTable->truncate();
         $this->paketTable->truncate();
-        $content = file_get_contents('https://emonitoring.pu.go.id/api_pep/sisa_lelang_sda');
+        $content = file_get_contents(getenv('API_EMON') . 'api_pep/sisa_lelang_sda');
         $dom = new \DOMDocument();
         @$dom->loadHTML($content);
         $xpath = new \DomXpath($dom);
@@ -101,7 +101,7 @@ class SisaLelangSda extends \App\Controllers\BaseController
                 $satker_id = $this->db->insertID();
             } else {
                 // Paket Pekerjaan
-                $substrKode = substr($this->trimString($node->item(1)->nodeValue),0,18);
+                $substrKode = substr($this->trimString($node->item(1)->nodeValue), 0, 18);
                 $paketInsert = [
                     'tarik_id'            => $tarik_id,
                     'satker_id'           => $satker_id,
@@ -147,7 +147,8 @@ class SisaLelangSda extends \App\Controllers\BaseController
         return rtrim(ltrim($_text));
     }
 
-    private function getDataSisaLelangPerKategori() {
+    private function getDataSisaLelangPerKategori()
+    {
         $lastTarikId = $this->tarikTable->select('id')
             ->orderBy('id', 'DESC')
             ->limit(1)
@@ -166,17 +167,18 @@ class SisaLelangSda extends \App\Controllers\BaseController
             ($subSbsn) as sbsn,
             ($subPhln) as phln
         ")
-        ->join('tgiat', "SUBSTRING_INDEX(emon_tarik_sisalelang_sda_paketpekerjaan.kode, '.', 1) = tgiat.kdgiat")
-        ->where('tarik_id', $lastTarikId)
-        ->where("nama != 'TOTAL'")
-        ->where('tahun_anggaran', $this->user["tahun"])
-        ->groupBy("SUBSTRING_INDEX(kode, '.', 1)")
-        ->orderBy("tgiat.kdgiat")
-        ->get()
-        ->getResult();
+            ->join('tgiat', "SUBSTRING_INDEX(emon_tarik_sisalelang_sda_paketpekerjaan.kode, '.', 1) = tgiat.kdgiat")
+            ->where('tarik_id', $lastTarikId)
+            ->where("nama != 'TOTAL'")
+            ->where('tahun_anggaran', $this->user["tahun"])
+            ->groupBy("SUBSTRING_INDEX(kode, '.', 1)")
+            ->orderBy("tgiat.kdgiat")
+            ->get()
+            ->getResult();
     }
 
-    private function subQuery_getDataSisaLelangPerKategori($_sumberDana) {
+    private function subQuery_getDataSisaLelangPerKategori($_sumberDana)
+    {
         return "SELECT IFNULL(SUM($_sumberDana.sisa_lelang), 0) FROM emon_tarik_sisalelang_sda_paketpekerjaan $_sumberDana WHERE $_sumberDana.sumber_dana = '$_sumberDana' AND SUBSTRING_INDEX($_sumberDana.kode, '.', 1) = kodeKeg";
     }
 }

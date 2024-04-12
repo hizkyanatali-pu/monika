@@ -143,8 +143,21 @@ class Auth extends \App\Controllers\BaseController
 				->join('m_balai', 'ku_user.balaiid = m_balai.balaiid', 'left')
 				->first();
 
+			// kode satker 498077 = PJSA BATANGHARI 2024 ganti kode ke 633074
+			// kode satker 498366 = Bendungan Cimanuk 2024 ganti kode ke 690680
 
-			$setSession_userData['satker_id']           = $dataSarker_n_Balai['satkerid'];
+			if ($dataSarker_n_Balai['satkerid'] == "498077" and $this->request->getPost('tahun') > 2023) {
+				$satker_id = "633074";
+			} elseif ($dataSarker_n_Balai['satkerid'] == "498366" and $this->request->getPost('tahun') > 2023) {
+				$satker_id = "690680";
+			} else {
+
+				$satker_id = $dataSarker_n_Balai['satkerid'];
+			}
+
+
+
+			$setSession_userData['satker_id']           = $satker_id;
 			$setSession_userData['satker_nama']         = $dataSarker_n_Balai['satker'];
 			$setSession_userData['satker_grup_jabatan'] = $dataSarker_n_Balai['grup_jabatan'];
 			$setSession_userData['balai_id']            = $dataSarker_n_Balai['balaiid'];

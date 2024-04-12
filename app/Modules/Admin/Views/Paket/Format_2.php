@@ -122,7 +122,7 @@ $currentDayOfMonth = date('j');
                                     <!-- <h3><?php //number_format((($qdata[0]['pagusda_progres_keuangan']-$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya']) / $maxDays * $currentDayOfMonth )+$qdata[0]['pagusda_progres_keuangan_bulan_sebelumnya'], 2, ',', '.'); 
                                                 ?>% </h3> -->
                                     <!-- <h3><?= number_format((isset($qdata[0]['pagusda_progres_keuangan']) ? $qdata[0]['pagusda_progres_keuangan'] : 0), 2, ',', '.'); ?>% </h3> -->
-                                    <h3><?= number_format($keuProgressSda, 2, ',', '.') ?>%</h3>
+                                    <h3><?= isset($keuProgressSda) ? number_format($keuProgressSda, 2, ',', '.') : 0 ?>%</h3>
                                 </div>
                                 <div class="float-right text-right">
                                     <h6> Progres Keuangan</h6>
@@ -137,7 +137,7 @@ $currentDayOfMonth = date('j');
                                     <!-- <h3><?php // number_format(((($qdata[0]['pagusda_progres_fisik']-$qdata[0]['pagusda_progres_fisik_bulan_sebelumnya']) )  / $maxDays * $currentDayOfMonth ) + $qdata[0]['pagusda_progres_fisik_bulan_sebelumnya'] , 2, ',', '.'); 
                                                 ?>% </h3> -->
                                     <!-- <h3><?= number_format((isset($qdata[0]['pagusda_progres_fisik']) ? $qdata[0]['pagusda_progres_fisik'] : 0), 2, ',', '.'); ?>% </h3> -->
-                                    <h3><?= number_format($fisikProgressSda, 2, ',', '.') ?>%</h3>
+                                    <h3><?= isset($fisikProgressSda) ? number_format($fisikProgressSda, 2, ',', '.') : 0 ?>%</h3>
                                 </div>
                                 <div class="float-right text-right">
                                     <h6>Progres Fisik</h6>
@@ -273,7 +273,7 @@ $currentDayOfMonth = date('j');
                         </div>
                     </div>
                     <div class="float-right">
-                        <?php if($title == "Progres Per Provinsi") :  ?>
+                        <?php if ($title == "Progres Per Provinsi") :  ?>
                             <a target="_blank" href="<?php echo site_url('pulldata/rekap-progreskeu-progres-per-provinsi/pdf'); ?>" class="btn btn-warning btn-sm text-white"><i class="fa fa-file-pdf"></i>PDF</a>
                             <a target="_blank" href="<?php echo site_url('pulldata/rekap-progreskeu-progres-per-provinsi/excel'); ?>" class="btn btn-success btn-sm text-white"><i class="fa fa-file-excel"></i>Rekap</a>
                         <?php else : ?>
@@ -631,7 +631,7 @@ $currentDayOfMonth = date('j');
     });
 
     $(".pdf-report").click(function() {
-        
+
         let arr = [];
 
         if (!$("input[name=pagu_rpm]").prop("checked")) {
@@ -674,9 +674,9 @@ $currentDayOfMonth = date('j');
 
         //condition for report button
         if (report_open) {
-            <?php 
-                $linkPdf = $id_report;
-                if ($title == 'Semua Satker' || $title == 'Progres Per Provinsi')  $linkPdf = '../'.$id_report;
+            <?php
+            $linkPdf = $id_report ?? '';
+            if ($title == 'Semua Satker' || $title == 'Progres Per Provinsi')  $linkPdf = '../' . $id_report;
             ?>
             $(this).attr("href", "<?= $linkPdf ?>?filter=" + arr.join(','))
             $(this).attr("target", "_blank")

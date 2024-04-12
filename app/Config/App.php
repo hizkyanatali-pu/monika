@@ -184,14 +184,14 @@ class App extends BaseConfig
 	|
 	*/
 	public $sessionDriver            = 'CodeIgniter\Session\Handlers\DatabaseHandler';
-	public $sessionCookieName        = 'Monika_session';
-	public $sessionExpiration        = 7200;
+	public $sessionCookieName        = 'Monika_sessions';
+	public $sessionExpiration        = 0;
 	// public $sessionSavePath          = WRITEPATH . 'session';
 	public $sessionSavePath          = 'ci_sessions';
 
-	public $sessionMatchIP           = true;
+	public $sessionMatchIP           = false;
 	public $sessionTimeToUpdate      = 300;
-	public $sessionRegenerateDestroy = true;
+	public $sessionRegenerateDestroy = false;
 
 	/*
 	|--------------------------------------------------------------------------

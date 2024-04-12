@@ -5,15 +5,21 @@
 
 <div class="kt-header-menu-wrapper" id="kt_header_menu_wrapper">
 	<div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout-default ">
+		<ul class="kt-menu__nav ">
+			<li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel" data-ktmenu-submenu-toggle="click" aria-haspopup="true"><a href="javascript:;" class="kt-menu__link kt-menu__toggle" style="cursor: none;"><span class="kt-menu__link-text">Selamat datang di Aplikasi Monika - <b> &nbsp; Tahun <?= session('userData.tahun') ?> </b></span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+				<div class="kt-menu__submenu  kt-menu__submenu--fixed kt-menu__submenu--left" style="width:1000px">
+				</div>
+			</li>
 
+		</ul>
 	</div>
+
 </div>
 
 <!-- end:: Header Menu -->
 
 <!-- begin:: Header Topbar -->
 <div class="kt-header__topbar">
-
 
 	<!--begin: User Bar -->
 	<div class="kt-header__topbar-item kt-header__topbar-item--user">

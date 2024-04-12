@@ -20,7 +20,7 @@ class Importdata extends \App\Controllers\BaseController
     public function index($slug = "paket")
     {
         $pg = 20;
-        $type = ["type" => $slug];
+        $type = ["type" => $slug, "tahunanggaran" => $this->user['tahun']];
         $data = [
             'title' => 'Daftar pemanggilan data',
             'pg' => $pg,
@@ -59,7 +59,7 @@ class Importdata extends \App\Controllers\BaseController
                 'import_uid'   => $this->user['uid'],
                 'st'            => 2
             ];
-            $this->ImportdataModel->where(['st' => 3, 'type' => $d["type"]])->set($post)->update();
+            $this->ImportdataModel->where(['st' => 3, 'type' => $d["type"], 'tahunanggaran' => $this->user['tahun']])->set($post)->update();
             $this->importsql($d['nmfile']);
             $post = [
                 'aktif_dt'    => date("ymdHis"),
@@ -70,7 +70,7 @@ class Importdata extends \App\Controllers\BaseController
         }
 
         if ($aksi == true) {
-            $q = $this->ImportdataModel->where(['idpull' => $slug, 'type' => $d["type"]])->set($post)->update();
+            $q = $this->ImportdataModel->where(['idpull' => $slug, 'type' => $d["type"], 'tahunanggaran' => $this->user['tahun']])->set($post)->update();
         }
 
         return redirect()->to('/preferensi/tarik-data-emon/' . $d["type"])->with('success', 'Proses selesai');
@@ -108,11 +108,11 @@ class Importdata extends \App\Controllers\BaseController
         // ) {
         // exit;
         if ($type == 'paket') {
-            $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket?thang=" . $tahunAnggaran);
+            $data = file_get_contents(getenv('API_EMON') . "ws_sda/paket?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_paket_' . $tahunAnggaran;
             $regex = preg_replace('/\s+/', ' ', $data);
         } else if ($type == 'kontrak') {
-            $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/kontrak?thang=" . $tahunAnggaran);
+            $data = file_get_contents(getenv('API_EMON') . "ws_sda/kontrak?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_kontrak_' . $tahunAnggaran;
             $regex = preg_replace('/\s+/', ' ', $data);
             $regex = preg_replace('/"+"/', '"', $regex);
@@ -122,12 +122,12 @@ class Importdata extends \App\Controllers\BaseController
             // $regex = preg_replace('/"",/', '"NULL",', $regex);
             // $regex = preg_replace('/"",/', '"', $regex);
         } else if ($type == 'paket_register') {
-            $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/paket_register?thang=" . $tahunAnggaran);
+            $data = file_get_contents(getenv('API_EMON') . "ws_sda/paket_register?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_paket_register_' . $tahunAnggaran;
             $regex = preg_replace('/\s+/', ' ', $data);
         } else {
 
-            $data = file_get_contents("https://emonitoring.pu.go.id/ws_sda/rekap_unor?thang=" . $tahunAnggaran);
+            $data = file_get_contents(getenv('API_EMON') . "ws_sda/rekap_unor?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_rekap_unor_' . $tahunAnggaran;
             $regex = preg_replace('/\s+/', ' ', $data);
         }
@@ -308,7 +308,7 @@ class Importdata extends \App\Controllers\BaseController
             == "local"
         ) {
 
-            $command = "E:\laragon\bin\mysql\mysql-5.7.24-winx64\bin\mysql --user=root --password= -h localhost -D monika < E:\\xampp\\htdocs\\monika\\writable\\emon\FileSql\\$slug.sql";
+            $command = "E:\\laragon\\bin\\mysql\\mysql-5.7.24-winx64\\bin\\mysql --user=root --password= -h localhost -D monika < E:\\xampp\\htdocs\\monika-new\\writable\\emon\FileSql\\$slug.sql";
         } else if (
             $_ENV['SERVER']
             == 'mascitra'
@@ -318,8 +318,33 @@ class Importdata extends \App\Controllers\BaseController
         } else {
             $command = "mysql --user='" . $_ENV['database.default.username'] . "' --password='" . $_ENV['database.default.password'] . "' -h localhost -D " . $_ENV['database.default.database'] . "< /var/www/monika-new/writable/emon/FileSql/$slug.sql";
         }
-        //dd($command);
+        // dd($command);
         $cmd = shell_exec($command);
         return ['command' => $command];
+    }
+
+
+    function copyTableTemplatePK()
+    {
+        $db = \Config\Database::connect();
+        $dokumen_pk_template = $db->query('CREATE TABLE IF NOT EXISTS dokumen_pk_template_2024 LIKE dokumen_pk_template_2023');
+        $dokumen_pk_template = $db->query('REPLACE INTO dokumen_pk_template_2024 SELECT * FROM dokumen_pk_template_2023');
+
+        $dokumen_pk_template_akses = $db->query('CREATE TABLE IF NOT EXISTS dokumen_pk_template_akses_2024 LIKE dokumen_pk_template_akses_2023');
+        $dokumen_pk_template_akses = $db->query('REPLACE INTO dokumen_pk_template_akses_2024 SELECT * FROM dokumen_pk_template_akses_2023');
+
+        $dokumen_pk_template_info = $db->query('CREATE TABLE IF NOT EXISTS dokumen_pk_template_info_2024 LIKE dokumen_pk_template_info_2023');
+        $dokumen_pk_template_info = $db->query('REPLACE INTO dokumen_pk_template_info_2024 SELECT * FROM dokumen_pk_template_info_2023');
+
+        $dokumen_pk_template_kegiatan = $db->query('CREATE TABLE IF NOT EXISTS dokumen_pk_template_kegiatan_2024 LIKE dokumen_pk_template_kegiatan_2023');
+        $dokumen_pk_template_kegiatan = $db->query('REPLACE INTO dokumen_pk_template_kegiatan_2024 SELECT * FROM dokumen_pk_template_kegiatan_2023');
+
+        $dokumen_pk_template_row = $db->query('CREATE TABLE IF NOT EXISTS dokumen_pk_template_row_2024 LIKE dokumen_pk_template_row_2023');
+        $dokumen_pk_template_row = $db->query('REPLACE INTO dokumen_pk_template_row_2024 SELECT * FROM dokumen_pk_template_row_2023');
+
+        $dokumen_pk_template_rowrumus = $db->query('CREATE TABLE IF NOT EXISTS dokumen_pk_template_rowrumus_2024 LIKE dokumen_pk_template_rowrumus_2023');
+        $dokumen_pk_template_rowrumus = $db->query('REPLACE INTO dokumen_pk_template_rowrumus_2024 SELECT * FROM dokumen_pk_template_rowrumus_2023');
+
+        return "Berhasil";
     }
 }

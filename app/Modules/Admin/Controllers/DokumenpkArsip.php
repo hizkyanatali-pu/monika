@@ -44,14 +44,14 @@ class DokumenpkArsip extends \App\Controllers\BaseController
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
-            dokumen_pk_template.title as dokumenTitle,
+            dokumen_pk_template_' . session('userData.tahun') . '.title as dokumenTitle,
             ku_user.nama as userCreatedName,
             dokumenpk_satker.satkerid,
             dokumenpk_satker.balaiid
         ')
-            ->join('dokumen_pk_template', 'dokumenpk_satker.template_id = dokumen_pk_template.id', 'left')
+            ->join('dokumen_pk_template_' . session('userData.tahun'), 'dokumenpk_satker.template_id = dokumen_pk_template_' . session('userData.tahun') . '.id', 'left')
             ->join('ku_user', 'dokumenpk_satker.user_created = ku_user.uid', 'left')
-            ->where('dokumen_pk_template.status', '1')
+            ->where('dokumen_pk_template_' . session('userData.tahun') . '.status', '1')
             ->where('dokumenpk_satker.status', $_status)
             ->where("dokumenpk_satker.deleted_at is not null")
             ->orderBy('dokumenpk_satker.id', 'DESC');
@@ -59,7 +59,7 @@ class DokumenpkArsip extends \App\Controllers\BaseController
         if ($_dokumenType != 'all') $dataDokumen->where('dokumenpk_satker.dokumen_type', $_dokumenType);
 
         $returnDaata = array_map(function ($arr) {
-            
+
             return [
                 'id'                         => $arr->id,
                 'template_id'                => $arr->template_id,
@@ -95,9 +95,9 @@ class DokumenpkArsip extends \App\Controllers\BaseController
             'status' => true
         ]);
     }
-    
-    
-    
+
+
+
     public function arsipkanMultipleDokumen()
     {
         foreach ($this->request->getPost('id') as $key => $value) {
@@ -138,9 +138,9 @@ class DokumenpkArsip extends \App\Controllers\BaseController
             'status' => true
         ]);
     }
-    
-    
-    
+
+
+
     public function deletePermanentMultiple()
     {
         foreach ($this->request->getPost('id') as $key => $value) {
@@ -151,13 +151,13 @@ class DokumenpkArsip extends \App\Controllers\BaseController
             'status' => true
         ]);
     }
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     private function deleteDokumen($dokumenId)
     {
         $dataDokumen = $this->dokumenSatker->select('revision_master_dokumen_id')->where(['id' => $dokumenId])->get()->getFirstRow();

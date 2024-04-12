@@ -117,8 +117,8 @@ $request = \Config\Services::request();
                 </div>
             </li>
 
-            <li class="kt-menu__item  kt-menu__item--submenu  <?=
-                                                                ($request->uri->getSegment(1) == 'tematik' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+            <!-- <li class="kt-menu__item  kt-menu__item--submenu  <?=
+                                                                    ($request->uri->getSegment(1) == 'tematik' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                 <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                     <i class="kt-menu__link-icon fas fa-project-diagram"></i>
                     <span class="kt-menu__link-text">Tematik</span>
@@ -183,8 +183,14 @@ $request = \Config\Services::request();
                         </li>
                     </ul>
                 </div>
+            </li> -->
+            <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'tematik' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                <a href="<?= site_url('tematik'); ?>" class="kt-menu__link ">
+                    <i class="kt-menu__link-icon fas fa-ban"></i>
+                    <span class="kt-menu__link-text">Tematik</span>
+                    <span class="kt-badge kt-badge--danger">N</span>
+                </a>
             </li>
-
 
             <li class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'sisa-lelang' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fas fa-project-diagram"></i><span class="kt-menu__link-text">Sisa Lelang</span><span class="kt-badge kt-badge--danger">N</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
@@ -342,22 +348,16 @@ $request = \Config\Services::request();
                     <span class="kt-menu__arrow"></span>
 
                     <ul class="kt-menu__subnav">
-                        <li 
-                            class="kt-menu__item 
-                            <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'dashboard'  ? ' kt-menu__item--active' : '') ?>" 
-                            aria-haspopup="true"
-                        >
-                            <a 
-                                href="<?= site_url('dokumenpk/dashboard'); ?>" 
-                                class="kt-menu__link "
-                            >
-                            <i class="kt-menu__link-icon fas fa-chart-bar"></i>
+                        <li class="kt-menu__item 
+                            <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'dashboard'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <a href="<?= site_url('dokumenpk/dashboard'); ?>" class="kt-menu__link ">
+                                <i class="kt-menu__link-icon fas fa-chart-bar"></i>
                                 <span class="kt-menu__link-text">
                                     Dashboard
                                 </span>
                             </a>
                         </li>
-                        
+
 
 
                         <li class="

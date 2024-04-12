@@ -61,7 +61,7 @@ class Preferensi extends \App\Controllers\BaseController
         $builder = $this->db1->table('monika_data');
 
 
-        $url = 'https://emonitoring.pu.go.id/ws_sda';
+        $url = getenv('API_EMON') . 'ws_sda';
 
         $ch = curl_init();
         $options = [
@@ -366,15 +366,19 @@ class Preferensi extends \App\Controllers\BaseController
             $countdata = $query->countAll();
             $query2 = $this->db1->query("SELECT * FROM monika_pull_sqlite ORDER BY idpull asc LIMIT 1");
             $result = $query2->getRow();
-            $fileDelete = $targetDir . DIRECTORY_SEPARATOR . $result->nmfile;
 
-            if ($countdata > 4) {
-                if (file_exists($fileDelete)) {
+            if ($result) {
 
-                    unlink($fileDelete);
+                $fileDelete = $targetDir . DIRECTORY_SEPARATOR . $result->nmfile;
 
-                    $query->where('nmfile', $result->nmfile);
-                    $query->delete();
+                if ($countdata > 30) {
+                    if (file_exists($fileDelete)) {
+
+                        unlink($fileDelete);
+
+                        $query->where('nmfile', $result->nmfile);
+                        $query->delete();
+                    }
                 }
             }
 
@@ -383,10 +387,10 @@ class Preferensi extends \App\Controllers\BaseController
             $post = [
                 'idpull' => null,
                 'nmfile' => $fileName,
-                'sizefile' =>  $_FILES["file"]["size"],
+                'sizefile' =>  $_FILES["file"]["size"] ?? '',
                 'in_dt' => date("ymdHis"),
                 'in_uid' => $this->user['uid'],
-                'nmfileoriginal' => $_REQUEST['name']
+                'nmfileoriginal' => $_REQUEST['name'] ?? ''
             ];
             $q = $this->ImportdataSqliteModel->save($post);
         }
@@ -487,9 +491,11 @@ class Preferensi extends \App\Controllers\BaseController
             if ($pullcount > 30) {
 
                 $query = $this->ImportdataModel->deleteFiles(["nmfile" => $namefile, "type" => $tabel]);
-
-                unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
-                unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
+                if (file_exists($targetDir . DIRECTORY_SEPARATOR . $namefile)) {
+                    // Hapus file hanya jika file tersebut ada
+                    unlink($targetDir . DIRECTORY_SEPARATOR . $namefile);
+                    unlink($targetDir1 . DIRECTORY_SEPARATOR . $namefilesql);
+                }
             }
 
 
