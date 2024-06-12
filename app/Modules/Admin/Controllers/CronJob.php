@@ -39,7 +39,7 @@ class CronJob extends \App\Controllers\BaseController
 
             if ($type == 'paket') {
 
-                $data = file_get_contents(getenv('API_EMON') . "ws_sda/paket?thang=" . date("Y"));
+                $data = file_get_contents(getenv('API_EMON') . "ws_sda/index?thang=" . date("Y"));
                 $nmFile = date("ymdHis") . '_fromemon_paket_' . date("Y");
                 $regex = preg_replace('/\s+/', ' ', $data);
 
