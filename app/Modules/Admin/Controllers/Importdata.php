@@ -108,7 +108,7 @@ class Importdata extends \App\Controllers\BaseController
         // ) {
         // exit;
         if ($type == 'paket') {
-            $data = file_get_contents(getenv('API_EMON') . "ws_sda/index?thang=" . $tahunAnggaran);
+            $data = file_get_contents(getenv('API_EMON') . "ws_sda/pkt?thang=" . $tahunAnggaran);
             $nmFile = date("ymdHis") . '_fromemon_paket_' . $tahunAnggaran;
             $regex = preg_replace('/\s+/', ' ', $data);
         } else if ($type == 'kontrak') {
