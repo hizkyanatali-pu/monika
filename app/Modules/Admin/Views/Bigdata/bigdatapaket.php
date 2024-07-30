@@ -2,6 +2,12 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <?= $this->section('content') ?>
+<style>
+  #map {
+    width: 100%;
+    height: 400px;
+  }
+</style>
 <!-- <style>
     select,
     .select2 {
@@ -73,9 +79,7 @@
         <input type="hidden" name="filter" id="filter" value="">
         <input type="hidden" name="columns" id="columns" value="">
     </form>
-
     <div id="example-table"></div>
-
 </div>
 <!-- end:: Content -->
 
@@ -224,7 +228,21 @@
     </div>
 </div>
 <!-- end-of: Modal Filter Column -->
-
+<div class="modal fade" id="mapModal" aria-labelledby="mapModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mapModalLabel">Peta Kabupaten</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+</div>
 <?= $this->endSection() ?>
 
 
@@ -243,7 +261,6 @@
         ajaxURL: "http://localhost:8080/bigdata/sda_paket", // Ganti dengan URL ke file PHP
         layout: "fitColumns",
         ajaxResponse: function(url, params, response) {
-            console.log(response);
             // Mengambil definisi kolom dari respons JSON
             var kolomData = response.kolom;
             tabel.setColumns(kolomData);
@@ -254,6 +271,30 @@
         }
     }); 
 </script>-->
+<script src="https://maps.googleapis.com/maps/api/js?key=api_key_google_map" ></script>
+<script>
+    $(document).on('click','.btn-map',function(){
+        lat = $(this).data('lat')
+        lng = $(this).data('lng')
+        initialize(parseInt(lat),parseInt(lng))
+        $("#mapModal").modal("show");
+    })
+    function initialize(lat,lng) {
+        var mapCanvas = document.getElementById('map');
+        var myLatLng = {lat: lat, lng: lng};
+        var mapOptions = {
+            center: new google.maps.LatLng(myLatLng),
+            zoom: 8,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(mapCanvas, mapOptions)
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Kabupaten'
+        });
+    }
+</script>
 
 <script>
     function loadColumn() {
@@ -298,7 +339,6 @@
 
         var selectedColumns = $('input[name="selectedColumns[]"]:checked').map(function() {
             var originalValue = $(this).val();
-            console.log(originalValue);
             switch (true) {
                 case originalValue.includes("nmbalai"):
                     return "m_balai.balai as " + originalValue;
@@ -424,12 +464,24 @@
                 for (var key in firstItem) {
                     if (firstItem.hasOwnProperty(key)) {
                         // Tambahkan kolom ke array kolom
-                        columns.push({
-                            title: key,
-                            field: key
-                        });
+                        if(key != 'lat' && key != 'lng'){
+                            columns.push({
+                                title: key,
+                                field: key
+                            });
+                        }
                     }
                 }
+                columns.push({
+                    title: 'Lokasi',
+                    field: 'kdkabkota',
+                    formatter : function(cell, formatterParams, onRendered){
+                        let lat_data = cell._cell.row.data.lat
+                        let lng_data = cell._cell.row.data.lng
+                        return `<button type='button' data-lat='${lat_data}' data-lng='${lng_data}' class='btn btn-info btn-map'>Map</button>`
+                    }
+
+                });
 
                 // Inisialisasi tabel TabulatorJS dengan kolom yang telah dihasilkan
                 // if (!table) {
@@ -490,7 +542,6 @@
 
         $('#year').val(year);
         $('#filter').val(JSON.stringify(filterData));
-        console.log($('#filter').val());
         $('#columns').val(columns);
 
         // Submit form tersembunyi
@@ -501,7 +552,6 @@
 
 
     // document.getElementById("download-xlsx").addEventListener("click", function() {
-    //     console.log('wait');
     //     // Mendapatkan semua baris dari tabel
     //     table.getRows(true, 'data', function(rows) {
     //         // Membuat array dari data baris

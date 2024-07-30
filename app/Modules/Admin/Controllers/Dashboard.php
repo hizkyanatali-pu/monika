@@ -75,7 +75,7 @@ class Dashboard extends \App\Controllers\BaseController
         // exit;
 
         $grupData = $this->rekapGroupData();
-        $qdata = $this->TematikModel->getListRekap($grupData, $filterDateStart, $filterDateEnd);
+        $qdata = [];
 
         //pohon terkontrak
         $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"], $filterDateStart, $filterDateEnd);
@@ -264,8 +264,233 @@ class Dashboard extends \App\Controllers\BaseController
         return view('Modules\Admin\Views\Dashboard', $data);
     }
 
+    public function index2(){
+        //cek jika tabel yang berkaitan dengan api emon kosong 
+
+        $check_empty_table_paket = $this->db_mysql->query("SELECT * FROM monika_data_{$this->user['tahun']}")->getNumRows();
+        $check_empty_table_kontrak = $this->db_mysql->query("SELECT * FROM monika_kontrak_{$this->user['tahun']}")->getNumRows();
+        $check_empty_table_rekap_unor = $this->db_mysql->query("SELECT * FROM monika_rekap_unor_{$this->user['tahun']}")->getNumRows();
+        $check_empty_table_paket_register = $this->db_mysql->query("SELECT * FROM monika_paket_register_{$this->user['tahun']}")->getNumRows();
 
 
+
+        if ($check_empty_table_paket < 1) {
+
+            return redirect()->to(site_url("preferensi/tarik-data-emon/paket"));
+        }
+
+        if ($check_empty_table_kontrak < 1) {
+
+            return redirect()->to(site_url("preferensi/tarik-data-emon/kontrak"));
+        }
+
+        if ($check_empty_table_rekap_unor < 1) {
+
+            return redirect()->to(site_url("preferensi/tarik-data-emon/rekap_unor"));
+        }
+
+        if ($check_empty_table_paket_register < 1) {
+
+            return redirect()->to(site_url("preferensi/tarik-data-emon/paket_register"));
+        }
+
+        // end
+
+
+        $filterDateStart = $this->request->getGet('filter-date-start') ?? null;
+        $filterDateEnd   = $this->request->getGet('filter-date-end') ?? null;
+
+        // print_r($filterDateStart);
+        // exit;
+
+        $grupData = $this->rekapGroupData();
+        $qdata = [];
+
+        //pohon terkontrak
+        $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"], $filterDateStart, $filterDateEnd);
+        $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"], $filterDateStart, $filterDateEnd);
+        $qbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"], $filterDateStart, $filterDateEnd);
+        $qpersiapankontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Persiapan kontrak"], $filterDateStart, $filterDateEnd);
+
+
+        $rekapUnor = $this->RekapUnorModel->getRekapUnor();
+        $getGraphicData = $this->PulldataModel->getGraphicDataProgressPerSumberDana();
+        $getGraphicDataJenisBelanja = $this->PulldataModel->getGraphicDataProgressPerJenisBelanja();
+        $getGraphicDataPerkegiatan = $this->PulldataModel->getGraphicDataProgressPerKegiatan();
+
+
+        // postur belum lelang
+
+
+
+        //table perkegiatan
+
+        $belumlelangPerkegiatanRpmSyc =  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_rpm", 0, true, $filterDateStart, $filterDateEnd);
+        $belumlelangPerkegiatanMyc =  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_total", "1,2,3", false, $filterDateStart, $filterDateEnd);
+
+
+
+
+        // $data = array(
+        //     'title' => 'Belum Lelang',
+        // );
+
+
+        $data = array(
+            'title' => 'Dashboard',
+            'data' => $qdata,
+            'rekapunor' => $rekapUnor,
+
+            //pohon kontraktual
+            'terkontrak' => $qterkontrak,
+            'proseslelang' => $qproseslelang,
+            'belumlelang' => $qbelumlelang,
+            'persiapankontrak' => $qpersiapankontrak,
+            'gagallelang' => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Gagal Lelang"]),
+
+
+            'keu' => $this->getprogreskeu("keuangan"),
+            'fis' => $this->getprogreskeu("fisik"),
+            'pagu' =>    $getGraphicData,
+            'jenisbelanja' =>  $getGraphicDataJenisBelanja,
+            'perkegiatan' =>  $getGraphicDataPerkegiatan,
+
+            // belum lelang RPM syc
+            'belum_lelang_rpm_syc' => $belumlelangPerkegiatanRpmSyc,
+            'belum_lelang_myc' => $belumlelangPerkegiatanMyc,
+            'belum_lelang_phln_project_loan' =>  $this->PohonAnggaran->getDataBelumLelangPhlnMycProjectLoan("pagu_phln", "1,2,3", false, $filterDateStart, $filterDateEnd),
+
+
+            'qdata' => [
+                "bbws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS'"),
+                "bws" => $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BWS'"),
+                "pusat" => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='99'"),
+                'Balai Teknik' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='97'"),
+                'dinas' => $this->PulldataModel->getBalaiPaket('satker', "b.balaiid='98'"),
+                'Semua Satker' => $this->PulldataModel->getBalaiPaket("satker10terendah")
+            ],
+
+
+
+        );
+
+        // belum lelang 
+
+        $data['nilai_rpm'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "RPM", $filterDateStart, $filterDateEnd);
+        $data['nilai_sbsn'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "SBSN", $filterDateStart, $filterDateEnd);
+        $data['nilai_phln'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "PHLN", $filterDateStart, $filterDateEnd);
+
+        $data['rpmSyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "RPM", $filterDateStart, $filterDateEnd);
+        $data['rpmMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "RPM", $filterDateStart, $filterDateEnd);
+
+        $data['phlnMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "PHLN", $filterDateStart, $filterDateEnd);
+
+
+        $data['rpmSycList'] = $this->PohonAnggaran->getDataBelumLelangList([[0]], "RPM", $filterDateStart, $filterDateEnd);
+        $data['rpmMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "RPM", $filterDateStart, $filterDateEnd);
+        $data['phlnMycList'] = $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "PHLN", $filterDateStart, $filterDateEnd);
+
+
+        //rencana tender
+        $data['tenderRpm'] =  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("RPM", null, null, false, $filterDateStart, $filterDateEnd);
+        $data['tenderPhln'] =  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("PHLN", null, null, false, $filterDateStart, $filterDateEnd);
+
+
+        // Filter Menu Dashboard
+        $data['filterMenu'] = [
+            [
+                'title'      => 'PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR',
+                'menuId'     => 'progres_fisik_keuangan_kementerian_pupr',
+                'alwaysShow' => true
+            ],
+            [
+                'title'      => 'PROGRES PROGRAM PADAT KARYA PER KEGIATAN',
+                'menuId'     => 'progres_program_padat_karya_per_kegiatan',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRESS KEGIATAN TEMATIK DIREKTORAT JENDERAL SUMBER DAYA AIR',
+                'menuId'     => 'progress_kegiatan_tematik_direktorat_jenderal_sumber_daya_air',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'POSTUR PAKET KONTRAKTUAL',
+                'menuId'     => 'viewkontraktual',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'POSTUR PAKET BELUM LELANG',
+                'menuId'     => 'belum-lelang',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN',
+                'menuId'     => 'daftar_paket_belum_lelang_rpm_syc_per_kegiatan',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN',
+                'menuId'     => 'daftar_paket_belum_lelang_myc_per_kegiatan',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PAKET BELUM LELANG PHLN - MYC PROJECT LOAN',
+                'menuId'     => 'paket_belum_lelang_phln_myc_project_loan',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'RENCANA TENDER, PAKET BELUM LELANG RPM',
+                'menuId'     => 'rencana_tender_paket_belum_lelang_rpm',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'RENCANA TENDER, PAKET BELUM LELANG PLN',
+                'menuId'     => 'rencana_tender_paket_belum_lelang_pln',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK DITJEN SDA',
+                'menuId'     => 'progres_keuangan_fisik_ditjen_sda',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK PER KEGIATAN',
+                'menuId'     => 'progres_keuangan_fisik_per_kegiatan',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK - BBWS',
+                'menuId'     => 'progres_keuangan_fisik_bbws',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK - BWS',
+                'menuId'     => 'progres_keuangan_fisik_bws',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK - PUSAT',
+                'menuId'     => 'progres_keuangan_fisik_pusat',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK - BALAI TEKNIK',
+                'menuId'     => 'progres_keuangan_fisik_balai_teknik',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES KEUANGAN & FISIK - DINAS',
+                'menuId'     => 'progres_keuangan_fisik_dinas',
+                'alwaysShow' => false
+            ],
+            [
+                'title'      => 'PROGRES 10 SATUAN KERJA TERENDAH',
+                'menuId'     => 'progres_10_satuan_kerja_terendah',
+                'alwaysShow' => false
+            ]
+        ];
+        return view('Modules\Admin\Views\Dashboard2',$data);
+    }
 
     // private function rekapGroupData()
     // {
