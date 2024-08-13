@@ -5,7 +5,7 @@
 <style>
   #map {
     width: 100%;
-    height: 400px;
+    height: 700px;
   }
 </style>
 <!-- <style>
@@ -229,7 +229,7 @@
 </div>
 <!-- end-of: Modal Filter Column -->
 <div class="modal fade" id="mapModal" aria-labelledby="mapModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="mapModalLabel">Peta Kabupaten</h5>
@@ -271,7 +271,8 @@
         }
     }); 
 </script>-->
-<script src="https://maps.googleapis.com/maps/api/js?key=api_key_google_map" ></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1MgLuZuyqR_OGY3ob3M52N46TDBRI_9k" ></script> -->
+<script src="https://maps.googleapis.com/maps/api/js?key=api_key" ></script>
 <script>
     $(document).on('click','.btn-map',function(){
         lat = $(this).data('lat')
@@ -284,7 +285,7 @@
         var myLatLng = {lat: lat, lng: lng};
         var mapOptions = {
             center: new google.maps.LatLng(myLatLng),
-            zoom: 8,
+            zoom: 11,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         }
         var map = new google.maps.Map(mapCanvas, mapOptions)
@@ -587,6 +588,10 @@
             var year = $('#tahun').val();
 
             var columns = selectedColumns(year);
+            if (columns.length > 0) {
+                columns.push('lat')
+                columns.push('lng')
+            }
             getData(1, 10, columns, year);
 
             $("#ModalFKolom").modal("hide")
