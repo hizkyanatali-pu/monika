@@ -272,7 +272,7 @@
     }); 
 </script>-->
 <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1MgLuZuyqR_OGY3ob3M52N46TDBRI_9k" ></script> -->
-<script src="https://maps.googleapis.com/maps/api/js?key=api_key" ></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPQQfSUVDLy4nPRf6csSip-cuOmpEMpJs&libraries=places" ></script>
 <script>
     $(document).on('click','.btn-map',function(){
         lat = $(this).data('lat')
