@@ -654,9 +654,15 @@
 
                         // elementInput_target.val(data.target_value)
                         // elementInput_outcome.val(data.outcome_value)
-                        elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                        elementInput_target.val(
+                            (data.template_row_id == "151010") ||
+                            (data.template_row_id == "141009") ? data.target_value :
+                            formatRupiah(data.target_value.toString().replaceAll('.', ',')))
                         data.target_sat ? elementInput_target_satuan.val(data.target_sat) : ''
-                        elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
+                        elementInput_outcome.val(
+                            (data.template_row_id == "151010") ||
+                            (data.template_row_id == "141009") ? data.outcome_value :
+                            formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
 
                         const idPaketArray = res.paket
@@ -799,9 +805,15 @@
                         elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
                         elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
-                    elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                    elementInput_target.val(
+                        (data.template_row_id == "151010") ||
+                        (data.template_row_id == "141009") ? data.target_value :
+                        formatRupiah(data.target_value.toString().replaceAll('.', ',')))
                     elementInput_target_satuan.val(data.target_sat)
-                    elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
+                    elementInput_outcome.val(
+                        (data.template_row_id == "151010") ||
+                        (data.template_row_id == "141009") ? data.outcome_value :
+                        formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
 
                     const idPaketArray = res.paket
@@ -1948,7 +1960,7 @@
                                         placeholder="Masukkan Nilai"
                                         value="${ data.targetBalaiDefualtValue }"
                                         data-row-id="${ data.id }"
-                                        onkeyup="return this.value = formatRupiah(this.value, '')"
+                                    onkeyup="return this.value = formatRupiah(this.value, '')"
                                     data-pktype="balai">
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
@@ -1957,6 +1969,7 @@
                             </td>
                         `
                     } else {
+
                         renderInputTarget = `
                         <td>
                             <div class="input-group">
@@ -1967,7 +1980,11 @@
                                     value="${ data.outcomeSatkerValue }"
                                     data-row-id="${ data.id }"
                                     data-targetSatuan = "${ data.target_satuan}"
-                                    onkeyup="return this.value = formatRupiah(this.value, '')" data-pktype="satker"
+                                    ${(data.template_id == '15' && data.id == "151010") ||
+                                    (data.template_id == '14' && data.id == "141009") ? "maxlength = 1":""}
+                                    onkeyup="${(data.template_id == '15' && data.id == "151010") 
+                                    ||
+                                    (data.template_id == '14' && data.id == "141009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}" data-pktype="satker"
                                     ${data.template_id === '5' || data.template_id === '6'|| data.template_id === '9'  || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'readonly' }>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan.split(';')[0]}</span>
@@ -2092,7 +2109,10 @@
                                         placeholder="Masukkan Nilai"
                                         value="${ data.outcomeDefaultValue }"
                                         data-row-id="${ data.id }"
-                                        onkeyup="return this.value = formatRupiah(this.value, '')"
+                                       ${(data.template_id == '15' && data.id == "151010") ||
+                                       (data.template_id == '14' && data.id == "141009") ? "maxlength = 1":""}
+                                    onkeyup="${ (data.template_id == '15' && data.id == "151010") ||
+                                    (data.template_id == '14' && data.id == "141009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}"
                                         ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
                                         >
                                     <div class="input-group-append">

@@ -7,7 +7,7 @@ use CodeIgniter\API\ResponseTrait;
 use App\Libraries\FPDF_PROTEC as FPDF;
 use Dompdf\Dompdf;
 
-class Renstra extends \App\Controllers\BaseController
+class Renstra_new extends \App\Controllers\BaseController
 {
     use ResponseTrait;
 
@@ -22,7 +22,7 @@ class Renstra extends \App\Controllers\BaseController
         $this->dokumenSatker          = $this->db->table('renstra_data');
         $this->dokumenSatker_rows     = $this->db->table('renstra_data_rows');
         $this->dokumenSatker_paket     = $this->db->table('renstra_data_paket');
-        $this->dokumenSatker_kegiatan = $this->db->table('renstra_data_ogiat');
+        $this->dokumenSatker_kegiatan = $this->db->table('renstra_data_kegiatan');
 
         $this->templateDokumen  = $this->db->table('renstra_template');
         $this->templateRow      = $this->db->table('renstra_template_row');
@@ -51,105 +51,9 @@ class Renstra extends \App\Controllers\BaseController
 
     public function index()
     {
-        $isEselon1 = false;
-        $listSatkerCreateCokumen = false;
-        $this->session->remove('createDokumenByBalai');
-
-        $query_dataDokumen = $this->dokumenSatker->select('
-            renstra_data.id,
-            renstra_data.template_id,
-            renstra_data.tahun,
-            renstra_data.status,
-            (CASE
-            WHEN renstra_data.acc_by IS NULL THEN renstra_data.reject_by
-            ELSE renstra_data.acc_by
-            END) AS verif_by,
-            
-           
-            renstra_data.change_status_at,
-            renstra_data.created_at,
-            renstra_template.title as dokumenTitle
-        ')
-            ->join('renstra_template', 'renstra_data.template_id = renstra_template.id', 'left')
-            // ->where('user_created', $this->userUID)
-            ->where('renstra_data.status !=', 'revision')
-            ->where("renstra_data.deleted_at is null")
-            ->where("renstra_data.tahun", $this->user['tahun'])
-            ->orderBy('renstra_data.id', 'DESC');
-
-        if ($this->user['user_type'] == 'satker') {
-            $query_dataDokumen->where('satkerid', $this->user['satker_id'])
-                ->groupStart()
-                ->where('dokumen_type', 'satker')
-                ->orWhere('dokumen_type', 'eselon2')
-                ->orWhere('dokumen_type', 'eselon1')
-                ->groupEnd();
-        } elseif ($this->user['user_type'] == 'balai') {
-            $query_dataDokumen->where('balaiid', $this->user['balai_id'])
-                ->where('dokumen_type', 'balai');
-        }
-        $dataDokumen = $query_dataDokumen->get()->getResult();
 
 
-        if (
-            isset($this->user['satker_id'])
-            || isset($this->user['balai_id'])
-        ) {
-            $template_type    = $this->user['user_type'];
-            $templae_revTable = '';
-            $template_revID   = '';
-
-            switch ($this->user['user_type']) {
-                case 'satker':
-                    $templae_revTable = 'm_satker';
-                    $template_revID   = $this->user['satker_id'];
-                    if ($this->user['satker_id'] == '000000') $isEselon1 = true;
-                    break;
-
-                case 'balai':
-                    $template_type    = 'master-balai';
-                    $templae_revTable = 'm_balai';
-                    $template_revID   = $this->user['balai_id'];
-                    $listSatkerCreateCokumen = true;
-                    break;
-            }
-
-            $dataTemplate = $this->templateDokumen->select('renstra_template.*')
-                ->join('renstra_template_akses', 'renstra_template.id = renstra_template_akses' . '.template_id', 'left')
-                ->where('renstra_template.status', '1')
-                ->where('renstra_template_akses.rev_id', $template_revID)
-                // ->where('dokumen_pk_template.type', $template_type)
-                ->where('renstra_template_akses.rev_table', $templae_revTable)
-                ->where("deleted_at is null")
-                ->groupBy('renstra_template.id')
-                ->get()->getResult();
-
-            if (!$dataTemplate) $dataTemplate = [];
-
-            goto returnSection;
-        }
-
-        globalUserTemplate:
-        if (isset($this->user['user_type'])) $this->templateDokumen->where('type', $this->user['user_type']);
-        $dataTemplate = $this->templateDokumen->where('renstra_template.status', '1')->where("deleted_at is null")->get()->getResult();
-
-        returnSection:
-
-        return view('Modules\Satker\Views\Renstra.php', [
-            'user_type'             =>  $this->user['user_type'] ?? "",
-            'title'             => "Input Renstra",
-            'sessionYear'       => $this->user['tahun'],
-            'templateDokumen'   => $dataTemplate,
-            'templateAvailable' => count($dataTemplate) > 0 ? 'true' : 'false',
-            'isCanCreated'      => true,
-            'isCanConfirm'      => false,
-            'isEselon1'         => $isEselon1,
-
-            'listSatkerCreateCokumen' => $listSatkerCreateCokumen,
-
-            'dataDokumen'   => $dataDokumen,
-            'dokumenStatus' => $this->dokumenStatus
-        ]);
+        return view('Modules\Satker\Views\Renstra_view.php');
     }
 
 
@@ -502,9 +406,6 @@ class Renstra extends \App\Controllers\BaseController
 
 
         $templateDokumen = $this->templateDokumen->where('id', $id)->get()->getRow();
-
-
-
         $dokumenExistSameYear = null;
 
         $templateRows = array_map(function ($arr) use ($session_userType, $session_balaiId, $templateDokumen, $dokumenExistSameYear) {
@@ -518,6 +419,10 @@ class Renstra extends \App\Controllers\BaseController
             $rowPaket = array();
             $targetSatuan = '';
             $average = 0;
+
+
+
+
 
 
 
@@ -749,8 +654,6 @@ class Renstra extends \App\Controllers\BaseController
                 'target_satuan'           => $arr->target_satuan,
                 'outcome_satuan'          => $arr->outcome_satuan,
                 'type'                    => $arr->type,
-                'status'                    => $arr->status,
-                'grup'                    => $arr->grup,
                 'targetSatkerValue'       => $targetSatkerValue,
                 // 'outcomeSatkerValue'      => ($average == 1 ? ($outcomeSatkerValue / 3) : $outcomeSatkerValue),
                 'outcomeSatkerValue'      => $outcomeSatkerValue,
@@ -764,11 +667,6 @@ class Renstra extends \App\Controllers\BaseController
 
             ];
         }, $this->templateRow->where('template_id', $id)->orderBy('no_urut')->get()->getResult());
-
-
-
-        // print_r($this->db->getLastQuery());
-        // exit;
 
 
         $valudasiCreatedDokumen = true;
@@ -850,16 +748,11 @@ class Renstra extends \App\Controllers\BaseController
 
         //ogiat
         $ogiat = $this->templateOgiat
-            ->select("renstra_template_ogiat.*,renstra_template_subogiat.title as title2,renstra_template_subogiat.satuan_output,renstra_template_subogiat.satuan_outcome1,renstra_template_subogiat.satuan_outcome2,renstra_template_subogiat.satuan_outcome3,grup,
-            renstra_template_ogiatrumus.rowId
-            ")
+            ->select("renstra_template_ogiat.*,renstra_template_subogiat.title as title2,renstra_template_subogiat.satuan_output,renstra_template_subogiat.satuan_outcome1,renstra_template_subogiat.satuan_outcome2,renstra_template_subogiat.satuan_outcome3")
             ->join("renstra_template_subogiat", "renstra_template_subogiat.parent_id = renstra_template_ogiat.id")
             ->join("renstra_template_akses_ogiat", "renstra_template_akses_ogiat.ogiat_id = renstra_template_ogiat.id ")
-            ->join("renstra_template_ogiatrumus", "renstra_template_ogiatrumus.rumus = renstra_template_ogiat.id ")
-            ->where('renstra_template_akses_ogiat.template_id', $templateDokumen->id)->get()->getResult();
 
-
-
+            ->where('template_id', $templateDokumen->id)->get()->getResult();
 
 
 
@@ -940,24 +833,22 @@ class Renstra extends \App\Controllers\BaseController
         $listPesanRevision = [];
         $dataDokumen =  $this->dokumenSatker->where('id', $id)->get()->getRow();
 
-        // if (!is_null($dataDokumen->revision_master_dokumen_id)) {
-        //     $dataListRevision = $this->dokumenSatker->where('status', 'revision')
-        //         ->where('id', $dataDokumen->revision_master_dokumen_id)
-        //         ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
-        //         ->get()->getResult();
+        if (!is_null($dataDokumen->revision_master_dokumen_id)) {
+            $dataListRevision = $this->dokumenSatker->where('status', 'revision')
+                ->where('id', $dataDokumen->revision_master_dokumen_id)
+                ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
+                ->get()->getResult();
 
-        //     $listPesanRevision = array_map(function ($arr) {
-        //         // var_dump($arr);die;
-        //         $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
-        //         return [
-        //             'tanggal'       => date_indo($arr->change_status_at) . " " . date("H:i", strtotime($arr->change_status_at)),
-        //             'pesan'         => $arr->revision_message,
-        //             'koreksi_by'    => $dataPengguna->nama ?? '',
-        //         ];
-        //     }, $dataListRevision);
-        // }
-
-
+            $listPesanRevision = array_map(function ($arr) {
+                // var_dump($arr);die;
+                $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
+                return [
+                    'tanggal'       => date_indo($arr->change_status_at) . " " . date("H:i", strtotime($arr->change_status_at)),
+                    'pesan'         => $arr->revision_message,
+                    'koreksi_by'    => $dataPengguna->nama ?? '',
+                ];
+            }, $dataListRevision);
+        }
 
 
 
@@ -966,8 +857,8 @@ class Renstra extends \App\Controllers\BaseController
             'dokumen'      => $dataDokumen,
             'rows'         => $this->dokumenSatker_rows->where('dokumen_id', $id)->get()->getResult(),
             'paket'         => $this->dokumenSatker_paket->where('dokumen_id', $id)->get()->getResult(),
-            'ogiat'     => $this->dokumenSatker_kegiatan->where('dokumen_id', $id)->get()->getResult(),
-            // 'listRevision' => $listPesanRevision
+            'kegiatan'     => $this->dokumenSatker_kegiatan->where('dokumen_id', $id)->get()->getResult(),
+            'listRevision' => $listPesanRevision
         ]);
     }
 
@@ -1094,7 +985,6 @@ class Renstra extends \App\Controllers\BaseController
     public function create()
     {
 
-
         $createByAdmin = $this->session->get('createDokumenByAdmin');
         $replacements = [
             "." => "",
@@ -1120,6 +1010,10 @@ class Renstra extends \App\Controllers\BaseController
         }
 
 
+
+
+
+
         $dataTemplateDokumen = $this->templateDokumen->select('type')->where('id', $this->request->getPost('templateID'))->get()->getRow();
         $inserted_dokumenSatker = [
             'template_id'           => $this->request->getPost('templateID'),
@@ -1141,19 +1035,7 @@ class Renstra extends \App\Controllers\BaseController
         $this->dokumenSatker->insert($inserted_dokumenSatker);
         $dokumenID = $this->db->insertID();
 
-        /* dokumen rows */
-        $this->insertDokumenSatker_rows($this->request->getPost(), $dokumenID);
-        /** end-of: dokumen rows */
-
-        /* dokumen data_ogiat */
-        $this->insertDokumenSatker_oGiat($this->request->getPost(), $dokumenID);
-        /** end-of: data_ogiat */
-
-
-
-        /* dokumen data_paket */
         $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
-        /** end-of: data_paket */
 
         // /* dokumen */
         // $dataTemplateDokumen = $this->templateDokumen->select('type')->where('id', $this->request->getPost('templateID'))->get()->getRow();
@@ -1356,161 +1238,55 @@ class Renstra extends \App\Controllers\BaseController
 
     private function insertDokumenSatker_rows($input, $_dokumenID)
     {
-        $data_rows = [];
-        foreach ($input['rows']['row_indikator'] as $item) {
-            if ($item['isChecked'] == 1) {  // Check if isChecked is 1
-                $data_rows[] = [
-                    'template_row_id' => $item['row_id'],
-                    'target_value' => $item['target'],
-                    'target_sat' => $item['target_satuan'],
-                    'outcome1_value' => $item['outcome1'],
-                    'outcome1_sat' => $item['outcome1_satuan'],
-                    'isChecked' => $item['isChecked']
-                ];
-            }
-        }
-
         $rows = array_map(function ($arr) use ($_dokumenID) {
             return [
                 'dokumen_id'      => $_dokumenID,
-                'template_row_id' => $arr['template_row_id'],
-                'target_value'    => str_replace(',', '.', $arr['target_value']),
-                'target_sat'      => $arr['target_sat'] ?? null,
-                'outcome1_value'  => str_replace(',', '.', $arr['outcome1_value']),
-                'outcome1_sat'    => $arr['outcome1_sat'] ?? null,
+                'template_row_id' => $arr['id'],
+                'target_value'    => str_replace(',', '.', $arr['target']),
+                'target_sat'    =>  $arr['target_satuan'] ??  null,
+                'outcome_value'   => str_replace(',', '.', $arr['outcome']),
                 'is_checked'      => $arr['isChecked']
             ];
-        },  $data_rows);
-
+        }, $input['rows']);
         $this->dokumenSatker_rows->insertBatch($rows);
-    }
-
-    private function insertDokumenSatker_oGiat($input, $_dokumenID)
-    {
-        $batchData = [];
-
-        foreach ($input['rows']['row_indikator'] as $row) {
-            if ($row['isChecked'] == "1") {
-                // Pastikan outputkegiatan tidak kosong
-                if (!empty($row['outputkegiatan'])) {
-                    foreach ($row['outputkegiatan'] as $output) {
-
-                        // Ambil oGiatId dari array yang ada
-                        $oGiatIds = array_column($output['oGiatId'], 'oGiatId');
-
-                        // Ambil panjang masing-masing array
-                        $targetCount = count($output['target']);
-                        $outcome1Count = count($output['outcome1']);
-                        $outcome2Count = count($output['outcome2']);
-                        $outcome3Count = count($output['outcome3']);
-
-                        // Iterasi berdasarkan jumlah maksimal dari array yang ada
-                        for ($i = 0; $i < max($targetCount, $outcome1Count, $outcome2Count, $outcome3Count); $i++) {
-                            // Mengambil elemen dari setiap array jika ada, menggunakan default jika tidak
-                            $target = $output['target'][$i] ?? null;
-                            $outcome1 = $output['outcome1'][$i] ?? null;
-                            $outcome2 = $output['outcome2'][$i] ?? null;
-                            $outcome3 = $output['outcome3'][$i] ?? null;
-
-                            // Memasukkan data ke dalam batch
-                            foreach ($oGiatIds as $oGiatId) {
-                                $batchData[] = [
-                                    'dokumen_id' => $_dokumenID,
-                                    'template_row_id' => $row['row_id'],
-                                    'template_ogiat_id' => $oGiatId,  // Menggunakan oGiatId dari array
-                                    'output_val' => $target['targetNilai'] ?? '0',  // Default 0 jika tidak ada
-                                    'output_sat' => $target['targetSatuan'] ?? null, // Default N/A jika tidak ada
-                                    'outcome1_val' => $outcome1['outcome1Nilai'] ?? '0',  // Default 0 jika tidak ada
-                                    'outcome1_sat' => $outcome1['outcome1Satuan'] ?? null, // Default N/A jika tidak ada
-                                    'outcome2_val' => $outcome2['outcome2Nilai'] ?? '0',  // Default 0 jika tidak ada
-                                    'outcome2_sat' => $outcome2['outcome2Satuan'] ?? null, // Default N/A jika tidak ada
-                                    'outcome3_val' => $outcome3['outcome3Nilai'] ?? '0',  // Default 0 jika tidak ada
-                                    'outcome3_sat' => $outcome3['outcome3Satuan'] ?? null, // Default N/A jika tidak ada
-                                ];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-        // // Simpan data ke dalam tabel dengan insertBatch
-        // if (!empty($batchData)) {
-        //     $renstraDataOgiatModel->insertBatch($batchData);
-        // }
-        if (!empty($batchData)) {
-            $this->dokumenSatker_kegiatan->insertBatch($batchData);
-        }
     }
 
     private function insertDokumenSatker_paket($input, $_dokumenID)
     {
 
-        // print_r($input);
-        // exit;
+        $data = $this->request->getPost('paket');
         $dataPaket = [];
+        foreach ($input['paket'] as $item) {
 
+            if (isset($item['paketId']) && !empty($item['paketId'])) {
+                $paketIds = json_decode($item['paketId'], true); // Mendekode JSON menjadi array
+                // print_r($paketIds);
+                // exit;
+                foreach ($paketIds as $paketId) {
 
-        foreach ($input['rows']['row_indikator'] as $item) {
-            if (isset($item['paket'])) {
-                foreach ($item['paket'] as $paketItems) {
-                    foreach ($paketItems as $paket) {
-                        $dataPaket[] = [
-                            'tahun' => $item['tahun'],
-                            'template_row_id' => $item['row_id'],
-                            'template_ogiat_id' => $paket['oGiatId'],
-                            'idpaket' => $paket['paketId'],
-                            'output_val' => $paket['target_nilai'],
-                            'output_sat' => $paket['target_satuan'],
-                            'outcome1_val' => $paket['outcome1_nilai'],
-                            'outcome1_sat' => $paket['outcome1_satuan'],
-                            'outcome2_val' => $paket['outcome2_nilai'],
-                            'outcome2_sat' => $paket['outcome2_satuan'],
-                            'outcome3_val' => $paket['outcome3_nilai'],
-                            'outcome3_sat' => $paket['outcome3_satuan'],
-                            // 'isChecked' => $item['id']
+                    $dataPaket[] = [
+                        'template_ogiat_id' => $item['id'],
+                        'idpaket' => $paketId['paketId'],
+                        'output_val' => $paketId['target_nilai'],
+                        'output_sat' => $paketId['target_satuan'],
+                        'outcome1_val' => $paketId['outcome1_nilai'],
+                        'outcome1_sat' => $paketId['outcome1_satuan'],
+                        'outcome2_val' => $paketId['outcome2_nilai'],
+                        'outcome2_sat' => $paketId['outcome2_satuan'],
+                        'outcome3_val' => $paketId['outcome3_nilai'],
+                        'outcome3_sat' => $paketId['outcome3_satuan'],
+                        // 'isChecked' => $item['id']
 
-                        ];
-                    }
+                    ];
                 }
             }
         }
 
-        // $data = $this->request->getPost('paket');
-        // foreach ($input['paket'] as $item) {
-
-        //     if (isset($item['paketId']) && !empty($item['paketId'])) {
-        //         $paketIds = json_decode($item['paketId'], true); // Mendekode JSON menjadi array
-        //         // print_r($paketIds);
-        //         // exit;
-        //         foreach ($paketIds as $paketId) {
-
-        //             $dataPaket[] = [
-        //                 'template_ogiat_id' => $item['id'],
-        //                 'idpaket' => $paketId['paketId'],
-        //                 'output_val' => $paketId['target_nilai'],
-        //                 'output_sat' => $paketId['target_satuan'],
-        //                 'outcome1_val' => $paketId['outcome1_nilai'],
-        //                 'outcome1_sat' => $paketId['outcome1_satuan'],
-        //                 'outcome2_val' => $paketId['outcome2_nilai'],
-        //                 'outcome2_sat' => $paketId['outcome2_satuan'],
-        //                 'outcome3_val' => $paketId['outcome3_nilai'],
-        //                 'outcome3_sat' => $paketId['outcome3_satuan'],
-        //                 // 'isChecked' => $item['id']
-
-        //             ];
-        //         }
-        //     }
-        // }
-
         $rows = array_map(function ($arr) use ($_dokumenID) {
             return [
                 'dokumen_id'      => $_dokumenID,
-                'template_row_id' => $arr['template_row_id'],
                 'template_ogiat_id' => $arr['template_ogiat_id'],
                 'idpaket'    =>  $arr['idpaket'],
-                'nmpaket'    =>  paket_name($arr['idpaket'], $arr['tahun']),
                 'output_val' => $arr['output_val'],
                 'output_sat' => $arr['output_sat'],
                 'outcome1_val' => $arr['outcome1_val'],
@@ -1525,8 +1301,6 @@ class Renstra extends \App\Controllers\BaseController
         }, $dataPaket);
 
 
-        // print_r($rows);
-        // exit;
 
         $this->dokumenSatker_paket->insertBatch($rows);
     }
@@ -1559,9 +1333,6 @@ class Renstra extends \App\Controllers\BaseController
         ]);
     }
 }
-
-
-
 
 
 
