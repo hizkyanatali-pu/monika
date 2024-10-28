@@ -33,6 +33,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('backup-table/(:any)', '\Modules\Admin\Controllers\DataJson::downloadDataTable/$1');
 
         $routes->get('download-backup-table/(:any)', '\Modules\Admin\Controllers\DownloadBackupTable::download/$1');
+
+        $routes->get('getOutputKegiatan', '\Modules\Satker\Controllers\renstra_api::getOutputKegiatanTagging');
     });
 
 
@@ -451,39 +453,39 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
             //RENSTRA
             $routes->group('renstra', ['namespace' => 'App\Controllers'], function ($routes) {
-                $routes->get('/', '\Modules\Admin\Controllers\Renstra::index');
-                $routes->get('get-template/(:any)', '\Modules\Admin\Controllers\Renstra::getTemplate/$1');
-                $routes->get('check-dokumen-same-year-exist/(:any)/(:any)', '\Modules\Admin\Controllers\Renstra::checkDocumentSameYearExist/$1/$2');
-                $routes->get('detail/(:any)', '\Modules\Admin\Controllers\Renstra::show/$1');
-                $routes->get('get-list-revisioned/(:any)', '\Modules\Admin\Controllers\Renstra::getListRevisioned/$1');
-                $routes->post('create', '\Modules\Admin\Controllers\Renstra::create');
-                $routes->post('editDokumen', '\Modules\Admin\Controllers\Renstra::edit');
-                $routes->get('get-paket/(:any)/(:any)', '\Modules\Admin\Controllers\Renstra::getPaket/$1/$2');
+                $routes->get('/', '\Modules\Satker\Controllers\renstra::index');
+                $routes->get('get-template/(:any)', '\Modules\Satker\Controllers\renstra::getTemplate/$1');
+                $routes->get('check-dokumen-same-year-exist/(:any)/(:any)', '\Modules\Satker\Controllers\renstra::checkDocumentSameYearExist/$1/$2');
+                $routes->get('detail/(:any)', '\Modules\Satker\Controllers\renstra::show/$1');
+                $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\renstra::getListRevisioned/$1');
+                $routes->post('create', '\Modules\Satker\Controllers\renstra::create');
+                $routes->post('editDokumen', '\Modules\Satker\Controllers\renstra::edit');
+                $routes->get('get-paket/(:any)/(:any)', '\Modules\Satker\Controllers\renstra::getPaket/$1/$2');
 
 
                 $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
                 $routes->get('get-list-template-buat-dokumen/(:any)/(:any)', '\Modules\Admin\Controllers\Dokumenpk::getListTemplateBuatDokumen/$1/$2');
 
-                $routes->post('change-status', '\Modules\Admin\Controllers\Renstra::changeStatus');
+                $routes->post('change-status', '\Modules\Admin\Controllers\renstra::changeStatus');
 
-                $routes->get('list-satker-balai', '\Modules\Admin\Controllers\Renstra::listSatkerBalai');
+                $routes->get('list-satker-balai', '\Modules\Satker\Controllers\renstra::listSatkerBalai');
 
                 $routes->group('satker', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
-                    $routes->get('get-list-revisioned/(:any)', '\Modules\Admin\Controllers\Renstra::getListRevisioned/$1');
+                    $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\renstra::getListRevisioned/$1');
                     $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
-                    $routes->get('get-data-belum-input/(:any)', '\Modules\Admin\Controllers\Renstra::dataBelumInput/$1');
+                    $routes->get('get-data-belum-input/(:any)', '\Modules\Satker\Controllers\renstra::dataBelumInput/$1');
                 });
 
-                $routes->get('balai', '\Modules\Admin\Controllers\Renstra::balai');
-                $routes->get('eselon2', '\Modules\Admin\Controllers\Renstra::eselon2');
+                $routes->get('balai', '\Modules\Admin\Controllers\renstra::balai');
+                $routes->get('eselon2', '\Modules\Admin\Controllers\renstra::eselon2');
 
                 $routes->group('eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
-                    $routes->get('/', '\Modules\Admin\Controllers\Renstra::eselon1');
+                    $routes->get('/', '\Modules\Admin\Controllers\renstra::eselon1');
                     $routes->get('export-rekap-excel', '\Modules\Admin\Controllers\Dokumenpk::eselon1_export_rekap_excel');
                 });
 
-                $routes->get('get-tgiat-for-formpk', '\Modules\Admin\Controllers\Renstra::getTgiatForFormPk');
+                $routes->get('get-tgiat-for-formpk', '\Modules\Satker\Controllers\renstra::getTgiatForFormPk');
                 $routes->get('rekap', '\Modules\Admin\Controllers\RekapPk::pdf');
                 // $routes->group('rekapitulasi', ['namespace' => 'App\Controllers'], function ($routes) {
                 //     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::rekapitulasi');
@@ -498,10 +500,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             });
 
 
-            $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Admin\Controllers\Renstra::balaiSatker/$1');
-            $routes->get('dokumenpk-download-log/(:any)', '\Modules\Admin\Controllers\Renstra::logKoreksi/$1');
-            $routes->get('panduan', '\Modules\Admin\Controllers\Renstra::panduanpk');
-            $routes->get('instansi-list/(:any)', '\Modules\Admin\Controllers\Renstra::instansiList/$1');
+            $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Satker\Controllers\renstra::balaiSatker/$1');
+            $routes->get('dokumenpk-download-log/(:any)', '\Modules\Satker\Controllers\renstra::logKoreksi/$1');
+            $routes->get('panduan', '\Modules\Satker\Controllers\renstra::panduanpk');
+            $routes->get('instansi-list/(:any)', '\Modules\Admin\Controllers\renstra::instansiList/$1');
         }
     }
 });
