@@ -1560,7 +1560,6 @@
         data: {},
         target: ''
     }) {
-
         element_btnSaveDokumen.attr('data-template-id', params.templateId)
         element_modalDialog.addClass('modal-xl')
         element_modalFooter.removeClass('d-none')
@@ -1574,7 +1573,6 @@
                 <small>${params.templateTitle}</small>
             `)
         }
-
         renderFormTemplate(params.dataId, params.data, params.target)
         // $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
 
@@ -1673,7 +1671,6 @@
 
 
     function renderFormTemplate(_dataId, _data, _target) {
-
         last_dokumen_id = '';
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
             paramsBtnPaket = "edit";
@@ -1846,7 +1843,6 @@
     function renderFormTemplate_rowTable(_data, _templateType, _satkerId, DocID, _tahun) {
 
         let selectedYear = $('#tahunAnggaran').val();
-
         let rows = '',
             rowNumber = 1,
             ogiatNumber = 1,
@@ -2085,6 +2081,7 @@
                             data-templateid="" 
                             data-indikator="${dataOgiat.title2}" 
                             data-rowid="${dataOgiat.id}"" 
+                            data-indikatorid="${dataOgiat.rowId}"" 
                             data-outputsatuan="${dataOgiat.satuan_output}" 
                             data-outcome1satuan="${dataOgiat.satuan_outcome1}"
                             data-outcome2satuan="${dataOgiat.satuan_outcome2}"
@@ -3045,8 +3042,6 @@
         let indikatorID = $(this).data('rowid');
         let skindikatorID = $(this).data('indikatorid');
 
-        console.log(skindikatorID);
-
         // let output_satuan = $('.select-target-satuan[data-row-id=' + indikatorID + ']').val();
         let output_satuan = $(this).data('outputsatuan');
         let outcome1_satuan = $(this).data('outcome1satuan');
@@ -3089,7 +3084,7 @@
                 if (res.message != 'tidak ada data') {
                     const tbody = $('#tbody');
                     tbody.empty();
-                    var jsonData = JSON.parse(res);
+                    var jsonData = JSON.parse(JSON.stringify(res));
 
                     jsonData.forEach(function(balai, index) {
 
@@ -3590,8 +3585,8 @@
     $(document).on('click', '.save-btn-paket', function(e) {
 
         e.preventDefault();
-        indikatorId = $(this).attr("data-indikatorid");
-        skindikatorId = $(this).attr("data-skindikatorid");
+        indikatorId = $(this).data("indikatorid");
+        skindikatorId = $(this).data("skindikatorid");
 
         var selectedItems = [];
         const outputKegiatanItems = {
@@ -3628,7 +3623,7 @@
 
             var outcome3_nilai = $(this).closest('tr').find('input[name=outcome3_nilai]').val();
             var outcome3_satuan = !$('.outcome3').hasClass('d-none') ? $(this).closest('tr').find('select[name=outcome3_satuan]').val() : '';
-            console.log(outcome2_satuan)
+            // console.log(outcome2_satuan)
 
             if (target_nilai.trim() === '') {
                 errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
@@ -3812,6 +3807,7 @@
 
                 var totalTarget_nilai = $('.__targetValue-' + satuan.replace(/ /g, '') + '[data-row-id=' + indikatorId + ']')
                 totalTarget_nilai.val(totalJumlahTargetDenganKoma);
+                $('.__inputTemplateRow-target[data-row-id=' + skindikatorId + ']').val(totalJumlahTargetDenganKoma)
 
                 outputKegiatanItems.target.unshift({
                     // oGiatId: indikatorId,
@@ -3841,6 +3837,7 @@
                 }
                 var totalOutcome1_nilai = $('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome1_nilai.val(totalJumlahOutcome1DenganKoma);
+                $('.__inputTemplateRow-outcome[data-row-id=' + skindikatorId + ']').val(totalJumlahOutcome1DenganKoma)
 
 
                 outputKegiatanItems.outcome1.unshift({
