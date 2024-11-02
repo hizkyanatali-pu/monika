@@ -1950,7 +1950,7 @@
                                     placeholder="Masukkan Nilai"
                                     value="${ data.outcomeSatkerValue }"
                                     data-row-id="${ data.id }"
-                                    data-targetSatuan = "${ data.target_satuan}"
+                                    data-targetSatuan = "${ data.target_satuan.split(';')[0]}"
                                     onkeyup="return this.value = formatRupiah(this.value, '')" data-pktype="satker"
                                     ${data.template_id === '5' || data.template_id === '6'|| data.template_id === '9'  || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'' } 
                                     readonly="true"
@@ -1986,7 +1986,7 @@
                     }
 
                     rows += `
-                        <tr>
+                        <tr data-row-id="${data.id}">
                            <td class="text-center align-middle" width="50px">
                                <!-- <input type="checkbox" name="form-check-row-indikator" checked data-id="${data.id}"/> -->
                             </td>
@@ -3039,8 +3039,8 @@
         let _tahun = $(this).data('tahun');
 
         let docId = $(this).data('dokid');
-        let indikatorID = $(this).data('rowid');
-        let skindikatorID = $(this).data('indikatorid');
+        let indikatorID = $(this).attr('data-rowid');
+        let skindikatorID = $(this).attr('data-indikatorid');
 
         // let output_satuan = $('.select-target-satuan[data-row-id=' + indikatorID + ']').val();
         let output_satuan = $(this).data('outputsatuan');
@@ -3051,16 +3051,13 @@
 
 
         $('#modalFormTitlePaket').html(``);
-        $('#modalFormTitlePaket').html(`<h6>Pilih Paket Tahun ${_tahun}</h6>
-                        <small>Indikator : <b>${ indikator } </b></small>
-                       
-                        `);
+        $('#modalFormTitlePaket').html(`<h6>Pilih Paket Tahun ${_tahun}</h6><small>Indikator : <b>${ indikator } </b></small>`);
 
 
-        $('.save-btn-paket').removeAttr("data-indikatorid");
-        $('.save-btn-paket').removeAttr("data-skindikatorid");
-        $('.save-btn-paket').attr("data-indikatorid", indikatorID)
-        $('.save-btn-paket').attr("data-skindikatorid", skindikatorID)
+        $(document).find('.save-btn-paket').removeAttr("data-indikatorid");
+        $(document).find('.save-btn-paket').removeAttr("data-skindikatorid");
+        $(document).find('.save-btn-paket').attr("data-indikatorid", indikatorID)
+        $(document).find('.save-btn-paket').attr("data-skindikatorid", skindikatorID)
 
 
         var storedItems = sessionStorage.getItem("Paket_" + skindikatorID + '|' + indikatorID);
@@ -3585,8 +3582,8 @@
     $(document).on('click', '.save-btn-paket', function(e) {
 
         e.preventDefault();
-        indikatorId = $(this).data("indikatorid");
-        skindikatorId = $(this).data("skindikatorid");
+        indikatorId = $(this).attr('data-indikatorid');
+        skindikatorId = $(this).attr('data-skindikatorid');
 
         var selectedItems = [];
         const outputKegiatanItems = {
@@ -3702,7 +3699,6 @@
                     }
                     targetTotals[target_satuan] += target_nilai_number; // Tambahkan nilai ke total
                 }
-
                 if (outcome1_satuan) {
                     if (!outcome1Totals[outcome1_satuan]) {
                         outcome1Totals[outcome1_satuan] = 0; // Inisialisasi jika belum ada
@@ -3807,7 +3803,6 @@
 
                 var totalTarget_nilai = $('.__targetValue-' + satuan.replace(/ /g, '') + '[data-row-id=' + indikatorId + ']')
                 totalTarget_nilai.val(totalJumlahTargetDenganKoma);
-                $('.__inputTemplateRow-target[data-row-id=' + skindikatorId + ']').val(totalJumlahTargetDenganKoma)
 
                 outputKegiatanItems.target.unshift({
                     // oGiatId: indikatorId,
@@ -3818,10 +3813,6 @@
                 sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
 
             });
-
-
-
-
 
             Object.entries(outcome1Totals).forEach(([satuan, total]) => {
                 var jumlahDesimal_outcome1 = (total % 1 === 0) ? 0 : total.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
@@ -3837,7 +3828,7 @@
                 }
                 var totalOutcome1_nilai = $('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome1_nilai.val(totalJumlahOutcome1DenganKoma);
-                $('.__inputTemplateRow-outcome[data-row-id=' + skindikatorId + ']').val(totalJumlahOutcome1DenganKoma)
+                // $('.__inputTemplateRow-outcome[data-row-id=' + skindikatorId + ']').val(totalJumlahOutcome1DenganKoma)
 
 
                 outputKegiatanItems.outcome1.unshift({
@@ -3897,14 +3888,74 @@
                 });
                 sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
 
-
             });
 
 
+            let dataID = $(".__buat-dokumen-pilih-template").data('id')
+            $.ajax({
+                url: "<?php echo site_url('renstra/get-rumus-outcome/') ?>" + dataID + "/" + skindikatorId,
+                type: 'GET',
+                data: {},
+                success: (res) => {
+                    let arr = res.rumus
 
+                    if ($(".form-control").hasClass('__inputTemplateRow-target')) {
+                        $('.__inputTemplateRow-target').each(function() {
+                            let id = $(this).attr('data-row-id')
+                            let target = $(this).attr('data-targetsatuan')
+                            let total = 0
+                            if (arr.hasOwnProperty(id)) {
+                                if (arr[id].hasOwnProperty(target)) {
+                                    arr[id][target].forEach(function(v) {
+                                        let nilai = parseInt($('.__targetValue-' + target + '[data-row-id=' + v + ']').val())
+                                        if (!isNaN(nilai)) {
+                                            total += nilai
+                                        }
+                                    })
+                                }
+                            }
+                            $(this).val(total)
 
+                        })
+                    }
+                    if ($(".form-control").hasClass('__inputTemplateRow-outcome')) {
+                        $('.__inputTemplateRow-outcome').each(function() {
+                            let id = $(this).attr('data-row-id')
+                            let target1 = $(this).attr('data-outcome1satuan')
+                            let totalOutcome = 0
+                            if (arr.hasOwnProperty(id)) {
+                                if (arr[id].hasOwnProperty(target1)) {
+                                    arr[id][target1].forEach(function(v) {
+                                        let nilai = parseInt($('.__outcome1Value-' + target1 + '[data-row-id=' + v + ']').val())
+                                        if (!isNaN(nilai)) {
+                                            totalOutcome += nilai
+                                        }
+                                    })
+                                }
+                            }
+                            $(this).val(totalOutcome)
+                        })
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    Swal.fire({
+                        title: 'Gagal',
+                        icon: "warning",
+                        text: 'Rumus Tidak Ditemukan!',
+                        type: 'confirm',
+                        confirmButtonText: 'Refresh Halaman',
 
+                    }).then(result => {
+                        if (result.value) {
+                            location.reload();
+                        }
+                    });
+                },
+                fail: (xhr) => {
+                    alert("Terjadi kesalahan pada sistem")
 
+                }
+            })
             $('#modalPilihPaket').modal('hide');
         } else {
             Swal.fire(

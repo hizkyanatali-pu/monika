@@ -455,6 +455,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             $routes->group('renstra', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('/', '\Modules\Satker\Controllers\renstra::index');
                 $routes->get('get-template/(:any)', '\Modules\Satker\Controllers\renstra::getTemplate/$1');
+                $routes->get('get-rumus-outcome/(:any)', '\Modules\Satker\Controllers\renstra::getRumusOutcome/$1');
                 $routes->get('check-dokumen-same-year-exist/(:any)/(:any)', '\Modules\Satker\Controllers\renstra::checkDocumentSameYearExist/$1/$2');
                 $routes->get('detail/(:any)', '\Modules\Satker\Controllers\renstra::show/$1');
                 $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\renstra::getListRevisioned/$1');

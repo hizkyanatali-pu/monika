@@ -36,6 +36,8 @@ class Renstra extends \App\Controllers\BaseController
         $this->kegiatan = $this->db->table('tgiat');
         $this->program = $this->db->table('tprogram');
 
+        $this->renstraOutcomeRumus = $this->db->table('renstra_outcome_rumus');
+        $this->renstraRumusOutcomeMaster = $this->db->table('renstra_rumus_outcome_master');
 
         $this->kota = $this->db->table('tkabkota');
         $this->kuUser = $this->db->table('ku_user');
@@ -887,7 +889,24 @@ class Renstra extends \App\Controllers\BaseController
         ]);
     }
 
+    public function getRumusOutcome($id, $row)
+    {
+        $rumusMaster = $this->renstraRumusOutcomeMaster
+            ->where('renstra_template_id', $id)
+            ->where('row_id', $row)
+            ->get()->getResult();
+        $arr = [];
+        foreach ($rumusMaster as $master) {
+            $outcomeRumus = $this->renstraOutcomeRumus->where('id_renstra_rumus_outcome_master', $master->id)->get()->getResult();
+            foreach ($outcomeRumus as $item) {
+                $arr[$master->row_id][$master->outcome_satuan][] = $item->outcome_indikator;
+            }
+        }
 
+        return $this->respond([
+            'rumus'      => $arr,
+        ]);
+    }
 
     public function checkDocumentSameYearExist($_createdYear, $_templateId)
     {
