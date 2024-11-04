@@ -1274,7 +1274,8 @@
 
         $('.btnOutputKegiatan').each((index, element) => {
             let element_rowParent = $(element).parents('tr').find('td');
-            let checkbox = element_rowParent.find('input:checkbox[name=form-check-row-indikator]');
+            // let checkbox = element_rowParent.find('input:checkbox[name=form-check-row-indikator]');
+            let checkbox = element_rowParent.find('input:checkbox[name=form-check-row-output-kegiatan]');
             let inputTarget = element_rowParent.find('input.__inputTemplateRow-target');
             let inputOutcome1 = element_rowParent.find('input.__inputTemplateRow-outcome');
 
@@ -3892,54 +3893,63 @@
 
 
             let dataID = $(".__buat-dokumen-pilih-template").data('id')
+
             $.ajax({
                 url: "<?php echo site_url('renstra/get-rumus-outcome/') ?>" + dataID + "/" + skindikatorId,
                 type: 'GET',
                 data: {},
                 success: (res) => {
                     let arr = res.rumus
-
-                    if ($(".form-control").hasClass('__inputTemplateRow-target')) {
-                        $('.__inputTemplateRow-target').each(function() {
-                            let id = $(this).attr('data-row-id')
-                            let target = $(this).attr('data-targetsatuan')
-                            let total = 0
-                            if (arr.hasOwnProperty(id)) {
-                                if (arr[id].hasOwnProperty(target)) {
-                                    arr[id][target].forEach(function(v) {
-                                        if ($('.__targetValue-' + target + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__targetValue-' + target + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
-                                            if (!isNaN(nilai)) {
-                                                total += nilai
+                    $('.__inputTemplateRow-target').each(function() {
+                        let rowid = $(this).data('row-id')
+                        let parent = $('tr').find('[data-row-id=' + rowid + ']')
+                        if (arr.hasOwnProperty(rowid)) {
+                            parent.each(function() {
+                                if ($(this).data('targetsatuan') !== undefined) {
+                                    let target = $(this).data('targetsatuan')
+                                    if (arr[rowid].hasOwnProperty(target)) {
+                                        let total = 0
+                                        arr[rowid][target].forEach(function(v) {
+                                            if ($('.__targetValue-' + target + '[data-row-id=' + v + ']').val() !== undefined) {
+                                                let nilai = parseInt($('.__targetValue-' + target + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                                if (!isNaN(nilai)) {
+                                                    total += nilai
+                                                }
                                             }
-                                        }
-                                    })
+                                        })
+                                        $(this).val(total)
+                                    }
                                 }
-                            }
-                            $(this).val(total)
-
-                        })
-                    }
-                    if ($(".form-control").hasClass('__inputTemplateRow-outcome')) {
-                        $('.__inputTemplateRow-outcome').each(function() {
-                            let id = $(this).attr('data-row-id')
-                            let target1 = $(this).attr('data-outcome1satuan')
-                            let totalOutcome = 0
-                            if (arr.hasOwnProperty(id)) {
-                                if (arr[id].hasOwnProperty(target1)) {
-                                    arr[id][target1].forEach(function(v) {
-                                        if ($('.__outcome1Value-' + target1 + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__outcome1Value-' + target1 + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
-                                            if (!isNaN(nilai)) {
-                                                totalOutcome += nilai
+                                if ($(this).data('outcome1satuan') !== undefined) {
+                                    let target = $(this).data('outcome1satuan')
+                                    if (arr[rowid].hasOwnProperty(target)) {
+                                        let total1 = 0
+                                        arr[rowid][target].forEach(function(v) {
+                                            if ($('.__outcome1Value-' + target + '[data-row-id=' + v + ']').val() !== undefined) {
+                                                let nilai = parseInt($('.__outcome1Value-' + target + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                                if (!isNaN(nilai)) {
+                                                    total1 += nilai
+                                                }
                                             }
-                                        }
-                                    })
+                                            if ($('.__outcome2Value-' + target + '[data-row-id=' + v + ']').val() !== undefined) {
+                                                let nilai = parseInt($('.__outcome2Value-' + target + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                                if (!isNaN(nilai)) {
+                                                    total1 += nilai
+                                                }
+                                            }
+                                            if ($('.__outcome3Value-' + target + '[data-row-id=' + v + ']').val() !== undefined) {
+                                                let nilai = parseInt($('.__outcome3Value-' + target + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                                if (!isNaN(nilai)) {
+                                                    total1 += nilai
+                                                }
+                                            }
+                                        })
+                                        $(this).val(total1)
+                                    }
                                 }
-                            }
-                            $(this).val(totalOutcome)
-                        })
-                    }
+                            })
+                        }
+                    })
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     Swal.fire({
