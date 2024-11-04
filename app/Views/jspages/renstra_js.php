@@ -3907,9 +3907,11 @@
                             if (arr.hasOwnProperty(id)) {
                                 if (arr[id].hasOwnProperty(target)) {
                                     arr[id][target].forEach(function(v) {
-                                        let nilai = parseInt($('.__targetValue-' + target + '[data-row-id=' + v + ']').val())
-                                        if (!isNaN(nilai)) {
-                                            total += nilai
+                                        if ($('.__targetValue-' + target + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__targetValue-' + target + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            if (!isNaN(nilai)) {
+                                                total += nilai
+                                            }
                                         }
                                     })
                                 }
@@ -3926,9 +3928,11 @@
                             if (arr.hasOwnProperty(id)) {
                                 if (arr[id].hasOwnProperty(target1)) {
                                     arr[id][target1].forEach(function(v) {
-                                        let nilai = parseInt($('.__outcome1Value-' + target1 + '[data-row-id=' + v + ']').val())
-                                        if (!isNaN(nilai)) {
-                                            totalOutcome += nilai
+                                        if ($('.__outcome1Value-' + target1 + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome1Value-' + target1 + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            if (!isNaN(nilai)) {
+                                                totalOutcome += nilai
+                                            }
                                         }
                                     })
                                 }
