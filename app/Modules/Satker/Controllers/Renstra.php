@@ -1107,8 +1107,6 @@ class Renstra extends \App\Controllers\BaseController
 
     public function create()
     {
-
-
         $createByAdmin = $this->session->get('createDokumenByAdmin');
         $replacements = [
             "." => "",
@@ -1151,7 +1149,6 @@ class Renstra extends \App\Controllers\BaseController
             $inserted_dokumenSatker['dokumen_type']   = 'balai';
             $inserted_dokumenSatker['balaiid']        = $session_balaiId;
         }
-
         $this->dokumenSatker->insert($inserted_dokumenSatker);
         $dokumenID = $this->db->insertID();
 
@@ -1169,6 +1166,9 @@ class Renstra extends \App\Controllers\BaseController
         $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
         /** end-of: data_paket */
 
+        return $this->respond([
+            'status' => true,
+        ]);
         // /* dokumen */
         // $dataTemplateDokumen = $this->templateDokumen->select('type')->where('id', $this->request->getPost('templateID'))->get()->getRow();
 

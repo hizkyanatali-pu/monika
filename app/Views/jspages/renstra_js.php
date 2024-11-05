@@ -379,18 +379,41 @@
     element_btnSaveDokumen.on('click', function() {
         // CheckConnection().then(result => {
         if (saveDokumenValidation()) {
-            // let oldButtonText = element_btnSaveDokumen.text()
-            // element_btnSaveDokumen.addClass('d-none');
+            let oldButtonText = element_btnSaveDokumen.text()
+            element_btnSaveDokumen.addClass('d-none');
 
             // Simpan referensi ke elemen penyimpanan pesan
-            // let savingMessageElement = $('<center>menyimpan data</center>');
-            // element_btnSaveDokumen.parent().append(savingMessageElement);
+            let savingMessageElement = $('<center>menyimpan data</center>');
+            element_btnSaveDokumen.parent().append(savingMessageElement);
 
 
             // $('input[name=total-anggaran]').prop("disabled", false)
-            let formData = getFormValue();
 
-            console.log(formData);
+            let formData = getFormValue();
+            $.ajax({
+                url: "<?php echo site_url('renstra/create') ?>",
+                type: 'POST',
+                data: formData,
+                success: (res) => {
+                    if (res.status) {
+                        location.reload()
+                    } else {
+                        Swal.fire(
+                            'Gagal',
+                            res.message,
+                            'error'
+                        ).then(result => {
+                            location.reload()
+                        })
+                    }
+                },
+                fail: (xhr) => {
+                    alert('Terjadi kesalahan pada sistem')
+                    console.log(xhr)
+                }
+            })
+
+            return;
 
 
 
@@ -456,7 +479,7 @@
                             res.message,
                             'error'
                         ).then(result => {
-                            // location.reload()
+                            location.reload()
                         })
                     }
                 },
@@ -1199,7 +1222,7 @@
                 target_satuan: elementInput_target_satuan,
                 outcome1: elementInput_outcome.val().replace('.', ''),
                 outcome1_satuan: elementInput_outcome_satuan,
-                isChecked: element_checkRow.is(':checked') ? '1' : '0',
+                isChecked: elementInput_outcome.val() > 0 || elementInput_target.val() > 0 ? '1' : '0',
                 outputkegiatan: [], // Tambahkan field Outputkegiatan dan paket di sini
                 paket: []
             };
@@ -1271,37 +1294,51 @@
             checkOutputKegiatan = true
 
         let anyChecked = false;
-
-        $('.btnOutputKegiatan').each((index, element) => {
-            let element_rowParent = $(element).parents('tr').find('td');
-            // let checkbox = element_rowParent.find('input:checkbox[name=form-check-row-indikator]');
-            let checkbox = element_rowParent.find('input:checkbox[name=form-check-row-output-kegiatan]');
-            let inputTarget = element_rowParent.find('input.__inputTemplateRow-target');
-            let inputOutcome1 = element_rowParent.find('input.__inputTemplateRow-outcome');
-
-            if (checkbox.is(':checked')) {
-                anyChecked = true; // Set the flag to true if at least one checkbox is checked
-
-                if ($(element).find('.totalbtnOutputKegiatan').text() > 0) {
-                    checkOutputKegiatan = true;
-                } else {
-                    checkOutputKegiatan = false;
-                }
-
-                if (inputTarget.val() == '' || inputTarget.val() == 0) {
-                    checkInputTarget = false;
-                } else {
-                    checkInputTarget = true;
-                }
-
-                if (inputOutcome1.val() == '' || inputOutcome1.val() == 0) {
-                    checkInputOutcome1 = false;
-                } else {
-                    checkInputOutcome1 = true;
-                }
+        $(document).find('.__inputTemplateRow-target').each((i, e) => {
+            if ($(e).val() > 0) {
+                anyChecked = true;
+                checkInputTarget = true
+                checkInputOutcome1 = true
 
             }
-        });
+        })
+        $(document).find('.__inputTemplateRow-outcome').each((i, e) => {
+            if ($(e).val() > 0) {
+                anyChecked = true;
+                checkInputTarget = true
+                checkInputOutcome1 = true
+            }
+        })
+        // $('.btnOutputKegiatan').each((index, element) => {
+        //     let element_rowParent = $(element).parents('tr').find('td');
+        //     // let checkbox = element_rowParent.find('input:checkbox[name=form-check-row-indikator]');
+        //     let checkbox = element_rowParent.find('input:checkbox[name=form-check-row-output-kegiatan]');
+        //     let inputTarget = element_rowParent.find('input.__inputTemplateRow-target');
+        //     let inputOutcome1 = element_rowParent.find('input.__inputTemplateRow-outcome');
+
+        //     if (checkbox.is(':checked')) {
+        //         anyChecked = true; // Set the flag to true if at least one checkbox is checked
+
+        //         if ($(element).find('.totalbtnOutputKegiatan').text() > 0) {
+        //             checkOutputKegiatan = true;
+        //         } else {
+        //             checkOutputKegiatan = false;
+        //         }
+
+        //         if (inputTarget.val() == '' || inputTarget.val() == 0) {
+        //             checkInputTarget = false;
+        //         } else {
+        //             checkInputTarget = true;
+        //         }
+
+        //         if (inputOutcome1.val() == '' || inputOutcome1.val() == 0) {
+        //             checkInputOutcome1 = false;
+        //         } else {
+        //             checkInputOutcome1 = true;
+        //         }
+
+        //     }
+        // });
 
         // $('.__inputTemplateRow-target').each((index, element) => {
         //     let element_rowParent = $(element).parents('tr').find('td'),
@@ -1351,23 +1388,23 @@
         //     }
         // })
 
-        if (!anyChecked) {
-            Swal.fire(
-                'Peringatan',
-                'Tidak Ada Satupun Data Yang diisi',
-                'warning'
-            )
-            return false
-        }
+        // if (!anyChecked) {
+        //     Swal.fire(
+        //         'Peringatan',
+        //         'Tidak Ada Satupun Data Yang diisi',
+        //         'warning'
+        //     )
+        //     return false
+        // }
 
-        if (checkOutputKegiatan == false) {
-            Swal.fire(
-                'Peringatan',
-                'Terdapat Output kegiatan yang belum dipilih pada indikator',
-                'warning'
-            )
-            return false
-        }
+        // if (checkOutputKegiatan == false) {
+        //     Swal.fire(
+        //         'Peringatan',
+        //         'Terdapat Output kegiatan yang belum dipilih pada indikator',
+        //         'warning'
+        //     )
+        //     return false
+        // }
         if (checkInputTarget == false) {
             Swal.fire(
                 'Peringatan',
