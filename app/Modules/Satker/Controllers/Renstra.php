@@ -1091,7 +1091,6 @@ class Renstra extends \App\Controllers\BaseController
         ];
 
 
-
         if ($this->user['user_type'] == 'other' || isset($createByAdmin)) {
             $session_userType   = $createByAdmin['byAdmin_user_type'];
             $session_satkerNama = $createByAdmin['byAdmin_satker_nama'] ?? null;
@@ -1125,6 +1124,17 @@ class Renstra extends \App\Controllers\BaseController
             $dataBalai = $this->balai->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('balaiid', $session_balaiId)->get()->getRow();
             $inserted_dokumenSatker['dokumen_type']   = 'balai';
             $inserted_dokumenSatker['balaiid']        = $session_balaiId;
+        }
+
+        $check = $this->dokumenSatker->where([
+            'satkerid' => $session_satkerId,
+            'tahun' => $this->request->getPost('tahun')
+        ])->get()->getNumRows();
+        if ($check > 0) {
+            return $this->respond([
+                'status' => false,
+                'message' => "Data Tahun " . $this->request->getPost('tahun') . " Sudah Ada"
+            ]);
         }
         $this->dokumenSatker->insert($inserted_dokumenSatker);
         $dokumenID = $this->db->insertID();
