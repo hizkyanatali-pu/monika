@@ -100,17 +100,15 @@
                         } else {
                             $disabled = "";
                         }
+                    }
                     ?>
 
-                        <?php if (!isset($balaiCreateForSatker)) { ?>
-                            <button class="btn btn-primary __opsi-tahun-renstra <?= $disabled ? "d-none" : "" ?>" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php }
-                                                                                                                                                                                                                                                                            if (!isset($balaiCreateForSatker) and empty(session('userData.satker_id'))) {
-                                                                                                                                                                                                                                                                                echo "data-type=uptBalai-add";
-                                                                                                                                                                                                                                                                            } ?>>
-                                <i class="fas fa-plus"></i> Input Renstra
-                            </button> <?php } ?>
-
-                    <?php } ?>
+                    <button
+                        class="btn btn-primary __opsi-tahun-renstra"
+                        data-available="<?php echo $templateAvailable ?>"
+                        <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?>
+                        data-type="uptBalai-add"><i class="fas fa-plus"></i> Input Renstra
+                    </button>
                 </div>
             </div>
         </div>
@@ -184,19 +182,19 @@
 
                             <td class="d-flex justify-content-center">
                                 <div class="btn-load mt-3">
-                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Lihat">
+                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type="lihat" title="Lihat">
                                         <i class="fas fa-eye"></i>
-
-                                        <?php if ($data->status == 'hold' and (!isset($balaiCreateForSatker))) { ?>
-                                            <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                        <?php } ?>
-                                        <?php if ($data->status == 'setuju'  and (!isset($balaiCreateForSatker))) { ?>
-                                            <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                        <?php } ?>
+                                    </button>
+                                    <?php if ($data->status == 'hold' and (!isset($balaiCreateForSatker))) { ?>
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    <?php } ?>
+                                    <?php if ($data->status == 'setuju'  and (!isset($balaiCreateForSatker))) { ?>
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    <?php } ?>
                                 </div>
                             </td>
                         </tr>

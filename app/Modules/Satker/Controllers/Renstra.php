@@ -953,29 +953,6 @@ class Renstra extends \App\Controllers\BaseController
     {
         $listPesanRevision = [];
         $dataDokumen =  $this->dokumenSatker->where('id', $id)->get()->getRow();
-
-        // if (!is_null($dataDokumen->revision_master_dokumen_id)) {
-        //     $dataListRevision = $this->dokumenSatker->where('status', 'revision')
-        //         ->where('id', $dataDokumen->revision_master_dokumen_id)
-        //         ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
-        //         ->get()->getResult();
-
-        //     $listPesanRevision = array_map(function ($arr) {
-        //         // var_dump($arr);die;
-        //         $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
-        //         return [
-        //             'tanggal'       => date_indo($arr->change_status_at) . " " . date("H:i", strtotime($arr->change_status_at)),
-        //             'pesan'         => $arr->revision_message,
-        //             'koreksi_by'    => $dataPengguna->nama ?? '',
-        //         ];
-        //     }, $dataListRevision);
-        // }
-
-
-
-
-
-
         return $this->respond([
             'dokumen'      => $dataDokumen,
             'rows'         => $this->dokumenSatker_rows->where('dokumen_id', $id)->get()->getResult(),
@@ -1306,29 +1283,46 @@ class Renstra extends \App\Controllers\BaseController
     public function edit()
     {
         $dokumenID = $this->request->getPost('id');
+        $createByAdmin = $this->session->get('createDokumenByAdmin');
         $replacements = [
             "." => "",
             "," => ".",
         ];
 
-        /* dokumen */
+        if ($this->user['user_type'] == 'other' || isset($createByAdmin)) {
+            $session_userType   = $createByAdmin['byAdmin_user_type'];
+            $session_satkerNama = $createByAdmin['byAdmin_satker_nama'] ?? null;
+            $session_balaiNama  = $createByAdmin['byAdmin_balai_nama'] ?? null;
+            $session_satkerId   = $createByAdmin['byAdmin_satker_id'] ?? null;
+            $session_balaiId    = $createByAdmin['byAdmin_balai_id'] ?? null;
+
+            $this->session->remove('createDokumenByAdmin');
+        } else {
+            $session_userType   = $this->user['user_type'];
+            $session_satkerNama = $this->user['satker_nama'] ?? null;
+            $session_balaiNama  = $this->user['balai_nama'] ?? null;
+            $session_satkerId   = $this->user['satker_id'] ?? null;
+            $session_balaiId    = $this->user['balai_id'] ?? null;
+        }
+
+
+        $dataTemplateDokumen = $this->templateDokumen->select('type')->where('id', $this->request->getPost('templateID'))->get()->getRow();
         $inserted_dokumenSatker = [
             'template_id'           => $this->request->getPost('templateID'),
-            'total_anggaran'        => strtr($this->request->getPost('totalAnggaran'), $replacements),
-            'pihak1_ttd'            => $this->request->getPost('ttdPihak1'),
-            'pihak1_is_plt'         => $this->request->getPost('ttdPihak1_isPlt'),
-            'pihak2_ttd'            => $this->request->getPost('ttdPihak2'),
-            'pihak2_is_plt'         => $this->request->getPost('ttdPihak2_isPlt'),
-            'kota'                  => $this->request->getPost('kota'),
-            'kota_nama'             => $this->request->getPost('kotaNama'),
-            'bulan'                 => $this->request->getPost('bulan'),
-            'tanggal'               => $this->request->getPost('tanggal'),
-            // 'tahun'                 => $this->request->getPost('tahun'),
-            'created_at'            => date('Y-m-d H:i:s')
+            'user_created'          => $this->userUID,
+            'tahun'                 => $this->request->getPost('tahun')
         ];
 
-        if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
-
+        if ($session_userType == "satker") {
+            $dataSatker = $this->satker->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('satkerid', $session_satkerId)->get()->getRow();
+            $inserted_dokumenSatker['dokumen_type']   = $dataTemplateDokumen->type;
+            $inserted_dokumenSatker['balaiid']        = $session_balaiId;
+            $inserted_dokumenSatker['satkerid']       = $session_satkerId;
+        } elseif ($session_userType == "balai") {
+            $dataBalai = $this->balai->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('balaiid', $session_balaiId)->get()->getRow();
+            $inserted_dokumenSatker['dokumen_type']   = 'balai';
+            $inserted_dokumenSatker['balaiid']        = $session_balaiId;
+        }
         $this->dokumenSatker->where('id', $dokumenID);
         $this->dokumenSatker->update($inserted_dokumenSatker);
         /** end-of: dokumen */
@@ -1344,7 +1338,6 @@ class Renstra extends \App\Controllers\BaseController
                 /** end-of: dokumen rows */
             }
         }
-
         /* dokumen rows */
         $this->dokumenSatker_rows->where('dokumen_id', $dokumenID);
         $this->dokumenSatker_rows->delete();
@@ -1354,7 +1347,7 @@ class Renstra extends \App\Controllers\BaseController
         /** dokumen kegiatan */
         $this->dokumenSatker_kegiatan->where('dokumen_id', $dokumenID);
         $this->dokumenSatker_kegiatan->delete();
-        $this->insertDokumenSatker_kegiatan($this->request->getPost(), $dokumenID);
+        $this->insertDokumenSatker_oGiat($this->request->getPost(), $dokumenID);
         /** end-of: dokumen kegiatan */
 
         return $this->respond([
