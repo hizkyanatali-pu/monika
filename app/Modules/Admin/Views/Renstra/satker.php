@@ -874,6 +874,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             url: "<?php echo site_url('renstra/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>" + (instansi ? '/' + instansi : '') + "?_=" + new Date().getTime(),
             type: 'GET',
             success: (res) => {
+                console.log(res)
                 renderTableRow(_status, res.data)
             }
         })

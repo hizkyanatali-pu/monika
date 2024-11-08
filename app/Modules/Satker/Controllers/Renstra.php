@@ -248,11 +248,7 @@ class Renstra extends \App\Controllers\BaseController
         $dataDokumen = $this->dokumenSatker->select('
             renstra_data.id,
             renstra_data.template_id,
-            renstra_data.revision_master_dokumen_id,
-            renstra_data.revision_master_number,
-            renstra_data.revision_number,
             renstra_data.status,
-            renstra_data.is_revision_same_year,
             renstra_data.change_status_at,
             renstra_data.created_at,
             renstra_template.title as dokumenTitle,
@@ -280,11 +276,11 @@ class Renstra extends \App\Controllers\BaseController
             return [
                 'id'                         => $arr->id,
                 'template_id'                => $arr->template_id,
-                'revision_master_dokumen_id' => $arr->revision_master_dokumen_id,
-                'revision_master_number'     => $arr->revision_master_number,
-                'revision_number'            => $arr->revision_number,
+                // 'revision_master_dokumen_id' => $arr->revision_master_dokumen_id,
+                // 'revision_master_number'     => $arr->revision_master_number,
+                // 'revision_number'            => $arr->revision_number,
                 'status'                     => $arr->status,
-                'is_revision_same_year'      => $arr->is_revision_same_year,
+                // 'is_revision_same_year'      => $arr->is_revision_same_year,
                 'change_status_at'           => $arr->status != 'hold' ? date_indo($arr->change_status_at) : '-',
                 'created_at'                 => $arr->created_at != null ? date_indo($arr->created_at) : '',
                 'dokumenTitle'               => $arr->dokumenTitle,
@@ -1364,10 +1360,6 @@ class Renstra extends \App\Controllers\BaseController
             'status' => true
         ]);
     }
-
-
-
-
 
 
 

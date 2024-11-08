@@ -357,11 +357,7 @@
                     if (res.status) {
                         location.reload()
                     } else {
-                        Swal.fire(
-                            'Gagal',
-                            res.message,
-                            'error'
-                        ).then(result => {
+                        Swal.fire('Gagal', res.message, 'error').then(result => {
                             location.reload()
                         })
                     }
@@ -425,28 +421,28 @@
             //         }
             //     })
             // } else {
-            $.ajax({
-                url: "<?php echo site_url('renstra/create') ?>",
-                type: 'POST',
-                data: formData,
-                success: (res) => {
-                    if (res.status) {
-                        location.reload()
-                    } else {
-                        Swal.fire(
-                            'Gagal',
-                            res.message,
-                            'error'
-                        ).then(result => {
-                            location.reload()
-                        })
-                    }
-                },
-                fail: (xhr) => {
-                    alert('Terjadi kesalahan pada sistem')
-                    console.log(xhr)
-                }
-            })
+            // $.ajax({
+            //     url: "<?php echo site_url('renstra/create') ?>",
+            //     type: 'POST',
+            //     data: formData,
+            //     success: (res) => {
+            //         if (res.status) {
+            //             location.reload()
+            //         } else {
+            //             Swal.fire(
+            //                 'Gagal',
+            //                 res.message,
+            //                 'error'
+            //             ).then(result => {
+            //                 location.reload()
+            //             })
+            //         }
+            //     },
+            //     fail: (xhr) => {
+            //         alert('Terjadi kesalahan pada sistem')
+            //         console.log(xhr)
+            //     }
+            // })
             // }
 
         }
