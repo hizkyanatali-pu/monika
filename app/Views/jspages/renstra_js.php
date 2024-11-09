@@ -572,7 +572,7 @@
             beforeModalMount: () => {
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
-                if ($(this).data('type') !== "Admin") {
+                if ($(this).data('type') !== "Admin" && $(this).data('status') == "hold") {
                     $('.__save-update-dokumen').removeClass('d-none')
                 }
                 // console.log($('.__save-update-dokumen'))

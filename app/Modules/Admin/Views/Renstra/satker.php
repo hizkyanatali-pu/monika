@@ -949,6 +949,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         class="btn btn-sm btn-outline-success __edit-dokumen"
                         data-id="${data.id}"
                         data-type="Admin"
+                        data-status="${_status}"
                         data-template-id="${data.template_id}" title="Edit"
                     >
                         <i class="fas fa-edit"></i>
@@ -1099,14 +1100,17 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
     }
     $(document).on('click', '.__edit-dokumen', function() {
         let _dokumenID = $(this).data('id')
-        let html = `
-        <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
-            <i class="fa fa-ban"></i> Tolak
-        </button>
-        <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
-            <i class="fa fa-check"></i> Setujui
-        </button>`
-        $("#parentModalFooter").html(html)
+        let status = $(this).data('status')
+        if (status == "hold") {
+            let html = `
+            <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+                <i class="fa fa-ban"></i> Tolak
+            </button>
+            <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+                <i class="fa fa-check"></i> Setujui
+            </button>`
+            $("#parentModalFooter").html(html)
+        }
     })
 
     //filter
