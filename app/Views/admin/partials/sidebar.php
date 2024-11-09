@@ -38,7 +38,7 @@ $request = \Config\Services::request();
 
         <ul class="kt-menu__nav ">
             <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dashboard' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('dashboard'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Dashboard</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
-            
+
             <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dashboard2' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('dashboard2'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Dashboard 2</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
 
             <li class="kt-menu__item  kt-menu__item--submenu <?=
@@ -513,7 +513,7 @@ $request = \Config\Services::request();
             </li>
 
 
-            <li class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'dokumenpk' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+            <li class="kt-menu__item  kt-menu__item--submenu <?= ($request->uri->getSegment(1) == 'renstra' ? ' kt-menu__item--open kt-menu__item--here' : '') ?>" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                 <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                     <i class="kt-menu__link-icon fas fa-book"></i>
                     <span class="kt-menu__link-text">Renstra</span>
@@ -525,7 +525,7 @@ $request = \Config\Services::request();
 
                     <ul class="kt-menu__subnav">
                         <!-- <li class="kt-menu__item 
-                            <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'dashboard'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                            <?= ($request->uri->getSegment(1) == 'renstra' && $request->uri->getSegment(2) == 'dashboard'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                             <a href="<?= site_url('dokumenpk/dashboard'); ?>" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon fas fa-chart-bar"></i>
                                 <span class="kt-menu__link-text">
@@ -538,7 +538,7 @@ $request = \Config\Services::request();
 
                         <li class="
                                 kt-menu__item  kt-menu__item--submenu 
-                                <?= ($request->uri->getSegment(1) == 'dokumenpk' &&
+                                <?= ($request->uri->getSegment(1) == 'renstra' &&
                                     ($request->uri->getSegment(2) == 'satker' ||
                                         $request->uri->getSegment(2) == 'balai' ||
                                         $request->uri->getSegment(2) == 'eselon2' ||
@@ -556,8 +556,8 @@ $request = \Config\Services::request();
                             <div class="kt-menu__submenu ">
                                 <span class="kt-menu__arrow"></span>
                                 <ul class="kt-menu__subnav">
-                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'satker'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                                        <a href="<?= site_url('dokumenpk/satker'); ?>" class="kt-menu__link ">
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'renstra' && $request->uri->getSegment(2) == 'satker'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('renstra/satker'); ?>" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                                 <span></span>
                                             </i>

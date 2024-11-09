@@ -375,6 +375,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             <div class="modal-footer d-none">
                 <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
                 <button type="button" class="btn btn-success __save-update-dokumen d-none">Simpan Dokumen</button>
+                <div id="parentModalFooter"></div>
             </div>
         </div>
     </div>
@@ -751,7 +752,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
                 }
                 $.ajax({
-                    url: "<?php echo site_url('dokumenpk/change-status') ?>",
+                    url: "<?php echo site_url('renstra/change-status') ?>",
                     type: "POST",
                     data: {
                         csrf_test_name: $('input[name=csrf_test_name]').val(),
@@ -781,8 +782,9 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
     $(document).on('click', '.__setujui-dokumen', function() {
         let dataID = $(this).data('id')
+        return
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/change-status') ?>",
+            url: "<?php echo site_url('renstra/change-status') ?>",
             type: "POST",
             data: {
                 csrf_test_name: $('input[name=csrf_test_name]').val(),
@@ -874,7 +876,6 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             url: "<?php echo site_url('renstra/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>" + (instansi ? '/' + instansi : '') + "?_=" + new Date().getTime(),
             type: 'GET',
             success: (res) => {
-                console.log(res)
                 renderTableRow(_status, res.data)
             }
         })
@@ -937,26 +938,27 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
             if (isAdmin == '1') {
                 menuOptions = `
-                    <button 
+                    <!--<button 
                         class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
                         data-id="${data.id}" data-createdat ="${data.created_at}"
                         data-to-confirm="${buttonData_toConfirm}" title="Cetak"
                     >
                         <i class="fas fa-print"></i>
-                    </button>
+                    </button>--!>
                     <button 
                         class="btn btn-sm btn-outline-success __edit-dokumen"
                         data-id="${data.id}"
+                        data-type="Admin"
                         data-template-id="${data.template_id}" title="Edit"
                     >
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button 
+                    <!--<button 
                         class="btn btn-sm btn-outline-danger __arsipkan-dokumen"
                         data-id="${data.id}" title="Arsipkan"
                     >
                         <i class="fas fa-trash"></i>
-                    </button>
+                    </button>--!>
                 `
             }
 
@@ -1022,8 +1024,6 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             `)).draw()
         });
     }
-
-
 
     function cetakDokumen(_dokumenID, _toConfirm, createAt) {
         $.ajax({
@@ -1097,6 +1097,17 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             }
         })
     }
+    $(document).on('click', '.__edit-dokumen', function() {
+        let _dokumenID = $(this).data('id')
+        let html = `
+        <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+            <i class="fa fa-ban"></i> Tolak
+        </button>
+        <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+            <i class="fa fa-check"></i> Setujui
+        </button>`
+        $("#parentModalFooter").html(html)
+    })
 
     //filter
     $(document).on('click', '.filter-instansi', function() {

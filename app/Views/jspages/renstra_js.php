@@ -558,7 +558,6 @@
         })
     })
     $(document).on('click', '.__edit-dokumen', function() {
-
         if ($(this).data('type') == "uptBalai-add") {
             paramsBtnPaket = "uptBalai-add";
 
@@ -567,14 +566,15 @@
             paramsBtnPaket = "edit";
         }
         let documentId = $(this).data('id')
-
         prepareRevisiDocument({
             dataId: documentId,
             templateId: $(this).data('template-id'),
             beforeModalMount: () => {
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
-                $('.__save-update-dokumen').removeClass('d-none')
+                if ($(this).data('type') !== "Admin") {
+                    $('.__save-update-dokumen').removeClass('d-none')
+                }
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
             }
@@ -887,7 +887,7 @@
             showCancelButton: true,
             preConfirm: () => {
                 $.ajax({
-                    url: "<?php echo site_url('dokumenpk/change-status') ?>",
+                    url: "<?php echo site_url('renstra/change-status') ?>",
                     type: "POST",
                     data: {
                         csrf_test_name: $('input[name=csrf_test_name]').val(),
@@ -907,10 +907,11 @@
             }
         })
     })
+
     $(document).on('click', '.__setujui-dokumen', function() {
         let dataID = $(this).data('id')
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/change-status') ?>",
+            url: "<?php echo site_url('renstra/change-status') ?>",
             type: "POST",
             data: {
                 csrf_test_name: $('input[name=csrf_test_name]').val(),
