@@ -404,6 +404,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
                 $routes->post('create', '\Modules\Satker\Controllers\Dokumenpk::create');
                 $routes->post('editDokumen', '\Modules\Satker\Controllers\Dokumenpk::edit');
+                $routes->post('editDokumenBA', '\Modules\Satker\Controllers\Dokumenpk::editBA');
                 $routes->get('get-paket/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getPaket/$1/$2');
 
 

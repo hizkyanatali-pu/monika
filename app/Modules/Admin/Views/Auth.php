@@ -58,7 +58,7 @@
 
 
 									<select class="form-control" name="tahun">
-										<?php for ($date = 2020; $date <= (date("m") > 11 ? date("Y") + 1 : date("Y")); $date++) {
+										<?php for ($date = 2020; $date <= (date("m") >= 11 ? date("Y") + 1 : date("Y")); $date++) {
 										?>
 											<option value="<?= $date ?>" <?= ($date == date("Y")) ? 'selected' : ''; ?>><?= $date ?></option>
 										<?php } ?>
