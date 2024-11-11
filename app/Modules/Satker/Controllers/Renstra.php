@@ -846,10 +846,13 @@ class Renstra extends \App\Controllers\BaseController
 
         //ogiat
         $ogiat = $this->templateOgiat
-            ->select("renstra_template_ogiat.*,renstra_template_subogiat.title as title2,renstra_template_subogiat.satuan_output,renstra_template_subogiat.satuan_outcome1,renstra_template_subogiat.satuan_outcome2,renstra_template_subogiat.satuan_outcome3,grup,renstra_template_ogiatrumus.rowId")
+            // ->select("renstra_template_ogiat.*,renstra_template_subogiat.title as title2,renstra_template_subogiat.satuan_output,renstra_template_subogiat.satuan_outcome1,renstra_template_subogiat.satuan_outcome2,renstra_template_subogiat.satuan_outcome3,grup
+            // ,renstra_template_ogiatrumus.rowId")
+            ->select("renstra_template_ogiat.*,renstra_template_subogiat.title as title2,renstra_template_subogiat.satuan_output,renstra_template_subogiat.satuan_outcome1,renstra_template_subogiat.satuan_outcome2,renstra_template_subogiat.satuan_outcome3,grup
+            ")
             ->join("renstra_template_subogiat", "renstra_template_subogiat.parent_id = renstra_template_ogiat.id")
             ->join("renstra_template_akses_ogiat", "renstra_template_akses_ogiat.ogiat_id = renstra_template_ogiat.id ")
-            ->join("renstra_template_ogiatrumus", "renstra_template_ogiatrumus.rumus = renstra_template_ogiat.id ")
+            // ->join("renstra_template_ogiatrumus", "renstra_template_ogiatrumus.rumus = renstra_template_ogiat.id ")
             ->where('renstra_template_akses_ogiat.template_id', $templateDokumen->id)->groupBy('id')->get()->getResult();
 
 
