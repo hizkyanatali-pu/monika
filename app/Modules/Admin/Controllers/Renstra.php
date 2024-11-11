@@ -18,7 +18,7 @@ class Renstra extends \App\Controllers\BaseController
         $this->user = $session->get('userData');
         $this->db = \Config\Database::connect();
 
-        $this->dokumenSatker = $this->db->table('dokumenpk_satker');
+        $this->dokumenSatker = $this->db->table('renstra_data');
 
         $this->tahun = session('userData.tahun');
 
@@ -464,7 +464,6 @@ class Renstra extends \App\Controllers\BaseController
 
     public function changeStatus()
     {
-
         switch ($this->request->getPost('dokumenType')) {
             case 'satker':
                 $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
@@ -490,7 +489,7 @@ class Renstra extends \App\Controllers\BaseController
 
 
 
-                $this->dokumenSatker->update($updatedData);
+                $upd = $this->dokumenSatker->update($updatedData);
                 break;
             case 'hold-edit':
                 $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
