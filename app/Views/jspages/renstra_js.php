@@ -339,11 +339,11 @@
         // CheckConnection().then(result => {
         if (saveDokumenValidation()) {
             let oldButtonText = element_btnSaveDokumen.text()
-            element_btnSaveDokumen.addClass('d-none');
+            // element_btnSaveDokumen.addClass('d-none');
 
             // Simpan referensi ke elemen penyimpanan pesan
-            let savingMessageElement = $('<center>menyimpan data</center>');
-            element_btnSaveDokumen.parent().append(savingMessageElement);
+            // let savingMessageElement = $('<center>menyimpan data</center>');
+            // element_btnSaveDokumen.parent().append(savingMessageElement);
 
 
             // $('input[name=total-anggaran]').prop("disabled", false)
@@ -490,7 +490,6 @@
 
                             formData['id'] = $(this).data('id')
                             formData['csrf_test_name'] = res.token
-                            console.log(formData)
                             $.ajax({
                                 url: "<?php echo site_url('renstra/editDokumen') ?>",
                                 type: "POST",
@@ -1410,7 +1409,6 @@
     }
 
     function renderFormTemplate_rowTable(_data, _templateType, _satkerId, DocID, _tahun) {
-        console.log(_data)
         let selectedYear = $('#tahunAnggaran').val();
         let rows = '',
             rowNumber = 1,
@@ -1427,9 +1425,6 @@
             colspanSectionTitle = 2
             classDNoneOutcome = 'd-none'
         }
-
-
-
 
         _data.templateRow.forEach((data, key) => {
             switch (data.type) {
@@ -1628,41 +1623,31 @@
                             if (dataOgiat.grup == data.grup) {
 
                                 rows += `
-
-                       <tr class="ogiat-row" data-parent-rowid="${dataOgiat.id}">
-                                  <td></td>
-                                  <td></td>
-                                    <td class="align-middle" colspan="${colspanSectionTitle}"><strong>${ ogiatNumber++ }. ${ dataOgiat.title } </strong></td>
-
-                                </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="align-middle" colspan="${colspanSectionTitle}"><strong>${ ogiatNumber++ }. ${ dataOgiat.title } </strong></td>
+                            </tr>
                            <tr class="ogiat-row" data-parent-rowid="${dataOgiat.id}">
-                                  <td></td>
-
-                               <td>
+                                <td></td>
+                                <td>
                                   <input type="checkbox" name="form-check-row-output-kegiatan" style="margin-left: 8px !important" data-parent-rowid="${dataOgiat.id}"/>
                                 </td>
-
                                  <td class="align-middle ml-2">${ dataOgiat.title2} 
-
-                              <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" 
-                            title="pilih paket" 
-                            data-dokid="" 
-                            data-templateid="" 
-                            data-indikator="${dataOgiat.title2}" 
-                            data-rowid="${dataOgiat.id}"" 
-                            data-indikatorid="${dataOgiat.rowId}"" 
-                            data-outputsatuan="${dataOgiat.satuan_output}" 
-                            data-outcome1satuan="${dataOgiat.satuan_outcome1}"
-                            data-outcome2satuan="${dataOgiat.satuan_outcome2}"
-                            data-outcome3satuan="${dataOgiat.satuan_outcome3}"
-                           data-satkerid="${_satkerId}"
-                           data-tahun="${selectedYear}">
-                        Paket 
-                        <span class="label label-sm label-white ml-2 totalpaket">
-                        0
-                        </span>
-                    </button>
-
+                                    <button class="font-weight-bold btn-light-success btn-sm mr-2 paket" 
+                                        title="pilih paket" 
+                                        data-dokid="" 
+                                        data-templateid="" 
+                                        data-indikator="${dataOgiat.title2}" 
+                                        data-rowid="${dataOgiat.id}"
+                                        data-outputsatuan="${dataOgiat.satuan_output}" 
+                                        data-outcome1satuan="${dataOgiat.satuan_outcome1}"
+                                        data-outcome2satuan="${dataOgiat.satuan_outcome2}"
+                                        data-outcome3satuan="${dataOgiat.satuan_outcome3}"
+                                        data-satkerid="${_satkerId}"
+                                        data-tahun="${selectedYear}">
+                                        Paket <span class="label label-sm label-white ml-2 totalpaket">0</span>
+                                    </button>
                                  </td>`;
                                 //Target
                                 const output_satuan = dataOgiat.satuan_output.split(';');
@@ -2112,7 +2097,6 @@
                 _tahun: _tahun
             },
             success: (res) => {
-
                 if (res.message != 'tidak ada data') {
                     const tbody = $('#tbody');
                     tbody.empty();
@@ -2566,64 +2550,77 @@
 
             let dataID = $(".__buat-dokumen-pilih-template").data('id')
             $("tr[data-row-id]").each(function() {
-                let row_id = $(this).data('row-id')
+                let elParent = $(this)
+                let row_id = elParent.data('row-id')
 
                 $.ajax({
                     url: "<?php echo site_url('renstra/get-rumus-outcome/') ?>" + dataID + "/" + row_id,
                     type: 'GET',
                     data: {},
-                    success: (res) => {
-                        let arr = res.rumus
+                    success: (arr) => {
                         if (arr[row_id] !== undefined) {
-                            $('.__inputTemplateRow-target').each(function() {
-                                let parent = $('tr').find('[data-row-id=' + row_id + ']')
-                                if (arr.hasOwnProperty(row_id)) {
-                                    parent.each(function() {
-                                        if ($(this).data('targetsatuan') !== undefined) {
-                                            let target = $(this).data('targetsatuan')
-                                            if (arr[row_id].hasOwnProperty(target)) {
-                                                let total = 0
-                                                arr[row_id][target].forEach(function(v) {
-                                                    if ($('.__targetValue-' + target + '[data-row-id=' + v + ']').val() !== undefined) {
-                                                        let nilai = parseInt($('.__targetValue-' + target + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
-                                                        if (!isNaN(nilai)) {
-                                                            total += nilai
-                                                        }
-                                                    }
-                                                })
-                                                $(this).val(total)
-                                            }
+                            if (elParent.find('.__inputTemplateRow-target').data('targetsatuan') !== undefined) {
+                                let total = 0
+                                arr[row_id][elParent.find('.__inputTemplateRow-target').data('targetsatuan')]['parent'].forEach((v) => {
+                                    let satuan = arr[row_id][elParent.find('.__inputTemplateRow-target').data('targetsatuan')]['satuan']
+                                    if ($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total += nilai
                                         }
-                                        if ($(this).data('outcome1satuan') !== undefined) {
-                                            let target = $(this).data('outcome1satuan')
-                                            if (arr[row_id].hasOwnProperty(target)) {
-                                                let total1 = 0
-                                                arr[row_id][target].forEach(function(v) {
-                                                    if ($('.__outcome1Value-' + target + '[data-row-id=' + v + ']').val() !== undefined) {
-                                                        let nilai = parseInt($('.__outcome1Value-' + target + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
-                                                        if (!isNaN(nilai)) {
-                                                            total1 += nilai
-                                                        }
-                                                    }
-                                                    if ($('.__outcome2Value-' + target + '[data-row-id=' + v + ']').val() !== undefined) {
-                                                        let nilai = parseInt($('.__outcome2Value-' + target + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
-                                                        if (!isNaN(nilai)) {
-                                                            total1 += nilai
-                                                        }
-                                                    }
-                                                    if ($('.__outcome3Value-' + target + '[data-row-id=' + v + ']').val() !== undefined) {
-                                                        let nilai = parseInt($('.__outcome3Value-' + target + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
-                                                        if (!isNaN(nilai)) {
-                                                            total1 += nilai
-                                                        }
-                                                    }
-                                                })
-                                                $(this).val(total1)
-                                            }
+                                    }
+                                    if ($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total += nilai
                                         }
-                                    })
-                                }
-                            })
+                                    }
+                                    if ($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total += nilai
+                                        }
+                                    }
+                                    if ($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total += nilai
+                                        }
+                                    }
+                                })
+                                $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(total)
+                            }
+                            if (elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan') !== undefined) {
+                                let total1 = 0
+                                arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['parent'].forEach((v) => {
+                                    let satuan = arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['satuan']
+                                    if ($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total1 += nilai
+                                        }
+                                    }
+                                    if ($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total1 += nilai
+                                        }
+                                    }
+                                    if ($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total1 += nilai
+                                        }
+                                    }
+                                    if ($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total1 += nilai
+                                        }
+                                    }
+                                })
+                                $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(total1)
+                            }
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
