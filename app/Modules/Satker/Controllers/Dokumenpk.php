@@ -35,6 +35,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->kegiatan = $this->db->table('tgiat');
         $this->program = $this->db->table('tprogram');
 
+        $this->pkSettingBA          = $this->db->table('dokumenpk_setting_ba');
+
+
 
         $this->kota = $this->db->table('tkabkota');
         $this->kuUser = $this->db->table('ku_user');
@@ -63,6 +66,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.revision_master_number,
             dokumenpk_satker.revision_number,
             dokumenpk_satker.status,
+            dokumenpk_satker.status_ba,
             (CASE
             WHEN dokumenpk_satker.acc_by IS NULL THEN dokumenpk_satker.reject_by
             ELSE dokumenpk_satker.acc_by
@@ -92,6 +96,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                 ->where('dokumen_type', 'balai');
         }
         $dataDokumen = $query_dataDokumen->get()->getResult();
+
+        $qBaStatus = $this->pkSettingBA->where('tahun', $this->user['tahun'])->get()->getRow();
 
 
         if (
@@ -151,7 +157,8 @@ class Dokumenpk extends \App\Controllers\BaseController
             'listSatkerCreateCokumen' => $listSatkerCreateCokumen,
 
             'dataDokumen'   => $dataDokumen,
-            'dokumenStatus' => $this->dokumenStatus
+            'dokumenStatus' => $this->dokumenStatus,
+            'statusBA'  => $qBaStatus
         ]);
     }
 
@@ -256,6 +263,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
+            dokumenpk_satker.status_ba,
             dokumen_pk_template_' . session('userData.tahun') . '.title as dokumenTitle,
             ku_user.nama as userCreatedName,
             dokumenpk_satker.satkerid,
@@ -273,7 +281,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             $dataDokumen->where("dokumenpk_satker.satkerid", $instansi);
         }
 
-        $dataDokumen = $dataDokumen->orderBy('dokumenpk_satker.id', 'DESC')
+        $dataDokumen = $dataDokumen->orderBy('dokumenpk_satker.status_ba', 'DESC')
             ->get()->getResult();
 
 
@@ -291,6 +299,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'dokumenTitle'               => $arr->dokumenTitle,
                 'userCreatedName'            => $arr->userCreatedName,
                 'satkerid'                   => instansi_name($arr->satkerid ?? $arr->balaiid)->nama_instansi,
+                'status_ba'                 => $arr->status_ba
 
             ];
         }, $dataDokumen);
@@ -1290,6 +1299,86 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->dokumenSatker_kegiatan->delete();
         $this->insertDokumenSatker_kegiatan($this->request->getPost(), $dokumenID);
         /** end-of: dokumen kegiatan */
+
+        return $this->respond([
+            'status' => true
+        ]);
+    }
+
+
+
+    public function editBA()
+    {
+
+
+
+        $dokumenID = $this->request->getPost('id');
+        $replacements = [
+            "." => "",
+            "," => ".",
+        ];
+        $_beritaAcara = $this->request->getPost('_beritaAcara');
+
+
+
+        /* dokumen */
+        $inserted_dokumenSatker = [
+            'template_id'           => $this->request->getPost('templateID'),
+            'status_ba'             => 1,
+            // 'tahun'                 => $this->request->getPost('tahun'),
+            'created_at'            => date('Y-m-d H:i:s')
+        ];
+
+        if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
+
+        $this->dokumenSatker->where('id', $dokumenID);
+        $this->dokumenSatker->update($inserted_dokumenSatker);
+        /** end-of: dokumen */
+
+
+
+
+        // $_templateID = $this->request->getPost('templateID');
+        // if ($this->user['tahun'] != 2023) {
+        //     if (!in_array($_templateID, ['5', '6', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '29', '31', '32', '33', '34', '35', '36', '37', '38', '40', '42'])) {
+
+        //         /* dokumen paket */
+        //         $this->dokumenSatker_paket->where('dokumen_id', $dokumenID);
+        //         $this->dokumenSatker_paket->delete();
+        //         $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
+        //         /** end-of: dokumen rows */
+        //     }
+        // }
+        $this->dokumenSatker_rows->where('dokumen_id', $dokumenID);
+        $this->dokumenSatker_rows->delete();
+
+
+        $rows = array_map(function ($arr) use ($dokumenID) {
+            return [
+                'dokumen_id'      => $dokumenID,
+                'template_row_id' => $arr['id'],
+                'target_value'    => str_replace(',', '.', $arr['target']),
+                'target_sat'    =>  $arr['target_satuan'] ??  null,
+                'outcome_value'   => str_replace(',', '.', $arr['outcome']),
+                'capaian_output_value'  =>  $arr['capaian_output_value'],
+                'capaian_outcome_value'  =>  $arr['capaian_outcome_value'],
+                'is_checked'      => $arr['isChecked']
+            ];
+        },  $this->request->getPost()['rows']);
+        $this->dokumenSatker_rows->insertBatch($rows);
+
+
+        // /* dokumen rows */
+        // $this->dokumenSatker_rows->where('dokumen_id', $dokumenID);
+        // $this->dokumenSatker_rows->delete();
+        // $this->insertDokumenSatker_rows($this->request->getPost(), $dokumenID);
+        // /** end-of: dokumen rows */
+
+        // /** dokumen kegiatan */
+        // $this->dokumenSatker_kegiatan->where('dokumen_id', $dokumenID);
+        // $this->dokumenSatker_kegiatan->delete();
+        // $this->insertDokumenSatker_kegiatan($this->request->getPost(), $dokumenID);
+        // /** end-of: dokumen kegiatan */
 
         return $this->respond([
             'status' => true

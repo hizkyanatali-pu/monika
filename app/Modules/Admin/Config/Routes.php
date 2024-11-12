@@ -29,6 +29,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('cron-tarik-data-sisa-lelang', '\Modules\Admin\Controllers\CronJob::tarikDataEmonSisaLelangSda/$1');
         //check dokument PK
         $routes->get('showpdf/tampilkan/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
+        $routes->get('showpdf-berita-acara/tampilkan/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdfBeritaAcara/$1');
 
         $routes->get('backup-table/(:any)', '\Modules\Admin\Controllers\DataJson::downloadDataTable/$1');
 
@@ -320,6 +321,11 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->group('template-eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::templateEselon1');
                 });
+
+                $routes->group('setting', ['namespace' => 'App\Controllers'], function ($routes) {
+                    $routes->get('berita-acara', '\Modules\Admin\Controllers\Dokumenpk::settingBA');
+                    $routes->post('berita-acara/update', '\Modules\Admin\Controllers\Dokumenpk::changeStatussettingBA');
+                });
             });
 
             //Renstra
@@ -409,6 +415,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
 
                 $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
+                $routes->get('export-pdf-berita-acara/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdfBeritaAcara/$1');
                 $routes->get('get-list-template-buat-dokumen/(:any)/(:any)', '\Modules\Admin\Controllers\Dokumenpk::getListTemplateBuatDokumen/$1/$2');
 
                 $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
@@ -419,6 +426,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
                     $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
                     $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
+                    $routes->get('export-pdf-berita-acara/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdfBeritaAcara/$1');
                     $routes->get('get-data-belum-input/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataBelumInput/$1');
                 });
 
