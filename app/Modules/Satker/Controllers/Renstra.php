@@ -898,13 +898,12 @@ class Renstra extends \App\Controllers\BaseController
         foreach ($rumusMaster as $master) {
             $outcomeRumus = $this->renstraOutcomeRumus->where('id_renstra_rumus_outcome_master', $master->id)->get()->getResult();
             foreach ($outcomeRumus as $item) {
-                $arr[$master->row_id][$master->outcome_satuan][] = $item->outcome_indikator;
+                $arr[$master->row_id][$master->outcome_satuan]['parent'][] = $item->outcome_indikator;
+                $arr[$master->row_id][$master->outcome_satuan]['satuan'] = $item->outcome_satuan;
             }
         }
 
-        return $this->respond([
-            'rumus'      => $arr,
-        ]);
+        return $this->respond($arr);
     }
 
     public function checkDocumentSameYearExist($_createdYear, $_templateId)

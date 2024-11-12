@@ -2558,6 +2558,7 @@
                     type: 'GET',
                     data: {},
                     success: (arr) => {
+                        console.log(arr)
                         if (arr[row_id] !== undefined) {
                             if (elParent.find('.__inputTemplateRow-target').data('targetsatuan') !== undefined) {
                                 let total = 0
