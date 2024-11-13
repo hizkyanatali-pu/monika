@@ -233,6 +233,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal disetujui</th>
+                            <th width="120px">Berita Acara</th>
                             <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
                         </tr>
                     </thead>
@@ -643,11 +644,26 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
     $(document).on('click', '.__preview-dokumen', function() {
 
-        cetakDokumen(
-            $(this).data('id'),
-            $(this).data('to-confirm'),
-            $(this).data('createdat')
-        )
+        dataBA = $(this).data("beritaacara");
+
+        if (dataBA) {
+
+            cetakDokumenBeritaAcara(
+                $(this).data('id'),
+                $(this).data('to-confirm'),
+                $(this).data('createdat')
+            )
+        } else {
+
+            cetakDokumen(
+                $(this).data('id'),
+                $(this).data('to-confirm'),
+                $(this).data('createdat')
+            )
+        }
+
+
+
     })
 
 
@@ -930,7 +946,18 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 `
             }
 
-            if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>`
+            dataBeritaAcara = data.status_ba == 1 ? `<button 
+                        class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
+                        data-id="${data.id}" data-createdat ="${data.created_at}"
+                        data-to-confirm="${buttonData_toConfirm}" title="Cetak Berita acara"
+                        data-beritaacara="true"
+                    >
+                        <i class="fas fa-print"></i>
+                    </button>` : "Belum Mengisi Berita Acara";
+
+            if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>
+            <td>${dataBeritaAcara}</td>
+            `
 
             var menuOptions = ''
 
@@ -940,6 +967,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
                         data-id="${data.id}" data-createdat ="${data.created_at}"
                         data-to-confirm="${buttonData_toConfirm}" title="Cetak"
+                        data-beritaacara="false"
                     >
                         <i class="fas fa-print"></i>
                     </button>
@@ -976,6 +1004,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         </div>
                     </td>
                     <td>${data.created_at}</td>
+                    
                     ${render_columnChangeStatusAt}
                     <td>
                         <button 
@@ -1052,6 +1081,79 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     }
 
                     element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/' + _dokumenID + "_" + createAt + '?preview=true&_=' + Math.round(Math.random() * 10000000))
+                    element_modalPreviewCetakDokumen.modal('show')
+
+                    if (_toConfirm) {
+                        element_modalPreviewCetakDokumen.find('.modal-footer').html(`
+                            <div class="p-2">
+                                <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+                                    <i class="fa fa-ban"></i> Tolak
+                                </button>
+
+                                <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+                                    <i class="fa fa-check"></i> Setujui
+                                </button>
+                            </div>
+                        `)
+                    } else {
+                        element_modalPreviewCetakDokumen.find('.modal-footer').empty()
+                    }
+                }, 400)
+            },
+            error: function(XMLHttpRequest, testStatus, error) {
+                if (XMLHttpRequest.readyState == 4) {
+                    // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                    Swal.fire({
+                        type: 'error',
+                        title: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else if (XMLHttpRequest.readyState == 0) {
+                    // Network error (i.e. connection refused, access denied due to CORS, etc.)
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Periksa Jaringan Internet Anda',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                } else {
+                    alert('error');
+                }
+
+
+            }
+        })
+    }
+
+    function cetakDokumenBeritaAcara(_dokumenID, _toConfirm, createAt) {
+        $.ajax({
+            url: "<?php echo site_url('dokumenpk/satker/export-pdf-berita-acara/') ?>" + _dokumenID + "_" + createAt + "?_=" + new Date().getTime(),
+            type: 'GET',
+            cache: false,
+            success: (res) => {
+                $('#modal-cetak-dokumen-revisioned').modal('hide')
+                setTimeout(() => {
+                    let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
+
+                    if (res.dokumen.revision_message != null) {
+                        element_iframePreviewDokumen.css({
+                            'height': '60vh'
+                        })
+                        $('.container-revision-alert-cetak').html(`
+                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                                <h5 class="alert-heading">Pesan !</h5>
+                                <p>${res.dokumen.revision_message}</p>
+                            </div>
+                        `)
+                    } else {
+                        element_iframePreviewDokumen.css({
+                            'height': '80vh'
+                        })
+                        $('.container-revision-alert-cetak').html('')
+                    }
+
+                    element_iframePreviewDokumen.attr('src', '/api/showpdf-berita-acara/tampilkan/' + _dokumenID + "_" + createAt + '?preview=true&_=' + Math.round(Math.random() * 10000000))
                     element_modalPreviewCetakDokumen.modal('show')
 
                     if (_toConfirm) {

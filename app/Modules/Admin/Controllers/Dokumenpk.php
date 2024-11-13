@@ -35,6 +35,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->tableProgram            = $this->db->table("tprogram");
         $this->templateDokumen         = $this->db->table('dokumen_pk_template_' . $this->tahun);
         $this->dokumenSatker_paket     = $this->db->table('dokumenpk_satker_paket');
+        $this->dokumenPKSettingBA               = $this->db->table('dokumenpk_setting_ba');
+
 
 
 
@@ -2669,5 +2671,48 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
         return $this->response->setJSON($instansiList);
+    }
+
+
+    public function settingBA()
+    {
+
+        $q = $this->db->query("
+        SELECT
+            *
+        FROM
+           dokumenpk_setting_ba
+    ")->getResult();
+        return view('Modules\Admin\Views\DokumenPK\setting\SettingBA.php', [
+            'title' => "Setting Berita Acara",
+            'data' => $q
+
+        ]);
+    }
+
+
+    public function changeStatussettingBA()
+    {
+
+        $id = $this->request->getJSON()->id;
+        $data = $this->dokumenPKSettingBA->where('id', $id)->get()->getRow();
+
+        if ($data) {
+            // Toggle status
+            $newStatus = $data->status == 1 ? 0 : 1;
+
+            // Update status di database
+            $this->dokumenPKSettingBA->where('id', $id);
+            $this->dokumenPKSettingBA->update(['status' => $newStatus]);
+
+            // Kirim respons JSON
+            return $this->response->setJSON([
+                'success' => true,
+                'new_status' => $newStatus
+            ]);
+        }
+
+
+        return $this->response->setJSON(['success' => false]);
     }
 }
