@@ -339,11 +339,11 @@
         // CheckConnection().then(result => {
         if (saveDokumenValidation()) {
             let oldButtonText = element_btnSaveDokumen.text()
-            // element_btnSaveDokumen.addClass('d-none');
+            element_btnSaveDokumen.addClass('d-none');
 
             // Simpan referensi ke elemen penyimpanan pesan
-            // let savingMessageElement = $('<center>menyimpan data</center>');
-            // element_btnSaveDokumen.parent().append(savingMessageElement);
+            let savingMessageElement = $('<center>menyimpan data</center>');
+            element_btnSaveDokumen.parent().append(savingMessageElement);
 
 
             // $('input[name=total-anggaran]').prop("disabled", false)
@@ -2441,113 +2441,6 @@
             });
         } else if (selectedItems.length > 0) {
 
-            sessionStorage.setItem("Paket_" + skindikatorId + '|' + indikatorId, JSON.stringify(selectedItems));
-
-
-            outputKegiatanItems.oGiatId.unshift({
-                oGiatId: indikatorId,
-            });
-            sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
-
-            var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
-            totalPaketElement.html(selectedItems.length);
-            $('input[data-row-id="' + indikatorId + '"]').val('');
-
-            Object.entries(targetTotals).forEach(([satuan, total]) => {
-                var jumlahDesimal_target = (total % 1 === 0) ? 0 : total.toFixed(TargetlengthFix).toString().split('.')[1].length;
-
-                totalJumlahTargetDenganKoma = total.toLocaleString('id-ID', {
-                    // minimumFractionDigits: jumlahDesimal_target
-                    minimumFractionDigits: jumlahDesimal_target
-                });
-
-                var totalTarget_nilai = $('.__targetValue-' + satuan.replace(/ /g, '') + '[data-row-id=' + indikatorId + ']')
-                totalTarget_nilai.val(totalJumlahTargetDenganKoma);
-
-                outputKegiatanItems.target.unshift({
-                    // oGiatId: indikatorId,
-                    targetSatuan: satuan.replace(/ /g, ''),
-                    targetNilai: totalJumlahTargetDenganKoma
-                });
-
-                sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
-
-            });
-
-            Object.entries(outcome1Totals).forEach(([satuan, total]) => {
-                var jumlahDesimal_outcome1 = (total % 1 === 0) ? 0 : total.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
-
-                totalJumlahOutcome1DenganKoma = total.toLocaleString('id-ID', {
-                    minimumFractionDigits: jumlahDesimal_outcome1
-                });
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
-
-                // Jika 'satuan' mengandung '%', bersihkan simbolnya
-                if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
-                }
-                var totalOutcome1_nilai = $('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
-                totalOutcome1_nilai.val(totalJumlahOutcome1DenganKoma);
-                // $('.__inputTemplateRow-outcome[data-row-id=' + skindikatorId + ']').val(totalJumlahOutcome1DenganKoma)
-
-
-                outputKegiatanItems.outcome1.unshift({
-                    outcome1Satuan: satuan.replace(/ /g, ''),
-                    outcome1Nilai: totalJumlahOutcome1DenganKoma
-                });
-
-                sessionStorage.setItem("oGIAT_" + skindikatorId + '|' +
-                    indikatorId, JSON.stringify(outputKegiatanItems));
-            });
-
-            Object.entries(outcome2Totals).forEach(([satuan, total]) => {
-
-                var jumlahDesimal_outcome2 = (total % 1 === 0) ? 0 : total.toFixed(Outcome2lengthFix).toString().split('.')[1].length;
-
-                totalJumlahOutcome2DenganKoma = total.toLocaleString('id-ID', {
-                    minimumFractionDigits: jumlahDesimal_outcome2
-                });
-
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
-
-                // Jika 'satuan' mengandung '%', bersihkan simbolnya
-                if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
-                }
-                var totalOutcome2_nilai = $('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
-                totalOutcome2_nilai.val(totalJumlahOutcome2DenganKoma);
-
-                outputKegiatanItems.outcome2.unshift({
-                    outcome2Satuan: satuan.replace(/ /g, ''),
-                    outcome2Nilai: totalJumlahOutcome2DenganKoma
-                });
-
-                sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
-            });
-
-            Object.entries(outcome3Totals).forEach(([satuan, total]) => {
-                var jumlahDesimal_outcome3 = (total % 1 === 0) ? 0 : total.toFixed(Outcome2lengthFix).toString().split('.')[1].length;
-
-                totalJumlahOutcome3DenganKoma = total.toLocaleString('id-ID', {
-                    minimumFractionDigits: jumlahDesimal_outcome3
-                });
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
-
-                // Jika 'satuan' mengandung '%', bersihkan simbolnya
-                if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
-                }
-                var totalOutcome3_nilai = $('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
-                totalOutcome3_nilai.val(totalJumlahOutcome3DenganKoma);
-
-                outputKegiatanItems.outcome3.unshift({
-                    outcome3Satuan: satuan.replace(/ /g, ''),
-                    outcome3Nilai: totalJumlahOutcome3DenganKoma
-                });
-                sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
-
-            });
-
             let dataID = $(".__buat-dokumen-pilih-template").data('id')
             $("tr[data-row-id]").each(function() {
                 let elParent = $(this)
@@ -2558,12 +2451,13 @@
                     type: 'GET',
                     data: {},
                     success: (arr) => {
-                        console.log(arr)
                         if (arr[row_id] !== undefined) {
                             if (elParent.find('.__inputTemplateRow-target').data('targetsatuan') !== undefined) {
                                 let total = 0
+                                let ind = ""
                                 arr[row_id][elParent.find('.__inputTemplateRow-target').data('targetsatuan')]['parent'].forEach((v) => {
                                     let satuan = arr[row_id][elParent.find('.__inputTemplateRow-target').data('targetsatuan')]['satuan']
+                                    ind = v
                                     if ($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
                                         let nilai = parseInt($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                         if (!isNaN(nilai)) {
@@ -2590,6 +2484,14 @@
                                     }
                                 })
                                 $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(total)
+                                if (total > 0) {
+                                    sessionStorage.setItem("Paket_" + row_id + '|' + ind, JSON.stringify(selectedItems));
+
+                                    outputKegiatanItems.oGiatId.unshift({
+                                        oGiatId: indikatorId,
+                                    });
+                                    sessionStorage.setItem("oGIAT_" + row_id + '|' + ind, JSON.stringify(outputKegiatanItems));
+                                }
                             }
                             if (elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan') !== undefined) {
                                 let total1 = 0
@@ -2644,6 +2546,105 @@
                     }
                 })
             })
+
+            var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
+            totalPaketElement.html(selectedItems.length);
+            $('input[data-row-id="' + indikatorId + '"]').val('');
+
+            Object.entries(targetTotals).forEach(([satuan, total]) => {
+                var jumlahDesimal_target = (total % 1 === 0) ? 0 : total.toFixed(TargetlengthFix).toString().split('.')[1].length;
+
+                totalJumlahTargetDenganKoma = total.toLocaleString('id-ID', {
+                    // minimumFractionDigits: jumlahDesimal_target
+                    minimumFractionDigits: jumlahDesimal_target
+                });
+
+                var totalTarget_nilai = $('.__targetValue-' + satuan.replace(/ /g, '') + '[data-row-id=' + indikatorId + ']')
+                totalTarget_nilai.val(totalJumlahTargetDenganKoma);
+
+                outputKegiatanItems.target.unshift({
+                    // oGiatId: indikatorId,
+                    targetSatuan: satuan.replace(/ /g, ''),
+                    targetNilai: totalJumlahTargetDenganKoma
+                });
+
+                // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
+
+            });
+
+            Object.entries(outcome1Totals).forEach(([satuan, total]) => {
+                var jumlahDesimal_outcome1 = (total % 1 === 0) ? 0 : total.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
+
+                totalJumlahOutcome1DenganKoma = total.toLocaleString('id-ID', {
+                    minimumFractionDigits: jumlahDesimal_outcome1
+                });
+                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+
+                // Jika 'satuan' mengandung '%', bersihkan simbolnya
+                if (satuan.includes('%')) {
+                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                }
+                var totalOutcome1_nilai = $('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
+                totalOutcome1_nilai.val(totalJumlahOutcome1DenganKoma);
+                // $('.__inputTemplateRow-outcome[data-row-id=' + skindikatorId + ']').val(totalJumlahOutcome1DenganKoma)
+
+
+                outputKegiatanItems.outcome1.unshift({
+                    outcome1Satuan: satuan.replace(/ /g, ''),
+                    outcome1Nilai: totalJumlahOutcome1DenganKoma
+                });
+
+                // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' +
+                //     indikatorId, JSON.stringify(outputKegiatanItems));
+            });
+
+            Object.entries(outcome2Totals).forEach(([satuan, total]) => {
+
+                var jumlahDesimal_outcome2 = (total % 1 === 0) ? 0 : total.toFixed(Outcome2lengthFix).toString().split('.')[1].length;
+
+                totalJumlahOutcome2DenganKoma = total.toLocaleString('id-ID', {
+                    minimumFractionDigits: jumlahDesimal_outcome2
+                });
+
+                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+
+                // Jika 'satuan' mengandung '%', bersihkan simbolnya
+                if (satuan.includes('%')) {
+                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                }
+                var totalOutcome2_nilai = $('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
+                totalOutcome2_nilai.val(totalJumlahOutcome2DenganKoma);
+
+                outputKegiatanItems.outcome2.unshift({
+                    outcome2Satuan: satuan.replace(/ /g, ''),
+                    outcome2Nilai: totalJumlahOutcome2DenganKoma
+                });
+
+                // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
+            });
+
+            Object.entries(outcome3Totals).forEach(([satuan, total]) => {
+                var jumlahDesimal_outcome3 = (total % 1 === 0) ? 0 : total.toFixed(Outcome2lengthFix).toString().split('.')[1].length;
+
+                totalJumlahOutcome3DenganKoma = total.toLocaleString('id-ID', {
+                    minimumFractionDigits: jumlahDesimal_outcome3
+                });
+                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+
+                // Jika 'satuan' mengandung '%', bersihkan simbolnya
+                if (satuan.includes('%')) {
+                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                }
+                var totalOutcome3_nilai = $('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
+                totalOutcome3_nilai.val(totalJumlahOutcome3DenganKoma);
+
+                outputKegiatanItems.outcome3.unshift({
+                    outcome3Satuan: satuan.replace(/ /g, ''),
+                    outcome3Nilai: totalJumlahOutcome3DenganKoma
+                });
+                // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
+
+            });
             $('#modalPilihPaket').modal('hide');
         } else {
             Swal.fire(
@@ -2654,7 +2655,6 @@
         }
 
     });
-
 
     $(document).on('click', 'input:checkbox[name=form-checkall-row-indikator]', function() {
         let rowChild = $('input:checkbox[name=form-check-row-indikator]').parents('tr').find('td')
