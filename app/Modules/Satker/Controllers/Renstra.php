@@ -76,7 +76,7 @@ class Renstra extends \App\Controllers\BaseController
             // ->where('user_created', $this->userUID)
             ->where('renstra_data.status !=', 'revision')
             ->where("renstra_data.deleted_at is null")
-            ->where("renstra_data.tahun", $this->user['tahun'])
+            // ->where("renstra_data.tahun", $this->user['tahun'])
             ->orderBy('renstra_data.id', 'DESC');
 
         if ($this->user['user_type'] == 'satker') {

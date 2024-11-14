@@ -7,7 +7,7 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h5 class="kt-subheader__title">
-                Tarik Data E-Monitoring Sisa Lelang SDA
+                Setting Berita Acara Perjanjian kinerja
             </h5>
             <span class="kt-subheader__separator kt-hidden"></span>
 
@@ -23,10 +23,7 @@
     <div class="kt-portlet">
         <div class="kt-portlet__head row pt-3">
             <div class="col-md-3 mt-2 mb-2">
-                <button class="btn btn-brand btn-elevate btn-sm __handle_tarikData">
-                    <i class="la la-download"></i>
-                    Tarik Data
-                </button>
+
             </div>
         </div>
 
