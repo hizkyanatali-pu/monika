@@ -102,13 +102,14 @@
                         }
                     }
                     ?>
-
-                    <button
-                        class="btn btn-primary __opsi-tahun-renstra"
-                        data-available="<?php echo $templateAvailable ?>"
-                        <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?>
-                        data-type="uptBalai-add"><i class="fas fa-plus"></i> Input Renstra
-                    </button>
+                    <?php if (!$isBalai) { ?>
+                        <button
+                            class="btn btn-primary __opsi-tahun-renstra"
+                            data-available="<?php echo $templateAvailable ?>"
+                            <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php } ?>
+                            data-type="uptBalai-add"><i class="fas fa-plus"></i> Input Renstra
+                        </button>
+                    <?php } ?>
                 </div>
             </div>
         </div>
