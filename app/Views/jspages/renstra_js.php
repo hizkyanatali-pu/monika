@@ -1338,7 +1338,7 @@
 
             theadBalaiTarget = '<td class="text-center" style="width:15%">Target ' + $('#tahunAnggaran ').val() + ' < /td>';
         } else {
-            titleTheadTable = '<td class="text-center" style="width:15%">Target ' + $('#tahunAnggaran ').val() + '</td>';
+            titleTheadTable = '<td class="text-center" style="width:15%">Output ' + $('#tahunAnggaran ').val() + '</td>';
         }
 
 
