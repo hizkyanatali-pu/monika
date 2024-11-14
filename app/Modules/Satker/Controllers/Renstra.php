@@ -54,6 +54,7 @@ class Renstra extends \App\Controllers\BaseController
     public function index()
     {
         $isEselon1 = false;
+        $isBalai = false;
         $listSatkerCreateCokumen = false;
         $this->session->remove('createDokumenByBalai');
 
@@ -113,6 +114,7 @@ class Renstra extends \App\Controllers\BaseController
                     $templae_revTable = 'm_balai';
                     $template_revID   = $this->user['balai_id'];
                     $listSatkerCreateCokumen = true;
+                    $isBalai = true;
                     break;
             }
 
@@ -146,6 +148,7 @@ class Renstra extends \App\Controllers\BaseController
             'isCanCreated'      => true,
             'isCanConfirm'      => false,
             'isEselon1'         => $isEselon1,
+            'isBalai'         => $isBalai,
 
             'listSatkerCreateCokumen' => $listSatkerCreateCokumen,
 
@@ -169,18 +172,17 @@ class Renstra extends \App\Controllers\BaseController
         $queryDataDokumen = $this->dokumenSatker->select('
             renstra_data.id,
             renstra_data.template_id,
-            renstra_data.revision_master_dokumen_id,
-            renstra_data.revision_master_number,
-            renstra_data.revision_number,
+            renstra_data.tahun,
             renstra_data.status,
-            renstra_data.is_revision_same_year,
-            renstra_data.change_status_at,
-            renstra_data.created_at,
             renstra_data.satkerid,
             (CASE
             WHEN renstra_data.acc_by IS NULL THEN renstra_data.reject_by
             ELSE renstra_data.acc_by
             END) AS verif_by,
+            
+           
+            renstra_data.change_status_at,
+            renstra_data.created_at,
             renstra_template.title as dokumenTitle,
             ku_user.nama as userCreatedName
         ')
@@ -188,7 +190,7 @@ class Renstra extends \App\Controllers\BaseController
             ->join('ku_user', 'renstra_data.user_created=ku_user.uid', 'left')
             ->where('renstra_data.status !=', 'revision')
             ->where('renstra_data.dokumen_type', 'satker')
-            ->where("renstra_data.tahun", $this->user['tahun'])
+            // ->where("renstra_data.tahun", $this->user['tahun'])
             ->where("renstra_data.deleted_at is null")
             ->orderBy('renstra_data.id', 'DESC');
 
@@ -217,7 +219,7 @@ class Renstra extends \App\Controllers\BaseController
 
 
 
-        return view('Modules\Satker\Views\Dokumenpk.php', [
+        return view('Modules\Satker\Views\Renstra.php', [
             'title' => 'Perjanjian Kinerja Satker',
 
 
@@ -228,6 +230,7 @@ class Renstra extends \App\Controllers\BaseController
             'isCanCreated'            => $isCanCreated,
             'isCanConfirm'            => true,
             'isEselon1'               => false,
+            'isBalai' => true,
             'listSatkerCreateCokumen' => true,
 
             'filterSatker'          => $this->satker->where('balaiid', $this->user['balaiid'])->get()->getResult(),

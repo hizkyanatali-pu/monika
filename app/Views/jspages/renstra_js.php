@@ -2045,13 +2045,14 @@
 
         var balaiCreateSatker = $(".__opsi-template").attr("data-balai-create-satker");
 
+        // // console.log(balaiCreateSatker);
 
 
-        if (balaiCreateSatker != undefined) {
+        // if (balaiCreateSatker != undefined) {
 
-            satkerId = balaiCreateSatker;
+        //     satkerId = balaiCreateSatker;
 
-        }
+        // }
 
 
         let indikator = $(this).data('indikator');
@@ -2086,7 +2087,7 @@
                 if (res.message != 'tidak ada data') {
                     const tbody = $('#tbody');
                     tbody.empty();
-                    var jsonData = JSON.parse(JSON.stringify(res));
+                    var jsonData = JSON.parse(res);
 
                     jsonData.forEach(function(balai, index) {
 

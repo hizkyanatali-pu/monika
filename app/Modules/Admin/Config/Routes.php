@@ -510,7 +510,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             });
 
 
-            $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Satker\Controllers\renstra::balaiSatker/$1');
+            $routes->get('renstra-balai-satker/(:any)', '\Modules\Satker\Controllers\renstra::balaiSatker/$1');
             $routes->get('dokumenpk-download-log/(:any)', '\Modules\Satker\Controllers\renstra::logKoreksi/$1');
             $routes->get('panduan', '\Modules\Satker\Controllers\renstra::panduanpk');
             $routes->get('instansi-list/(:any)', '\Modules\Admin\Controllers\renstra::instansiList/$1');
