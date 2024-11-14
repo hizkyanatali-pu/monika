@@ -1136,7 +1136,6 @@ class Renstra extends \App\Controllers\BaseController
         }
         $this->dokumenSatker->insert($inserted_dokumenSatker);
         $dokumenID = $this->db->insertID();
-
         /* dokumen rows */
         $this->insertDokumenSatker_rows($this->request->getPost(), $dokumenID);
         /** end-of: dokumen rows */
@@ -1410,10 +1409,10 @@ class Renstra extends \App\Controllers\BaseController
                         $oGiatIds = array_column($output['oGiatId'], 'oGiatId');
 
                         // Ambil panjang masing-masing array
-                        $targetCount = count($output['target']);
-                        $outcome1Count = count($output['outcome1']);
-                        $outcome2Count = count($output['outcome2']);
-                        $outcome3Count = count($output['outcome3']);
+                        $targetCount = count($output['target'] ?? []);
+                        $outcome1Count = count($output['outcome1'] ?? []);
+                        $outcome2Count = count($output['outcome2'] ?? []);
+                        $outcome3Count = count($output['outcome3'] ?? []);
 
                         // Iterasi berdasarkan jumlah maksimal dari array yang ada
                         for ($i = 0; $i < max($targetCount, $outcome1Count, $outcome2Count, $outcome3Count); $i++) {

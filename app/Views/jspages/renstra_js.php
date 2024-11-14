@@ -339,11 +339,11 @@
         // CheckConnection().then(result => {
         if (saveDokumenValidation()) {
             let oldButtonText = element_btnSaveDokumen.text()
-            element_btnSaveDokumen.addClass('d-none');
+            // element_btnSaveDokumen.addClass('d-none');
 
             // Simpan referensi ke elemen penyimpanan pesan
-            let savingMessageElement = $('<center>menyimpan data</center>');
-            element_btnSaveDokumen.parent().append(savingMessageElement);
+            // let savingMessageElement = $('<center>menyimpan data</center>');
+            // element_btnSaveDokumen.parent().append(savingMessageElement);
 
 
             // $('input[name=total-anggaran]').prop("disabled", false)
@@ -2037,7 +2037,6 @@
 
 <script>
     $(document).on('click', '.paket', function() {
-        var selectedItems = [];
         $('#modalPilihPaket').modal('show');
         $('.modal.btn-modal-full').trigger('click');
 
@@ -2060,32 +2059,19 @@
 
         let docId = $(this).data('dokid');
         let indikatorID = $(this).attr('data-rowid');
-        let skindikatorID = $(this).attr('data-indikatorid');
-
+        // let skindikatorID = $(this).attr('data-indikatorid');
         // let output_satuan = $('.select-target-satuan[data-row-id=' + indikatorID + ']').val();
         let output_satuan = $(this).data('outputsatuan');
         let outcome1_satuan = $(this).data('outcome1satuan');
         let outcome2_satuan = $(this).data('outcome2satuan');
         let outcome3_satuan = $(this).data('outcome3satuan');
-
-
-
         $('#modalFormTitlePaket').html(``);
         $('#modalFormTitlePaket').html(`<h6>Pilih Paket Tahun ${_tahun}</h6><small>Indikator : <b>${ indikator } </b></small>`);
-
 
         $(document).find('.save-btn-paket').removeAttr("data-indikatorid");
         $(document).find('.save-btn-paket').removeAttr("data-skindikatorid");
         $(document).find('.save-btn-paket').attr("data-indikatorid", indikatorID)
-        $(document).find('.save-btn-paket').attr("data-skindikatorid", skindikatorID)
-
-
-        var storedItems = sessionStorage.getItem("Paket_" + skindikatorID + '|' + indikatorID);
-
-        if (storedItems) {
-            selectedItems = JSON.parse(storedItems);
-        }
-
+        // $(document).find('.save-btn-paket').attr("data-skindikatorid", skindikatorID)
 
         //get paket
         $.ajax({
@@ -2106,19 +2092,27 @@
 
                         if (index === 0) {
                             tbody.append(`
-                    <tr style="background-color:#89CFF0" class="sticky-header-2">
-                    <td>-</td>
-                    <td colspan = "12"><strong>${balai.balai}</strong></td>
-                    </tr>`);
+                            <tr style="background-color:#89CFF0" class="sticky-header-2">
+                            <td>-</td>
+                            <td colspan = "12"><strong>${balai.balai}</strong></td>
+                            </tr>`);
                         }
                         tbody.append(`
-                    <tr style="background-color:#b6dced" class="sticky-header-3">
-                    <td><strong>${balai.satkerid}</strong></td>
-                    <td colspan = "12"><strong>${balai.satker}</strong></td>
-                    </tr>
-                   `);
+                            <tr style="background-color:#b6dced" class="sticky-header-3">
+                            <td><strong>${balai.satkerid}</strong></td>
+                            <td colspan = "12"><strong>${balai.satker}</strong></td>
+                            </tr>
+                           `);
 
                         balai.paket.forEach(function(paket, index) {
+                            var selectedItems = [];
+                            $('tr[data-row-id]').each(function() {
+                                let skindikatorID = $(this).data('row-id')
+                                var storedItems = sessionStorage.getItem("Paket_" + $(this).data('row-id') + '|' + indikatorID)
+                                if (storedItems) {
+                                    selectedItems = JSON.parse(storedItems);
+                                }
+                            })
                             trClass = '';
                             output_from_satrker = ''
                             var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
@@ -2143,74 +2137,73 @@
                                     output_from_satrker = ''; // Atur ke nilai default jika tidak ditemukan
                                 }
                             }
-
                             checkboxHtml += '>';
 
                             $(".outcome2").addClass('d-none');
                             $(".outcome3").addClass('d-none');
 
                             tbodyContent = `<tr ${trClass}>
-                          <td width="5%">${checkboxHtml}</td>
-                            <td width="10%">${paket.paketId}</td>
-                            <td width="20%">${paket.label}</td>
-                            <td width="5%">${paket.vol}</td>
-                            <td width="5%">${paket.satuan}</td>
-                            <!-- <td>${paket.paguDipa}</td>
-                            <td>${paket.realisasi}</td> -->
-                            <td width="5%">${paket.persenKeu}</td>
-                            <td width="5%">${paket.persenFis}</td>
-                            <td width="10%">
-                            <div class="form-group form-group-last row">
-								<div class="form-group-sub">
-									<label class="form-control-label">Vol Output :</label>
-									<input type="text" class="form-control target_nilai checkbox-click" name="target_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"}>
-								</div>
-                                <div class="form-group-sub">
-									<label class="form-control-label">Satuan Output :</label>
-                                        <div class="input-group-append">
-                                            <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"} name="target_satuan">
-                                                ${output_satuan.split(';').map(function(satuan) {
-                                                    const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.target_satuan === satuan.trim());
-                                                    return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
-                                                }).join('')}
-                                            </select>
+                                  <td width="5%">${checkboxHtml}</td>
+                                    <td width="10%">${paket.paketId}</td>
+                                    <td width="20%">${paket.label}</td>
+                                    <td width="5%">${paket.vol}</td>
+                                    <td width="5%">${paket.satuan}</td>
+                                    <!-- <td>${paket.paguDipa}</td>
+                                    <td>${paket.realisasi}</td> -->
+                                    <td width="5%">${paket.persenKeu}</td>
+                                    <td width="5%">${paket.persenFis}</td>
+                                    <td width="10%">
+                                    <div class="form-group form-group-last row">
+                                        <div class="form-group-sub">
+                                            <label class="form-control-label">Vol Output :</label>
+                                            <input type="text" class="form-control target_nilai checkbox-click" name="target_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"}>
                                         </div>
-								</div>
-							</div>
-                            </td>
-                            <td width="10%">
-                            <div class="form-group form-group-last row">
-								<div class="form-group-sub">
-									<label class="form-control-label center">Vol Outcome :</label>
-									<input type="text" class="form-control outcome1_nilai checkbox-click" name="outcome1_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome1_nilai:"disabled"}>
-								</div>
-                                <div class="form-group-sub">
-									<label class="form-control-label">Satuan Outcome :</label>
-								
-									<div class="input-group-append">
-                                            <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId) ? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_nilai:"disabled"} name="outcome1_satuan">
-                                                ${outcome1_satuan.split(';').map(function(satuan) {
-                                                    const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.outcome1_satuan === satuan.trim());
-                                                    return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
-                                                }).join('')}
-                                            </select>
+                                        <div class="form-group-sub">
+                                            <label class="form-control-label">Satuan Output :</label>
+                                                <div class="input-group-append">
+                                                    <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"} name="target_satuan">
+                                                        ${output_satuan.split(';').map(function(satuan) {
+                                                            const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.target_satuan === satuan.trim());
+                                                            return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
+                                                        }).join('')}
+                                                    </select>
+                                                </div>
                                         </div>
-								</div>
-							</div>
-                            </td>`;
+                                    </div>
+                                    </td>
+                                    <td width="10%">
+                                    <div class="form-group form-group-last row">
+                                        <div class="form-group-sub">
+                                            <label class="form-control-label center">Vol Outcome :</label>
+                                            <input type="text" class="form-control outcome1_nilai checkbox-click" name="outcome1_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome1_nilai:"disabled"}>
+                                        </div>
+                                        <div class="form-group-sub">
+                                            <label class="form-control-label">Satuan Outcome :</label>
+                                        
+                                            <div class="input-group-append">
+                                                    <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId) ? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_nilai:"disabled"} name="outcome1_satuan">
+                                                        ${outcome1_satuan.split(';').map(function(satuan) {
+                                                            const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.outcome1_satuan === satuan.trim());
+                                                            return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
+                                                        }).join('')}
+                                                    </select>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    </td>`;
 
                             if (outcome2_satuan) {
                                 $(".outcome2").removeClass('d-none');
 
                                 tbodyContent += `<td class="text-center" style="vertical-align: middle; height: 100%;" width="10%">
-                                        <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId)? selectedItems.find(item => item.paketId === paket.paketId).outcome2_nilai:"disabled"} name="outcome2_satuan">
-                                                <option value="">Pilih Tipe</option>
-                                                ${outcome2_satuan.split(';').map(function(satuan) {
-                                                    const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.outcome2_satuan === satuan.trim());
-                                                    return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
-                                                }).join('')}
-                                            </select>
-                                            </td>`;
+                                                <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId)? selectedItems.find(item => item.paketId === paket.paketId).outcome2_nilai:"disabled"} name="outcome2_satuan">
+                                                        <option value="">Pilih Tipe</option>
+                                                        ${outcome2_satuan.split(';').map(function(satuan) {
+                                                            const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.outcome2_satuan === satuan.trim());
+                                                            return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
+                                                        }).join('')}
+                                                    </select>
+                                                    </td>`;
 
                             }
 
@@ -2218,14 +2211,14 @@
                                 $(".outcome3").removeClass('d-none');
 
                                 tbodyContent += `<td class="text-center" style="vertical-align: middle; height: 100%;" width="10%">
-                                        <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId)? selectedItems.find(item => item.paketId === paket.paketId).outcome3_nilai:"disabled"} name="outcome3_satuan">
-                                                <option value="">Pilih Kategori</option>
-                                                ${outcome3_satuan.split(';').map(function(satuan) {
-                                                    const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.outcome3_satuan === satuan.trim());
-                                                    return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
-                                                }).join('')}
-                                            </select>
-                                            </td>`;
+                                                <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId)? selectedItems.find(item => item.paketId === paket.paketId).outcome3_nilai:"disabled"} name="outcome3_satuan">
+                                                        <option value="">Pilih Kategori</option>
+                                                        ${outcome3_satuan.split(';').map(function(satuan) {
+                                                            const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.outcome3_satuan === satuan.trim());
+                                                            return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
+                                                        }).join('')}
+                                                    </select>
+                                                    </td>`;
 
                             }
                             tbodyContent += `</tr>`;
@@ -2252,11 +2245,6 @@
                 }
             }
         })
-
-
-
-
-
     });
 </script>
 <script>
@@ -2485,12 +2473,12 @@
                                 })
                                 $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(total)
                                 if (total > 0) {
-                                    sessionStorage.setItem("Paket_" + row_id + '|' + ind, JSON.stringify(selectedItems));
+                                    sessionStorage.setItem("Paket_" + row_id + '|' + indikatorId, JSON.stringify(selectedItems));
 
                                     outputKegiatanItems.oGiatId.unshift({
                                         oGiatId: indikatorId,
                                     });
-                                    sessionStorage.setItem("oGIAT_" + row_id + '|' + ind, JSON.stringify(outputKegiatanItems));
+                                    sessionStorage.setItem("oGIAT_" + row_id + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
                                 }
                             }
                             if (elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan') !== undefined) {
