@@ -663,25 +663,48 @@
                                     target_nilai: item.output_val,
                                     target_satuan: item.output_sat,
                                     outcome1_nilai: item.outcome1_val,
-                                    outcome1_satuan: item.outcome1_sat,
+                                    outcome1_satuan: item.outcome1_sat.replace(/\//g, ''),
                                     outcome2_nilai: item.outcome2_val ?? "",
-                                    outcome2_satuan: item.outcome2_sat ?? "",
+                                    outcome2_satuan: item.outcome2_sat.replace(/\//g, '') ?? "",
                                     outcome3_nilai: item.outcome3_val ?? "",
-                                    outcome3_satuan: item.outcome3_sat ?? "",
+                                    outcome3_satuan: item.outcome3_sat.replace(/\//g, '') ?? "",
                                 })
                             }
                         })
                         sessionStorage.setItem('Paket_' + id, JSON.stringify(duplicate));
                     })
                     res.ogiat.forEach((data, key) => {
+                        let cleanedOutput = data.output_sat;
+                        let cleanedOutcome = data.outcome1_sat;
+                        let cleanedOutcome2 = data.outcome2_sat;
+                        let cleanedOutcome3 = data.outcome3_sat;
+                        if (cleanedOutput == '%') {
+                            cleanedOutput = 'percent'
+
+                        }
+                        if (cleanedOutcome == '%') {
+                            cleanedOutcome = 'percent'
+
+                        }
+                        if (cleanedOutcome2 == '%') {
+                            cleanedOutcome2 = 'percent'
+
+                        }
+                        if (cleanedOutcome3 == '%') {
+                            cleanedOutcome3 = 'percent'
+
+                        }
+
+
+
                         let parent = $('tr[data-parent-rowid=' + data.template_ogiat_id + ']')
                         parent.find(`input[type="checkbox"][data-parent-rowid=${data.template_ogiat_id}]`).prop("checked", true);
                         parent.find('td').removeClass('disabled')
                         parent.find(`.paket`).removeAttr('disabled')
-                        parent.find(`.__targetValue-${data.output_sat}[data-row-id=${data.template_ogiat_id}]`).val(data.output_val)
-                        parent.find(`.__outcome1Value-${data.outcome1_sat}[data-row-id=${data.template_ogiat_id}]`).val(data.outcome1_val)
-                        parent.find(`.__outcome2Value-${data.outcome2_sat}[data-row-id=${data.template_ogiat_id}]`).val(data.outcome2_val)
-                        parent.find(`.__outcome3Value-${data.outcome3_sat}[data-row-id=${data.template_ogiat_id}]`).val(data.outcome3_val)
+                        parent.find(`.__targetValue-${cleanedOutput}[data-row-id=${data.template_ogiat_id}]`).val(data.output_val)
+                        parent.find(`.__outcome1Value-${cleanedOutcome ? cleanedOutcome.replace(/\//g, ''):''}[data-row-id=${data.template_ogiat_id}]`).val(data.outcome1_val)
+                        parent.find(`.__outcome2Value-${cleanedOutcome2 ? cleanedOutcome2.replace(/\//g, ''):'' }[data-row-id=${data.template_ogiat_id}]`).val(data.outcome2_val)
+                        parent.find(`.__outcome3Value-${cleanedOutcome3 ? cleanedOutcome3.replace(/\//g, ''):''}[data-row-id=${data.template_ogiat_id}]`).val(data.outcome3_val)
 
                         const outputKegiatanItems = {
                             oGiatId: [{
@@ -1716,7 +1739,8 @@
                                 const outcome1_satuan = dataOgiat.satuan_outcome1.split(';');
                                 rows += `<td class="outcome1">`;
                                 outcome1_satuan.forEach(outcome => {
-                                    var cleanedOutcome = outcome.replace(/\s+/g, '').replace('%', 'percent');
+
+                                    var cleanedOutcome = outcome.replace(/\s+/g, '').replace('%', 'percent').replace(/\//g, '');;
                                     rows += ` <div class="input-group input-group-sm mt-1">
                                         <input 
                                             type="text" 
@@ -1741,7 +1765,7 @@
 
                                     rows += `<td class="outcome2">`;
                                     outcome2_satuan.forEach(outcome => {
-                                        var cleanedOutcome2 = outcome.replace(/\s+/g, '').replace('%', 'percent');
+                                        var cleanedOutcome2 = outcome.replace(/\s+/g, '').replace('%', 'percent').replace(/\//g, '');;
 
                                         rows += ` <div class="input-group input-group-sm mt-1">
                                         <input 
@@ -1766,7 +1790,7 @@
 
                                     rows += `<td>`;
                                     outcome3_satuan.forEach(outcome => {
-                                        var cleanedOutcome3 = outcome.replace(/\s+/g, '').replace('%', 'percent');
+                                        var cleanedOutcome3 = outcome.replace(/\s+/g, '').replace('%', 'percent').replace(/\//g, '');;
 
                                         rows += ` <div class="input-group input-group-sm mt-1">
                                         <input 
@@ -2111,8 +2135,10 @@
         $('#modalFormTitlePaket').html(`<h6>Pilih Paket Tahun ${_tahun}</h6><small>Indikator : <b>${ indikator } </b></small>`);
 
         $(document).find('.save-btn-paket').removeAttr("data-indikatorid");
+        $(document).find('.save-btn-paket').removeAttr("data-satkerid");
         $(document).find('.save-btn-paket').removeAttr("data-skindikatorid");
         $(document).find('.save-btn-paket').attr("data-indikatorid", indikatorID)
+        $(document).find('.save-btn-paket').attr("data-satkerid", satkerId)
         // $(document).find('.save-btn-paket').attr("data-skindikatorid", skindikatorID)
 
         //get paket
@@ -2128,7 +2154,7 @@
                 if (res.message != 'tidak ada data') {
                     const tbody = $('#tbody');
                     tbody.empty();
-                    var jsonData = JSON.parse(JSON.stringify(res));
+                    var jsonData = JSON.parse(res);
 
                     jsonData.forEach(function(balai, index) {
 
@@ -2295,6 +2321,8 @@
         e.preventDefault();
         indikatorId = $(this).attr('data-indikatorid');
         skindikatorId = $(this).attr('data-skindikatorid');
+        satkerId = $(this).attr('data-satkerid');
+
 
         var selectedItems = [];
         const outputKegiatanItems = {
@@ -2351,11 +2379,11 @@
                 errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Outcome1 Satuan yang belum diisi.');
 
 
-            } else if (!$('.outcome2').hasClass('d-none') && outcome2_satuan.trim() === '') {
+            } else if (!$('.outcome2').hasClass('d-none') && outcome2_satuan.trim() === '' && satkerId != '403477') {
                 errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Tipe Satuan yang belum diisi.');
 
 
-            } else if (!$('.outcome3').hasClass('d-none') && outcome3_satuan.trim() === '') {
+            } else if (!$('.outcome3').hasClass('d-none') && outcome3_satuan.trim() === '' && satkerId != '403477') {
                 errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Kategori Satuan yang belum diisi.');
 
 
@@ -2514,6 +2542,10 @@
                 if (satuan.includes('%')) {
                     cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
+                if (satuan.includes('M3/detik')) {
+                    cleanedSatuan = cleanedSatuan.replace(/\//g, "");
+
+                }
                 var totalOutcome1_nilai = $('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome1_nilai.val(totalJumlahOutcome1DenganKoma);
                 // $('.__inputTemplateRow-outcome[data-row-id=' + skindikatorId + ']').val(totalJumlahOutcome1DenganKoma)
@@ -2541,6 +2573,10 @@
                 if (satuan.includes('%')) {
                     cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
+                if (satuan.includes('M3/detik')) {
+                    cleanedSatuan = cleanedSatuan.replace(/\//g, "");
+
+                }
                 var totalOutcome2_nilai = $('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome2_nilai.val(totalJumlahOutcome2DenganKoma);
 
@@ -2564,6 +2600,10 @@
                 if (satuan.includes('%')) {
                     cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
+                if (satuan.includes('M3/detik')) {
+                    cleanedSatuan = cleanedSatuan.replace(/\//g, "");
+
+                }
                 var totalOutcome3_nilai = $('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome3_nilai.val(totalJumlahOutcome3DenganKoma);
 
@@ -2585,33 +2625,55 @@
                     data: {},
                     success: (arr) => {
                         if (arr[row_id] !== undefined) {
+
+
                             if (elParent.find('.__inputTemplateRow-target').data('targetsatuan') !== undefined) {
                                 let total = 0
                                 arr[row_id][elParent.find('.__inputTemplateRow-target').data('targetsatuan')]['parent'].forEach((v) => {
                                     let satuan = arr[row_id][elParent.find('.__inputTemplateRow-target').data('targetsatuan')]['satuan']
+                                    var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+
+                                    // Jika 'satuan' mengandung '%', bersihkan simbolnya
+                                    if (satuan.includes('%')) {
+                                        cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                                    }
+                                    if (satuan.includes('M3/detik')) {
+                                        cleanedSatuan = cleanedSatuan.replace(/\//g, "");
+
+                                    }
+
+
+
                                     let getOgiat = sessionStorage.getItem(`oGIAT_${v}`)
                                     let getOgiatData = JSON.parse(getOgiat)
                                     if (getOgiatData !== null) {
-                                        if ($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+
+
+                                        if ($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
                                         }
-                                        if ($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if ($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
                                         }
-                                        if ($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+
+
+                                        if ($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
                                         }
-                                        if ($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+
+
+
+                                        if ($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
@@ -2624,26 +2686,37 @@
                                 let total1 = 0
                                 arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['parent'].forEach((v) => {
                                     let satuan = arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['satuan']
-                                    if ($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                    var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+
+                                    // Jika 'satuan' mengandung '%', bersihkan simbolnya
+                                    if (satuan.includes('%')) {
+                                        cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                                    }
+                                    if (satuan.includes('M3/detik')) {
+                                        cleanedSatuan = cleanedSatuan.replace(/\//g, "");
+
+                                    }
+
+                                    if ($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
                                     }
-                                    if ($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                    if ($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
                                     }
-                                    if ($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                    if ($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
                                     }
-                                    if ($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                    if ($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
@@ -2711,6 +2784,10 @@
                 if (satuan.includes('%')) {
                     cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
+                if (satuan.includes('M3/detik')) {
+                    cleanedSatuan = cleanedSatuan.replace(/\//g, "");
+
+                }
                 var totalOutcome1_nilai = $('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome1_nilai.val(totalJumlahOutcome1DenganKoma);
                 // $('.__inputTemplateRow-outcome[data-row-id=' + skindikatorId + ']').val(totalJumlahOutcome1DenganKoma)
@@ -2739,6 +2816,10 @@
                 if (satuan.includes('%')) {
                     cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
+                if (satuan.includes('M3/detik')) {
+                    cleanedSatuan = cleanedSatuan.replace(/\//g, "");
+
+                }
                 var totalOutcome2_nilai = $('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome2_nilai.val(totalJumlahOutcome2DenganKoma);
 
@@ -2761,6 +2842,10 @@
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
                     cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                }
+                if (satuan.includes('M3/detik')) {
+                    cleanedSatuan = cleanedSatuan.replace(/\//g, "");
+
                 }
                 var totalOutcome3_nilai = $('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome3_nilai.val(totalJumlahOutcome3DenganKoma);
