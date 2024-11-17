@@ -2489,12 +2489,12 @@
                     minimumFractionDigits: jumlahDesimal_target
                 });
 
-                var totalTarget_nilai = $('.__targetValue-' + satuan.replace(/ /g, '') + '[data-row-id=' + indikatorId + ']')
+                var totalTarget_nilai = $('.__targetValue-' + satuan.replaceAll(/ /g, '') + '[data-row-id=' + indikatorId + ']')
                 totalTarget_nilai.val(totalJumlahTargetDenganKoma);
 
                 outputKegiatanItems.target.unshift({
                     // oGiatId: indikatorId,
-                    targetSatuan: satuan.replace(/ /g, ''),
+                    targetSatuan: satuan.replaceAll(/ /g, ''),
                     targetNilai: totalJumlahTargetDenganKoma
                 });
 
@@ -2508,11 +2508,11 @@
                 totalJumlahOutcome1DenganKoma = total.toLocaleString('id-ID', {
                     minimumFractionDigits: jumlahDesimal_outcome1
                 });
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 var totalOutcome1_nilai = $('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome1_nilai.val(totalJumlahOutcome1DenganKoma);
@@ -2520,7 +2520,7 @@
 
 
                 outputKegiatanItems.outcome1.unshift({
-                    outcome1Satuan: satuan.replace(/ /g, ''),
+                    outcome1Satuan: satuan.replaceAll(/ /g, ''),
                     outcome1Nilai: totalJumlahOutcome1DenganKoma
                 });
 
@@ -2535,17 +2535,17 @@
                     minimumFractionDigits: jumlahDesimal_outcome2
                 });
 
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 var totalOutcome2_nilai = $('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome2_nilai.val(totalJumlahOutcome2DenganKoma);
 
                 outputKegiatanItems.outcome2.unshift({
-                    outcome2Satuan: satuan.replace(/ /g, ''),
+                    outcome2Satuan: satuan.replaceAll(/ /g, ''),
                     outcome2Nilai: totalJumlahOutcome2DenganKoma
                 });
 
@@ -2558,17 +2558,17 @@
                 totalJumlahOutcome3DenganKoma = total.toLocaleString('id-ID', {
                     minimumFractionDigits: jumlahDesimal_outcome3
                 });
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 var totalOutcome3_nilai = $('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome3_nilai.val(totalJumlahOutcome3DenganKoma);
 
                 outputKegiatanItems.outcome3.unshift({
-                    outcome3Satuan: satuan.replace(/ /g, ''),
+                    outcome3Satuan: satuan.replaceAll(/ /g, ''),
                     outcome3Nilai: totalJumlahOutcome3DenganKoma
                 });
                 sessionStorage.setItem("oGIAT_" + indikatorId, JSON.stringify(outputKegiatanItems));
@@ -2577,6 +2577,7 @@
             let dataID = $(".__buat-dokumen-pilih-template").data('id')
             $("tr[data-row-id]").each(function() {
                 let elParent = $(this)
+                // console.log(elParent.find('.__inputTemplateRow-target').data('targetsatuan'))
                 let row_id = elParent.data('row-id')
 
                 $.ajax({
@@ -2592,26 +2593,26 @@
                                     let getOgiat = sessionStorage.getItem(`oGIAT_${v}`)
                                     let getOgiatData = JSON.parse(getOgiat)
                                     if (getOgiatData !== null) {
-                                        if ($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if ($('.__targetValue-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__targetValue-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
                                         }
-                                        if ($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if ($('.__outcome1Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome1Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
                                         }
-                                        if ($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if ($('.__outcome2Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome2Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
                                         }
-                                        if ($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if ($('.__outcome3Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome3Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
@@ -2620,36 +2621,39 @@
                                 })
                                 $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(total)
                             }
-                            if (elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan') !== undefined) {
-                                let total1 = 0
-                                arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['parent'].forEach((v) => {
-                                    let satuan = arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['satuan']
-                                    if ($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__targetValue-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
-                                        if (!isNaN(nilai)) {
-                                            total1 += nilai
+
+                            if (typeof(arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]) != "undefined") {
+                                if (elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan') !== undefined) {
+                                    let total1 = 0
+                                    arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['parent'].forEach((v) => {
+                                        let satuan = arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['satuan']
+                                        if ($('.__targetValue-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__targetValue-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            if (!isNaN(nilai)) {
+                                                total1 += nilai
+                                            }
                                         }
-                                    }
-                                    if ($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__outcome1Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
-                                        if (!isNaN(nilai)) {
-                                            total1 += nilai
+                                        if ($('.__outcome1Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome1Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            if (!isNaN(nilai)) {
+                                                total1 += nilai
+                                            }
                                         }
-                                    }
-                                    if ($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__outcome2Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
-                                        if (!isNaN(nilai)) {
-                                            total1 += nilai
+                                        if ($('.__outcome2Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome2Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            if (!isNaN(nilai)) {
+                                                total1 += nilai
+                                            }
                                         }
-                                    }
-                                    if ($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__outcome3Value-' + satuan.replace(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
-                                        if (!isNaN(nilai)) {
-                                            total1 += nilai
+                                        if ($('.__outcome3Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome3Value-' + satuan.replaceAll(" ", "") + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            if (!isNaN(nilai)) {
+                                                total1 += nilai
+                                            }
                                         }
-                                    }
-                                })
-                                $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(total1)
+                                    })
+                                    $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(total1)
+                                }
                             }
                         }
                     },
@@ -2686,12 +2690,12 @@
                     minimumFractionDigits: jumlahDesimal_target
                 });
 
-                var totalTarget_nilai = $('.__targetValue-' + satuan.replace(/ /g, '') + '[data-row-id=' + indikatorId + ']')
+                var totalTarget_nilai = $('.__targetValue-' + satuan.replaceAll(/ /g, '') + '[data-row-id=' + indikatorId + ']')
                 totalTarget_nilai.val(totalJumlahTargetDenganKoma);
 
                 outputKegiatanItems.target.unshift({
                     // oGiatId: indikatorId,
-                    targetSatuan: satuan.replace(/ /g, ''),
+                    targetSatuan: satuan.replaceAll(/ /g, ''),
                     targetNilai: totalJumlahTargetDenganKoma
                 });
 
@@ -2705,11 +2709,11 @@
                 totalJumlahOutcome1DenganKoma = total.toLocaleString('id-ID', {
                     minimumFractionDigits: jumlahDesimal_outcome1
                 });
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 var totalOutcome1_nilai = $('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome1_nilai.val(totalJumlahOutcome1DenganKoma);
@@ -2717,7 +2721,7 @@
 
 
                 outputKegiatanItems.outcome1.unshift({
-                    outcome1Satuan: satuan.replace(/ /g, ''),
+                    outcome1Satuan: satuan.replaceAll(/ /g, ''),
                     outcome1Nilai: totalJumlahOutcome1DenganKoma
                 });
 
@@ -2733,17 +2737,17 @@
                     minimumFractionDigits: jumlahDesimal_outcome2
                 });
 
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 var totalOutcome2_nilai = $('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome2_nilai.val(totalJumlahOutcome2DenganKoma);
 
                 outputKegiatanItems.outcome2.unshift({
-                    outcome2Satuan: satuan.replace(/ /g, ''),
+                    outcome2Satuan: satuan.replaceAll(/ /g, ''),
                     outcome2Nilai: totalJumlahOutcome2DenganKoma
                 });
 
@@ -2756,17 +2760,17 @@
                 totalJumlahOutcome3DenganKoma = total.toLocaleString('id-ID', {
                     minimumFractionDigits: jumlahDesimal_outcome3
                 });
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 var totalOutcome3_nilai = $('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome3_nilai.val(totalJumlahOutcome3DenganKoma);
 
                 outputKegiatanItems.outcome3.unshift({
-                    outcome3Satuan: satuan.replace(/ /g, ''),
+                    outcome3Satuan: satuan.replaceAll(/ /g, ''),
                     outcome3Nilai: totalJumlahOutcome3DenganKoma
                 });
                 // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
