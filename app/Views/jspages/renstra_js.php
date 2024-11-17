@@ -37,7 +37,7 @@
     })
 
     $(document).on('change', 'select[name=filter-satker]', function() {
-        window.location.href = "<?php echo base_url('dokumenpk-balai-satker') ?>/" + $(this).val()
+        window.location.href = "<?php echo base_url('renstra-balai-satker') ?>/" + $(this).val()
     })
 
     $(document).on('click', '.__opsi-tahun-renstra', function() {
@@ -570,8 +570,9 @@
             beforeModalMount: () => {
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
-                if ($(this).data('type') !== "Admin") {
-                    $('.__save-update-dokumen').removeClass('d-none')
+                $('.__save-update-dokumen').removeClass('d-none')
+                if ($(this).data('type') == "Admin" || $(this).data('type') == "satker") {
+                    $('.__save-update-dokumen').addClass('d-none')
                 }
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
