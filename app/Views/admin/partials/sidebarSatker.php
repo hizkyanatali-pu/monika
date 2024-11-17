@@ -41,6 +41,12 @@ $request = \Config\Services::request();
                     <span class="kt-menu__link-text">Input Perjanjuan Kinerja</span>
                 </a>
             </li>
+            <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'renstra' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                <a href="<?= site_url('renstra'); ?>" class="kt-menu__link ">
+                    <i class="kt-menu__link-icon fas fa-book"></i>
+                    <span class="kt-menu__link-text">Input Rencana Strategis</span>
+                </a>
+            </li>
             <li class="kt-menu__item <?= ($request->uri->getSegment(1) == 'panduan' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
                 <a href="<?= site_url('panduan'); ?>" class="kt-menu__link ">
                     <i class="kt-menu__link-icon fas fa-book"></i>

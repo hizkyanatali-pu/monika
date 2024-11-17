@@ -32,23 +32,24 @@
         <!--begin::Section-->
         <div class="kt-section  pb-4 pt-3">
 
-            <div class="kt-section__content">
+            <div class="kt-section__content" style="overflow-x: auto;">
                 <!-- <div class="text-center mt-4">
                         <h4 class="text-dark"><b><?= $title; ?></b></h4>
                         <hr class="w-75 mb-0">
                     </div> -->
-
-                <div class="tree ml--105 pr-4">
-                    <ul id="_main-tree">
-                        <li class="w-100">
-                            <a href="#" class="w-25" id="_container_cardParent">
-                                
-                            </a>
-                            <ul id="_container_cardChildren">
-                                
-                            </ul>
-                        </li>
-                    </ul>
+                <div class="" style="width: 1400px; margin: 0px auto">
+                    <div class="tree ml--105 pr-4">
+                        <ul id="_main-tree">
+                            <li class="w-100">
+                                <a href="#" class="w-25" id="_container_cardParent">
+                                    
+                                </a>
+                                <ul id="_container_cardChildren">
+                                    
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 

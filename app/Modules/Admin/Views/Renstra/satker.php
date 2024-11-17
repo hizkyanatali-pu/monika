@@ -233,7 +233,6 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                             <th>Dokumen</th>
                             <th width="120px">Tanggal Kirim</th>
                             <th width="120px">Tanggal disetujui</th>
-                            <th width="120px">Berita Acara</th>
                             <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
                         </tr>
                     </thead>
@@ -376,6 +375,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             <div class="modal-footer d-none">
                 <button type="button" class="btn btn-primary __save-dokumen">Simpan Dokumen</button>
                 <button type="button" class="btn btn-success __save-update-dokumen d-none">Simpan Dokumen</button>
+                <div id="parentModalFooter"></div>
             </div>
         </div>
     </div>
@@ -466,7 +466,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 <?php echo script_tag('plugins/datatables/jquery.dataTables.min.js'); ?>
 <?php echo script_tag('plugins/datatables/dataTables.bootstrap4.min.js'); ?>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<?php echo $this->include('jspages/dokumenpk') ?>
+<?php echo $this->include('jspages/renstra_js') ?>
 
 <script>
     var isAdmin = '<?php echo $isAdmin ?>'
@@ -644,26 +644,11 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
     $(document).on('click', '.__preview-dokumen', function() {
 
-        dataBA = $(this).data("beritaacara");
-
-        if (dataBA) {
-
-            cetakDokumenBeritaAcara(
-                $(this).data('id'),
-                $(this).data('to-confirm'),
-                $(this).data('createdat')
-            )
-        } else {
-
-            cetakDokumen(
-                $(this).data('id'),
-                $(this).data('to-confirm'),
-                $(this).data('createdat')
-            )
-        }
-
-
-
+        cetakDokumen(
+            $(this).data('id'),
+            $(this).data('to-confirm'),
+            $(this).data('createdat')
+        )
     })
 
 
@@ -767,7 +752,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
                 }
                 $.ajax({
-                    url: "<?php echo site_url('dokumenpk/change-status') ?>",
+                    url: "<?php echo site_url('renstra/change-status') ?>",
                     type: "POST",
                     data: {
                         csrf_test_name: $('input[name=csrf_test_name]').val(),
@@ -797,8 +782,9 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
     $(document).on('click', '.__setujui-dokumen', function() {
         let dataID = $(this).data('id')
+        return
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/change-status') ?>",
+            url: "<?php echo site_url('renstra/change-status') ?>",
             type: "POST",
             data: {
                 csrf_test_name: $('input[name=csrf_test_name]').val(),
@@ -887,7 +873,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
     function getData(_status, instansi = '') {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>" + (instansi ? '/' + instansi : '') + "?_=" + new Date().getTime(),
+            url: "<?php echo site_url('renstra/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>" + (instansi ? '/' + instansi : '') + "?_=" + new Date().getTime(),
             type: 'GET',
             success: (res) => {
                 renderTableRow(_status, res.data)
@@ -899,7 +885,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
     function getDataBelumInput(_dokumenType) {
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-data-belum-input/') ?>" + _dokumenType,
+            url: "<?php echo site_url('renstra/satker/get-data-belum-input/') ?>" + _dokumenType,
             type: 'GET',
             success: (res) => {
                 renderTableRowBelumInput(res.data)
@@ -946,44 +932,34 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 `
             }
 
-            dataBeritaAcara = data.status_ba == 1 ? `<button 
-                        class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
-                        data-id="${data.id}" data-createdat ="${data.created_at}"
-                        data-to-confirm="${buttonData_toConfirm}" title="Cetak Berita acara"
-                        data-beritaacara="true"
-                    >
-                        <i class="fas fa-print"></i>
-                    </button>` : "Belum Mengisi Berita Acara";
-
-            if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>
-            <td>${dataBeritaAcara}</td>
-            `
+            if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>`
 
             var menuOptions = ''
 
             if (isAdmin == '1') {
                 menuOptions = `
-                    <button 
+                    <!--<button 
                         class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
                         data-id="${data.id}" data-createdat ="${data.created_at}"
                         data-to-confirm="${buttonData_toConfirm}" title="Cetak"
-                        data-beritaacara="false"
                     >
                         <i class="fas fa-print"></i>
-                    </button>
+                    </button>--!>
                     <button 
                         class="btn btn-sm btn-outline-success __edit-dokumen"
                         data-id="${data.id}"
+                        data-type="Admin"
+                        data-status="${_status}"
                         data-template-id="${data.template_id}" title="Edit"
                     >
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button 
+                    <!--<button 
                         class="btn btn-sm btn-outline-danger __arsipkan-dokumen"
                         data-id="${data.id}" title="Arsipkan"
                     >
                         <i class="fas fa-trash"></i>
-                    </button>
+                    </button>--!>
                 `
             }
 
@@ -1004,7 +980,6 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         </div>
                     </td>
                     <td>${data.created_at}</td>
-                    
                     ${render_columnChangeStatusAt}
                     <td>
                         <button 
@@ -1050,8 +1025,6 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             `)).draw()
         });
     }
-
-
 
     function cetakDokumen(_dokumenID, _toConfirm, createAt) {
         $.ajax({
@@ -1125,79 +1098,20 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             }
         })
     }
-
-    function cetakDokumenBeritaAcara(_dokumenID, _toConfirm, createAt) {
-        $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/export-pdf-berita-acara/') ?>" + _dokumenID + "_" + createAt + "?_=" + new Date().getTime(),
-            type: 'GET',
-            cache: false,
-            success: (res) => {
-                $('#modal-cetak-dokumen-revisioned').modal('hide')
-                setTimeout(() => {
-                    let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
-
-                    if (res.dokumen.revision_message != null) {
-                        element_iframePreviewDokumen.css({
-                            'height': '60vh'
-                        })
-                        $('.container-revision-alert-cetak').html(`
-                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Pesan !</h5>
-                                <p>${res.dokumen.revision_message}</p>
-                            </div>
-                        `)
-                    } else {
-                        element_iframePreviewDokumen.css({
-                            'height': '80vh'
-                        })
-                        $('.container-revision-alert-cetak').html('')
-                    }
-
-                    element_iframePreviewDokumen.attr('src', '/api/showpdf-berita-acara/tampilkan/' + _dokumenID + "_" + createAt + '?preview=true&_=' + Math.round(Math.random() * 10000000))
-                    element_modalPreviewCetakDokumen.modal('show')
-
-                    if (_toConfirm) {
-                        element_modalPreviewCetakDokumen.find('.modal-footer').html(`
-                            <div class="p-2">
-                                <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
-                                    <i class="fa fa-ban"></i> Tolak
-                                </button>
-
-                                <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
-                                    <i class="fa fa-check"></i> Setujui
-                                </button>
-                            </div>
-                        `)
-                    } else {
-                        element_modalPreviewCetakDokumen.find('.modal-footer').empty()
-                    }
-                }, 400)
-            },
-            error: function(XMLHttpRequest, testStatus, error) {
-                if (XMLHttpRequest.readyState == 4) {
-                    // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
-                    Swal.fire({
-                        type: 'error',
-                        title: 'error',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                } else if (XMLHttpRequest.readyState == 0) {
-                    // Network error (i.e. connection refused, access denied due to CORS, etc.)
-                    Swal.fire({
-                        type: 'error',
-                        title: 'Periksa Jaringan Internet Anda',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    })
-                } else {
-                    alert('error');
-                }
-
-
-            }
-        })
-    }
+    $(document).on('click', '.__edit-dokumen', function() {
+        let _dokumenID = $(this).data('id')
+        let status = $(this).data('status')
+        if (status == "hold") {
+            let html = `
+            <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+                <i class="fa fa-ban"></i> Tolak
+            </button>
+            <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+                <i class="fa fa-check"></i> Setujui
+            </button>`
+            $("#parentModalFooter").html(html)
+        }
+    })
 
     //filter
     $(document).on('click', '.filter-instansi', function() {

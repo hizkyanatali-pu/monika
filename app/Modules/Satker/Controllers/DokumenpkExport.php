@@ -166,7 +166,112 @@ class DokumenpkExport extends \App\Controllers\BaseController
     }
 
 
+    public function pdfBeritaAcara($_dokumenSatkerID)
+    {
+        //qrcode
+        $writer = new PngWriter();
 
+        $qrcodeSite = base_url() . "/api/showpdf/tampilkan/" . $_dokumenSatkerID . "?preview=true";
+
+        // Create QR code
+        $qrCode = QrCode::create($qrcodeSite)
+            ->setEncoding(new Encoding('UTF-8'))
+            ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
+            ->setSize(300)
+            ->setMargin(10)
+            ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->setForegroundColor(new Color(0, 0, 0))
+            ->setBackgroundColor(new Color(255, 255, 255));
+
+        // Create generic logo
+        $logo = Logo::create(FCPATH . 'logo.png')
+            ->setResizeToWidth(50);
+
+        // // Create generic label
+        // $label = Label::create($qrcodeSite)
+        //     ->setTextColor(new Color(255, 0, 0));
+
+        $result = $writer->write($qrCode, $logo);
+
+        $qrcode = $result->getDataUri();
+        // echo '<img src="'.$dataUri.'" alt="PUPR">';exit;
+
+
+
+        //generate pdf
+        $pdf = new PDF();
+
+        $dataDokumen = $this->dokumenSatker->select('
+            dokumenpk_satker.*,
+            tkabkota.*,
+            dokumen_pk_template_' . session('userData.tahun') . '.keterangan,
+            dokumen_pk_template_' . session('userData.tahun') . '.info_title
+        ')
+            ->join('dokumen_pk_template_' . session('userData.tahun'), 'dokumenpk_satker.template_id = dokumen_pk_template_' . session('userData.tahun') . '.id', 'left')
+            ->join('tkabkota', "(SUBSTRING_INDEX(dokumenpk_satker.kota, '-', 1) = tkabkota.kdlokasi AND SUBSTRING_INDEX(dokumenpk_satker.kota, '-', -1) = tkabkota.kdkabkota)", 'left')
+            ->where('dokumenpk_satker.id', $_dokumenSatkerID)
+            ->get()
+            ->getRowArray();
+
+        if ($dataDokumen) {
+            $this->dokumenBulan = bulan(date('m', strtotime($dataDokumen['created_at'])));
+
+            if ($dataDokumen['tahun'] != '') {
+                $this->dokumenYear = $dataDokumen['tahun'];
+            } else {
+                $this->dokumenYear = date('Y', strtotime($dataDokumen['created_at']));
+            }
+
+            if ($dataDokumen['kota_nama'] != '') {
+                $this->dokumenLokasi = $dataDokumen['kota_nama'];
+            } else {
+                if ($dataDokumen['kota'] != '') $this->dokumenLokasi = $dataDokumen['nmkabkota'];
+            }
+
+            if ($dataDokumen['bulan'] != '') $this->dokumenBulan = $this->bulan[$dataDokumen['bulan'] - 1];
+            if ($dataDokumen['tanggal'] != '') $this->tanggal = $dataDokumen['tanggal'];
+        }
+        // $watermaskRevisi       = $dataDokumen['is_revision_same_year'] == '1' ? 'revision-same-year' : $dataDokumen['status'];
+        // $watermarkRevisiNumber = $dataDokumen['is_revision_same_year'] == '1' ? $dataDokumen['revision_same_year_number'] : $dataDokumen['revision_number'];
+
+
+
+        // $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen);
+
+        $this->dokumenLoadedStatus = $dataDokumen['status'];
+
+        /** Dokumen Opening */
+        // $this->pdf_pageDokumenOpening($pdf, $dataDokumen);
+
+        /** Dokumen Detail */
+        // $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'target', '');
+
+        /** Dokumen Detail 2 */
+        // dd($dataDokumen['dokumen_type']);
+        if ($dataDokumen['dokumen_type'] == 'balai' || $dataDokumen['dokumen_type'] == 'eselon2') {
+
+            $this->pdf_pageDokumenDetailBeritaAcara($pdf, $_dokumenSatkerID, $dataDokumen, 'output', $qrcode);
+        } else {
+
+            $this->pdf_pageDokumenDetailBeritaAcara($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome', $qrcode);
+        }
+
+        $pdf->SetProtection(array('print'));
+
+
+
+        if ($_GET['preview']) {
+            $nm_file = date('Ymdhis') . "_PK " . str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . " - " . str_replace(array('DIREKTUR', 'DIREKTORAT'), array("MENTERI", "KEMENTERIAN"), str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+            $pdf->Output('I', $nm_file . '.pdf');
+            exit;
+        } else {
+
+            // $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
+            return $this->respond([
+                'dokumen' => $dataDokumen
+            ]);
+        };
+    }
 
 
 
@@ -543,11 +648,17 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         break;
                 }
 
+
                 switch ($_detailDokumenType) {
+
                     case 'target':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
                         $rSeparator = explode('.', $data_targetValue['target_value']);
-                        $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_target;
+                        $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+
+                            && $data_targetValue['template_row_id'] != '171009'
+
+                            ? number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['target_value'])) . " " . $satuan_target;
                         // $targetValue = str_replace('.',',',$data_targetValue['target_value']) .  ' ' .  $satuan_target;
                         // $targetValue = (number_format($data_targetValue['target_value'],)) .  ' ' .  $satuan_target;
 
@@ -557,7 +668,9 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         // $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 3) . ' ' . $data['outcome_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 10, ',', '.'), '0'), ',') . ' ' . $satuan_outcome;
                         $rSeparator = explode('.', $data_targetValue['outcome_value']);
-                        $targetValue = number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') .  ' ' .  $satuan_outcome;
+                        $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                            && $data_targetValue['template_row_id'] != '171009'
+                            ? number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['outcome_value'])) .  ' ' .  $satuan_outcome;
 
 
                         break;
@@ -741,6 +854,457 @@ class DokumenpkExport extends \App\Controllers\BaseController
     }
 
 
+    private function pdf_pageDokumenDetailBeritaAcara($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType, $qrcode)
+    {
+        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen, 6, 10);
+
+        // header('Content-Type: text/html; charset=utf-8');
+        $pdf->SetMargins(0, 16, 0, 0);
+        $pdf->AddPage('L', 'A4');
+        $pdf->SetAutoPageBreak(false);
+        // $headerTarget = $_detailDokumenType == 'target' ? 'TARGET ' : 'OUTCOME ';
+        $headerTarget = strtoupper($_detailDokumenType);
+
+        $header      = ['SASARAN PROGRAM / SASARAN KEGIATAN / INDIKATOR', $headerTarget . " " . $this->dokumenYear];
+        $headerWidth = [
+            200,
+            65
+        ];
+
+        $dataDokumenKegiatan = $this->dokumenSatker_kegiatan->where('dokumen_id', $_dokumenSatkerID)->get()->getResultArray();
+        $dataDokumenInfo     = $this->templateInfo->where('template_id', $dataDokumen['template_id'])->get()->getResultArray();
+
+        // $tableData = $this->templateRow
+        //     ->where('template_id', $dataDokumen['template_id'])
+        //     ->get()
+        //     ->getResultArray();
+
+        $tableData = $this->gettemplateRowChecked($dataDokumen['template_id'], $_dokumenSatkerID);
+
+        $tableDataWidth = [20, 110, 60, 60, 15];
+
+        // print_r($qrcode);exit;
+        if ($qrcode) {
+
+            $pdf->Image($qrcode, 282, 195, 15, 15, "PNG");
+        }
+
+        /**  Dokumen KOP */
+        // $pdf->Ln();
+        $dokumenKopTitle1 = 'BERITA ACARA KESEPAKATAN CAPAIAN KINERJA TAHUN ' . $this->dokumenYear;
+
+        $divisiPihak2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak2_initial']));
+        $divisiPihak2 = str_replace('MENTERI', 'KEMENTERIAN', $divisiPihak2);
+        $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
+        // Set top margin (adjust the value as needed)
+        $topMargin = 6;
+        $pdf->SetY($topMargin);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(255);
+        $pdf->SetTextColor(0);
+        // Kop Title 1
+        $width_kopTitle1 = $pdf->GetStringWidth($dokumenKopTitle1) + 6;
+        $pdf->SetX((300 - $width_kopTitle1) / 2);
+        $pdf->Cell($width_kopTitle1, 6, $dokumenKopTitle1, 0, 1, 'C');
+
+        //satker SKPDTPOP PERMUKIMAN PROVINSI KEPULAUAN BANGKA BELITUNG
+        if ($dataDokumen['satkerid'] == 309214) {
+            $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . chr(10) . $divisiPihak2;
+            $dokumenKopTitle2 = str_replace('SEKRETARIS', 'SEKRETARIAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . chr(10) . $divisiPihak2;
+        } else {
+            $dokumenKopTitle2 = str_replace('DIREKTUR', 'DIREKTORAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
+            $dokumenKopTitle2 = str_replace('SEKRETARIS', 'SEKRETARIAT', str_replace('KEPALA', '', $dataDokumen['pihak1_initial'])) . ' - ' . $divisiPihak2;
+        }
+
+        // Kop Title 2
+        $pdf->SetFont('Arial', 'B', 9);
+        $width_kopTitle2 = $pdf->GetStringWidth($dokumenKopTitle2) + 6;
+        // $pdf->SetX((300 - $width_kopTitle2) / 2);
+        // $pdf->Cell($width_kopTitle2, 6, $dokumenKopTitle2, 0, 1, 'C');
+        $pdf->MultiCell(0, 4, $dokumenKopTitle2, 0, 'C');
+        $pdf->SetFont('Arial', 'B', 10);
+
+        // Line break
+        $pdf->Ln(1);
+
+
+        $pdf->SetLineWidth(0.01);
+        $pdf->SetDrawColor(0, 0, 0);
+
+
+        /** Table */
+        // Header 1
+        $pdf->SetFont($this->fontFamily, 'B', 9);
+        $pdf->SetFillColor(255);
+        $pdf->SetTextColor(0);
+        $pdf->SetX((300 - array_sum($headerWidth)) / 2);
+        // foreach ($header as $key_header => $data_header)
+        //     $pdf->Cell($headerWidth[$key_header], 8, $data_header, 1, 0, 'C');
+        // $pdf->Ln();
+
+        $pdf->Cell(130, 24, $header[0], 1, 0, 'C');
+        $pdf->Cell(60, 8, "TARGET", 1, 0, 'C');
+        $pdf->Cell(60, 8, "CAPAIAN", 1, 0, 'C');
+        $pdf->Cell(15, 8, "KINERJA", 1, 0, 'C');
+        $pdf->Ln();
+
+        $pdf->SetFont($this->fontFamily, 'B', 9);
+        $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
+        $pdf->Cell(30, 8, "OUTPUT", 1, 0, 'C');
+        $pdf->Cell(30, 8, "OUTCOME", 1, 0, 'C');
+        $pdf->Cell(30, 8, "OUTPUT", 1, 0, 'C');
+        $pdf->Cell(30, 8, "OUTCOME", 1, 0, 'C');
+        $pdf->Cell(15, 8, "%", 1, 0, 'C');
+        $pdf->Ln();
+
+        $pdf->SetFont($this->fontFamily, 'B', 9);
+        $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
+        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
+        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
+        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
+        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
+        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
+        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
+        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
+        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
+        $pdf->Cell(15, 8, "", 1, 0, 'C');
+        $pdf->Ln();
+
+
+        // Header 2 (Header Number)
+        // $pdf->SetFont($this->fontFamily, 'B', 8);
+        // $pdf->SetX((300 - array_sum($headerWidth)) / 2);
+        // foreach ($header as $key_header => $data_header)
+        //     $pdf->Cell($headerWidth[$key_header], 4, '(' . (string)($key_header + 1) . ')', 1, 0, 'C');
+        // $pdf->Ln();
+
+
+
+        // Data
+        $pdf->SetFont($this->fontFamily, '', 8);
+        $rowNUmber = 0;
+
+        foreach ($tableData as $key => $data) {
+            // $celTableDataFill = $this->dokumenLoadedStatus == 'setuju' ? true : false;
+            $celTableDataFill = true;
+            $data_targetValue = [];
+
+            if ($data['type'] == 'form') {
+                $data_targetValue = $this->dokumenSatker_rows->where('dokumen_id', $_dokumenSatkerID)
+                    ->where('template_row_id', $data['id'])
+                    ->get()
+                    ->getRowArray();
+
+                $pdf->SetFillColor(255);
+                $width_cellTitle = $tableDataWidth[1];
+
+                if ($data_targetValue['is_checked'] == '1') $rowNUmber++;
+            } else {
+                $data_targetValue['is_checked'] = '1';
+
+                $pdf->SetFillColor(233);
+                $width_cellTitle = 245;
+
+                if ($data['prefix_title'] == 'full') {
+                    $rowNUmber = '';
+                    // $data['title'] = '';
+                } else {
+                    $rowNUmber = $data['prefix_title'] ?? '-';
+                }
+            }
+
+
+            $pdf->SetX((300 - array_sum($tableDataWidth)) / 2);
+            $numberText = $rowNUmber;
+            if ($data_targetValue['is_checked'] == '1') {
+                // $pdf->Cell($tableDataWidth[0], 6, $rowNUmber, 'T,B,L', 0, 'C', $celTableDataFill);
+                // $pdf->Cell($width_cellTitle, 6, $data['title'], 'T,R,B', 0, 'L', $celTableDataFill);
+            }
+
+            if ($data['type'] == 'form') {
+                $targetValue = '';
+
+                $str = iconv('UTF-8', 'windows-1252', html_entity_decode("&sup3;"));
+                switch (strtolower($data_targetValue['target_sat'] ??  trim(explode(";", $data['target_satuan'])[0]))) {
+                    case 'm3/detik':
+                        $satuan_target = 'M' . $str . "/Detik";
+
+                        break;
+                    case 'juta m3':
+                        $satuan_target = "Juta M" . $str;
+
+                        break;
+                    case 'm3/kapita':
+                        $satuan_target = 'M' . $str . '/Kapita';
+                        break;
+                    case 'm3/tahun/hektar':
+                        $satuan_target = 'M' . $str . '/Tahun/Hektar';
+                        break;
+                    case 'miliar m3':
+                        $satuan_target = 'Miliar M' . $str;
+                        break;
+                    default:
+                        $satuan_target = $data_targetValue['target_sat'] ?? trim(explode(";", $data['target_satuan'])[0]);
+                        break;
+                }
+
+                switch (strtolower($data['outcome_satuan'])) {
+                    case 'm3/detik':
+                        $satuan_outcome = 'M' . $str . "/Detik";
+                        break;
+                    case 'juta m3':
+                        $satuan_outcome = "Juta M" . $str;
+                        break;
+                    default:
+                        $satuan_outcome = $data['outcome_satuan'];
+                        break;
+                }
+
+
+                switch ($_detailDokumenType) {
+
+                    case 'target':
+                        // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
+                        $rSeparator = explode('.', $data_targetValue['target_value']);
+                        $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+
+                            && $data_targetValue['template_row_id'] != '171009'
+
+                            ? number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['target_value']));
+                        // $targetValue = str_replace('.',',',$data_targetValue['target_value']) .  ' ' .  $satuan_target;
+                        // $targetValue = (number_format($data_targetValue['target_value'],)) .  ' ' .  $satuan_target;
+
+                        break;
+
+                    case 'outcome':
+                        // $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 3) . ' ' . $data['outcome_satuan'];
+                        // $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 10, ',', '.'), '0'), ',') . ' ' . $satuan_outcome;
+                        $rSeparator = explode('.', $data_targetValue['outcome_value']);
+                        $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                            && $data_targetValue['template_row_id'] != '171009'
+                            ? number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['outcome_value']));
+
+
+                        break;
+
+                        //balai
+                    case 'output':
+                        // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
+                        // $targetValue = rtrim(rtrim(number_format($data_targetValue['target_value'], 10, ',', '.'), '0'), ',') . ' ' .  $satuan_target;
+                        $targetValue = 0 . " %";
+
+                        $sumOutputValue     = 0;
+                        $outputSatuan = '';
+                        $average = 0;
+
+
+                        $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $data['template_id'], 'rowId' =>  $data['id']])->get()->getResult();
+                        foreach ($templateRowRumus as $key => $dataRumus) {
+                            $rumus = $this->dokumenSatker->select(
+                                'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
+                                dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan,target_satuan'
+                            )
+                                ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                                ->join('dokumen_pk_template_row_' . session('userData.tahun'), "(dokumenpk_satker_rows.template_row_id=dokumen_pk_template_row_" . session('userData.tahun') . ".id)", 'left')
+                                ->join('dokumen_pk_template_rowrumus_' . session('userData.tahun'), "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".rowId)", 'left')
+                                ->where('dokumen_pk_template_rowrumus_' . session('userData.tahun') . '.rumus', $dataRumus->rumus)
+                                ->where('dokumenpk_satker.balaiid', $dataDokumen['balaiid'])
+                                ->where('dokumenpk_satker.status', 'setuju')
+                                ->where('dokumenpk_satker.satkerid is not null')
+                                ->where('dokumenpk_satker.deleted_at is null')
+                                ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+                                // ->where('dokumenpk_satker_rows.is_checked', '1')
+                                ->get()->getResult();
+
+                            $outcomeRumus = 0;
+                            $outputRumus = 0;
+
+                            foreach ($rumus as $keyOutcome => $dataOutput) {
+                                $outputRumus += $dataOutput ? ($dataOutput->target_value != '' ? $dataOutput->target_value : 0) : 0;
+                                // $outputSatuan = $dataOutput->target_sat ?? trim(explode(";", $dataOutput->target_satuan)[0]);
+                                $outputSatuan = $data['outcome_satuan'];
+                            }
+                            if ($sumOutputValue == '' && $outcomeRumus > 0) $sumOutputValue = 0;
+
+
+                            if ($outputRumus > 0) {
+                                $sumOutputValue  += $outputRumus;
+                            }
+                            $rSeparator = explode('.', $data['id'] != "291011" ?  $sumOutputValue : ($sumOutputValue / 3));
+                            $decimalLength = min(2, strlen($rSeparator[1])); // Mengambil panjang maksimum 2 karakter
+                            $targetValue = number_format(($data['id'] == "291011" ? ($sumOutputValue / 3) : $sumOutputValue), $decimalLength, ',', '.');
+                        }
+
+
+
+                        break;
+                    default:
+                        $targetValue = 0;
+                        break;
+                }
+
+                //target (output & outcome)
+                $rSeparatorTarget = explode('.', $data_targetValue['target_value']);
+                $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['target_value'], strlen($rSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['target_value']));
+
+                $rSeparatorOutcome = explode('.', $data_targetValue['outcome_value']);
+                $outcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                    && $data_targetValue['template_row_id'] != '171009'
+                    ? number_format($data_targetValue['outcome_value'], strlen($rSeparatorOutcome[1]), ',', '.') : strtoupper($data_targetValue['outcome_value']));
+
+                //capaian (output & outcome)
+                $CapaianrSeparatorTarget = explode('.', $data_targetValue['capaian_output_value']);
+                $CapaiantargetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['capaian_output_value'], strlen($CapaianrSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['capaian_output_value']));
+
+                $CapaianrSeparatorOutcome = explode('.', $data_targetValue['capaian_outcome_value']);
+                $CapaianoutcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                    && $data_targetValue['template_row_id'] != '171009'
+                    ? number_format($data_targetValue['capaian_outcome_value'], strlen($CapaianrSeparatorOutcome[1]), ',', '.') : strtoupper($data_targetValue['capaian_outcome_value']));
+
+
+                if ($data_targetValue['target_value'] == 0) {
+                    $kinerja = 0;
+                } else {
+
+                    $kinerja = ($data_targetValue['capaian_output_value'] / $data_targetValue['target_value']) * 100;
+                }
+
+
+                $pdf->SetWidths(array($tableDataWidth[0], $width_cellTitle, $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4]));
+                $pdf->SetAligns(array('C', 'L', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'));
+                $pdf->SetValigns(array(true, false, true));
+                $pdf->SetLineHeight(6);
+                $pdf->Row(array(
+                    $numberText,
+                    $data['title'],
+                    $targetValue,
+                    $satuan_target,
+                    $outcomeValue,
+                    $satuan_outcome,
+                    $CapaiantargetValue,
+                    $satuan_target,
+                    $CapaianoutcomeValue,
+                    $satuan_outcome,
+                    str_replace(".", ",", number_format($kinerja, 2)),
+                ), $celTableDataFill);
+
+                // if ($data_targetValue['is_checked'] == '1')  $pdf->Cell($tableDataWidth[2], 6, $targetValue, 1, 0, 'C', $celTableDataFill);
+            } else {
+                $rowNUmber = 0;
+
+                $pdf->SetWidths(array($tableDataWidth[0], $width_cellTitle));
+                $pdf->SetAligns(array('C', 'L'));
+                $pdf->SetValigns(array(true, false));
+                $pdf->SetLineHeight(6);
+                $pdf->Row(array(
+                    $numberText,
+                    $data['title']
+                ), $celTableDataFill);
+            }
+
+            if ($data_targetValue['is_checked'] == '1') $pdf->Ln();
+        }
+        $pdf->Ln(2);
+        $pdf->SetFont($this->fontFamily, 'I', 9);
+        $pdf->SetX((297 - array_sum($tableDataWidth)) / 2);
+        $pdf->Cell(100, 7, 'Penetapan berita acara ini bersifat mengikat sebagai acuan data pencapaian kinerja Direktorat Jenderal Sumber Daya Air Tahun ' . ($dataDokumen['tahun_ttd'] != '' ? $dataDokumen['tahun_ttd'] : $this->dokumenYear), 0, 0, 'L');
+        $pdf->Ln(5);
+
+
+        /** Keterangan Section */
+        // if ($dataDokumen['keterangan'] != '') {
+        //     // keterangan title
+        //     $pdf->SetFont($this->fontFamily, 'B', 9);
+        //     $pdf->SetX((297 - array_sum($tableDataWidth)) / 2);
+        //     $pdf->Cell(100, 7, 'KETERANGAN', 0, 0, 'L');
+        //     $pdf->Ln(5);
+
+        //     // keterangan
+        //     $pdf->SetFont($this->fontFamily, 'B', 8);
+        //     $pdf->SetX((297 - array_sum($tableDataWidth)) / 2);
+        //     $pdf->Cell(100, 7, $dataDokumen['keterangan'], 0, 0, 'L');
+        //     $pdf->Ln(8);
+        // }
+
+
+        // /** Info & Anggaran Section */
+        // // Info title
+        // $pdf->SetFont($this->fontFamily, 'B', 9);
+        // $pdf->SetX((297 - array_sum($tableDataWidth)) / 2);
+        // $pdf->Cell(100, 4, $dataDokumen['info_title'], 0, 0, 'L');
+
+        // // anggaran title
+        // $pdf->SetFont($this->fontFamily, 'B', 9);
+        // $pdf->SetX(183);
+        // $pdf->Cell(85, 4, 'Anggaran', 0, 0, 'R');
+        // $pdf->Ln(5);
+
+
+
+        // kegiatan
+        // foreach ($dataDokumenKegiatan as $key_kegiatan => $data_kegiatan) {
+        //     $pdf->SetFont($this->fontFamily, '', 8);
+        //     $pdf->SetX((310 - array_sum($tableDataWidth)) / 2);
+        //     $pdf->Cell(100, 3, ++$key_kegiatan . ". " . ltrim($data_kegiatan['nama']), 0, 0, 'L');
+
+        //     // anggaran perkegiatan value
+        //     $pdf->SetFont($this->fontFamily, 'B', 8);
+        //     $pdf->SetX(170);
+        //     $pdf->Cell(80, 3, "Rp", 0, 0, 'R');
+
+        //     // anggaran value
+        //     $pdf->SetFont($this->fontFamily, '', 8);
+        //     $pdf->SetX(183);
+        //     $pdf->Cell(100, 3, rupiahFormat($data_kegiatan['anggaran'], false, 2), 0, 0, 'R');
+
+        //     $pdf->Ln(4);
+        // }
+        // $pdf->Ln(2);
+
+        // total anggaran title
+        // $pdf->SetFont($this->fontFamily, 'B', 8);
+        // $pdf->SetX(150);
+        // $pdf->Cell(100, 7, "JUMLAH", 0, 0, 'L');
+
+
+        //RP title
+        // $pdf->SetFont($this->fontFamily, 'B', 8);
+        // $pdf->SetX(170);
+        // // $pdf->Cell(80, 7, "JUMLAH : \t \t \t \t \t \t \t Rp", 0, 0, 'R');
+        // $pdf->Cell(80, 3, "Rp", 0, 0, 'R');
+
+
+
+        // total anggaran value
+        // $pdf->SetFont($this->fontFamily, 'B', 8);
+        // $pdf->SetX(183);
+        // $pdf->Cell(100, 3, rupiahFormat($dataDokumen['total_anggaran'], false, 2), 0, 0, 'R');
+
+        // info
+        // foreach ($dataDokumenInfo as $key_info => $data_info) {
+        //     $pdf->SetFont($this->fontFamily, '', 8);
+        //     $pdf->SetX((310 - array_sum($tableDataWidth)) / 2);
+        //     $pdf->Cell(100, 7, $data_info['info'], 0, 0, 'L');
+        //     $pdf->Ln(4);
+        // }
+
+
+        /** TTD Section */
+        $pdf->Ln(5);
+
+        $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
+        $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
+        // $dokumenKopTitle1_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
+        $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
+            'person1Title' => $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial'],
+            'person1Name'  => $dataDokumen['pihak2_ttd'],
+            'person2Date'  => $this->dokumenLokasi . ',   ' . $this->tanggal . ' '  . $this->dokumenBulan . ' ' . ($dataDokumen['tahun_ttd'] != '' ? $dataDokumen['tahun_ttd'] : $this->dokumenYear),
+            // 'person2Title' => $jabatanPihak1_isPlt . $dokumenKopTitle1_prefix . $dataDokumen['pihak1_initial'],
+            'person2Title' => $jabatanPihak1_isPlt . $dataDokumen['pihak1_initial'],
+            'person2Name'  => $dataDokumen['pihak1_ttd'],
+        ], $_beritaacara = true);
+    }
+
 
 
 
@@ -750,7 +1314,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
         'person2Date'  => '-',
         'person2Title' => '-',
         'person2Name'  => '-',
-    ])
+    ], $_beritaacara = '')
     {
 
         // Tanda tangan instansi Khusus
@@ -792,7 +1356,15 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetX((300 - $_sectionWidth) / 2);
         $pdf->Cell(125, 13.7, $_ttd['person1Title'], 0, 0, 'C');
 
-        // title ttd 2
+        if ($_beritaacara) {
+            //Mengetahui
+            $pdf->SetFont($this->fontFamily, 'B', 9);
+            $pdf->SetX(10);
+            // $pdf->Cell(144, 4, $_ttd['person2Date'], 0, 0, 'C');
+            $pdf->Cell($widthNamaPejabat, 4, "Mengetahui", 0, 0, 'C');
+        }
+
+
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX(149);
         // $pdf->Cell(144, 4, $_ttd['person2Date'], 0, 0, 'C');

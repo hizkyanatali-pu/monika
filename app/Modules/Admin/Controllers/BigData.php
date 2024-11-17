@@ -70,6 +70,8 @@ class BigData extends \App\Controllers\BaseController
             "m_satker.satker as nmsatker",
             "monika_data_$year.kdpaket",
             "monika_data_$year.nmpaket",
+            "monika_data_$year.kdkabkota",
+            "monika_data_$year.kdlokasi",
             "pagu_rpm",
             "pagu_sbsn",
             "pagu_phln",
@@ -79,7 +81,9 @@ class BigData extends \App\Controllers\BaseController
             "real_phln",
             "real_total",
             "progres_keuangan",
-            "progres_fisik"
+            "progres_fisik",
+            "tkabkota.lat",
+            "tkabkota.lng",
         ];
 
         $column = $this->request->getVar('column') ?? $defaultKolom;
@@ -225,6 +229,7 @@ class BigData extends \App\Controllers\BaseController
                 'real_phln',
                 'real_total',
                 'progres_keuangan',
+                'kdkabkota',
                 'progres_fisik'
             ],
         ];

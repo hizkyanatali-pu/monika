@@ -313,3 +313,9 @@
     background-color: #C9F7F5;
     border-color: transparent;
 }
+
+
+.table-hover tbody tr:hover {
+  color: #212529;
+  background-color: skyblue;
+}

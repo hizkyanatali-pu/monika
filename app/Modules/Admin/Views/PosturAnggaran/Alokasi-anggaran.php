@@ -320,163 +320,164 @@ ORG CHART
 
 <div id="wrapper">
     <div id="container">
-
-        <ol class="organizational-chart">
-            <li>
-                <div>
-                    <h1>DITJEN SDA</h1>
-                    <hr>
-                    Paket <?= number_format($paketdjs->paket); ?>
-                    <hr>
-                    Rp. <?= number_format($totaldjs->total); ?>
-                </div>
-
-                <ol>
-                    <li>
-                        <div>
-                            <h2>BARANG NON OPS</h2>
-                            <hr>
-                            Paket <?= number_format($paketketahanansda->paket); ?>
-                            <hr>
-                            RP. <?= number_format($totalketahanansda->total); ?>
-                        </div>
-                        <ol>
-                            <li>
-                                <div>
-                                    <h3>NON TENDER</h3>
-                                    <hr>
-                                    RP. 8787878
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <h3>TENDER</h3>
-                                    <hr>
-                                    RP. 8787878
-                                </div>
-                                <ol>
-                                    <li>
-                                        <div>
-                                            <h4>SYC</h4>
-                                            <hr>
-                                            RP. 8787878
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div>
-                                            <h4>MYC LANJUTAN</h4>
-                                            <hr>
-                                            RP. 8787878
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div>
-                                            <h4>MYC BARU</h4>
-                                            <hr>
-                                            RP. 8787878
-                                        </div>
-                                    </li>
-                                </ol>
-                            </li>
-                        </ol>
-                    </li>
-
-
-                    <li>
-                        <div>
-                            <h2>BARANG OPS</h2>
-                            <hr>
-                            Paket <?= number_format($paketdukungan->paket); ?>
-                            <hr>
-                            RP. <?= number_format($totaldukungan->total); ?>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div>
-                            <h2>PEGAWAS &nbsp;&nbsp;&nbsp;<br> </h2>
-                            <hr>
-                            RP. <?= number_format($totaldukungan->total); ?>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div>
-                            <h2>MODAL OPS</h2>
-                            <hr>
-                            RP. <?= number_format($totaldukungan->total); ?>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <h2>MODAL NON OPS</h2>
-                            <hr>
-                            RP. <?= number_format($totaldukungan->total); ?>
-                        </div>
-                        <ol>
-                            <li>
-                                <div>
-                                    <h3>LAHAN</h3>
-                                    <hr>
-                                    RP. 8787878
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <h3>DILUAR LAHAN</h3>
-                                    <hr>
-                                    RP. 8787878
-                                </div>
-                                <ol>
-                                    <li>
-                                        <div>
-                                            <h4>TENDER</h4>
-                                            <hr>
-                                            RP. 8787878
-                                        </div>
-                                        <ol>
-                                            <li>
-                                                <div>
-                                                    <h6>SYC</h6>
-                                                    <hr>
-                                                    RP. 8787878
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div>
-                                                    <h6>MYC LANJUTAN</h6>
-                                                    <hr>
-                                                    RP. 8787878
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div>
-                                                    <h6>MYC BARU</h6>
-                                                    <hr>
-                                                    RP. 8787878
-                                                </div>
-                                            </li>
-                                        </ol>
-
-                                    </li>
-                                    <li>
-                                        <div>
-                                            <h4>NON TENDER</h4>
-                                            <hr>
-                                            RP. 8787878
-                                        </div>
-                                    </li>
-                                </ol>
-                            </li>
-
-                        </ol>
-
-
-                    </li>
-
-                </ol>
-            </li>
-        </ol>
+        <div class="" style="width: 1400px; margin: 0px auto">
+            <ol class="organizational-chart">
+                <li>
+                    <div>
+                        <h1>DITJEN SDA</h1>
+                        <hr>
+                        Paket <?= number_format($paketdjs->paket); ?>
+                        <hr>
+                        Rp. <?= number_format($totaldjs->total); ?>
+                    </div>
+    
+                    <ol>
+                        <li>
+                            <div>
+                                <h2>BARANG NON OPS</h2>
+                                <hr>
+                                Paket <?= number_format($paketketahanansda->paket); ?>
+                                <hr>
+                                RP. <?= number_format($totalketahanansda->total); ?>
+                            </div>
+                            <ol>
+                                <li>
+                                    <div>
+                                        <h3>NON TENDER</h3>
+                                        <hr>
+                                        RP. 8787878
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <h3>TENDER</h3>
+                                        <hr>
+                                        RP. 8787878
+                                    </div>
+                                    <ol>
+                                        <li>
+                                            <div>
+                                                <h4>SYC</h4>
+                                                <hr>
+                                                RP. 8787878
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <h4>MYC LANJUTAN</h4>
+                                                <hr>
+                                                RP. 8787878
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <h4>MYC BARU</h4>
+                                                <hr>
+                                                RP. 8787878
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </li>
+    
+    
+                        <li>
+                            <div>
+                                <h2>BARANG OPS</h2>
+                                <hr>
+                                Paket <?= number_format($paketdukungan->paket); ?>
+                                <hr>
+                                RP. <?= number_format($totaldukungan->total); ?>
+                            </div>
+                        </li>
+    
+                        <li>
+                            <div>
+                                <h2>PEGAWAS &nbsp;&nbsp;&nbsp;<br> </h2>
+                                <hr>
+                                RP. <?= number_format($totaldukungan->total); ?>
+                            </div>
+                        </li>
+    
+                        <li>
+                            <div>
+                                <h2>MODAL OPS</h2>
+                                <hr>
+                                RP. <?= number_format($totaldukungan->total); ?>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <h2>MODAL NON OPS</h2>
+                                <hr>
+                                RP. <?= number_format($totaldukungan->total); ?>
+                            </div>
+                            <ol>
+                                <li>
+                                    <div>
+                                        <h3>LAHAN</h3>
+                                        <hr>
+                                        RP. 8787878
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <h3>DILUAR LAHAN</h3>
+                                        <hr>
+                                        RP. 8787878
+                                    </div>
+                                    <ol>
+                                        <li>
+                                            <div>
+                                                <h4>TENDER</h4>
+                                                <hr>
+                                                RP. 8787878
+                                            </div>
+                                            <ol>
+                                                <li>
+                                                    <div>
+                                                        <h6>SYC</h6>
+                                                        <hr>
+                                                        RP. 8787878
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div>
+                                                        <h6>MYC LANJUTAN</h6>
+                                                        <hr>
+                                                        RP. 8787878
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div>
+                                                        <h6>MYC BARU</h6>
+                                                        <hr>
+                                                        RP. 8787878
+                                                    </div>
+                                                </li>
+                                            </ol>
+    
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <h4>NON TENDER</h4>
+                                                <hr>
+                                                RP. 8787878
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </li>
+    
+                            </ol>
+    
+    
+                        </li>
+    
+                    </ol>
+                </li>
+            </ol>
+        </div>
 
     </div>
 </div>
