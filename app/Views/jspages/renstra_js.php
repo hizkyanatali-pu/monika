@@ -2517,12 +2517,12 @@
                     minimumFractionDigits: jumlahDesimal_target
                 });
 
-                var totalTarget_nilai = $('.__targetValue-' + satuan.replace(/ /g, '') + '[data-row-id=' + indikatorId + ']')
+                var totalTarget_nilai = $('.__targetValue-' + satuan.replaceAll(/ /g, '') + '[data-row-id=' + indikatorId + ']')
                 totalTarget_nilai.val(totalJumlahTargetDenganKoma);
 
                 outputKegiatanItems.target.unshift({
                     // oGiatId: indikatorId,
-                    targetSatuan: satuan.replace(/ /g, ''),
+                    targetSatuan: satuan.replaceAll(/ /g, ''),
                     targetNilai: totalJumlahTargetDenganKoma
                 });
 
@@ -2536,11 +2536,11 @@
                 totalJumlahOutcome1DenganKoma = total.toLocaleString('id-ID', {
                     minimumFractionDigits: jumlahDesimal_outcome1
                 });
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 if (satuan.includes('M3/detik')) {
                     cleanedSatuan = cleanedSatuan.replace(/\//g, "");
@@ -2552,7 +2552,7 @@
 
 
                 outputKegiatanItems.outcome1.unshift({
-                    outcome1Satuan: satuan.replace(/ /g, ''),
+                    outcome1Satuan: satuan.replaceAll(/ /g, ''),
                     outcome1Nilai: totalJumlahOutcome1DenganKoma
                 });
 
@@ -2567,11 +2567,11 @@
                     minimumFractionDigits: jumlahDesimal_outcome2
                 });
 
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 if (satuan.includes('M3/detik')) {
                     cleanedSatuan = cleanedSatuan.replace(/\//g, "");
@@ -2581,7 +2581,7 @@
                 totalOutcome2_nilai.val(totalJumlahOutcome2DenganKoma);
 
                 outputKegiatanItems.outcome2.unshift({
-                    outcome2Satuan: satuan.replace(/ /g, ''),
+                    outcome2Satuan: satuan.replaceAll(/ /g, ''),
                     outcome2Nilai: totalJumlahOutcome2DenganKoma
                 });
 
@@ -2594,11 +2594,11 @@
                 totalJumlahOutcome3DenganKoma = total.toLocaleString('id-ID', {
                     minimumFractionDigits: jumlahDesimal_outcome3
                 });
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 if (satuan.includes('M3/detik')) {
                     cleanedSatuan = cleanedSatuan.replace(/\//g, "");
@@ -2608,7 +2608,7 @@
                 totalOutcome3_nilai.val(totalJumlahOutcome3DenganKoma);
 
                 outputKegiatanItems.outcome3.unshift({
-                    outcome3Satuan: satuan.replace(/ /g, ''),
+                    outcome3Satuan: satuan.replaceAll(/ /g, ''),
                     outcome3Nilai: totalJumlahOutcome3DenganKoma
                 });
                 sessionStorage.setItem("oGIAT_" + indikatorId, JSON.stringify(outputKegiatanItems));
@@ -2617,6 +2617,7 @@
             let dataID = $(".__buat-dokumen-pilih-template").data('id')
             $("tr[data-row-id]").each(function() {
                 let elParent = $(this)
+                // console.log(elParent.find('.__inputTemplateRow-target').data('targetsatuan'))
                 let row_id = elParent.data('row-id')
 
                 $.ajax({
@@ -2759,12 +2760,12 @@
                     minimumFractionDigits: jumlahDesimal_target
                 });
 
-                var totalTarget_nilai = $('.__targetValue-' + satuan.replace(/ /g, '') + '[data-row-id=' + indikatorId + ']')
+                var totalTarget_nilai = $('.__targetValue-' + satuan.replaceAll(/ /g, '') + '[data-row-id=' + indikatorId + ']')
                 totalTarget_nilai.val(totalJumlahTargetDenganKoma);
 
                 outputKegiatanItems.target.unshift({
                     // oGiatId: indikatorId,
-                    targetSatuan: satuan.replace(/ /g, ''),
+                    targetSatuan: satuan.replaceAll(/ /g, ''),
                     targetNilai: totalJumlahTargetDenganKoma
                 });
 
@@ -2778,11 +2779,11 @@
                 totalJumlahOutcome1DenganKoma = total.toLocaleString('id-ID', {
                     minimumFractionDigits: jumlahDesimal_outcome1
                 });
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 if (satuan.includes('M3/detik')) {
                     cleanedSatuan = cleanedSatuan.replace(/\//g, "");
@@ -2794,7 +2795,7 @@
 
 
                 outputKegiatanItems.outcome1.unshift({
-                    outcome1Satuan: satuan.replace(/ /g, ''),
+                    outcome1Satuan: satuan.replaceAll(/ /g, ''),
                     outcome1Nilai: totalJumlahOutcome1DenganKoma
                 });
 
@@ -2810,11 +2811,11 @@
                     minimumFractionDigits: jumlahDesimal_outcome2
                 });
 
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 if (satuan.includes('M3/detik')) {
                     cleanedSatuan = cleanedSatuan.replace(/\//g, "");
@@ -2824,7 +2825,7 @@
                 totalOutcome2_nilai.val(totalJumlahOutcome2DenganKoma);
 
                 outputKegiatanItems.outcome2.unshift({
-                    outcome2Satuan: satuan.replace(/ /g, ''),
+                    outcome2Satuan: satuan.replaceAll(/ /g, ''),
                     outcome2Nilai: totalJumlahOutcome2DenganKoma
                 });
 
@@ -2837,11 +2838,11 @@
                 totalJumlahOutcome3DenganKoma = total.toLocaleString('id-ID', {
                     minimumFractionDigits: jumlahDesimal_outcome3
                 });
-                var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
                 }
                 if (satuan.includes('M3/detik')) {
                     cleanedSatuan = cleanedSatuan.replace(/\//g, "");
@@ -2851,7 +2852,7 @@
                 totalOutcome3_nilai.val(totalJumlahOutcome3DenganKoma);
 
                 outputKegiatanItems.outcome3.unshift({
-                    outcome3Satuan: satuan.replace(/ /g, ''),
+                    outcome3Satuan: satuan.replaceAll(/ /g, ''),
                     outcome3Nilai: totalJumlahOutcome3DenganKoma
                 });
                 // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
