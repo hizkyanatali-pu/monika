@@ -571,7 +571,7 @@
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
                 $('.__save-update-dokumen').removeClass('d-none')
-                if ($(this).data('type') == "Admin" || $(this).data('type') == "satker") {
+                if ($(this).data('type') == "Admin" || $(this).data('type') == "satker" || $(this).data('type') == "balai") {
                     $('.__save-update-dokumen').addClass('d-none')
                 }
                 // console.log($('.__save-update-dokumen'))
@@ -650,9 +650,13 @@
                         if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
 
                     })
+                    // unique = res.paket.map(e => e['template_ogiat_id']).map((e, i, final) => final.indexOf(e) === i && i)
+                    //     .filter(obj => res.paket[obj])
+                    //     .map(e => res.paket[e]["template_ogiat_id"]);
                     let duplicateIds = res.paket.map(e => e['template_ogiat_id']).map((e, i, final) => final.indexOf(e) !== i && i)
                         .filter(obj => res.paket[obj])
                         .map(e => res.paket[e]["template_ogiat_id"])
+                    // console.log(unique, duplicateIds)
                     duplicateIds.forEach(id => {
                         let duplicate = []
                         res.paket.forEach(item => {
@@ -2155,7 +2159,7 @@
                 if (res.message != 'tidak ada data') {
                     const tbody = $('#tbody');
                     tbody.empty();
-                    var jsonData = JSON.parse(res);
+                    var jsonData = JSON.parse(JSON.stringify(res));
 
                     jsonData.forEach(function(balai, index) {
 
