@@ -963,6 +963,23 @@ class Renstra extends \App\Controllers\BaseController
         ]);
     }
 
+    public function totalPaket($id)
+    {
+        return $this->respond([
+            'paket'         => $this->dokumenSatker_paket->select(['count(template_ogiat_id) as total', 'template_ogiat_id'])->where([
+                'dokumen_id' => $id,
+            ])->groupBy('template_ogiat_id')->get()->getResult(),
+        ]);
+    }
+    public function getPaketbyOgiat($id, $row_id)
+    {
+        return $this->respond([
+            'paket'         => $this->dokumenSatker_paket->where([
+                'dokumen_id' => $id,
+                'template_ogiat_id' => $row_id
+            ])->get()->getResult(),
+        ]);
+    }
 
 
     public function logKoreksi($id)
@@ -1146,8 +1163,6 @@ class Renstra extends \App\Controllers\BaseController
         /* dokumen data_ogiat */
         $this->insertDokumenSatker_oGiat($this->request->getPost(), $dokumenID);
         /** end-of: data_ogiat */
-
-
 
         /* dokumen data_paket */
         $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
@@ -1402,51 +1417,44 @@ class Renstra extends \App\Controllers\BaseController
     {
         $batchData = [];
 
-        foreach ($input['rows']['row_indikator'] as $row) {
-            if ($row['isChecked'] == "1") {
-                // Pastikan outputkegiatan tidak kosong
-                if (!empty($row['outputkegiatan'])) {
-                    foreach ($row['outputkegiatan'] as $output) {
+        foreach ($input['ogiat'] as $row) {
+            // Pastikan outputkegiatan tidak kosong
 
-                        // Ambil oGiatId dari array yang ada
-                        $oGiatIds = array_column($output['oGiatId'], 'oGiatId');
+            // Ambil oGiatId dari array yang ada
+            $oGiatIds = array_column($row['oGiatId'], 'oGiatId');
 
-                        // Ambil panjang masing-masing array
-                        $targetCount = count($output['target'] ?? []);
-                        $outcome1Count = count($output['outcome1'] ?? []);
-                        $outcome2Count = count($output['outcome2'] ?? []);
-                        $outcome3Count = count($output['outcome3'] ?? []);
+            // Ambil panjang masing-masing array
+            $targetCount = count($row['target'] ?? []);
+            $outcome1Count = count($row['outcome1'] ?? []);
+            $outcome2Count = count($row['outcome2'] ?? []);
+            $outcome3Count = count($row['outcome3'] ?? []);
 
-                        // Iterasi berdasarkan jumlah maksimal dari array yang ada
-                        for ($i = 0; $i < max($targetCount, $outcome1Count, $outcome2Count, $outcome3Count); $i++) {
-                            // Mengambil elemen dari setiap array jika ada, menggunakan default jika tidak
-                            $target = $output['target'][$i] ?? null;
-                            $outcome1 = $output['outcome1'][$i] ?? null;
-                            $outcome2 = $output['outcome2'][$i] ?? null;
-                            $outcome3 = $output['outcome3'][$i] ?? null;
+            // Iterasi berdasarkan jumlah maksimal dari array yang ada
+            for ($i = 0; $i < max($targetCount, $outcome1Count, $outcome2Count, $outcome3Count); $i++) {
+                // Mengambil elemen dari setiap array jika ada, menggunakan default jika tidak
+                $target = $row['target'][$i] ?? null;
+                $outcome1 = $row['outcome1'][$i] ?? null;
+                $outcome2 = $row['outcome2'][$i] ?? null;
+                $outcome3 = $row['outcome3'][$i] ?? null;
 
-                            // Memasukkan data ke dalam batch
-                            foreach ($oGiatIds as $oGiatId) {
-                                $batchData[] = [
-                                    'dokumen_id' => $_dokumenID,
-                                    'template_row_id' => $row['row_id'],
-                                    'template_ogiat_id' => $oGiatId,  // Menggunakan oGiatId dari array
-                                    'output_val' => $target['targetNilai'] ?? '0',  // Default 0 jika tidak ada
-                                    'output_sat' => $target['targetSatuan'] ?? null, // Default N/A jika tidak ada
-                                    'outcome1_val' => $outcome1['outcome1Nilai'] ?? '0',  // Default 0 jika tidak ada
-                                    'outcome1_sat' => $outcome1['outcome1Satuan'] ?? null, // Default N/A jika tidak ada
-                                    'outcome2_val' => $outcome2['outcome2Nilai'] ?? '0',  // Default 0 jika tidak ada
-                                    'outcome2_sat' => $outcome2['outcome2Satuan'] ?? null, // Default N/A jika tidak ada
-                                    'outcome3_val' => $outcome3['outcome3Nilai'] ?? '0',  // Default 0 jika tidak ada
-                                    'outcome3_sat' => $outcome3['outcome3Satuan'] ?? null, // Default N/A jika tidak ada
-                                ];
-                            }
-                        }
-                    }
+                // Memasukkan data ke dalam batch
+                foreach ($oGiatIds as $oGiatId) {
+                    $batchData[] = [
+                        'dokumen_id' => $_dokumenID,
+                        'template_row_id' => null,
+                        'template_ogiat_id' => $oGiatId,  // Menggunakan oGiatId dari array
+                        'output_val' => $target['targetNilai'] ?? '0',  // Default 0 jika tidak ada
+                        'output_sat' => $target['targetSatuan'] ?? null, // Default N/A jika tidak ada
+                        'outcome1_val' => $outcome1['outcome1Nilai'] ?? '0',  // Default 0 jika tidak ada
+                        'outcome1_sat' => $outcome1['outcome1Satuan'] ?? null, // Default N/A jika tidak ada
+                        'outcome2_val' => $outcome2['outcome2Nilai'] ?? '0',  // Default 0 jika tidak ada
+                        'outcome2_sat' => $outcome2['outcome2Satuan'] ?? null, // Default N/A jika tidak ada
+                        'outcome3_val' => $outcome3['outcome3Nilai'] ?? '0',  // Default 0 jika tidak ada
+                        'outcome3_sat' => $outcome3['outcome3Satuan'] ?? null, // Default N/A jika tidak ada
+                    ];
                 }
             }
         }
-
 
         // // Simpan data ke dalam tabel dengan insertBatch
         // if (!empty($batchData)) {
@@ -1460,62 +1468,25 @@ class Renstra extends \App\Controllers\BaseController
     private function insertDokumenSatker_paket($input, $_dokumenID)
     {
 
-        // print_r($input);
-        // exit;
         $dataPaket = [];
-
-
-        foreach ($input['rows']['row_indikator'] as $item) {
-            if (isset($item['paket'])) {
-                foreach ($item['paket'] as $paketItems) {
-                    foreach ($paketItems as $paket) {
-                        $dataPaket[] = [
-                            'tahun' => $item['tahun'],
-                            'template_row_id' => $item['row_id'],
-                            'template_ogiat_id' => $paket['oGiatId'],
-                            'idpaket' => $paket['paketId'],
-                            'output_val' => $paket['target_nilai'],
-                            'output_sat' => $paket['target_satuan'],
-                            'outcome1_val' => $paket['outcome1_nilai'],
-                            'outcome1_sat' => $paket['outcome1_satuan'],
-                            'outcome2_val' => $paket['outcome2_nilai'],
-                            'outcome2_sat' => $paket['outcome2_satuan'],
-                            'outcome3_val' => $paket['outcome3_nilai'],
-                            'outcome3_sat' => $paket['outcome3_satuan'],
-                            // 'isChecked' => $item['id']
-
-                        ];
-                    }
-                }
+        foreach ($input['paket'] as $items) {
+            foreach ($items as $paket) {
+                $dataPaket[] = [
+                    'tahun' => $input['tahun'],
+                    'template_row_id' => null,
+                    'template_ogiat_id' => $paket['oGiatId'],
+                    'idpaket' => $paket['paketId'],
+                    'output_val' => $paket['target_nilai'],
+                    'output_sat' => $paket['target_satuan'],
+                    'outcome1_val' => $paket['outcome1_nilai'],
+                    'outcome1_sat' => $paket['outcome1_satuan'],
+                    'outcome2_val' => $paket['outcome2_nilai'],
+                    'outcome2_sat' => $paket['outcome2_satuan'],
+                    'outcome3_val' => $paket['outcome3_nilai'],
+                    'outcome3_sat' => $paket['outcome3_satuan'],
+                ];
             }
         }
-
-        // $data = $this->request->getPost('paket');
-        // foreach ($input['paket'] as $item) {
-
-        //     if (isset($item['paketId']) && !empty($item['paketId'])) {
-        //         $paketIds = json_decode($item['paketId'], true); // Mendekode JSON menjadi array
-        //         // print_r($paketIds);
-        //         // exit;
-        //         foreach ($paketIds as $paketId) {
-
-        //             $dataPaket[] = [
-        //                 'template_ogiat_id' => $item['id'],
-        //                 'idpaket' => $paketId['paketId'],
-        //                 'output_val' => $paketId['target_nilai'],
-        //                 'output_sat' => $paketId['target_satuan'],
-        //                 'outcome1_val' => $paketId['outcome1_nilai'],
-        //                 'outcome1_sat' => $paketId['outcome1_satuan'],
-        //                 'outcome2_val' => $paketId['outcome2_nilai'],
-        //                 'outcome2_sat' => $paketId['outcome2_satuan'],
-        //                 'outcome3_val' => $paketId['outcome3_nilai'],
-        //                 'outcome3_sat' => $paketId['outcome3_satuan'],
-        //                 // 'isChecked' => $item['id']
-
-        //             ];
-        //         }
-        //     }
-        // }
 
         $rows = array_map(function ($arr) use ($_dokumenID) {
             return [
@@ -1536,10 +1507,6 @@ class Renstra extends \App\Controllers\BaseController
                 // 'is_checked'      => $arr['isChecked']
             ];
         }, $dataPaket);
-
-
-        // print_r($rows);
-        // exit;
 
         $this->dokumenSatker_paket->insertBatch($rows);
     }

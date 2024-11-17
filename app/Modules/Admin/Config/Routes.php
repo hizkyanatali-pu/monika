@@ -467,6 +467,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('get-rumus-outcome/(:any)', '\Modules\Satker\Controllers\renstra::getRumusOutcome/$1');
                 $routes->get('check-dokumen-same-year-exist/(:any)/(:any)', '\Modules\Satker\Controllers\renstra::checkDocumentSameYearExist/$1/$2');
                 $routes->get('detail/(:any)', '\Modules\Satker\Controllers\renstra::show/$1');
+                $routes->get('total-paket/(:any)', '\Modules\Satker\Controllers\renstra::totalPaket/$1');
+                $routes->get('get-paket/(:any)/(:any)', '\Modules\Satker\Controllers\renstra::getPaketbyOgiat/$1/$2');
                 $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\renstra::getListRevisioned/$1');
                 $routes->post('create', '\Modules\Satker\Controllers\renstra::create');
                 $routes->post('editDokumen', '\Modules\Satker\Controllers\renstra::edit');

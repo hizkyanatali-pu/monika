@@ -187,12 +187,12 @@
                                         <i class="fas fa-eye"></i>
                                     </button>
                                     <?php if ($data->status == 'hold' and (!isset($balaiCreateForSatker))) { ?>
-                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type=<?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? "uptBalai-add" : session('userData')['group_id'] ?? "") ?> data-status="<?= $data->status ?>" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     <?php } ?>
                                     <?php if ($data->status == 'setuju'  and (!isset($balaiCreateForSatker))) { ?>
-                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-type=<?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? "uptBalai-add" : session('userData')['group_id'] ?? "") ?> data-status="<?= $data->status ?>" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     <?php } ?>

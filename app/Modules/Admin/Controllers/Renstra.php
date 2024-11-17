@@ -478,7 +478,6 @@ class Renstra extends \App\Controllers\BaseController
                 $from = $this->request->getPost('dataID');
 
                 if ($newStatus == "tolak") {
-                    $updatedData['revision_message'] = $this->request->getPost('message');
                     $updatedData['reject_by']           = $this->user['idpengguna'];
                     $updatedData['reject_date']           = date("Y-m-d H:i:s");
                 } else {
@@ -499,7 +498,7 @@ class Renstra extends \App\Controllers\BaseController
                     'status'           => $newStatus,
                     'change_status_at' => date("Y-m-d H:i:s")
                 ];
-                $updatedData['revision_message'] = $this->request->getPost('message');
+                // $updatedData['revision_message'] = $this->request->getPost('message');
 
 
                 // var_dump($updat edData);die;
