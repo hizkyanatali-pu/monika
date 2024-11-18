@@ -37,7 +37,7 @@
     })
 
     $(document).on('change', 'select[name=filter-satker]', function() {
-        window.location.href = "<?php echo base_url('dokumenpk-balai-satker') ?>/" + $(this).val()
+        window.location.href = "<?php echo base_url('renstra-balai-satker') ?>/" + $(this).val()
     })
 
     $(document).on('click', '.__opsi-tahun-renstra', function() {
@@ -570,8 +570,9 @@
             beforeModalMount: () => {
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
-                if ($(this).data('type') !== "Admin") {
-                    $('.__save-update-dokumen').removeClass('d-none')
+                $('.__save-update-dokumen').removeClass('d-none')
+                if ($(this).data('type') == "Admin" || $(this).data('type') == "satker" || $(this).data('type') == "balai") {
+                    $('.__save-update-dokumen').addClass('d-none')
                 }
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
@@ -649,30 +650,57 @@
                         if (data.is_checked == '0') elementInput_target.parents('tr').find('input:checkbox[name=form-check-row]').trigger('click')
 
                     })
+                    unique = res.paket.map(e => e['template_ogiat_id']).map((e, i, final) => final.indexOf(e) === i && i)
+                        .filter(obj => res.paket[obj])
+                        .map(e => res.paket[e]["template_ogiat_id"]);
                     let duplicateIds = res.paket.map(e => e['template_ogiat_id']).map((e, i, final) => final.indexOf(e) !== i && i)
                         .filter(obj => res.paket[obj])
                         .map(e => res.paket[e]["template_ogiat_id"])
-                    duplicateIds.forEach(id => {
-                        let duplicate = []
-                        res.paket.forEach(item => {
+                    if (duplicateIds.length > 0) {
+                        duplicateIds.forEach(id => {
+                            let duplicate = []
+                            res.paket.forEach(item => {
 
-                            if (item.template_ogiat_id === id) {
-                                duplicate.push({
-                                    oGiatId: item.template_ogiat_id,
-                                    paketId: item.idpaket,
-                                    target_nilai: item.output_val,
-                                    target_satuan: item.output_sat,
-                                    outcome1_nilai: item.outcome1_val,
-                                    outcome1_satuan: item.outcome1_sat.replace(/\//g, ''),
-                                    outcome2_nilai: item.outcome2_val ?? "",
-                                    outcome2_satuan: item.outcome2_sat.replace(/\//g, '') ?? "",
-                                    outcome3_nilai: item.outcome3_val ?? "",
-                                    outcome3_satuan: item.outcome3_sat.replace(/\//g, '') ?? "",
-                                })
-                            }
+                                if (item.template_ogiat_id === id) {
+                                    duplicate.push({
+                                        oGiatId: item.template_ogiat_id,
+                                        paketId: item.idpaket,
+                                        target_nilai: item.output_val,
+                                        target_satuan: item.output_sat,
+                                        outcome1_nilai: item.outcome1_val,
+                                        outcome1_satuan: item.outcome1_sat.replace(/\//g, ''),
+                                        outcome2_nilai: item.outcome2_val ?? "",
+                                        outcome2_satuan: item.outcome2_sat.replace(/\//g, '') ?? "",
+                                        outcome3_nilai: item.outcome3_val ?? "",
+                                        outcome3_satuan: item.outcome3_sat.replace(/\//g, '') ?? "",
+                                    })
+                                }
+                            })
+                            sessionStorage.setItem('Paket_' + id, JSON.stringify(duplicate));
                         })
-                        sessionStorage.setItem('Paket_' + id, JSON.stringify(duplicate));
-                    })
+                    } else {
+                        unique.forEach(id => {
+                            let duplicate = []
+                            res.paket.forEach(item => {
+
+                                if (item.template_ogiat_id === id) {
+                                    duplicate.push({
+                                        oGiatId: item.template_ogiat_id,
+                                        paketId: item.idpaket,
+                                        target_nilai: item.output_val,
+                                        target_satuan: item.output_sat,
+                                        outcome1_nilai: item.outcome1_val,
+                                        outcome1_satuan: item.outcome1_sat.replace(/\//g, ''),
+                                        outcome2_nilai: item.outcome2_val ?? "",
+                                        outcome2_satuan: item.outcome2_sat.replace(/\//g, '') ?? "",
+                                        outcome3_nilai: item.outcome3_val ?? "",
+                                        outcome3_satuan: item.outcome3_sat.replace(/\//g, '') ?? "",
+                                    })
+                                }
+                            })
+                            sessionStorage.setItem('Paket_' + id, JSON.stringify(duplicate));
+                        })
+                    }
                     res.ogiat.forEach((data, key) => {
                         let cleanedOutput = data.output_sat;
                         let cleanedOutcome = data.outcome1_sat;
@@ -1306,20 +1334,24 @@
         let buttonType = params.hasOwnProperty('buttonType') ? 'btn-' + params.buttonType : 'btn-danger',
             buttonText = params.hasOwnProperty('buttonText') ? params.buttonText : 'Simpan Koreksi'
 
-        element_btnSaveDokumen.attr('data-dokumen-id', params.dokumenID)
-        element_btnSaveDokumen.attr('data-dokumen-master-id', params.dokumenMasterID)
+        element_btnSaveEditDokumen.attr('id', params.dokumenID)
+        // element_btnSaveEditDokumen.attr('data-dokumen-master-id', params.dokumenMasterID)
 
-        element_btnSaveDokumen.addClass(buttonType)
-        element_btnSaveDokumen.text(buttonText)
+        element_btnSaveDokumen.addClass('d-none')
+        element_btnSaveEditDokumen.removeClass('d-none')
+        element_btnSaveEditDokumen.addClass(buttonType)
+        element_btnSaveEditDokumen.text(buttonText)
     }
 
     function render_reset_btnSubmitToRevision() {
-        element_btnSaveDokumen.removeAttr('data-dokumen-id')
-        element_btnSaveDokumen.removeAttr('data-dokumen-master-id')
+        element_btnSaveEditDokumen.removeAttr('data-id')
+        // element_btnSaveDokumen.removeAttr('data-dokumen-id')
+        // element_btnSaveDokumen.removeAttr('data-dokumen-master-id')
 
-        element_btnSaveDokumen.removeClass('btn-danger')
-        element_btnSaveDokumen.removeClass('btn-warning')
-        element_btnSaveDokumen.text('Simpan Dokumen')
+        element_btnSaveEditDokumen.removeClass('btn-danger')
+        element_btnSaveEditDokumen.removeClass('btn-warning')
+        // element_btnSaveDokumen.removeClass('btn-warning')
+        // element_btnSaveDokumen.text('Simpan Dokumen')
     }
 
     function renderFormTemplate(_dataId, _data, _target) {
@@ -2772,7 +2804,6 @@
                 // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
 
             });
-
             Object.entries(outcome1Totals).forEach(([satuan, total]) => {
                 var jumlahDesimal_outcome1 = (total % 1 === 0) ? 0 : total.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
 
@@ -3130,9 +3161,144 @@
             // }
 
 
-            sessionStorage.removeItem(indikatorID + "|" + rowid);
-            sessionStorage.removeItem("oGIAT_" + indikatorID + "|" + rowid);
-            sessionStorage.removeItem(indikatorID);
+            // sessionStorage.removeItem(indikatorID + "|" + rowid);
+            sessionStorage.removeItem("oGIAT_" + rowid);
+            sessionStorage.removeItem("Paket_" + rowid);
+            // sessionStorage.removeItem(indikatorID);
+
+            let dataID = $(".__buat-dokumen-pilih-template").data('id')
+            $("tr[data-row-id]").each(function() {
+                let elParent = $(this)
+                // console.log(elParent.find('.__inputTemplateRow-target').data('targetsatuan'))
+                let row_id = elParent.data('row-id')
+
+                $.ajax({
+                    url: "<?php echo site_url('renstra/get-rumus-outcome/') ?>" + dataID + "/" + row_id,
+                    type: 'GET',
+                    data: {},
+                    success: (arr) => {
+                        if (arr[row_id] !== undefined) {
+
+
+                            if (elParent.find('.__inputTemplateRow-target').data('targetsatuan') !== undefined) {
+                                let total = 0
+                                arr[row_id][elParent.find('.__inputTemplateRow-target').data('targetsatuan')]['parent'].forEach((v) => {
+                                    let satuan = arr[row_id][elParent.find('.__inputTemplateRow-target').data('targetsatuan')]['satuan']
+                                    var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+
+                                    // Jika 'satuan' mengandung '%', bersihkan simbolnya
+                                    if (satuan.includes('%')) {
+                                        cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                                    }
+                                    if (satuan.includes('M3/detik')) {
+                                        cleanedSatuan = cleanedSatuan.replace(/\//g, "");
+
+                                    }
+
+
+
+                                    let getOgiat = sessionStorage.getItem(`oGIAT_${v}`)
+                                    let getOgiatData = JSON.parse(getOgiat)
+                                    if (getOgiatData !== null) {
+
+
+                                        if ($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            if (!isNaN(nilai)) {
+                                                total += nilai
+                                            }
+                                        }
+                                        if ($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            if (!isNaN(nilai)) {
+                                                total += nilai
+                                            }
+                                        }
+
+
+                                        if ($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            if (!isNaN(nilai)) {
+                                                total += nilai
+                                            }
+                                        }
+
+
+
+                                        if ($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                            let nilai = parseInt($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            if (!isNaN(nilai)) {
+                                                total += nilai
+                                            }
+                                        }
+                                    }
+                                })
+                                $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(total)
+                            }
+                            if (elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan') !== undefined) {
+                                let total1 = 0
+                                arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['parent'].forEach((v) => {
+                                    let satuan = arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['satuan']
+                                    var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
+
+                                    // Jika 'satuan' mengandung '%', bersihkan simbolnya
+                                    if (satuan.includes('%')) {
+                                        cleanedSatuan = cleanedSatuan.replace('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                                    }
+                                    if (satuan.includes('M3/detik')) {
+                                        cleanedSatuan = cleanedSatuan.replace(/\//g, "");
+
+                                    }
+
+                                    if ($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total1 += nilai
+                                        }
+                                    }
+                                    if ($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total1 += nilai
+                                        }
+                                    }
+                                    if ($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total1 += nilai
+                                        }
+                                    }
+                                    if ($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
+                                        let nilai = parseInt($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        if (!isNaN(nilai)) {
+                                            total1 += nilai
+                                        }
+                                    }
+                                })
+                                $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(total1)
+                            }
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        Swal.fire({
+                            title: 'Gagal',
+                            icon: "warning",
+                            text: 'Rumus Tidak Ditemukan!',
+                            type: 'confirm',
+                            confirmButtonText: 'Refresh Halaman',
+
+                        }).then(result => {
+                            if (result.value) {
+                                location.reload();
+                            }
+                        });
+                    },
+                    fail: (xhr) => {
+                        alert("Terjadi kesalahan pada sistem")
+
+                    }
+                })
+            })
 
             // sessionStorage.clear()
         } else {
