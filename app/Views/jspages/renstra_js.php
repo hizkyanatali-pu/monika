@@ -1741,7 +1741,7 @@
                                         data-outcome2satuan="${dataOgiat.satuan_outcome2}"
                                         data-outcome3satuan="${dataOgiat.satuan_outcome3}"
                                         data-satkerid="${_satkerId}"
-                                        data-tahun="${_tahun}">
+                                        data-tahun="${selectedYear}">
                                         Paket <span class="label label-sm label-white ml-2 totalpaket">0</span>
                                     </button>
                                  </td>`;
