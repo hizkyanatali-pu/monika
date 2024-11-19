@@ -2350,7 +2350,9 @@
                             if (outcome2_satuan) {
                                 $(".outcome2").removeClass('d-none');
 
-                                tbodyContent += `<td class="text-center" style="vertical-align: middle; height: 100%;" width="10%">
+
+                                if (outcome2_satuan !== "MW") {
+                                    tbodyContent += `<td class="text-center" style="vertical-align: middle; height: 100%;" width="10%">
                                                 <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId)? selectedItems.find(item => item.paketId === paket.paketId).outcome2_nilai:"disabled"} name="outcome2_satuan">
                                                         <option value="">Pilih Tipe</option>
                                                         ${outcome2_satuan.split(';').map(function(satuan) {
@@ -2359,6 +2361,30 @@
                                                         }).join('')}
                                                     </select>
                                                     </td>`;
+                                } else {
+                                    tbodyContent += `<td width="10%">
+                                    <div class="form-group form-group-last row">
+                                        <div class="form-group-sub">
+                                            <label class="form-control-label center">Vol Outcome :</label>
+                                            <input type="text" class="form-control outcome2_nilai checkbox-click" name="outcome2_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome2_nilai:"disabled"}>
+                                        </div>
+                                        <div class="form-group-sub">
+                                            <label class="form-control-label">Satuan Outcome :</label>
+                                        
+                                            <div class="input-group-append">
+                                                    <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId) ? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome2_nilai:"disabled"} name="outcome2_satuan">
+                                                        ${outcome2_satuan.split(';').map(function(satuan) {
+                                                            const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.outcome2_satuan === satuan.trim());
+                                                            return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
+                                                        }).join('')}
+                                                    </select>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    </td>`
+
+                                }
+
 
                             }
 
@@ -2444,9 +2470,18 @@
             var outcome2_nilai = $(this).closest('tr').find('input[name=outcome2_nilai]').val();
             var outcome2_satuan = !$('.outcome2').hasClass('d-none') ? $(this).closest('tr').find('select[name=outcome2_satuan]').val() : '';
 
+
             var outcome3_nilai = $(this).closest('tr').find('input[name=outcome3_nilai]').val();
             var outcome3_satuan = !$('.outcome3').hasClass('d-none') ? $(this).closest('tr').find('select[name=outcome3_satuan]').val() : '';
             // console.log(outcome2_satuan)
+            if (!$('.outcome2').hasClass('d-none') && satkerId != '403477' && outcome2_satuan.trim() == "MW") {
+
+                if (outcome2_nilai.trim() === '') {
+                    errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Tipe Vol yang belum diisi.');
+                }
+
+            }
+
 
             if (target_nilai.trim() === '') {
                 errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
@@ -2464,16 +2499,12 @@
             // } 
             else if (outcome1_satuan.trim() === '') {
                 errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Outcome1 Satuan yang belum diisi.');
-
-
             } else if (!$('.outcome2').hasClass('d-none') && outcome2_satuan.trim() === '' && satkerId != '403477') {
-                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Tipe Satuan yang belum diisi.');
 
+                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Tipe Satuan yang belum diisi.');
 
             } else if (!$('.outcome3').hasClass('d-none') && outcome3_satuan.trim() === '' && satkerId != '403477') {
                 errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Kategori Satuan yang belum diisi.');
-
-
             } else {
 
                 selectedItems.push({
@@ -2497,7 +2528,15 @@
                 target_nilai_number = parseFloat(target_nilai_number_remove_titik.replace(',', '.'));
                 outcome1_nilai_number = parseFloat(outcome1_nilai_number_remove_titik.replace(',', '.'));
 
-                outcome2_nilai_number = !$('.outcome2').hasClass('d-none') ? 1 : 0;
+                if (outcome2_satuan !== "MW") {
+                    outcome2_nilai_number = !$('.outcome2').hasClass('d-none') ? 1 : 0;
+                } else {
+
+                    outcome2_nilai_number_remove_titik = !$('.outcome2').hasClass('d-none') ? outcome2_nilai.replace(/\./g, "") : 0;
+                    outcome2_nilai_number = parseFloat(outcome2_nilai_number_remove_titik.replace(',', '.'));
+
+                }
+
 
                 outcome3_nilai_number = !$('.outcome3').hasClass('d-none') ? 1 : 0;
 
@@ -2515,11 +2554,14 @@
                 }
 
                 if (outcome2_satuan) {
+
+
                     if (!outcome2Totals[outcome2_satuan]) {
                         outcome2Totals[outcome2_satuan] = 0; // Inisialisasi jika belum ada
                     }
                     outcome2Totals[outcome2_satuan] += outcome2_nilai_number; // Tambahkan nilai ke total
                 }
+
 
                 if (outcome3_satuan) {
                     if (!outcome3Totals[outcome3_satuan]) {
@@ -2618,6 +2660,7 @@
             });
 
             Object.entries(outcome1Totals).forEach(([satuan, total]) => {
+
                 var jumlahDesimal_outcome1 = (total % 1 === 0) ? 0 : total.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
 
                 totalJumlahOutcome1DenganKoma = total.toLocaleString('id-ID', {
