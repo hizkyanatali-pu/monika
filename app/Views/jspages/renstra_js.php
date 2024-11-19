@@ -111,7 +111,8 @@
                     templateId: dataID,
                     templateTitle: $(this).text(),
                     data: res,
-                    target: 'create'
+                    target: 'create',
+                    tahunForEdit: $("#tahunAnggaran").val()
                 })
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -541,9 +542,13 @@
     })
     $(document).on('click', '.__lihat-dokumen', function() {
         paramsBtnPaket = $(this).data('type') == "uptBalai-add" ? "uptBalai-add" : "lihat"
+        tahunForEdit = $(this).data('tahun');
+
+
         prepareRevisiDocument({
             dataId: $(this).data('id'),
             templateId: $(this).data('template-id'),
+            tahunForEdit: tahunForEdit,
             beforeModalMount: () => {
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
                 $('#modalForm').find('input').attr('disabled', 'disabled')
@@ -564,9 +569,11 @@
             paramsBtnPaket = "edit";
         }
         let documentId = $(this).data('id')
+        tahunForEdit = $(this).data('tahun');
         prepareRevisiDocument({
             dataId: documentId,
             templateId: $(this).data('template-id'),
+            tahunForEdit: tahunForEdit,
             beforeModalMount: () => {
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
@@ -583,11 +590,17 @@
     function prepareRevisiDocument(params = {
         dataId: '',
         templateId: '',
+        tahunForEdit: '',
         beforeModalMount: () => {}
     }) {
         const promiseGetTemplate = new Promise((resolve, reject) => {
             var templateId = params.templateId,
-                dataId = params.dataId
+                dataId = params.dataId,
+                tahunForEdit = params.tahunForEdit
+
+
+
+
             $.ajax({
                 url: "<?php echo site_url('renstra/get-template/') ?>" + templateId + "/" + dataId,
                 type: 'GET',
@@ -596,7 +609,8 @@
                         dataId: dataId,
                         templateId: templateId,
                         data: res,
-                        target: 'koreksi'
+                        target: 'koreksi',
+                        tahunForEdit: tahunForEdit
                     })
 
                     element_modalFormTitle.html(`
@@ -1254,8 +1268,11 @@
         templateId: '',
         templateTitle: '',
         data: {},
-        target: ''
+        target: '',
+        tahunForEdit: ''
     }) {
+
+
         element_btnSaveDokumen.attr('data-template-id', params.templateId)
         element_modalDialog.addClass('modal-xl')
         element_modalFooter.removeClass('d-none')
@@ -1268,7 +1285,10 @@
                 <small>${params.templateTitle}</small>
             `)
         }
-        renderFormTemplate(params.dataId, params.data, params.target)
+
+
+
+        renderFormTemplate(params.dataId, params.data, params.target, params.tahunForEdit)
         // $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
 
         if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
@@ -1354,16 +1374,19 @@
         // element_btnSaveDokumen.text('Simpan Dokumen')
     }
 
-    function renderFormTemplate(_dataId, _data, _target) {
+    function renderFormTemplate(_dataId, _data, _target, tahunForEdit) {
         last_dokumen_id = '';
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
             paramsBtnPaket = "edit";
             last_dokumen_id = _data.dokumenExistSameYear.last_dokumen_id;
         }
+
+
+
         let template = _data.template,
             value_dataId = _dataId ?? last_dokumen_id,
             templateExtraData = _data.templateExtraData,
-            render_rowsForm = renderFormTemplate_rowTable(_data, _data.template.type, _data.satkerid, value_dataId, _data.tahun_dokumen),
+            render_rowsForm = renderFormTemplate_rowTable(_data, _data.template.type, _data.satkerid, value_dataId, tahunForEdit),
             // render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
             // render_rowKegiatan = renderFormTemplate_rowOgiat(_data.ogiat, _data.template.type, _data.satkerid),
             render_listInfo = renderFormTemplate_listInfo(_data.templateInfo),
@@ -1432,9 +1455,9 @@
                     break;
             }
 
-            theadBalaiTarget = '<td class="text-center" style="width:15%">Target ' + $('#tahunAnggaran ').val() + ' < /td>';
+            theadBalaiTarget = '<td class="text-center" style="width:15%">Target ' + tahunForEdit + ' < /td>';
         } else {
-            titleTheadTable = '<td class="text-center" style="width:15%">Output ' + $('#tahunAnggaran ').val() + '</td>';
+            titleTheadTable = '<td class="text-center" style="width:15%">Output ' + tahunForEdit + '</td>';
         }
 
 
@@ -1505,6 +1528,9 @@
     }
 
     function renderFormTemplate_rowTable(_data, _templateType, _satkerId, DocID, _tahun) {
+
+
+
         let selectedYear = $('#tahunAnggaran').val();
         let rows = '',
             rowNumber = 1,
@@ -1741,7 +1767,7 @@
                                         data-outcome2satuan="${dataOgiat.satuan_outcome2}"
                                         data-outcome3satuan="${dataOgiat.satuan_outcome3}"
                                         data-satkerid="${_satkerId}"
-                                        data-tahun="${selectedYear}">
+                                        data-tahun="${_tahun ?? selectedYear}">
                                         Paket <span class="label label-sm label-white ml-2 totalpaket">0</span>
                                     </button>
                                  </td>`;
@@ -2186,7 +2212,7 @@
                 if (res.message != 'tidak ada data') {
                     const tbody = $('#tbody');
                     tbody.empty();
-                    var jsonData = JSON.parse(JSON.stringify(res));
+                    var jsonData = JSON.parse(res);
 
                     jsonData.forEach(function(balai, index) {
 
@@ -2713,7 +2739,16 @@
                                         }
                                     }
                                 })
-                                $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(total)
+
+
+                                var jumlahDesimal_target = (total % 1 === 0) ? 0 : total.toFixed(TargetlengthFix).toString().split('.')[1].length;
+                                totalJumlahTargetDenganKomaIndikator = total.toLocaleString('id-ID', {
+                                    // minimumFractionDigits: jumlahDesimal_target
+                                    minimumFractionDigits: jumlahDesimal_target
+                                });
+
+                                // total = parseFloat(total.toFixed(2));
+                                $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
                             }
                             if (elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan') !== undefined) {
                                 let total1 = 0
@@ -2755,7 +2790,13 @@
                                         }
                                     }
                                 })
-                                $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(total1)
+
+                                var jumlahDesimal_Outcome = (total1 % 1 === 0) ? 0 : total1.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
+                                totalJumlahOutcomeDenganKomaIndikator = total1.toLocaleString('id-ID', {
+                                    // minimumFractionDigits: jumlahDesimal_target
+                                    minimumFractionDigits: jumlahDesimal_Outcome
+                                });
+                                $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahOutcomeDenganKomaIndikator)
                             }
                         }
                     },
