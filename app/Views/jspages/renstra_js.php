@@ -1165,28 +1165,50 @@
     }
 
     function saveDokumenValidation() {
-        let checkInputKegiatanAnggatan = true,
-            checkInputKegiatanManual = true,
-            checkInputTarget = false,
-            checkInputOutcome1 = false,
-            checkOutputKegiatan = true
+        // let checkInputKegiatanAnggatan = true,
+        //     checkInputKegiatanManual = true,
+        //     checkInputTarget = false,
+        //     checkInputOutcome1 = false,
+        //     checkOutputKegiatan = true
+        let checkPaket = false
 
-        let anyChecked = false;
-        $(document).find('.__inputTemplateRow-target').each((i, e) => {
-            if ($(e).val() > 0) {
-                anyChecked = true;
-                checkInputTarget = true
-                checkInputOutcome1 = true
+        // let anyChecked = false;
+        // $(document).find('.__inputTemplateRow-target').each((i, e) => {
+        //     if ($(e).val() > 0) {
+        //         anyChecked = true;
+        //         checkInputTarget = true
+        //         checkInputOutcome1 = true
 
+        //     }
+        // })
+        // $(document).find('.__inputTemplateRow-outcome').each((i, e) => {
+        //     if ($(e).val() > 0) {
+        //         anyChecked = true;
+        //         checkInputTarget = true
+        //         checkInputOutcome1 = true
+        //     }
+        // })
+
+
+        $('input[name="form-check-row-output-kegiatan"]').each(function(e) {
+            if ($(this).prop('checked')) {
+                checkPaket = true; // If any checkbox is checked, set isFormValid to true
+                return false; // Exit loop early since we found a checked checkbox
             }
-        })
-        $(document).find('.__inputTemplateRow-outcome').each((i, e) => {
-            if ($(e).val() > 0) {
-                anyChecked = true;
-                checkInputTarget = true
-                checkInputOutcome1 = true
-            }
-        })
+        });
+
+
+
+
+        if (checkPaket == false) {
+            Swal.fire(
+                'Peringatan',
+                'Tidak ada output kegiatan yang dipilih',
+                'warning'
+            )
+            return false
+        }
+
 
         return true
     }
@@ -1465,7 +1487,6 @@
             titleTheadTable = '<td class="text-center" style="width:15%">Output ' + tahunForEdit + '</td>';
         }
 
-        localStorage.setItem('tahunForEdit', tahunForEdit);
 
 
 
