@@ -29,10 +29,13 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         $routes->get('cron-tarik-data-sisa-lelang', '\Modules\Admin\Controllers\CronJob::tarikDataEmonSisaLelangSda/$1');
         //check dokument PK
         $routes->get('showpdf/tampilkan/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
+        $routes->get('showpdf-berita-acara/tampilkan/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdfBeritaAcara/$1');
 
         $routes->get('backup-table/(:any)', '\Modules\Admin\Controllers\DataJson::downloadDataTable/$1');
 
         $routes->get('download-backup-table/(:any)', '\Modules\Admin\Controllers\DownloadBackupTable::download/$1');
+
+        $routes->get('getOutputKegiatan', '\Modules\Satker\Controllers\renstra_api::getOutputKegiatanTagging');
     });
 
 
@@ -324,6 +327,11 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->group('template-eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::templateEselon1');
                 });
+
+                $routes->group('setting', ['namespace' => 'App\Controllers'], function ($routes) {
+                    $routes->get('berita-acara', '\Modules\Admin\Controllers\Dokumenpk::settingBA');
+                    $routes->post('berita-acara/update', '\Modules\Admin\Controllers\Dokumenpk::changeStatussettingBA');
+                });
             });
 
             //Renstra
@@ -408,10 +416,12 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
                 $routes->post('create', '\Modules\Satker\Controllers\Dokumenpk::create');
                 $routes->post('editDokumen', '\Modules\Satker\Controllers\Dokumenpk::edit');
+                $routes->post('editDokumenBA', '\Modules\Satker\Controllers\Dokumenpk::editBA');
                 $routes->get('get-paket/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getPaket/$1/$2');
 
 
                 $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
+                $routes->get('export-pdf-berita-acara/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdfBeritaAcara/$1');
                 $routes->get('get-list-template-buat-dokumen/(:any)/(:any)', '\Modules\Admin\Controllers\Dokumenpk::getListTemplateBuatDokumen/$1/$2');
 
                 $routes->post('change-status', '\Modules\Admin\Controllers\Dokumenpk::changeStatus');
@@ -422,6 +432,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
                     $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
                     $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
+                    $routes->get('export-pdf-berita-acara/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdfBeritaAcara/$1');
                     $routes->get('get-data-belum-input/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataBelumInput/$1');
                 });
 
@@ -457,14 +468,17 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
             //RENSTRA
             $routes->group('renstra', ['namespace' => 'App\Controllers'], function ($routes) {
-                $routes->get('/', '\Modules\Admin\Controllers\Renstra::index');
-                $routes->get('get-template/(:any)', '\Modules\Admin\Controllers\Renstra::getTemplate/$1');
-                $routes->get('check-dokumen-same-year-exist/(:any)/(:any)', '\Modules\Admin\Controllers\Renstra::checkDocumentSameYearExist/$1/$2');
-                $routes->get('detail/(:any)', '\Modules\Admin\Controllers\Renstra::show/$1');
-                $routes->get('get-list-revisioned/(:any)', '\Modules\Admin\Controllers\Renstra::getListRevisioned/$1');
-                $routes->post('create', '\Modules\Admin\Controllers\Renstra::create');
-                $routes->post('editDokumen', '\Modules\Admin\Controllers\Renstra::edit');
-                $routes->get('get-paket/(:any)/(:any)', '\Modules\Admin\Controllers\Renstra::getPaket/$1/$2');
+                $routes->get('/', '\Modules\Satker\Controllers\Renstra::index');
+                $routes->get('get-template/(:any)', '\Modules\Satker\Controllers\Renstra::getTemplate/$1');
+                $routes->get('get-rumus-outcome/(:any)', '\Modules\Satker\Controllers\Renstra::getRumusOutcome/$1');
+                $routes->get('check-dokumen-same-year-exist/(:any)/(:any)', '\Modules\Satker\Controllers\Renstra::checkDocumentSameYearExist/$1/$2');
+                $routes->get('detail/(:any)', '\Modules\Satker\Controllers\Renstra::show/$1');
+                $routes->get('total-paket/(:any)', '\Modules\Satker\Controllers\Renstra::totalPaket/$1');
+                $routes->get('get-paket/(:any)/(:any)', '\Modules\Satker\Controllers\Renstra::getPaketbyOgiat/$1/$2');
+                $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Renstra::getListRevisioned/$1');
+                $routes->post('create', '\Modules\Satker\Controllers\Renstra::create');
+                $routes->post('editDokumen', '\Modules\Satker\Controllers\Renstra::edit');
+                $routes->get('get-paket/(:any)/(:any)', '\Modules\Satker\Controllers\Renstra::getPaket/$1/$2');
 
 
                 $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
@@ -472,13 +486,13 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
                 $routes->post('change-status', '\Modules\Admin\Controllers\Renstra::changeStatus');
 
-                $routes->get('list-satker-balai', '\Modules\Admin\Controllers\Renstra::listSatkerBalai');
+                $routes->get('list-satker-balai', '\Modules\Satker\Controllers\Renstra::listSatkerBalai');
 
                 $routes->group('satker', ['namespace' => 'App\Controllers'], function ($routes) {
-                    $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
-                    $routes->get('get-list-revisioned/(:any)', '\Modules\Admin\Controllers\Renstra::getListRevisioned/$1');
+                    $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Renstra::dataDokumenSatker/$1/$2');
+                    $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Renstra::getListRevisioned/$1');
                     $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
-                    $routes->get('get-data-belum-input/(:any)', '\Modules\Admin\Controllers\Renstra::dataBelumInput/$1');
+                    $routes->get('get-data-belum-input/(:any)', '\Modules\Satker\Controllers\Renstra::dataBelumInput/$1');
                 });
 
                 $routes->get('balai', '\Modules\Admin\Controllers\Renstra::balai');
@@ -489,7 +503,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('export-rekap-excel', '\Modules\Admin\Controllers\Dokumenpk::eselon1_export_rekap_excel');
                 });
 
-                $routes->get('get-tgiat-for-formpk', '\Modules\Admin\Controllers\Renstra::getTgiatForFormPk');
+                $routes->get('get-tgiat-for-formpk', '\Modules\Satker\Controllers\Renstra::getTgiatForFormPk');
                 $routes->get('rekap', '\Modules\Admin\Controllers\RekapPk::pdf');
                 // $routes->group('rekapitulasi', ['namespace' => 'App\Controllers'], function ($routes) {
                 //     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::rekapitulasi');
@@ -504,9 +518,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             });
 
 
-            $routes->get('dokumenpk-balai-satker/(:any)', '\Modules\Admin\Controllers\Renstra::balaiSatker/$1');
-            $routes->get('dokumenpk-download-log/(:any)', '\Modules\Admin\Controllers\Renstra::logKoreksi/$1');
-            $routes->get('panduan', '\Modules\Admin\Controllers\Renstra::panduanpk');
+            $routes->get('renstra-balai-satker/(:any)', '\Modules\Satker\Controllers\Renstra::balaiSatker/$1');
+            $routes->get('dokumenpk-download-log/(:any)', '\Modules\Satker\Controllers\Renstra::logKoreksi/$1');
+            $routes->get('panduan', '\Modules\Satker\Controllers\Renstra::panduanpk');
             $routes->get('instansi-list/(:any)', '\Modules\Admin\Controllers\Renstra::instansiList/$1');
         }
     }

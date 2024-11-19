@@ -53,6 +53,7 @@ class Pulldata extends \App\Controllers\BaseController
 
         $w = $this->request->getVar('satkerId');
         $templateid = $this->request->getVar('templateId');
+        $_tahun = $this->request->getVar('_tahun') ?? $this->user['tahun'];
 
         if ($w == 0) {
             $jsonResponse =  json_encode(["message" => "tidak ada data"]);
@@ -81,7 +82,7 @@ class Pulldata extends \App\Controllers\BaseController
         b.balaiid, b.balai,
 		md.kdsatker as satkerid, s.satker,
         md.kdprogram as programid, md.kdgiat as giatid, md.kdoutput as outputid, md.kdsoutput as soutputid, md.kdkmpnen as komponenid,
-        md.kdpaket as id, md.nmpaket as label, 
+        md.kdpaket as id, md.nmpaket as label,md.tahun, 
        
         md.vol,
         SUBSTRING_INDEX(SUBSTRING_INDEX(md.nmpaket,';',3),';',-1) as lokasi, 
@@ -94,7 +95,7 @@ class Pulldata extends \App\Controllers\BaseController
 
         md.real_total as real_total, md.progres_keuangan, md.progres_fisik
 
-        FROM monika_data_{$this->user['tahun']} md
+        FROM monika_data_{$_tahun} md
 		LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
 		LEFT JOIN m_balai b ON b.balaiid=s.balaiid WHERE
         " . ($w ? "$where" : '') . "$validation ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
@@ -119,6 +120,7 @@ class Pulldata extends \App\Controllers\BaseController
                     'balai' => $row['balai'],
                     'satkerid' => $satkerid,
                     'satker' => $row['satker'],
+                    'tahun' => $row['tahun'],
                     'paket' => array()
                 );
             }

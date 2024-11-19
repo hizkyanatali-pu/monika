@@ -9,7 +9,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
         ) {
             // $routes->get('dashboard', '\Modules\Satker\Controllers\Dashboard::index');
             $routes->get('dashboard', '\Modules\Satker\Controllers\Dokumenpk::index');
-            $routes->get('renstra', '\Modules\Satker\Controllers\Renstra::index');
+            // $routes->get('renstra-satker', '\Modules\Satker\Controllers\Renstra::index');
         }
     }
 });

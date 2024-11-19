@@ -167,7 +167,7 @@
                         <i><b>*Dalam Ribu Rupiah</b></i>
                     </div>
 
-                    <div class="">
+                    <div class="table-responsive">
                         <table class="table-bordered" width="100%">
                             <thead class="text-center text-white" style="background-color: #1562aa;">
                                 <tr>
@@ -238,7 +238,7 @@
                     </div>
                 </div>
                 <hr style="border: 1px solid #ddd;">
-                <div class="chart-container mt-2" style="height: 500px">
+                <div class="chart-container mt-2" style="height: 500px; overflow-x: auto;">
                     <div id="placeholder-bar-chart" class="mychart"></div>
                     <div id="bar-legend" class="chart-legend"></div>
                 </div>
@@ -410,59 +410,61 @@
                         </div>
 
                         <!-- <div class="table-responsive tableFixHead"> -->
-
+                        
                         <?php $colspan = 8; ?>
-                        <table class="table-bordered mb-0 table-striped" id="tabletematik" width="100%">
-                            <thead>
-                                <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                    <th style="padding: 1px !important;" rowspan="3">No</th>
-                                    <th style="padding: 4px !important; width: 25%;" class="tematik" rowspan="3" style="width: 21%;">Tematik</th>
-                                    <th style="padding: 1px !important;" class="pagu" rowspan="3" style="width: 6%;">Pagu (dalam Milyar)</th>
-                                    <th style="padding: 4px !important; width: 25%;" class="realisasi" colspan="3">Realisasi</th>
-                                    <th style="padding: 1px !important;" class="keterangan" rowspan="3">Keterangan</th>
-                                </tr>
-                                <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                    <th style="padding: 0px 4px 0px 4px !important;" class="progres_keu progres" colspan="2">Keuangan</th>
-                                    <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres">Fisik</th>
-                                </tr>
-                                <tr class="text-center  text-white" style="background-color: #1562aa;">
-                                    <th style="padding: 0px 4px 0px 4px !important;" class="progres_keu progres" style="width: 6%;">Rp</th>
-                                    <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres" style="width: 6%;">%</th>
-                                    <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres" style="width: 6%;">%</th>
-
-                                </tr>
-                            </thead>
-
-                            <tbody id="tbody-utama">
-                                <?php
-                                $no = 1;
-                                foreach ($data as $key => $value) :
-                                ?>
-                                    <tr>
-                                        <td style="padding: 0px 4px 0px 4px !important;" class="tdprogram"><?php echo $no++ ?></td>
-                                        <td style="padding: 0px 4px 0px 4px !important;" class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
-                                        <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo toMilyar($value['totalPagu'], false, 2) ?></td>
-                                        <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo toMilyar($value['totalRealisasi'], false, 2) ?></td>
-                                        <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?> %</td>
-                                        <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?> %</td>
-                                        <td style="padding: 0px 4px 0px 4px !important;" class="col-sm-10 tdprogram"></td>
+                        <div class="table-responsive">
+                            <table class="table-bordered mb-0 table-striped" id="tabletematik" width="100%">
+                                <thead>
+                                    <tr class="text-center  text-white" style="background-color: #1562aa;">
+                                        <th style="padding: 1px !important;" rowspan="3">No</th>
+                                        <th style="padding: 4px !important; width: 25%;" class="tematik" rowspan="3" style="width: 21%;">Tematik</th>
+                                        <th style="padding: 1px !important;" class="pagu" rowspan="3" style="width: 6%;">Pagu (dalam Milyar)</th>
+                                        <th style="padding: 4px !important; width: 25%;" class="realisasi" colspan="3">Realisasi</th>
+                                        <th style="padding: 1px !important;" class="keterangan" rowspan="3">Keterangan</th>
                                     </tr>
-                                    <?php foreach ($value['list'] as $key2 => $value2) : ?>
+                                    <tr class="text-center  text-white" style="background-color: #1562aa;">
+                                        <th style="padding: 0px 4px 0px 4px !important;" class="progres_keu progres" colspan="2">Keuangan</th>
+                                        <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres">Fisik</th>
+                                    </tr>
+                                    <tr class="text-center  text-white" style="background-color: #1562aa;">
+                                        <th style="padding: 0px 4px 0px 4px !important;" class="progres_keu progres" style="width: 6%;">Rp</th>
+                                        <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres" style="width: 6%;">%</th>
+                                        <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres" style="width: 6%;">%</th>
+    
+                                    </tr>
+                                </thead>
+    
+                                <tbody id="tbody-utama">
+                                    <?php
+                                    $no = 1;
+                                    foreach ($data as $key => $value) :
+                                    ?>
                                         <tr>
-                                            <td style="padding: 0px 4px 0px 4px !important;"></td>
-                                            <td style="padding: 0px 4px 0px 4px !important;" class="col-tematik"><?php echo $value2->tematik ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right text-right"><?php echo toMilyar($value2->pagu, false, 2) ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo toMilyar($value2->realisasi, false, 2) ?></td>
-                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_keu) ?> %</td>
-                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_fis) ?> %</td>
-                                            <td style="padding: 0px 4px 0px 4px !important;" class="col-sm-10"><?php echo $value2->ket ?></td>
-
-                                            <!--<td><?php echo  "- " . str_replace("||", "<br> - ", str_replace(", ", ",", $value2->ket))  ?></td>-->
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="tdprogram"><?php echo $no++ ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="col-tematik tdprogram"><?php echo $value['title'] ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo toMilyar($value['totalPagu'], false, 2) ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo toMilyar($value['totalRealisasi'], false, 2) ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgKeu']) ?> %</td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="text-right tdprogram"><?php echo onlyTwoDecimal($value['totalProgFis']) ?> %</td>
+                                            <td style="padding: 0px 4px 0px 4px !important;" class="col-sm-10 tdprogram"></td>
                                         </tr>
+                                        <?php foreach ($value['list'] as $key2 => $value2) : ?>
+                                            <tr>
+                                                <td style="padding: 0px 4px 0px 4px !important;"></td>
+                                                <td style="padding: 0px 4px 0px 4px !important;" class="col-tematik"><?php echo $value2->tematik ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important;" class="text-right text-right"><?php echo toMilyar($value2->pagu, false, 2) ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo toMilyar($value2->realisasi, false, 2) ?></td>
+                                                <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_keu) ?> %</td>
+                                                <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_fis) ?> %</td>
+                                                <td style="padding: 0px 4px 0px 4px !important;" class="col-sm-10"><?php echo $value2->ket ?></td>
+    
+                                                <!--<td><?php echo  "- " . str_replace("||", "<br> - ", str_replace(", ", ",", $value2->ket))  ?></td>-->
+                                            </tr>
+                                        <?php endforeach ?>
                                     <?php endforeach ?>
-                                <?php endforeach ?>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                         <!-- </div> -->
 
                     </div>
@@ -495,7 +497,7 @@
         </div>
         <div class="kt-portlet__body">
             <div class="kt-section mb-0">
-                <div class="kt-section__content">
+                <div class="kt-section__content" style="overflow-x: auto">
                     <div style="width: 1400px; margin: 0px auto">
                         <div class="tree">
                             <ul>
@@ -639,170 +641,172 @@
             <!--begin::Section-->
             <div class="kt-section  pb-4 pt-3">
 
-                <div class="kt-section__content">
+                <div class="kt-section__content" style="overflow-x: auto; width: ">
                     <!-- <div class="text-center mt-4">
                         <h4 class="text-dark"><b><?= $title; ?></b></h4>
                         <hr class="w-75 mb-0">
                     </div> -->
-
-                    <div class="tree ml--105 pr-4">
-                        <ul>
-                            <li class="w-100">
-                                <a href="#" class="w-25">
-                                    <div class="tree-content">
-                                        <div class="card card-body bg-tree-1">
-                                            <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
-                                            <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                            <label> <?= formatNumber($nilai_rpm['jml_paket'] + $nilai_sbsn['jml_paket'] + $nilai_phln['jml_paket']); ?> Paket</label>
-                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                <h5 class="mb-0">
-                                                    <?= toMilyar($nilai_rpm['nilai_kontrak'] + $nilai_sbsn['nilai_kontrak'] + $nilai_phln['nilai_kontrak'], true, 2); ?> M
-                                                </h5>
+                    
+                    <div class="" style="width: 1400px; margin: 0px auto">
+                        <div class="tree ml--105 pr-4">
+                            <ul>
+                                <li class="w-100">
+                                    <a href="#" class="w-25">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-1">
+                                                <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                                <h4 class="mb-0"><b> BELUM LELANG </b></h4>
+                                                <label> <?= formatNumber($nilai_rpm['jml_paket'] + $nilai_sbsn['jml_paket'] + $nilai_phln['jml_paket']); ?> Paket</label>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                        <?= toMilyar($nilai_rpm['nilai_kontrak'] + $nilai_sbsn['nilai_kontrak'] + $nilai_phln['nilai_kontrak'], true, 2); ?> M
+                                                    </h5>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
-                                <ul>
-
-                                    <li class="" style="width: 50% !important">
-                                        <a href="#" class="w-50">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> RPM </b></h4>
-                                                    <label> <?= formatNumber($nilai_rpm['jml_paket']) ?> Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            <?= toMilyar($nilai_rpm['nilai_kontrak'], true, 2); ?> M
-                                                        </h5>
+                                    </a>
+                                    <ul>
+    
+                                        <li class="" style="width: 50% !important">
+                                            <a href="#" class="w-50">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> RPM </b></h4>
+                                                        <label> <?= formatNumber($nilai_rpm['jml_paket']) ?> Paket</label>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($nilai_rpm['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                        <ul>
-                                            <li class="w-50">
-                                                <a href="#" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> SYC </b></h4>
-                                                            <label> <?= formatNumber($rpmSyc['jml_paket']); ?> Paket</label>
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
-                                                                    <?= toMilyar($rpmSyc['nilai_kontrak'], true, 2); ?> M
-                                                                </h5>
+                                            </a>
+                                            <ul>
+                                                <li class="w-50">
+                                                    <a href="#" class="w-100">
+                                                        <div class="tree-content">
+                                                            <div class="card card-body bg-tree-3">
+                                                                <h4 class="mb-0"><b> SYC </b></h4>
+                                                                <label> <?= formatNumber($rpmSyc['jml_paket']); ?> Paket</label>
+                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        <?= toMilyar($rpmSyc['nilai_kontrak'], true, 2); ?> M
+                                                                    </h5>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </a>
-                                                <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                            <h6>Antara Lain :</h6>
-                                                            <?php foreach ($rpmSycList as $key => $daftarsyc) { ?>
-
-                                                                <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
-
-
-                                                            <?php } ?>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="w-50">
-                                                <a href="#" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-3">
-                                                            <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                            <label> <?= formatNumber($rpmMyc['jml_paket']); ?> Paket</label>
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
-                                                                    <?= toMilyar($rpmMyc['nilai_kontrak'], true, 2); ?> M
-                                                                </h5>
+                                                    </a>
+                                                    <div class="border-single-tree-down"></div>
+                                                    <a href="#" class="w-100">
+                                                        <div class="tree-content">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                                <h6>Antara Lain :</h6>
+                                                                <?php foreach ($rpmSycList as $key => $daftarsyc) { ?>
+    
+                                                                    <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
+    
+    
+                                                                <?php } ?>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </a>
-                                                <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                            <h6>Antara Lain :</h6>
-                                                            <?php foreach ($rpmMycList as $key => $daftarsyc) { ?>
-
-                                                                <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
-
-
-                                                            <?php } ?>
+                                                    </a>
+                                                </li>
+                                                <li class="w-50">
+                                                    <a href="#" class="w-100">
+                                                        <div class="tree-content">
+                                                            <div class="card card-body bg-tree-3">
+                                                                <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                                <label> <?= formatNumber($rpmMyc['jml_paket']); ?> Paket</label>
+                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        <?= toMilyar($rpmMyc['nilai_kontrak'], true, 2); ?> M
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <div class="border-single-tree-down"></div>
+                                                    <a href="#" class="w-100">
+                                                        <div class="tree-content">
+                                                            <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                                <h6>Antara Lain :</h6>
+                                                                <?php foreach ($rpmMycList as $key => $daftarsyc) { ?>
+    
+                                                                    <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
+    
+    
+                                                                <?php } ?>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="" style="width: 20% !important">
+                                            <a href="#" class="w-75">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> SBSN </b></h4>
+                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($nilai_sbsn['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
                                                         </div>
                                                     </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="" style="width: 20% !important">
-                                        <a href="#" class="w-75">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> SBSN </b></h4>
-                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            <?= toMilyar($nilai_sbsn['nilai_kontrak'], true, 2); ?> M
-                                                        </h5>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="" style="width: 30% !important">
+                                            <a href="#" class="w-75">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> PHLN </b></h4>
+                                                        <label><?= formatNumber($nilai_phln['jml_paket']); ?> Paket</label>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($nilai_phln['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="" style="width: 30% !important">
-                                        <a href="#" class="w-75">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-2">
-                                                    <h4 class="mb-0"><b> PHLN </b></h4>
-                                                    <label><?= formatNumber($nilai_phln['jml_paket']); ?> Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            <?= toMilyar($nilai_phln['nilai_kontrak'], true, 2); ?> M
-                                                        </h5>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-75">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-3">
+                                                        <h4 class="mb-0"><b> MYC Baru </b></h4>
+                                                        <label><?= formatNumber($phlnMyc['jml_paket']); ?> Paket</label>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($phlnMyc['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                        <div class="border-single-tree-down"></div>
-                                        <a href="#" class="w-75">
-                                            <div class="tree-content">
-                                                <div class="card card-body bg-tree-3">
-                                                    <h4 class="mb-0"><b> MYC Baru </b></h4>
-                                                    <label><?= formatNumber($phlnMyc['jml_paket']); ?> Paket</label>
-                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                        <h5 class="mb-0">
-                                                            <?= toMilyar($phlnMyc['nilai_kontrak'], true, 2); ?> M
-                                                        </h5>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-75">
+                                                <div class="tree-content">
+                                                    <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
+                                                        <h6>Antara Lain :</h6>
+                                                        <?php foreach ($phlnMycList as $key => $daftarsyc) { ?>
+    
+                                                            <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
+    
+    
+                                                        <?php } ?>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                        <div class="border-single-tree-down"></div>
-                                        <a href="#" class="w-75">
-                                            <div class="tree-content">
-                                                <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
-                                                    <h6>Antara Lain :</h6>
-                                                    <?php foreach ($phlnMycList as $key => $daftarsyc) { ?>
-
-                                                        <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
-
-
-                                                    <?php } ?>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-
-
-
-                                </ul>
-                            </li>
-                        </ul>
+                                            </a>
+                                        </li>
+    
+    
+    
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -1053,7 +1057,7 @@
         </div>
         <div class="kt-portlet__body">
             <div class="kt-section mb-0">
-                <div class="kt-section__content">
+                <div class="kt-section__content" style="overflow-x: auto;">
                     <div class="tree ml--105 pr-4">
                         <ul>
                             <li class="w-100">
@@ -1115,7 +1119,7 @@
         </div>
         <div class="kt-portlet__body">
             <div class="kt-section mb-0">
-                <div class="kt-section__content">
+                <div class="kt-section__content" style="overflow-x: auto;">
                     <div class="tree ml--105 pr-4">
                         <ul>
                             <li class="w-100">
@@ -1175,7 +1179,7 @@
         </div>
         <div class="kt-portlet__body">
             <div class="kt-section mb-0">
-                <div class="kt-section__content">
+                <div class="kt-section__content" style="overflow-x: auto">
                     <div class="row">
                         <div class="col-6">
                             <!--begin::Portlet-->
@@ -1278,7 +1282,7 @@
 
         </div>
         <div class="kt-portlet__body pt-1">
-            <div class="kt-section mb-0">
+            <div class="kt-section mb-0" style="overflow-x: auto">
                 <div class="card-body">
                     <div class="chart-container mt-2" style="height: 400px">
                         <div id="bar-legend-perkegiatan" class="chart-legend"></div>
@@ -1286,39 +1290,40 @@
                     </div>
                 </div>
                 <div class="card-body">
-
-                    <table class="table table-bordered">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th style="padding: 0px 4px 0px 4px !important">No</th>
-                                <th style="padding: 0px 4px 0px 4px !important">Kode Kegiatan</th>
-                                <th style="padding: 0px 4px 0px 4px !important" style="text-align: center;">Kegiatan</th>
-                                <th style="padding: 0px 4px 0px 4px !important">Keuangan %</th>
-                                <th style="padding: 0px 4px 0px 4px !important">Fisik %</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            <?php foreach ($perkegiatan as $key => $value) {
-
-                                if ($value->kdgiat != '-') {
-                            ?>
-                                    <tr>
-                                        <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
-                                        <td style="padding: 0px 4px 0px 4px !important"> <?= $value->kdgiat; ?></td>
-                                        <td style="padding: 0px 4px 0px 4px !important"> <?= $value->nmgiat; ?></td>
-                                        <td style="padding: 0px 4px 0px 4px !important"> <?= onlyTwoDecimal($value->keu); ?></td>
-                                        <td style="padding: 0px 4px 0px 4px !important"> <?= onlyTwoDecimal($value->fis); ?></td>
-
-                                    </tr>
-
-                            <?php  }
-                            } ?>
-
-
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th style="padding: 0px 4px 0px 4px !important">No</th>
+                                    <th style="padding: 0px 4px 0px 4px !important">Kode Kegiatan</th>
+                                    <th style="padding: 0px 4px 0px 4px !important" style="text-align: center;">Kegiatan</th>
+                                    <th style="padding: 0px 4px 0px 4px !important">Keuangan %</th>
+                                    <th style="padding: 0px 4px 0px 4px !important">Fisik %</th>
+    
+                                </tr>
+                            </thead>
+                            <tbody>
+    
+                                <?php foreach ($perkegiatan as $key => $value) {
+    
+                                    if ($value->kdgiat != '-') {
+                                ?>
+                                        <tr>
+                                            <th style="padding: 0px 4px 0px 4px !important" scope="row"><?= ++$key ?></th>
+                                            <td style="padding: 0px 4px 0px 4px !important"> <?= $value->kdgiat; ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"> <?= $value->nmgiat; ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"> <?= onlyTwoDecimal($value->keu); ?></td>
+                                            <td style="padding: 0px 4px 0px 4px !important"> <?= onlyTwoDecimal($value->fis); ?></td>
+    
+                                        </tr>
+    
+                                <?php  }
+                                } ?>
+    
+    
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </div>
@@ -1369,7 +1374,7 @@
                                 </div> -->
                             <i><b>*Dalam Ribu Rupiah</b></i>
                         </div>
-                        <div class="">
+                        <div class="table-responsive">
                             <table class="table-bordered mb-0 table-striped" width="100%">
                                 <thead class="text-center text-white" style="background-color: #1562aa;">
                                     <tr class="text-center">

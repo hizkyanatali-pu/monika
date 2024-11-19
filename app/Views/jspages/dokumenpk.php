@@ -429,73 +429,118 @@
     element_btnSaveEditDokumen.on('click', function() {
 
         let dataID = $(this).data('id')
+        let dataBeritaAcara = $(this).data('beritaacara') ? $(this).data('beritaacara') : '';
+
+        if (dataBeritaAcara) {
 
 
-        Swal.fire({
-            title: "Anda yakin akan mengedit dokumen ini ? ",
-            html: `<textarea class="form-control" name="pesan-revisi-dokumen" rows="10" placeholder="Tulis pesan" required></textarea>`,
-            confirmButtonText: "Kirim, Beri alasan",
-            cancelButtonText: "Batal",
-            showLoaderOnConfirm: true,
-            showCancelButton: true,
-            preConfirm: () => {
+            if (saveDokumenValidation()) {
 
-                const pesanRevisi = $('textarea[name=pesan-revisi-dokumen]').val();
+                let oldButtonText = element_btnSaveEditDokumen.text()
+                element_btnSaveEditDokumen.addClass('d-none')
+                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
 
-                if (!pesanRevisi) {
-                    Swal.showValidationMessage('Pesan harus diisi');
-                    return false;
-                }
+                let formData = getFormValue(),
+                    dataId = $(this).data('id')
+
+                formData['id'] = $(this).data('id')
+                // formData['csrf_test_name'] = res.token
+                formData['_beritaAcara'] = dataBeritaAcara
+
                 $.ajax({
-                    url: "<?php echo site_url('dokumenpk/change-status') ?>",
+                    url: "<?php echo site_url('dokumenpk/editDokumenBA') ?>",
                     type: "POST",
-                    data: {
-                        csrf_test_name: $('input[name=csrf_test_name]').val(),
-                        dokumenType: 'hold-edit',
-                        dataID: dataID,
-                        message: $('textarea[name=pesan-revisi-dokumen]').val(),
-                        newStatus: 'hold'
-                    },
+                    data: formData,
                     success: (res) => {
-                        // CheckConnection().then(result => {
 
-                        if (saveDokumenValidation()) {
+                        if (res.status) {
+                            location.reload()
 
-                            let oldButtonText = element_btnSaveEditDokumen.text()
-                            element_btnSaveEditDokumen.addClass('d-none')
-                            element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
-
-                            let formData = getFormValue(),
-                                dataId = $(this).data('id')
-
-                            formData['id'] = $(this).data('id')
-                            formData['csrf_test_name'] = res.token
-
-
-                            $.ajax({
-                                url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
-                                type: "POST",
-                                data: formData,
-                                success: (res) => {
-
-                                    if (res.status) {
-                                        location.reload()
-
-                                    }
-                                },
-                                fail: (xhr) => {
-                                    alert('Terjadi kesalahan pada sistem')
-                                    console.log(xhr)
-                                }
-                            })
                         }
-                        // }).catch(error => {
-                        //     alert("Youre internet connection  cs slow");
-                        // });
+                    },
+                    fail: (xhr) => {
+                        alert('Terjadi kesalahan pada sistem')
+                        console.log(xhr)
                     }
                 })
             }
-        })
+
+
+
+
+        } else {
+
+            Swal.fire({
+                title: "Anda yakin akan mengedit dokumen ini ? ",
+                html: `<textarea class="form-control" name="pesan-revisi-dokumen" rows="10" placeholder="Tulis pesan" required></textarea>`,
+                confirmButtonText: "Kirim, Beri alasan",
+                cancelButtonText: "Batal",
+                showLoaderOnConfirm: true,
+                showCancelButton: true,
+                preConfirm: () => {
+
+                    const pesanRevisi = $('textarea[name=pesan-revisi-dokumen]').val();
+
+                    if (!pesanRevisi) {
+                        Swal.showValidationMessage('Pesan harus diisi');
+                        return false;
+                    }
+
+                    $.ajax({
+                        url: "<?php echo site_url('dokumenpk/change-status') ?>",
+                        type: "POST",
+                        data: {
+                            csrf_test_name: $('input[name=csrf_test_name]').val(),
+                            dokumenType: 'hold-edit',
+                            dataID: dataID,
+                            message: $('textarea[name=pesan-revisi-dokumen]').val(),
+                            newStatus: 'hold',
+                        },
+                        success: (res) => {
+                            // CheckConnection().then(result => {
+
+                            if (saveDokumenValidation()) {
+
+                                let oldButtonText = element_btnSaveEditDokumen.text()
+                                element_btnSaveEditDokumen.addClass('d-none')
+                                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+
+                                let formData = getFormValue(),
+                                    dataId = $(this).data('id')
+
+                                formData['id'] = $(this).data('id')
+                                formData['csrf_test_name'] = res.token
+
+
+                                $.ajax({
+                                    url: "<?php echo site_url('dokumenpk/editDokumen') ?>",
+                                    type: "POST",
+                                    data: formData,
+                                    success: (res) => {
+
+                                        if (res.status) {
+                                            location.reload()
+
+                                        }
+                                    },
+                                    fail: (xhr) => {
+                                        alert('Terjadi kesalahan pada sistem')
+                                        console.log(xhr)
+                                    }
+                                })
+                            }
+                            // }).catch(error => {
+                            //     alert("Youre internet connection  cs slow");
+                            // });
+                        }
+                    })
+
+
+
+                }
+            })
+
+        }
 
     })
 
@@ -528,7 +573,8 @@
                     dokumenID: res.dokumen.id,
                     dokumenMasterID: res.dokumen.revision_master_dokumen_id ?? res.dokumen.id
                 });
-            }
+            },
+            paramsBA: false
         })
 
 
@@ -559,7 +605,8 @@
                 $('#modalForm').find('.__remove-item-kegiatan').addClass('d-none')
                 $('#modalForm').find('#__add-item-kegiatan').addClass('d-none')
 
-            }
+            },
+            paramsBA: false
         })
 
     })
@@ -586,16 +633,50 @@
                 $('.__save-update-dokumen').removeClass('d-none')
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
-            }
+            },
+            paramsBA: false
         })
     })
+
+
+
+    $(document).on('click', '.__edit-dokumen-berita-acara', function() {
+
+
+
+
+        if ($(this).data('type') == "uptBalai-add") {
+            paramsBtnPaket = "uptBalai-add";
+
+        } else {
+
+            paramsBtnPaket = "edit";
+        }
+        let documentId = $(this).data('id')
+
+        prepareRevisiDocument({
+            dataId: documentId,
+            templateId: $(this).data('template-id'),
+            beforeModalMount: () => {
+                element_btnSaveEditDokumen.data('id', documentId);
+                $('.__save-dokumen').addClass('d-none')
+                $('.__save-update-dokumen').removeClass('d-none')
+                $('.__save-update-dokumen').attr('data-beritaacara', true);
+                // console.log($('.__save-update-dokumen'))
+                $('#modalForm').find('.container-revision-alert').addClass('d-none')
+            },
+            paramsBA: true
+        })
+    })
+
 
 
 
     function prepareRevisiDocument(params = {
         dataId: '',
         templateId: '',
-        beforeModalMount: () => {}
+        beforeModalMount: () => {},
+        paramsBA: ''
     }) {
         const promiseGetTemplate = new Promise((resolve, reject) => {
             var templateId = params.templateId,
@@ -609,7 +690,8 @@
                         dataId: dataId,
                         templateId: templateId,
                         data: res,
-                        target: 'koreksi'
+                        target: 'koreksi',
+                        paramsBA: params.paramsBA
                     })
 
                     element_modalFormTitle.html(`
@@ -648,15 +730,49 @@
 
                     satkerIdDefault = 0;
                     res.rows.forEach((data, key) => {
-                        let elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
+                        let
+                            elementInput_target = $('.__inputTemplateRow-target[data-row-id=' + data.template_row_id + ']'),
+                            elementInput_capaian_target = $('.__inputTemplateRow-capaian-target[data-row-id=' + data.template_row_id + ']'),
                             elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
-                            elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
-
+                            elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']'),
+                            elementInput_capaian_outcome = $('.__inputTemplateRow-capaian-outcome[data-row-id=' + data.template_row_id + ']')
                         // elementInput_target.val(data.target_value)
                         // elementInput_outcome.val(data.outcome_value)
-                        elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                        elementInput_target.val(
+                            (data.template_row_id == "151010") ||
+                            (data.template_row_id == "141009") ||
+                            (data.template_row_id == "171009")
+
+                            ?
+                            data.target_value :
+                            formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+
+
+                        elementInput_capaian_target.val(
+                            (data.template_row_id == "151010") ||
+                            (data.template_row_id == "141009") ||
+                            (data.template_row_id == "171009")
+
+                            ?
+                            data.capaian_output_value :
+                            formatRupiah(data.capaian_output_value.toString().replaceAll('.', ',')))
+
+
                         data.target_sat ? elementInput_target_satuan.val(data.target_sat) : ''
-                        elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
+
+
+                        elementInput_outcome.val(
+                            (data.template_row_id == "151010") ||
+                            (data.template_row_id == "141009") ||
+                            (data.template_row_id == "171009") ? data.outcome_value :
+                            formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
+
+
+                        elementInput_capaian_outcome.val(
+                            (data.template_row_id == "151010") ||
+                            (data.template_row_id == "141009") ||
+                            (data.template_row_id == "171009") ? data.capaian_outcome_value :
+                            formatRupiah(data.capaian_outcome_value.toString().replaceAll('.', ',')))
 
 
                         const idPaketArray = res.paket
@@ -799,9 +915,19 @@
                         elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
                         elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
-                    elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                    elementInput_target.val(
+                        (data.template_row_id == "151010") ||
+                        (data.template_row_id == "141009") ||
+                        (data.template_row_id == "171009") ?
+                        data.target_value :
+                        formatRupiah(data.target_value.toString().replaceAll('.', ',')))
                     elementInput_target_satuan.val(data.target_sat)
-                    elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
+                    elementInput_outcome.val(
+                        (data.template_row_id == "151010") ||
+                        (data.template_row_id == "141009") ||
+                        (data.template_row_id == "171009") ?
+                        data.outcome_value :
+                        formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
 
                     const idPaketArray = res.paket
@@ -892,6 +1018,7 @@
 
     $(document).on('click', '.__cetak-dokumen', function() {
         let dokumenMasterID = $(this).data('dokumen-master-id')
+        let Jcetak = $(this).data('cetak')
 
         if ($(this).data('number-revisioned')) {
             $.ajax({
@@ -900,7 +1027,13 @@
                 success: (res) => {
                     let list = ''
                     if ($(this).data('select-top')) {
-                        cetakDokumen(res.dokumenList[0].id, true)
+                        if (Jcetak == 'berita-acara') {
+                            cetakDokumenBeritaAcara(res.dokumenList[0].id, true)
+
+                        } else {
+
+                            cetakDokumen(res.dokumenList[0].id, true)
+                        }
                     } else {
                         res.dokumenList.forEach((data, key) => {
                             let listTitle = 'Dokumen Awal',
@@ -936,7 +1069,16 @@
                 }
             })
         } else {
-            cetakDokumen(dokumenMasterID, true)
+
+            if (Jcetak == 'berita-acara') {
+                cetakDokumenBeritaAcara(dokumenMasterID, true)
+
+
+            } else {
+
+                cetakDokumen(dokumenMasterID, true)
+
+            }
         }
     })
 
@@ -1135,12 +1277,17 @@
             let elementInput_target = $(element),
                 elementInput_target_satuan = $('.select-target-satuan').eq(key),
                 elementInput_outcome = $('.__inputTemplateRow-outcome').eq(key),
+                elementInput_capaian_output = $('.__inputTemplateRow-capaian-target').eq(key),
+                elementInput_capaian_outcome = $('.__inputTemplateRow-capaian-outcome').eq(key),
                 element_checkRow = $('input:checkbox[name=form-check-row]').eq(key)
 
             rows.push({
                 id: elementInput_target.data('row-id'),
                 target: elementInput_target.val().replace('.', ''),
                 target_satuan: elementInput_target_satuan.val(),
+                outcome: elementInput_outcome.val().replace('.', ''),
+                capaian_output_value: elementInput_capaian_output.length > 0 ? elementInput_capaian_output.val().replace('.', '') : 0,
+                capaian_outcome_value: elementInput_capaian_outcome.length > 0 ? elementInput_capaian_outcome.val().replace('.', '') : 0,
                 outcome: elementInput_outcome.val().replace('.', ''),
                 isChecked: element_checkRow.is(':checked') ? '1' : '0'
             })
@@ -1434,6 +1581,66 @@
         })
     }
 
+    function cetakDokumenBeritaAcara(_dokumenID, _toConfirm) {
+        $.ajax({
+            url: "<?php echo site_url('dokumenpk/export-pdf-berita-acara/') ?>" + _dokumenID + "?_=" + new Date().getTime(),
+            type: 'GET',
+            cache: false,
+            success: (res) => {
+                $('#modal-cetak-dokumen-revisioned').modal('hide')
+
+                setTimeout(() => {
+                    let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
+
+                    if (res.dokumen.revision_message != null) {
+                        element_iframePreviewDokumen.css({
+                            // 'height': '60vh'
+                            'height': '100vh'
+                        })
+                        $('.container-revision-alert-cetak').html(`
+                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                                <h5 class="alert-heading">Pesan !</h5>
+                                <p>${res.dokumen.revision_message}</p>
+                            </div>
+                        `)
+                    } else {
+                        element_iframePreviewDokumen.css({
+                            // 'height': '80vh'
+                            'height': '100vh'
+                        })
+                        $('.container-revision-alert-cetak').html('')
+                    }
+
+
+                    element_iframePreviewDokumen.attr('src', '/api/showpdf-berita-acara/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
+
+                    element_modalPreviewCetakDokumen.modal('show')
+
+                    if (_toConfirm) {
+                        if (res.dokumen.status != 'setuju' && res.dokumen.status != 'tolak') {
+                            element_modalPreviewCetakDokumen.find('.modal-footer').html(`
+                                <div class="p-2">
+                                    <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+                                        <i class="fa fa-ban"></i> Tolak
+                                    </button>
+
+                                    <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+                                        <i class="fa fa-check"></i> Setujui
+                                    </button>
+                                </div>
+                            `)
+                        } else {
+                            element_modalPreviewCetakDokumen.find('.modal-footer').empty()
+                        }
+                    } else {
+                        element_modalPreviewCetakDokumen.find('.modal-footer').empty()
+                    }
+                }, 400)
+                // $('.btn-modal-full').trigger('click')
+            }
+        })
+    }
+
 
 
     function preapreForm_afterChooseTemplate(params = {
@@ -1441,7 +1648,8 @@
         templateId: '',
         templateTitle: '',
         data: {},
-        target: ''
+        target: '',
+        paramsBA: ''
     }) {
 
         element_btnSaveDokumen.attr('data-template-id', params.templateId)
@@ -1458,7 +1666,7 @@
             `)
         }
 
-        renderFormTemplate(params.dataId, params.data, params.target)
+        renderFormTemplate(params.dataId, params.data, params.target, params.paramsBA)
         // $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
 
         if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
@@ -1555,7 +1763,9 @@
 
 
 
-    function renderFormTemplate(_dataId, _data, _target) {
+    function renderFormTemplate(_dataId, _data, _target, _beritaAcara) {
+
+
         last_dokumen_id = '';
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
             paramsBtnPaket = "edit";
@@ -1565,7 +1775,7 @@
         let template = _data.template,
             value_dataId = _dataId ?? last_dokumen_id,
             templateExtraData = _data.templateExtraData,
-            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type, _data.satkerid, value_dataId, _data.tahun_dokumen),
+            render_rowsForm = renderFormTemplate_rowTable(_data.templateRow, _data.template.type, _data.satkerid, value_dataId, _data.tahun_dokumen, _beritaAcara),
             render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
             render_listInfo = renderFormTemplate_listInfo(_data.templateInfo),
             render_ttdPihak2 = renderFormTemplate_ttdPihak2(_data.penandatangan.pihak2, templateExtraData.jabatanPihak2),
@@ -1629,12 +1839,13 @@
                     titleTheadTableOutcomeBalai = '<td class="text-center" style="width: 10%">Target Satker</td>';
                     titleTheadTable = '<td class="text-center" style="width: 10%">Outcome Satker</td>';
                     theadBalaiTargetNumber += '<td class="text-center p-2">(4)</td>';
+                    title2 = ``
                     break;
 
                 case 'eselon1':
                     titleTheadTable = 'Acuan';
+                    title2 = ``
                     break;
-
                 default:
                     titleTheadTable = '';
                     titleTheadTableOutcomeBalai = '';
@@ -1644,8 +1855,31 @@
 
             theadBalaiTarget = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
         } else {
-            titleTheadTable = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
+
+            // titleTheadTable = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
+
+            if (_beritaAcara == true) {
+
+                titleTheadTable = '<td class="text-center" style="width: 15%" colspan="2">Target ' + <?php echo $sessionYear ?> + '</td>';
+                title2 = `<td class="text-center ${classDNoneOutcome}" style="width: 15%" colspan="2">
+                            Capaian
+                        </td>`
+
+                // title3 = `<td class="text-center ${classDNoneOutcome}" style="width: 15%" colspan="2">
+                //             Kinerja
+                //         </td>`
+
+
+
+            } else {
+                titleTheadTable = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
+                title2 = `<td class="text-center ${classDNoneOutcome}" style="width: 15%" >
+                            Outcome
+                        </td>`
+            }
         }
+
+
 
 
         let render = `
@@ -1663,19 +1897,49 @@
                         ${titleTheadTable}
                   
                         ${theadBalaiTarget}
-                        <td class="text-center ${classDNoneOutcome}" style="width: 15%">
-                            Outcome
+                        ${title2}
+                      
+                        
+                    </tr>`;
+
+        if (_beritaAcara == true) {
+            render += `<tr>
+                        <td class="text-center p-2 align-middle">
                         </td>
-                    </tr>
-                    <tr style="font-size:10px" class="sticky-header-2">
+                        <td class="text-center" colspan="2"></td>
+                        <td class="text-center">Output</td>
+                        <td class="text-center">Outcome</td>
+                        <td class="text-center">Output</td>
+                        <td class="text-center">Outcome</td>
+                    </tr>`;
+        }
+
+
+
+
+        render += `<tr style="font-size:10px" class="sticky-header-2">
                         <td class="text-center p-2 align-middle">
                             <input type="checkbox" name="form-checkall-row" checked />
                         </td>
                         <td class="text-center p-2" colspan="2">(1)</td>
                         <td class="text-center p-2">(2)</td>
                         ${theadBalaiTargetNumber}
-                        <td class="text-center p-2 ${classDNoneOutcome}">(3)</td>
-                    </tr>
+                        <td class="text-center p-2 ${classDNoneOutcome}">(3)</td>`
+
+        if (_beritaAcara == true) {
+
+            render += `<td class="text-center p-2 ${classDNoneOutcome}">(4)</td>
+                        <td class="text-center p-2 ${classDNoneOutcome}">(5)</td>
+                       
+                        `
+
+
+        }
+
+
+
+
+        render += `</tr>
                 </thead>
                 <tbody>
                     ${ render_rowsForm }
@@ -1860,7 +2124,7 @@
 
 
 
-    function renderFormTemplate_rowTable(_data, _templateType, _satkerId, DocID, _tahun) {
+    function renderFormTemplate_rowTable(_data, _templateType, _satkerId, DocID, _tahun, _beritaAcara) {
 
 
         let rows = '',
@@ -1948,7 +2212,7 @@
                                         placeholder="Masukkan Nilai"
                                         value="${ data.targetBalaiDefualtValue }"
                                         data-row-id="${ data.id }"
-                                        onkeyup="return this.value = formatRupiah(this.value, '')"
+                                    onkeyup="return this.value = formatRupiah(this.value, '')"
                                     data-pktype="balai">
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
@@ -1957,6 +2221,7 @@
                             </td>
                         `
                     } else {
+
                         renderInputTarget = `
                         <td>
                             <div class="input-group">
@@ -1967,7 +2232,18 @@
                                     value="${ data.outcomeSatkerValue }"
                                     data-row-id="${ data.id }"
                                     data-targetSatuan = "${ data.target_satuan}"
-                                    onkeyup="return this.value = formatRupiah(this.value, '')" data-pktype="satker"
+                                    ${(data.template_id == '15' && data.id == "151010") ||
+                                    (data.template_id == '14' && data.id == "141009")
+                                    ||
+                                    (data.template_id == '17' && data.id == "171009")
+                                    ? "maxlength = 1":""}
+                                    onkeyup="${(data.template_id == '15' && data.id == "151010") 
+                                    ||
+                                    (data.template_id == '14' && data.id == "141009")
+                                    ||
+                                    (data.template_id == '17' && data.id == "171009")
+                                    
+                                    ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}" data-pktype="satker"
                                     ${data.template_id === '5' || data.template_id === '6'|| data.template_id === '9'  || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'readonly' }>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan.split(';')[0]}</span>
@@ -2092,16 +2368,89 @@
                                         placeholder="Masukkan Nilai"
                                         value="${ data.outcomeDefaultValue }"
                                         data-row-id="${ data.id }"
-                                        onkeyup="return this.value = formatRupiah(this.value, '')"
+                                       ${(data.template_id == '15' && data.id == "151010") 
+                                       ||
+                                       (data.template_id == '14' && data.id == "141009")
+                                       ||
+                                       (data.template_id == '17' && data.id == "171009") ? "maxlength = 1":""}
+                                        onkeyup="${ (data.template_id == '15' && data.id == "151010")
+                                        ||
+                                        (data.template_id == '14' && data.id == "141009")
+                                        ||
+                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}"
                                         ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
                                         >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>
                                     </div>
                                 </div>
+                            </td>`;
+
+
+                    if (_beritaAcara) {
+
+                        rows += `<td class="${classDNoneOutcome}">
+                                <div class="input-group">
+                                    <input 
+                                        type="text" 
+                                        class="form-control __inputTemplateRow-capaian-target" 
+                                        placeholder="Masukkan Nilai"
+                                      
+                                        data-row-id="${ data.id }"
+                                       ${(data.template_id == '15' && data.id == "151010") 
+                                       ||
+                                       (data.template_id == '14' && data.id == "141009")
+                                       ||
+                                       (data.template_id == '17' && data.id == "171009") ? "maxlength = 1":""}
+                                        onkeyup="${ (data.template_id == '15' && data.id == "151010")
+                                        ||
+                                        (data.template_id == '14' && data.id == "141009")
+                                        ||
+                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}"
+                                        ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :""}
+                                        >
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">${ data.target_satuan.split(';')[0] }</span>
+                                    </div>
+                                </div>
                             </td>
-                        </tr>
-                    `
+
+
+
+                            <td class="${classDNoneOutcome}">
+                                <div class="input-group">
+                                    <input 
+                                        type="text" 
+                                        class="form-control __inputTemplateRow-capaian-outcome" 
+                                        placeholder="Masukkan Nilai"
+                                       
+                                        data-row-id="${ data.id }"
+                                       ${(data.template_id == '15' && data.id == "151010") 
+                                       ||
+                                       (data.template_id == '14' && data.id == "141009")
+                                       ||
+                                       (data.template_id == '17' && data.id == "171009") ? "maxlength = 1":""}
+                                        onkeyup="${ (data.template_id == '15' && data.id == "151010")
+                                        ||
+                                        (data.template_id == '14' && data.id == "141009")
+                                        ||
+                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}"
+                                        ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :""}
+                                        >
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">${ data.outcome_satuan }</span>
+                                    </div>
+                                </div>
+                            </td>
+                                                    
+                            `;
+
+
+
+                    }
+
+
+                    rows += `</tr>`
                     break;
 
 
