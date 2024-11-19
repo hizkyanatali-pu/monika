@@ -90,6 +90,12 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
             $routes->group('dashboard2', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->add('/', '\Modules\Admin\Controllers\Dashboard::index2');
             });
+            $routes->group('laporan', ['namespace' => 'App\Controllers'], function ($routes) {
+                $routes->add('/', '\Modules\Admin\Controllers\Dashboard::laporan');
+            });
+            $routes->group('laporan/cetak', ['namespace' => 'App\Controllers'], function ($routes) {
+                $routes->add('/', '\Modules\Admin\Controllers\Dashboard::cetak_laporan');
+            });
 
             $routes->add('excel', '\Modules\Admin\Controllers\Dashboard::Excel');
 
