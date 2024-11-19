@@ -110,39 +110,62 @@ class PohonAnggaranModel extends Model
                 return "'$arr'";
             }, $pengadaan);
             $implodeJenisKontrak = implode(",", $mapJenisKontrak);
-            // $whereInJenisKontrak = "AND (SELECT jenis_kontrak FROM monika_kontrak_{$this->user['tahun']} c WHERE SUBSTRING_INDEX(c.kdpaket, '.', -5) = SUBSTRING_INDEX(a.kode, '.', 5) LIMIT 1) IN ($implodeJenisKontrak)";
             $wherePengadaan = "AND pengadaan IN ($implodeJenisKontrak)";
         }
 
-        // $wherePengadaan = isset($pengadaan) ? " AND pengadaan IN (".$pengadaan.")" : "";
-
         $whereDrop = $drop ? " AND real_$sumber_dana < 1 AND prognosis < 1 AND pengadaan NOT IN ('AU','S')" : "";
-
-
-
 
         $db = \Config\Database::connect();
         $qdata['monika_data'] = $db->query("SELECT
-        SUM(prognosis) / 1000 as prognosis,SUM(pagu_$sumber_dana)/1000 as pagu, 
-        SUM(pagu_$sumber_dana - prognosis) / 1000 AS sisaPagu
-        FROM
-        monika_data_{$this->user['tahun']} md
-        WHERE
-        pagu_$sumber_dana != 0
-        AND pagu_$sumber_dana IS NOT NULL $wherePengadaan $whereDrop
-            
-        
+            SUM(prognosis) / 1000 as prognosis,SUM(pagu_$sumber_dana)/1000 as pagu, 
+            SUM(pagu_$sumber_dana - prognosis) / 1000 AS sisaPagu
+            FROM
+            monika_data_{$this->user['tahun']} md
+            WHERE
+            pagu_$sumber_dana != 0
+            AND pagu_$sumber_dana IS NOT NULL $wherePengadaan $whereDrop
         ")->getRowArray();
 
         $qdata['monika_rekap'] = $db->query("SELECT
-        pagu_rpm,pagu_sbsn,pagu_phln,pagu_total,real_rpm,real_sbsn,real_phln,real_total
-        FROM monika_rekap_unor_{$this->user['tahun']}
-        WHERE kdunit = '06'
-        
-    
-    ")->getRowArray();
+            pagu_rpm,pagu_sbsn,pagu_phln,pagu_total,real_rpm,real_sbsn,real_phln,real_total
+            FROM monika_rekap_unor_{$this->user['tahun']}
+            WHERE kdunit = '06'
+        ")->getRowArray();
 
+        return $qdata;
+    }
 
+    public function getDataSisaDataTerserap($sumber_dana = "", $pengadaan = [], $drop = '')
+    {
+        ini_set('max_execution_time', 0);
+
+        $wherePengadaan = '';
+        if (count($pengadaan) > 0) {
+            $mapJenisKontrak = array_map(function ($arr) {
+                return "'$arr'";
+            }, $pengadaan);
+            $implodeJenisKontrak = implode(",", $mapJenisKontrak);
+            $wherePengadaan = "AND pengadaan IN ($implodeJenisKontrak)";
+        }
+
+        $whereDrop = $drop ? " AND real_$sumber_dana < 1 AND prognosis < 1 AND pengadaan NOT IN ('AU','S')" : "";
+
+        $db = \Config\Database::connect();
+        $qdata['monika_data'] = $db->query("SELECT
+            SUM(prognosis) / 1000 as prognosis,SUM(pagu_$sumber_dana)/1000 as pagu, 
+            SUM(pagu_$sumber_dana - prognosis) / 1000 AS sisaPagu
+            FROM
+            monika_data_{$this->user['tahun']} md
+            WHERE
+            pagu_$sumber_dana != 0
+            AND pagu_$sumber_dana IS NOT NULL $wherePengadaan $whereDrop
+        ")->getRowArray();
+
+        $qdata['monika_rekap'] = $db->query("SELECT
+            pagu_rpm,pagu_sbsn,pagu_phln,pagu_total,real_rpm,real_sbsn,real_phln,real_total
+            FROM monika_rekap_unor_{$this->user['tahun']}
+            WHERE kdunit = '06'
+        ")->getRowArray();
 
         return $qdata;
     }

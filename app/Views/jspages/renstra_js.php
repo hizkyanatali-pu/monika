@@ -111,7 +111,8 @@
                     templateId: dataID,
                     templateTitle: $(this).text(),
                     data: res,
-                    target: 'create'
+                    target: 'create',
+                    tahunForEdit: $("#tahunAnggaran").val()
                 })
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -541,9 +542,13 @@
     })
     $(document).on('click', '.__lihat-dokumen', function() {
         paramsBtnPaket = $(this).data('type') == "uptBalai-add" ? "uptBalai-add" : "lihat"
+        tahunForEdit = $(this).data('tahun');
+
+
         prepareRevisiDocument({
             dataId: $(this).data('id'),
             templateId: $(this).data('template-id'),
+            tahunForEdit: tahunForEdit,
             beforeModalMount: () => {
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
                 $('#modalForm').find('input').attr('disabled', 'disabled')
@@ -564,9 +569,11 @@
             paramsBtnPaket = "edit";
         }
         let documentId = $(this).data('id')
+        tahunForEdit = $(this).data('tahun');
         prepareRevisiDocument({
             dataId: documentId,
             templateId: $(this).data('template-id'),
+            tahunForEdit: tahunForEdit,
             beforeModalMount: () => {
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
@@ -583,11 +590,17 @@
     function prepareRevisiDocument(params = {
         dataId: '',
         templateId: '',
+        tahunForEdit: '',
         beforeModalMount: () => {}
     }) {
         const promiseGetTemplate = new Promise((resolve, reject) => {
             var templateId = params.templateId,
-                dataId = params.dataId
+                dataId = params.dataId,
+                tahunForEdit = params.tahunForEdit
+
+
+
+
             $.ajax({
                 url: "<?php echo site_url('renstra/get-template/') ?>" + templateId + "/" + dataId,
                 type: 'GET',
@@ -596,7 +609,8 @@
                         dataId: dataId,
                         templateId: templateId,
                         data: res,
-                        target: 'koreksi'
+                        target: 'koreksi',
+                        tahunForEdit: tahunForEdit
                     })
 
                     element_modalFormTitle.html(`
@@ -1090,6 +1104,10 @@
             row_indikator: [],
         }
 
+        let tahunForEditStored = localStorage.getItem('tahunForEdit');
+
+
+
         $('.__inputTemplateRow-target').each((key, element) => {
             let elementInput_target = $(element),
                 elementInput_target_satuan = elementInput_target.data("targetsatuan"),
@@ -1099,10 +1117,10 @@
 
             let rowIndikator = {
                 row_id: elementInput_target.data('row-id'),
-                tahun: $('#tahunAnggaran').val(),
-                target: elementInput_target.val().replace('.', ''),
+                tahun: tahunForEditStored ?? $('#tahunAnggaran').val(),
+                target: elementInput_target.val(),
                 target_satuan: elementInput_target_satuan,
-                outcome1: elementInput_outcome.val().replace('.', ''),
+                outcome1: elementInput_outcome.val(),
                 outcome1_satuan: elementInput_outcome_satuan,
                 isChecked: elementInput_outcome.val() > 0 || elementInput_target.val() > 0 ? '1' : '0',
             };
@@ -1140,7 +1158,7 @@
             rows: renstra_data_rows,
             ogiat: outputkegiatan,
             paket: paket,
-            tahun: $('#tahunAnggaran').val()
+            tahun: tahunForEditStored ?? $('#tahunAnggaran').val()
         }
 
         return inputValue
@@ -1254,8 +1272,11 @@
         templateId: '',
         templateTitle: '',
         data: {},
-        target: ''
+        target: '',
+        tahunForEdit: ''
     }) {
+
+
         element_btnSaveDokumen.attr('data-template-id', params.templateId)
         element_modalDialog.addClass('modal-xl')
         element_modalFooter.removeClass('d-none')
@@ -1268,7 +1289,10 @@
                 <small>${params.templateTitle}</small>
             `)
         }
-        renderFormTemplate(params.dataId, params.data, params.target)
+
+
+
+        renderFormTemplate(params.dataId, params.data, params.target, params.tahunForEdit)
         // $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
 
         if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
@@ -1354,16 +1378,19 @@
         // element_btnSaveDokumen.text('Simpan Dokumen')
     }
 
-    function renderFormTemplate(_dataId, _data, _target) {
+    function renderFormTemplate(_dataId, _data, _target, tahunForEdit) {
         last_dokumen_id = '';
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
             paramsBtnPaket = "edit";
             last_dokumen_id = _data.dokumenExistSameYear.last_dokumen_id;
         }
+
+
+
         let template = _data.template,
             value_dataId = _dataId ?? last_dokumen_id,
             templateExtraData = _data.templateExtraData,
-            render_rowsForm = renderFormTemplate_rowTable(_data, _data.template.type, _data.satkerid, value_dataId, _data.tahun_dokumen),
+            render_rowsForm = renderFormTemplate_rowTable(_data, _data.template.type, _data.satkerid, value_dataId, tahunForEdit),
             // render_rowKegiatan = renderFormTemplate_rowKegiatan(_data.templateKegiatan),
             // render_rowKegiatan = renderFormTemplate_rowOgiat(_data.ogiat, _data.template.type, _data.satkerid),
             render_listInfo = renderFormTemplate_listInfo(_data.templateInfo),
@@ -1432,10 +1459,14 @@
                     break;
             }
 
-            theadBalaiTarget = '<td class="text-center" style="width:15%">Target ' + $('#tahunAnggaran ').val() + ' < /td>';
+
+            theadBalaiTarget = '<td class="text-center" style="width:15%">Target ' + tahunForEdit + ' < /td>';
         } else {
-            titleTheadTable = '<td class="text-center" style="width:15%">Output ' + $('#tahunAnggaran ').val() + '</td>';
+            titleTheadTable = '<td class="text-center" style="width:15%">Output ' + tahunForEdit + '</td>';
         }
+
+        localStorage.setItem('tahunForEdit', tahunForEdit);
+
 
 
         let render = `
@@ -1505,6 +1536,9 @@
     }
 
     function renderFormTemplate_rowTable(_data, _templateType, _satkerId, DocID, _tahun) {
+
+
+
         let selectedYear = $('#tahunAnggaran').val();
         let rows = '',
             rowNumber = 1,
@@ -1741,7 +1775,7 @@
                                         data-outcome2satuan="${dataOgiat.satuan_outcome2}"
                                         data-outcome3satuan="${dataOgiat.satuan_outcome3}"
                                         data-satkerid="${_satkerId}"
-                                        data-tahun="${selectedYear}">
+                                        data-tahun="${_tahun ?? selectedYear}">
                                         Paket <span class="label label-sm label-white ml-2 totalpaket">0</span>
                                     </button>
                                  </td>`;
@@ -2683,7 +2717,7 @@
 
 
                                         if ($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            let nilai = parseFloat($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replace(/\./g, "").replace(',', '.'))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
@@ -2713,7 +2747,16 @@
                                         }
                                     }
                                 })
-                                $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(total)
+
+
+                                var jumlahDesimal_target = (total % 1 === 0) ? 0 : total.toFixed(TargetlengthFix).toString().split('.')[1].length;
+                                totalJumlahTargetDenganKomaIndikator = total.toLocaleString('id-ID', {
+                                    // minimumFractionDigits: jumlahDesimal_target
+                                    minimumFractionDigits: jumlahDesimal_target
+                                });
+
+                                // total = parseFloat(total.toFixed(2));
+                                $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
                             }
                             if (elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan') !== undefined) {
                                 let total1 = 0
@@ -2755,7 +2798,13 @@
                                         }
                                     }
                                 })
-                                $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(total1)
+
+                                var jumlahDesimal_Outcome = (total1 % 1 === 0) ? 0 : total1.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
+                                totalJumlahOutcomeDenganKomaIndikator = total1.toLocaleString('id-ID', {
+                                    // minimumFractionDigits: jumlahDesimal_target
+                                    minimumFractionDigits: jumlahDesimal_Outcome
+                                });
+                                $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahOutcomeDenganKomaIndikator)
                             }
                         }
                     },
@@ -2780,115 +2829,6 @@
                 })
             })
 
-            var totalPaketElement = $('[data-rowid="' + indikatorId + '"]').find('.totalpaket');
-            totalPaketElement.html(selectedItems.length);
-            $('input[data-row-id="' + indikatorId + '"]').val('');
-
-            Object.entries(targetTotals).forEach(([satuan, total]) => {
-                var jumlahDesimal_target = (total % 1 === 0) ? 0 : total.toFixed(TargetlengthFix).toString().split('.')[1].length;
-
-                totalJumlahTargetDenganKoma = total.toLocaleString('id-ID', {
-                    // minimumFractionDigits: jumlahDesimal_target
-                    minimumFractionDigits: jumlahDesimal_target
-                });
-
-                var totalTarget_nilai = $('.__targetValue-' + satuan.replaceAll(/ /g, '') + '[data-row-id=' + indikatorId + ']')
-                totalTarget_nilai.val(totalJumlahTargetDenganKoma);
-
-                outputKegiatanItems.target.unshift({
-                    // oGiatId: indikatorId,
-                    targetSatuan: satuan.replaceAll(/ /g, ''),
-                    targetNilai: totalJumlahTargetDenganKoma
-                });
-
-                // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
-
-            });
-            Object.entries(outcome1Totals).forEach(([satuan, total]) => {
-                var jumlahDesimal_outcome1 = (total % 1 === 0) ? 0 : total.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
-
-                totalJumlahOutcome1DenganKoma = total.toLocaleString('id-ID', {
-                    minimumFractionDigits: jumlahDesimal_outcome1
-                });
-                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
-
-                // Jika 'satuan' mengandung '%', bersihkan simbolnya
-                if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
-                }
-                if (satuan.includes('M3/detik')) {
-                    cleanedSatuan = cleanedSatuan.replace(/\//g, "");
-
-                }
-                var totalOutcome1_nilai = $('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
-                totalOutcome1_nilai.val(totalJumlahOutcome1DenganKoma);
-                // $('.__inputTemplateRow-outcome[data-row-id=' + skindikatorId + ']').val(totalJumlahOutcome1DenganKoma)
-
-
-                outputKegiatanItems.outcome1.unshift({
-                    outcome1Satuan: satuan.replaceAll(/ /g, ''),
-                    outcome1Nilai: totalJumlahOutcome1DenganKoma
-                });
-
-                // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' +
-                //     indikatorId, JSON.stringify(outputKegiatanItems));
-            });
-
-            Object.entries(outcome2Totals).forEach(([satuan, total]) => {
-
-                var jumlahDesimal_outcome2 = (total % 1 === 0) ? 0 : total.toFixed(Outcome2lengthFix).toString().split('.')[1].length;
-
-                totalJumlahOutcome2DenganKoma = total.toLocaleString('id-ID', {
-                    minimumFractionDigits: jumlahDesimal_outcome2
-                });
-
-                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
-
-                // Jika 'satuan' mengandung '%', bersihkan simbolnya
-                if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
-                }
-                if (satuan.includes('M3/detik')) {
-                    cleanedSatuan = cleanedSatuan.replace(/\//g, "");
-
-                }
-                var totalOutcome2_nilai = $('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
-                totalOutcome2_nilai.val(totalJumlahOutcome2DenganKoma);
-
-                outputKegiatanItems.outcome2.unshift({
-                    outcome2Satuan: satuan.replaceAll(/ /g, ''),
-                    outcome2Nilai: totalJumlahOutcome2DenganKoma
-                });
-
-                // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
-            });
-
-            Object.entries(outcome3Totals).forEach(([satuan, total]) => {
-                var jumlahDesimal_outcome3 = (total % 1 === 0) ? 0 : total.toFixed(Outcome2lengthFix).toString().split('.')[1].length;
-
-                totalJumlahOutcome3DenganKoma = total.toLocaleString('id-ID', {
-                    minimumFractionDigits: jumlahDesimal_outcome3
-                });
-                var cleanedSatuan = satuan.replaceAll(/ /g, ''); // Menghapus spasi
-
-                // Jika 'satuan' mengandung '%', bersihkan simbolnya
-                if (satuan.includes('%')) {
-                    cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
-                }
-                if (satuan.includes('M3/detik')) {
-                    cleanedSatuan = cleanedSatuan.replace(/\//g, "");
-
-                }
-                var totalOutcome3_nilai = $('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
-                totalOutcome3_nilai.val(totalJumlahOutcome3DenganKoma);
-
-                outputKegiatanItems.outcome3.unshift({
-                    outcome3Satuan: satuan.replaceAll(/ /g, ''),
-                    outcome3Nilai: totalJumlahOutcome3DenganKoma
-                });
-                // sessionStorage.setItem("oGIAT_" + skindikatorId + '|' + indikatorId, JSON.stringify(outputKegiatanItems));
-
-            });
             $('#modalPilihPaket').modal('hide');
         } else {
             Swal.fire(

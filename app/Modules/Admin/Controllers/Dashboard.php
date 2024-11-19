@@ -9,6 +9,7 @@ use Modules\Admin\Models\PohonAnggaranModel;
 use Modules\Admin\Models\PulldataModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Dompdf\Dompdf;
 
 class Dashboard extends \App\Controllers\BaseController
 {
@@ -490,6 +491,81 @@ class Dashboard extends \App\Controllers\BaseController
             ]
         ];
         return view('Modules\Admin\Views\Dashboard2',$data);
+    }
+
+    public function laporan(){
+        $data = array(
+            'title' => 'Laporan',
+            'report_list' => [
+                "PROGRES ANGGARAN PER SUMBER DANA", /*sudah ada, menu dashboard, PROGRESS PER SUMBER DANA*/
+                "PROGRES PUPR PER UNIT ORGANISASI", /*sudah ada, menu dashboard, PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR*/
+                "PAKET KEGIATAN KONTRAKTUAL TA 2024", /*sudah ada, menu dashboard, POSTUR PAKET KONTRAKTUAL T.A. 2024 */
+                "PAKET KEGIATAN BELUM LELANG TA 2024", /*sudah ada, menu dashboard, POSTUR PAKET BELUM LELANG TA 2024 */
+                "PROGRES PAKET BELUM LELANG TA 2024", /*tidak ditemukan*/
+                "PAKET BELUM LELANG TA 2024 (RPM-SYC)", /*sudah ada, menu dashboard, DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN*/
+                "PAKET BELUM LELANG TA 2024 (RPM-MYC)", /*sudah ada, menu dashboard, DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN*/
+                "PAKET BELUM LELANG TA 2024 (PLN SYC)", /*sudah ada, menu dashboard, DAFTAR PAKET BELUM LELANG PHLN - MYC PROJECT LOAN*/
+                "PAKET BELUM LELANG TA 2024 (PLN-MYC)", /*sudah ada, menu dashboard, PAKET BELUM LELANG PHLN - MYC PROJECT LOAN*/
+                "PAKET BELUM LELANG TA 2024 (PLN-MYC MENDAHULUI DIPA)", /*tidak ditemukan*/
+                "PAKET DENGAN SISA BELUM TERSERAP TERTINGGI", /*adanya terendah, re-query, menu dashboard, PROGRES 10 SATUAN KERJA TERENDAH TA 2024*/
+                "PROGRES PELAKSANAAN IKN", /*harus tanya pupr*/
+                "REKAPITULASI PAKET KEGIATAN BIDANG SDA DI KAWASAN IKN", /*harus tanya pupr*/
+                "REKAPITULASI PAKET KEGIATAN BIDANG SDA DI KAWASAN IKN (selesai)", /*harus tanya pupr*/
+                "PROGNOSIS PENYERAPAN ANGGARAN TA 2024 (1)", /*tidak ada, adanya Dana Tidak Terserap, di postur anggaran*/
+                "RENCANA PEMANFAATAN RUPIAH MURNI TA 2024 (1)", /*tidak ditemukan*/
+                "PROGNOSIS PENYERAPAN ANGGARAN TA 2024 (2)", /*tidak ada, adanya Dana Tidak Terserap, di postur anggaran*/
+                "PROYEK BENDUNGAN PERLU PERHATIAN KHUSUS (1)", /*harus tanya pupr*/
+                "PROGNOSIS SESUAI IEMONITORING SEBELUM PEMANFAATAN ANGGARAN TA 2024 PER UNIT KERJA", /*tidak ditemukan*/
+                "PROYEK BENDUNGAN PERLU PERHATIAN KHUSUS (2)", /*harus tanya pupr*/
+                "PROGNOSIS PENYERAPAN ANGGARAN TA 2024 (3)", /*tidak ada, adanya Dana Tidak Terserap, di postur anggaran*/
+                "RENCANA PEMANFAATAN RUPIAH MURNI TA 2024 (2)", /*tidak ditemukan*/
+            ]
+        );
+
+        return view('Modules\Admin\Views\Laporan\index',$data);
+    }
+
+    public function cetak_laporan(){
+        $filterDateStart = $this->request->getGet('filter-date-start') ?? null;
+        $filterDateEnd   = $this->request->getGet('filter-date-end') ?? null;
+        $rekapUnor = $this->RekapUnorModel->getRekapUnor();
+        $qterkontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"], $filterDateStart, $filterDateEnd);
+        $qproseslelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"], $filterDateStart, $filterDateEnd);
+        $qbelumlelang = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"], $filterDateStart, $filterDateEnd);
+        $qpersiapankontrak = $this->PohonAnggaran->getDataKontrak(["status_tender" => "Persiapan kontrak"], $filterDateStart, $filterDateEnd);
+        $getGraphicData = $this->PulldataModel->getGraphicDataProgressPerSumberDana();
+        
+        $data = array(
+            'title' => 'Cetak Laporan',
+            'report_list_selected' => $this->request->getVar('report_list'),
+            'rekapunor' => $rekapUnor,
+            'terkontrak' => $qterkontrak,
+            'proseslelang' => $qproseslelang,
+            'belumlelang' => $qbelumlelang,
+            'persiapankontrak' => $qpersiapankontrak,
+            'gagallelang' => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Gagal Lelang"]),
+            'nilai_rpm' => $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "RPM", $filterDateStart, $filterDateEnd),
+            'nilai_sbsn' => $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "SBSN", $filterDateStart, $filterDateEnd),
+            'nilai_phln' => $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "PHLN", $filterDateStart, $filterDateEnd),
+            'rpmSyc' => $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "RPM", $filterDateStart, $filterDateEnd),
+            'rpmMyc' => $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "RPM", $filterDateStart, $filterDateEnd),
+            'rpmSycList' => $this->PohonAnggaran->getDataBelumLelangList([[0]], "RPM", $filterDateStart, $filterDateEnd),
+            'rpmMycList' => $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "RPM", $filterDateStart, $filterDateEnd),
+            'phlnMyc' => $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "PHLN", $filterDateStart, $filterDateEnd),
+            'phlnMycList' => $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "PHLN", $filterDateStart, $filterDateEnd),
+            'tenderRpm' =>  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("RPM", null, null, false, $filterDateStart, $filterDateEnd),
+            'tenderPhln' =>  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("PHLN", null, null, false, $filterDateStart, $filterDateEnd),
+            'pagu' =>    $getGraphicData,
+
+        );
+
+        return view('Modules\Admin\Views\Laporan\cetak', $data);
+        $pdf = new Dompdf();
+        $pdf->set_option('isRemoteEnabled', TRUE);
+        $pdf->loadHtml(view('Modules\Admin\Views\Laporan\cetak', $data), 'UTF-8');
+        $pdf->setPaper('A4', 'landscape');
+        $pdf->render();
+        $pdf->stream('laporan_monika.pdf', array('Attachment' => false));
     }
 
     // private function rekapGroupData()
