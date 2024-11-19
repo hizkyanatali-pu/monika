@@ -1104,6 +1104,10 @@
             row_indikator: [],
         }
 
+        let tahunForEditStored = localStorage.getItem('tahunForEdit');
+
+
+
         $('.__inputTemplateRow-target').each((key, element) => {
             let elementInput_target = $(element),
                 elementInput_target_satuan = elementInput_target.data("targetsatuan"),
@@ -1113,7 +1117,7 @@
 
             let rowIndikator = {
                 row_id: elementInput_target.data('row-id'),
-                tahun: $('#tahunAnggaran').val(),
+                tahun: tahunForEditStored ?? $('#tahunAnggaran').val(),
                 target: elementInput_target.val(),
                 target_satuan: elementInput_target_satuan,
                 outcome1: elementInput_outcome.val(),
@@ -1154,7 +1158,7 @@
             rows: renstra_data_rows,
             ogiat: outputkegiatan,
             paket: paket,
-            tahun: $('#tahunAnggaran').val()
+            tahun: tahunForEditStored ?? $('#tahunAnggaran').val()
         }
 
         return inputValue
@@ -1455,10 +1459,14 @@
                     break;
             }
 
+
             theadBalaiTarget = '<td class="text-center" style="width:15%">Target ' + tahunForEdit + ' < /td>';
         } else {
             titleTheadTable = '<td class="text-center" style="width:15%">Output ' + tahunForEdit + '</td>';
         }
+
+        localStorage.setItem('tahunForEdit', tahunForEdit);
+
 
 
         let render = `
