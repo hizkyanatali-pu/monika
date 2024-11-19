@@ -2744,7 +2744,7 @@
                                             }
                                         }
                                         if ($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            let nilai = parseFloat($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", "."))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
@@ -2752,7 +2752,7 @@
 
 
                                         if ($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            let nilai = parseFloat($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", "."))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
@@ -2761,7 +2761,7 @@
 
 
                                         if ($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseInt($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                            let nilai = parseFloat($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", "."))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
@@ -2776,7 +2776,6 @@
                                     minimumFractionDigits: jumlahDesimal_target
                                 });
 
-                                // total = parseFloat(total.toFixed(2));
                                 $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
                             }
                             if (elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan') !== undefined) {
@@ -2795,37 +2794,38 @@
                                     }
 
                                     if ($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        let nilai = parseFloat($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", '.'))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
                                     }
                                     if ($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        let nilai = parseFloat($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", '.'))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
                                     }
                                     if ($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        let nilai = parseFloat($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", '.'))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
                                     }
                                     if ($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseInt($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(".", ""))
+                                        let nilai = parseFloat($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", '.'))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
                                     }
                                 })
 
-                                var jumlahDesimal_Outcome = (total1 % 1 === 0) ? 0 : total1.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
-                                totalJumlahOutcomeDenganKomaIndikator = total1.toLocaleString('id-ID', {
+                                var jumlahDesimal_target = (total1 % 1 === 0) ? 0 : total1.toFixed(TargetlengthFix).toString().split('.')[1].length;
+                                totalJumlahTargetDenganKomaIndikator = total1.toLocaleString('id-ID', {
                                     // minimumFractionDigits: jumlahDesimal_target
-                                    minimumFractionDigits: jumlahDesimal_Outcome
+                                    minimumFractionDigits: jumlahDesimal_target
                                 });
-                                $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahOutcomeDenganKomaIndikator)
+
+                                $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
                             }
                         }
                     },
