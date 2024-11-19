@@ -174,7 +174,7 @@
 
 
                                     <?php if ($data->status == 'tolak'  and (!isset($balaiCreateForSatker))) : ?>
-                                        <button class="ml-2 btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
+                                        <button class="ml-2 btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-tahun="<?php echo $data->tahun ?>">
                                             <i class="fas fa-edit"></i>Koreksi
                                         </button>
                                     <?php endif; ?>

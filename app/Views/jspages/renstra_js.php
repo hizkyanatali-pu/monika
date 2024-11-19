@@ -517,10 +517,12 @@
 
         let document_id = $(this).data('id')
         element_btnSaveEditDokumen.data('id', document_id)
+        tahunForEdit = $(this).data('tahun');
 
         prepareRevisiDocument({
             dataId: $(this).data('id'),
             templateId: $(this).data('template-id'),
+            tahunForEdit: tahunForEdit,
             beforeModalMount: (res) => {
                 //get session satker
                 let sessionUserLevelId = res.dokumen.dokumen_type == 'balai' ? res.dokumen.balaiid : res.dokumen.satkerid
@@ -1488,7 +1490,7 @@
         }
 
 
-
+        localStorage.setItem('tahunForEdit', tahunForEdit);
 
         let render = `
             <input type="hidden" name="revision_same_year" value="${inputValue_revisionSameYear}" />
