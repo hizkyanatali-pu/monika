@@ -1353,8 +1353,7 @@ class Renstra extends \App\Controllers\BaseController
         $dataTemplateDokumen = $this->templateDokumen->select('type')->where('id', $this->request->getPost('templateID'))->get()->getRow();
         $inserted_dokumenSatker = [
             'template_id'           => $this->request->getPost('templateID'),
-            'user_created'          => $this->userUID,
-            'tahun'                 => $this->request->getPost('tahun')
+            'user_created'          => $this->userUID
         ];
 
         if ($session_userType == "satker") {
@@ -1421,9 +1420,9 @@ class Renstra extends \App\Controllers\BaseController
             return [
                 'dokumen_id'      => $_dokumenID,
                 'template_row_id' => $arr['template_row_id'],
-                'target_value'    => str_replace(',', '.', $arr['target_value']),
+                'target_value'    => $arr['target_value'] ?? null,
                 'target_sat'      => $arr['target_sat'] ?? null,
-                'outcome1_value'  => str_replace(',', '.', $arr['outcome1_value']),
+                'outcome1_value'  => $arr['outcome1_value'] ?? null,
                 'outcome1_sat'    => $arr['outcome1_sat'] ?? null,
                 'is_checked'      => $arr['isChecked']
             ];
