@@ -174,7 +174,7 @@
 
 
                                     <?php if ($data->status == 'tolak'  and (!isset($balaiCreateForSatker))) : ?>
-                                        <button class="ml-2 btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
+                                        <button class="ml-2 btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-tahun="<?php echo $data->tahun ?>">
                                             <i class="fas fa-edit"></i>Koreksi
                                         </button>
                                     <?php endif; ?>
@@ -183,16 +183,16 @@
 
                             <td class="d-flex justify-content-center">
                                 <div class="btn-load mt-3">
-                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type="lihat" title="Lihat">
+                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type="lihat" title="Lihat" data-tahun="<?php echo $data->tahun ?>">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                     <?php if ($data->status == 'hold' and (!isset($balaiCreateForSatker))) { ?>
-                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type=<?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? "uptBalai-add" : session('userData')['group_id'] ?? "") ?> data-status="<?= $data->status ?>" title="Edit">
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type=<?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? "uptBalai-add" : session('userData')['group_id'] ?? "") ?> data-status="<?= $data->status ?>" title="Edit" data-tahun="<?php echo $data->tahun ?>">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     <?php } ?>
                                     <?php if ($data->status == 'setuju'  and (!isset($balaiCreateForSatker))) { ?>
-                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-type=<?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? "uptBalai-add" : session('userData')['group_id'] ?? "") ?> data-status="<?= $data->status ?>" title="Edit">
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-type=<?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? "uptBalai-add" : session('userData')['group_id'] ?? "") ?> data-status="<?= $data->status ?>" title="Edit" data-tahun="<?php echo $data->tahun ?>">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     <?php } ?>
@@ -233,11 +233,14 @@
                             $currentYear = date("Y");
                             for ($i = 2020; $i <= $currentYear; $i++) {
                                 $selected = ($i == $currentYear) ? "selected" : "";
+
                             ?>
                                 <option value="<?= $i ?>" <?= $selected ?>><?= $i ?></option>
                             <?php
                             }
                             ?>
+
+
                         </select>
                         <button type="button" class="btn btn-primary __opsi-template" data-available="<?php echo $templateAvailable ?>" <?php if (isset($balaiCreateForSatker)) { ?> data-balai-create-satker="<?php echo $balaiCreateForSatker ?>" <?php }
                                                                                                                                                                                                                                                 if (!isset($balaiCreateForSatker) and empty(session('userData.satker_id'))) {
