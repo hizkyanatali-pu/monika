@@ -1404,16 +1404,16 @@ class Renstra extends \App\Controllers\BaseController
     {
         $data_rows = [];
         foreach ($input['rows']['row_indikator'] as $item) {
-            if ($item['isChecked'] == 1) {  // Check if isChecked is 1
-                $data_rows[] = [
-                    'template_row_id' => $item['row_id'],
-                    'target_value' => $item['target'],
-                    'target_sat' => $item['target_satuan'],
-                    'outcome1_value' => $item['outcome1'],
-                    'outcome1_sat' => $item['outcome1_satuan'],
-                    'isChecked' => $item['isChecked']
-                ];
-            }
+            // if ($item['isChecked'] == 1) {  // Check if isChecked is 1
+            $data_rows[] = [
+                'template_row_id' => $item['row_id'],
+                'target_value' => $item['target'],
+                'target_sat' => $item['target_satuan'],
+                'outcome1_value' => $item['outcome1'],
+                'outcome1_sat' => $item['outcome1_satuan'],
+                'isChecked' => $item['isChecked']
+            ];
+            // }
         }
 
         $rows = array_map(function ($arr) use ($_dokumenID) {
