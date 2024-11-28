@@ -86,8 +86,7 @@
             /* bottom: 0px; */
         }
     }
-</style>
-<style>
+
     .card{
         border: none;
     }
@@ -157,6 +156,31 @@
     .modal-header button{
         color: white !important;
     }
+    @media (min-width: 1050px) {
+        .tree li .tree-mobile, .tree-mobile{
+            display: none;
+        }
+        .w-flexible{
+            width: 25%
+        }
+    }
+    @media (max-width: 1050px) {
+        .tree li .tree-mobile, .tree-mobile{
+            display: block !important;
+        }
+        .tree-desktop{
+            display: none !important;
+        }
+        .w-flexible{
+            width: 100%
+        }
+    }
+
+        .card-1{
+            background: url("<?= base_url('images/laporan/9.png'); ?>") ;
+            background-size: cover;
+            background-position: center center;
+        }
 </style>
 
 <div class="kt-subheader   kt-grid__item" id="kt_subheader">
@@ -307,6 +331,38 @@
                             $no_modal += 1;
                             endforeach;
                         ?>
+                        <div class="col-6 col-lg-3 icon-group2" data-toggle="modal" data-target="#dashboard30Modal">
+                            <div class="card card-body">
+                                <span class="icon">
+                                    <i class="fas fa-water fa-4x"></i>
+                                </span>
+                                <p class="text-ellipsis-2">Progres Anggaran Per Sumber Dana</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3 icon-group2" data-toggle="modal" data-target="#dashboard31Modal">
+                            <div class="card card-body">
+                                <span class="icon">
+                                    <i class="fas fa-water fa-4x"></i>
+                                </span>
+                                <p class="text-ellipsis-2">Postur Paket Belum Lelang TA 2024</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3 icon-group2" data-toggle="modal" data-target="#dashboard32Modal">
+                            <div class="card card-body">
+                                <span class="icon">
+                                    <i class="fas fa-water fa-4x"></i>
+                                </span>
+                                <p class="text-ellipsis-2">Progres Fisik & Keuangan Kementrian PUPR</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3 icon-group2" data-toggle="modal" data-target="#dashboard33Modal">
+                            <div class="card card-body">
+                                <span class="icon">
+                                    <i class="fas fa-water fa-4x"></i>
+                                </span>
+                                <p class="text-ellipsis-2">Postur Paket Kontraktual T.A. 2024</p>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -719,8 +775,8 @@
                     </div>
                     <div class="modal-body" style="overflow-x: auto">
                         <div id="belum-lelang" class="">
-                            <div class="tree ml--105 pr-4">
-                                <ul>
+                            <div class="tree">
+                                <ul style="padding:0">
                                     <li class="mb-5" style="width: 1100px">
                                         <a href="#" class="w-25">
                                             <div class="tree-content">
@@ -1423,6 +1479,931 @@
             $no_modal += 1;
             endforeach;
         ?>
+
+        <!-- Modal 30 -->
+        <div class="modal fade" id="dashboard30Modal" tabindex="-1">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">PROGRES KEUANGAN & FISIK PER KEGIATAN</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <?php $totalPagu = 0 ?>
+                        <?php foreach ($pagu as $key => $value) : ?>
+                            <?php $totalPagu += $value->totalPagu ?>
+                        <?php endforeach ?>
+                        <div class="tree-mobile">
+                            <div class="row ">
+                                <div class="col-6">
+                                    <div class="card border-0 text-center card-1">
+                                        <div class="card-body font-weight-bold" style="padding:3rem">
+                                            <p>PROGRES </p>
+                                            <p>KEUANGAN</p>
+                                            <p>34,61%</p>
+                                            <p>Deviasi</p>
+                                            <p>-10,88%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card border-0 text-center card-1">
+                                        <div class="card-body font-weight-bold" style="padding:3rem">
+                                            <p>PROGRES </p>
+                                            <p>FISIK</p>
+                                            <p>40,22%</p>
+                                            <p>Deviasi</p>
+                                            <p>-10,86%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="tree">
+                            <ul style="padding:0">
+                                <li class="w-100 pb-5">
+                                    <a href="#" class="w-flexible">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-1">
+                                                <h4 class="mb-0"><b> Total Pagu </b></h4>
+                                                <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                        <?= toRupiah($totalPagu) ?> M
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="tree-mobile">
+                                        <div class="border-single-tree-down"></div>
+                                        <a href="#" class="w-100">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-1">
+                                                    <h4 class="mb-0"><b> Total Pagu </b></h4>
+                                                    <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            0 M
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="border-single-tree-down"></div>
+                                        <a href="#" class="w-100">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-1">
+                                                    <h4 class="mb-0"><b> Total Realisasi </b></h4>
+                                                    <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            0 M
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="border-single-tree-down"></div>
+                                        <a href="#" class="w-100">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-1">
+                                                    <h4 class="mb-0"><b> Total Belum Realisasi </b></h4>
+                                                    <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            0 M
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <ul class="tree-desktop">
+                                        <?php foreach ($pagu as $key => $value) : ?>
+                                        <li class="" style="width: 33% !important">
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-secondary text-white">
+                                                        <h4 class="mb-0"><b><?= $value->title ?></b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toRupiah($value->totalPagu) ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card bg-tree-3  text-white bg-tree-footer card-body shadow">
+                                                        <h4 class="mb-0"><b>Realisasi</b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card bg-danger  text-white bg-tree-footer card-body shadow">
+                                                        <h4 class="mb-0"><b>Belum Realisasi</b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <?php endforeach ?>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal 31 -->
+        <div class="modal fade" id="dashboard31Modal" tabindex="-1">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">PROGRES KEUANGAN & FISIK PER KEGIATAN</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tree">
+                            <ul style="padding:0">
+                                <li class="mb-5" style="width: 100%">
+                                    <a href="#" class="w-flexible">
+                                        <div class="tree-content">
+                                            <div class="card card-body bg-tree-1">
+                                                <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                                <h4 class="mb-0"><b> TOTAL PAGU </b></h4>
+                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                    <h5 class="mb-0">
+                                                        <?= toMilyar($totalPagu, true, 2); ?> M
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="tree-mobile">
+                                        <div class="border-single-tree-down"></div>
+                                        <a href="#" class="w-100 mb-2">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2 show-31-rpm" >
+                                                    <h4 class="mb-0"><b> RPM </b></h4>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            <?= toMilyar($nilai_rpm['nilai_kontrak'], true, 2); ?> M
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="w-100 mb-2">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2 show-31-sbsn" >
+                                                    <h4 class="mb-0"><b> SBSN </b></h4>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            <?= toMilyar($nilai_sbsn['nilai_kontrak'], true, 2); ?> M
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="w-100 mb-2">
+                                            <div class="tree-content">
+                                                <div class="card card-body bg-tree-2 show-31-phln" >
+                                                    <h4 class="mb-0"><b> PHLN </b></h4>
+                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                        <h5 class="mb-0">
+                                                            <?= toMilyar($nilai_phln['nilai_kontrak'], true, 2); ?> M
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <ul class="tree-desktop">
+                                        <li class="" style="width: 33% !important">
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> RPM </b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($nilai_rpm['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100 mb-2">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> REALISASI </b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100 mb-2">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="" style="width: 33% !important">
+                                            <a href="#" class="w-75">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> SBSN </b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($nilai_sbsn['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100 mb-2">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> REALISASI </b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100 mb-2">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="" style="width: 33% !important">
+                                            <a href="#" class="w-75">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> PHLN </b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($nilai_phln['nilai_kontrak'], true, 2); ?> M
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100 mb-2">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> REALISASI </b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100 mb-2">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-2">
+                                                        <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal 32 -->
+        <div class="modal fade" id="dashboard32Modal" tabindex="-1">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">PROGRES KEUANGAN & FISIK PER KEGIATAN</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="kt-portlet kt-portlet--tab" id="progres_keuangan_fisik_per_kegiatan">
+                                <div class="kt-section mb-0">
+                                    <div class="kt-section__content">
+                                        <div class="float-left">
+                                            <i><b>Status : <?= $rekapunor['total']['status'] ?></b></i>
+                                        </div>
+
+                                        <div class="float-right">
+                                            <i><b>*Dalam Ribu Rupiah</b></i>
+                                        </div>
+
+                                        <table class="table-bordered table-responsive   " style="width: 100%;">
+                                            <thead class="text-center text-white" style="background-color: #1562aa;">
+                                                <tr>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">No</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">Unit Organisasi</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="1">Pagu</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="1">Realisasi</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progress</th>
+
+                                                </tr>
+                                                <tr>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
+
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
+
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keuangan</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Fisik</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($rekapunor['unor'] as $key => $val) { ?>
+
+                                                    <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram font-weight-bold'" : "") ?>>
+                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" scope="row"><?= ++$key ?></th>
+                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px"><?= $val['nmsingkat']; ?></td>
+                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_total'], 2, ',', '.'); ?></td>
+                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_total"], 2, ',', '.'); ?></td>
+
+                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
+                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
+
+                                                    </tr>
+
+
+                                                <?php   } ?>
+
+                                                <tr class="text-center text-white" style="background-color: #1562aa;">
+                                                    <td colspan="2">TOTAL</td>
+                                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['pagu_total'], 2, ',', '.'); ?></td>
+
+                                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']["real_total"], 2, ',', '.'); ?></td>
+
+                                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_keu'], 2, ',', '.'); ?> %</td>
+                                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_fisik'], 2, ',', '.'); ?> %</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            <!-- <div class="footer">
+                                <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal 33 -->
+        <div class="modal fade" id="dashboard33Modal" tabindex="-1">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">PROGRES KEUANGAN & FISIK PER KEGIATAN</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="viewkontraktual" class="">
+                            <div style="width: 100%; margin: 0px auto">
+                                <div class="tree">
+                                    <ul style="padding:0">
+                                        <li class="mb-5" style="width: 100%">
+                                            <a href="#" class="w-flexible">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-tree-1">
+                                                        <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
+                                                        <h4 class="mb-0"><b> KONTRAKTUAL </b></h4>
+                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                0 M
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="tree-mobile">
+                                                <div class="border-single-tree-down"></div>
+                                                <a href="#" class="w-100 mb-2">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-2">
+                                                            <h4 class="mb-0"><b> TERKONTRAK </b></h4>
+                                                            <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    0 M
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a href="#" class="w-100 mb-2">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-2">
+                                                            <h4 class="mb-0"><b> PROSES LELANG </b></h4>
+                                                            <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    0 M
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a href="#" class="w-100 mb-2">
+                                                    <div class="tree-content">
+                                                        <div class="card card-body bg-tree-2">
+                                                            <h4 class="mb-0"><b> BELUM LELANG </b></h4>
+                                                            <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                <h5 class="mb-0">
+                                                                    0 M
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <ul class="tree-desktop">
+                                                <li class="" style="width: 33% !important">
+                                                    <a href="#" class="w-100">
+                                                        <div class="tree-content">
+                                                            <div class="card card-body bg-tree-2">
+                                                                <h4 class="mb-0"><b> TERKONTRAK </b></h4>
+                                                                <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        0 M
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <ul style="padding:0">
+                                                        <li class="" style="width: 50% !important">
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> SYC </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <div class="border-single-tree-down"></div>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> RPM </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> SBSN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> PLN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                        <li class="" style="width: 50% !important">
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> MYC </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <div class="border-single-tree-down"></div>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> RPM </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> SBSN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> PLN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="" style="width: 33% !important">
+                                                    <a href="#" class="w-75">
+                                                        <div class="tree-content">
+                                                            <div class="card card-body bg-tree-2">
+                                                                <h4 class="mb-0"><b> PROSES LELANG </b></h4>
+                                                                <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        0 M
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <ul style="padding:0">
+                                                        <li class="" style="width: 50% !important">
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> SYC </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <div class="border-single-tree-down"></div>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> RPM </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> SBSN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> PLN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                        <li class="" style="width: 50% !important">
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> MYC </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <div class="border-single-tree-down"></div>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> RPM </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> SBSN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> PLN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="" style="width: 33% !important">
+                                                    <a href="#" class="w-75">
+                                                        <div class="tree-content">
+                                                            <div class="card card-body bg-tree-2">
+                                                                <h4 class="mb-0"><b> BELUM LELANG </b></h4>
+                                                                <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        0 M
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <ul style="padding:0">
+                                                        <li class="" style="width: 50% !important">
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> SYC </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <div class="border-single-tree-down"></div>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> RPM </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> SBSN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> PLN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                        <li class="" style="width: 50% !important">
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> MYC </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <div class="border-single-tree-down"></div>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> RPM </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100 mb-2">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> SBSN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a href="#" class="w-100">
+                                                                <div class="tree-content">
+                                                                    <div class="card card-body bg-tree-2">
+                                                                        <h4 class="mb-0"><b> PLN </b></h4>
+                                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                                        <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
+                                                                            <h5 class="mb-0">
+                                                                                0 M
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
 
     </div>
 </div>

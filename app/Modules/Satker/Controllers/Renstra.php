@@ -1435,6 +1435,7 @@ class Renstra extends \App\Controllers\BaseController
     {
         $batchData = [];
 
+
         foreach ($input['ogiat'] as $row) {
             // Pastikan outputkegiatan tidak kosong
 
@@ -1454,14 +1455,15 @@ class Renstra extends \App\Controllers\BaseController
                 $outcome1 = $row['outcome1'][$i] ?? null;
                 $outcome2 = $row['outcome2'][$i] ?? null;
                 $outcome3 = $row['outcome3'][$i] ?? null;
-
+                $targetNilai = $target['targetNilai'] ?? '0';
+                $targetSat = $target['targetSatuan'] ?? null;
                 // Memasukkan data ke dalam batch
                 foreach ($oGiatIds as $oGiatId) {
                     $batchData[] = [
                         'dokumen_id' => $_dokumenID,
                         'template_row_id' => null,
                         'template_ogiat_id' => $oGiatId,  // Menggunakan oGiatId dari array
-                        'output_val' => $target['targetNilai'] ?? '0',  // Default 0 jika tidak ada
+                        'output_val' => ($targetSat  == "DI" ? '1' : $targetNilai),  // Default 0 jika tidak ada
                         'output_sat' => $target['targetSatuan'] ?? null, // Default N/A jika tidak ada
                         'outcome1_val' => $outcome1['outcome1Nilai'] ?? '0',  // Default 0 jika tidak ada
                         'outcome1_sat' => $outcome1['outcome1Satuan'] ?? null, // Default N/A jika tidak ada
