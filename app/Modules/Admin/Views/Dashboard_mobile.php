@@ -145,7 +145,7 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h5 class="kt-subheader__title text-center">
-                Dasboard Progres Keuangan & Fisik
+                Dasboard Progres Keu & Fisik
             </h5>
             <span class="kt-subheader__separator kt-hidden"></span>
 
@@ -186,23 +186,23 @@
                                 <div class="row ">
                                     <div class="col-6">
                                         <div class="card border-0 text-center card-1">
-                                            <div class="card-body font-weight-bold" style="padding: 2rem;line-height: 12px;">
-                                                <p>PROGRES </p>
-                                                <p>KEUANGAN</p>
-                                                <p>34,61%</p>
-                                                <p>Deviasi</p>
-                                                <p>-10,88%</p>
+                                            <div class="card-body font-weight-bold text-white" style="padding: 2rem;line-height: 12px;">
+                                                <p>PROGRES (%) </p>
+                                                <p>KEU</p>
+                                                <p>34,61</p>
+                                                <p>Deviasi (%)</p>
+                                                <p>-10,88</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="card border-0 text-center card-1">
-                                            <div class="card-body font-weight-bold" style="padding: 2rem;line-height: 12px;">
-                                                <p>PROGRES </p>
+                                            <div class="card-body font-weight-bold text-white" style="padding: 2rem;line-height: 12px;">
+                                                <p>PROGRES (%) </p>
                                                 <p>FISIK</p>
-                                                <p>40,22%</p>
-                                                <p>Deviasi</p>
-                                                <p>-10,86%</p>
+                                                <p>40,22</p>
+                                                <p>Deviasi (%)</p>
+                                                <p>-10,86</p>
                                             </div>
                                         </div>
                                     </div>
@@ -215,7 +215,7 @@
                                                     <h4 class="mb-0"><b> Total Pagu </b></h4>
                                                     <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            <?= toRupiah($pagu_total->total_pagu) ?> M
+                                                            <?= toRupiah($pagu_total->total_pagu) ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -229,7 +229,7 @@
                                                         <h4 class="mb-0"><b> Total Realisasi </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toRupiah($real_total->total_real) ?> M
+                                                                <?= toRupiah($real_total->total_real) ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -242,7 +242,7 @@
                                                         <h4 class="mb-0"><b> Total Belum Realisasi </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toRupiah($selisih_total->selisih) ?> M
+                                                                <?= toRupiah($selisih_total->selisih) ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -310,7 +310,7 @@
                                                     <h4 class="mb-0"><b> TOTAL PAGU </b></h4>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            <?= toMilyar($pagu_all->total_pagu, true, 2); ?> M
+                                                            <?= toMilyar($pagu_all->total_pagu, true, 2); ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -324,7 +324,7 @@
                                                         <h4 class="mb-0"><b> RPM </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($pagu_all->total_rpm, true, 2); ?> M
+                                                                <?= toMilyar($pagu_all->total_rpm, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -336,7 +336,7 @@
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($pagu_all->total_sbsn, true, 2); ?> M
+                                                                <?= toMilyar($pagu_all->total_sbsn, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -348,7 +348,7 @@
                                                         <h4 class="mb-0"><b> PLN </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($pagu_all->total_phln, true, 2); ?> M
+                                                                <?= toMilyar($pagu_all->total_phln, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -363,7 +363,7 @@
                                                             <h4 class="mb-0"><b> RPM </b></h4>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    <?= toMilyar($nilai_rpm['nilai_kontrak'], true, 2); ?> M
+                                                                    <?= toMilyar($nilai_rpm['nilai_kontrak'], true, 2); ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -413,7 +413,7 @@
                                                             <h4 class="mb-0"><b> SBSN </b></h4>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    <?= toMilyar($nilai_sbsn['nilai_kontrak'], true, 2); ?> M
+                                                                    <?= toMilyar($nilai_sbsn['nilai_kontrak'], true, 2); ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -463,7 +463,7 @@
                                                             <h4 class="mb-0"><b> PLN </b></h4>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    <?= toMilyar($nilai_phln['nilai_kontrak'], true, 2); ?> M
+                                                                    <?= toMilyar($nilai_phln['nilai_kontrak'], true, 2); ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -532,7 +532,7 @@
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">Unit Organisasi</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="1">Pagu</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="1">Realisasi</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progress</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progres</th>
 
                                                 </tr>
                                                 <tr>
@@ -540,7 +540,7 @@
 
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
 
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keuangan</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keu</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Fisik</th>
 
                                                 </tr>
@@ -551,8 +551,8 @@
                                                     <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram font-weight-bold' data-toggle='modal' data-target='#KegiatanModal'" : "") ?>>
                                                         <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" scope="row"><?= ++$key ?></th>
                                                         <td style="padding: 0px 4px 0px 4px !important; font-size: 12px"><?= $val['nmsingkat']; ?></td>
-                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= toMilyar($val['pagu_total'], true, 2); ?> M</td>
-                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= toMilyar($val["real_total"], true, 2); ?> M</td>
+                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= toMilyar($val['pagu_total'], true, 2); ?></td>
+                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= toMilyar($val["real_total"], true, 2); ?></td>
 
                                                         <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
                                                         <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
@@ -564,9 +564,9 @@
 
                                                 <tr class="text-center text-white" style="background-color: #1562aa;">
                                                     <td colspan="2">TOTAL</td>
-                                                    <td class="tdNilai text-right col-pagu_phln"><?= toMilyar($rekapunor['total']['pagu_total'], true, 2); ?> M</td>
+                                                    <td class="tdNilai text-right col-pagu_phln"><?= toMilyar($rekapunor['total']['pagu_total'], true, 2); ?></td>
 
-                                                    <td class="tdNilai text-right col-pagu_phln"><?= toMilyar($rekapunor['total']["real_total"], true, 2); ?> M</td>
+                                                    <td class="tdNilai text-right col-pagu_phln"><?= toMilyar($rekapunor['total']["real_total"], true, 2); ?></td>
 
                                                     <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_keu'], 2, ',', '.'); ?> %</td>
                                                     <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_fisik'], 2, ',', '.'); ?> %</td>
@@ -581,7 +581,7 @@
                     </div>
                     <div class="centered-xy height-150 bg-blue">
                         <div class="w-100 table-responsive">
-                            <h3 class="text-center">Satker dengan Progres Tertinggi</h3>
+                            <h3 class="text-center text-white">Satker dengan Progres Tertinggi</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
                                     <tr>
@@ -618,7 +618,7 @@
                     </div>
                     <div class="centered-xy height-210 bg-blue">
                         <div class="w-100 table-responsive">
-                            <h3 class="text-center">Satker dengan Progres Terendah</h3>
+                            <h3 class="text-center text-white">Satker dengan Progres Terendah</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
                                     <tr>
@@ -655,7 +655,7 @@
                     </div>
                     <div class="centered-xy height-120 bg-blue">
                         <div class="w-100 table-responsive">
-                            <h3 class="text-center">Balai dengan Progres Tertinggi</h3>
+                            <h3 class="text-center text-white">Balai dengan Progres Tertinggi</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
                                     <tr>
@@ -692,7 +692,7 @@
                     </div>
                     <div class="centered-xy height-130 bg-blue">
                         <div class="w-100 table-responsive">
-                            <h3 class="text-center">Balai dengan Progres Terendah</h3>
+                            <h3 class="text-center text-white">Balai dengan Progres Terendah</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
                                     <tr>
@@ -2062,7 +2062,7 @@
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">PROGRES KEUANGAN & FISIK DITJEN SDA</h5>
+                        <h5 class="modal-title">PROGRES Keu & FISIK DITJEN SDA</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -2079,7 +2079,7 @@
                                                     <i class="la la-gear"></i>
                                                 </span>
                                                 <h3 class="kt-portlet__head-title">
-                                                    PROGRESS KEUANGAN
+                                                    Progres Keu
                                                 </h3>
                                             </div>
                                         </div>
@@ -2097,7 +2097,7 @@
                                                     <i class="la la-gear"></i>
                                                 </span>
                                                 <h3 class="kt-portlet__head-title">
-                                                    PROGRESS FISIK
+                                                    Progres FISIK
                                                 </h3>
                                             </div>
                                         </div>
@@ -2116,7 +2116,7 @@
                                                     <i class="la la-gear"></i>
                                                 </span>
                                                 <h3 class="kt-portlet__head-title">
-                                                    PROGRESS PER SUMBER DANA
+                                                    PROGRES PER SUMBER DANA
                                                 </h3>
                                             </div>
                                         </div>
@@ -2136,7 +2136,7 @@
                                                     <i class="la la-gear"></i>
                                                 </span>
                                                 <h3 class="kt-portlet__head-title">
-                                                    PROGRESS PER JENIS BELANJA
+                                                    PROGRES PER JENIS BELANJA
                                                 </h3>
                                             </div>
                                         </div>
@@ -2160,7 +2160,7 @@
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">PROGRES KEUANGAN & FISIK PER KEGIATAN</h5>
+                        <h5 class="modal-title">PROGRES Keu & FISIK PER KEGIATAN</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -2180,7 +2180,7 @@
                                                     <th style="padding: 0px 4px 0px 4px !important">No</th>
                                                     <th style="padding: 0px 4px 0px 4px !important">Kode Kegiatan</th>
                                                     <th style="padding: 0px 4px 0px 4px !important" style="text-align: center;">Kegiatan</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important">Keuangan %</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important">Keu %</th>
                                                     <th style="padding: 0px 4px 0px 4px !important">Fisik %</th>
 
                                                 </tr>
@@ -2222,7 +2222,7 @@
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Progres Fisik & Keuangan Kementrian PUPR</h5>
+                        <h5 class="modal-title">Progres Fisik & Keu Kementrian PUPR</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -2247,7 +2247,7 @@
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">Unit Organisasi</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="4">Pagu</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="4">Realisasi</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progress</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progres</th>
 
                                                 </tr>
                                                 <tr>
@@ -2261,7 +2261,7 @@
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">PLN</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
 
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keuangan</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keu</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Fisik</th>
 
                                                 </tr>
