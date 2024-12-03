@@ -1172,8 +1172,9 @@
         //     checkInputTarget = false,
         //     checkInputOutcome1 = false,
         //     checkOutputKegiatan = true
-        let checkPaket = false
-
+        let checkOgiat = false,
+            indikator = '';
+        checkPaket = false
         // let anyChecked = false;
         // $(document).find('.__inputTemplateRow-target').each((i, e) => {
         //     if ($(e).val() > 0) {
@@ -1194,15 +1195,43 @@
 
         $('input[name="form-check-row-output-kegiatan"]').each(function(e) {
             if ($(this).prop('checked')) {
-                checkPaket = true; // If any checkbox is checked, set isFormValid to true
+                checkOgiat = true; // If any checkbox is checked, set isFormValid to true
+
                 return false; // Exit loop early since we found a checked checkbox
             }
         });
 
 
+        $('.paket').each((index, element) => {
+
+            let element_rowParent = $(element).parents('tr').find('td'),
+                checlist = element_rowParent.find('input:checkbox[name=form-check-row-output-kegiatan]').is(':checked')
+
+            if (checlist) {
+                if ($(element).find('.totalpaket').text() > 0) {
+                    checkPaket = true
+                } else {
+                    indikator = $(element).data("indikator");
+                    checkPaket = false
+                }
+            }
+
+        })
 
 
         if (checkPaket == false) {
+            Swal.fire(
+                'Peringatan',
+                'Terdapat paket yang belum dipilih pada Output Kegiatan <b>' + indikator + '</b>',
+                'warning'
+            )
+            return false
+        }
+
+
+
+
+        if (checkOgiat == false) {
             Swal.fire(
                 'Peringatan',
                 'Tidak ada output kegiatan yang dipilih',
@@ -1650,7 +1679,7 @@
                                         value="${ data.targetBalaiDefualtValue }"
                                         data-row-id="${ data.id }"
                                         onkeyup="return this.value = formatRupiah(this.value, '')"
-                                    data-pktype="balai" readonly="true">
+                                    data-pktype="balai" readonly="true" >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan }</span>
                                     </div>
@@ -1669,7 +1698,7 @@
                                     data-row-id="${ data.id }"
                                     data-targetSatuan = "${ data.target_satuan.split(';')[0]}"
                                     onkeyup="return this.value = formatRupiah(this.value, '')" data-pktype="satker"
-                                    ${data.template_id === '5' || data.template_id === '6'|| data.template_id === '9'  || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'' } 
+                                    ${data.template_id === '1' || data.template_id === '2'  || data.template_id === '3' || data.template_id === '4' ? 'readonly' :'' } 
                                     
                                     >
                                     <div class="input-group-append">
@@ -1743,7 +1772,7 @@
                                         data-row-id="${ data.id }"
                                         data-outcome1satuan="${ data.outcome_satuan }"
                                         onkeyup="return this.value = formatRupiah(this.value, '')"
-                                        ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :""}
+                                        ${data.template_id === '1' || data.template_id === '2'  || data.template_id === '3' || data.template_id === '4' ? 'readonly' :""}
                                         >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>
@@ -1760,7 +1789,7 @@
                     <tr>
                     <td></td>
                       <td class="text-center p-2 align-middle">
-                            <input type="checkbox" name="form-checkall-row-output-kegiatan" checked/>
+                            <input class="d-none" type="checkbox" name="form-checkall-row-output-kegiatan" checked/>
                         </td>
 
                     <td colspan="3">
@@ -1806,6 +1835,7 @@
                                 const output_satuan = dataOgiat.satuan_output.split(';');
                                 rows += `<td class="output">`;
                                 output_satuan.forEach(output => {
+
                                     rows += ` <div class="input-group input-group-sm mt-1">
                                         <input 
                                             type="text" 
@@ -1826,11 +1856,38 @@
 
                                 //Outcome1
                                 const outcome1_satuan = dataOgiat.satuan_outcome1.split(';');
-                                rows += `<td class="outcome1">`;
-                                outcome1_satuan.forEach(outcome => {
 
-                                    var cleanedOutcome = outcome.replace(/\s+/g, '').replace('%', 'percent').replace(/\//g, '');;
-                                    rows += ` <div class="input-group input-group-sm mt-1">
+                                if (dataOgiat.id == "OTKSK503704" || dataOgiat.id == "OTKSK503706") {
+
+                                    rows += `<td class="outcome1">`;
+                                    outcome1_satuan.forEach(outcome => {
+
+                                        var cleanedOutcome = outcome.replace(/\s+/g, '').replace('%', 'percent').replace(/\//g, '');;
+                                        rows += ` <div class="input-group input-group-sm mt-1">
+                                        <input 
+                                            type="text" 
+                                            class="form-control __outcome1Value __outcome1Value-${cleanedOutcome}" 
+                                            placeholder="0"
+                                            data-row-id="${dataOgiat.id}"
+                                            data-outcomeSatuan = "${outcome}"
+                                           >
+
+                                        <input type="hidden" class="HektarKawasanPantura" data-row-id="${dataOgiat.id}">
+                                            <div class="input-group-append">
+                                               <span class="input-group-text  bg-warning">
+                                                ${outcome}
+                                                </span>
+                                            </div>
+                                        </div>`;
+                                    });
+                                    rows += `</td>`;
+
+
+                                } else {
+                                    rows += `<td class="outcome1">`;
+                                    outcome1_satuan.forEach(outcome => {
+                                        var cleanedOutcome = outcome.replace(/\s+/g, '').replace('%', 'percent').replace(/\//g, '');;
+                                        rows += ` <div class="input-group input-group-sm mt-1">
                                         <input 
                                             type="text" 
                                             class="form-control __outcome1Value __outcome1Value-${cleanedOutcome}" 
@@ -1844,8 +1901,12 @@
                                                 </span>
                                             </div>
                                         </div>`;
-                                });
-                                rows += `</td>`;
+                                    });
+                                    rows += `</td>`;
+
+
+                                }
+
 
 
                                 //Outcome2
@@ -2309,8 +2370,10 @@
                                     <td>${paket.realisasi}</td> -->
                                     <td width="5%">${paket.persenKeu}</td>
                                     <td width="5%">${paket.persenFis}</td>
-                                    <td width="10%">
-                                    <div class="form-group form-group-last row">
+                                    <td width="10%">`;
+                            if (output_satuan !== "DI") {
+
+                                tbodyContent += `<div class="form-group form-group-last row">
                                         <div class="form-group-sub">
                                             <label class="form-control-label">Vol Output :</label>
                                             <input type="text" class="form-control target_nilai checkbox-click" name="target_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"}>
@@ -2326,13 +2389,19 @@
                                                     </select>
                                                 </div>
                                         </div>
-                                    </div>
-                                    </td>
+                                    </div>`;
+                            }
+
+
+
+
+                            tbodyContent += `</td>
                                     <td width="10%">
                                     <div class="form-group form-group-last row">
                                         <div class="form-group-sub">
                                             <label class="form-control-label center">Vol Outcome :</label>
-                                            <input type="text" class="form-control outcome1_nilai checkbox-click" name="outcome1_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome1_nilai:"disabled"}>
+                                            <input type="text" class="form-control outcome1_nilai checkbox-click" name="outcome1_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome1_nilai:"disabled"}                        
+                                           >
                                         </div>
                                         <div class="form-group-sub">
                                             <label class="form-control-label">Satuan Outcome :</label>
@@ -2461,6 +2530,7 @@
         var outcome1Totals = {};
         var outcome2Totals = {};
         var outcome3Totals = {};
+        var hektarKawasanPantura = 0;
 
         $('.checkbox:checked').each(function() {
             var paketId = $(this).attr('val');
@@ -2485,11 +2555,23 @@
             }
 
 
-            if (target_nilai.trim() === '') {
-                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
-            } else if (target_satuan.trim() === '') {
-                errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Satuan yang belum diisi.');
-            } else if (outcome1_nilai.trim() === '') {
+            // jika satuan target DI (PJPA)
+            if (target_satuan != undefined) {
+                if (target_nilai.trim() === '') {
+                    errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
+                } else if (target_satuan.trim() === '') {
+                    errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Satuan yang belum diisi.');
+                }
+            } else {
+                target_nilai = "0";
+                target_satuan = "DI";
+
+            }
+
+
+
+
+            if (outcome1_nilai.trim() === '') {
                 errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Outcome1 Nilai yang belum diisi.');
             }
 
@@ -2522,6 +2604,8 @@
                     outcome3_satuan: outcome3_satuan ?? ""
 
                 });
+
+
                 target_nilai_number_remove_titik = target_nilai.replace(/\./g, "");
                 outcome1_nilai_number_remove_titik = outcome1_nilai.replace(/\./g, "");
                 // outcome2_nilai_number_remove_titik = !$('.outcome2').hasClass('d-none') ? outcome2_nilai.replace(/\./g, "") : 0;
@@ -2529,6 +2613,7 @@
 
                 target_nilai_number = parseFloat(target_nilai_number_remove_titik.replace(',', '.'));
                 outcome1_nilai_number = parseFloat(outcome1_nilai_number_remove_titik.replace(',', '.'));
+
 
                 if (outcome2_satuan !== "MW") {
                     outcome2_nilai_number = !$('.outcome2').hasClass('d-none') ? 1 : 0;
@@ -2553,6 +2638,13 @@
                         outcome1Totals[outcome1_satuan] = 0; // Inisialisasi jika belum ada
                     }
                     outcome1Totals[outcome1_satuan] += outcome1_nilai_number; // Tambahkan nilai ke total
+
+                    //PJSA Bagian Kawasan Pesisir Utara Jawa
+                    if ((indikatorId == "OTKSK503704" || indikatorId == "OTKSK503706" || indikatorId == "OTKSK503709") && outcome2_satuan == "Kawasan Pesisir Utara Jawa") {
+
+                        hektarKawasanPantura += outcome1_nilai_number;
+
+                    }
                 }
 
                 if (outcome2_satuan) {
@@ -2649,7 +2741,16 @@
                 });
 
                 var totalTarget_nilai = $('.__targetValue-' + satuan.replaceAll(/ /g, '') + '[data-row-id=' + indikatorId + ']')
-                totalTarget_nilai.val(totalJumlahTargetDenganKoma);
+
+
+
+                if (satuan == "DI") {
+                    totalTarget_nilai.val("1");
+                } else {
+                    totalTarget_nilai.val(totalJumlahTargetDenganKoma);
+
+                }
+
 
                 outputKegiatanItems.target.unshift({
                     // oGiatId: indikatorId,
@@ -2660,6 +2761,7 @@
                 sessionStorage.setItem("oGIAT_" + indikatorId, JSON.stringify(outputKegiatanItems));
 
             });
+
 
             Object.entries(outcome1Totals).forEach(([satuan, total]) => {
 
@@ -2672,15 +2774,40 @@
 
                 // Jika 'satuan' mengandung '%', bersihkan simbolnya
                 if (satuan.includes('%')) {
+
                     cleanedSatuan = cleanedSatuan.replaceAll('%', 'percent'); // Hapus simbol '%' dari 'satuan'
+                    average = (total / selectedItems.length); // Gantilah lengthPaketOutcome1 dengan countAverage
+                    totalJumlahOutcome1DenganKoma = average.toLocaleString('id-ID', {
+                        minimumFractionDigits: jumlahDesimal_outcome1
+                    });
+
                 }
                 if (satuan.includes('M3/detik')) {
                     cleanedSatuan = cleanedSatuan.replace(/\//g, "");
 
                 }
+
+
                 var totalOutcome1_nilai = $('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + indikatorId + ']')
                 totalOutcome1_nilai.val(totalJumlahOutcome1DenganKoma);
                 // $('.__inputTemplateRow-outcome[data-row-id=' + skindikatorId + ']').val(totalJumlahOutcome1DenganKoma)
+
+
+                //PJSA Bagian Kawasan Pesisir Utara Jawa
+                if ((indikatorId == "OTKSK503704" || indikatorId == "OTKSK503706" || indikatorId == "OTKSK503709")) {
+
+                    var jumlahDesimal_outcome1KawasanPantura = (hektarKawasanPantura % 1 === 0) ? 0 : hektarKawasanPantura.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
+
+                    totalJumlahOutcome1PanturaDenganKoma = hektarKawasanPantura.toLocaleString('id-ID', {
+                        minimumFractionDigits: jumlahDesimal_outcome1KawasanPantura
+                    });
+
+
+                    var ElementHektarKawasanPantura = $('.HektarKawasanPantura' + '[data-row-id=' + indikatorId + ']')
+                    ElementHektarKawasanPantura.val(totalJumlahOutcome1PanturaDenganKoma);
+
+                }
+
 
 
                 outputKegiatanItems.outcome1.unshift({
@@ -2721,7 +2848,7 @@
             });
 
             Object.entries(outcome3Totals).forEach(([satuan, total]) => {
-                var jumlahDesimal_outcome3 = (total % 1 === 0) ? 0 : total.toFixed(Outcome2lengthFix).toString().split('.')[1].length;
+                var jumlahDesimal_outcome3 = (total % 1 === 0) ? 0 : total.toFixed(Outcome3lengthFix).toString().split('.')[1].length;
 
                 totalJumlahOutcome3DenganKoma = total.toLocaleString('id-ID', {
                     minimumFractionDigits: jumlahDesimal_outcome3
@@ -2746,6 +2873,9 @@
                 sessionStorage.setItem("oGIAT_" + indikatorId, JSON.stringify(outputKegiatanItems));
 
             });
+
+
+
             let dataID = $(".__buat-dokumen-pilih-template").data('id')
             $("tr[data-row-id]").each(function() {
                 let elParent = $(this)
@@ -2762,6 +2892,7 @@
 
                             if (elParent.find('.__inputTemplateRow-target').data('targetsatuan') !== undefined) {
                                 let total = 0
+
                                 arr[row_id][elParent.find('.__inputTemplateRow-target').data('targetsatuan')]['parent'].forEach((v) => {
                                     let satuan = arr[row_id][elParent.find('.__inputTemplateRow-target').data('targetsatuan')]['satuan']
                                     var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
@@ -2777,6 +2908,7 @@
 
 
 
+
                                     let getOgiat = sessionStorage.getItem(`oGIAT_${v}`)
                                     let getOgiatData = JSON.parse(getOgiat)
                                     if (getOgiatData !== null) {
@@ -2787,9 +2919,11 @@
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
+
+
                                         }
                                         if ($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseFloat($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", "."))
+                                            let nilai = parseFloat($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replace(/\./g, "").replaceAll(",", "."))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
@@ -2797,7 +2931,7 @@
 
 
                                         if ($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseFloat($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", "."))
+                                            let nilai = parseFloat($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replace(/\./g, "").replaceAll(",", "."))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
@@ -2806,7 +2940,7 @@
 
 
                                         if ($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                            let nilai = parseFloat($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", "."))
+                                            let nilai = parseFloat($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replace(/\./g, "").replaceAll(",", "."))
                                             if (!isNaN(nilai)) {
                                                 total += nilai
                                             }
@@ -2822,9 +2956,14 @@
                                 });
 
                                 $(this).find('.__inputTemplateRow-target[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
+
+
                             }
+
+
                             if (elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan') !== undefined) {
                                 let total1 = 0
+                                let total2 = 0
                                 arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['parent'].forEach((v) => {
                                     let satuan = arr[row_id][elParent.find('.__inputTemplateRow-outcome').data('outcome1satuan')]['satuan']
                                     var cleanedSatuan = satuan.replace(/ /g, ''); // Menghapus spasi
@@ -2835,42 +2974,79 @@
                                     }
                                     if (satuan.includes('M3/detik')) {
                                         cleanedSatuan = cleanedSatuan.replace(/\//g, "");
-
                                     }
 
                                     if ($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseFloat($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", '.'))
+                                        let nilai = parseFloat($('.__targetValue-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replace(/\./g, "").replaceAll(",", '.'))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
                                     }
                                     if ($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseFloat($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", '.'))
+                                        let nilai = parseFloat($('.__outcome1Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replace(/\./g, "").replaceAll(",", '.'))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
+
+
+
+
                                     }
                                     if ($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseFloat($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", '.'))
+                                        let nilai = parseFloat($('.__outcome2Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replace(/\./g, "").replaceAll(",", '.'))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
+
                                     }
                                     if ($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val() !== undefined) {
-                                        let nilai = parseFloat($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replaceAll(",", '.'))
+                                        let nilai = parseFloat($('.__outcome3Value-' + cleanedSatuan + '[data-row-id=' + v + ']').val().replace(/\./g, "").replaceAll(",", '.'))
                                         if (!isNaN(nilai)) {
                                             total1 += nilai
                                         }
+
+
                                     }
                                 })
 
-                                var jumlahDesimal_target = (total1 % 1 === 0) ? 0 : total1.toFixed(TargetlengthFix).toString().split('.')[1].length;
-                                totalJumlahTargetDenganKomaIndikator = total1.toLocaleString('id-ID', {
-                                    // minimumFractionDigits: jumlahDesimal_target
-                                    minimumFractionDigits: jumlahDesimal_target
-                                });
 
-                                $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
+
+                                if (row_id == "21004") {
+
+                                    let nilaiOTKSK503704 = parseFloat($('.HektarKawasanPantura' + '[data-row-id=OTKSK503704]').val().replace(/\./g, "").replaceAll(",", '.'))
+                                    let nilaiOTKSK503706 = parseFloat($('.HektarKawasanPantura' + '[data-row-id=OTKSK503706]').val().replace(/\./g, "").replaceAll(",", '.'))
+
+                                    if (!isNaN(nilaiOTKSK503704)) {
+                                        total2 += nilaiOTKSK503704
+                                    }
+
+                                    if (!isNaN(nilaiOTKSK503706)) {
+                                        total2 += nilaiOTKSK503706
+                                    }
+
+                                    console.log(total2);
+
+
+                                    var jumlahDesimal_target = (total2 % 1 === 0) ? 0 : total2.toFixed(TargetlengthFix).toString().split('.')[1].length;
+                                    totalJumlahTargetDenganKomaIndikator = total2.toLocaleString('id-ID', {
+                                        // minimumFractionDigits: jumlahDesimal_target
+                                        minimumFractionDigits: jumlahDesimal_target
+                                    });
+
+
+                                    $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
+
+                                } else {
+                                    var jumlahDesimal_target = (total1 % 1 === 0) ? 0 : total1.toFixed(TargetlengthFix).toString().split('.')[1].length;
+                                    totalJumlahTargetDenganKomaIndikator = total1.toLocaleString('id-ID', {
+                                        // minimumFractionDigits: jumlahDesimal_target
+                                        minimumFractionDigits: jumlahDesimal_target
+                                    });
+                                    $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
+                                }
+
+
+
                             }
                         }
                     },
