@@ -40,6 +40,8 @@ $request = \Config\Services::request();
             <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dashboard' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('dashboard'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Dashboard</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
 
             <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dashboard2' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('dashboard2'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Dashboard 2</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
+
+            <li class="kt-menu__item sidebar-menu-mobile <?= ($request->uri->getSegment(1) == 'dashboard_mobile' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('dashboard_mobile'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Dashboard Mobile</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
             
             <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'laporan' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('laporan'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Laporan</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
 
