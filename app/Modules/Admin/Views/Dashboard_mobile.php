@@ -121,8 +121,17 @@
     .height-100{
         height: 100vh;
     }
-    .height-125{
-        height: 125vh;
+    .height-150{
+        height: 150vh;
+    }
+    .height-210{
+        height: 210vh;
+    }
+    .height-120{
+        height: 120vh;
+    }
+    .height-130{
+        height: 130vh;
     }
     .bg-blue{
         background-color: #00b0f0;
@@ -570,8 +579,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="centered-xy height-125 bg-blue">
-                        <div class="w-100">
+                    <div class="centered-xy height-150 bg-blue">
+                        <div class="w-100 table-responsive">
                             <h3 class="text-center">Satker dengan Progres Tertinggi</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
@@ -607,8 +616,8 @@
                             </table>
                         </div>
                     </div>
-                    <div class="centered-xy height-100 bg-blue">
-                        <div class="w-100">
+                    <div class="centered-xy height-210 bg-blue">
+                        <div class="w-100 table-responsive">
                             <h3 class="text-center">Satker dengan Progres Terendah</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
@@ -644,8 +653,8 @@
                             </table>
                         </div>
                     </div>
-                    <div class="centered-xy height-100 bg-blue">
-                        <div class="w-100">
+                    <div class="centered-xy height-120 bg-blue">
+                        <div class="w-100 table-responsive">
                             <h3 class="text-center">Balai dengan Progres Tertinggi</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
@@ -681,8 +690,8 @@
                             </table>
                         </div>
                     </div>
-                    <div class="centered-xy height-100 bg-blue">
-                        <div class="w-100">
+                    <div class="centered-xy height-130 bg-blue">
+                        <div class="w-100 table-responsive">
                             <h3 class="text-center">Balai dengan Progres Terendah</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
