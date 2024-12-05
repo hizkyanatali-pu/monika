@@ -542,29 +542,35 @@ class Dashboard extends \App\Controllers\BaseController
         $data['pagu_all'] = $this->db_mysql->table("monika_data_{$tahun}")
         ->selectSum('pagu_total', 'total_pagu')
         ->selectSum('pagu_rpm', 'total_rpm')
+        ->selectSum('real_rpm', 'total_real_rpm')
         ->selectSum('pagu_sbsn', 'total_sbsn')
+        ->selectSum('real_sbsn', 'total_real_sbsn')
         ->selectSum('pagu_phln', 'total_phln')
+        ->selectSum('real_phln', 'total_real_phln')
         ->get()->getRow();
 
         $data['satker_desc'] = $this->db_mysql->table("monika_data_{$tahun}")
-        ->select("m_satker.satker, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->select("m_satker.satker, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
         ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
+        ->where("m_satker.satker is not null")
         ->groupBy('kdsatker')
         ->orderBy('total_progres', 'DESC')
         ->limit(10)
         ->get()->getResult();
 
         $data['satker_asc'] = $this->db_mysql->table("monika_data_{$tahun}")
-        ->select("m_satker.satker, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->select("m_satker.satker, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
         ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
+        ->where("m_satker.satker is not null")
         ->groupBy('kdsatker')
         ->orderBy('total_progres', 'ASC')
         ->limit(10)
         ->get()->getResult();
 
         $data['balai_desc'] = $this->db_mysql->table("monika_data_{$tahun}")
-        ->select("m_balai.balai, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->select("m_balai.balai, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
         ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
+        ->where("m_balai.balai is not null")
         ->join('m_balai',"m_satker.balaiid = m_balai.balaiid",'left')
         ->groupBy('m_balai.balaiid')
         ->orderBy('total_progres', 'DESC')
@@ -572,8 +578,9 @@ class Dashboard extends \App\Controllers\BaseController
         ->get()->getResult();
 
         $data['balai_asc'] = $this->db_mysql->table("monika_data_{$tahun}")
-        ->select("m_balai.balai, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->select("m_balai.balai, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
         ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
+        ->where("m_balai.balai is not null")
         ->join('m_balai',"m_satker.balaiid = m_balai.balaiid",'left')
         ->groupBy('m_balai.balaiid')
         ->orderBy('total_progres', 'ASC')
