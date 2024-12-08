@@ -1,4 +1,5 @@
-<script src="https://unpkg.com/imask"></script>
+<?php echo script_tag('js/imask.js'); ?>
+
 
 <script>
     $(window).on('beforeunload', function() {
