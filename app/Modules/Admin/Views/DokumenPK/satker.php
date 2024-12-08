@@ -752,6 +752,8 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
     $(document).on('click', '.__tolak-dokumen', function() {
         let dataID = $(this).data('id')
+        let _beritaAcara = $(this).data('beritaacara')
+
 
         Swal.fire({
             title: "Kenapa dokumen ini di tolak?",
@@ -774,7 +776,10 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         dokumenType: 'satker',
                         dataID: dataID,
                         message: $('textarea[name=pesan-tolak-dokumen]').val(),
-                        newStatus: 'tolak'
+                        newStatus: _beritaAcara == "0" ? 'tolak' : "2",
+                        _beritaAcara: _beritaAcara
+
+
                     },
                     success: (res) => {
                         return res
@@ -797,6 +802,11 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
     $(document).on('click', '.__setujui-dokumen', function() {
         let dataID = $(this).data('id')
+        let _beritaAcara = $(this).data('beritaacara')
+
+        console.log(_beritaAcara);
+
+
         $.ajax({
             url: "<?php echo site_url('dokumenpk/change-status') ?>",
             type: "POST",
@@ -804,7 +814,9 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 csrf_test_name: $('input[name=csrf_test_name]').val(),
                 dokumenType: 'satker',
                 dataID: dataID,
-                newStatus: 'setuju'
+                newStatus: (_beritaAcara == "0") ? 'setuju' : "1",
+
+                _beritaAcara: _beritaAcara
             },
             success: (res) => {
                 element_modalPreviewCetakDokumen.modal('hide')
@@ -1086,11 +1098,11 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     if (_toConfirm) {
                         element_modalPreviewCetakDokumen.find('.modal-footer').html(`
                             <div class="p-2">
-                                <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+                                <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}" data-beritaacara="0">
                                     <i class="fa fa-ban"></i> Tolak
                                 </button>
 
-                                <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+                                <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}" data-beritaacara="0">
                                     <i class="fa fa-check"></i> Setujui
                                 </button>
                             </div>
@@ -1159,11 +1171,11 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     if (_toConfirm) {
                         element_modalPreviewCetakDokumen.find('.modal-footer').html(`
                             <div class="p-2">
-                                <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+                                <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}" data-beritaacara="1">
                                     <i class="fa fa-ban"></i> Tolak
                                 </button>
 
-                                <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+                                <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}" data-beritaacara="1">
                                     <i class="fa fa-check"></i> Setujui
                                 </button>
                             </div>

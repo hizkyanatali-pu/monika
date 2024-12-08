@@ -527,7 +527,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                     $from = $this->request->getPost('dataID');
 
-                    if ($newStatus == "tolak") {
+                    if ($newStatus == "2") {
                         $updatedData['notes_ba'] = $this->request->getPost('message');
                         // $updatedData['reject_by']           = $this->user['idpengguna'];
                         // $updatedData['reject_date']           = date("Y-m-d H:i:s");
