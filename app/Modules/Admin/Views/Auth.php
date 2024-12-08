@@ -31,6 +31,7 @@
 				<div class="card card-input-login">
 					<div class="card-body p-5">
 						<form class="kt-form" action="<?= site_url('auth'); ?>" method="POST">
+							<input type="hidden" name="device" id="device">
 							<div class="form-group <?php if (session('errors.idpengguna')) echo 'is-invalid'; ?>">
 								<div class="input-group">
 									<div class="input-group-text bg-green mr-3">
@@ -153,6 +154,13 @@
 
 <?= $this->endSection() ?>
 <?= $this->section('footer_js') ?>
+<script>
+	if(( window.innerWidth <= 900 ) || ( window.innerHeight <= 700 )){
+        document.getElementById("device").value = "mobile"
+    }else{
+        document.getElementById("device").value = "desktop"
+    }
+</script>
 
 
 <?= $this->endSection() ?>

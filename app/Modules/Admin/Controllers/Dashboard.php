@@ -383,7 +383,6 @@ class Dashboard extends \App\Controllers\BaseController
 
         $data['rpmSyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "RPM", $filterDateStart, $filterDateEnd);
         $data['rpmMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "RPM", $filterDateStart, $filterDateEnd);
-
         $data['phlnMyc'] = $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "PHLN", $filterDateStart, $filterDateEnd);
 
 
@@ -491,6 +490,105 @@ class Dashboard extends \App\Controllers\BaseController
             ]
         ];
         return view('Modules\Admin\Views\Dashboard2',$data);
+    }
+
+    public function index_mobile(){
+        $filterDateStart = $this->request->getGet('filter-date-start') ?? null;
+        $filterDateEnd   = $this->request->getGet('filter-date-end') ?? null;
+        $tahun = $this->user['tahun'];
+
+        $data = [
+            'pagu' =>    $this->PulldataModel->getGraphicDataProgressPerSumberDana(),
+            'rekapunor' => $this->RekapUnorModel->getRekapUnor(),
+            'data'  => [],
+            'terkontrak' => $this->PohonAnggaran->getDataKontrak(["status_tender" => "terkontrak"], $filterDateStart, $filterDateEnd),
+            'proseslelang' => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Proses Lelang"], $filterDateStart, $filterDateEnd),
+            'belumlelang' => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Belum Lelang"], $filterDateStart, $filterDateEnd),
+            'persiapankontrak' => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Persiapan kontrak"], $filterDateStart, $filterDateEnd),
+            'gagallelang' => $this->PohonAnggaran->getDataKontrak(["status_tender" => "Gagal Lelang"]),
+            'nilai_rpm' => $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "RPM", $filterDateStart, $filterDateEnd),
+            'nilai_sbsn' => $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "SBSN", $filterDateStart, $filterDateEnd),
+            'nilai_phln' => $this->PohonAnggaran->getDataBelumLelangNilai([[0, 1, 2, 3]], "PHLN", $filterDateStart, $filterDateEnd),
+            'rpmSyc' => $this->PohonAnggaran->getDataBelumLelangNilai([[0]], "RPM", $filterDateStart, $filterDateEnd),
+            'rpmMyc' => $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "RPM", $filterDateStart, $filterDateEnd),
+            'phlnMyc' => $this->PohonAnggaran->getDataBelumLelangNilai([[1, 3]], "PHLN", $filterDateStart, $filterDateEnd),
+            'rpmSycList' => $this->PohonAnggaran->getDataBelumLelangList([[0]], "RPM", $filterDateStart, $filterDateEnd),
+            'rpmMycList' => $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "RPM", $filterDateStart, $filterDateEnd),
+            'phlnMycList' => $this->PohonAnggaran->getDataBelumLelangList([[1, 3]], "PHLN", $filterDateStart, $filterDateEnd),
+            'belum_lelang_rpm_syc' =>  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_rpm", 0, true, $filterDateStart, $filterDateEnd),
+            'belum_lelang_myc' =>  $this->PohonAnggaran->getDataBelumLelangPerKegiatan("pagu_total", "1,2,3", false, $filterDateStart, $filterDateEnd),
+            'belum_lelang_phln_project_loan' =>  $this->PohonAnggaran->getDataBelumLelangPhlnMycProjectLoan("pagu_phln", "1,2,3", false, $filterDateStart, $filterDateEnd),
+            'perkegiatan' => $this->PulldataModel->getGraphicDataProgressPerKegiatan(),
+            'keu' => $this->getprogreskeu("keuangan"),
+            'fis' => $this->getprogreskeu("fisik"),
+            'pagu' =>    $this->PulldataModel->getGraphicDataProgressPerSumberDana(),
+            'jenisbelanja' =>  $this->PulldataModel->getGraphicDataProgressPerJenisBelanja(),
+            'perkegiatan' =>  $this->PulldataModel->getGraphicDataProgressPerKegiatan(),
+        ];
+
+
+        $data['pagu_total'] = $this->db_mysql->table("monika_data_{$tahun}")
+        ->selectSum('pagu_total', 'total_pagu')
+        ->get()->getRow();
+
+        $data['real_total'] = $this->db_mysql->table("monika_data_{$tahun}")
+        ->selectSum('real_total', 'total_real')
+        ->get()->getRow();
+
+        $sql = "SELECT (SUM(pagu_total) - SUM(real_total)) AS selisih 
+        FROM monika_data_{$tahun}";
+        $data['selisih_total'] = $this->db_mysql->query($sql)->getRow();
+
+        $data['pagu_all'] = $this->db_mysql->table("monika_data_{$tahun}")
+        ->selectSum('pagu_total', 'total_pagu')
+        ->selectSum('pagu_rpm', 'total_rpm')
+        ->selectSum('real_rpm', 'total_real_rpm')
+        ->selectSum('pagu_sbsn', 'total_sbsn')
+        ->selectSum('real_sbsn', 'total_real_sbsn')
+        ->selectSum('pagu_phln', 'total_phln')
+        ->selectSum('real_phln', 'total_real_phln')
+        ->get()->getRow();
+
+        $data['satker_desc'] = $this->db_mysql->table("monika_data_{$tahun}")
+        ->select("m_satker.satker, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
+        ->where("m_satker.satker is not null")
+        ->groupBy('kdsatker')
+        ->orderBy('total_progres', 'DESC')
+        ->limit(10)
+        ->get()->getResult();
+
+        $data['satker_asc'] = $this->db_mysql->table("monika_data_{$tahun}")
+        ->select("m_satker.satker, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
+        ->where("m_satker.satker is not null")
+        ->groupBy('kdsatker')
+        ->orderBy('total_progres', 'ASC')
+        ->limit(10)
+        ->get()->getResult();
+
+        $data['balai_desc'] = $this->db_mysql->table("monika_data_{$tahun}")
+        ->select("m_balai.balai, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
+        ->where("m_balai.balai is not null")
+        ->join('m_balai',"m_satker.balaiid = m_balai.balaiid",'left')
+        ->groupBy('m_balai.balaiid')
+        ->orderBy('total_progres', 'DESC')
+        ->limit(10)
+        ->get()->getResult();
+
+        $data['balai_asc'] = $this->db_mysql->table("monika_data_{$tahun}")
+        ->select("m_balai.balai, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
+        ->where("m_balai.balai is not null")
+        ->join('m_balai',"m_satker.balaiid = m_balai.balaiid",'left')
+        ->groupBy('m_balai.balaiid')
+        ->orderBy('total_progres', 'ASC')
+        ->limit(10)
+        ->get()->getResult();
+        // echo json_encode($data);die;
+
+        return view('Modules\Admin\Views\Dashboard_mobile',$data);
     }
 
     public function laporan(){
