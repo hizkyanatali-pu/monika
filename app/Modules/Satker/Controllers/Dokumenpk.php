@@ -48,6 +48,13 @@ class Dokumenpk extends \App\Controllers\BaseController
             'tolak'    => ['message' => 'Di Tolak', 'color' => 'bg-danger text-white'],
             'revision' => ['message' => 'Telah Di Revisi', 'color' => 'bg-dark text-white']
         ];
+
+        $this->BAStatus = [
+            '0'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
+            '1'   => ['message' => 'Telah di Setujui', 'color' => 'bg-success text-white'],
+            '2'    => ['message' => 'Di Tolak', 'color' => 'bg-danger text-white'],
+            null => ['message' => 'Belum Input Berita Acara PK', 'color' => 'bg-secondary']
+        ];
         $this->request = \Config\services::request();
     }
 
@@ -74,6 +81,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
+            dokumenpk_satker.change_status_ba_at,
             dokumenpk_satker.created_at,
             dokumen_pk_template_' . session('userData.tahun') . '.title as dokumenTitle
         ')
@@ -158,6 +166,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             'dataDokumen'   => $dataDokumen,
             'dokumenStatus' => $this->dokumenStatus,
+            'BAStatusVerif' => $this->BAStatus,
             'statusBA'  => $qBaStatus
         ]);
     }
@@ -181,9 +190,12 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.revision_master_number,
             dokumenpk_satker.revision_number,
             dokumenpk_satker.status,
+            dokumenpk_satker.status_ba,
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
+            dokumenpk_satker.change_status_ba_at,
+
             dokumenpk_satker.satkerid,
             (CASE
             WHEN dokumenpk_satker.acc_by IS NULL THEN dokumenpk_satker.reject_by
@@ -222,6 +234,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         }
 
         $dataDokumen = $queryDataDokumen->get()->getResult();
+        $qBaStatus = $this->pkSettingBA->where('tahun', $this->user['tahun'])->get()->getRow();
+
 
 
 
@@ -244,7 +258,11 @@ class Dokumenpk extends \App\Controllers\BaseController
             'dataDokumen'   => $dataDokumen,
             'dokumenStatus' => $this->dokumenStatus,
 
-            'balaiCreateForSatker' =>  $_satkerId
+            'balaiCreateForSatker' =>  $_satkerId,
+            'statusBA'  => $qBaStatus,
+            'BAStatusVerif' => $this->BAStatus,
+
+
         ]);
     }
 
@@ -1324,9 +1342,10 @@ class Dokumenpk extends \App\Controllers\BaseController
         /* dokumen */
         $inserted_dokumenSatker = [
             'template_id'           => $this->request->getPost('templateID'),
-            'status_ba'             => 1,
-            // 'tahun'                 => $this->request->getPost('tahun'),
-            'created_at'            => date('Y-m-d H:i:s')
+            'status_ba'             => 0,
+            'bulan_ttd_ba'                 => $this->request->getPost('bulan'),
+            'tanggal_ttd_ba'               => $this->request->getPost('tanggal'),
+            'change_status_ba_at'            => date('Y-m-d H:i:s')
         ];
 
         if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
@@ -1338,17 +1357,19 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-        // $_templateID = $this->request->getPost('templateID');
-        // if ($this->user['tahun'] != 2023) {
-        //     if (!in_array($_templateID, ['5', '6', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '29', '31', '32', '33', '34', '35', '36', '37', '38', '40', '42'])) {
+        $_templateID = $this->request->getPost('templateID');
+        if ($this->user['tahun'] != 2023) {
+            if (!in_array($_templateID, ['5', '6', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '29', '31', '32', '33', '34', '35', '36', '37', '38', '40', '42'])) {
 
-        //         /* dokumen paket */
-        //         $this->dokumenSatker_paket->where('dokumen_id', $dokumenID);
-        //         $this->dokumenSatker_paket->delete();
-        //         $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
-        //         /** end-of: dokumen rows */
-        //     }
-        // }
+                /* dokumen paket */
+                $this->dokumenSatker_paket->where('dokumen_id', $dokumenID);
+                $this->dokumenSatker_paket->delete();
+                $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
+                /** end-of: dokumen rows */
+            }
+        }
+
+
         $this->dokumenSatker_rows->where('dokumen_id', $dokumenID);
         $this->dokumenSatker_rows->delete();
 
@@ -1426,6 +1447,14 @@ class Dokumenpk extends \App\Controllers\BaseController
                         'target_unit' => $paketId['target_satuan'],
                         'output_value' => $paketId['outcome_nilai'],
                         'output_unit' => $paketId['outcome_satuan'],
+
+                        // tambahan fitur berita acara
+                        'capaian_output_value' => $paketId['capaian_output_nilai'],
+                        'capaian_output_unit' => $paketId['target_satuan'],
+
+                        'capaian_outcome_value' => $paketId['capaian_outcome_nilai'],
+                        'capaian_outcome_unit' => $paketId['outcome_satuan'],
+
                         // 'isChecked' => $item['id']
 
                     ];
@@ -1444,6 +1473,13 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'output_unit' => $arr['output_unit'],
                 // 'outcome_value'   => str_replace(',', '.', $arr['outcome']),
                 // 'is_checked'      => $arr['isChecked']
+
+                //tambahan fitur Berita Acara
+                'capaian_output_value' => $arr['capaian_output_value'],
+                'capaian_output_unit' => $arr['target_unit'],
+
+                'capaian_outcome_value' => $arr['capaian_outcome_value'],
+                'capaian_outcome_unit' => $arr['output_unit'],
             ];
         }, $dataPaket);
 

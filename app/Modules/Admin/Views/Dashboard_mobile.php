@@ -145,7 +145,7 @@
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h5 class="kt-subheader__title text-center">
-                Dasboard Progres Keuangan & Fisik
+                Dasboard Progres Keu & Fisik
             </h5>
             <span class="kt-subheader__separator kt-hidden"></span>
 
@@ -186,23 +186,23 @@
                                 <div class="row ">
                                     <div class="col-6">
                                         <div class="card border-0 text-center card-1">
-                                            <div class="card-body font-weight-bold" style="padding: 2rem;line-height: 12px;">
-                                                <p>PROGRES </p>
-                                                <p>KEUANGAN</p>
-                                                <p>34,61%</p>
-                                                <p>Deviasi</p>
-                                                <p>-10,88%</p>
+                                            <div class="card-body font-weight-bold text-white" style="padding: 2rem;line-height: 12px;">
+                                                <p>PROGRES (%) </p>
+                                                <p>KEU</p>
+                                                <p>34,61</p>
+                                                <p>Deviasi (%)</p>
+                                                <p>-10,88</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="card border-0 text-center card-1">
-                                            <div class="card-body font-weight-bold" style="padding: 2rem;line-height: 12px;">
-                                                <p>PROGRES </p>
+                                            <div class="card-body font-weight-bold text-white" style="padding: 2rem;line-height: 12px;">
+                                                <p>PROGRES (%) </p>
                                                 <p>FISIK</p>
-                                                <p>40,22%</p>
-                                                <p>Deviasi</p>
-                                                <p>-10,86%</p>
+                                                <p>40,22</p>
+                                                <p>Deviasi (%)</p>
+                                                <p>-10,86</p>
                                             </div>
                                         </div>
                                     </div>
@@ -215,7 +215,7 @@
                                                     <h4 class="mb-0"><b> Total Pagu </b></h4>
                                                     <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            <?= toRupiah($pagu_total->total_pagu) ?> M
+                                                            <?= toMilyar($pagu_total->total_pagu) ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -229,7 +229,7 @@
                                                         <h4 class="mb-0"><b> Total Realisasi </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toRupiah($real_total->total_real) ?> M
+                                                                <?= toMilyar($real_total->total_real) ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -242,7 +242,7 @@
                                                         <h4 class="mb-0"><b> Total Belum Realisasi </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toRupiah($selisih_total->selisih) ?> M
+                                                                <?= toMilyar($selisih_total->selisih) ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -252,20 +252,20 @@
                                         <ul class="tree-desktop">
                                             <?php foreach ($pagu as $key => $value) : ?>
                                             <li class="" style="width: 33% !important">
-                                                <a href="#" class="w-100">
+                                                <a href="javascript:;" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-secondary text-white">
                                                             <h4 class="mb-0"><b><?= $value->title ?></b></h4>
                                                             <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    <?= toRupiah($value->totalPagu) ?>
+                                                                    <?= toMilyar($value->totalPagu) ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </a>
                                                 <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100">
+                                                <a href="javascript:;" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card bg-tree-3  text-white bg-tree-footer card-body shadow">
                                                             <h4 class="mb-0"><b>Realisasi</b></h4>
@@ -278,7 +278,7 @@
                                                     </div>
                                                 </a>
                                                 <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100">
+                                                <a href="javascript:;" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card bg-danger  text-white bg-tree-footer card-body shadow">
                                                             <h4 class="mb-0"><b>Belum Realisasi</b></h4>
@@ -303,14 +303,14 @@
                             <div class="tree">
                                 <ul style="padding:0">
                                     <li class="mb-5" style="width: 100%">
-                                        <a href="#" class="w-flexible">
+                                        <a href="javascript:;" class="w-flexible">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-1">
                                                     <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                                     <h4 class="mb-0"><b> TOTAL PAGU </b></h4>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            <?= toMilyar($pagu_all->total_pagu, true, 2); ?> M
+                                                            <?= toMilyar($pagu_all->total_pagu, true, 2); ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -324,7 +324,7 @@
                                                         <h4 class="mb-0"><b> RPM </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($pagu_all->total_rpm, true, 2); ?> M
+                                                                <?= toMilyar($pagu_all->total_rpm, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -336,7 +336,7 @@
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($pagu_all->total_sbsn, true, 2); ?> M
+                                                                <?= toMilyar($pagu_all->total_sbsn, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -348,7 +348,7 @@
                                                         <h4 class="mb-0"><b> PLN </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($pagu_all->total_phln, true, 2); ?> M
+                                                                <?= toMilyar($pagu_all->total_phln, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -357,20 +357,20 @@
                                         </div>
                                         <ul class="tree-desktop">
                                             <li class="" style="width: 33% !important">
-                                                <a href="#" class="w-100">
+                                                <a href="javascript:;" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> RPM </b></h4>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    <?= toMilyar($nilai_rpm['nilai_kontrak'], true, 2); ?> M
+                                                                    <?= toMilyar($nilai_rpm['nilai_kontrak'], true, 2); ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </a>
                                                 <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100 mb-2">
+                                                <a href="javascript:;" class="w-100 mb-2">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> REALISASI </b></h4>
@@ -388,7 +388,7 @@
                                                     </div>
                                                 </a>
                                                 <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100 mb-2">
+                                                <a href="javascript:;" class="w-100 mb-2">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
@@ -407,20 +407,20 @@
                                                 </a>
                                             </li>
                                             <li class="" style="width: 33% !important">
-                                                <a href="#" class="w-75">
+                                                <a href="javascript:;" class="w-75">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> SBSN </b></h4>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    <?= toMilyar($nilai_sbsn['nilai_kontrak'], true, 2); ?> M
+                                                                    <?= toMilyar($nilai_sbsn['nilai_kontrak'], true, 2); ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </a>
                                                 <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100 mb-2">
+                                                <a href="javascript:;" class="w-100 mb-2">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> REALISASI </b></h4>
@@ -438,7 +438,7 @@
                                                     </div>
                                                 </a>
                                                 <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100 mb-2">
+                                                <a href="javascript:;" class="w-100 mb-2">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
@@ -457,20 +457,20 @@
                                                 </a>
                                             </li>
                                             <li class="" style="width: 33% !important">
-                                                <a href="#" class="w-75">
+                                                <a href="javascript:;" class="w-75">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> PLN </b></h4>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    <?= toMilyar($nilai_phln['nilai_kontrak'], true, 2); ?> M
+                                                                    <?= toMilyar($nilai_phln['nilai_kontrak'], true, 2); ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </a>
                                                 <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100 mb-2">
+                                                <a href="javascript:;" class="w-100 mb-2">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> REALISASI </b></h4>
@@ -488,7 +488,7 @@
                                                     </div>
                                                 </a>
                                                 <div class="border-single-tree-down"></div>
-                                                <a href="#" class="w-100 mb-2">
+                                                <a href="javascript:;" class="w-100 mb-2">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
@@ -532,7 +532,7 @@
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">Unit Organisasi</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="1">Pagu</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="1">Realisasi</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progress</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progres</th>
 
                                                 </tr>
                                                 <tr>
@@ -540,7 +540,7 @@
 
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
 
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keuangan</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keu</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Fisik</th>
 
                                                 </tr>
@@ -551,8 +551,8 @@
                                                     <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram font-weight-bold' data-toggle='modal' data-target='#KegiatanModal'" : "") ?>>
                                                         <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" scope="row"><?= ++$key ?></th>
                                                         <td style="padding: 0px 4px 0px 4px !important; font-size: 12px"><?= $val['nmsingkat']; ?></td>
-                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= toMilyar($val['pagu_total'], true, 2); ?> M</td>
-                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= toMilyar($val["real_total"], true, 2); ?> M</td>
+                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= toMilyar($val['pagu_total'], true, 2); ?></td>
+                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= toMilyar($val["real_total"], true, 2); ?></td>
 
                                                         <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
                                                         <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
@@ -564,9 +564,9 @@
 
                                                 <tr class="text-center text-white" style="background-color: #1562aa;">
                                                     <td colspan="2">TOTAL</td>
-                                                    <td class="tdNilai text-right col-pagu_phln"><?= toMilyar($rekapunor['total']['pagu_total'], true, 2); ?> M</td>
+                                                    <td class="tdNilai text-right col-pagu_phln"><?= toMilyar($rekapunor['total']['pagu_total'], true, 2); ?></td>
 
-                                                    <td class="tdNilai text-right col-pagu_phln"><?= toMilyar($rekapunor['total']["real_total"], true, 2); ?> M</td>
+                                                    <td class="tdNilai text-right col-pagu_phln"><?= toMilyar($rekapunor['total']["real_total"], true, 2); ?></td>
 
                                                     <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_keu'], 2, ',', '.'); ?> %</td>
                                                     <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_fisik'], 2, ',', '.'); ?> %</td>
@@ -581,7 +581,7 @@
                     </div>
                     <div class="centered-xy height-150 bg-blue">
                         <div class="w-100 table-responsive">
-                            <h3 class="text-center">Satker dengan Progres Tertinggi</h3>
+                            <h3 class="text-center text-white">Satker dengan Progres Tertinggi</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
                                     <tr>
@@ -594,23 +594,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($satker_desc as $key => $value): ?>
+                                    <?php 
+                                        $sum_total_progres = 0;
+                                        $sum_total_keu_progres = 0;
+                                        $sum_total_fis_progres = 0;
+
+                                        foreach ($satker_desc as $key => $value): 
+
+                                        $sum_total_progres += $value->total_progres;
+                                        $sum_total_keu_progres += $value->total_keu_progres;
+                                        $sum_total_fis_progres += $value->total_fis_progres;
+                                    ?>  
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
                                             <td><?= $key+1 ?></td>
                                             <td><?= $value->satker ?></td>
                                             <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
+                                            <td><?= 0 ?></td>
+                                            <td><?= $value->total_keu_progres ?></td>
+                                            <td><?= $value->total_fis_progres ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
                                         <td>12</td>
                                         <td>Total</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><?= $sum_total_progres ?></td>
+                                        <td><?= 0 ?></td>
+                                        <td><?= $sum_total_keu_progres ?></td>
+                                        <td><?= $sum_total_fis_progres ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -618,7 +628,7 @@
                     </div>
                     <div class="centered-xy height-210 bg-blue">
                         <div class="w-100 table-responsive">
-                            <h3 class="text-center">Satker dengan Progres Terendah</h3>
+                            <h3 class="text-center text-white">Satker dengan Progres Terendah</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
                                     <tr>
@@ -631,23 +641,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($satker_asc as $key => $value): ?>
+                                    <?php 
+                                        $sum_total_progres = 0;
+                                        $sum_total_keu_progres = 0;
+                                        $sum_total_fis_progres = 0;
+
+                                        foreach ($satker_asc as $key => $value): 
+
+                                        $sum_total_progres += $value->total_progres;
+                                        $sum_total_keu_progres += $value->total_keu_progres;
+                                        $sum_total_fis_progres += $value->total_fis_progres;
+                                    ?>  
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
                                             <td><?= $key+1 ?></td>
                                             <td><?= $value->satker ?></td>
                                             <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
+                                            <td><?= 0 ?></td>
+                                            <td><?= $value->total_keu_progres ?></td>
+                                            <td><?= $value->total_fis_progres ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
                                         <td>12</td>
                                         <td>Total</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><?= $sum_total_progres ?></td>
+                                        <td><?= 0 ?></td>
+                                        <td><?= $sum_total_keu_progres ?></td>
+                                        <td><?= $sum_total_fis_progres ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -655,7 +675,7 @@
                     </div>
                     <div class="centered-xy height-120 bg-blue">
                         <div class="w-100 table-responsive">
-                            <h3 class="text-center">Balai dengan Progres Tertinggi</h3>
+                            <h3 class="text-center text-white">Balai dengan Progres Tertinggi</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
                                     <tr>
@@ -668,23 +688,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($balai_desc as $key => $value): ?>
+                                    <?php 
+                                        $sum_total_progres = 0;
+                                        $sum_total_keu_progres = 0;
+                                        $sum_total_fis_progres = 0;
+
+                                        foreach ($balai_desc as $key => $value): 
+
+                                        $sum_total_progres += $value->total_progres;
+                                        $sum_total_keu_progres += $value->total_keu_progres;
+                                        $sum_total_fis_progres += $value->total_fis_progres;
+                                    ?>  
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
                                             <td><?= $key+1 ?></td>
                                             <td><?= $value->balai ?></td>
                                             <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
+                                            <td><?= 0 ?></td>
+                                            <td><?= $value->total_keu_progres ?></td>
+                                            <td><?= $value->total_fis_progres ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
                                         <td>12</td>
                                         <td>Total</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><?= $sum_total_progres ?></td>
+                                        <td><?= 0 ?></td>
+                                        <td><?= $sum_total_keu_progres ?></td>
+                                        <td><?= $sum_total_fis_progres ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -692,7 +722,7 @@
                     </div>
                     <div class="centered-xy height-130 bg-blue">
                         <div class="w-100 table-responsive">
-                            <h3 class="text-center">Balai dengan Progres Terendah</h3>
+                            <h3 class="text-center text-white">Balai dengan Progres Terendah</h3>
                             <table class="table table-bordered">
                                 <thead class="text-white text-center" style="background-color: #1562aa;">
                                     <tr>
@@ -705,23 +735,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($balai_asc as $key => $value): ?>
+                                    <?php 
+                                        $sum_total_progres = 0;
+                                        $sum_total_keu_progres = 0;
+                                        $sum_total_fis_progres = 0;
+
+                                        foreach ($balai_asc as $key => $value): 
+
+                                        $sum_total_progres += $value->total_progres;
+                                        $sum_total_keu_progres += $value->total_keu_progres;
+                                        $sum_total_fis_progres += $value->total_fis_progres;
+                                    ?>  
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
                                             <td><?= $key+1 ?></td>
                                             <td><?= $value->balai ?></td>
                                             <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_progres ?></td>
+                                            <td><?= 0 ?></td>
+                                            <td><?= $value->total_keu_progres ?></td>
+                                            <td><?= $value->total_fis_progres ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
                                         <td>12</td>
                                         <td>Total</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><?= $sum_total_progres ?></td>
+                                        <td><?= 0 ?></td>
+                                        <td><?= $sum_total_keu_progres ?></td>
+                                        <td><?= $sum_total_fis_progres ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -732,15 +772,15 @@
                             <div class="tree">
                                 <ul style="padding:0">
                                     <li class="mb-5" style="width: 100%">
-                                        <a href="#" class="w-flexible">
+                                        <a href="javascript:;" class="w-flexible">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-1">
                                                     <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                                     <h4 class="mb-0"><b> KONTRAKTUAL </b></h4>
-                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                    <label><?= number_format(($terkontrak['jml_paket'] + ($proseslelang['jml_paket'] + $belumlelang['jml_paket'] + $persiapankontrak['jml_paket'] + $gagallelang['jml_paket'])), 0, ',', '.'); ?> Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            0 M
+                                                            <?= toMilyar($terkontrak['nilai_kontrak'] + ($proseslelang['nilai_kontrak'] + $belumlelang['nilai_kontrak'] + $persiapankontrak['nilai_kontrak'] + $gagallelang['nilai_kontrak']), true, 2); ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -752,10 +792,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> TERKONTRAK </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= number_format($terkontrak['jml_paket'] + $persiapankontrak['jml_paket'], 0, ',', '.'); ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($terkontrak['nilai_kontrak'] + $persiapankontrak['nilai_kontrak'], true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -765,10 +805,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PROSES LELANG </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= number_format($proseslelang['jml_paket'], 0, ',', '.'); ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($proseslelang['nilai_kontrak'], true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -778,10 +818,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= number_format($belumlelang['jml_paket'], 0, ',', '.'); ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -790,14 +830,14 @@
                                         </div>
                                         <ul class="tree-desktop">
                                             <li class="" style="width: 33% !important">
-                                                <a href="#" class="w-100">
+                                                <a href="javascript:;" class="w-100">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> TERKONTRAK </b></h4>
-                                                            <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                            <label><?= number_format($terkontrak['jml_paket'] + $persiapankontrak['jml_paket'], 0, ',', '.'); ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    0 M
+                                                                    <?= toMilyar($terkontrak['nilai_kontrak'] + $persiapankontrak['nilai_kontrak'], true, 2); ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -805,7 +845,7 @@
                                                 </a>
                                                 <ul style="padding:0">
                                                     <li class="" style="width: 50% !important">
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> SYC </b></h4>
@@ -819,7 +859,7 @@
                                                             </div>
                                                         </a>
                                                         <div class="border-single-tree-down"></div>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> RPM </b></h4>
@@ -832,7 +872,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> SBSN </b></h4>
@@ -845,7 +885,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> PLN </b></h4>
@@ -860,7 +900,7 @@
                                                         </a>
                                                     </li>
                                                     <li class="" style="width: 50% !important">
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> MYC </b></h4>
@@ -874,7 +914,7 @@
                                                             </div>
                                                         </a>
                                                         <div class="border-single-tree-down"></div>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> RPM </b></h4>
@@ -887,7 +927,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> SBSN </b></h4>
@@ -900,7 +940,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> PLN </b></h4>
@@ -917,14 +957,14 @@
                                                 </ul>
                                             </li>
                                             <li class="" style="width: 33% !important">
-                                                <a href="#" class="w-75">
+                                                <a href="javascript:;" class="w-75">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> PROSES LELANG </b></h4>
-                                                            <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                            <label><?= number_format($proseslelang['jml_paket'], 0, ',', '.'); ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    0 M
+                                                                    <?= toMilyar($proseslelang['nilai_kontrak'], true, 2); ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -932,7 +972,7 @@
                                                 </a>
                                                 <ul style="padding:0">
                                                     <li class="" style="width: 50% !important">
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> SYC </b></h4>
@@ -946,7 +986,7 @@
                                                             </div>
                                                         </a>
                                                         <div class="border-single-tree-down"></div>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> RPM </b></h4>
@@ -959,7 +999,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> SBSN </b></h4>
@@ -972,7 +1012,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> PLN </b></h4>
@@ -987,7 +1027,7 @@
                                                         </a>
                                                     </li>
                                                     <li class="" style="width: 50% !important">
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> MYC </b></h4>
@@ -1001,7 +1041,7 @@
                                                             </div>
                                                         </a>
                                                         <div class="border-single-tree-down"></div>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> RPM </b></h4>
@@ -1014,7 +1054,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> SBSN </b></h4>
@@ -1027,7 +1067,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> PLN </b></h4>
@@ -1044,14 +1084,14 @@
                                                 </ul>
                                             </li>
                                             <li class="" style="width: 33% !important">
-                                                <a href="#" class="w-75">
+                                                <a href="javascript:;" class="w-75">
                                                     <div class="tree-content">
                                                         <div class="card card-body bg-tree-2">
                                                             <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                                            <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                            <label><?= number_format($belumlelang['jml_paket'], 0, ',', '.'); ?> Paket</label>
                                                             <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    0 M
+                                                                    <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -1059,7 +1099,7 @@
                                                 </a>
                                                 <ul style="padding:0">
                                                     <li class="" style="width: 50% !important">
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> SYC </b></h4>
@@ -1073,7 +1113,7 @@
                                                             </div>
                                                         </a>
                                                         <div class="border-single-tree-down"></div>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> RPM </b></h4>
@@ -1086,7 +1126,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> SBSN </b></h4>
@@ -1099,7 +1139,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> PLN </b></h4>
@@ -1114,7 +1154,7 @@
                                                         </a>
                                                     </li>
                                                     <li class="" style="width: 50% !important">
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> MYC </b></h4>
@@ -1128,7 +1168,7 @@
                                                             </div>
                                                         </a>
                                                         <div class="border-single-tree-down"></div>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> RPM </b></h4>
@@ -1141,7 +1181,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100 mb-2">
+                                                        <a href="javascript:;" class="w-100 mb-2">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> SBSN </b></h4>
@@ -1154,7 +1194,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="#" class="w-100">
+                                                        <a href="javascript:;" class="w-100">
                                                             <div class="tree-content">
                                                                 <div class="card card-body bg-tree-2">
                                                                     <h4 class="mb-0"><b> PLN </b></h4>
@@ -1181,15 +1221,15 @@
                             <div class="tree">
                                 <ul style="padding:0">
                                     <li class="mb-5" style="width: 100%">
-                                        <a href="#" class="w-100">
+                                        <a href="javascript:;" class="w-100">
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-1">
                                                     <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                                     <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                                    <label>99 Paket</label>
+                                                    <label><?= number_format($belumlelang['jml_paket'], 0, ',', '.'); ?> Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            0 M
+                                                            <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -1200,10 +1240,10 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> SYC </b></h4>
-                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                    <label><?= formatNumber($rpmSyc['jml_paket']); ?> Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            0 M
+                                                            <?= toMilyar($rpmSyc['nilai_kontrak'], true, 2); ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -1213,10 +1253,10 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> MYC BARU </b></h4>
-                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                    <label><?= formatNumber($rpmMyc['jml_paket']); ?> Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            0 M
+                                                            <?= toMilyar($rpmMyc['nilai_kontrak'], true, 2); ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -1247,39 +1287,39 @@
                         <div class="tree">
                             <ul style="padding:0">
                                 <li class="mb-5" style="width: 100%">
-                                    <a href="#" class="w-100">
+                                    <a href="javascript:;" class="w-100">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-1">
                                                 <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                                 <h4 class="mb-0"><b> RPM </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($pagu_all->total_rpm, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
                                     <div class="border-single-tree-down"></div>
-                                    <a href="#" class="w-100 mb-2">
+                                    <a href="javascript:;" class="w-100 mb-2">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> REALISASI </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($pagu_all->total_real_rpm, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="#" class="w-100 mb-2">
+                                    <a href="javascript:;" class="w-100 mb-2">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($pagu_all->total_rpm-$pagu_all->total_real_rpm, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -1306,39 +1346,39 @@
                         <div class="tree">
                             <ul style="padding:0">
                                 <li class="mb-5" style="width: 100%">
-                                    <a href="#" class="w-100">
+                                    <a href="javascript:;" class="w-100">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-1">
                                                 <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                                 <h4 class="mb-0"><b> SBSN </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($pagu_all->total_sbsn, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
                                     <div class="border-single-tree-down"></div>
-                                    <a href="#" class="w-100 mb-2">
+                                    <a href="javascript:;" class="w-100 mb-2">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> REALISASI </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($pagu_all->total_real_sbsn, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="#" class="w-100 mb-2">
+                                    <a href="javascript:;" class="w-100 mb-2">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($pagu_all->total_sbsn-$pagu_all->total_real_sbsn, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -1365,39 +1405,39 @@
                         <div class="tree">
                             <ul style="padding:0">
                                 <li class="mb-5" style="width: 100%">
-                                    <a href="#" class="w-100">
+                                    <a href="javascript:;" class="w-100">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-1">
                                                 <!-- <h6 class="mb-0 tree-dot"><i class="fas fa-circle"></i></h6> -->
                                                 <h4 class="mb-0"><b> PLN </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($pagu_all->total_phln, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
                                     <div class="border-single-tree-down"></div>
-                                    <a href="#" class="w-100 mb-2">
+                                    <a href="javascript:;" class="w-100 mb-2">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> REALISASI </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                    <h5 class="mb-0">
-                                                        0 M
+                                                    <h5 class="mb-0">                                                        
+                                                        <?= toMilyar($pagu_all->total_real_phln, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="#" class="w-100 mb-2">
+                                    <a href="javascript:;" class="w-100 mb-2">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($pagu_all->total_phln-$pagu_all->total_real_phln, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -1541,14 +1581,14 @@
                         <div class="tree">
                             <ul style="padding:0">
                                 <li class="" style="width: 100% !important">
-                                    <a href="#" class="w-100">
+                                    <a href="javascript:;" class="w-100">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> TERKONTRAK </b></h4>
-                                                <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                <label><?= number_format($terkontrak['jml_paket'] + $persiapankontrak['jml_paket'], 0, ',', '.'); ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($terkontrak['nilai_kontrak'] + $persiapankontrak['nilai_kontrak'], true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -1556,7 +1596,7 @@
                                     </a>
                                     <ul style="padding:0">
                                         <li class="" style="width: 50% !important">
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SYC </b></h4>
@@ -1570,7 +1610,7 @@
                                                 </div>
                                             </a>
                                             <div class="border-single-tree-down"></div>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
@@ -1583,7 +1623,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
@@ -1596,7 +1636,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
@@ -1611,7 +1651,7 @@
                                             </a>
                                         </li>
                                         <li class="" style="width: 50% !important">
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> MYC </b></h4>
@@ -1625,7 +1665,7 @@
                                                 </div>
                                             </a>
                                             <div class="border-single-tree-down"></div>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
@@ -1638,7 +1678,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
@@ -1651,7 +1691,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
@@ -1687,14 +1727,14 @@
                         <div class="tree">
                             <ul style="padding:0">
                                 <li class="" style="width: 100% !important">
-                                    <a href="#" class="w-100">
+                                    <a href="javascript:;" class="w-100">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> PROSES LELANG </b></h4>
-                                                <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                <label><?= number_format($proseslelang['jml_paket'], 0, ',', '.'); ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($proseslelang['nilai_kontrak'], true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -1702,7 +1742,7 @@
                                     </a>
                                     <ul style="padding:0">
                                         <li class="" style="width: 50% !important">
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SYC </b></h4>
@@ -1716,7 +1756,7 @@
                                                 </div>
                                             </a>
                                             <div class="border-single-tree-down"></div>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
@@ -1729,7 +1769,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
@@ -1742,7 +1782,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
@@ -1757,7 +1797,7 @@
                                             </a>
                                         </li>
                                         <li class="" style="width: 50% !important">
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> MYC </b></h4>
@@ -1771,7 +1811,7 @@
                                                 </div>
                                             </a>
                                             <div class="border-single-tree-down"></div>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
@@ -1784,7 +1824,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
@@ -1797,7 +1837,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
@@ -1833,14 +1873,14 @@
                         <div class="tree">
                             <ul style="padding:0">
                                 <li class="" style="width: 100% !important">
-                                    <a href="#" class="w-100">
+                                    <a href="javascript:;" class="w-100">
                                         <div class="tree-content">
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                                <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                <label><?= number_format($belumlelang['jml_paket'], 0, ',', '.'); ?> Paket</label>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        0 M
+                                                        <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -1848,7 +1888,7 @@
                                     </a>
                                     <ul style="padding:0">
                                         <li class="" style="width: 50% !important">
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SYC </b></h4>
@@ -1862,7 +1902,7 @@
                                                 </div>
                                             </a>
                                             <div class="border-single-tree-down"></div>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
@@ -1875,7 +1915,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
@@ -1888,7 +1928,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
@@ -1903,7 +1943,7 @@
                                             </a>
                                         </li>
                                         <li class="" style="width: 50% !important">
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> MYC </b></h4>
@@ -1917,7 +1957,7 @@
                                                 </div>
                                             </a>
                                             <div class="border-single-tree-down"></div>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
@@ -1930,7 +1970,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100 mb-2">
+                                            <a href="javascript:;" class="w-100 mb-2">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
@@ -1943,7 +1983,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="#" class="w-100">
+                                            <a href="javascript:;" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
@@ -2062,7 +2102,7 @@
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">PROGRES KEUANGAN & FISIK DITJEN SDA</h5>
+                        <h5 class="modal-title">PROGRES Keu & FISIK DITJEN SDA</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -2079,7 +2119,7 @@
                                                     <i class="la la-gear"></i>
                                                 </span>
                                                 <h3 class="kt-portlet__head-title">
-                                                    PROGRESS KEUANGAN
+                                                    Progres Keu
                                                 </h3>
                                             </div>
                                         </div>
@@ -2097,7 +2137,7 @@
                                                     <i class="la la-gear"></i>
                                                 </span>
                                                 <h3 class="kt-portlet__head-title">
-                                                    PROGRESS FISIK
+                                                    Progres FISIK
                                                 </h3>
                                             </div>
                                         </div>
@@ -2116,7 +2156,7 @@
                                                     <i class="la la-gear"></i>
                                                 </span>
                                                 <h3 class="kt-portlet__head-title">
-                                                    PROGRESS PER SUMBER DANA
+                                                    PROGRES PER SUMBER DANA
                                                 </h3>
                                             </div>
                                         </div>
@@ -2136,7 +2176,7 @@
                                                     <i class="la la-gear"></i>
                                                 </span>
                                                 <h3 class="kt-portlet__head-title">
-                                                    PROGRESS PER JENIS BELANJA
+                                                    PROGRES PER JENIS BELANJA
                                                 </h3>
                                             </div>
                                         </div>
@@ -2160,7 +2200,7 @@
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">PROGRES KEUANGAN & FISIK PER KEGIATAN</h5>
+                        <h5 class="modal-title">PROGRES Keu & FISIK PER KEGIATAN</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -2180,7 +2220,7 @@
                                                     <th style="padding: 0px 4px 0px 4px !important">No</th>
                                                     <th style="padding: 0px 4px 0px 4px !important">Kode Kegiatan</th>
                                                     <th style="padding: 0px 4px 0px 4px !important" style="text-align: center;">Kegiatan</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important">Keuangan %</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important">Keu %</th>
                                                     <th style="padding: 0px 4px 0px 4px !important">Fisik %</th>
 
                                                 </tr>
@@ -2222,7 +2262,7 @@
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Progres Fisik & Keuangan Kementrian PUPR</h5>
+                        <h5 class="modal-title">Progres Fisik & Keu Kementrian PUPR</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -2247,7 +2287,7 @@
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">Unit Organisasi</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="4">Pagu</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="4">Realisasi</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progress</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progres</th>
 
                                                 </tr>
                                                 <tr>
@@ -2261,7 +2301,7 @@
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">PLN</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
 
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keuangan</th>
+                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keu</th>
                                                     <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Fisik</th>
 
                                                 </tr>

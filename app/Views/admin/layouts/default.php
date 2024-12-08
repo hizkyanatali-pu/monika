@@ -171,10 +171,11 @@ $title = $title ?? '';
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script>
-        if(window.innerWidth >= 1050){
-            $(".sidebar-menu-mobile").hide()
-        }else{
+        if(( window.innerWidth <= 900 ) || ( window.innerHeight <= 700 )){
             $(".sidebar-menu-mobile").show()
+            $(".kt-header-mobile__toolbar").hide()
+        }else{
+            $(".sidebar-menu-mobile").hide()
         }
 
         function capture(_element, _fileName) {
