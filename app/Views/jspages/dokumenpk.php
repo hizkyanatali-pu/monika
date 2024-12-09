@@ -3018,12 +3018,14 @@
                         <div class="form-group form-group-last row>
                             <div class="form-group-sub">
                                 <label class="form-control-label">Vol Output :</label>
-                                <input type="text" class="form-control capaian_output_nilai checkbox-click" name="capaian_output_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item=> item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).capaian_output_nilai:"disabled"} value="0">
+                                <input type="text" class="form-control capaian_output_nilai checkbox-click" name="capaian_output_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')"  ${selectedItems.some(item => item.paketId === paket.paketId) ? 
+        `value="${selectedItems.find(item => item.paketId === paket.paketId).capaian_output_nilai ?? 0}"` 
+        : "disabled"}>
                             </div>
                             <div class="form-group-sub">
                                 <label class="form-control-label">Satuan Output :</label>
                                 <div class="input-group-append">
-                                    <select class="form-control checkbox-click" ${selectedItems.some(item=> item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"} name="target_satuan" disabled>
+                                    <select class="form-control checkbox-click" ${selectedItems.some(item=> item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai ?? 0:"disabled"} name="target_satuan" disabled>
                                         ${output_satuan.split(';').map(function(satuan) {
                                         const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.target_satuan === satuan.trim());
                                         return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : '' }>${satuan.trim()}</option>`;
@@ -3039,7 +3041,9 @@
                         <div class="form-group form-group-last row">
                             <div class="form-group-sub">
                                 <label class="form-control-label center">Vol Outcome :</label>
-                                <input type="text" class="form-control capaian_outcome_nilai checkbox-click" name="capaian_outcome_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item=> item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).capaian_outcome_nilai:"disabled"} value="0">
+                                <input type="text" class="form-control capaian_outcome_nilai checkbox-click" name="capaian_outcome_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId) ? 
+        `value="${selectedItems.find(item => item.paketId === paket.paketId).capaian_outcome_nilai ?? 0}"` 
+        : "disabled"}>
                             </div>
                             <div class="form-group-sub">
                                 <label class="form-control-label">Satuan Outcome :</label>

@@ -1454,11 +1454,11 @@ class Dokumenpk extends \App\Controllers\BaseController
                         'output_unit' => $paketId['outcome_satuan'],
 
                         // tambahan fitur berita acara
-                        'capaian_output_value' => $paketId['capaian_output_nilai'],
-                        'capaian_output_unit' => $paketId['target_satuan'],
+                        'capaian_output_value' => $paketId['capaian_output_nilai'] ?? 0,
+                        'capaian_output_unit' => $paketId['target_satuan'] ?? null,
 
-                        'capaian_outcome_value' => $paketId['capaian_outcome_nilai'],
-                        'capaian_outcome_unit' => $paketId['outcome_satuan'],
+                        'capaian_outcome_value' => $paketId['capaian_outcome_nilai'] ?? 0,
+                        'capaian_outcome_unit' => $paketId['outcome_satuan'] ?? null,
 
                         // 'isChecked' => $item['id']
 
