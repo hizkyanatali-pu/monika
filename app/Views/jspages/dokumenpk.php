@@ -876,8 +876,6 @@
                     })
 
                     $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
-                    $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
-                    $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
 
                     $('.title-ttd-pihak1').text(res.dokumen.pihak1_initial)
                     $('.title-ttd-pihak2').text(res.dokumen.pihak2_initial)
@@ -895,10 +893,15 @@
                     if (params.paramsBA) {
                         $('select[name=created-bulan]').val(res.dokumen.bulan_ttd_ba).trigger('change')
                         $('select[name=created-day]').val(res.dokumen.tanggal_ttd_ba).trigger('change')
+                        $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd_ba)
+                        $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd_ba)
 
                     } else {
                         $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
                         $('select[name=created-day]').val(res.dokumen.tanggal).trigger('change')
+                        $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
+                        $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
+
                     }
 
 

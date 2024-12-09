@@ -1145,7 +1145,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                 //target (output & outcome)
                 $rSeparatorTarget = explode('.', $data_targetValue['target_value']);
-                $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['target_value'], strlen($rSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['target_value']));
+                $targetValueNew = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['target_value'], strlen($rSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['target_value']));
 
                 $rSeparatorOutcome = explode('.', $data_targetValue['outcome_value']);
                 $outcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
@@ -1177,7 +1177,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $pdf->Row(array(
                     $numberText,
                     $data['title'],
-                    $targetValue,
+                    $targetValueNew,
                     $satuan_target,
                     $outcomeValue,
                     $satuan_outcome,
@@ -1297,11 +1297,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
         // $dokumenKopTitle1_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
             'person1Title' => $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial'],
-            'person1Name'  => $dataDokumen['pihak2_ttd'],
+            'person1Name'  => $dataDokumen['pihak2_ttd_ba'],
             'person2Date'  => $this->dokumenLokasi . ',   ' . $this->tanggal . ' '  . $this->dokumenBulan . ' ' . ($dataDokumen['tahun_ttd'] != '' ? $dataDokumen['tahun_ttd'] : $this->dokumenYear),
             // 'person2Title' => $jabatanPihak1_isPlt . $dokumenKopTitle1_prefix . $dataDokumen['pihak1_initial'],
             'person2Title' => $jabatanPihak1_isPlt . $dataDokumen['pihak1_initial'],
-            'person2Name'  => $dataDokumen['pihak1_ttd'],
+            'person2Name'  => $dataDokumen['pihak1_ttd_ba'],
         ], $_beritaacara = true);
     }
 
