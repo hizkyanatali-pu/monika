@@ -884,8 +884,7 @@
                         $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
                     }
 
-                    if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
-                    if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
+
 
                     $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
                     $('input[name=created-kota-nama]').val(res.dokumen.kota_nama)
@@ -896,11 +895,16 @@
                         $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd_ba)
                         $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd_ba)
 
+                        if (res.dokumen.pihak1_is_plt_ba == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
+                        if (res.dokumen.pihak2_is_plt_ba == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
+
                     } else {
                         $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
                         $('select[name=created-day]').val(res.dokumen.tanggal).trigger('change')
                         $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
                         $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
+                        if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
+                        if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
 
                     }
 
