@@ -1343,9 +1343,14 @@ class Dokumenpk extends \App\Controllers\BaseController
         $inserted_dokumenSatker = [
             'template_id'           => $this->request->getPost('templateID'),
             'status_ba'             => 0,
-            'bulan_ttd_ba'                 => $this->request->getPost('bulan'),
-            'tanggal_ttd_ba'               => $this->request->getPost('tanggal'),
-            'change_status_ba_at'            => date('Y-m-d H:i:s')
+            'bulan_ttd_ba'          => $this->request->getPost('bulan'),
+            'tanggal_ttd_ba'        => $this->request->getPost('tanggal'),
+            'change_status_ba_at'   => date('Y-m-d H:i:s'),
+
+            'pihak1_ttd_ba'            => $this->request->getPost('ttdPihak1'),
+            'pihak1_is_plt_ba'         => $this->request->getPost('ttdPihak1_isPlt'),
+            'pihak2_ttd_ba'            => $this->request->getPost('ttdPihak2'),
+            'pihak2_is_plt_ba'         => $this->request->getPost('ttdPihak2_isPlt'),
         ];
 
         if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
@@ -1381,8 +1386,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'target_value'    => str_replace(',', '.', $arr['target']),
                 'target_sat'    =>  $arr['target_satuan'] ??  null,
                 'outcome_value'   => str_replace(',', '.', $arr['outcome']),
-                'capaian_output_value'  =>  $arr['capaian_output_value'],
-                'capaian_outcome_value'  =>  $arr['capaian_outcome_value'],
+                'capaian_output_value'  => str_replace(',', '.', $arr['capaian_output_value']),
+                'capaian_outcome_value'  =>  str_replace(',', '.', $arr['capaian_outcome_value']),
                 'is_checked'      => $arr['isChecked']
             ];
         },  $this->request->getPost()['rows']);
