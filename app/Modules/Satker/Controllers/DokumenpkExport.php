@@ -1292,8 +1292,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
         /** TTD Section */
         $pdf->Ln(5);
 
-        $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
-        $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
+        $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt_ba'] ? 'Plt. ' : '';
+        $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt_ba'] ? 'Plt. ' : '';
         // $dokumenKopTitle1_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
             'person1Title' => $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial'],
