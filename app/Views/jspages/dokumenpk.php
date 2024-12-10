@@ -3214,8 +3214,8 @@
             var jumlahDesimal_outcome = (totalJumlahOutcome % 1 === 0) ? 0 : totalJumlahOutcome.toFixed(OutcomelengthFix).toString().split('.')[1].length;
 
             //tambahan fitur berita acara
-            var jumlahDesimal_capaian_output = (totalJumlahCapaianOutput % 1 === 0) ? 0 : totalJumlahCapaianOutput.toFixed(TargetlengthFix).toString().split('.')[1].length;
-            var jumlahDesimal_capaian_outcome = (totalJumlahCapaianOutcome % 1 === 0) ? 0 : totalJumlahCapaianOutcome.toFixed(OutcomelengthFix).toString().split('.')[1].length;
+            var jumlahDesimal_capaian_output = ((totalJumlahCapaianOutput % 1 === 0) ? 0 : totalJumlahCapaianOutput.toFixed(TargetlengthFix).toString().split('.')[1] || '').length;
+            var jumlahDesimal_capaian_outcome = ((totalJumlahCapaianOutcome % 1 === 0) ? 0 : totalJumlahCapaianOutcome.toFixed(OutcomelengthFix).toString().split('.')[1] || '').length;
 
 
 
