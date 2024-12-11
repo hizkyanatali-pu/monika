@@ -183,10 +183,10 @@
 
                             <td class="d-flex justify-content-center">
                                 <div class="btn-load mt-3">
-                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type="lihat" title="Lihat">
+                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type="lihat" title="Lihat" data-status=<?= $data->status ?>>
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <?php if ($data->status == 'hold') { ?>
+                                    <!-- <?php if ($data->status == 'hold') { ?>
                                         <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type="<?= $user_type ?>" data-status=<?= $data->status ?> title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -196,7 +196,7 @@
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     <?php } ?>
-                                </div>
+                                </div> -->
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -283,6 +283,8 @@
                         </a>
                     <?php endforeach ?>
                 </div>
+                <div class="container-revision-alert"></div>
+
                 <div class="p-4 d-none" id="make-dokumen">
                 </div>
 
@@ -512,7 +514,7 @@
 <?php echo script_tag('plugins/inputmask/jquery.inputmask.js'); ?>
 <?php echo script_tag('plugins/inputmask/inputmask.binding.js'); ?>
 <script>
-    $(document).on('click', '.__edit-dokumen', function() {
+    $(document).on('click', '.__lihat-dokumen', function() {
         let _dokumenID = $(this).data('id')
         let status = $(this).data('status')
         if (status == "hold") {

@@ -465,7 +465,8 @@ class Renstra extends \App\Controllers\BaseController
                 ->where('id', $iddoc)
                 ->where("status != ", 'revision')
                 ->where("deleted_at is null")
-                ->where("tahun", $sessionYear)->orderBy('id', 'desc')->get()->getRow();
+                // ->where("tahun", $sessionYear)
+                ->orderBy('id', 'desc')->get()->getRow();
 
             // kode satker 498077 = PJSA BATANGHARI 2024 ganti kode ke 633074
             // kode satker 498366 = Bendungan Cimanuk 2024 ganti kode ke 690690
