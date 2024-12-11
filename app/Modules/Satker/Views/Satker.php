@@ -183,7 +183,7 @@
 
                             <td class="d-flex justify-content-center">
                                 <div class="btn-load mt-3">
-                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type="lihat" title="Lihat" data-status=<?= $data->status ?>>
+                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" data-type="lihat" title="Lihat" data-status=<?= $data->status ?> data-tahun="<?php echo $data->tahun ?>">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                     <!-- <?php if ($data->status == 'hold') { ?>
