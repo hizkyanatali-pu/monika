@@ -2280,6 +2280,29 @@
         let indikator = $(this).data('indikator');
         let _tahun = $(this).data('tahun');
 
+
+        // kode satker 498077 = PJSA BATANGHARI 2024 ganti kode ke 633074
+        // kode satker 498366 = Bendungan Cimanuk 2024 ganti kode ke 690690
+        if (satkerId == "633074" &&
+            _tahun < 2024) {
+
+            satkerId = "498077"
+        }
+
+
+        if (satkerId == "690680" &&
+            _tahun < 2024) {
+            satkerId = "498366"
+        }
+
+
+
+
+
+
+
+
+
         let docId = $(this).data('dokid');
         let indikatorID = $(this).attr('data-rowid');
         // let skindikatorID = $(this).attr('data-indikatorid');

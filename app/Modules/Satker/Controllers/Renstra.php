@@ -469,7 +469,7 @@ class Renstra extends \App\Controllers\BaseController
                 ->orderBy('id', 'desc')->get()->getRow();
 
             // kode satker 498077 = PJSA BATANGHARI 2024 ganti kode ke 633074
-            // kode satker 498366 = Bendungan Cimanuk 2024 ganti kode ke 690690
+            // kode satker 498366 = Bendungan Cimanuk 2024 ganti kode ke 690680
             if ($idbalai) {
                 if ($idbalai->satkerid == "498077" and $sessionYear > 2023) {
                     $idsatker = "633074";
