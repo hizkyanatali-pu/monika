@@ -101,6 +101,7 @@
 
     $(document).on('click', '.__buat-dokumen-pilih-template', function() {
         let dataID = $(this).data('id')
+        paramsBtnPaket = "buat-dokumen";
 
         $.ajax({
             url: "<?php echo site_url('renstra/get-template/') ?>" + dataID,
@@ -2340,6 +2341,7 @@
                             trClass = '';
                             output_from_satrker = ''
                             var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
+
                             if (paramsBtnPaket == "lihat" || paramsBtnPaket == 'uptBalai-add') {
                                 checkboxHtml += 'disabled';
                                 $(".checkbox-click").attr("disabled", true)
@@ -3029,9 +3031,6 @@
                                     if (!isNaN(nilaiOTKSK503706)) {
                                         total2 += nilaiOTKSK503706
                                     }
-
-                                    console.log(total2);
-
 
                                     var jumlahDesimal_target = (total2 % 1 === 0) ? 0 : total2.toFixed(TargetlengthFix).toString().split('.')[1].length;
                                     totalJumlahTargetDenganKomaIndikator = total2.toLocaleString('id-ID', {
