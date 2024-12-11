@@ -555,10 +555,16 @@
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
                 $('#modalForm').find('input').attr('disabled', 'disabled')
                 $('#modalForm').find('select').attr('disabled', 'disabled')
-                $('#modalForm').find('.modal-footer').addClass('d-none')
+                // $('#modalForm').find('.modal-footer').addClass('d-none')
 
                 $('#modalForm').find('.__remove-item-kegiatan').addClass('d-none')
                 $('#modalForm').find('#__add-item-kegiatan').addClass('d-none')
+                $('.__save-dokumen').addClass('d-none')
+
+
+                if ($(this).data('type') == "Admin" || $(this).data('type') == "satker" || $(this).data('type') == "balai") {
+                    $('.__save-update-dokumen').addClass('d-none')
+                }
             }
         })
     })
