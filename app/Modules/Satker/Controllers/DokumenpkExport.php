@@ -654,11 +654,38 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     case 'target':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
                         $rSeparator = explode('.', $data_targetValue['target_value']);
-                        $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                        // $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
 
-                            && $data_targetValue['template_row_id'] != '171009'
+                        //     && $data_targetValue['template_row_id'] != '171009'
 
-                            ? number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['target_value'])) . " " . $satuan_target;
+                        //     ? number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['target_value'])) . " " . $satuan_target;
+
+
+                        if ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009') {
+
+                            $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') . " " . $satuan_target;
+                        } else {
+
+                            $nilaiIKM = $data_targetValue['target_value'];
+
+
+                            if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                                $GradeIKM = 'A';
+                            } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                                $GradeIKM = 'B';
+                            } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                                $GradeIKM = 'C';
+                            } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                                $GradeIKM = 'D';
+                            } else {
+                                $GradeIKM = 'Nilai IKM tidak valid'; // Jika nilai di luar rentang yang diharapkan
+                            }
+
+                            $targetValue = number_format($nilaiIKM, strlen($rSeparator[1]), ',', '.') . " " . $satuan_target . " (" . strtoupper($GradeIKM) . ")";
+                        }
+
+
+
                         // $targetValue = str_replace('.',',',$data_targetValue['target_value']) .  ' ' .  $satuan_target;
                         // $targetValue = (number_format($data_targetValue['target_value'],)) .  ' ' .  $satuan_target;
 
@@ -668,9 +695,35 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         // $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 3) . ' ' . $data['outcome_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 10, ',', '.'), '0'), ',') . ' ' . $satuan_outcome;
                         $rSeparator = explode('.', $data_targetValue['outcome_value']);
-                        $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+
+                        // $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                        //     && $data_targetValue['template_row_id'] != '171009'
+                        //     ? number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['outcome_value'])) .  ' ' .  $satuan_outcome;
+
+                        if (
+                            $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
                             && $data_targetValue['template_row_id'] != '171009'
-                            ? number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['outcome_value'])) .  ' ' .  $satuan_outcome;
+                        ) {
+                            $targetValue = number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') . " " . $satuan_target;
+                        } else {
+
+                            $nilaiIKM = $data_targetValue['outcome_value'];
+
+
+                            if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                                $GradeIKM = 'A';
+                            } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                                $GradeIKM = 'B';
+                            } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                                $GradeIKM = 'C';
+                            } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                                $GradeIKM = 'D';
+                            } else {
+                                $GradeIKM = 'Nilai IKM tidak valid'; // Jika nilai di luar rentang yang diharapkan
+                            }
+
+                            $targetValue =  number_format($nilaiIKM, strlen($rSeparator[1]), ',', '.') . " " . $satuan_target . " (" . strtoupper($GradeIKM) . ") ";
+                        }
 
 
                         break;
@@ -1144,22 +1197,131 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 }
 
                 //target (output & outcome)
+
                 $rSeparatorTarget = explode('.', $data_targetValue['target_value']);
-                $targetValueNew = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['target_value'], strlen($rSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['target_value']));
+                // $targetValueNew = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['target_value'], strlen($rSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['target_value']));
+
+                //kondisi IKM
+                if ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009') {
+                    $targetValueNew = number_format($data_targetValue['target_value'], strlen($rSeparatorTarget[1]), ',', '.');
+                } else {
+                    $nilaiIKM = $data_targetValue['target_value'];
+
+
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                        $GradeIKM = 'A';
+                    } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                        $GradeIKM = 'B';
+                    } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                        $GradeIKM = 'C';
+                    } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                        $GradeIKM = 'D';
+                    } else {
+                        $GradeIKM = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                    }
+
+                    $targetValueNew = number_format($nilaiIKM, strlen($rSeparator[1]), ',', '.') . " (" . strtoupper($GradeIKM) . ")";
+                }
+
+
+
 
                 $rSeparatorOutcome = explode('.', $data_targetValue['outcome_value']);
-                $outcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                // $outcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                //     && $data_targetValue['template_row_id'] != '171009'
+                //     ? number_format($data_targetValue['outcome_value'], strlen($rSeparatorOutcome[1]), ',', '.') : strtoupper($data_targetValue['outcome_value']));
+
+                //kondisi IKM
+                if (
+                    $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
                     && $data_targetValue['template_row_id'] != '171009'
-                    ? number_format($data_targetValue['outcome_value'], strlen($rSeparatorOutcome[1]), ',', '.') : strtoupper($data_targetValue['outcome_value']));
+                ) {
+                    $outcomeValue = number_format($data_targetValue['outcome_value'], strlen($rSeparatorOutcome[1]), ',', '.');
+                } else {
+                    $nilaiIKM = $data_targetValue['outcome_value'];
+
+
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                        $GradeIKM = 'A';
+                    } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                        $GradeIKM = 'B';
+                    } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                        $GradeIKM = 'C';
+                    } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                        $GradeIKM = 'D';
+                    } else {
+                        $GradeIKM = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                    }
+
+                    $outcomeValue = number_format($nilaiIKM, strlen($rSeparatorOutcome[1]), ',', '.') . " (" . strtoupper($GradeIKM) . ")";
+                }
+
+
+
 
                 //capaian (output & outcome)
                 $CapaianrSeparatorTarget = explode('.', $data_targetValue['capaian_output_value']);
-                $CapaiantargetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['capaian_output_value'], strlen($CapaianrSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['capaian_output_value']));
+                // $CapaiantargetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['capaian_output_value'], strlen($CapaianrSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['capaian_output_value']));
+
+                //kondisi IKM
+                if (
+                    $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                    && $data_targetValue['template_row_id'] != '171009'
+                ) {
+                    $CapaiantargetValue = number_format($data_targetValue['capaian_output_value'], strlen($CapaianrSeparatorTarget[1]), ',', '.');
+                } else {
+                    $nilaiIKM = $data_targetValue['capaian_output_value'];
+
+
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                        $GradeIKM = 'A';
+                    } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                        $GradeIKM = 'B';
+                    } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                        $GradeIKM = 'C';
+                    } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                        $GradeIKM = 'D';
+                    } else {
+                        $GradeIKM = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                    }
+
+                    $CapaiantargetValue = number_format($nilaiIKM, strlen($CapaianrSeparatorTarget[1]), ',', '.') . " (" . strtoupper($GradeIKM) . ")";
+                }
+
+
+
+
+
 
                 $CapaianrSeparatorOutcome = explode('.', $data_targetValue['capaian_outcome_value']);
-                $CapaianoutcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                // $CapaianoutcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                //     && $data_targetValue['template_row_id'] != '171009'
+                //     ? number_format($data_targetValue['capaian_outcome_value'], strlen($CapaianrSeparatorOutcome[1]), ',', '.') : strtoupper($data_targetValue['capaian_outcome_value']));
+
+                //kondisi IKM
+                if (
+                    $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
                     && $data_targetValue['template_row_id'] != '171009'
-                    ? number_format($data_targetValue['capaian_outcome_value'], strlen($CapaianrSeparatorOutcome[1]), ',', '.') : strtoupper($data_targetValue['capaian_outcome_value']));
+                ) {
+                    $CapaianoutcomeValue = number_format($data_targetValue['capaian_outcome_value'], strlen($CapaianrSeparatorOutcome[1]), ',', '.');
+                } else {
+                    $nilaiIKM = $data_targetValue['capaian_outcome_value'];
+
+
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                        $GradeIKM = 'A';
+                    } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                        $GradeIKM = 'B';
+                    } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                        $GradeIKM = 'C';
+                    } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                        $GradeIKM = 'D';
+                    } else {
+                        $GradeIKM = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                    }
+
+                    $CapaianoutcomeValue = number_format($nilaiIKM, strlen($CapaianrSeparatorOutcome[1]), ',', '.') . " (" . strtoupper($GradeIKM) . ")";
+                }
 
 
                 if ($data_targetValue['target_value'] == 0) {
@@ -1167,6 +1329,19 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 } else {
 
                     $kinerja = ($data_targetValue['capaian_output_value'] / $data_targetValue['target_value']) * 100;
+
+
+                    if ($kinerja >= 88.31 && $kinerja <= 100.00) {
+                        $gradeKinerja = 'A';
+                    } elseif ($kinerja >= 76.61 && $kinerja <= 88.30) {
+                        $gradeKinerja = 'B';
+                    } elseif ($kinerja >= 65.00 && $kinerja <= 76.60) {
+                        $gradeKinerja = 'C';
+                    } elseif ($kinerja >= 25.00 && $kinerja <= 64.99) {
+                        $gradeKinerja = 'D';
+                    } else {
+                        $gradeKinerja = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                    }
                 }
 
 
@@ -1185,7 +1360,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     $satuan_target,
                     $CapaianoutcomeValue,
                     $satuan_outcome,
-                    number_format($kinerja, 2, ',', '.')
+                    (
+                        $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                        && $data_targetValue['template_row_id'] != '171009' ? number_format($kinerja, 2, ',', '.') : number_format($kinerja, 2, ',', '.') . " (" . $gradeKinerja . ")"
+                    )
                 ), $celTableDataFill);
 
                 // if ($data_targetValue['is_checked'] == '1')  $pdf->Cell($tableDataWidth[2], 6, $targetValue, 1, 0, 'C', $celTableDataFill);

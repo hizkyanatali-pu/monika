@@ -469,7 +469,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $_beritaAcara = $this->request->getPost('_beritaAcara');
 
-        if ($_beritaAcara == "0") {
+        if ($_beritaAcara == "false") {
             switch ($this->request->getPost('dokumenType')) {
                 case 'satker':
                     $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
