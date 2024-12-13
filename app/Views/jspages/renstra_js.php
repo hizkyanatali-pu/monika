@@ -652,6 +652,7 @@
                     if (res.dokumen.revision_same_year_number != 0) {
                         $('input[name=revision_same_year]').val(1)
                     }
+
                     satkerIdDefault = 0;
                     res.rows.forEach((data, key) => {
 
@@ -679,6 +680,7 @@
                     let duplicateIds = res.paket.map(e => e['template_ogiat_id']).map((e, i, final) => final.indexOf(e) !== i && i)
                         .filter(obj => res.paket[obj])
                         .map(e => res.paket[e]["template_ogiat_id"])
+
                     if (duplicateIds.length > 0) {
                         duplicateIds.forEach(id => {
                             let duplicate = []
@@ -699,31 +701,37 @@
                                     })
                                 }
                             })
-                            sessionStorage.setItem('Paket_' + id, JSON.stringify(duplicate));
-                        })
-                    } else {
-                        unique.forEach(id => {
-                            let duplicate = []
-                            res.paket.forEach(item => {
 
-                                if (item.template_ogiat_id === id) {
-                                    duplicate.push({
-                                        oGiatId: item.template_ogiat_id,
-                                        paketId: item.idpaket,
-                                        target_nilai: item.output_val,
-                                        target_satuan: item.output_sat,
-                                        outcome1_nilai: item.outcome1_val,
-                                        outcome1_satuan: item.outcome1_sat.replace(/\//g, ''),
-                                        outcome2_nilai: item.outcome2_val ?? "",
-                                        outcome2_satuan: item.outcome2_sat.replace(/\//g, '') ?? "",
-                                        outcome3_nilai: item.outcome3_val ?? "",
-                                        outcome3_satuan: item.outcome3_sat.replace(/\//g, '') ?? "",
-                                    })
-                                }
-                            })
                             sessionStorage.setItem('Paket_' + id, JSON.stringify(duplicate));
                         })
+
+
                     }
+
+                    // else { // yusfi komen untuk edit
+                    unique.forEach(id => {
+                        let duplicate = []
+                        res.paket.forEach(item => {
+
+                            if (item.template_ogiat_id === id) {
+                                duplicate.push({
+                                    oGiatId: item.template_ogiat_id,
+                                    paketId: item.idpaket,
+                                    target_nilai: item.output_val,
+                                    target_satuan: item.output_sat,
+                                    outcome1_nilai: item.outcome1_val,
+                                    outcome1_satuan: item.outcome1_sat.replace(/\//g, ''),
+                                    outcome2_nilai: item.outcome2_val ?? "",
+                                    outcome2_satuan: item.outcome2_sat.replace(/\//g, '') ?? "",
+                                    outcome3_nilai: item.outcome3_val ?? "",
+                                    outcome3_satuan: item.outcome3_sat.replace(/\//g, '') ?? "",
+                                })
+                            }
+                        })
+                        sessionStorage.setItem('Paket_' + id, JSON.stringify(duplicate));
+                    })
+
+                    // }
                     res.ogiat.forEach((data, key) => {
                         let cleanedOutput = data.output_sat;
                         let cleanedOutcome = data.outcome1_sat;
