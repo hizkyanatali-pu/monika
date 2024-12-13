@@ -678,7 +678,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                             } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
                                 $GradeIKM = 'D';
                             } else {
-                                $GradeIKM = 'Nilai IKM tidak valid'; // Jika nilai di luar rentang yang diharapkan
+                                $GradeIKM = 'N/A'; // Jika nilai di luar rentang yang diharapkan
                             }
 
                             $targetValue = number_format($nilaiIKM, strlen($rSeparator[1]), ',', '.') . " " . $satuan_target . " (" . strtoupper($GradeIKM) . ")";
