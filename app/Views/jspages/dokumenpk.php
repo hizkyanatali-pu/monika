@@ -432,9 +432,9 @@
     element_btnSaveEditDokumen.on('click', function() {
 
         let dataID = $(this).data('id')
-        let dataBeritaAcara = $(this).data('beritaacara') ? $(this).data('beritaacara') : '';
+        let dataBeritaAcara = $(this).attr('data-beritaacara');
 
-        if (dataBeritaAcara) {
+        if (dataBeritaAcara == "true") {
 
 
             if (saveDokumenValidation()) {
@@ -498,6 +498,7 @@
                             dataID: dataID,
                             message: $('textarea[name=pesan-revisi-dokumen]').val(),
                             newStatus: 'hold',
+                            _beritaAcara: dataBeritaAcara
                         },
                         success: (res) => {
                             // CheckConnection().then(result => {
@@ -513,6 +514,8 @@
 
                                 formData['id'] = $(this).data('id')
                                 formData['csrf_test_name'] = res.token
+
+
 
 
                                 $.ajax({
@@ -663,6 +666,8 @@
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
                 $('.__save-update-dokumen').removeClass('d-none')
+                $('.__save-update-dokumen').attr('data-beritaacara', false);
+
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
             },
@@ -771,41 +776,19 @@
                             elementInput_capaian_outcome = $('.__inputTemplateRow-capaian-outcome[data-row-id=' + data.template_row_id + ']')
                         // elementInput_target.val(data.target_value)
                         // elementInput_outcome.val(data.outcome_value)
-                        elementInput_target.val(
-                            (data.template_row_id == "151010") ||
-                            (data.template_row_id == "141009") ||
-                            (data.template_row_id == "171009")
-
-                            ?
-                            data.target_value :
-                            formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                        elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
 
 
-                        elementInput_capaian_target.val(
-                            (data.template_row_id == "151010") ||
-                            (data.template_row_id == "141009") ||
-                            (data.template_row_id == "171009")
-
-                            ?
-                            data.capaian_output_value :
-                            formatRupiah(data.capaian_output_value.toString().replaceAll('.', ',')))
+                        elementInput_capaian_target.val(formatRupiah(data.capaian_output_value.toString().replaceAll('.', ',')))
 
 
                         data.target_sat ? elementInput_target_satuan.val(data.target_sat) : ''
 
 
-                        elementInput_outcome.val(
-                            (data.template_row_id == "151010") ||
-                            (data.template_row_id == "141009") ||
-                            (data.template_row_id == "171009") ? data.outcome_value :
-                            formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
+                        elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
 
-                        elementInput_capaian_outcome.val(
-                            (data.template_row_id == "151010") ||
-                            (data.template_row_id == "141009") ||
-                            (data.template_row_id == "171009") ? data.capaian_outcome_value :
-                            formatRupiah(data.capaian_outcome_value.toString().replaceAll('.', ',')))
+                        elementInput_capaian_outcome.val(formatRupiah(data.capaian_outcome_value.toString().replaceAll('.', ',')))
 
 
                         const idPaketArray = res.paket
@@ -2307,14 +2290,14 @@
                                     (data.template_id == '14' && data.id == "141009")
                                     ||
                                     (data.template_id == '17' && data.id == "171009")
-                                    ? "maxlength = 1":""}
+                                    ? "":""}
                                     onkeyup="${(data.template_id == '15' && data.id == "151010") 
                                     ||
                                     (data.template_id == '14' && data.id == "141009")
                                     ||
                                     (data.template_id == '17' && data.id == "171009")
                                     
-                                    ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}" data-pktype="satker"
+                                    ? "return this.value = formatRupiah(this.value, '')":"return this.value = formatRupiah(this.value, '')"}" data-pktype="satker"
                                     ${data.template_id === '5' || data.template_id === '6'|| data.template_id === '9'  || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'readonly' }>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan.split(';')[0]}</span>
@@ -2442,12 +2425,12 @@
                                        ||
                                        (data.template_id == '14' && data.id == "141009")
                                        ||
-                                       (data.template_id == '17' && data.id == "171009") ? "maxlength = 1":""}
+                                       (data.template_id == '17' && data.id == "171009") ? "":""}
                                         onkeyup="${ (data.template_id == '15' && data.id == "151010")
                                         ||
                                         (data.template_id == '14' && data.id == "141009")
                                         ||
-                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}"
+                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = formatRupiah(this.value, '')":"return this.value = formatRupiah(this.value, '')"}"
                                         ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
                                         >
                                     <div class="input-group-append">
@@ -2471,12 +2454,12 @@
                                        ||
                                        (data.template_id == '14' && data.id == "141009")
                                        ||
-                                       (data.template_id == '17' && data.id == "171009") ? "maxlength = 1":""}
+                                       (data.template_id == '17' && data.id == "171009") ? "":""}
                                         onkeyup="${ (data.template_id == '15' && data.id == "151010")
                                         ||
                                         (data.template_id == '14' && data.id == "141009")
                                         ||
-                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}"
+                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = formatRupiah(this.value, '')":"return this.value = formatRupiah(this.value, '')"}"
                                         ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
                                         >
                                     <div class="input-group-append">
@@ -2499,12 +2482,12 @@
                                        ||
                                        (data.template_id == '14' && data.id == "141009")
                                        ||
-                                       (data.template_id == '17' && data.id == "171009") ? "maxlength = 1":""}
+                                       (data.template_id == '17' && data.id == "171009") ? "":""}
                                         onkeyup="${ (data.template_id == '15' && data.id == "151010")
                                         ||
                                         (data.template_id == '14' && data.id == "141009")
                                         ||
-                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}"
+                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = formatRupiah(this.value, '')":"return this.value = formatRupiah(this.value, '')"}"
                                         ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
                                         >
                                     <div class="input-group-append">
