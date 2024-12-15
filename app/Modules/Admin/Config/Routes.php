@@ -361,15 +361,16 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('export-rekap-excel', '\Modules\Admin\Controllers\Renstra::eselon1_export_rekap_excel');
                 });
                 $routes->group('rekapitulasi', ['namespace' => 'App\Controllers'], function ($routes) {
-                    $routes->get('/', '\Modules\Admin\Controllers\Renstra::rekapitulasi');
-                    $routes->get('export-excel', '\Modules\Admin\Controllers\Renstra::rekapitulasi_export_excel');
-                    $routes->get('export-rekap-all', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_all');
-                    $routes->get('export-rekap-satker', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_satker');
-                    $routes->get('export-rekap-balai', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_balai');
-                    $routes->get('export-rekap-skpd', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_skpd');
-                    $routes->get('export-rekap-satpus', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_satpus');
-                    $routes->get('export-rekap-eselon2', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_eselon2');
-                    $routes->get('export-rekap-baltek', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_baltek');
+                    $routes->get('/', '\Modules\Admin\Controllers\Renstra::rekapRenstraView');
+
+                    // $routes->get('export-excel', '\Modules\Admin\Controllers\Renstra::rekapitulasi_export_excel');
+                    // $routes->get('export-rekap-all', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_all');
+                    // $routes->get('export-rekap-satker', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_satker');
+                    // $routes->get('export-rekap-balai', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_balai');
+                    // $routes->get('export-rekap-skpd', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_skpd');
+                    // $routes->get('export-rekap-satpus', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_satpus');
+                    // $routes->get('export-rekap-eselon2', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_eselon2');
+                    // $routes->get('export-rekap-baltek', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_baltek');
                 });
                 $routes->get('get-list-template-buat-dokumen/(:any)/(:any)', '\Modules\Admin\Controllers\Renstra::getListTemplateBuatDokumen/$1/$2');
 
@@ -508,16 +509,18 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
 
                 $routes->get('get-tgiat-for-formpk', '\Modules\Satker\Controllers\Renstra::getTgiatForFormPk');
                 $routes->get('rekap', '\Modules\Admin\Controllers\RekapPk::pdf');
-                // $routes->group('rekapitulasi', ['namespace' => 'App\Controllers'], function ($routes) {
-                //     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::rekapitulasi');
-                //     $routes->get('export-rekap-all', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_all');
-                //     $routes->get('export-rekap-satker', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_satker');
-                //     $routes->get('export-rekap-balai', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_balai');
-                //     $routes->get('export-rekap-skpd', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_skpd');
-                //     $routes->get('export-rekap-satpus', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_satpus');
-                //     $routes->get('export-rekap-eselon2', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_eselon2');
-                //     $routes->get('export-rekap-baltek', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_baltek');
-                // });
+                $routes->group('rekapitulasi', ['namespace' => 'App\Controllers'], function ($routes) {
+                    $routes->get('/', '\Modules\Admin\Controllers\Renstra::rekapRenstraView');
+                    // $routes->get('export-rekap-all', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_all');
+                    // $routes->get('export-rekap-satker', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_satker');
+                    // $routes->get('export-rekap-balai', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_balai');
+                    // $routes->get('export-rekap-skpd', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_skpd');
+                    // $routes->get('export-rekap-satpus', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_satpus');
+                    // $routes->get('export-rekap-eselon2', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_eselon2');
+                    // $routes->get('export-rekap-baltek', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_baltek');
+                });
+
+                $routes->get('rekap-renstra/(:any)', '\Modules\Admin\Controllers\Renstra::rekapRenstra/$1');
             });
 
 

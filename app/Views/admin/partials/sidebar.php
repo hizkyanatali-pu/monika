@@ -42,7 +42,7 @@ $request = \Config\Services::request();
             <!-- <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dashboard2' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('dashboard2'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Dashboard 2</span> <span class="kt-badge kt-badge--danger">N</span></a></li> -->
 
             <li class="kt-menu__item sidebar-menu-mobile <?= ($request->uri->getSegment(1) == 'dashboard_mobile' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('dashboard_mobile'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Dashboard Mobile</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
-            
+
             <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'laporan' ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true"><a href="<?= site_url('laporan'); ?>" class="kt-menu__link "><i class="kt-menu__link-icon fas fa-chart-bar"></i><span class="kt-menu__link-text">Laporan</span> <span class="kt-badge kt-badge--danger">N</span></a></li>
 
             <li class="kt-menu__item  kt-menu__item--submenu <?=
@@ -603,18 +603,9 @@ $request = \Config\Services::request();
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'balai'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                                        <a href="<?= site_url('dokumenpk/balai'); ?>" class="kt-menu__link ">
-                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                                <span></span>
-                                            </i>
-                                            <span class="kt-menu__link-text">
-                                                Balai
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'eselon2'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                                        <a href="<?= site_url('dokumenpk/eselon2'); ?>" class="kt-menu__link ">
+
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'renstra' && $request->uri->getSegment(2) == 'eselon2'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('renstra/eselon2'); ?>" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                                 <span></span>
                                             </i>
@@ -623,8 +614,8 @@ $request = \Config\Services::request();
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'eselon1'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                                        <a href="<?= site_url('dokumenpk/eselon1'); ?>" class="kt-menu__link ">
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'renstra' && $request->uri->getSegment(2) == 'eselon1'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('renstra/eselon1'); ?>" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                                 <span></span>
                                             </i>
@@ -633,23 +624,13 @@ $request = \Config\Services::request();
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'rekapitulasi'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                                        <a href="<?= site_url('dokumenpk/rekapitulasi'); ?>" class="kt-menu__link ">
+                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'renstra' && $request->uri->getSegment(2) == 'rekapitulasi'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
+                                        <a href="<?= site_url('renstra/rekapitulasi'); ?>" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
                                                 <span></span>
                                             </i>
                                             <span class="kt-menu__link-text">
                                                 Rekapitulasi
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-menu__item  <?= ($request->uri->getSegment(1) == 'dokumenpk' && $request->uri->getSegment(2) == 'arsip'  ? ' kt-menu__item--active' : '') ?>" aria-haspopup="true">
-                                        <a href="<?= site_url('dokumenpk/arsip'); ?>" class="kt-menu__link">
-                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                                <span></span>
-                                            </i>
-                                            <span class="kt-menu__link-text">
-                                                Arsip
                                             </span>
                                         </a>
                                     </li>
