@@ -3703,7 +3703,7 @@ class Renstra extends \App\Controllers\BaseController
     public function rekapRenstraView()
     {
 
-        return view('Modules\Admin\Views\Renstra\Rekap\rekapRenstraView.php', []);
+        return view('Modules\Admin\Views\Renstra\Rekap\RekapRenstraView.php', []);
     }
 
 
