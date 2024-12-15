@@ -510,7 +510,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('get-tgiat-for-formpk', '\Modules\Satker\Controllers\Renstra::getTgiatForFormPk');
                 $routes->get('rekap', '\Modules\Admin\Controllers\RekapPk::pdf');
                 $routes->group('rekapitulasi', ['namespace' => 'App\Controllers'], function ($routes) {
-                    $routes->get('/', '\Modules\Admin\Controllers\Renstra::rekapRenstraView');
+                    $routes->get('/', '\Modules\Admin\Controllers\Renstra::RekapRenstraView');
                     // $routes->get('export-rekap-all', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_all');
                     // $routes->get('export-rekap-satker', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_satker');
                     // $routes->get('export-rekap-balai', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_balai');
