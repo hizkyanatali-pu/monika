@@ -361,7 +361,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('export-rekap-excel', '\Modules\Admin\Controllers\Renstra::eselon1_export_rekap_excel');
                 });
                 $routes->group('rekapitulasi', ['namespace' => 'App\Controllers'], function ($routes) {
-                    $routes->get('/', '\Modules\Admin\Controllers\Renstra::rekapRenstraView');
+                    $routes->get('/', '\Modules\Admin\Controllers\Renstra::RekapRenstraView');
 
                     // $routes->get('export-excel', '\Modules\Admin\Controllers\Renstra::rekapitulasi_export_excel');
                     // $routes->get('export-rekap-all', '\Modules\Admin\Controllers\Renstra::export_rekap_excel_all');
