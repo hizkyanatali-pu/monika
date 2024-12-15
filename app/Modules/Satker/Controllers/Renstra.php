@@ -167,6 +167,8 @@ class Renstra extends \App\Controllers\BaseController
          */
         $setSession_userData['byBalai_user_type']    = 'upt-balai';
         $this->session->set('createDokumenByBalai', $setSession_userData);
+
+
         /* */
         $queryDataDokumen = $this->dokumenSatker->select('
             renstra_data.id,
@@ -194,45 +196,45 @@ class Renstra extends \App\Controllers\BaseController
             ->orderBy('renstra_data.id', 'DESC');
 
         // Get All Satker By Balai ID
-        $satker = $this->satker->select('satkerid')->where('balaiid', $this->user['balaiid'])->get()->getResult();
-        $arrSatker = [];
-        foreach ($satker as $item) {
-            $arrSatker[] = $item->satkerid;
-        }
-
-        $queryDataDokumen->where('renstra_data.balaiid', $this->user['balaiid'])->where("renstra_data.deleted_at is null");
-
-        $dataTemplate = $this->templateDokumen->select('renstra_template.*')
-            ->join('renstra_template_akses', 'renstra_template.id = renstra_template_akses.template_id', 'left')
-            ->where('renstra_template.status', '1')
-            ->whereIn('renstra_template_akses.rev_id', $arrSatker)
-            // ->where('dokumen_pk_template.type', $template_type)
-            ->where('renstra_template_akses.rev_table', 'm_satker')
-            ->where("deleted_at is null")
-            ->groupBy('renstra_template.id')
-            ->get()->getResult();
-        $isCanCreated = false;
-
-        // if ($_satkerId == 'all') {
-        //     $queryDataDokumen->where('renstra_data.balaiid', $this->user['balaiid'])->where("renstra_data.deleted_at is null");
-
-        //     $dataTemplate = [];
-        //     $isCanCreated = false;
-        // } else {
-        //     $queryDataDokumen->where('renstra_data.satkerid', $_satkerId);
-
-        //     $dataTemplate = $this->templateDokumen->select('renstra_template.*')
-        //         ->join('renstra_template_akses', 'renstra_template.id = renstra_template_akses.template_id', 'left')
-        //         ->where('renstra_template.status', '1')
-        //         ->where('renstra_template_akses.rev_id', $_satkerId)
-        //         // ->where('dokumen_pk_template.type', $template_type)
-        //         ->where('renstra_template_akses.rev_table', 'm_satker')
-        //         ->where("deleted_at is null")
-        //         ->groupBy('renstra_template.id')
-        //         ->get()->getResult();
-
-        //     $isCanCreated = true;
+        // $satker = $this->satker->select('satkerid')->where('balaiid', $this->user['balaiid'])->get()->getResult();
+        // $arrSatker = [];
+        // foreach ($satker as $item) {
+        //     $arrSatker[] = $item->satkerid;
         // }
+
+        // $queryDataDokumen->where('renstra_data.balaiid', $this->user['balaiid'])->where("renstra_data.deleted_at is null");
+
+        // $dataTemplate = $this->templateDokumen->select('renstra_template.*')
+        //     ->join('renstra_template_akses', 'renstra_template.id = renstra_template_akses.template_id', 'left')
+        //     ->where('renstra_template.status', '1')
+        //     ->whereIn('renstra_template_akses.rev_id', $arrSatker)
+        //     // ->where('dokumen_pk_template.type', $template_type)
+        //     ->where('renstra_template_akses.rev_table', 'm_satker')
+        //     ->where("deleted_at is null")
+        //     ->groupBy('renstra_template.id')
+        //     ->get()->getResult();
+        // $isCanCreated = false;
+
+        if ($_satkerId == 'all') {
+            $queryDataDokumen->where('renstra_data.balaiid', $this->user['balaiid'])->where("renstra_data.deleted_at is null");
+
+            $dataTemplate = [];
+            $isCanCreated = false;
+        } else {
+            $queryDataDokumen->where('renstra_data.satkerid', $_satkerId);
+
+            $dataTemplate = $this->templateDokumen->select('renstra_template.*')
+                ->join('renstra_template_akses', 'renstra_template.id = renstra_template_akses.template_id', 'left')
+                ->where('renstra_template.status', '1')
+                ->where('renstra_template_akses.rev_id', $_satkerId)
+                // ->where('dokumen_pk_template.type', $template_type)
+                ->where('renstra_template_akses.rev_table', 'm_satker')
+                ->where("deleted_at is null")
+                ->groupBy('renstra_template.id')
+                ->get()->getResult();
+
+            $isCanCreated = true;
+        }
 
         $dataDokumen = $queryDataDokumen->get()->getResult();
 

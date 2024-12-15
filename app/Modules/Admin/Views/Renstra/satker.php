@@ -945,15 +945,15 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     >
                         <i class="fas fa-print"></i>
                     </button>--!>
-                    <button 
+                   <!-- <button 
                         class="btn btn-sm btn-outline-success __edit-dokumen"
                         data-id="${data.id}"
                         data-type="Admin"
                         data-status="${_status}"
                         data-template-id="${data.template_id}" title="Edit"
-                    >
+                    > 
                         <i class="fas fa-edit"></i>
-                    </button>
+                    </button> -->
                     <!--<button 
                         class="btn btn-sm btn-outline-danger __arsipkan-dokumen"
                         data-id="${data.id}" title="Arsipkan"
