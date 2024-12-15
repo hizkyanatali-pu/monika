@@ -178,13 +178,13 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 <table class="table table-bordered" id="table-hold">
                     <thead>
                         <tr class="text-center">
-                            <th width="15px">
+                            <th width="5%">
                                 <input type="checkbox" name="checkall" data-status="hold" />
                             </th>
-                            <th width="25px">No</th>
-                            <th>Dokumen</th>
-                            <th width="120px">Tanggal Kirim</th>
-                            <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
+                            <th width="5%">No</th>
+                            <th width="60%">Dokumen</th>
+                            <th width="15%">Tanggal Kirim</th>
+                            <th width="<?php echo $isAdmin ? '15%' : '50px' ?>">Aksi</th>
                         </tr>
                     </thead>
 
@@ -226,15 +226,15 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 <table class="table table-bordered" id="table-setuju">
                     <thead>
                         <tr class="text-center">
-                            <th width="15px">
+                            <th width="5%">
                                 <input type="checkbox" name="checkall" data-status="setuju" />
                             </th>
-                            <th width="30px">No</th>
-                            <th>Dokumen</th>
-                            <th width="120px">Tanggal Kirim</th>
-                            <th width="120px">Tanggal disetujui</th>
-                            <th width="120px">Berita Acara</th>
-                            <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
+                            <th width="5%">No</th>
+                            <th width="40%">Dokumen</th>
+                            <th width="10%">Tanggal Kirim</th>
+                            <th width="20%">Dokumen PK</th>
+                            <th width="20%">Berita Acara</th>
+
                         </tr>
                     </thead>
 
@@ -275,14 +275,13 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 <table class="table table-bordered" id="table-tolak">
                     <thead>
                         <tr class="text-center">
-                            <th width="15px">
+                            <th width="5%">
                                 <input type="checkbox" name="checkall" data-status="tolak" />
                             </th>
-                            <th width="30px">No</th>
-                            <th>Dokumen</th>
-                            <th width="120px">Tanggal Kirim</th>
-                            <th width="120px">Tanggal Ditolak</th>
-                            <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
+                            <th width="5%">No</th>
+                            <th width="50%">Dokumen</th>
+                            <th width="20%">Tanggal Kirim</th>
+                            <th width="<?php echo $isAdmin ? '20%' : '50px' ?>">Dokumen PK</th>
                         </tr>
                     </thead>
 
@@ -480,13 +479,63 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
         element_tableInformasi = $('._table-informasi').find('tbody')
 
 
+
+    function lastTab() {
+
+        // Cek jika ada tab yang terakhir dibuka di localStorage
+        var lastTab = localStorage.getItem('lastTab');
+
+
+        if (lastTab) {
+            // Fokus ke tab terakhir yang dipilih
+            $('#' + lastTab).tab('show');
+
+            if (lastTab === "pills-one-tab") {
+
+                setTimeout(() => {
+                    element_tableHold = $('#table-hold').DataTable({
+                        scrollX: true
+                    })
+                    getData('hold');
+                }, 300)
+
+            }
+
+            if (lastTab === "pills-two-tab") {
+                setTimeout(() => {
+                    element_tableSetuju = $('#table-setuju').DataTable({
+                        scrollX: true
+                    })
+                    getData('setuju');
+                }, 300)
+
+            }
+
+
+            if (lastTab === "pills-three-tab") {
+                setTimeout(() => {
+                    element_tableTolak = $('#table-tolak').DataTable({
+                        scrollX: true
+                    })
+                    getData('tolak');
+                }, 300)
+
+            }
+
+
+
+        }
+
+        // Simpan tab yang dipilih ke localStorage ketika tab diubah
+        $('a[data-toggle="pill"]').on('shown.bs.tab', function(e) {
+            var activeTab = $(e.target).attr('id'); // Ambil ID tab yang dipilih
+            localStorage.setItem('lastTab', activeTab); // Simpan ke localStorage
+        });
+    }
+
+
     $(document).ready(function() {
-        setTimeout(() => {
-            element_tableHold = $('#table-hold').DataTable({
-                scrollX: true
-            })
-            getData('hold');
-        }, 300)
+        lastTab()
 
 
         $('.F_instansi').select2({
@@ -514,6 +563,17 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     scrollX: true
                 });
             }
+        }, 300)
+    })
+
+    $('#pills-one-tab').on('click', () => {
+        setTimeout(() => {
+            if (element_tableHold == '') {
+                element_tableHold = $('#table-hold').DataTable({
+                    scrollX: true
+                })
+            }
+            getData('hold');
         }, 300)
     })
 
@@ -647,7 +707,6 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
         dataBA = $(this).data("beritaacara");
 
         if (dataBA) {
-
             cetakDokumenBeritaAcara(
                 $(this).data('id'),
                 $(this).data('to-confirm'),
@@ -782,6 +841,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
                     },
                     success: (res) => {
+                        $(".__refresh-data-table").trigger('click')
                         return res
                     }
                 })
@@ -804,8 +864,6 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
         let dataID = $(this).data('id')
         let _beritaAcara = $(this).data('beritaacara')
 
-        console.log(_beritaAcara);
-
 
         $.ajax({
             url: "<?php echo site_url('dokumenpk/change-status') ?>",
@@ -814,7 +872,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 csrf_test_name: $('input[name=csrf_test_name]').val(),
                 dokumenType: 'satker',
                 dataID: dataID,
-                newStatus: (_beritaAcara == "0") ? 'setuju' : "1",
+                newStatus: _beritaAcara == "0" ? 'setuju' : "1",
 
                 _beritaAcara: _beritaAcara
             },
@@ -958,18 +1016,31 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 `
             }
 
-            dataBeritaAcara = data.status_ba == 1 ? `<button 
+            dataBeritaAcara = data.status == 'setuju' && data.status_ba != null ? `<button 
                         class="btn btn-sm btn-outline-primary __preview-dokumen mr-4"
                         data-id="${data.id}" data-createdat ="${data.created_at}"
-                        data-to-confirm="${buttonData_toConfirm}" title="Cetak Berita acara"
+                        data-to-confirm="${data.status_ba ==='1'? false:true }" title="Cetak Berita acara"
                         data-beritaacara="true"
                     >
                         <i class="fas fa-print"></i>
                     </button>` : "Belum Mengisi Berita Acara";
 
-            if (_status != 'hold') render_columnChangeStatusAt = `<td>${data.change_status_at}</td>
-            <td>${dataBeritaAcara}</td>
-            `
+            let render_columnBeritaAcara = (data.status === 'setuju' ?
+                `<td class="text-center">
+                <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                <span class="badge badge-pill px-3 font-weight-bold text-white ${data.status_ba === '0' ? 'bg-warning' : data.status_ba === '1' ? 'bg-success':data.status_ba === '2' ?'bg-danger':'bg-secondary'}">
+                 ${data.status_ba === '0' ? 'Menunggu Verifikasi' : data.status_ba === '1' ? 'BA Telah Disetujui':data.status_ba === '2' ?'BA Ditolak':'Belum Input BA'}
+                 </span>
+                </div>
+                    Status Update : <b>${data.change_status_at}</b>
+                    <hr>
+
+                    ${dataBeritaAcara}
+                
+                
+                </td>` :
+                "");
+
 
             var menuOptions = ''
 
@@ -983,19 +1054,19 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     >
                         <i class="fas fa-print"></i>
                     </button>
-                    <button 
+                    <!-- <button 
                         class="btn btn-sm btn-outline-success __edit-dokumen"
                         data-id="${data.id}"
                         data-template-id="${data.template_id}" title="Edit"
-                    >
+                    > 
                         <i class="fas fa-edit"></i>
-                    </button>
-                    <button 
+                    </button>-->
+                   <!-- <button 
                         class="btn btn-sm btn-outline-danger __arsipkan-dokumen"
                         data-id="${data.id}" title="Arsipkan"
                     >
                         <i class="fas fa-trash"></i>
-                    </button>
+                    </button> -->
                 `
             }
 
@@ -1016,9 +1087,16 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         </div>
                     </td>
                     <td>${data.created_at}</td>
-                    
-                    ${render_columnChangeStatusAt}
-                    <td>
+
+                    <td class="text-center">
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                <span class="badge badge-pill px-3 font-weight-bold text-white ${data.status === 'hold' ? 'bg-warning' : data.status === 'setuju' ? 'bg-success':data.status === 'tolak' ?'bg-danger':'bg-secondary'}">
+                 ${data.status === 'hold' ? 'Menunggu Verifikasi' : data.status === 'setuju' ? 'PK Telah Disetujui':data.status === 'tolak' ?'PK Ditolak':'Belum Input PK'}
+                 </span>
+                </div>
+                    status update : <b>${data.change_status_at}</b>
+
+                    <hr>
                         <button 
                             class="btn btn-sm btn-outline-secondary __lihat-dokumen"
                             data-id="${data.id}"
@@ -1029,6 +1107,9 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         </button>
                         ${menuOptions}
                     </td>
+                    
+                    ${render_columnBeritaAcara}
+                    
                 </tr>
             `);
 
@@ -1148,14 +1229,14 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 setTimeout(() => {
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
 
-                    if (res.dokumen.revision_message != null) {
+                    if (res.dokumen.notes_ba != null) {
                         element_iframePreviewDokumen.css({
                             'height': '60vh'
                         })
                         $('.container-revision-alert-cetak').html(`
                             <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                                 <h5 class="alert-heading">Pesan !</h5>
-                                <p>${res.dokumen.revision_message}</p>
+                                <p>${res.dokumen.notes_ba}</p>
                             </div>
                         `)
                     } else {
