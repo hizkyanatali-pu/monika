@@ -524,6 +524,9 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
 
 
+        } else {
+            $('#pills-one-tab').trigger('click')
+
         }
 
         // Simpan tab yang dipilih ke localStorage ketika tab diubah

@@ -452,7 +452,7 @@ function paket_name($id, $tahun)
 {
     $db      = \Config\Database::connect();
     $builder = $db->query("SELECT nmpaket FROM monika_data_$tahun WHERE kdpaket='$id'")->getRow();
-    return $builder->nmpaket;
+    return $builder->nmpaket ?? "N/A";
 }
 
 function indikatorPK_name($id, $tahun)
@@ -474,4 +474,19 @@ function subtematik_name($id)
     $db      = \Config\Database::connect();
     $builder = $db->query("SELECT subtematik FROM m_subtematik WHERE subtematikid='$id'")->getRow();
     return $builder->subtematik;
+}
+
+function indikatorRenstra_name($id)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->query("SELECT title FROM renstra_template_row WHERE id='$id'")->getRow();
+    return $builder->title ?? "N/A";
+}
+
+
+function indikatorOgiat_name($id)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->query("SELECT title FROM renstra_template_ogiat WHERE id='$id'")->getRow();
+    return $builder->title ?? "N/A";
 }
