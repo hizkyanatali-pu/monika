@@ -469,7 +469,8 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $_beritaAcara = $this->request->getPost('_beritaAcara');
 
-        if ($_beritaAcara == "false") {
+
+        if ($_beritaAcara === "0") {
             switch ($this->request->getPost('dokumenType')) {
                 case 'satker':
                     $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
@@ -503,7 +504,8 @@ class Dokumenpk extends \App\Controllers\BaseController
 
                     $updatedData = [
                         'status'           => $newStatus,
-                        'change_status_at' => date("Y-m-d H:i:s")
+                        'change_status_at' => date("Y-m-d H:i:s"),
+                        'status_ba'        => '0'
                     ];
                     $updatedData['revision_message'] = $this->request->getPost('message');
 
@@ -549,7 +551,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                         'status_ba'           => $newStatus,
                         'change_status_ba_at' => date("Y-m-d H:i:s")
                     ];
-                    $updatedData['revision_message'] = $this->request->getPost('message');
+                    $updatedData['notes_ba'] = $this->request->getPost('message');
 
 
                     // var_dump($updat edData);die;

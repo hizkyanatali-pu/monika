@@ -1644,24 +1644,24 @@
                 setTimeout(() => {
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumenBA.find('iframe')
 
-                    // if (res.dokumen.revision_message != null) {
-                    //     element_iframePreviewDokumen.css({
-                    //         // 'height': '60vh'
-                    //         'height': '100vh'
-                    //     })
-                    //     $('.container-revision-alert-cetak').html(`
-                    //         <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                    //             <h5 class="alert-heading">Pesan !</h5>
-                    //             <p>${res.dokumen.revision_message}</p>
-                    //         </div>
-                    //     `)
-                    // } else {
-                    //     element_iframePreviewDokumen.css({
-                    //         // 'height': '80vh'
-                    //         'height': '100vh'
-                    //     })
-                    //     $('.container-revision-alert-cetak').html('')
-                    // }
+                    if (res.dokumen.notes_ba != null) {
+                        element_iframePreviewDokumen.css({
+                            // 'height': '60vh'
+                            'height': '100vh'
+                        })
+                        $('.container-revision-alert-cetak').html(`
+                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                                <h5 class="alert-heading">Pesan !</h5>
+                                <p>${res.dokumen.notes_ba}</p>
+                            </div>
+                        `)
+                    } else {
+                        element_iframePreviewDokumen.css({
+                            // 'height': '80vh'
+                            'height': '100vh'
+                        })
+                        $('.container-revision-alert-cetak').html('')
+                    }
 
 
                     element_iframePreviewDokumen.attr('src', '/api/showpdf-berita-acara/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
