@@ -278,7 +278,8 @@ class Renstra extends \App\Controllers\BaseController
             renstra_template.title as dokumenTitle,
             ku_user.nama as userCreatedName,
             renstra_data.satkerid,
-            renstra_data.balaiid
+            renstra_data.balaiid,
+            renstra_data.tahun
             
         ')
             ->join('renstra_template', 'renstra_data.template_id = renstra_template.id', 'left')
@@ -286,8 +287,8 @@ class Renstra extends \App\Controllers\BaseController
             ->where('renstra_template.status', '1')
             ->where('renstra_data.status', $_status)
             ->where('renstra_data.dokumen_type', $_dokumenType)
-            ->where("renstra_data.deleted_at is null")
-            ->where("renstra_data.tahun", $this->user['tahun']);
+            ->where("renstra_data.deleted_at is null");
+        // ->where("renstra_data.tahun", $this->user['tahun']);
         if ($instansi) {
             $dataDokumen->where("renstra_data.satkerid", $instansi);
         }
@@ -310,6 +311,7 @@ class Renstra extends \App\Controllers\BaseController
                 'dokumenTitle'               => $arr->dokumenTitle,
                 'userCreatedName'            => $arr->userCreatedName,
                 'satkerid'                   => instansi_name($arr->satkerid ?? $arr->balaiid)->nama_instansi,
+                'tahun' => $arr->tahun
 
             ];
         }, $dataDokumen);
