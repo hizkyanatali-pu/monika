@@ -704,7 +704,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                             $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
                             && $data_targetValue['template_row_id'] != '171009'
                         ) {
-                            $targetValue = number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') . " " . $satuan_target;
+                            $targetValue = number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') . " " . $satuan_outcome;
                         } else {
 
                             $nilaiIKM = $data_targetValue['outcome_value'];
@@ -722,7 +722,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                                 $GradeIKM = 'Nilai IKM tidak valid'; // Jika nilai di luar rentang yang diharapkan
                             }
 
-                            $targetValue =  number_format($nilaiIKM, strlen($rSeparator[1]), ',', '.') . " " . $satuan_target . " (" . strtoupper($GradeIKM) . ") ";
+                            $targetValue =  number_format($nilaiIKM, strlen($rSeparator[1]), ',', '.') . " " . $satuan_outcome . " (" . strtoupper($GradeIKM) . ") ";
                         }
 
 
