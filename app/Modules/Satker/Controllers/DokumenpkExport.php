@@ -1001,26 +1001,39 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell(15, 8, "KINERJA", 1, 0, 'C');
         $pdf->Ln();
 
-        $pdf->SetFont($this->fontFamily, 'B', 9);
-        $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
-        $pdf->Cell(30, 8, "OUTPUT", 1, 0, 'C');
-        $pdf->Cell(30, 8, "OUTCOME", 1, 0, 'C');
-        $pdf->Cell(30, 8, "OUTPUT", 1, 0, 'C');
-        $pdf->Cell(30, 8, "OUTCOME", 1, 0, 'C');
-        $pdf->Cell(15, 8, "%", 1, 0, 'C');
-        $pdf->Ln();
+        $widthTitleVolumeSatuan = 30;
+
+        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+
+            $pdf->SetFont($this->fontFamily, 'B', 9);
+            $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
+            $pdf->Cell(30, 8, "OUTPUT", 1, 0, 'C');
+            $pdf->Cell(30, 8, "OUTCOME", 1, 0, 'C');
+            $pdf->Cell(30, 8, "OUTPUT", 1, 0, 'C');
+            $pdf->Cell(30, 8, "OUTCOME", 1, 0, 'C');
+            $pdf->Cell(15, 8, "", 1, 0, 'C');
+            $pdf->Ln();
+
+            $widthTitleVolumeSatuan = 15;
+        }
+
+
 
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
-        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
-        $pdf->Cell(15, 8, "", 1, 0, 'C');
+        $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
+        $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
+        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+            $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
+            $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
+        }
+        $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
+        $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
+        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+            $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
+            $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
+        }
+        $pdf->Cell(15, 8, "%", 1, 0, 'C');
         $pdf->Ln();
 
 
@@ -1349,22 +1362,42 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $pdf->SetAligns(array('C', 'L', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'));
                 $pdf->SetValigns(array(true, false, true));
                 $pdf->SetLineHeight(6);
-                $pdf->Row(array(
-                    $numberText,
-                    $data['title'],
-                    $targetValueNew,
-                    $satuan_target,
-                    $outcomeValue,
-                    $satuan_outcome,
-                    $CapaiantargetValue,
-                    $satuan_target,
-                    $CapaianoutcomeValue,
-                    $satuan_outcome,
-                    (
-                        $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
-                        && $data_targetValue['template_row_id'] != '171009' ? number_format($kinerja, 2, ',', '.') : number_format($kinerja, 2, ',', '.') . " (" . $gradeKinerja . ")"
-                    )
-                ), $celTableDataFill);
+
+                if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+                    $pdf->Row(array(
+                        $numberText,
+                        $data['title'],
+                        $targetValueNew,
+                        $satuan_target,
+                        $outcomeValue,
+                        $satuan_outcome,
+                        $CapaiantargetValue,
+                        $satuan_target,
+                        $CapaianoutcomeValue,
+                        $satuan_outcome,
+                        (
+                            $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                            && $data_targetValue['template_row_id'] != '171009' ? number_format($kinerja, 2, ',', '.') : number_format($kinerja, 2, ',', '.') . " (" . $gradeKinerja . ")"
+                        )
+                    ), $celTableDataFill);
+                } else {
+                    // $tableDataWidth = [20, 110, 60, 60, 15];
+
+                    $pdf->SetWidths(array(20, 110, 30, 30, 30, 30, 15));
+                    $pdf->Row(array(
+                        $numberText,
+                        $data['title'],
+                        $targetValueNew,
+                        $satuan_target,
+                        $CapaiantargetValue,
+                        $satuan_target,
+                        (
+                            $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                            && $data_targetValue['template_row_id'] != '171009' ? number_format($kinerja, 2, ',', '.') : number_format($kinerja, 2, ',', '.') . " (" . $gradeKinerja . ")"
+                        )
+                    ), $celTableDataFill);
+                }
+
 
                 // if ($data_targetValue['is_checked'] == '1')  $pdf->Cell($tableDataWidth[2], 6, $targetValue, 1, 0, 'C', $celTableDataFill);
             } else {
@@ -1644,17 +1677,17 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     $pdf->watermarkBorder_offsetTop = $topBorder;
                     $pdf->watermarkOffsetTop        = $topWatermark;
                 }
+
+                if ($_dataDokumen['is_revision_same_year'] > 0) {
+
+                    $pdf->watermarkText = 'REVISI';
+                    $pdf->watermarkOffsetLeft        = 246;
+                    $pdf->watermarkBorder_width      = 24;
+                    $pdf->watermarkBorder_offsetLeft = 240;
+                    $pdf->watermarkBorder_offsetTop = $topBorder;
+                    $pdf->watermarkOffsetTop        = $topWatermark;
+                }
             }
-        }
-
-        if ($_dataDokumen['is_revision_same_year'] > 0) {
-
-            $pdf->watermarkText = 'REVISI';
-            $pdf->watermarkOffsetLeft        = 246;
-            $pdf->watermarkBorder_width      = 24;
-            $pdf->watermarkBorder_offsetLeft = 240;
-            $pdf->watermarkBorder_offsetTop = $topBorder;
-            $pdf->watermarkOffsetTop        = $topWatermark;
         }
     }
 
