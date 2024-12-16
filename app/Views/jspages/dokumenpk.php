@@ -434,8 +434,9 @@
         let dataID = $(this).data('id')
         let dataBeritaAcara = $(this).attr('data-beritaacara');
 
-        if (dataBeritaAcara == "true") {
 
+
+        if (dataBeritaAcara === "true") {
 
             if (saveDokumenValidation()) {
 
@@ -525,7 +526,7 @@
                                     success: (res) => {
 
                                         if (res.status) {
-                                            location.reload()
+                                            // location.reload()
 
                                         }
                                     },
@@ -1175,9 +1176,6 @@
     $(document).on('click', '.__tolak-dokumen', function() {
         let dataID = $(this).data('id')
         let _beritaAcara = $(this).data('beritaacara')
-
-        console.log(_beritaAcara);
-
 
         Swal.fire({
             title: "Kenapa dokumen ini di tolak?",
