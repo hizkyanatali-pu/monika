@@ -481,11 +481,13 @@ class Renstra extends \App\Controllers\BaseController
                 if ($newStatus == "tolak") {
                     $updatedData['reject_by']           = $this->user['idpengguna'];
                     $updatedData['reject_date']           = date("Y-m-d H:i:s");
+                    $updatedData['notes_reject'] = $this->request->getPost('message');
                 } else {
 
                     $updatedData['acc_by']           = $this->user['idpengguna'];
                     $updatedData['acc_date']           = date("Y-m-d H:i:s");
                 };
+
 
 
 
@@ -499,7 +501,7 @@ class Renstra extends \App\Controllers\BaseController
                     'status'           => $newStatus,
                     'change_status_at' => date("Y-m-d H:i:s")
                 ];
-                // $updatedData['revision_message'] = $this->request->getPost('message');
+                $updatedData['notes_reject'] = $this->request->getPost('message');
 
 
                 // var_dump($updat edData);die;

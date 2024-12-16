@@ -283,8 +283,6 @@
                         </a>
                     <?php endforeach ?>
                 </div>
-                <div class="container-revision-alert"></div>
-
                 <div class="p-4 d-none" id="make-dokumen">
                 </div>
 

@@ -553,7 +553,7 @@
             templateId: $(this).data('template-id'),
             tahunForEdit: tahunForEdit,
             beforeModalMount: () => {
-                $('#modalForm').find('.container-revision-alert').addClass('d-none')
+                // $('#modalForm').find('.container-revision-alert').addClass('d-none')
                 $('#modalForm').find('input').attr('disabled', 'disabled')
                 $('#modalForm').find('select').attr('disabled', 'disabled')
                 // $('#modalForm').find('.modal-footer').addClass('d-none')
@@ -807,6 +807,24 @@
                     })
 
                     params.beforeModalMount(res)
+
+                    if (res.dokumen.notes_reject != null) {
+
+                        $('.container-revision-alert').removeClass("d-none");
+
+                        $('.container-revision-alert').html(`
+                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                                <h5 class="alert-heading">Pesan !</h5>
+                                <p>${res.dokumen.notes_reject}</p>
+                            </div>
+                        `)
+                    } else {
+
+                        $('.container-revision-alert').html('')
+                    }
+
+
+
 
                     $('.modal').trigger('click');
                     $('#modalForm').modal('show')

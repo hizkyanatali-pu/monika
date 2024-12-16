@@ -178,13 +178,14 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 <table class="table table-bordered" id="table-hold">
                     <thead>
                         <tr class="text-center">
-                            <th width="15px">
+                            <th width="5%">
                                 <input type="checkbox" name="checkall" data-status="hold" />
                             </th>
-                            <th width="25px">No</th>
-                            <th>Dokumen</th>
-                            <th width="120px">Tanggal Kirim</th>
-                            <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
+                            <th width="5%">No</th>
+                            <th width="40%">Dokumen</th>
+                            <th width="10%">Tahun</th>
+                            <th width="10px">Tanggal Kirim</th>
+                            <th width="<?php echo $isAdmin ? '30%' : '50px' ?>">Aksi</th>
                         </tr>
                     </thead>
 
@@ -226,14 +227,15 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 <table class="table table-bordered" id="table-setuju">
                     <thead>
                         <tr class="text-center">
-                            <th width="15px">
+                            <th width="5%">
                                 <input type="checkbox" name="checkall" data-status="setuju" />
                             </th>
-                            <th width="30px">No</th>
-                            <th>Dokumen</th>
-                            <th width="120px">Tanggal Kirim</th>
-                            <th width="120px">Tanggal disetujui</th>
-                            <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
+                            <th width="5%">No</th>
+                            <th width="40%">Dokumen</th>
+                            <th width="10%">Tahun</th>
+                            <th width="10%">Tanggal Kirim</th>
+                            <th width="10%">Tanggal disetujui</th>
+                            <th width="<?php echo $isAdmin ? '20%' : '50px' ?>">Aksi</th>
                         </tr>
                     </thead>
 
@@ -274,14 +276,15 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 <table class="table table-bordered" id="table-tolak">
                     <thead>
                         <tr class="text-center">
-                            <th width="15px">
+                            <th width="5%">
                                 <input type="checkbox" name="checkall" data-status="tolak" />
                             </th>
-                            <th width="30px">No</th>
-                            <th>Dokumen</th>
-                            <th width="120px">Tanggal Kirim</th>
-                            <th width="120px">Tanggal Ditolak</th>
-                            <th width="<?php echo $isAdmin ? '280px' : '50px' ?>">Aksi</th>
+                            <th width="5%">No</th>
+                            <th width="40%">Dokumen</th>
+                            <th width="10%">Tahun</th>
+                            <th width="10%">Tanggal Kirim</th>
+                            <th width="10%">Tanggal Ditolak</th>
+                            <th width="<?php echo $isAdmin ? '20%' : '50px' ?>">Aksi</th>
                         </tr>
                     </thead>
 
@@ -325,7 +328,6 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 </div>
             </div>
             <div class="modal-body p-0">
-                <div class="container-revision-alert-cetak"></div>
                 <iframe width="100%" style="height: 80vh" frameborder="0"></iframe>
             </div>
             <div class="modal-footer p-0">
@@ -362,6 +364,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             </div>
             <div class="modal-body p-0">
                 <div class="list-group" id="choose-template">
+
                     <?php /* foreach ($templateDokumen as $keyTemplate => $dataTemplate) : ?>
                         <a class="list-group-item list-group-item-action __buat-dokumen-pilih-template" href="javascript:void(0)" data-id="<?php echo $dataTemplate->id ?>">
                             <?php echo $dataTemplate->title ?>
@@ -369,6 +372,8 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     <?php endforeach */ ?>
                 </div>
                 <div class="p-4 d-none" id="make-dokumen">
+                    <div class="container-revision-alert-cetak"></div>
+
                 </div>
             </div>
 
@@ -480,13 +485,66 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
         element_tableInformasi = $('._table-informasi').find('tbody')
 
 
+    function lastTab() {
+
+        // Cek jika ada tab yang terakhir dibuka di localStorage
+        var lastTab = localStorage.getItem('lastTab');
+
+
+        if (lastTab) {
+            // Fokus ke tab terakhir yang dipilih
+            $('#' + lastTab).tab('show');
+
+            if (lastTab === "pills-one-tab") {
+
+                setTimeout(() => {
+                    element_tableHold = $('#table-hold').DataTable({
+                        scrollX: true
+                    })
+                    getData('hold');
+                }, 300)
+
+            }
+
+            if (lastTab === "pills-two-tab") {
+                setTimeout(() => {
+                    element_tableSetuju = $('#table-setuju').DataTable({
+                        scrollX: true
+                    })
+                    getData('setuju');
+                }, 300)
+
+            }
+
+
+            if (lastTab === "pills-three-tab") {
+                setTimeout(() => {
+                    element_tableTolak = $('#table-tolak').DataTable({
+                        scrollX: true
+                    })
+                    getData('tolak');
+                }, 300)
+
+            }
+
+
+
+        } else {
+            $('#pills-one-tab').trigger('click')
+
+        }
+
+        // Simpan tab yang dipilih ke localStorage ketika tab diubah
+        $('a[data-toggle="pill"]').on('shown.bs.tab', function(e) {
+            var activeTab = $(e.target).attr('id'); // Ambil ID tab yang dipilih
+            localStorage.setItem('lastTab', activeTab); // Simpan ke localStorage
+        });
+    }
+
+
+
     $(document).ready(function() {
-        setTimeout(() => {
-            element_tableHold = $('#table-hold').DataTable({
-                scrollX: true
-            })
-            getData('hold');
-        }, 300)
+        lastTab();
 
 
         $('.F_instansi').select2({
@@ -517,6 +575,16 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
         }, 300)
     })
 
+    $('#pills-one-tab').on('click', () => {
+        setTimeout(() => {
+            if (element_tableHold == '') {
+                element_tableHold = $('#table-hold').DataTable({
+                    scrollX: true
+                })
+            }
+            getData('hold');
+        }, 300)
+    })
 
 
     $('#pills-two-tab').on('click', () => {
@@ -762,20 +830,27 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         newStatus: 'tolak'
                     },
                     success: (res) => {
-                        return res
+                        // return res
+
+                        $('#modalForm').modal('hide')
+                        getData("hold")
+
+
                     }
                 })
             }
-        }).then((res) => {
-            if (res.value) {
-                element_modalPreviewCetakDokumen.modal('hide')
-
-                element_tableHold
-                    .row($('#_dokumen-row-' + dataID))
-                    .remove()
-                    .draw();
-            }
         })
+
+        // .then((res) => {
+        //     if (res.value) {
+        //         element_modalPreviewCetakDokumen.modal('hide')
+
+        //         element_tableHold
+        //             .row($('#_dokumen-row-' + dataID))
+        //             .remove()
+        //             .draw();
+        //     }
+        // })
     })
 
 
@@ -793,12 +868,15 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 newStatus: 'setuju'
             },
             success: (res) => {
-                element_modalPreviewCetakDokumen.modal('hide')
+                // element_modalPreviewCetakDokumen.modal('hide')
 
-                element_tableHold
-                    .row($('#_dokumen-row-' + dataID))
-                    .remove()
-                    .draw();
+                // element_tableHold
+                //     .row($('#_dokumen-row-' + dataID))
+                //     .remove()
+                //     .draw();
+
+                $('#modalForm').modal('hide')
+                getData("hold")
             }
         })
     })
@@ -979,6 +1057,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
                         </div>
                     </td>
+                    <td>${data.tahun}</td>
                     <td>${data.created_at}</td>
                     ${render_columnChangeStatusAt}
                     <td>
@@ -987,6 +1066,8 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                             data-id="${data.id}"
                             data-template-id="${data.template_id}"
                             data-to-confirm="${buttonData_toConfirm}" title="Lihat"
+                            data-tahun="${data.tahun}"
+                            data-status="${data.status}"
                         >
                             <i class="fas fa-eye"></i>
                         </button>
@@ -1144,6 +1225,28 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
         // if (status != 'belum-input') {
         //     getData(status)
         // }
+    })
+
+    $(document).on('click', '.__lihat-dokumen', function() {
+
+        let _dokumenID = $(this).data('id')
+        let status = $(this).data('status')
+
+        if (status === "hold") {
+            let html = `
+            <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+                <i class="fa fa-ban"></i> Tolak
+            </button>
+            <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+                <i class="fa fa-check"></i> Setujui
+            </button>`
+            $("#parentModalFooter").html(html)
+        } else {
+            let html = ``;
+            $("#parentModalFooter").html(html)
+        }
+
+
     })
 </script>
 <?= $this->endSection() ?>
