@@ -1840,7 +1840,8 @@
             titleTheadTable = '',
             theadBalaiTarget = '',
             theadBalaiTargetNumber = '',
-            titleTheadTableOutcomeBalai = ''
+            titleTheadTableOutcomeBalai = '',
+            colspan = '2'
 
 
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
@@ -1879,6 +1880,7 @@
             _data.template.type == 'master-balai'
         ) {
             classDNoneOutcome = 'd-none'
+            colspan = '1';
         }
 
         if (_data.template.type == 'master-balai' || _data.template.type == 'eselon1') {
@@ -1912,8 +1914,8 @@
 
             if (_beritaAcara == true) {
 
-                titleTheadTable = '<td class="text-center" style="width: 15%" colspan="2">Target ' + <?php echo $sessionYear ?> + '</td>';
-                title2 = `<td class="text-center ${classDNoneOutcome}" style="width: 15%" colspan="2">
+                titleTheadTable = `<td class="text-center" style="width: 15%" colspan="${colspan}">Target ` + <?php echo $sessionYear ?> + '</td>';
+                title2 = `<td class="text-center" style="width: 15%" colspan="${colspan}">
                             Capaian
                         </td>`
 
@@ -1959,10 +1961,10 @@
                         <td class="text-center p-2 align-middle">
                         </td>
                         <td class="text-center" colspan="2"></td>
-                        <td class="text-center">Output</td>
-                        <td class="text-center">Outcome</td>
-                        <td class="text-center">Output</td>
-                        <td class="text-center">Outcome</td>
+                        <td class="text-center ${classDNoneOutcome}">Output</td>
+                        <td class="text-center ${classDNoneOutcome}">Outcome</td>
+                        <td class="text-center ${classDNoneOutcome}">Output</td>
+                        <td class="text-center ${classDNoneOutcome}">Outcome</td>
                     </tr>`;
         }
 
@@ -1976,7 +1978,7 @@
                         <td class="text-center p-2" colspan="2">(1)</td>
                         <td class="text-center p-2">(2)</td>
                         ${theadBalaiTargetNumber}
-                        <td class="text-center p-2 ${classDNoneOutcome}">(3)</td>`
+                        <td class="text-center p-2 ${_beritaAcara ? '':'d-none'}" >(3)</td>`
 
         if (_beritaAcara == true) {
 
@@ -2183,7 +2185,8 @@
             rowNumber = 1,
             colspanSectionTitle = 3,
             classDNoneOutcome = '',
-            data_value = ''
+            data_value = '',
+            colspan = '2'
 
         if (
             _templateType == 'eselon1' ||
@@ -2440,7 +2443,7 @@
 
                     // if (_beritaAcara) {
 
-                    rows += `<td class="${classDNoneOutcome} ${_beritaAcara ? '':'d-none'}">
+                    rows += `<td class="${_beritaAcara ? '':'d-none'}">
                                 <div class="input-group">
                                     <input 
                                         type="text" 
