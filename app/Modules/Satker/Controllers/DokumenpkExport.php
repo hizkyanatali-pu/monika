@@ -1667,6 +1667,16 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $pdf->watermarkBorder_offsetLeft = 240;
             $pdf->watermarkBorder_offsetTop = $topBorder;
             $pdf->watermarkOffsetTop        = $topWatermark;
+
+
+            if ($_dataDokumen['status'] == 'hold' || $_dataDokumen['status'] == 'tolak') {
+                $pdf->watermarkText = 'KONSEP';
+                $pdf->watermarkOffsetLeft        = 254.5;
+                $pdf->watermarkBorder_width      = 24;
+                $pdf->watermarkBorder_offsetLeft = 250;
+                $pdf->watermarkBorder_offsetTop = $topBorder;
+                $pdf->watermarkOffsetTop        = $topWatermark;
+            }
         }
     }
 
