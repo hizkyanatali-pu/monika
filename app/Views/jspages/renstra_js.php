@@ -2428,9 +2428,9 @@
                                     <td width="5%">${paket.persenKeu}</td>
                                     <td width="5%">${paket.persenFis}</td>
                                     <td width="10%">`;
-                            if (output_satuan !== "DI") {
+                            // if (output_satuan !== "DI") {
 
-                                tbodyContent += `<div class="form-group form-group-last row">
+                            tbodyContent += `<div class="form-group form-group-last row">
                                         <div class="form-group-sub">
                                             <label class="form-control-label">Vol Output :</label>
                                             <input type="text" class="form-control target_nilai checkbox-click" name="target_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"}>
@@ -2447,7 +2447,7 @@
                                                 </div>
                                         </div>
                                     </div>`;
-                            }
+                            // }
 
 
 
@@ -2613,17 +2613,17 @@
 
 
             // jika satuan target DI (PJPA)
-            if (target_satuan != undefined) {
-                if (target_nilai.trim() === '') {
-                    errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
-                } else if (target_satuan.trim() === '') {
-                    errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Satuan yang belum diisi.');
-                }
-            } else {
-                target_nilai = "0";
-                target_satuan = "DI";
+            // if (target_satuan != undefined) {
+            //     if (target_nilai.trim() === '') {
+            //         errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
+            //     } else if (target_satuan.trim() === '') {
+            //         errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Satuan yang belum diisi.');
+            //     }
+            // } else {
+            //     target_nilai = "0";
+            //     target_satuan = "DI";
 
-            }
+            // }
 
 
 
@@ -2801,12 +2801,12 @@
 
 
 
-                if (satuan == "DI") {
-                    totalTarget_nilai.val("1");
-                } else {
-                    totalTarget_nilai.val(totalJumlahTargetDenganKoma);
+                // if (satuan == "DI") {
+                //     totalTarget_nilai.val("1");
+                // } else {
+                totalTarget_nilai.val(totalJumlahTargetDenganKoma);
 
-                }
+                // }
 
 
                 outputKegiatanItems.target.unshift({
