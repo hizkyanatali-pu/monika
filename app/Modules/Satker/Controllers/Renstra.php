@@ -1468,7 +1468,8 @@ class Renstra extends \App\Controllers\BaseController
                         'dokumen_id' => $_dokumenID,
                         'template_row_id' => null,
                         'template_ogiat_id' => $oGiatId,  // Menggunakan oGiatId dari array
-                        'output_val' => ($targetSat  == "DI" ? '1' : $targetNilai),  // Default 0 jika tidak ada
+                        // 'output_val' => ($targetSat  == "DI" ? '1' : $targetNilai),  // Default 0 jika tidak ada
+                        'output_val' => $targetNilai,  // Default 0 jika tidak ada
                         'output_sat' => $target['targetSatuan'] ?? null, // Default N/A jika tidak ada
                         'outcome1_val' => $outcome1['outcome1Nilai'] ?? '0',  // Default 0 jika tidak ada
                         'outcome1_sat' => $outcome1['outcome1Satuan'] ?? null, // Default N/A jika tidak ada
