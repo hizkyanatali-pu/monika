@@ -609,7 +609,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
     $(document).on('click', '.__refresh-data-table', function() {
         let status = $(this).data('status')
         $('.F_instansi').val(null).trigger('change');
-        console.log("ok");
+
         switch (status) {
             case 'belum-input':
                 element_tableBelumInput.clear().draw()
@@ -844,19 +844,34 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
                     },
                     success: (res) => {
-                        $(".__refresh-data-table").trigger('click')
-                        return res
+
+                        if (_beritaAcara) {
+
+                            getData("setuju")
+                        } else {
+
+                            return res
+                        }
                     }
                 })
             }
         }).then((res) => {
             if (res.value) {
                 element_modalPreviewCetakDokumen.modal('hide')
+                if (!_beritaAcara) {
+                    element_tableHold
+                        .row($('#_dokumen-row-' + dataID))
+                        .remove()
+                        .draw();
 
-                element_tableHold
-                    .row($('#_dokumen-row-' + dataID))
-                    .remove()
-                    .draw();
+                    Swal.fire({
+                        title: "Berhasil !",
+                        text: "Status Dokumen PK Berhasil Di Tolak",
+                        icon: "success"
+                    });
+
+                }
+
             }
         })
     })
@@ -1232,16 +1247,24 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 setTimeout(() => {
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
 
-                    if (res.dokumen.notes_ba != null) {
+                    if (res.pesan_perbaikan.length > 0) {
                         element_iframePreviewDokumen.css({
                             'height': '60vh'
                         })
+                        // $('.container-revision-alert-cetak').html(`
+                        //     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                        //         <h5 class="alert-heading">Pesan !</h5>
+                        //         <p>${res.dokumen.notes_ba}</p>
+                        //     </div>
+                        // `)
                         $('.container-revision-alert-cetak').html(`
-                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Pesan !</h5>
-                                <p>${res.dokumen.notes_ba}</p>
-                            </div>
-                        `)
+                        <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                            <h5 class="alert-heading">Daftar Pesan Perubahan !</h5>
+                            ${$.map(res.pesan_perbaikan, function(value) {
+                                return `<p>[${value.reject_date}] ${value.reject_by==1 ? "admin":value.reject_by} : ${value.notes_ba}</p>`;
+                            }).join('')}
+                        </div>
+                    `);
                     } else {
                         element_iframePreviewDokumen.css({
                             'height': '80vh'

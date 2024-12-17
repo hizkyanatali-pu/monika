@@ -19,6 +19,7 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->db = \Config\Database::connect();
 
         $this->dokumenSatker = $this->db->table('dokumenpk_satker');
+        $this->dokumenpk_ba_notes = $this->db->table('dokumenpk_ba_notes');
 
         $this->tahun = session('userData.tahun');
 
@@ -526,22 +527,35 @@ class Dokumenpk extends \App\Controllers\BaseController
                         'change_status_ba_at' => date("Y-m-d H:i:s")
                     ];
 
+                    $this->dokumenSatker->update($updatedData);
+
                     $from = $this->request->getPost('dataID');
 
                     if ($newStatus == "2") {
-                        $updatedData['notes_ba'] = $this->request->getPost('message');
-                        // $updatedData['reject_by']           = $this->user['idpengguna'];
-                        // $updatedData['reject_date']           = date("Y-m-d H:i:s");
+                        $insert['notes_ba'] = $this->request->getPost('message');
+                        $insert['reject_by']           = $this->user['idpengguna'];
+                        $insert['reject_date']           = date("Y-m-d H:i:s");
                     } else {
 
-                        // $updatedData['acc_by']           = $this->user['idpengguna'];
-                        // $updatedData['acc_date']           = date("Y-m-d H:i:s");
+                        $insert['acc_by']           = $this->user['idpengguna'];
+                        $insert['acc_date']           = date("Y-m-d H:i:s");
                     };
 
-
-
-                    $this->dokumenSatker->update($updatedData);
+                    $this->dokumenpk_ba_notes->insert([
+                        'id_dokumen'   =>  $this->request->getPost('dataID'),
+                        'notes_ba'     => isset($insert['notes_ba']) ? $insert['notes_ba'] : null,
+                        'reject_by'    => isset($insert['reject_by']) ? $insert['reject_by'] : null,
+                        'reject_date'  => isset($insert['reject_date']) ? $insert['reject_date'] : null,
+                        'acc_by'       => isset($insert['acc_by']) ? $insert['acc_by'] : null,
+                        'acc_date'     => isset($insert['acc_date']) ? $insert['acc_date'] : null,
+                    ]);
                     break;
+
+
+
+
+
+
                 case 'hold-edit':
                     $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
                     $newStatus = $this->request->getPost('newStatus');

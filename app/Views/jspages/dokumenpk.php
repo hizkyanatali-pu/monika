@@ -440,6 +440,8 @@
 
             if (saveDokumenValidation()) {
 
+                statusBa = $(this).data("statusba");
+
                 let oldButtonText = element_btnSaveEditDokumen.text()
                 element_btnSaveEditDokumen.addClass('d-none')
                 element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
@@ -451,22 +453,79 @@
                 // formData['csrf_test_name'] = res.token
                 formData['_beritaAcara'] = dataBeritaAcara
 
-                $.ajax({
-                    url: "<?php echo site_url('dokumenpk/editDokumenBA') ?>",
-                    type: "POST",
-                    data: formData,
-                    success: (res) => {
 
-                        if (res.status) {
-                            location.reload()
+                if (statusBa == "belum-input") {
+                    formData['statusubahba'] = false;
+
+                    $.ajax({
+                        url: "<?php echo site_url('dokumenpk/editDokumenBA') ?>",
+                        type: "POST",
+                        data: formData,
+                        success: (res) => {
+
+                            if (res.status) {
+                                location.reload()
+
+                            }
+                        },
+                        fail: (xhr) => {
+                            alert('Terjadi kesalahan pada sistem')
+                            console.log(xhr)
+                        }
+                    })
+
+                } else {
+
+
+                    Swal.fire({
+                        title: "Input Pesan Perubahan ",
+                        html: `<textarea class="form-control" name="pesan-revisi-dokumen-BA" rows="10" placeholder="Tulis pesan" required></textarea>`,
+                        confirmButtonText: "Kirim, Beri alasan",
+                        cancelButtonText: "Batal",
+                        showLoaderOnConfirm: true,
+                        showCancelButton: true,
+                        preConfirm: () => {
+
+                            const pesanRevisi = $('textarea[name=pesan-revisi-dokumen-BA]').val();
+
+                            if (!pesanRevisi) {
+                                Swal.showValidationMessage('Pesan harus diisi');
+                                return false;
+                            }
+
+                            formData['message'] = $('textarea[name=pesan-revisi-dokumen-BA]').val();
+                            formData['statusubahba'] = true;
+
+                            $.ajax({
+                                url: "<?php echo site_url('dokumenpk/editDokumenBA') ?>",
+                                type: "POST",
+                                data: formData,
+                                success: (res) => {
+
+                                    if (res.status) {
+                                        location.reload()
+
+                                    }
+                                },
+                                fail: (xhr) => {
+                                    alert('Terjadi kesalahan pada sistem')
+                                    console.log(xhr)
+                                }
+                            })
 
                         }
-                    },
-                    fail: (xhr) => {
-                        alert('Terjadi kesalahan pada sistem')
-                        console.log(xhr)
-                    }
-                })
+
+
+
+                    })
+                }
+
+
+
+
+
+
+
             }
 
 
@@ -668,6 +727,8 @@
                 $('.__save-dokumen').addClass('d-none')
                 $('.__save-update-dokumen').removeClass('d-none')
                 $('.__save-update-dokumen').attr('data-beritaacara', false);
+                $('.__save-update-dokumen').removeAttr('data-statusba')
+
 
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
@@ -681,7 +742,7 @@
     $(document).on('click', '.__edit-dokumen-berita-acara', function() {
 
 
-
+        let statusBA = $(this).data('statusba') ?? '';
 
         if ($(this).data('type') == "uptBalai-add") {
             paramsBtnPaket = "uptBalai-add";
@@ -700,6 +761,7 @@
                 $('.__save-dokumen').addClass('d-none')
                 $('.__save-update-dokumen').removeClass('d-none')
                 $('.__save-update-dokumen').attr('data-beritaacara', true);
+                $('.__save-update-dokumen').attr('data-statusba', statusBA)
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
             },
@@ -1642,17 +1704,19 @@
                 setTimeout(() => {
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumenBA.find('iframe')
 
-                    if (res.dokumen.notes_ba != null) {
+                    if (res.pesan_perbaikan.length > 0) {
                         element_iframePreviewDokumen.css({
                             // 'height': '60vh'
                             'height': '100vh'
                         })
                         $('.container-revision-alert-cetak').html(`
-                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Pesan !</h5>
-                                <p>${res.dokumen.notes_ba}</p>
-                            </div>
-                        `)
+                        <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                            <h5 class="alert-heading">Daftar Pesan Perubahan !</h5>
+                            ${$.map(res.pesan_perbaikan, function(value) {
+                                return `<p>[${value.reject_date}] ${value.reject_by==1 ? "admin":value.reject_by} : ${value.notes_ba}</p>`;
+                            }).join('')}
+                        </div>
+                    `);
                     } else {
                         element_iframePreviewDokumen.css({
                             // 'height': '80vh'

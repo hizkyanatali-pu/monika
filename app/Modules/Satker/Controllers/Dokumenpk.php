@@ -36,6 +36,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->program = $this->db->table('tprogram');
 
         $this->pkSettingBA          = $this->db->table('dokumenpk_setting_ba');
+        $this->dokumenpk_ba_notes = $this->db->table('dokumenpk_ba_notes');
+
 
 
 
@@ -1353,10 +1355,28 @@ class Dokumenpk extends \App\Controllers\BaseController
             'pihak2_is_plt_ba'         => $this->request->getPost('ttdPihak2_isPlt'),
         ];
 
+
+
+
         if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
+
+
+
 
         $this->dokumenSatker->where('id', $dokumenID);
         $this->dokumenSatker->update($inserted_dokumenSatker);
+
+        if ($this->request->getPost('statusubahba')  === "true") {
+            // jika dokumen ada perubahan dari satker
+            $inserted_dokumenPerubahan = [
+                'id_dokumen'   =>  $dokumenID,
+                'notes_ba'     => $this->request->getPost('message'),
+                'reject_by'    => $this->user['idpengguna'],
+                'reject_date'  => date("Y-m-d H:i:s"),
+            ];
+            $this->dokumenpk_ba_notes->insert($inserted_dokumenPerubahan);
+        }
+
         /** end-of: dokumen */
 
 

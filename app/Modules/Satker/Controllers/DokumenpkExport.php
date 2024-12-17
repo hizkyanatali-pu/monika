@@ -41,6 +41,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->templateInfo    = $this->db->table('dokumen_pk_template_info_' . session('userData.tahun'));
         $this->templateRowRumus = $this->db->table('dokumen_pk_template_rowrumus_' . session('userData.tahun'));
 
+        $this->dokumenpk_ba_notes = $this->db->table('dokumenpk_ba_notes');
+
+
+
 
         $this->dokumenStatus = [
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
@@ -213,6 +217,16 @@ class DokumenpkExport extends \App\Controllers\BaseController
             ->get()
             ->getRowArray();
 
+        $dokumenpk_ba_notes =  $this->dokumenpk_ba_notes->where('id_dokumen', $dataDokumen['id'])->get()->getResultArray();
+        // Mengubah format tanggal reject_date menjadi d/m/Y H:i:s
+        foreach ($dokumenpk_ba_notes as &$note) {
+            if ($note['reject_date']) {
+                $note['reject_date'] = date('H:i, d/m/Y', strtotime($note['reject_date']));
+            }
+        }
+
+
+
         if ($dataDokumen) {
             $this->dokumenBulan = bulan(date('m', strtotime($dataDokumen['created_at'])));
 
@@ -268,7 +282,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
             // $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
             return $this->respond([
-                'dokumen' => $dataDokumen
+                'dokumen' => $dataDokumen,
+                'pesan_perbaikan' => $dokumenpk_ba_notes
             ]);
         };
     }

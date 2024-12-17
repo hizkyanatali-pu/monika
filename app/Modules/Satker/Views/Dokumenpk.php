@@ -228,7 +228,7 @@
 
                                     <?php if ((!isset($balaiCreateForSatker))) { ?>
 
-                                        <button class="btn btn-sm btn-primary __edit-dokumen-berita-acara" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Input Berita Acara">
+                                        <button class="btn btn-sm btn-primary __edit-dokumen-berita-acara" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Input Berita Acara" data-statusba="<?= $data->status_ba != null ? $data->status_ba : 'belum-input' ?>">
                                             <i class="fas fa-edit"></i> Berita Acara
                                         </button>
 
