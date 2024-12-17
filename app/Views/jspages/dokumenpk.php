@@ -1972,6 +1972,10 @@
             }
 
             theadBalaiTarget = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
+            if (_beritaAcara) {
+
+                theadBalaiTarget += '<td class="text-center" style="width: 15%">Capaian ' + <?php echo $sessionYear ?> + '</td>';
+            }
         } else {
 
             // titleTheadTable = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
@@ -2042,7 +2046,7 @@
                         <td class="text-center p-2" colspan="2">(1)</td>
                         <td class="text-center p-2">(2)</td>
                         ${theadBalaiTargetNumber}
-                        <td class="text-center p-2 ${_beritaAcara ? '':'d-none'}" >(3)</td>`
+                        <td class="text-center p-2 ${_beritaAcara ? '':'d-none'}" >${_data.template.type === 'master-balai' ? "(5)":"(3)"}</td>`
 
         if (_beritaAcara == true) {
 
