@@ -526,7 +526,7 @@
                                     success: (res) => {
 
                                         if (res.status) {
-                                            // location.reload()
+                                            location.reload()
 
                                         }
                                     },
