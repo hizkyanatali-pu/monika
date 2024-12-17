@@ -846,7 +846,6 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     success: (res) => {
 
                         if (_beritaAcara) {
-
                             getData("setuju")
                         } else {
 
@@ -870,6 +869,13 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         icon: "success"
                     });
 
+                } else {
+
+                    Swal.fire({
+                        title: "Berhasil !",
+                        text: "Status Berita Acara PK Berhasil Di Tolak",
+                        icon: "success"
+                    });
                 }
 
             }
