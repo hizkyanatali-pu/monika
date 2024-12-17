@@ -1018,7 +1018,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         $widthTitleVolumeSatuan = 30;
 
-        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+        if ($dataDokumen['dokumen_type'] != 'eselon2') {
 
             $pdf->SetFont($this->fontFamily, 'B', 9);
             $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
@@ -1038,13 +1038,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
         $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
         $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
-        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+        if ($dataDokumen['dokumen_type'] != 'eselon2') {
             $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
             $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
         }
         $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
         $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
-        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+        if ($dataDokumen['dokumen_type'] != 'eselon2') {
             $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
             $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
         }
@@ -1224,6 +1224,76 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         break;
                 }
 
+
+
+                if ($dataDokumen['dokumen_type'] === 'balai') {
+
+                    $targetValue = 0 . " %";
+
+                    $sumOutputValue     = 0;
+                    $sumCapaianSatkerValue     = 0;
+                    $outputSatuan = '';
+                    $average = 0;
+
+
+                    $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $data['template_id'], 'rowId' =>  $data['id']])->get()->getResult();
+                    foreach ($templateRowRumus as $key => $dataRumus) {
+                        $rumus = $this->dokumenSatker->select(
+                            'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
+                            dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan,target_satuan,dokumenpk_satker_rows.capaian_outcome_value'
+                        )
+                            ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                            ->join('dokumen_pk_template_row_' . session('userData.tahun'), "(dokumenpk_satker_rows.template_row_id=dokumen_pk_template_row_" . session('userData.tahun') . ".id)", 'left')
+                            ->join('dokumen_pk_template_rowrumus_' . session('userData.tahun'), "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".rowId)", 'left')
+                            ->where('dokumen_pk_template_rowrumus_' . session('userData.tahun') . '.rumus', $dataRumus->rumus)
+                            ->where('dokumenpk_satker.balaiid', $dataDokumen['balaiid'])
+                            ->where('dokumenpk_satker.status', 'setuju')
+                            ->where('dokumenpk_satker.satkerid is not null')
+                            ->where('dokumenpk_satker.deleted_at is null')
+                            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+                            // ->where('dokumenpk_satker_rows.is_checked', '1')
+                            ->get()->getResult();
+
+                        $outcomeRumus = 0;
+                        $outputRumus = 0;
+                        $capaianRumus = 0;
+
+                        foreach ($rumus as $keyOutcome => $dataOutput) {
+                            $outputRumus += $dataOutput ? ($dataOutput->target_value != '' ? $dataOutput->target_value : 0) : 0;
+                            $capaianRumus += $dataOutput ? ($dataOutput->capaian_outcome_value != '' ? $dataOutput->capaian_outcome_value : 0) : 0;
+                            // $outputSatuan = $dataOutput->target_sat ?? trim(explode(";", $dataOutput->target_satuan)[0]);
+                            $outputSatuan = $data['outcome_satuan'];
+                        }
+                        if ($sumOutputValue == '' && $outcomeRumus > 0) $sumOutputValue = 0;
+                        if ($sumCapaianSatkerValue == '' &&  $capaianRumus > 0) $sumCapaianSatkerValue = 0;
+
+
+                        if ($outputRumus > 0) {
+                            $sumOutputValue  += $outputRumus;
+                        }
+
+                        if ($capaianRumus > 0) {
+                            $sumCapaianSatkerValue  += $capaianRumus;
+                        }
+                        $rSeparator = explode('.', $data['id'] != "291011" ?  $sumOutputValue : ($sumOutputValue / 3));
+                        $decimalLength = min(2, strlen($rSeparator[1])); // Mengambil panjang maksimum 2 karakter
+                        $outcomeSatker = number_format(($data['id'] == "291011" ? ($sumOutputValue / 3) : $sumOutputValue), $decimalLength, ',', '.');
+
+
+                        $rCapaianSeparator = explode('.', $data['id'] != "291011" ?  $sumCapaianSatkerValue : ($sumCapaianSatkerValue / 3));
+                        $CapaiandecimalLength = min(2, strlen($rCapaianSeparator[1])); // Mengambil panjang maksimum 2 karakter
+
+                        $CapaianSatkerOutcomeValue = number_format(($data['id'] == "291011" ? ($sumCapaianSatkerValue / 3) : $sumCapaianSatkerValue), $CapaiandecimalLength, ',', '.');
+                    }
+                }
+
+
+
+
+
+
+
+
                 //target (output & outcome)
 
                 $rSeparatorTarget = explode('.', $data_targetValue['target_value']);
@@ -1378,17 +1448,17 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $pdf->SetValigns(array(true, false, true));
                 $pdf->SetLineHeight(6);
 
-                if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+                if ($dataDokumen['dokumen_type'] != 'eselon2') {
                     $pdf->Row(array(
                         $numberText,
                         $data['title'],
                         $targetValueNew,
                         $satuan_target,
-                        $outcomeValue,
+                        ($dataDokumen['dokumen_type'] === 'balai' ? $outcomeSatker : $outcomeValue),
                         $satuan_outcome,
                         $CapaiantargetValue,
                         $satuan_target,
-                        $CapaianoutcomeValue,
+                        ($dataDokumen['dokumen_type'] === 'balai' ? $CapaianSatkerOutcomeValue : $CapaianoutcomeValue),
                         $satuan_outcome,
                         (
                             $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'

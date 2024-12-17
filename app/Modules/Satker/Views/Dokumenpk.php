@@ -211,7 +211,7 @@
                                 </div>
                             </td>
                             <td class="pr-0 text-center">
-                                <?php if ($statusBA->status == 1 && $data->status == 'setuju') { ?>
+                                <?php if ($statusBA->status == 1 && $data->status == 'setuju' && $data->is_revision_same_year > 0) { ?>
 
 
 
@@ -243,7 +243,7 @@
                                     </div>
                                 <?php } ?>
 
-                                <?php if ($statusBA->status == 1 && $data->status_ba != null && $data->status == 'setuju') {
+                                <?php if ($statusBA->status == 1 && $data->status_ba != null && $data->status == 'setuju' && $data->is_revision_same_year > 0) {
                                 ?>
                                     <button class="btn btn-sm __lihat-dokumenBA btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Lihat">
                                         <i class="fas fa-eye"></i>
