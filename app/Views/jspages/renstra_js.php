@@ -2726,7 +2726,7 @@
 
                 if (target_satuan.trim().toLowerCase() === "m3/detik") {
 
-                    TargetlengthFix = 4;
+                    TargetlengthFix = 5;
                 }
 
                 if (target_satuan.trim().toLowerCase() === "juta m3") {
@@ -2737,7 +2737,7 @@
 
                 if (outcome1_satuan.trim().toLowerCase() === "m3/detik") {
 
-                    Outcome1lengthFix = 4;
+                    Outcome1lengthFix = 5;
                 }
 
                 if (outcome1_satuan.trim().toLowerCase() === "juta m3") {
@@ -2747,7 +2747,7 @@
 
                 if (!$('.outcome2').hasClass('d-none') && outcome2_satuan.trim().toLowerCase() === "m3/detik") {
 
-                    Outcome2lengthFix = 4;
+                    Outcome2lengthFix = 5;
                 }
 
                 if (!$('.outcome2').hasClass('d-none') && outcome2_satuan.trim().toLowerCase() === "juta m3") {
@@ -2757,7 +2757,7 @@
 
                 if (!$('.outcome3').hasClass('d-none') && outcome3_satuan.trim().toLowerCase() === "m3/detik") {
 
-                    Outcome3lengthFix = 4;
+                    Outcome3lengthFix = 5;
                 }
 
                 if (!$('.outcome3').hasClass('d-none') && outcome3_satuan.trim().toLowerCase() === "juta m3") {
@@ -3081,7 +3081,7 @@
                                         total2 += nilaiOTKSK503706
                                     }
 
-                                    var jumlahDesimal_target = (total2 % 1 === 0) ? 0 : total2.toFixed(TargetlengthFix).toString().split('.')[1].length;
+                                    var jumlahDesimal_target = (total2 % 1 === 0) ? 0 : total2.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
                                     totalJumlahTargetDenganKomaIndikator = total2.toLocaleString('id-ID', {
                                         // minimumFractionDigits: jumlahDesimal_target
                                         minimumFractionDigits: jumlahDesimal_target
@@ -3091,11 +3091,14 @@
                                     $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
 
                                 } else {
-                                    var jumlahDesimal_target = (total1 % 1 === 0) ? 0 : total1.toFixed(TargetlengthFix).toString().split('.')[1].length;
+                                    var jumlahDesimal_target = (total1 % 1 === 0) ? 0 : total1.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
                                     totalJumlahTargetDenganKomaIndikator = total1.toLocaleString('id-ID', {
                                         // minimumFractionDigits: jumlahDesimal_target
                                         minimumFractionDigits: jumlahDesimal_target
                                     });
+
+                                    console.log(totalJumlahTargetDenganKomaIndikator);
+
                                     $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
                                 }
 
