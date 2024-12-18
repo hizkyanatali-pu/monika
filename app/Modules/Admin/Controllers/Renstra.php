@@ -3739,19 +3739,97 @@ class Renstra extends \App\Controllers\BaseController
 
         //array
         $dataArr = [
+
+            /* SATKER BALAI */
             // INDIKATOR Persentase deviasi perencanaan program dengan penganggaran tahunan UPT
             "61005" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
             //Persentase penurunan jumlah revisi anggaran UPT
             "61006" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
             // Persentase keterpaduan perencanaan pengelolaan SDA WS Wilayah Kerja UPT
             "61007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /* END SATKER BALAI */
 
-            // .....
 
-            // .....
+            /* DIREKTORAT SISTEM DAN STRATEGI PENGELOLAAN SDA */
+            // Persentase deviasi perencanaan program dengan penganggaran tahunan Ditjen SDA
+            "311001" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            // Persentase penurunan jumlah revisi anggaran di lingkungan Ditjen SDA
+            "311002" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            // Persentase keterpaduan perencanaan pengelolaan SDA WS Kewenangan Pusat di lingkungan Ditjen SDA
+            "311003" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            // Tingkat implementasi penyelenggaraan SAKIP Ditjen SDA
+            "311004" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            // Persentase progres pengadaan tanah untuk infrastruktur SDA
+            "311005" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            // Persentase pencapaian target wilayah Sungai yang dinilai indeks penilaian kinerjanya
+            "311006" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            // Indeks evaluasi kinerja anggaran
+            "311007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /* END DIREKTORAT SISTEM DAN STRATEGI PENGELOLAAN SDA */
 
+
+            /* SATKER PENGADAAN TANAH */
             // Jumlah luas tanah yang dibebaskan 
             "71001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /* END SATKER PENGADAAN TANAH */
+
+
+            /* SATKER PJPA */
+            // Jumlah tambahan panjang jaringan irigasi yang dibangun
+            "11001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "11002" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "11003" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "11004" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /* END SATKER PJPA */
+
+
+            /* DIREKTORAT IRIGASI DAN RAWA */
+            "321001" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "321002" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "321003" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /*END DIREKTORAT IRIGASI DAN RAWA */
+
+            /* BALTEK IRIGASI */
+            "121001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /*END BALTEK IRIGASI */
+
+            /* BALTEK RAWA */
+            "131001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /*END BALTEK RAWA */
+
+            /* SATKER PJSA*/
+            "21001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "21002" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "21003" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "21004" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "21005" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /* END SATKER PJSA */
+
+            /* SATKER PTPIN*/
+            "81001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /* END SATKER PTPIN */
+
+            /* DIREKTORAT SUNGAI & PANTAI*/
+            "331001" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "331002" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "331003" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /*END DIREKTORAT SUNGAI & PANTAI*/
+
+            /* BALAI TEKNIK SUNGAI*/
+            "141006" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "141007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "141008" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "141009" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /*END BALAI TEKNIK SUNGAI*/
+
+            /* BALAI TEKNIK PANTAI*/
+            "151007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "151008" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "151009" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            "151010" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+            /*END BALAI TEKNIK PANTAI*/
+
+
 
 
         ];
@@ -3759,46 +3837,144 @@ class Renstra extends \App\Controllers\BaseController
 
 
         //sheet 1
-        foreach ($dataArr as $templateRowId => $selectQuery) {
-            // Buat query dengan mengganti parameter berdasarkan $dataArr
-            $query = $this->db->query("
-                SELECT 
-                    $selectQuery,
+        // foreach ($dataArr as $templateRowId => $selectQuery) {
+        //     // Buat query dengan mengganti parameter berdasarkan $dataArr
+        //     $query = $this->db->query("
+        //         SELECT 
+        //             $selectQuery,
 
-                    GROUP_CONCAT(DISTINCT m_satker.satker ORDER BY m_satker.satker) AS satkerList
-                FROM renstra_data data1
-                LEFT JOIN renstra_data_rows data2 ON data1.id = data2.dokumen_id
-                LEFT JOIN m_satker ON data1.satkerid = m_satker.satkerid
-                WHERE data2.template_row_id = '$templateRowId'
-                  AND data1.tahun = '$tahun'
-                  AND data1.dokumen_type = 'satker'
-                  AND data1.status = 'setuju'
-            ORDER BY m_satker.satker")->getRowArray();
+        //             GROUP_CONCAT(DISTINCT m_satker.satker ORDER BY m_satker.satker) AS satkerList
+        //         FROM renstra_data data1
+        //         LEFT JOIN renstra_data_rows data2 ON data1.id = data2.dokumen_id
+        //         LEFT JOIN m_satker ON data1.satkerid = m_satker.satkerid
+        //         WHERE data2.template_row_id = '$templateRowId'
+        //           AND data1.tahun = '$tahun'
+        //           AND data1.dokumen_type = 'satker'
+        //           AND data1.status = 'setuju'
+        //     ORDER BY m_satker.satker")->getRowArray();
 
-            // Simpan hasil query dalam array dengan key `templateRowId`
-            $results[$templateRowId] = $query;
-        }
+        //     // Simpan hasil query dalam array dengan key `templateRowId`
+        //     $results[$templateRowId] = $query;
+        // }
 
-        $sheet->setCellValue('G' . 34, $results[61005]['outputVol']); // INDIKATOR Persentase deviasi perencanaan program dengan penganggaran tahunan UPT
-        $sheet->setCellValue('I' . 34, $results[61005]['outcomeVol']); // INDIKATOR Persentase deviasi perencanaan program dengan penganggaran tahunan UPT
-        $sheet->setCellValue('O' . 34, $results[61005]['satkerList']); // INDIKATOR Persentase deviasi perencanaan program dengan penganggaran tahunan UPT
-
-        $sheet->setCellValue('G' . 35, $results[61006]['outputVol']); // INDIKATOR Persentase penurunan jumlah revisi anggaran UPT
-        $sheet->setCellValue('I' . 35, $results[61006]['outcomeVol']); // INDIKATOR Persentase penurunan jumlah revisi anggaran UPT
-        $sheet->setCellValue('O' . 35, $results[61006]['satkerList']); // INDIKATOR Persentase penurunan jumlah revisi anggaran UPT
-
-
-        $sheet->setCellValue('G' . 36, $results[61007]['outputVol']); // INDIKATOR Persentase keterpaduan perencanaan pengelolaan SDA WS Wilayah Kerja UPT
-        $sheet->setCellValue('I' . 36, $results[61007]['outcomeVol']); // INDIKATOR Persentase keterpaduan perencanaan pengelolaan SDA WS Wilayah Kerja UPT
-        $sheet->setCellValue('O' . 36, $results[61007]['satkerList']); // INDIKATOR Persentase keterpaduan perencanaan pengelolaan SDA WS Wilayah Kerja UPT
-
-
-
-
-        $sheet->setCellValue('G' . 46, $results[71001]['outputVol'] ?? 0); // INDIKATOR Jumlah luas tanah yang dibebaskan
-        $sheet->setCellValue('I' . 46, $results[71001]['outcomeVol']) ?? 0; // INDIKATOR Jumlah luas tanah yang dibebaskan
-        $sheet->setCellValue('O' . 46, $results[71001]['satkerList']) ?? 0; // INDIKATOR Jumlah luas tanah yang dibebaskan
-
+        // $sheet->setCellValue('G' . 34, $results[61005]['outputVol'] ?? 0); // INDIKATOR Persentase deviasi perencanaan program dengan penganggaran tahunan UPT
+        // $sheet->setCellValue('I' . 34, $results[61005]['outcomeVol'] ?? 0); // INDIKATOR Persentase deviasi perencanaan program dengan penganggaran tahunan UPT
+        // $sheet->setCellValue('O' . 34, $results[61005]['satkerList']); // INDIKATOR Persentase deviasi perencanaan program dengan penganggaran tahunan UPT
+        // $sheet->setCellValue('G' . 35, $results[61006]['outputVol'] ?? 0); // INDIKATOR Persentase penurunan jumlah revisi anggaran UPT
+        // $sheet->setCellValue('I' . 35, $results[61006]['outcomeVol'] ?? 0); // INDIKATOR Persentase penurunan jumlah revisi anggaran UPT
+        // $sheet->setCellValue('O' . 35, $results[61006]['satkerList']); // INDIKATOR Persentase penurunan jumlah revisi anggaran UPT
+        // $sheet->setCellValue('G' . 36, $results[61007]['outputVol'] ?? 0); // INDIKATOR Persentase keterpaduan perencanaan pengelolaan SDA WS Wilayah Kerja UPT
+        // $sheet->setCellValue('I' . 36, $results[61007]['outcomeVol'] ?? 0); // INDIKATOR Persentase keterpaduan perencanaan pengelolaan SDA WS Wilayah Kerja UPT
+        // $sheet->setCellValue('O' . 36, $results[61007]['satkerList']); // INDIKATOR Persentase keterpaduan perencanaan pengelolaan SDA WS Wilayah Kerja UPT
+        // /* ------------------------------------------------------------------------------------- */
+        // $sheet->setCellValue('G' . 38, $results[311001]['outputVol'] ?? 0); // Persentase deviasi perencanaan program dengan penganggaran tahunan Ditjen SDA
+        // $sheet->setCellValue('I' . 38, $results[311001]['outcomeVol'] ?? 0); // Persentase deviasi perencanaan program dengan penganggaran tahunan Ditjen SDA
+        // $sheet->setCellValue('O' . 38, $results[311001]['satkerList']); // Persentase deviasi perencanaan program dengan penganggaran tahunan Ditjen SDA
+        // $sheet->setCellValue('G' . 39, $results[311002]['outputVol'] ?? 0); // Persentase penurunan jumlah revisi anggaran di lingkungan Ditjen SDA
+        // $sheet->setCellValue('I' . 39, $results[311002]['outcomeVol'] ?? 0); // Persentase penurunan jumlah revisi anggaran di lingkungan Ditjen SDA
+        // $sheet->setCellValue('O' . 39, $results[311002]['satkerList']); // Persentase penurunan jumlah revisi anggaran di lingkungan Ditjen SDA
+        // $sheet->setCellValue('G' . 40, $results[311003]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 40, $results[311003]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 40, $results[311003]['satkerList']);
+        // $sheet->setCellValue('G' . 41, $results[311004]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 41, $results[311004]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 41, $results[311004]['satkerList']);
+        // $sheet->setCellValue('G' . 42, $results[311005]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 42, $results[311005]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 42, $results[311005]['satkerList']);
+        // $sheet->setCellValue('G' . 43, $results[311006]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 43, $results[311006]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 43, $results[311006]['satkerList']);
+        // $sheet->setCellValue('G' . 44, $results[311007]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 44, $results[311007]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 44, $results[311007]['satkerList']);
+        // /* ------------------------------------------------------------------------------------- */
+        // $sheet->setCellValue('G' . 46, $results[71001]['outputVol'] ?? 0); // INDIKATOR Jumlah luas tanah yang dibebaskan
+        // $sheet->setCellValue('I' . 46, $results[71001]['outcomeVol'] ?? 0); // INDIKATOR Jumlah luas tanah yang dibebaskan
+        // $sheet->setCellValue('O' . 46, $results[71001]['satkerList']); // INDIKATOR Jumlah luas tanah yang dibebaskan
+        // /* ------------------------------------------------------------------------------------- */
+        // $sheet->setCellValue('G' . 67, $results[11001]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 67, $results[11001]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 67, $results[11001]['satkerList']);
+        // $sheet->setCellValue('G' . 68, $results[11002]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 68, $results[11002]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 68, $results[11002]['satkerList']);
+        // $sheet->setCellValue('G' . 69, $results[11003]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 69, $results[11003]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 69, $results[11003]['satkerList']);
+        // $sheet->setCellValue('G' . 70, $results[11004]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 70, $results[11004]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 70, $results[11004]['satkerList']);
+        // /* ------------------------------------------------------------------------------------- */
+        // $sheet->setCellValue('G' . 72, $results[321001]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 72, $results[321001]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 72, $results[321001]['satkerList']);
+        // $sheet->setCellValue('G' . 73, $results[321002]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 73, $results[321002]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 73, $results[321002]['satkerList']);
+        // $sheet->setCellValue('G' . 74, $results[321003]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 74, $results[321003]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 74, $results[321003]['satkerList']);
+        // /* ------------------------------------------------------------------------------------- */
+        // $sheet->setCellValue('G' . 76, $results[121001]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 76, $results[121001]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 76, $results[121001]['satkerList']);
+        // /* ------------------------------------------------------------------------------------- */
+        // $sheet->setCellValue('G' . 77, $results[131001]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 77, $results[131001]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 77, $results[131001]['satkerList']);
+        // /* ------------------------------------------------------------------------------------- */
+        // $sheet->setCellValue('G' . 108, ($results[21001]['outputVol'] + $results[81001]['outputVol']) ?? 0); //dijumlahkan dengan SK yang di PTPIN
+        // $sheet->setCellValue('I' . 108, ($results[21001]['outcomeVol'] + $results[81001]['outcomeVol']) ?? 0); //dijumlahkan dengan SK yang di PTPIN
+        // $sheet->setCellValue('O' . 108, $results[21001]['satkerList'] . $results[81001]['satkerList'] ? ", " . $results[81001]['satkerList'] : '');
+        // $sheet->setCellValue('G' . 109, $results[21002]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 109, $results[21002]['outcomeVol']  ?? 0);
+        // $sheet->setCellValue('O' . 109, $results[21002]['satkerList']);
+        // $sheet->setCellValue('G' . 110, $results[21003]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 110, $results[21003]['outcomeVol']  ?? 0);
+        // $sheet->setCellValue('O' . 110, $results[21003]['satkerList']);
+        // $sheet->setCellValue('G' . 111, $results[21004]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 111, $results[21004]['outcomeVol']  ?? 0);
+        // $sheet->setCellValue('O' . 111, $results[21004]['satkerList']);
+        // $sheet->setCellValue('G' . 112, $results[21005]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 112, $results[21005]['outcomeVol']  ?? 0);
+        // $sheet->setCellValue('O' . 112, $results[21005]['satkerList']);
+        // /* ------------------------------------------------------------------------------------- */
+        // $sheet->setCellValue('G' . 114, $results[331001]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 114, $results[331001]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 114, $results[331001]['satkerList']);
+        // $sheet->setCellValue('G' . 115, $results[331002]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 115, $results[331002]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 115, $results[331002]['satkerList']);
+        // $sheet->setCellValue('G' . 116, $results[331003]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 116, $results[331003]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 116, $results[331003]['satkerList']);
+        // /* ------------------------------------------------------------------------------------- */
+        // $sheet->setCellValue('G' . 118, $results[141006]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 118, $results[141006]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 118, $results[141006]['satkerList']);
+        // $sheet->setCellValue('G' . 119, $results[141007]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 119, $results[141007]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 119, $results[141007]['satkerList']);
+        // $sheet->setCellValue('G' . 120, $results[141008]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 120, $results[141008]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 120, $results[141008]['satkerList']);
+        // $sheet->setCellValue('G' . 121, $results[141009]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 121, $results[141009]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 121, $results[141009]['satkerList']);
+        // /* ------------------------------------------------------------------------------------- */
+        // $sheet->setCellValue('G' . 123, $results[151007]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 123, $results[151007]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 123, $results[151007]['satkerList']);
+        // $sheet->setCellValue('G' . 124, $results[151008]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 124, $results[151008]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 124, $results[151008]['satkerList']);
+        // $sheet->setCellValue('G' . 125, $results[151009]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 125, $results[151009]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 125, $results[151009]['satkerList']);
+        // $sheet->setCellValue('G' . 126, $results[151010]['outputVol'] ?? 0);
+        // $sheet->setCellValue('I' . 126, $results[151010]['outcomeVol'] ?? 0);
+        // $sheet->setCellValue('O' . 126, $results[151010]['satkerList']);
 
 
 
@@ -3819,9 +3995,9 @@ class Renstra extends \App\Controllers\BaseController
             $sheet2->setCellValue('B' . $col, $value2->id);
             $sheet2->setCellValue('C' . $col, $value2->satker);
             $sheet2->setCellValue('D' . $col, indikatorRenstra_name($value2->template_row_id));
-            $sheet2->setCellValue('E' . $col, $value2->target_value);
+            $sheet2->setCellValue('E' . $col, str_replace(",", ".", $value2->target_value));
             $sheet2->setCellValue('F' . $col, $value2->target_sat);
-            $sheet2->setCellValue('G' . $col, $value2->outcome1_value);
+            $sheet2->setCellValue('G' . $col, str_replace(",", ".", $value2->outcome1_value));
             $sheet2->setCellValue('H' . $col, $value2->outcome1_sat);
 
 
@@ -3845,9 +4021,9 @@ class Renstra extends \App\Controllers\BaseController
             $sheet3->setCellValue('B' . $col, $value3->id);
             $sheet3->setCellValue('C' . $col, $value3->satker);
             $sheet3->setCellValue('D' . $col, indikatorRenstra_name($value3->template_row_id));
-            $sheet3->setCellValue('E' . $col, $value3->target_value);
+            $sheet3->setCellValue('E' . $col, str_replace(",", ".", $value3->target_value));
             $sheet3->setCellValue('F' . $col, $value3->target_sat);
-            $sheet3->setCellValue('G' . $col, $value3->outcome1_value);
+            $sheet3->setCellValue('G' . $col, str_replace(",", ".", $value3->outcome1_value));
             $sheet3->setCellValue('H' . $col, $value3->outcome1_sat);
 
 
@@ -3871,9 +4047,9 @@ class Renstra extends \App\Controllers\BaseController
             $sheet4->setCellValue('B' . $col, $value4->id);
             $sheet4->setCellValue('C' . $col, $value4->satker);
             $sheet4->setCellValue('D' . $col, indikatorRenstra_name($value4->template_row_id));
-            $sheet4->setCellValue('E' . $col, $value4->target_value);
+            $sheet4->setCellValue('E' . $col, str_replace(",", ".", $value4->target_value));
             $sheet4->setCellValue('F' . $col, $value4->target_sat);
-            $sheet4->setCellValue('G' . $col, $value4->outcome1_value);
+            $sheet4->setCellValue('G' . $col, str_replace(",", ".", $value4->outcome1_value));
             $sheet4->setCellValue('H' . $col, $value4->outcome1_sat);
 
 
@@ -3937,13 +4113,13 @@ class Renstra extends \App\Controllers\BaseController
             $sheet6->setCellValue('B' . $col, $value6->id);
             $sheet6->setCellValue('C' . $col, $value6->satker);
             $sheet6->setCellValue('D' . $col, indikatorOgiat_name($value6->template_ogiat_id));
-            $sheet6->setCellValue('E' . $col, $value6->output_val);
+            $sheet6->setCellValue('E' . $col, str_replace(",", ".", $value6->output_val));
             $sheet6->setCellValue('F' . $col, $value6->output_sat);
-            $sheet6->setCellValue('G' . $col, $value6->outcome1_val);
+            $sheet6->setCellValue('G' . $col, str_replace(",", ".", $value6->outcome1_val));
             $sheet6->setCellValue('H' . $col, $value6->outcome1_sat);
-            $sheet6->setCellValue('I' . $col, $value6->outcome2_val);
+            $sheet6->setCellValue('I' . $col, str_replace(",", ".", $value6->outcome2_val));
             $sheet6->setCellValue('J' . $col, $value6->outcome2_sat);
-            $sheet6->setCellValue('K' . $col, $value6->outcome3_val);
+            $sheet6->setCellValue('K' . $col, str_replace(",", ".", $value6->outcome3_val));
             $sheet6->setCellValue('L' . $col, $value6->outcome3_sat);
             $sheet6->setCellValue('M' . $col, $value6->status);
 
@@ -3986,13 +4162,13 @@ class Renstra extends \App\Controllers\BaseController
             $sheet7->setCellValue('C' . $col, $value7->satker);
             $sheet7->setCellValue('D' . $col, indikatorOgiat_name($value7->template_ogiat_id));
             $sheet7->setCellValue('E' . $col, paket_name($value7->idpaket, $tahun));
-            $sheet7->setCellValue('F' . $col, $value7->output_val);
+            $sheet7->setCellValue('F' . $col, str_replace(",", ".", $value7->output_val));
             $sheet7->setCellValue('G' . $col, $value7->output_sat);
-            $sheet7->setCellValue('H' . $col, $value7->outcome1_val);
+            $sheet7->setCellValue('H' . $col, str_replace(",", ".", $value7->outcome1_val));
             $sheet7->setCellValue('I' . $col, $value7->outcome1_sat);
-            $sheet7->setCellValue('J' . $col, $value7->outcome2_val);
+            $sheet7->setCellValue('J' . $col, str_replace(",", ".", $value7->outcome2_val));
             $sheet7->setCellValue('K' . $col, $value7->outcome2_sat);
-            $sheet7->setCellValue('L' . $col, $value7->outcome3_val);
+            $sheet7->setCellValue('L' . $col, str_replace(",", ".", $value7->outcome3_val));
             $sheet7->setCellValue('M' . $col, $value7->outcome3_sat);
             $sheet7->setCellValue('N' . $col, $value7->status);
 
