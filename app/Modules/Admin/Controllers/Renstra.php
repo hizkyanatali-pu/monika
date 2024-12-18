@@ -103,8 +103,8 @@ class Renstra extends \App\Controllers\BaseController
         $dataBelumInput = $this->satker->select("
             m_satker.satker
         ")
-            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']} AND `status` != 'revision'
-            AND deleted_at is null) < 1 and m_satker.grup_jabatan = 'satker'")
+            ->where("(SELECT count(id) FROM renstra_data WHERE dokumen_type='satker' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']} AND `status` != 'revision' AND balaiid != 98
+            AND deleted_at is null) < 1  AND balaiid != 98 and m_satker.grup_jabatan = 'satker'")
             ->get()->getResult();
 
         $dataBelumInput = array_map(function ($arr) {
@@ -117,7 +117,7 @@ class Renstra extends \App\Controllers\BaseController
 
         return view('Modules\Admin\Views\Renstra\satker.php', [
             'sessionYear'              => $this->user['tahun'],
-            'title'                => 'Dokumen Penjanjian Kinerja - Satker',
+            'title'                => 'RENSTRA - Satker',
             'dokumenType'              => 'satker',
             'dataBelumInput'           => $dataBelumInput,
             'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'satker')->get()->getResult()),
@@ -143,7 +143,7 @@ class Renstra extends \App\Controllers\BaseController
 
         return view('Modules\Admin\Views\DokumenPK\satker.php', [
             'sessionYear'              => $this->user['tahun'],
-            'title'                => 'Dokumen Penjanjian Kinerja - Balai',
+            'title'                => 'RENSTRA - Balai',
             'dokumenType'              => 'balai',
             'dataBelumInput'           => $dataBelumInput,
             'createDokumen_userOption' => json_encode($this->tableBalai->select("balaiid as id, balai as title")->where('kota_penanda_tangan !=', '')->get()->getResult())
@@ -153,11 +153,13 @@ class Renstra extends \App\Controllers\BaseController
 
     public function eselon2()
     {
+
+
         $dataBelumInput = $this->satker->select("
-        m_satker.satker
-    ")
-            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='eselon2' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']} AND `status` != 'revision'
-		AND deleted_at is null) < 1 and m_satker.grup_jabatan = 'eselon2'")
+            m_satker.satker
+        ")
+            ->where("(SELECT count(id) FROM renstra_data WHERE dokumen_type='eselon2' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid AND `status` != 'revision' AND tahun= {$this->user['tahun']}
+            AND deleted_at is null) < 1 and m_satker.grup_jabatan = 'eselon2'")
             ->get()->getResult();
 
         $dataBelumInput = array_map(function ($arr) {
@@ -166,13 +168,15 @@ class Renstra extends \App\Controllers\BaseController
             ];
         }, $dataBelumInput);
 
+        $instansi =  $this->tableSatker->select("satkerid,satker")->get()->getResult();
 
-        return view('Modules\Admin\Views\DokumenPK\satker.php', [
+        return view('Modules\Admin\Views\Renstra\satker.php', [
             'sessionYear'              => $this->user['tahun'],
-            'title'                => 'Dokumen Penjanjian Kinerja - Eselon 2',
+            'title'                => 'RENSTRA - ESELON 2',
             'dokumenType'              => 'eselon2',
             'dataBelumInput'           => $dataBelumInput,
-            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon2')->get()->getResult())
+            'createDokumen_userOption' => json_encode($this->tableSatker->select("satkerid as id, satker as title")->whereNotIn('satker', ['', '1'])->where('grup_jabatan', 'eselon2')->get()->getResult()),
+
         ]);
     }
 
@@ -183,7 +187,7 @@ class Renstra extends \App\Controllers\BaseController
         $dataBelumInput = $this->satker->select("
         m_satker.satker
     ")
-            ->where("(SELECT count(id) FROM dokumenpk_satker WHERE dokumen_type='eselon1' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']} AND `status` != 'revision'
+            ->where("(SELECT count(id) FROM renstra_data WHERE dokumen_type='eselon1' and satkerid=m_satker.satkerid and balaiid=m_satker.balaiid and tahun= {$this->user['tahun']} AND `status` != 'revision'
 		AND deleted_at is null) < 1 and m_satker.grup_jabatan = 'eselon1'")
             ->get()->getResult();
 
@@ -193,7 +197,7 @@ class Renstra extends \App\Controllers\BaseController
             ];
         }, $dataBelumInput);
 
-        return view('Modules\Admin\Views\DokumenPK\satker.php', [
+        return view('Modules\Admin\Views\Renstra\satker.php', [
             'sessionYear'              => $this->user['tahun'],
             'title'                => 'Dokumen Penjanjian Kinerja - Eselon1',
             'dokumenType'              => 'eselon1',
