@@ -1442,6 +1442,10 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     }
                 }
 
+                if ($data_targetValue['target_value'] == 0 && $data_targetValue['capaian_output_value'] == 0) {
+                    $kinerja = 100;
+                }
+
 
                 $pdf->SetWidths(array($tableDataWidth[0], $width_cellTitle, $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4]));
                 $pdf->SetAligns(array('C', 'L', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'));
