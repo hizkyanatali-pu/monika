@@ -356,6 +356,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                     // $routes->post('delete-permanent', '\Modules\Admin\Controllers\RenstraArsip::deletePermanent');
                     // $routes->post('delete-permanent-multiple', '\Modules\Admin\Controllers\RenstraArsip::deletePermanentMultiple');
                 });
+
+                $routes->get('eselon2', '\Modules\Admin\Controllers\Renstra::eselon2');
+
                 $routes->group('eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Renstra::eselon1');
                     $routes->get('export-rekap-excel', '\Modules\Admin\Controllers\Renstra::eselon1_export_rekap_excel');
@@ -441,7 +444,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 });
 
                 $routes->get('balai', '\Modules\Admin\Controllers\Dokumenpk::balai');
-                $routes->get('eselon2', '\Modules\Admin\Controllers\Dokumenpk::eselon2');
+                // $routes->get('eselon2', '\Modules\Admin\Controllers\Dokumenpk::eselon2');
 
                 $routes->group('eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::eselon1');
@@ -508,7 +511,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 });
 
                 $routes->get('get-tgiat-for-formpk', '\Modules\Satker\Controllers\Renstra::getTgiatForFormPk');
-                $routes->get('rekap', '\Modules\Admin\Controllers\RekapPk::pdf');
+                // $routes->get('rekap', '\Modules\Admin\Controllers\RekapPk::pdf');
                 $routes->group('rekapitulasi', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Renstra::RekapRenstraView');
                     // $routes->get('export-rekap-all', '\Modules\Admin\Controllers\Dokumenpk::export_rekap_excel_all');
