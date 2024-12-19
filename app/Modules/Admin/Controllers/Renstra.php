@@ -4064,7 +4064,15 @@ class Renstra extends \App\Controllers\BaseController
                     WHERE NOT EXISTS (
                         SELECT 1
                         FROM renstra_data data1
-                        WHERE data1.satkerid = m_satker.satkerid
+                        WHERE 
+                        data1.satkerid = 
+                            CASE 
+                                WHEN m_satker.satkerid = 498366 THEN 690680
+                                ELSE m_satker.satkerid
+                                CASE 
+                                WHEN m_satker.satkerid = 633077 THEN 498074
+                                ELSE m_satker.satkerid
+                            END
                         AND data1.tahun = '$tahun'
                         AND data1.dokumen_type != 'balai'
                         ) 
