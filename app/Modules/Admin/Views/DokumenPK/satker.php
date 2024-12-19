@@ -1056,7 +1056,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                  ${data.status_ba === '0' ? 'Menunggu Verifikasi' : data.status_ba === '1' ? 'BA Telah Disetujui':data.status_ba === '2' ?'BA Ditolak':'Belum Input BA'}
                  </span>
                 </div>
-                    Status Update : <b>${data.change_status_at}</b>
+                    Status Update : <b>${data.change_status_ba_at}</b>
                     <hr>
 
                     ${dataBeritaAcara}

@@ -4068,9 +4068,9 @@ class Renstra extends \App\Controllers\BaseController
                         FROM renstra_data data1
                         WHERE data1.satkerid = m_satker.satkerid
                         AND data1.tahun = '$tahun'
-                        AND data1.dokumen_type = 'satker'
+                        AND data1.dokumen_type != 'balai'
                         ) 
-                    AND  m_satker.grup_jabatan = 'satker' AND balaiid != '98'
+                    AND  balaiid != '98'
          ORDER BY m_satker.satker")->getResult();
 
         $col = 3;
