@@ -1110,6 +1110,16 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function create()
     {
 
+        // http_response_code(500);
+
+        // // Mengirimkan response JSON yang berisi pesan kesalahan
+        // echo json_encode([
+        //     'status' => false,
+        //     'message' => 'Terjadi kesalahan pada server.'
+        // ]);
+
+        // exit;
+
         $createByAdmin = $this->session->get('createDokumenByAdmin');
         $replacements = [
             "." => "",
@@ -1271,6 +1281,15 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function edit()
     {
+        // http_response_code(500);
+
+        // // Mengirimkan response JSON yang berisi pesan kesalahan
+        // echo json_encode([
+        //     'status' => false,
+        //     'message' => 'Terjadi kesalahan pada server.'
+        // ]);
+
+        // exit;
         $dokumenID = $this->request->getPost('id');
         $replacements = [
             "." => "",
@@ -1333,7 +1352,15 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function editBA()
     {
 
+        // http_response_code(500);
 
+        // // Mengirimkan response JSON yang berisi pesan kesalahan
+        // echo json_encode([
+        //     'status' => false,
+        //     'message' => 'Terjadi kesalahan pada server.'
+        // ]);
+
+        // exit; // Pastikan tidak ada output lebih lanjut
 
         $dokumenID = $this->request->getPost('id');
         $replacements = [

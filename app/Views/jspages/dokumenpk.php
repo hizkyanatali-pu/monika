@@ -358,10 +358,6 @@
                     cancelButtonText: "Batal",
                     showLoaderOnConfirm: true,
                     showCancelButton: true,
-                    onCancel: () => {
-                        element_btnSaveDokumen.removeClass('d-none');
-
-                    },
                     preConfirm: () => {
                         const pesanRevisi = $('textarea[name=pesan-koreksi-dokumen]').val();
 
@@ -388,13 +384,25 @@
                                     })
                                 }
                             },
-                            fail: (xhr) => {
-                                alert('Terjadi kesalahan pada sistem')
+                            error: (xhr, status, error) => {
+
+                                element_btnSaveEditDokumen.removeClass('d-none')
+                                element_btnSaveEditDokumen.parent().find('center').remove()
+
+                                alert('DATA GAGAL DISIMPAN ! ' + error)
                                 console.log(xhr)
                             }
                         })
                     }
-                })
+                }).then((result) => {
+
+                    if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
+                        savingMessageElement.remove();
+                        element_btnSaveDokumen.removeClass('d-none');
+
+
+                    }
+                });
             } else {
                 $.ajax({
                     url: "<?php echo site_url('dokumenpk/create') ?>",
@@ -413,8 +421,12 @@
                             })
                         }
                     },
-                    fail: (xhr) => {
-                        alert('Terjadi kesalahan pada sistem')
+                    error: (xhr, status, error) => {
+
+                        element_btnSaveEditDokumen.removeClass('d-none')
+                        element_btnSaveEditDokumen.parent().find('center').remove()
+
+                        alert('DATA GAGAL DISIMPAN ! ' + error)
                         console.log(xhr)
                     }
                 })
@@ -435,16 +447,14 @@
         let dataBeritaAcara = $(this).attr('data-beritaacara');
 
 
+        let oldButtonText = element_btnSaveEditDokumen.text()
+        element_btnSaveEditDokumen.addClass('d-none')
+        element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+        statusBa = $(this).data("statusba");
 
         if (dataBeritaAcara === "true") {
 
             if (saveDokumenValidation()) {
-
-                statusBa = $(this).data("statusba");
-
-                let oldButtonText = element_btnSaveEditDokumen.text()
-                element_btnSaveEditDokumen.addClass('d-none')
-                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
 
                 let formData = getFormValue(),
                     dataId = $(this).data('id')
@@ -468,8 +478,12 @@
 
                             }
                         },
-                        fail: (xhr) => {
-                            alert('Terjadi kesalahan pada sistem')
+                        error: (xhr, status, error) => {
+
+                            element_btnSaveEditDokumen.removeClass('d-none')
+                            element_btnSaveEditDokumen.parent().find('center').remove()
+
+                            alert('DATA GAGAL DISIMPAN ! ' + error)
                             console.log(xhr)
                         }
                     })
@@ -507,8 +521,12 @@
 
                                     }
                                 },
-                                fail: (xhr) => {
-                                    alert('Terjadi kesalahan pada sistem')
+                                error: (xhr, status, error) => {
+
+                                    element_btnSaveEditDokumen.removeClass('d-none')
+                                    element_btnSaveEditDokumen.parent().find('center').remove()
+
+                                    alert('DATA GAGAL DISIMPAN ! ' + error)
                                     console.log(xhr)
                                 }
                             })
@@ -517,18 +535,17 @@
 
 
 
-                    })
+                    }).then((result) => {
+
+                        if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
+
+                            element_btnSaveEditDokumen.removeClass('d-none')
+                            element_btnSaveEditDokumen.parent().find('center').remove()
+
+                        }
+                    });
                 }
-
-
-
-
-
-
-
             }
-
-
 
 
         } else {
@@ -540,6 +557,7 @@
                 cancelButtonText: "Batal",
                 showLoaderOnConfirm: true,
                 showCancelButton: true,
+
                 preConfirm: () => {
 
                     const pesanRevisi = $('textarea[name=pesan-revisi-dokumen]').val();
@@ -565,9 +583,9 @@
 
                             if (saveDokumenValidation()) {
 
-                                let oldButtonText = element_btnSaveEditDokumen.text()
-                                element_btnSaveEditDokumen.addClass('d-none')
-                                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+                                // let oldButtonText = element_btnSaveEditDokumen.text()
+                                // element_btnSaveEditDokumen.addClass('d-none')
+                                // element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
 
                                 let formData = getFormValue(),
                                     dataId = $(this).data('id')
@@ -589,8 +607,12 @@
 
                                         }
                                     },
-                                    fail: (xhr) => {
-                                        alert('Terjadi kesalahan pada sistem')
+                                    error: (xhr, status, error) => {
+
+
+                                        element_btnSaveEditDokumen.removeClass('d-none')
+                                        element_btnSaveEditDokumen.parent().find('center').remove()
+                                        alert('DATA GAGAL DISIMPAN ! ' + error)
                                         console.log(xhr)
                                     }
                                 })
