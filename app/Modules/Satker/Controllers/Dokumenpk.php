@@ -282,6 +282,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.status,
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
+            dokumenpk_satker.change_status_ba_at,
             dokumenpk_satker.created_at,
             dokumenpk_satker.status_ba,
             dokumen_pk_template_' . session('userData.tahun') . '.title as dokumenTitle,
