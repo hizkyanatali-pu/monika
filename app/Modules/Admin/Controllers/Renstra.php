@@ -4068,10 +4068,9 @@ class Renstra extends \App\Controllers\BaseController
                         data1.satkerid = 
                             CASE 
                                 WHEN m_satker.satkerid = 498366 THEN 690680
-                                ELSE m_satker.satkerid
-                                CASE 
                                 WHEN m_satker.satkerid = 633077 THEN 498074
                                 ELSE m_satker.satkerid
+                        
                             END
                         AND data1.tahun = '$tahun'
                         AND data1.dokumen_type != 'balai'
