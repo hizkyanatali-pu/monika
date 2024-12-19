@@ -4080,8 +4080,6 @@ class Renstra extends \App\Controllers\BaseController
             $sheet5->setCellValue('A' . $col, $results5 + 1);
             $sheet5->setCellValue('B' . $col, $value5->satker);
 
-
-
             $col++;
         }
 
@@ -4183,7 +4181,8 @@ class Renstra extends \App\Controllers\BaseController
 
 
         // Nama file output
-        $fileName = 'Rekap-renstra-' . $tahun . "-" . date('YmdHis') . '.xlsx';
+        $tahun = preg_replace('/\D/', '', $tahun);
+        $fileName = 'Rekap-renstra-tahun-' . $tahun . "-" . date('YmdHis') . '.xlsx';
 
         // Set header untuk download file
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
