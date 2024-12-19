@@ -3718,9 +3718,7 @@ class Renstra extends \App\Controllers\BaseController
     public function rekapRenstra($tahun)
     {
 
-
-
-
+        ob_start(); // Start output buffering
 
         // Path ke file template
         $templatePath = FCPATH . 'FORMAT_RENSTRA.xlsx'; // Simpan file template di folder writable/templates
@@ -3742,101 +3740,101 @@ class Renstra extends \App\Controllers\BaseController
         $sheet7 =  $spreadsheet->getSheet(6);
 
         //array
-        $dataArr = [
+        // $dataArr = [
 
-            /* SATKER BALAI */
-            // INDIKATOR Persentase deviasi perencanaan program dengan penganggaran tahunan UPT
-            "61005" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            //Persentase penurunan jumlah revisi anggaran UPT
-            "61006" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            // Persentase keterpaduan perencanaan pengelolaan SDA WS Wilayah Kerja UPT
-            "61007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /* END SATKER BALAI */
-
-
-            /* DIREKTORAT SISTEM DAN STRATEGI PENGELOLAAN SDA */
-            // Persentase deviasi perencanaan program dengan penganggaran tahunan Ditjen SDA
-            "311001" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            // Persentase penurunan jumlah revisi anggaran di lingkungan Ditjen SDA
-            "311002" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            // Persentase keterpaduan perencanaan pengelolaan SDA WS Kewenangan Pusat di lingkungan Ditjen SDA
-            "311003" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            // Tingkat implementasi penyelenggaraan SAKIP Ditjen SDA
-            "311004" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            // Persentase progres pengadaan tanah untuk infrastruktur SDA
-            "311005" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            // Persentase pencapaian target wilayah Sungai yang dinilai indeks penilaian kinerjanya
-            "311006" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            // Indeks evaluasi kinerja anggaran
-            "311007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /* END DIREKTORAT SISTEM DAN STRATEGI PENGELOLAAN SDA */
+        //     /* SATKER BALAI */
+        //     // INDIKATOR Persentase deviasi perencanaan program dengan penganggaran tahunan UPT
+        //     "61005" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     //Persentase penurunan jumlah revisi anggaran UPT
+        //     "61006" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     // Persentase keterpaduan perencanaan pengelolaan SDA WS Wilayah Kerja UPT
+        //     "61007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /* END SATKER BALAI */
 
 
-            /* SATKER PENGADAAN TANAH */
-            // Jumlah luas tanah yang dibebaskan 
-            "71001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /* END SATKER PENGADAAN TANAH */
+        //     /* DIREKTORAT SISTEM DAN STRATEGI PENGELOLAAN SDA */
+        //     // Persentase deviasi perencanaan program dengan penganggaran tahunan Ditjen SDA
+        //     "311001" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     // Persentase penurunan jumlah revisi anggaran di lingkungan Ditjen SDA
+        //     "311002" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     // Persentase keterpaduan perencanaan pengelolaan SDA WS Kewenangan Pusat di lingkungan Ditjen SDA
+        //     "311003" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     // Tingkat implementasi penyelenggaraan SAKIP Ditjen SDA
+        //     "311004" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     // Persentase progres pengadaan tanah untuk infrastruktur SDA
+        //     "311005" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     // Persentase pencapaian target wilayah Sungai yang dinilai indeks penilaian kinerjanya
+        //     "311006" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     // Indeks evaluasi kinerja anggaran
+        //     "311007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /* END DIREKTORAT SISTEM DAN STRATEGI PENGELOLAAN SDA */
 
 
-            /* SATKER PJPA */
-            // Jumlah tambahan panjang jaringan irigasi yang dibangun
-            "11001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "11002" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "11003" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "11004" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /* END SATKER PJPA */
+        //     /* SATKER PENGADAAN TANAH */
+        //     // Jumlah luas tanah yang dibebaskan 
+        //     "71001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /* END SATKER PENGADAAN TANAH */
 
 
-            /* DIREKTORAT IRIGASI DAN RAWA */
-            "321001" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "321002" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "321003" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /*END DIREKTORAT IRIGASI DAN RAWA */
-
-            /* BALTEK IRIGASI */
-            "121001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /*END BALTEK IRIGASI */
-
-            /* BALTEK RAWA */
-            "131001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /*END BALTEK RAWA */
-
-            /* SATKER PJSA*/
-            "21001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "21002" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "21003" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "21004" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "21005" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /* END SATKER PJSA */
-
-            /* SATKER PTPIN*/
-            "81001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /* END SATKER PTPIN */
-
-            /* DIREKTORAT SUNGAI & PANTAI*/
-            "331001" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "331002" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "331003" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /*END DIREKTORAT SUNGAI & PANTAI*/
-
-            /* BALAI TEKNIK SUNGAI*/
-            "141006" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "141007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "141008" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "141009" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /*END BALAI TEKNIK SUNGAI*/
-
-            /* BALAI TEKNIK PANTAI*/
-            "151007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "151008" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "151009" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            "151010" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
-            /*END BALAI TEKNIK PANTAI*/
+        //     /* SATKER PJPA */
+        //     // Jumlah tambahan panjang jaringan irigasi yang dibangun
+        //     "11001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "11002" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "11003" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "11004" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /* END SATKER PJPA */
 
 
+        //     /* DIREKTORAT IRIGASI DAN RAWA */
+        //     "321001" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "321002" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "321003" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /*END DIREKTORAT IRIGASI DAN RAWA */
+
+        //     /* BALTEK IRIGASI */
+        //     "121001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /*END BALTEK IRIGASI */
+
+        //     /* BALTEK RAWA */
+        //     "131001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /*END BALTEK RAWA */
+
+        //     /* SATKER PJSA*/
+        //     "21001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "21002" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "21003" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "21004" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "21005" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /* END SATKER PJSA */
+
+        //     /* SATKER PTPIN*/
+        //     "81001" => "SUM(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,SUM(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /* END SATKER PTPIN */
+
+        //     /* DIREKTORAT SUNGAI & PANTAI*/
+        //     "331001" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "331002" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "331003" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /*END DIREKTORAT SUNGAI & PANTAI*/
+
+        //     /* BALAI TEKNIK SUNGAI*/
+        //     "141006" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "141007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "141008" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "141009" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /*END BALAI TEKNIK SUNGAI*/
+
+        //     /* BALAI TEKNIK PANTAI*/
+        //     "151007" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "151008" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "151009" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     "151010" => "AVG(CAST(REPLACE(data2.target_value, ',', '.') AS DECIMAL(10,2))) AS outputVol,AVG(CAST(REPLACE(data2.outcome1_value, ',', '.') AS DECIMAL(10,2))) outcomeVol",
+        //     /*END BALAI TEKNIK PANTAI*/
 
 
-        ];
+
+
+        // ];
         $results = [];
 
 
@@ -4181,7 +4179,6 @@ class Renstra extends \App\Controllers\BaseController
 
 
         // Nama file output
-        $tahun = preg_replace('/\D/', '', $tahun);
         $fileName = 'Rekap-renstra-tahun-' . $tahun . "-" . date('YmdHis') . '.xlsx';
 
         // Set header untuk download file
@@ -4192,6 +4189,7 @@ class Renstra extends \App\Controllers\BaseController
         // Tulis file ke output
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
+        ob_end_flush();
         exit;
     }
 }
