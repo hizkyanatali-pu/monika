@@ -320,7 +320,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'dokumenTitle'               => $arr->dokumenTitle,
                 'userCreatedName'            => $arr->userCreatedName,
                 'satkerid'                   => instansi_name($arr->satkerid ?? $arr->balaiid)->nama_instansi,
-                'status_ba'                 => $arr->status_ba
+                'status_ba'                 => $arr->status_ba,
+                'change_status_ba_at'           => $arr->status_ba != null ? date_indo($arr->change_status_ba_at) : '-',
+
 
             ];
         }, $dataDokumen);
