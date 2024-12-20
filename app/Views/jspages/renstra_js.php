@@ -660,9 +660,9 @@
                             elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
                             elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
-                        elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                        elementInput_target.val(formatRupiah(data.target_value))
                         data.target_sat ? elementInput_target_satuan.val(data.target_sat) : ''
-                        elementInput_outcome.val(formatRupiah(data.outcome1_value.toString().replaceAll('.', ',')))
+                        elementInput_outcome.val(formatRupiah(data.outcome1_value))
 
                         const foundRow = getRows.find(row => row.id === data.template_row_id);
                         if (foundRow) {
@@ -3097,7 +3097,6 @@
                                         minimumFractionDigits: jumlahDesimal_target
                                     });
 
-                                    console.log(totalJumlahTargetDenganKomaIndikator);
 
                                     $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
                                 }
