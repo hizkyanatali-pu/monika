@@ -626,7 +626,15 @@
 
 
                 }
-            })
+            }).then((result) => {
+
+                if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
+
+                    element_btnSaveEditDokumen.removeClass('d-none')
+                    element_btnSaveEditDokumen.parent().find('center').remove()
+
+                }
+            });
 
         }
 
@@ -937,13 +945,16 @@
                         })
                     })
                     $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
+                    totalAnggaranCount = 0;
                     res.kegiatan.forEach((data, key) => {
                         let elementInput_target = $('tr[data-kegiatan-id=' + (data.id == "?" ? "-" : data.id) + ']').find('input[name=kegiatan-anggaran]')
 
                         elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
+                        totalAnggaranCount += data.anggaran
+
                     })
 
-                    $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
+                    $('input[name=total-anggaran]').val(formatRupiah(totalAnggaranCount.toString().replaceAll('.', ',')))
 
                     $('.title-ttd-pihak1').text(res.dokumen.pihak1_initial)
                     $('.title-ttd-pihak2').text(res.dokumen.pihak2_initial)
@@ -1105,17 +1116,20 @@
                     rowTableKegiatan += renderFormTemplate_rowKegiatan_item({
                         id: data.id,
                         nama: data.nama,
-                        anggaran: data.anggaran,
+                        anggaran: formatRupiah(data.anggaran.toString().replaceAll('.', ',')),
                         rowType: rowType
                     })
                 })
                 $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
+                totalAnggaranCount = 0;
                 res.kegiatan.forEach((data, key) => {
                     let elementInput_target = $('tr[data-kegiatan-id=' + (data.id == "?" ? "-" : data.id) + ']').find('input[name=kegiatan-anggaran]')
                     elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
+                    totalAnggaranCount += data.anggaran
                 })
 
-                $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
+                // $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
+                $('input[name=total-anggaran]').val(formatRupiah(totalAnggaranCount.toString().replaceAll('.', ',')))
                 $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
                 $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
 
