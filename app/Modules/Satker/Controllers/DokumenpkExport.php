@@ -1018,7 +1018,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
         $widthTitleVolumeSatuan = 30;
 
-        if ($dataDokumen['dokumen_type'] != 'eselon2') {
+        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
 
             $pdf->SetFont($this->fontFamily, 'B', 9);
             $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
@@ -1038,13 +1038,13 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
         $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
         $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
-        if ($dataDokumen['dokumen_type'] != 'eselon2') {
+        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
             $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
             $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
         }
         $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
         $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
-        if ($dataDokumen['dokumen_type'] != 'eselon2') {
+        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
             $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
             $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
         }
@@ -1452,17 +1452,19 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $pdf->SetValigns(array(true, false, true));
                 $pdf->SetLineHeight(6);
 
-                if ($dataDokumen['dokumen_type'] != 'eselon2') {
+                if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
                     $pdf->Row(array(
                         $numberText,
                         $data['title'],
                         $targetValueNew,
                         $satuan_target,
-                        ($dataDokumen['dokumen_type'] === 'balai' ? $outcomeSatker : $outcomeValue),
+                        // ($dataDokumen['dokumen_type'] === 'balai' ? $outcomeSatker : $outcomeValue),
+                        $outcomeValue,
                         $satuan_outcome,
                         $CapaiantargetValue,
                         $satuan_target,
-                        ($dataDokumen['dokumen_type'] === 'balai' ? $CapaianSatkerOutcomeValue : $CapaianoutcomeValue),
+                        // ($dataDokumen['dokumen_type'] === 'balai' ? $CapaianSatkerOutcomeValue : $CapaianoutcomeValue),
+                        $CapaianoutcomeValue,
                         $satuan_outcome,
                         (
                             $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
