@@ -386,8 +386,9 @@
                             },
                             error: (xhr, status, error) => {
 
-                                element_btnSaveEditDokumen.removeClass('d-none')
-                                element_btnSaveEditDokumen.parent().find('center').remove()
+                                element_btnSaveDokumen.removeClass('d-none')
+                                element_btnSaveDokumen.parent().find('center').remove()
+
 
                                 alert('DATA GAGAL DISIMPAN ! ' + error)
                                 console.log(xhr)
@@ -397,8 +398,9 @@
                 }).then((result) => {
 
                     if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
-                        savingMessageElement.remove();
-                        element_btnSaveDokumen.removeClass('d-none');
+                        element_btnSaveDokumen.removeClass('d-none')
+                        element_btnSaveDokumen.parent().find('center').remove()
+
 
 
                     }
@@ -423,14 +425,18 @@
                     },
                     error: (xhr, status, error) => {
 
-                        element_btnSaveEditDokumen.removeClass('d-none')
-                        element_btnSaveEditDokumen.parent().find('center').remove()
+                        element_btnSaveDokumen.removeClass('d-none')
+                        element_btnSaveDokumen.parent().find('center').remove()
 
                         alert('DATA GAGAL DISIMPAN ! ' + error)
                         console.log(xhr)
                     }
                 })
             }
+
+        } else {
+            element_btnSaveDokumen.removeClass('d-none')
+            element_btnSaveDokumen.parent().find('center').remove()
 
         }
         // }).catch(error => {
@@ -545,43 +551,49 @@
                         }
                     });
                 }
+            } else {
+                element_btnSaveEditDokumen.removeClass('d-none')
+                element_btnSaveEditDokumen.parent().find('center').remove()
+
             }
 
 
         } else {
+            if (saveDokumenValidation()) {
 
-            Swal.fire({
-                title: "Anda yakin akan mengedit dokumen ini ? ",
-                html: `<textarea class="form-control" name="pesan-revisi-dokumen" rows="10" placeholder="Tulis pesan" required></textarea>`,
-                confirmButtonText: "Kirim, Beri alasan",
-                cancelButtonText: "Batal",
-                showLoaderOnConfirm: true,
-                showCancelButton: true,
+                Swal.fire({
+                    title: "Anda yakin akan mengedit dokumen ini ? ",
+                    html: `<textarea class="form-control" name="pesan-revisi-dokumen" rows="10" placeholder="Tulis pesan" required></textarea>`,
+                    confirmButtonText: "Kirim, Beri alasan",
+                    cancelButtonText: "Batal",
+                    showLoaderOnConfirm: true,
+                    showCancelButton: true,
 
-                preConfirm: () => {
+                    preConfirm: () => {
 
-                    const pesanRevisi = $('textarea[name=pesan-revisi-dokumen]').val();
+                        const pesanRevisi = $('textarea[name=pesan-revisi-dokumen]').val();
 
-                    if (!pesanRevisi) {
-                        Swal.showValidationMessage('Pesan harus diisi');
-                        return false;
-                    }
+                        if (!pesanRevisi) {
+                            Swal.showValidationMessage('Pesan harus diisi');
+                            return false;
+                        }
 
-                    $.ajax({
-                        url: "<?php echo site_url('dokumenpk/change-status') ?>",
-                        type: "POST",
-                        data: {
-                            csrf_test_name: $('input[name=csrf_test_name]').val(),
-                            dokumenType: 'hold-edit',
-                            dataID: dataID,
-                            message: $('textarea[name=pesan-revisi-dokumen]').val(),
-                            newStatus: 'hold',
-                            _beritaAcara: dataBeritaAcara
-                        },
-                        success: (res) => {
-                            // CheckConnection().then(result => {
 
-                            if (saveDokumenValidation()) {
+
+                        $.ajax({
+                            url: "<?php echo site_url('dokumenpk/change-status') ?>",
+                            type: "POST",
+                            data: {
+                                csrf_test_name: $('input[name=csrf_test_name]').val(),
+                                dokumenType: 'hold-edit',
+                                dataID: dataID,
+                                message: $('textarea[name=pesan-revisi-dokumen]').val(),
+                                newStatus: 'hold',
+                                _beritaAcara: dataBeritaAcara
+                            },
+                            success: (res) => {
+                                // CheckConnection().then(result => {
+
 
                                 // let oldButtonText = element_btnSaveEditDokumen.text()
                                 // element_btnSaveEditDokumen.addClass('d-none')
@@ -616,25 +628,31 @@
                                         console.log(xhr)
                                     }
                                 })
+
+                                // }).catch(error => {
+                                //     alert("Youre internet connection  cs slow");
+                                // });
                             }
-                            // }).catch(error => {
-                            //     alert("Youre internet connection  cs slow");
-                            // });
-                        }
-                    })
+                        })
 
 
 
-                }
-            }).then((result) => {
 
-                if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
+                    }
+                }).then((result) => {
 
-                    element_btnSaveEditDokumen.removeClass('d-none')
-                    element_btnSaveEditDokumen.parent().find('center').remove()
+                    if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
 
-                }
-            });
+                        element_btnSaveEditDokumen.removeClass('d-none')
+                        element_btnSaveEditDokumen.parent().find('center').remove()
+
+                    }
+                });
+
+            } else {
+                element_btnSaveEditDokumen.removeClass('d-none')
+                element_btnSaveEditDokumen.parent().find('center').remove()
+            }
 
         }
 
