@@ -444,7 +444,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 });
 
                 $routes->get('balai', '\Modules\Admin\Controllers\Dokumenpk::balai');
-                // $routes->get('eselon2', '\Modules\Admin\Controllers\Dokumenpk::eselon2');
+                $routes->get('eselon2', '\Modules\Admin\Controllers\Dokumenpk::eselon2');
 
                 $routes->group('eselon1', ['namespace' => 'App\Controllers'], function ($routes) {
                     $routes->get('/', '\Modules\Admin\Controllers\Dokumenpk::eselon1');
