@@ -976,13 +976,24 @@ class Dokumenpk extends \App\Controllers\BaseController
         }
 
 
+        $kegiatanData = $this->dokumenSatker_kegiatan->where('dokumen_id', $id)->get()->getResult();
 
+        $listAnggaran = array_map(function ($kegiatan) {
+            // Hapus desimal dengan floor() atau intval()
+            $anggaranTanpaDesimal = intval($kegiatan->anggaran); // Atau bisa menggunakan intval($kegiatan->anggaran)
+
+            return [
+                'id' => $kegiatan->id,
+                'nama' => $kegiatan->nama,
+                'anggaran' => $anggaranTanpaDesimal, // Anggaran tanpa desimal
+            ];
+        }, $kegiatanData);
 
         return $this->respond([
             'dokumen'      => $dataDokumen,
             'rows'         => $this->dokumenSatker_rows->where('dokumen_id', $id)->get()->getResult(),
             'paket'         => $this->dokumenSatker_paket->where('dokumen_id', $id)->get()->getResult(),
-            'kegiatan'     => $this->dokumenSatker_kegiatan->where('dokumen_id', $id)->get()->getResult(),
+            'kegiatan'     => $listAnggaran,
             'listRevision' => $listPesanRevision
         ]);
     }
