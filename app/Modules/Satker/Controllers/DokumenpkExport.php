@@ -1306,7 +1306,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     $nilaiIKM = $data_targetValue['target_value'];
 
 
-                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 150.00) {
                         $GradeIKM = 'A';
                     } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
                         $GradeIKM = 'B';
@@ -1339,7 +1339,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     $nilaiIKM = $data_targetValue['outcome_value'];
 
 
-                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 150.00) {
                         $GradeIKM = 'A';
                     } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
                         $GradeIKM = 'B';
@@ -1371,7 +1371,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     $nilaiIKM = $data_targetValue['capaian_output_value'];
 
 
-                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 150.00) {
                         $GradeIKM = 'A';
                     } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
                         $GradeIKM = 'B';
@@ -1406,7 +1406,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     $nilaiIKM = $data_targetValue['capaian_outcome_value'];
 
 
-                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 150.00) {
                         $GradeIKM = 'A';
                     } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
                         $GradeIKM = 'B';
@@ -1429,7 +1429,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     $kinerja = ($data_targetValue['capaian_output_value'] / $data_targetValue['target_value']) * 100;
 
 
-                    if ($kinerja >= 88.31 && $kinerja <= 100.00) {
+                    if ($kinerja >= 88.31 && $kinerja <= 150.00) {
                         $gradeKinerja = 'A';
                     } elseif ($kinerja >= 76.61 && $kinerja <= 88.30) {
                         $gradeKinerja = 'B';
