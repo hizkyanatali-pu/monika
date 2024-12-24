@@ -352,7 +352,7 @@
                 formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
 
                 Swal.fire({
-                    title: "Anda yakin akan mengedit dokumen ini ?",
+                    title: "Mengapa dokumen ini diubah, tulis alasannya?",
                     html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan"></textarea>`,
                     confirmButtonText: "Kirim",
                     cancelButtonText: "Batal",
@@ -498,7 +498,7 @@
 
 
                     Swal.fire({
-                        title: "Input Pesan Perubahan ",
+                        title: "Mengapa dokumen ini diubah, tulis alasannya?",
                         html: `<textarea class="form-control" name="pesan-revisi-dokumen-BA" rows="10" placeholder="Tulis pesan" required></textarea>`,
                         confirmButtonText: "Kirim, Beri alasan",
                         cancelButtonText: "Batal",
@@ -562,7 +562,7 @@
             if (saveDokumenValidation()) {
 
                 Swal.fire({
-                    title: "Anda yakin akan mengedit dokumen ini ? ",
+                    title: "Mengapa dokumen ini diubah, tulis alasannya?",
                     html: `<textarea class="form-control" name="pesan-revisi-dokumen" rows="10" placeholder="Tulis pesan" required></textarea>`,
                     confirmButtonText: "Kirim, Beri alasan",
                     cancelButtonText: "Batal",
@@ -1698,25 +1698,43 @@
                 setTimeout(() => {
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
 
-                    if (res.dokumen.revision_message != null) {
+                    // if (res.dokumen.revision_message != null) {
+                    //     element_iframePreviewDokumen.css({
+                    //         // 'height': '60vh'
+                    //         'height': '100vh'
+                    //     })
+                    //     $('.container-revision-alert-cetak').html(`
+                    //         <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                    //             <h5 class="alert-heading">Pesan !</h5>
+                    //             <p>${res.dokumen.revision_message}</p>
+                    //         </div>
+                    //     `)
+                    // } else {
+                    //     element_iframePreviewDokumen.css({
+                    //         // 'height': '80vh'
+                    //         'height': '100vh'
+                    //     })
+                    //     $('.container-revision-alert-cetak').html('')
+                    // }
+
+                    if (res.pesan_perbaikan.length != null) {
                         element_iframePreviewDokumen.css({
-                            // 'height': '60vh'
-                            'height': '100vh'
+                            'height': '60vh'
                         })
                         $('.container-revision-alert-cetak').html(`
-                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Pesan !</h5>
-                                <p>${res.dokumen.revision_message}</p>
-                            </div>
-                        `)
+                        <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                            <h5 class="alert-heading">Daftar Pesan Perubahan !</h5>
+                            ${$.map(res.pesan_perbaikan, function(value) {
+                                return `<p>[${value.reject_date}] ${value.reject_by==1 ? "admin":value.reject_by} : ${value.revision_message}</p>`;
+                            }).join('')}
+                        </div>
+                    `);
                     } else {
                         element_iframePreviewDokumen.css({
-                            // 'height': '80vh'
-                            'height': '100vh'
+                            'height': '80vh'
                         })
                         $('.container-revision-alert-cetak').html('')
                     }
-
 
                     element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
 

@@ -20,6 +20,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $this->dokumenSatker = $this->db->table('dokumenpk_satker');
         $this->dokumenpk_ba_notes = $this->db->table('dokumenpk_ba_notes');
+        $this->dokumenpk_revision_notes = $this->db->table('dokumenpk_revision_notes');
 
         $this->tahun = session('userData.tahun');
 
@@ -471,9 +472,11 @@ class Dokumenpk extends \App\Controllers\BaseController
         $_beritaAcara = $this->request->getPost('_beritaAcara');
 
         if ($_beritaAcara === "0" || $_beritaAcara === 'false') {
+            $dokumenPK = $this->dokumenSatker->where('id', $this->request->getPost('dataID'))->get()->getRow();
+
+
             switch ($this->request->getPost('dokumenType')) {
                 case 'satker':
-                    $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
 
                     $newStatus = $this->request->getPost('newStatus');
 
@@ -485,9 +488,19 @@ class Dokumenpk extends \App\Controllers\BaseController
                     $from = $this->request->getPost('dataID');
 
                     if ($newStatus == "tolak") {
-                        $updatedData['revision_message'] = $this->request->getPost('message');
-                        $updatedData['reject_by']           = $this->user['idpengguna'];
-                        $updatedData['reject_date']           = date("Y-m-d H:i:s");
+                        // $updatedData['revision_message'] = $this->request->getPost('message');
+                        // $updatedData['reject_by']           = $this->user['idpengguna'];
+                        // $updatedData['reject_date']           = date("Y-m-d H:i:s");
+                        $this->dokumenpk_revision_notes->insert([
+                            'id_dokumen'   =>  $this->request->getPost('dataID'),
+                            'revision_message'     => $this->request->getPost('message') ?? null,
+                            'reject_by'    => $this->user['idpengguna'],
+                            'reject_date'  => date("Y-m-d H:i:s"),
+                            'user_id'  => $dokumenPK->user_created,
+                            'revision_master_dokumen_id'  => $dokumenPK->revision_master_dokumen_id,
+                            'tahun'  => $dokumenPK->tahun,
+
+                        ]);
                     } else {
 
                         $updatedData['acc_by']           = $this->user['idpengguna'];
@@ -495,7 +508,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     };
 
 
-
+                    $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
                     $this->dokumenSatker->update($updatedData);
                     break;
                 case 'hold-edit':
@@ -507,7 +520,20 @@ class Dokumenpk extends \App\Controllers\BaseController
                         'change_status_at' => date("Y-m-d H:i:s"),
                         'status_ba'        => '0'
                     ];
-                    $updatedData['revision_message'] = $this->request->getPost('message');
+
+
+                    // $updatedData['revision_message'] = $this->request->getPost('message');
+
+                    $this->dokumenpk_revision_notes->insert([
+                        'id_dokumen'   =>  $this->request->getPost('dataID'),
+                        'revision_message'     => $this->request->getPost('message') ?? null,
+                        'reject_by'    => $this->user['idpengguna'],
+                        'reject_date'  => date("Y-m-d H:i:s"),
+                        'user_id'  => $dokumenPK->user_created,
+                        'revision_master_dokumen_id'  => $dokumenPK->revision_master_dokumen_id,
+                        'tahun'  => $dokumenPK->tahun,
+
+                    ]);
 
 
                     // var_dump($updat edData);die;
