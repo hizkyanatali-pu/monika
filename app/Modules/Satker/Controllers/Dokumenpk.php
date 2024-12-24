@@ -37,6 +37,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
         $this->pkSettingBA          = $this->db->table('dokumenpk_setting_ba');
         $this->dokumenpk_ba_notes = $this->db->table('dokumenpk_ba_notes');
+        $this->dokumenpk_revision_notes = $this->db->table('dokumenpk_revision_notes');
 
 
 
@@ -958,21 +959,41 @@ class Dokumenpk extends \App\Controllers\BaseController
         $listPesanRevision = [];
         $dataDokumen =  $this->dokumenSatker->where('id', $id)->get()->getRow();
 
-        if (!is_null($dataDokumen->revision_master_dokumen_id)) {
-            $dataListRevision = $this->dokumenSatker->where('status', 'revision')
-                ->where('id', $dataDokumen->revision_master_dokumen_id)
-                ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
-                ->get()->getResult();
+        // if (!is_null($dataDokumen->revision_master_dokumen_id)) {
+        //     $dataListRevision = $this->dokumenSatker->where('status', 'revision')
+        //         ->where('id', $dataDokumen->revision_master_dokumen_id)
+        //         ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
+        //         ->get()->getResult();
+
+        //     $listPesanRevision = array_map(function ($arr) {
+        //         // var_dump($arr);die;
+        //         $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
+        //         return [
+        //             'tanggal'       => date_indo($arr->change_status_at) . " " . date("H:i", strtotime($arr->change_status_at)),
+        //             'pesan'         => $arr->revision_message,
+        //             'koreksi_by'    => $dataPengguna->nama ?? '',
+        //         ];
+        //     }, $dataListRevision);
+        // }
+
+        //list pesan revisi/koreksi/penolakan
+        $dokumenpk_revision_notes =  $this->dokumenpk_revision_notes
+            ->where("user_id", $dataDokumen->user_created)
+            ->where("tahun", session('userData.tahun'))->get()->getResult();
+
+
+        if ($dokumenpk_revision_notes) {
+
 
             $listPesanRevision = array_map(function ($arr) {
                 // var_dump($arr);die;
                 $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
                 return [
-                    'tanggal'       => date_indo($arr->change_status_at) . " " . date("H:i", strtotime($arr->change_status_at)),
+                    'tanggal'       => date_indo($arr->reject_date) . " " . date("H:i", strtotime($arr->reject_date)),
                     'pesan'         => $arr->revision_message,
                     'koreksi_by'    => $dataPengguna->nama ?? '',
                 ];
-            }, $dataListRevision);
+            }, $dokumenpk_revision_notes);
         }
 
 
@@ -1250,6 +1271,20 @@ class Dokumenpk extends \App\Controllers\BaseController
                         ->orderBy('id', 'DESC')
                         ->get()->getFirstRow()->revision_number + 1;
                 }
+
+
+                $dokumenPK = $this->dokumenSatker->where('id', $revision_dokumenID)->get()->getRow();
+
+                $this->dokumenpk_revision_notes->insert([
+                    'id_dokumen'   =>  $revision_dokumenID,
+                    'revision_message'  => $revision_message ?? null,
+                    'reject_by'    => $this->user['idpengguna'],
+                    'reject_date'  => date("Y-m-d H:i:s"),
+                    'user_id'  => $dokumenPK->user_created,
+                    'revision_master_dokumen_id'  => $dokumenPK->revision_master_dokumen_id,
+                    'tahun'  => $dokumenPK->tahun,
+
+                ]);
 
                 $this->dokumenSatker->update([
                     'status' => 'revision'
