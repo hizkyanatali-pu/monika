@@ -3033,7 +3033,8 @@
                 if (res.message != 'tidak ada data') {
                     const tbody = $('#tbody');
                     tbody.empty();
-                    var jsonData = JSON.parse(res);
+                    // var jsonData = JSON.parse(res);
+                    var jsonData = res;
 
                     jsonData.forEach(function(balai, index) {
                         if (index === 0) {
