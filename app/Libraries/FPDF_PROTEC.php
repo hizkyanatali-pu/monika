@@ -66,7 +66,9 @@ if (function_exists('openssl_encrypt')) {
 
 class FPDF_PROTEC extends FPDF
 {
-    protected $encrypted = false;  //whether document is protected
+    protected $encrypted = false;
+    protected $padding;
+    protected $encryption_key;
     protected $Uvalue;             //U entry in pdf document
     protected $Ovalue;             //O entry in pdf document
     protected $Pvalue;             //P entry in pdf document
@@ -92,8 +94,7 @@ class FPDF_PROTEC extends FPDF
             $protection += $options[$permission];
         }
         if ($owner_pass === null)
-            // $owner_pass = uniqid(rand());
-            $owner_pass = "Monik4SD4";
+            $owner_pass = uniqid(rand());
         $this->encrypted = true;
         $this->padding = "\x28\xBF\x4E\x5E\x4E\x75\x8A\x41\x64\x00\x4E\x56\xFF\xFA\x01\x08" .
             "\x2E\x2E\x00\xB6\xD0\x68\x3E\x80\x2F\x0C\xA9\xFE\x64\x53\x69\x7A";

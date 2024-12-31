@@ -153,7 +153,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome', $qrcode);
         }
 
-        $pdf->SetProtection(array('print'));
+        $pdf->SetProtection(array('print'), "", "monikaPK@SDA");
 
 
 
@@ -285,7 +285,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $this->pdf_pageDokumenDetailBeritaAcara($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome', $qrcode);
         }
 
-        $pdf->SetProtection(array('print'));
+        $pdf->SetProtection(array('print'), "", "monikaPK@SDA");
 
 
 
