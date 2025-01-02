@@ -1,4 +1,4 @@
-<script src="https://unpkg.com/imask"></script>
+<?php echo script_tag('js/imask.js'); ?>
 
 <script>
     $(window).on('beforeunload', function() {
@@ -101,6 +101,7 @@
 
     $(document).on('click', '.__buat-dokumen-pilih-template', function() {
         let dataID = $(this).data('id')
+        paramsBtnPaket = "buat-dokumen";
 
         $.ajax({
             url: "<?php echo site_url('renstra/get-template/') ?>" + dataID,
@@ -552,13 +553,19 @@
             templateId: $(this).data('template-id'),
             tahunForEdit: tahunForEdit,
             beforeModalMount: () => {
-                $('#modalForm').find('.container-revision-alert').addClass('d-none')
+                // $('#modalForm').find('.container-revision-alert').addClass('d-none')
                 $('#modalForm').find('input').attr('disabled', 'disabled')
                 $('#modalForm').find('select').attr('disabled', 'disabled')
-                $('#modalForm').find('.modal-footer').addClass('d-none')
+                // $('#modalForm').find('.modal-footer').addClass('d-none')
 
                 $('#modalForm').find('.__remove-item-kegiatan').addClass('d-none')
                 $('#modalForm').find('#__add-item-kegiatan').addClass('d-none')
+                $('.__save-dokumen').addClass('d-none')
+
+
+                if ($(this).data('type') == "Admin" || $(this).data('type') == "satker" || $(this).data('type') == "balai") {
+                    $('.__save-update-dokumen').addClass('d-none')
+                }
             }
         })
     })
@@ -645,6 +652,7 @@
                     if (res.dokumen.revision_same_year_number != 0) {
                         $('input[name=revision_same_year]').val(1)
                     }
+
                     satkerIdDefault = 0;
                     res.rows.forEach((data, key) => {
 
@@ -652,9 +660,9 @@
                             elementInput_target_satuan = $('.select-target-satuan[data-row-id=' + data.template_row_id + ']'),
                             elementInput_outcome = $('.__inputTemplateRow-outcome[data-row-id=' + data.template_row_id + ']')
 
-                        elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                        elementInput_target.val(formatRupiah(data.target_value))
                         data.target_sat ? elementInput_target_satuan.val(data.target_sat) : ''
-                        elementInput_outcome.val(formatRupiah(data.outcome1_value.toString().replaceAll('.', ',')))
+                        elementInput_outcome.val(formatRupiah(data.outcome1_value))
 
                         const foundRow = getRows.find(row => row.id === data.template_row_id);
                         if (foundRow) {
@@ -672,6 +680,7 @@
                     let duplicateIds = res.paket.map(e => e['template_ogiat_id']).map((e, i, final) => final.indexOf(e) !== i && i)
                         .filter(obj => res.paket[obj])
                         .map(e => res.paket[e]["template_ogiat_id"])
+
                     if (duplicateIds.length > 0) {
                         duplicateIds.forEach(id => {
                             let duplicate = []
@@ -692,31 +701,37 @@
                                     })
                                 }
                             })
-                            sessionStorage.setItem('Paket_' + id, JSON.stringify(duplicate));
-                        })
-                    } else {
-                        unique.forEach(id => {
-                            let duplicate = []
-                            res.paket.forEach(item => {
 
-                                if (item.template_ogiat_id === id) {
-                                    duplicate.push({
-                                        oGiatId: item.template_ogiat_id,
-                                        paketId: item.idpaket,
-                                        target_nilai: item.output_val,
-                                        target_satuan: item.output_sat,
-                                        outcome1_nilai: item.outcome1_val,
-                                        outcome1_satuan: item.outcome1_sat.replace(/\//g, ''),
-                                        outcome2_nilai: item.outcome2_val ?? "",
-                                        outcome2_satuan: item.outcome2_sat.replace(/\//g, '') ?? "",
-                                        outcome3_nilai: item.outcome3_val ?? "",
-                                        outcome3_satuan: item.outcome3_sat.replace(/\//g, '') ?? "",
-                                    })
-                                }
-                            })
                             sessionStorage.setItem('Paket_' + id, JSON.stringify(duplicate));
                         })
+
+
                     }
+
+                    // else { // yusfi komen untuk edit
+                    unique.forEach(id => {
+                        let duplicate = []
+                        res.paket.forEach(item => {
+
+                            if (item.template_ogiat_id === id) {
+                                duplicate.push({
+                                    oGiatId: item.template_ogiat_id,
+                                    paketId: item.idpaket,
+                                    target_nilai: item.output_val,
+                                    target_satuan: item.output_sat,
+                                    outcome1_nilai: item.outcome1_val,
+                                    outcome1_satuan: item.outcome1_sat.replace(/\//g, ''),
+                                    outcome2_nilai: item.outcome2_val ?? "",
+                                    outcome2_satuan: item.outcome2_sat.replace(/\//g, '') ?? "",
+                                    outcome3_nilai: item.outcome3_val ?? "",
+                                    outcome3_satuan: item.outcome3_sat.replace(/\//g, '') ?? "",
+                                })
+                            }
+                        })
+                        sessionStorage.setItem('Paket_' + id, JSON.stringify(duplicate));
+                    })
+
+                    // }
                     res.ogiat.forEach((data, key) => {
                         let cleanedOutput = data.output_sat;
                         let cleanedOutcome = data.outcome1_sat;
@@ -792,6 +807,24 @@
                     })
 
                     params.beforeModalMount(res)
+
+                    if (res.dokumen.notes_reject != null) {
+
+                        $('.container-revision-alert').removeClass("d-none");
+
+                        $('.container-revision-alert').html(`
+                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                                <h5 class="alert-heading">Pesan !</h5>
+                                <p>${res.dokumen.notes_reject}</p>
+                            </div>
+                        `)
+                    } else {
+
+                        $('.container-revision-alert').html('')
+                    }
+
+
+
 
                     $('.modal').trigger('click');
                     $('#modalForm').modal('show')
@@ -2273,6 +2306,29 @@
         let indikator = $(this).data('indikator');
         let _tahun = $(this).data('tahun');
 
+
+        // kode satker 498077 = PJSA BATANGHARI 2024 ganti kode ke 633074
+        // kode satker 498366 = Bendungan Cimanuk 2024 ganti kode ke 690690
+        if (satkerId == "633074" &&
+            _tahun < 2024) {
+
+            satkerId = "498077"
+        }
+
+
+        if (satkerId == "690680" &&
+            _tahun < 2024) {
+            satkerId = "498366"
+        }
+
+
+
+
+
+
+
+
+
         let docId = $(this).data('dokid');
         let indikatorID = $(this).attr('data-rowid');
         // let skindikatorID = $(this).attr('data-indikatorid');
@@ -2304,7 +2360,8 @@
                 if (res.message != 'tidak ada data') {
                     const tbody = $('#tbody');
                     tbody.empty();
-                    var jsonData = JSON.parse(res);
+                    // var jsonData = JSON.parse(res);
+                    var jsonData = res;
 
                     jsonData.forEach(function(balai, index) {
 
@@ -2334,6 +2391,7 @@
                             trClass = '';
                             output_from_satrker = ''
                             var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
+
                             if (paramsBtnPaket == "lihat" || paramsBtnPaket == 'uptBalai-add') {
                                 checkboxHtml += 'disabled';
                                 $(".checkbox-click").attr("disabled", true)
@@ -2371,9 +2429,9 @@
                                     <td width="5%">${paket.persenKeu}</td>
                                     <td width="5%">${paket.persenFis}</td>
                                     <td width="10%">`;
-                            if (output_satuan !== "DI") {
+                            // if (output_satuan !== "DI") {
 
-                                tbodyContent += `<div class="form-group form-group-last row">
+                            tbodyContent += `<div class="form-group form-group-last row">
                                         <div class="form-group-sub">
                                             <label class="form-control-label">Vol Output :</label>
                                             <input type="text" class="form-control target_nilai checkbox-click" name="target_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"}>
@@ -2390,7 +2448,7 @@
                                                 </div>
                                         </div>
                                     </div>`;
-                            }
+                            // }
 
 
 
@@ -2556,17 +2614,17 @@
 
 
             // jika satuan target DI (PJPA)
-            if (target_satuan != undefined) {
-                if (target_nilai.trim() === '') {
-                    errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
-                } else if (target_satuan.trim() === '') {
-                    errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Satuan yang belum diisi.');
-                }
-            } else {
-                target_nilai = "0";
-                target_satuan = "DI";
+            // if (target_satuan != undefined) {
+            //     if (target_nilai.trim() === '') {
+            //         errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
+            //     } else if (target_satuan.trim() === '') {
+            //         errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Satuan yang belum diisi.');
+            //     }
+            // } else {
+            //     target_nilai = "0";
+            //     target_satuan = "DI";
 
-            }
+            // }
 
 
 
@@ -2669,7 +2727,7 @@
 
                 if (target_satuan.trim().toLowerCase() === "m3/detik") {
 
-                    TargetlengthFix = 4;
+                    TargetlengthFix = 5;
                 }
 
                 if (target_satuan.trim().toLowerCase() === "juta m3") {
@@ -2680,7 +2738,7 @@
 
                 if (outcome1_satuan.trim().toLowerCase() === "m3/detik") {
 
-                    Outcome1lengthFix = 4;
+                    Outcome1lengthFix = 5;
                 }
 
                 if (outcome1_satuan.trim().toLowerCase() === "juta m3") {
@@ -2690,7 +2748,7 @@
 
                 if (!$('.outcome2').hasClass('d-none') && outcome2_satuan.trim().toLowerCase() === "m3/detik") {
 
-                    Outcome2lengthFix = 4;
+                    Outcome2lengthFix = 5;
                 }
 
                 if (!$('.outcome2').hasClass('d-none') && outcome2_satuan.trim().toLowerCase() === "juta m3") {
@@ -2700,7 +2758,7 @@
 
                 if (!$('.outcome3').hasClass('d-none') && outcome3_satuan.trim().toLowerCase() === "m3/detik") {
 
-                    Outcome3lengthFix = 4;
+                    Outcome3lengthFix = 5;
                 }
 
                 if (!$('.outcome3').hasClass('d-none') && outcome3_satuan.trim().toLowerCase() === "juta m3") {
@@ -2744,12 +2802,12 @@
 
 
 
-                if (satuan == "DI") {
-                    totalTarget_nilai.val("1");
-                } else {
-                    totalTarget_nilai.val(totalJumlahTargetDenganKoma);
+                // if (satuan == "DI") {
+                //     totalTarget_nilai.val("1");
+                // } else {
+                totalTarget_nilai.val(totalJumlahTargetDenganKoma);
 
-                }
+                // }
 
 
                 outputKegiatanItems.target.unshift({
@@ -3024,10 +3082,7 @@
                                         total2 += nilaiOTKSK503706
                                     }
 
-                                    console.log(total2);
-
-
-                                    var jumlahDesimal_target = (total2 % 1 === 0) ? 0 : total2.toFixed(TargetlengthFix).toString().split('.')[1].length;
+                                    var jumlahDesimal_target = (total2 % 1 === 0) ? 0 : total2.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
                                     totalJumlahTargetDenganKomaIndikator = total2.toLocaleString('id-ID', {
                                         // minimumFractionDigits: jumlahDesimal_target
                                         minimumFractionDigits: jumlahDesimal_target
@@ -3037,11 +3092,13 @@
                                     $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
 
                                 } else {
-                                    var jumlahDesimal_target = (total1 % 1 === 0) ? 0 : total1.toFixed(TargetlengthFix).toString().split('.')[1].length;
+                                    var jumlahDesimal_target = (total1 % 1 === 0) ? 0 : total1.toFixed(Outcome1lengthFix).toString().split('.')[1].length;
                                     totalJumlahTargetDenganKomaIndikator = total1.toLocaleString('id-ID', {
                                         // minimumFractionDigits: jumlahDesimal_target
                                         minimumFractionDigits: jumlahDesimal_target
                                     });
+
+
                                     $(this).find('.__inputTemplateRow-outcome[data-row-id=' + row_id + ']').val(totalJumlahTargetDenganKomaIndikator)
                                 }
 

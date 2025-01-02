@@ -1,4 +1,5 @@
-<script src="https://unpkg.com/imask"></script>
+<?php echo script_tag('js/imask.js'); ?>
+
 
 <script>
     $(window).on('beforeunload', function() {
@@ -16,6 +17,7 @@
         element_modalFormTitle = element_modalForm.find('.modal-title'),
         element_modalFormBackChooseTemplate = element_modalForm.find('.__back-pilih-dokumen'),
         element_modalPreviewCetakDokumen = $('#modal-preview-cetak'),
+        element_modalPreviewCetakDokumenBA = $('#modal-preview-cetak'),
         element_btnSaveDokumen = $('.__save-dokumen'),
         element_btnSaveEditDokumen = $('.__save-update-dokumen'),
         element_btnChoosePaket = $('.paket')
@@ -121,7 +123,8 @@
                     templateId: dataID,
                     templateTitle: $(this).text(),
                     data: res,
-                    target: 'create'
+                    target: 'create',
+                    paramsBA: false
                 })
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -349,16 +352,12 @@
                 formData['revision_dokumen_master_id'] = $(this).data('dokumen-master-id')
 
                 Swal.fire({
-                    title: "Anda yakin akan mengedit dokumen ini ?",
+                    title: "Mengapa dokumen ini diubah, tulis alasannya?",
                     html: `<textarea class="form-control" name="pesan-koreksi-dokumen" rows="10" placeholder="Tulis pesan"></textarea>`,
                     confirmButtonText: "Kirim",
                     cancelButtonText: "Batal",
                     showLoaderOnConfirm: true,
                     showCancelButton: true,
-                    onCancel: () => {
-                        element_btnSaveDokumen.removeClass('d-none');
-
-                    },
                     preConfirm: () => {
                         const pesanRevisi = $('textarea[name=pesan-koreksi-dokumen]').val();
 
@@ -385,13 +384,27 @@
                                     })
                                 }
                             },
-                            fail: (xhr) => {
-                                alert('Terjadi kesalahan pada sistem')
+                            error: (xhr, status, error) => {
+
+                                element_btnSaveDokumen.removeClass('d-none')
+                                element_btnSaveDokumen.parent().find('center').remove()
+
+
+                                alert('DATA GAGAL DISIMPAN ! ' + error)
                                 console.log(xhr)
                             }
                         })
                     }
-                })
+                }).then((result) => {
+
+                    if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
+                        element_btnSaveDokumen.removeClass('d-none')
+                        element_btnSaveDokumen.parent().find('center').remove()
+
+
+
+                    }
+                });
             } else {
                 $.ajax({
                     url: "<?php echo site_url('dokumenpk/create') ?>",
@@ -410,12 +423,20 @@
                             })
                         }
                     },
-                    fail: (xhr) => {
-                        alert('Terjadi kesalahan pada sistem')
+                    error: (xhr, status, error) => {
+
+                        element_btnSaveDokumen.removeClass('d-none')
+                        element_btnSaveDokumen.parent().find('center').remove()
+
+                        alert('DATA GAGAL DISIMPAN ! ' + error)
                         console.log(xhr)
                     }
                 })
             }
+
+        } else {
+            element_btnSaveDokumen.removeClass('d-none')
+            element_btnSaveDokumen.parent().find('center').remove()
 
         }
         // }).catch(error => {
@@ -429,16 +450,17 @@
     element_btnSaveEditDokumen.on('click', function() {
 
         let dataID = $(this).data('id')
-        let dataBeritaAcara = $(this).data('beritaacara') ? $(this).data('beritaacara') : '';
+        let dataBeritaAcara = $(this).attr('data-beritaacara');
 
-        if (dataBeritaAcara) {
 
+        let oldButtonText = element_btnSaveEditDokumen.text()
+        element_btnSaveEditDokumen.addClass('d-none')
+        element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+        statusBa = $(this).data("statusba");
+
+        if (dataBeritaAcara === "true") {
 
             if (saveDokumenValidation()) {
-
-                let oldButtonText = element_btnSaveEditDokumen.text()
-                element_btnSaveEditDokumen.addClass('d-none')
-                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
 
                 let formData = getFormValue(),
                     dataId = $(this).data('id')
@@ -447,69 +469,143 @@
                 // formData['csrf_test_name'] = res.token
                 formData['_beritaAcara'] = dataBeritaAcara
 
-                $.ajax({
-                    url: "<?php echo site_url('dokumenpk/editDokumenBA') ?>",
-                    type: "POST",
-                    data: formData,
-                    success: (res) => {
 
-                        if (res.status) {
-                            location.reload()
+                if (statusBa == "belum-input") {
+                    formData['statusubahba'] = false;
+
+                    $.ajax({
+                        url: "<?php echo site_url('dokumenpk/editDokumenBA') ?>",
+                        type: "POST",
+                        data: formData,
+                        success: (res) => {
+
+                            if (res.status) {
+                                location.reload()
+
+                            }
+                        },
+                        error: (xhr, status, error) => {
+
+                            element_btnSaveEditDokumen.removeClass('d-none')
+                            element_btnSaveEditDokumen.parent().find('center').remove()
+
+                            alert('DATA GAGAL DISIMPAN ! ' + error)
+                            console.log(xhr)
+                        }
+                    })
+
+                } else {
+
+
+                    Swal.fire({
+                        title: "Mengapa dokumen ini diubah, tulis alasannya?",
+                        html: `<textarea class="form-control" name="pesan-revisi-dokumen-BA" rows="10" placeholder="Tulis pesan" required></textarea>`,
+                        confirmButtonText: "Kirim, Beri alasan",
+                        cancelButtonText: "Batal",
+                        showLoaderOnConfirm: true,
+                        showCancelButton: true,
+                        preConfirm: () => {
+
+                            const pesanRevisi = $('textarea[name=pesan-revisi-dokumen-BA]').val();
+
+                            if (!pesanRevisi) {
+                                Swal.showValidationMessage('Pesan harus diisi');
+                                return false;
+                            }
+
+                            formData['message'] = $('textarea[name=pesan-revisi-dokumen-BA]').val();
+                            formData['statusubahba'] = true;
+
+                            $.ajax({
+                                url: "<?php echo site_url('dokumenpk/editDokumenBA') ?>",
+                                type: "POST",
+                                data: formData,
+                                success: (res) => {
+
+                                    if (res.status) {
+                                        location.reload()
+
+                                    }
+                                },
+                                error: (xhr, status, error) => {
+
+                                    element_btnSaveEditDokumen.removeClass('d-none')
+                                    element_btnSaveEditDokumen.parent().find('center').remove()
+
+                                    alert('DATA GAGAL DISIMPAN ! ' + error)
+                                    console.log(xhr)
+                                }
+                            })
 
                         }
-                    },
-                    fail: (xhr) => {
-                        alert('Terjadi kesalahan pada sistem')
-                        console.log(xhr)
-                    }
-                })
+
+
+
+                    }).then((result) => {
+
+                        if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
+
+                            element_btnSaveEditDokumen.removeClass('d-none')
+                            element_btnSaveEditDokumen.parent().find('center').remove()
+
+                        }
+                    });
+                }
+            } else {
+                element_btnSaveEditDokumen.removeClass('d-none')
+                element_btnSaveEditDokumen.parent().find('center').remove()
+
             }
 
 
-
-
         } else {
+            if (saveDokumenValidation()) {
 
-            Swal.fire({
-                title: "Anda yakin akan mengedit dokumen ini ? ",
-                html: `<textarea class="form-control" name="pesan-revisi-dokumen" rows="10" placeholder="Tulis pesan" required></textarea>`,
-                confirmButtonText: "Kirim, Beri alasan",
-                cancelButtonText: "Batal",
-                showLoaderOnConfirm: true,
-                showCancelButton: true,
-                preConfirm: () => {
+                Swal.fire({
+                    title: "Mengapa dokumen ini diubah, tulis alasannya?",
+                    html: `<textarea class="form-control" name="pesan-revisi-dokumen" rows="10" placeholder="Tulis pesan" required></textarea>`,
+                    confirmButtonText: "Kirim, Beri alasan",
+                    cancelButtonText: "Batal",
+                    showLoaderOnConfirm: true,
+                    showCancelButton: true,
 
-                    const pesanRevisi = $('textarea[name=pesan-revisi-dokumen]').val();
+                    preConfirm: () => {
 
-                    if (!pesanRevisi) {
-                        Swal.showValidationMessage('Pesan harus diisi');
-                        return false;
-                    }
+                        const pesanRevisi = $('textarea[name=pesan-revisi-dokumen]').val();
 
-                    $.ajax({
-                        url: "<?php echo site_url('dokumenpk/change-status') ?>",
-                        type: "POST",
-                        data: {
-                            csrf_test_name: $('input[name=csrf_test_name]').val(),
-                            dokumenType: 'hold-edit',
-                            dataID: dataID,
-                            message: $('textarea[name=pesan-revisi-dokumen]').val(),
-                            newStatus: 'hold',
-                        },
-                        success: (res) => {
-                            // CheckConnection().then(result => {
+                        if (!pesanRevisi) {
+                            Swal.showValidationMessage('Pesan harus diisi');
+                            return false;
+                        }
 
-                            if (saveDokumenValidation()) {
 
-                                let oldButtonText = element_btnSaveEditDokumen.text()
-                                element_btnSaveEditDokumen.addClass('d-none')
-                                element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
+
+                        $.ajax({
+                            url: "<?php echo site_url('dokumenpk/change-status') ?>",
+                            type: "POST",
+                            data: {
+                                csrf_test_name: $('input[name=csrf_test_name]').val(),
+                                dokumenType: 'hold-edit',
+                                dataID: dataID,
+                                message: $('textarea[name=pesan-revisi-dokumen]').val(),
+                                newStatus: 'hold',
+                                _beritaAcara: dataBeritaAcara
+                            },
+                            success: (res) => {
+                                // CheckConnection().then(result => {
+
+
+                                // let oldButtonText = element_btnSaveEditDokumen.text()
+                                // element_btnSaveEditDokumen.addClass('d-none')
+                                // element_btnSaveEditDokumen.parent().append('<center>menyimpan dokumen</center>')
 
                                 let formData = getFormValue(),
                                     dataId = $(this).data('id')
 
                                 formData['id'] = $(this).data('id')
                                 formData['csrf_test_name'] = res.token
+
+
 
 
                                 $.ajax({
@@ -523,22 +619,40 @@
 
                                         }
                                     },
-                                    fail: (xhr) => {
-                                        alert('Terjadi kesalahan pada sistem')
+                                    error: (xhr, status, error) => {
+
+
+                                        element_btnSaveEditDokumen.removeClass('d-none')
+                                        element_btnSaveEditDokumen.parent().find('center').remove()
+                                        alert('DATA GAGAL DISIMPAN ! ' + error)
                                         console.log(xhr)
                                     }
                                 })
+
+                                // }).catch(error => {
+                                //     alert("Youre internet connection  cs slow");
+                                // });
                             }
-                            // }).catch(error => {
-                            //     alert("Youre internet connection  cs slow");
-                            // });
-                        }
-                    })
+                        })
 
 
 
-                }
-            })
+
+                    }
+                }).then((result) => {
+
+                    if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
+
+                        element_btnSaveEditDokumen.removeClass('d-none')
+                        element_btnSaveEditDokumen.parent().find('center').remove()
+
+                    }
+                });
+
+            } else {
+                element_btnSaveEditDokumen.removeClass('d-none')
+                element_btnSaveEditDokumen.parent().find('center').remove()
+            }
 
         }
 
@@ -611,6 +725,35 @@
 
     })
 
+    $(document).on('click', '.__lihat-dokumenBA', function() {
+
+        if ($(this).data('type') == "uptBalai-add") {
+            paramsBtnPaket = "uptBalai-add";
+
+        } else {
+
+            paramsBtnPaket = "lihat";
+        }
+
+
+        prepareRevisiDocument({
+            dataId: $(this).data('id'),
+            templateId: $(this).data('template-id'),
+            beforeModalMount: () => {
+                $('#modalForm').find('.container-revision-alert').addClass('d-none')
+                $('#modalForm').find('input').attr('disabled', 'disabled')
+                $('#modalForm').find('select').attr('disabled', 'disabled')
+                $('#modalForm').find('.modal-footer').addClass('d-none')
+
+                $('#modalForm').find('.__remove-item-kegiatan').addClass('d-none')
+                $('#modalForm').find('#__add-item-kegiatan').addClass('d-none')
+
+            },
+            paramsBA: true
+        })
+
+    })
+
 
 
     $(document).on('click', '.__edit-dokumen', function() {
@@ -631,6 +774,10 @@
                 element_btnSaveEditDokumen.data('id', documentId);
                 $('.__save-dokumen').addClass('d-none')
                 $('.__save-update-dokumen').removeClass('d-none')
+                $('.__save-update-dokumen').attr('data-beritaacara', false);
+                $('.__save-update-dokumen').removeAttr('data-statusba')
+
+
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
             },
@@ -643,7 +790,7 @@
     $(document).on('click', '.__edit-dokumen-berita-acara', function() {
 
 
-
+        let statusBA = $(this).data('statusba') ?? '';
 
         if ($(this).data('type') == "uptBalai-add") {
             paramsBtnPaket = "uptBalai-add";
@@ -662,6 +809,7 @@
                 $('.__save-dokumen').addClass('d-none')
                 $('.__save-update-dokumen').removeClass('d-none')
                 $('.__save-update-dokumen').attr('data-beritaacara', true);
+                $('.__save-update-dokumen').attr('data-statusba', statusBA)
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
             },
@@ -718,6 +866,7 @@
 
         promiseGetTemplate.then((res) => {
 
+
             getRows = res.templateRows;
             $.ajax({
                 url: "<?php echo site_url('dokumenpk/detail/') ?>" + res.dataId,
@@ -738,41 +887,19 @@
                             elementInput_capaian_outcome = $('.__inputTemplateRow-capaian-outcome[data-row-id=' + data.template_row_id + ']')
                         // elementInput_target.val(data.target_value)
                         // elementInput_outcome.val(data.outcome_value)
-                        elementInput_target.val(
-                            (data.template_row_id == "151010") ||
-                            (data.template_row_id == "141009") ||
-                            (data.template_row_id == "171009")
-
-                            ?
-                            data.target_value :
-                            formatRupiah(data.target_value.toString().replaceAll('.', ',')))
+                        elementInput_target.val(formatRupiah(data.target_value.toString().replaceAll('.', ',')))
 
 
-                        elementInput_capaian_target.val(
-                            (data.template_row_id == "151010") ||
-                            (data.template_row_id == "141009") ||
-                            (data.template_row_id == "171009")
-
-                            ?
-                            data.capaian_output_value :
-                            formatRupiah(data.capaian_output_value.toString().replaceAll('.', ',')))
+                        elementInput_capaian_target.val(formatRupiah(data.capaian_output_value.toString().replaceAll('.', ',')))
 
 
                         data.target_sat ? elementInput_target_satuan.val(data.target_sat) : ''
 
 
-                        elementInput_outcome.val(
-                            (data.template_row_id == "151010") ||
-                            (data.template_row_id == "141009") ||
-                            (data.template_row_id == "171009") ? data.outcome_value :
-                            formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
+                        elementInput_outcome.val(formatRupiah(data.outcome_value.toString().replaceAll('.', ',')))
 
 
-                        elementInput_capaian_outcome.val(
-                            (data.template_row_id == "151010") ||
-                            (data.template_row_id == "141009") ||
-                            (data.template_row_id == "171009") ? data.capaian_outcome_value :
-                            formatRupiah(data.capaian_outcome_value.toString().replaceAll('.', ',')))
+                        elementInput_capaian_outcome.val(formatRupiah(data.capaian_outcome_value.toString().replaceAll('.', ',')))
 
 
                         const idPaketArray = res.paket
@@ -783,7 +910,13 @@
                                         target_nilai: item.target_value,
                                         target_satuan: item.target_unit,
                                         outcome_nilai: item.output_value,
-                                        outcome_satuan: item.output_unit
+                                        outcome_satuan: item.output_unit,
+                                        //tambahan Nilai Capaian
+                                        capaian_output_nilai: item.capaian_output_value,
+                                        capaian_output_satuan: item.capaian_output_unit,
+                                        capaian_outcome_nilai: item.capaian_outcome_value,
+                                        capaian_outcome_satuan: item.capaian_outcome_unit
+
                                     };
                                 }
 
@@ -830,15 +963,16 @@
                         })
                     })
                     $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
+                    totalAnggaranCount = 0;
                     res.kegiatan.forEach((data, key) => {
                         let elementInput_target = $('tr[data-kegiatan-id=' + (data.id == "?" ? "-" : data.id) + ']').find('input[name=kegiatan-anggaran]')
 
                         elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
+                        totalAnggaranCount += data.anggaran
+
                     })
 
-                    $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
-                    $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
-                    $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
+                    $('input[name=total-anggaran]').val(formatRupiah(totalAnggaranCount.toString().replaceAll('.', ',')))
 
                     $('.title-ttd-pihak1').text(res.dokumen.pihak1_initial)
                     $('.title-ttd-pihak2').text(res.dokumen.pihak2_initial)
@@ -847,13 +981,32 @@
                         $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
                     }
 
-                    if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
-                    if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
+
 
                     $('select[name=created-kota]').val(res.dokumen.kota).trigger('change')
                     $('input[name=created-kota-nama]').val(res.dokumen.kota_nama)
-                    $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
-                    $('select[name=created-day]').val(res.dokumen.tanggal).trigger('change')
+
+                    if (params.paramsBA) {
+                        $('select[name=created-bulan]').val(res.dokumen.bulan_ttd_ba).trigger('change')
+                        $('select[name=created-day]').val(res.dokumen.tanggal_ttd_ba).trigger('change')
+                        $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd_ba)
+                        $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd_ba)
+
+                        if (res.dokumen.pihak1_is_plt_ba == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
+                        if (res.dokumen.pihak2_is_plt_ba == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
+
+                    } else {
+                        $('select[name=created-bulan]').val(res.dokumen.bulan).trigger('change')
+                        $('select[name=created-day]').val(res.dokumen.tanggal).trigger('change')
+                        $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
+                        $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
+                        if (res.dokumen.pihak1_is_plt == '1') $('input:checkbox[name=ttd-pihak1-plt]').prop('checked', true)
+                        if (res.dokumen.pihak2_is_plt == '1') $('input:checkbox[name=ttd-pihak2-plt]').prop('checked', true)
+
+                    }
+
+
+
                     $('select[name=created-tahun]').val(res.dokumen.tahun_ttd ?? res.dokumen.tahun).trigger('change')
 
                     if (res.dokumen.revision_message != null) {
@@ -866,7 +1019,10 @@
                     }
 
                     if (res.listRevision.length > 0) {
-                        $('.container-list-revision-message').removeClass('d-none')
+                        if (!params.paramsBA) {
+
+                            $('.container-list-revision-message').removeClass('d-none')
+                        }
 
                         let listRevisionMessage = ''
 
@@ -901,7 +1057,7 @@
 
 
 
-    function setDetailDataInForm(dokumenId) {
+    function setDetailDataInForm(dokumenId, _beritaAcara = false) {
         $.ajax({
             url: "<?php echo site_url('dokumenpk/detail/') ?>" + dokumenId,
             type: 'GET',
@@ -978,17 +1134,20 @@
                     rowTableKegiatan += renderFormTemplate_rowKegiatan_item({
                         id: data.id,
                         nama: data.nama,
-                        anggaran: data.anggaran,
+                        anggaran: formatRupiah(data.anggaran.toString().replaceAll('.', ',')),
                         rowType: rowType
                     })
                 })
                 $('.__table-kegiatan').find('tbody').html(rowTableKegiatan)
+                totalAnggaranCount = 0;
                 res.kegiatan.forEach((data, key) => {
                     let elementInput_target = $('tr[data-kegiatan-id=' + (data.id == "?" ? "-" : data.id) + ']').find('input[name=kegiatan-anggaran]')
                     elementInput_target.val(formatRupiah(data.anggaran.toString().replaceAll('.', ',')))
+                    totalAnggaranCount += data.anggaran
                 })
 
-                $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
+                // $('input[name=total-anggaran]').val(formatRupiah(res.dokumen.total_anggaran.toString().replaceAll('.', ',')))
+                $('input[name=total-anggaran]').val(formatRupiah(totalAnggaranCount.toString().replaceAll('.', ',')))
                 $('input[name=ttd-pihak1]').val(res.dokumen.pihak1_ttd)
                 $('input[name=ttd-pihak2]').val(res.dokumen.pihak2_ttd)
 
@@ -1132,6 +1291,7 @@
 
     $(document).on('click', '.__tolak-dokumen', function() {
         let dataID = $(this).data('id')
+        let _beritaAcara = $(this).data('beritaacara')
 
         Swal.fire({
             title: "Kenapa dokumen ini di tolak?",
@@ -1149,7 +1309,8 @@
                         dokumenType: 'satker',
                         dataID: dataID,
                         message: $('textarea[name=pesan-tolak-dokumen]').val(),
-                        newStatus: 'tolak'
+                        newStatus: _beritaAcara == "0" ? 'tolak' : "2",
+                        _beritaAcara: _beritaAcara
                     },
                     success: (res) => {
                         return res
@@ -1165,8 +1326,11 @@
 
 
 
+
     $(document).on('click', '.__setujui-dokumen', function() {
         let dataID = $(this).data('id')
+        let _beritaAcara = $(this).data('beritaacara')
+
         $.ajax({
             url: "<?php echo site_url('dokumenpk/change-status') ?>",
             type: "POST",
@@ -1174,7 +1338,9 @@
                 csrf_test_name: $('input[name=csrf_test_name]').val(),
                 dokumenType: 'satker',
                 dataID: dataID,
-                newStatus: 'setuju'
+                newStatus: _beritaAcara == "0" ? 'setuju' : "1",
+
+                _beritaAcara: _beritaAcara
             },
             success: (res) => {
                 location.reload()
@@ -1532,25 +1698,43 @@
                 setTimeout(() => {
                     let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
 
-                    if (res.dokumen.revision_message != null) {
+                    // if (res.dokumen.revision_message != null) {
+                    //     element_iframePreviewDokumen.css({
+                    //         // 'height': '60vh'
+                    //         'height': '100vh'
+                    //     })
+                    //     $('.container-revision-alert-cetak').html(`
+                    //         <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                    //             <h5 class="alert-heading">Pesan !</h5>
+                    //             <p>${res.dokumen.revision_message}</p>
+                    //         </div>
+                    //     `)
+                    // } else {
+                    //     element_iframePreviewDokumen.css({
+                    //         // 'height': '80vh'
+                    //         'height': '100vh'
+                    //     })
+                    //     $('.container-revision-alert-cetak').html('')
+                    // }
+
+                    if (res.pesan_perbaikan.length != null) {
                         element_iframePreviewDokumen.css({
-                            // 'height': '60vh'
-                            'height': '100vh'
+                            'height': '60vh'
                         })
                         $('.container-revision-alert-cetak').html(`
-                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Pesan !</h5>
-                                <p>${res.dokumen.revision_message}</p>
-                            </div>
-                        `)
+                        <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                            <h5 class="alert-heading">Daftar Pesan Perubahan !</h5>
+                            ${$.map(res.pesan_perbaikan, function(value) {
+                                return `<p>[${value.reject_date}] ${value.reject_by==1 ? "admin":value.reject_by} : ${value.revision_message}</p>`;
+                            }).join('')}
+                        </div>
+                    `);
                     } else {
                         element_iframePreviewDokumen.css({
-                            // 'height': '80vh'
-                            'height': '100vh'
+                            'height': '80vh'
                         })
                         $('.container-revision-alert-cetak').html('')
                     }
-
 
                     element_iframePreviewDokumen.attr('src', '/api/showpdf/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
 
@@ -1560,11 +1744,11 @@
                         if (res.dokumen.status != 'setuju' && res.dokumen.status != 'tolak') {
                             element_modalPreviewCetakDokumen.find('.modal-footer').html(`
                                 <div class="p-2">
-                                    <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+                                    <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}" data-beritaacara="0">
                                         <i class="fa fa-ban"></i> Tolak
                                     </button>
 
-                                    <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+                                    <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}" data-beritaacara="0">
                                         <i class="fa fa-check"></i> Setujui
                                     </button>
                                 </div>
@@ -1590,19 +1774,21 @@
                 $('#modal-cetak-dokumen-revisioned').modal('hide')
 
                 setTimeout(() => {
-                    let element_iframePreviewDokumen = element_modalPreviewCetakDokumen.find('iframe')
+                    let element_iframePreviewDokumen = element_modalPreviewCetakDokumenBA.find('iframe')
 
-                    if (res.dokumen.revision_message != null) {
+                    if (res.pesan_perbaikan.length > 0) {
                         element_iframePreviewDokumen.css({
                             // 'height': '60vh'
                             'height': '100vh'
                         })
                         $('.container-revision-alert-cetak').html(`
-                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Pesan !</h5>
-                                <p>${res.dokumen.revision_message}</p>
-                            </div>
-                        `)
+                        <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                            <h5 class="alert-heading">Daftar Pesan Perubahan !</h5>
+                            ${$.map(res.pesan_perbaikan, function(value) {
+                                return `<p>[${value.reject_date}] ${value.reject_by==1 ? "admin":value.reject_by} : ${value.notes_ba}</p>`;
+                            }).join('')}
+                        </div>
+                    `);
                     } else {
                         element_iframePreviewDokumen.css({
                             // 'height': '80vh'
@@ -1614,26 +1800,26 @@
 
                     element_iframePreviewDokumen.attr('src', '/api/showpdf-berita-acara/tampilkan/' + _dokumenID + '?preview=true&_=' + Math.round(Math.random() * 10000000))
 
-                    element_modalPreviewCetakDokumen.modal('show')
+                    element_modalPreviewCetakDokumenBA.modal('show')
 
                     if (_toConfirm) {
-                        if (res.dokumen.status != 'setuju' && res.dokumen.status != 'tolak') {
-                            element_modalPreviewCetakDokumen.find('.modal-footer').html(`
+                        if (res.dokumen.status_ba != 1 && res.dokumen.status_ba != 2) {
+                            element_modalPreviewCetakDokumenBA.find('.modal-footer').html(`
                                 <div class="p-2">
-                                    <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}">
+                                    <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}" data-beritaacara="1">
                                         <i class="fa fa-ban"></i> Tolak
                                     </button>
 
-                                    <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}">
+                                    <button class="btn btn-sm btn-success __setujui-dokumen" data-id="${_dokumenID}" data-beritaacara="1">
                                         <i class="fa fa-check"></i> Setujui
                                     </button>
                                 </div>
                             `)
                         } else {
-                            element_modalPreviewCetakDokumen.find('.modal-footer').empty()
+                            element_modalPreviewCetakDokumenBA.find('.modal-footer').empty()
                         }
                     } else {
-                        element_modalPreviewCetakDokumen.find('.modal-footer').empty()
+                        element_modalPreviewCetakDokumenBA.find('.modal-footer').empty()
                     }
                 }, 400)
                 // $('.btn-modal-full').trigger('click')
@@ -1665,6 +1851,8 @@
                 <small>${params.templateTitle}</small>
             `)
         }
+
+
 
         renderFormTemplate(params.dataId, params.data, params.target, params.paramsBA)
         // $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
@@ -1788,7 +1976,8 @@
             titleTheadTable = '',
             theadBalaiTarget = '',
             theadBalaiTargetNumber = '',
-            titleTheadTableOutcomeBalai = ''
+            titleTheadTableOutcomeBalai = '',
+            colspan = '2'
 
 
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
@@ -1807,7 +1996,7 @@
                 buttonText: 'Buat Revisi'
             });
 
-            setDetailDataInForm(_data.dokumenExistSameYear.last_dokumen_id)
+            setDetailDataInForm(_data.dokumenExistSameYear.last_dokumen_id, _beritaAcara)
         }
 
         if (_data && _data.dokumenExistSameYear && _data.dokumenExistSameYear.is_revision_same_year !== undefined) {
@@ -1827,6 +2016,7 @@
             _data.template.type == 'master-balai'
         ) {
             classDNoneOutcome = 'd-none'
+            colspan = '1';
         }
 
         if (_data.template.type == 'master-balai' || _data.template.type == 'eselon1') {
@@ -1854,14 +2044,18 @@
             }
 
             theadBalaiTarget = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
+            if (_beritaAcara) {
+
+                theadBalaiTarget += '<td class="text-center" style="width: 15%">Capaian ' + <?php echo $sessionYear ?> + '</td>';
+            }
         } else {
 
             // titleTheadTable = '<td class="text-center" style="width: 15%">Target ' + <?php echo $sessionYear ?> + '</td>';
 
             if (_beritaAcara == true) {
 
-                titleTheadTable = '<td class="text-center" style="width: 15%" colspan="2">Target ' + <?php echo $sessionYear ?> + '</td>';
-                title2 = `<td class="text-center ${classDNoneOutcome}" style="width: 15%" colspan="2">
+                titleTheadTable = `<td class="text-center" style="width: 15%" colspan="${colspan}">Target ` + <?php echo $sessionYear ?> + '</td>';
+                title2 = `<td class="text-center" style="width: 15%" colspan="${colspan}">
                             Capaian
                         </td>`
 
@@ -1892,7 +2086,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr class="sticky-header-1">
-                        <td class="text-center"  style="width: 70%" colspan="3">Sasaran Program / Sasaran Kegiatan / Indikator</td>
+                        <td class="text-center"  style="width: 50%" colspan="3">Sasaran Program / Sasaran Kegiatan / Indikator</td>
                         ${titleTheadTableOutcomeBalai}
                         ${titleTheadTable}
                   
@@ -1907,10 +2101,10 @@
                         <td class="text-center p-2 align-middle">
                         </td>
                         <td class="text-center" colspan="2"></td>
-                        <td class="text-center">Output</td>
-                        <td class="text-center">Outcome</td>
-                        <td class="text-center">Output</td>
-                        <td class="text-center">Outcome</td>
+                        <td class="text-center ${classDNoneOutcome}">Output</td>
+                        <td class="text-center ${classDNoneOutcome}">Outcome</td>
+                        <td class="text-center ${classDNoneOutcome}">Output</td>
+                        <td class="text-center ${classDNoneOutcome}">Outcome</td>
                     </tr>`;
         }
 
@@ -1919,12 +2113,12 @@
 
         render += `<tr style="font-size:10px" class="sticky-header-2">
                         <td class="text-center p-2 align-middle">
-                            <input type="checkbox" name="form-checkall-row" checked />
+                            <input type="checkbox" name="form-checkall-row" checked class="${_beritaAcara ? 'd-none':''}"/>
                         </td>
                         <td class="text-center p-2" colspan="2">(1)</td>
                         <td class="text-center p-2">(2)</td>
                         ${theadBalaiTargetNumber}
-                        <td class="text-center p-2 ${classDNoneOutcome}">(3)</td>`
+                        <td class="text-center p-2 ${_beritaAcara ? '':'d-none'}" >${_data.template.type === 'master-balai' ? "(5)":"(3)"}</td>`
 
         if (_beritaAcara == true) {
 
@@ -2131,7 +2325,8 @@
             rowNumber = 1,
             colspanSectionTitle = 3,
             classDNoneOutcome = '',
-            data_value = ''
+            data_value = '',
+            colspan = '2'
 
         if (
             _templateType == 'eselon1' ||
@@ -2236,14 +2431,14 @@
                                     (data.template_id == '14' && data.id == "141009")
                                     ||
                                     (data.template_id == '17' && data.id == "171009")
-                                    ? "maxlength = 1":""}
+                                    ? "":""}
                                     onkeyup="${(data.template_id == '15' && data.id == "151010") 
                                     ||
                                     (data.template_id == '14' && data.id == "141009")
                                     ||
                                     (data.template_id == '17' && data.id == "171009")
                                     
-                                    ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}" data-pktype="satker"
+                                    ? "return this.value = formatRupiah(this.value, '')":"return this.value = formatRupiah(this.value, '')"}" data-pktype="satker"
                                     ${data.template_id === '5' || data.template_id === '6'|| data.template_id === '9'  || data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :'readonly' }>
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan.split(';')[0]}</span>
@@ -2327,8 +2522,8 @@
 
                     rows += `
                         <tr>
-                            <td class="text-center align-middle" width="50px">
-                                <input type="checkbox" name="form-check-row" checked />
+                            <td class="text-center align-middle" width="50px" >
+                                <input type="checkbox" name="form-check-row" checked class="${_beritaAcara ? 'd-none':''}"/>
                             </td>
                             <td class="align-middle" width="50px">${ rowNumber++ }</td>
                             <td class="align-middle">${ data.title } 
@@ -2342,8 +2537,7 @@
                         data-rowid="${data.id}" 
                         data-outputsatuan="${data.target_satuan}" 
                         data-outcomesatuan="${data.outcome_satuan}" 
-                     
-
+                        data-beritaacara = "${_beritaAcara}"
                        data-satkerid="${_satkerId}">
                     Paket 
                     <span class="label label-sm label-white ml-2 totalpaket">
@@ -2372,12 +2566,12 @@
                                        ||
                                        (data.template_id == '14' && data.id == "141009")
                                        ||
-                                       (data.template_id == '17' && data.id == "171009") ? "maxlength = 1":""}
+                                       (data.template_id == '17' && data.id == "171009") ? "":""}
                                         onkeyup="${ (data.template_id == '15' && data.id == "151010")
                                         ||
                                         (data.template_id == '14' && data.id == "141009")
                                         ||
-                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}"
+                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = formatRupiah(this.value, '')":"return this.value = formatRupiah(this.value, '')"}"
                                         ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
                                         >
                                     <div class="input-group-append">
@@ -2387,9 +2581,9 @@
                             </td>`;
 
 
-                    if (_beritaAcara) {
+                    // if (_beritaAcara) {
 
-                        rows += `<td class="${classDNoneOutcome}">
+                    rows += `<td class="${_beritaAcara ? '':'d-none'}">
                                 <div class="input-group">
                                     <input 
                                         type="text" 
@@ -2401,13 +2595,13 @@
                                        ||
                                        (data.template_id == '14' && data.id == "141009")
                                        ||
-                                       (data.template_id == '17' && data.id == "171009") ? "maxlength = 1":""}
+                                       (data.template_id == '17' && data.id == "171009") ? "":""}
                                         onkeyup="${ (data.template_id == '15' && data.id == "151010")
                                         ||
                                         (data.template_id == '14' && data.id == "141009")
                                         ||
-                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}"
-                                        ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :""}
+                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = formatRupiah(this.value, '')":"return this.value = formatRupiah(this.value, '')"}"
+                                        ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
                                         >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.target_satuan.split(';')[0] }</span>
@@ -2417,7 +2611,7 @@
 
 
 
-                            <td class="${classDNoneOutcome}">
+                            <td class="${classDNoneOutcome} ${_beritaAcara ? '':'d-none'}">
                                 <div class="input-group">
                                     <input 
                                         type="text" 
@@ -2429,13 +2623,13 @@
                                        ||
                                        (data.template_id == '14' && data.id == "141009")
                                        ||
-                                       (data.template_id == '17' && data.id == "171009") ? "maxlength = 1":""}
+                                       (data.template_id == '17' && data.id == "171009") ? "":""}
                                         onkeyup="${ (data.template_id == '15' && data.id == "151010")
                                         ||
                                         (data.template_id == '14' && data.id == "141009")
                                         ||
-                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = this.value.replace(/[^A-Da-d]/g, '')":"return this.value = formatRupiah(this.value, '')"}"
-                                        ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :""}
+                                        (data.template_id == '17' && data.id == "171009") ? "return this.value = formatRupiah(this.value, '')":"return this.value = formatRupiah(this.value, '')"}"
+                                        ${data.template_id === '5' || data.template_id === '6'  || data.template_id === '9' ||data.template_id === '11' || data.template_id === '12' || data.template_id === '13'  || data.template_id === '14' || data.template_id === '15'  || data.template_id === '16'|| data.template_id === '17' || data.template_id === '18' || data.template_id === '19'|| data.template_id === '20' || data.template_id === '29' || _templateType === 'eselon2' ||  _tahun === '2023' ? '' :"readonly"}
                                         >
                                     <div class="input-group-append">
                                         <span class="input-group-text">${ data.outcome_satuan }</span>
@@ -2447,7 +2641,7 @@
 
 
 
-                    }
+                    // }
 
 
                     rows += `</tr>`
@@ -2713,6 +2907,77 @@
         var selectedItems = [];
         $('#modalPilihPaket').modal('show');
         $('.modal.btn-modal-full').trigger('click');
+        let _beritaAcara = $(this).data('beritaacara');
+
+
+        if (_beritaAcara == true) {
+
+            var table = `
+                <table class="table">
+                   <thead class="table-primary">
+                        <tr class="text-center theader sticky-header-1" style="background-color: #a8b0ed;">
+                            <th></th>
+                            <th class="tdKode">Kode</th>
+                            <th class="tdLabel">Paket</th>
+                            <th class="tdvol">Vol</th>
+                            <th class="tdSatuan">Satuan</th>
+                            <th class="tdNilai">Pagu Dipa</th>
+                            <th class="tdNilai">Realisasi</th>
+                            <th class="tdPersen">%keu</th>
+                            <th class="tdPersen">%fisik</th>
+                            <th colspan="2" class="text-center">TARGET</th>
+                            <th colspan="2" class="text-center">CAPAIAN</th>
+                        </tr>
+                        <tr class="text-center theader sticky-header-1" style="background-color: #a8b0ed;">
+                            <th colspan="9"></th>
+                            <th>OUTPUT</th>
+                            <th>OUTCOME</th>
+                            <th>OUTPUT</th>
+                            <th>OUTCOME</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+        
+                    </tbody>
+                </table>
+            `;
+
+        } else {
+
+            var table = `
+                <table class="table">
+                   <thead class="table-primary">
+                        <tr class="text-center theader sticky-header-1" style="background-color: #a8b0ed;">
+                            <th></th>
+                            <th class="tdKode">Kode</th>
+                            <th class="tdLabel">Paket</th>
+                            <th class="tdvol">Vol</th>
+                            <th class="tdSatuan">Satuan</th>
+                            <th class="tdNilai">Pagu Dipa</th>
+                            <th class="tdNilai">Realisasi</th>
+                            <th class="tdPersen">%keu</th>
+                            <th class="tdPersen">%fisik</th>
+                            <th class="text-center">Output</th>
+                            <th class="text-center">Outcome</th>
+                        </tr>
+                       
+                    </thead>
+                    <tbody id="tbody">
+        
+                    </tbody>
+                </table>
+            `;
+
+        }
+
+
+
+        $('.table-paket').html(table);
+
+
+
+
+
 
         let satkerId = $(this).data('satkerid');
         let templateId = $(this).data('templateid');
@@ -2739,9 +3004,9 @@
 
         $('#modalFormTitlePaket').html(``);
         $('#modalFormTitlePaket').html(`<h6>Pilih Paket</h6>
-                        <small>Indikator : <b>${ indikator }</b></small>
-                       
-                        `);
+<small>Indikator : <b>${ indikator }</b></small>
+
+`);
 
 
         $('.save-btn-paket').removeAttr("data-indikatorid");
@@ -2768,31 +3033,32 @@
                 if (res.message != 'tidak ada data') {
                     const tbody = $('#tbody');
                     tbody.empty();
-                    var jsonData = JSON.parse(res);
+                    // var jsonData = JSON.parse(res);
+                    var jsonData = res;
 
                     jsonData.forEach(function(balai, index) {
                         if (index === 0) {
                             tbody.append(`
-                    <tr style="background-color:#89CFF0" class="sticky-header-2">
-                    <td>-</td>
-                    <td colspan = "10"><strong>${balai.balai}</strong></td>
-                    </tr>`);
+                                            <tr style="background-color:#89CFF0" class="sticky-header-2">
+                                                <td>-</td>
+                                                <td colspan="${_beritaAcara ? 12 :10}"><strong>${balai.balai}</strong></td>
+                                            </tr>`);
                         }
                         tbody.append(`
-                    
-                    <tr style="background-color:#b6dced" class="sticky-header-3">
-                    <td><strong>${balai.satkerid}</strong></td>
-                    <td colspan = "10"><strong>${balai.satker}</strong></td>
-                    </tr>
-                
 
-                   `);
+                                            <tr style="background-color:#b6dced" class="sticky-header-3">
+                                                <td><strong>${balai.satkerid}</strong></td>
+                                                <td colspan="${_beritaAcara ? 12 :10}"><strong>${balai.satker}</strong></td>
+                                            </tr>
+
+
+                                            `);
 
                         balai.paket.forEach(function(paket, index) {
 
                             trClass = '';
                             output_from_satrker = ''
-                            var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox"`;
+                            var checkboxHtml = `<input type="checkbox" val="${paket.paketId}" class="checkbox ${_beritaAcara ? 'd-none':''}" `;
                             if (paramsBtnPaket == "lihat" || paramsBtnPaket == 'uptBalai-add') {
                                 checkboxHtml += 'disabled';
                                 $(".checkbox-click").attr("disabled", true)
@@ -2816,57 +3082,107 @@
                             }
 
                             checkboxHtml += '>';
+                            var tbodyGenerate = '';
 
-                            tbody.append(`
-                          <tr ${trClass}>
-                          <td>${checkboxHtml}</td>
-                            <td>${paket.paketId}</td>
-                            <td>${paket.label}</td>
-                            <td>${paket.vol}</td>
-                            <td>${paket.satuan}</td>
-                            <td>${paket.paguDipa}</td>
-                            <td>${paket.realisasi}</td>
-                            <td>${paket.persenKeu}</td>
-                            <td>${paket.persenFis}</td>
-                            <td>
-                            <div class="form-group form-group-last row">
-								<div class="form-group-sub">
-									<label class="form-control-label">Vol Output :</label>
-									<input type="text" class="form-control target_nilai checkbox-click" name="target_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"}>
-								</div>
-                                <div class="form-group-sub">
-									<label class="form-control-label">Satuan Output :</label>
-                                                <div class="input-group-append">
-                                                <select class="form-control checkbox-click" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"} name="target_satuan">
-    ${output_satuan.split(';').map(function(satuan) {
-        const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.target_satuan === satuan.trim());
-        return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : ''}>${satuan.trim()}</option>`;
-    }).join('')}
-</select>
-                                            </div>
+                            tbodyGenerate += `<tr ${trClass}>
+                    <td> ${checkboxHtml} </td>
+                    <td>${paket.paketId}</td>
+                    <td>${paket.label}</td>
+                    <td>${paket.vol}</td>
+                    <td>${paket.satuan}</td>
+                    <td>${paket.paguDipa}</td>
+                    <td>${paket.realisasi}</td>
+                    <td>${paket.persenKeu}</td>
+                    <td>${paket.persenFis}</td>`;
 
 
+                            tbodyGenerate += `
+                     <td>
+                        <div class="form-group form-group-last row">
+                            <div class="form-group-sub">
+                                <label class="form-control-label">Vol Output :</label>
+                                <input type="text" class="form-control target_nilai checkbox-click" name="target_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item=> item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"} ${_beritaAcara ? 'disabled':''}>
+                            </div>
+                            <div class="form-group-sub">
+                                <label class="form-control-label">Satuan Output :</label>
+                                <div class="input-group-append">
+                                    <select class="form-control checkbox-click" ${selectedItems.some(item=> item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai:"disabled"} name="target_satuan" ${_beritaAcara ? 'disabled':''}>
+                                        ${output_satuan.split(';').map(function(satuan) {
+                                        const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.target_satuan === satuan.trim());
+                                        return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : '' }>${satuan.trim()}</option>`;
+                                        }).join('')}
+                                    </select>
+                                </div>
 
-								</div>
-							</div>
-                            
-                            </td>
-                            <td>
-                            <div class="form-group form-group-last row">
-								<div class="form-group-sub">
-									<label class="form-control-label center">Vol Outcome :</label>
-									<input type="text" class="form-control outcome_nilai checkbox-click" name="outcome_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_nilai:"disabled"}>
-								</div>
-                                <div class="form-group-sub">
-									<label class="form-control-label">Satuan Outcome :</label>
-								
-									<input type="text" class="form-control outcome_satuan" name="outcome_satuan" value="${selectedItems.some(item => item.paketId === paket.paketId) ? selectedItems.find(item => item.paketId === paket.paketId).outcome_satuan : outcome_satuan} " disabled>
-								</div>
-							</div>
-                            
-                            </td>
-                          </tr>
-                        `);
+
+
+                            </div>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="form-group form-group-last row">
+                            <div class="form-group-sub">
+                                <label class="form-control-label center">Vol Outcome :</label>
+                                <input type="text" class="form-control outcome_nilai checkbox-click" name="outcome_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item=> item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).outcome_nilai:"disabled"}  ${_beritaAcara ? 'disabled':''}>
+                            </div>
+                            <div class="form-group-sub">
+                                <label class="form-control-label">Satuan Outcome :</label>
+
+                                <input type="text" class="form-control outcome_satuan" name="outcome_satuan" value="${selectedItems.some(item => item.paketId === paket.paketId) ? selectedItems.find(item => item.paketId === paket.paketId).outcome_satuan : outcome_satuan} " disabled  ${_beritaAcara ? 'disabled':''}>
+                            </div>
+                        </div>
+
+                    </td>`;
+
+
+                            // jika berita acara
+                            // if (_beritaAcara) {
+                            tbodyGenerate += `
+                                 <td class="${_beritaAcara?'':'d-none'}">
+                        <div class="form-group form-group-last row>
+                            <div class="form-group-sub">
+                                <label class="form-control-label">Vol Output :</label>
+                                <input type="text" class="form-control capaian_output_nilai checkbox-click" name="capaian_output_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')"  ${selectedItems.some(item => item.paketId === paket.paketId) ? 
+        `value="${selectedItems.find(item => item.paketId === paket.paketId).capaian_output_nilai ?? 0}"` 
+        : "disabled"}>
+                            </div>
+                            <div class="form-group-sub">
+                                <label class="form-control-label">Satuan Output :</label>
+                                <div class="input-group-append">
+                                    <select class="form-control checkbox-click" ${selectedItems.some(item=> item.paketId === paket.paketId)? "value=" +selectedItems.find(item => item.paketId === paket.paketId).target_nilai ?? 0:"disabled"} name="target_satuan" disabled>
+                                        ${output_satuan.split(';').map(function(satuan) {
+                                        const isSelected = selectedItems.some(item => item.paketId === paket.paketId && item.target_satuan === satuan.trim());
+                                        return `<option value="${satuan.trim()}" ${isSelected ? 'selected' : '' }>${satuan.trim()}</option>`;
+                                        }).join('')}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+                    
+                    <td class="${_beritaAcara?'':'d-none'}">
+                        <div class="form-group form-group-last row">
+                            <div class="form-group-sub">
+                                <label class="form-control-label center">Vol Outcome :</label>
+                                <input type="text" class="form-control capaian_outcome_nilai checkbox-click" name="capaian_outcome_nilai" placeholder="" onkeyup="return this.value = formatRupiah(this.value, '')" ${selectedItems.some(item => item.paketId === paket.paketId) ? 
+        `value="${selectedItems.find(item => item.paketId === paket.paketId).capaian_outcome_nilai ?? 0}"` 
+        : "disabled"}>
+                            </div>
+                            <div class="form-group-sub">
+                                <label class="form-control-label">Satuan Outcome :</label>
+
+                                <input type="text" class="form-control outcome_satuan" name="outcome_satuan" value="${selectedItems.some(item => item.paketId === paket.paketId) ? selectedItems.find(item => item.paketId === paket.paketId).outcome_satuan : outcome_satuan} " disabled>
+                            </div>
+                        </div>
+
+                    </td>`;
+
+                            // }
+                            tbodyGenerate += `</tr>`;
+
+                            tbody.append(tbodyGenerate);
 
                             // Mendengarkan perubahan status kotak centang
                             $('input.checkbox').on('change', function() {
@@ -2905,6 +3221,8 @@
         var errorMessages = [];
         var totalJumlahTarget = 0;
         var totalJumlahOutcome = 0;
+        var totalJumlahCapaianOutput = 0;
+        var totalJumlahCapaianOutcome = 0;
         var TargetlengthFix = 2;
         var OutcomelengthFix = 2;
 
@@ -2914,6 +3232,10 @@
             var target_satuan = $(this).closest('tr').find('select[name=target_satuan]').val();
             var outcome_nilai = $(this).closest('tr').find('input[name=outcome_nilai]').val();
             var outcome_satuan = $(this).closest('tr').find('input[name=outcome_satuan]').val();
+
+            //tambahan fitur berita acara
+            var capaian_output_nilai = $(this).closest('tr').find('input[name=capaian_output_nilai]').val();
+            var capaian_outcome_nilai = $(this).closest('tr').find('input[name=capaian_outcome_nilai]').val();
 
             if (target_nilai.trim() === '') {
                 errorMessages.push('Paket dengan ID ' + paketId + ' memiliki Target Nilai yang belum diisi.');
@@ -2935,16 +3257,30 @@
                     target_nilai: target_nilai,
                     target_satuan: target_satuan,
                     outcome_nilai: outcome_nilai,
-                    outcome_satuan: outcome_satuan
+                    outcome_satuan: outcome_satuan,
+
+                    //tambahan fitur berita acara
+                    capaian_outcome_nilai: capaian_outcome_nilai,
+                    capaian_output_nilai: capaian_output_nilai
                 });
 
 
 
-                target_nilai_number_remove_titik = target_nilai.replace('.', '');
-                outcome_nilai_number_remove_titik = outcome_nilai.replace('.', '');
+                target_nilai_number_remove_titik = target_nilai.replace(/\./g, "");
+                outcome_nilai_number_remove_titik = outcome_nilai.replace(/\./g, "");
 
                 target_nilai_number = parseFloat(target_nilai_number_remove_titik.replace(',', '.'));
                 outcome_nilai_number = parseFloat(outcome_nilai_number_remove_titik.replace(',', '.'));
+
+                //tambahan fitur berita acara
+                capaian_output_nilai_number_remove_titik = capaian_output_nilai.replace(/\./g, "");
+                capaian_outcome_nilai_number_remove_titik = capaian_outcome_nilai.replace(/\./g, "");
+
+                capaian_output_nilai_number = parseFloat(capaian_output_nilai_number_remove_titik.replace(',', '.'));
+                capaian_outcome_nilai_number = parseFloat(capaian_outcome_nilai_number_remove_titik.replace(',', '.'));
+
+
+
 
 
                 let elm_output_satuan_indikator = $('.__inputTemplateRow-target[data-row-id=' + indikatorId + ']').data('targetsatuan');
@@ -2952,6 +3288,9 @@
 
                 if (target_satuan == output_satuan_indikator) {
                     totalJumlahTarget += target_nilai_number;
+
+                    //tambahan fitur berita acara
+                    totalJumlahCapaianOutput += capaian_output_nilai_number;
                 }
 
 
@@ -2978,6 +3317,9 @@
                 }
                 totalJumlahOutcome += outcome_nilai_number;
 
+                //tambahan fitur berita acara
+                totalJumlahCapaianOutcome += capaian_outcome_nilai_number;
+
             }
 
         });
@@ -2996,6 +3338,10 @@
             var jumlahDesimal_target = (totalJumlahTarget % 1 === 0) ? 0 : totalJumlahTarget.toFixed(TargetlengthFix).toString().split('.')[1].length;
             var jumlahDesimal_outcome = (totalJumlahOutcome % 1 === 0) ? 0 : totalJumlahOutcome.toFixed(OutcomelengthFix).toString().split('.')[1].length;
 
+            //tambahan fitur berita acara
+            var jumlahDesimal_capaian_output = ((totalJumlahCapaianOutput % 1 === 0) ? 0 : totalJumlahCapaianOutput.toFixed(TargetlengthFix).toString().split('.')[1] || '').length;
+            var jumlahDesimal_capaian_outcome = ((totalJumlahCapaianOutcome % 1 === 0) ? 0 : totalJumlahCapaianOutcome.toFixed(OutcomelengthFix).toString().split('.')[1] || '').length;
+
 
 
             totalJumlahTargetDenganKoma = totalJumlahTarget.toLocaleString('id-ID', {
@@ -3007,10 +3353,31 @@
                 minimumFractionDigits: jumlahDesimal_outcome
             });
 
+
+            //tambahan fitur berita acara
+            totalJumlahCapaianOutputDenganKoma = totalJumlahCapaianOutput.toLocaleString('id-ID', {
+                // minimumFractionDigits: jumlahDesimal_target
+                minimumFractionDigits: jumlahDesimal_capaian_output
+            });
+
+            totalJumlahCapaianOutcomeDenganKoma = totalJumlahCapaianOutcome.toLocaleString('id-ID', {
+                minimumFractionDigits: jumlahDesimal_capaian_outcome
+            });
+
             var totalTarget_nilai = $('.__inputTemplateRow-target[data-row-id=' + indikatorId + ']')
             var totalOutcome_nilai = $('.__inputTemplateRow-outcome[data-row-id=' + indikatorId + ']')
+
+            //tambahan fitur berita acara
+            var totalCapaianOutput_nilai = $('.__inputTemplateRow-capaian-target[data-row-id=' + indikatorId + ']')
+            var totalCapaianOutcome_nilai = $('.__inputTemplateRow-capaian-outcome[data-row-id=' + indikatorId + ']')
+
+
+
             totalTarget_nilai.val(totalJumlahTargetDenganKoma);
             totalOutcome_nilai.val(totalJumlahOutcomeDenganKoma);
+            //tambahan fitur berita acara
+            totalCapaianOutput_nilai.val(totalJumlahCapaianOutputDenganKoma);
+            totalCapaianOutcome_nilai.val(totalJumlahCapaianOutcomeDenganKoma);
 
             $('#modalPilihPaket').modal('hide');
         } else {

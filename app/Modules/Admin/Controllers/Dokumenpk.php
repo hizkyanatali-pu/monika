@@ -19,6 +19,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->db = \Config\Database::connect();
 
         $this->dokumenSatker = $this->db->table('dokumenpk_satker');
+        $this->dokumenpk_ba_notes = $this->db->table('dokumenpk_ba_notes');
+        $this->dokumenpk_revision_notes = $this->db->table('dokumenpk_revision_notes');
 
         $this->tahun = session('userData.tahun');
 
@@ -467,49 +469,139 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function changeStatus()
     {
 
-        switch ($this->request->getPost('dokumenType')) {
-            case 'satker':
-                $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
+        $_beritaAcara = $this->request->getPost('_beritaAcara');
 
-                $newStatus = $this->request->getPost('newStatus');
-
-                $updatedData = [
-                    'status'           => $newStatus,
-                    'change_status_at' => date("Y-m-d H:i:s")
-                ];
-
-                $from = $this->request->getPost('dataID');
-
-                if ($newStatus == "tolak") {
-                    $updatedData['revision_message'] = $this->request->getPost('message');
-                    $updatedData['reject_by']           = $this->user['idpengguna'];
-                    $updatedData['reject_date']           = date("Y-m-d H:i:s");
-                } else {
-
-                    $updatedData['acc_by']           = $this->user['idpengguna'];
-                    $updatedData['acc_date']           = date("Y-m-d H:i:s");
-                };
+        if ($_beritaAcara === "0" || $_beritaAcara === 'false') {
+            $dokumenPK = $this->dokumenSatker->where('id', $this->request->getPost('dataID'))->get()->getRow();
 
 
+            switch ($this->request->getPost('dokumenType')) {
+                case 'satker':
 
-                $this->dokumenSatker->update($updatedData);
-                break;
-            case 'hold-edit':
-                $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
-                $newStatus = $this->request->getPost('newStatus');
+                    $newStatus = $this->request->getPost('newStatus');
 
-                $updatedData = [
-                    'status'           => $newStatus,
-                    'change_status_at' => date("Y-m-d H:i:s")
-                ];
-                $updatedData['revision_message'] = $this->request->getPost('message');
+                    $updatedData = [
+                        'status'           => $newStatus,
+                        'change_status_at' => date("Y-m-d H:i:s")
+                    ];
+
+                    $from = $this->request->getPost('dataID');
+
+                    if ($newStatus == "tolak") {
+                        // $updatedData['revision_message'] = $this->request->getPost('message');
+                        // $updatedData['reject_by']           = $this->user['idpengguna'];
+                        // $updatedData['reject_date']           = date("Y-m-d H:i:s");
+                        $this->dokumenpk_revision_notes->insert([
+                            'id_dokumen'   =>  $this->request->getPost('dataID'),
+                            'revision_message'     => $this->request->getPost('message') ?? null,
+                            'reject_by'    => $this->user['idpengguna'],
+                            'reject_date'  => date("Y-m-d H:i:s"),
+                            'user_id'  => $dokumenPK->user_created,
+                            'revision_master_dokumen_id'  => $dokumenPK->revision_master_dokumen_id,
+                            'tahun'  => $dokumenPK->tahun,
+
+                        ]);
+                    } else {
+
+                        $updatedData['acc_by']           = $this->user['idpengguna'];
+                        $updatedData['acc_date']           = date("Y-m-d H:i:s");
+                    };
 
 
-                // var_dump($updat edData);die;
+                    $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
+                    $this->dokumenSatker->update($updatedData);
+                    break;
+                case 'hold-edit':
+                    $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
+                    $newStatus = $this->request->getPost('newStatus');
 
-                $this->dokumenSatker->update($updatedData);
-                break;
+                    $updatedData = [
+                        'status'           => $newStatus,
+                        'change_status_at' => date("Y-m-d H:i:s"),
+                        'status_ba'        => '0'
+                    ];
+
+
+                    // $updatedData['revision_message'] = $this->request->getPost('message');
+
+                    $this->dokumenpk_revision_notes->insert([
+                        'id_dokumen'   =>  $this->request->getPost('dataID'),
+                        'revision_message'     => $this->request->getPost('message') ?? null,
+                        'reject_by'    => $this->user['idpengguna'],
+                        'reject_date'  => date("Y-m-d H:i:s"),
+                        'user_id'  => $dokumenPK->user_created,
+                        'revision_master_dokumen_id'  => $dokumenPK->revision_master_dokumen_id,
+                        'tahun'  => $dokumenPK->tahun,
+
+                    ]);
+
+
+                    // var_dump($updat edData);die;
+
+                    $this->dokumenSatker->update($updatedData);
+                    break;
+            }
+        } else {
+            switch ($this->request->getPost('dokumenType')) {
+                case 'satker':
+                    $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
+
+                    $newStatus = $this->request->getPost('newStatus');
+
+                    $updatedData = [
+                        'status_ba'           => $newStatus,
+                        'change_status_ba_at' => date("Y-m-d H:i:s")
+                    ];
+
+                    $this->dokumenSatker->update($updatedData);
+
+                    $from = $this->request->getPost('dataID');
+
+                    if ($newStatus == "2") {
+                        $insert['notes_ba'] = $this->request->getPost('message');
+                        // $insert['reject_by']           = $this->user['idpengguna'];
+                        // $insert['reject_date']           = date("Y-m-d H:i:s");
+
+
+                        $this->dokumenpk_ba_notes->insert([
+                            'id_dokumen'   =>  $this->request->getPost('dataID'),
+                            'notes_ba'     => isset($insert['notes_ba']) ? $insert['notes_ba'] : null,
+                            'reject_by'    => $this->user['idpengguna'],
+                            'reject_date'  => date("Y-m-d H:i:s"),
+                        ]);
+                    } else {
+
+                        // $insert['acc_by']           = $this->user['idpengguna'];
+                        // $insert['acc_date']           = date("Y-m-d H:i:s");
+                    };
+
+
+                    break;
+
+
+
+
+
+
+                case 'hold-edit':
+                    $this->dokumenSatker->where('id', $this->request->getPost('dataID'));
+                    $newStatus = $this->request->getPost('newStatus');
+
+                    $updatedData = [
+                        'status_ba'           => $newStatus,
+                        'change_status_ba_at' => date("Y-m-d H:i:s")
+                    ];
+                    $updatedData['notes_ba'] = $this->request->getPost('message');
+
+
+                    // var_dump($updat edData);die;
+
+                    $this->dokumenSatker->update($updatedData);
+                    break;
+            }
         }
+
+
 
         return $this->respond([
             'status' => true,
@@ -518,11 +610,6 @@ class Dokumenpk extends \App\Controllers\BaseController
             'input'  => $this->request->getPost()
         ]);
     }
-
-
-
-
-
 
 
 

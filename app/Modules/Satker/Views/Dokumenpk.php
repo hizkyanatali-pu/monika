@@ -94,9 +94,18 @@
 
                     <?php if ($isCanCreated) {
                         if (count($dataDokumen) > 0) {
+                            $disabled = '';
                             // matikan membuat revisi 18012024
-                            $disabled = $dataDokumen[0]->status != "setuju" ? "disabled" : "";
+                            if ($dataDokumen[0]->status != "setuju") {
+                                $disabled =   "disabled";
+                            }
+
+                            if ($dataDokumen[0]->status == "setuju" && $dataDokumen[0]->is_revision_same_year > 0) {
+                                $disabled =   "disabled";
+                            }
+
                             // $disabled = (($dataDokumen[0]->status == "setuju" || $dataDokumen[0]->status == "hold" || $dataDokumen[0]->status == "tolak") and session('userData.tahun') == 2024) ? "disabled" : "";
+
                         } else {
                             $disabled = "";
                         }
@@ -128,11 +137,12 @@
                 <thead>
                     <tr>
                         <th width="8%" class="text-center">No. Dokumen</td>
-                        <th width="50%" class="text-center">Dokumen</td>
+                        <th width="27%" class="text-center">Dokumen</td>
                         <th width="10%" class="text-center">Tanggal Kirim</th>
-                        <th width="10%" class="text-center">Tanggal Disetujui / Ditolak</th>
-                        <th width="5%" class="text-center">Status</th>
-                        <th width="17%" class="text-center">Aksi</th>
+                        <!-- <th width="10%" class="text-center">Tanggal Disetujui / Ditolak</th> -->
+                        <th width="20%" class="text-center">Status Dokumen PK</th>
+                        <th width="20%" class="text-center">Status Berita Acara PK</th>
+                        <!-- <th width="17%" class="text-center">Aksi</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -141,7 +151,7 @@
                         $dokumenMasterID = $data->revision_master_dokumen_id ?? $data->id;
                     ?>
                         <tr>
-                            <td>
+                            <td class="text-center">
                                 <?php echo $dokumenMasterID ?>
                             </td>
                             <td>
@@ -166,28 +176,94 @@
                                     </div>
                                 <?php } ?>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <?php echo date_indo($data->created_at) ?>
                             </td>
-                            <td>
+                            <!-- <td class="text-center">
                                 <?php echo $data->status != "hold" ? date_indo($data->change_status_at) : '-' ?>
-                            </td>
-                            <td class="pr-0">
-                                <div class="d-flex justify-content-between align-items-center">
+                            </td> -->
+                            <td class="pr-0 text-center">
+                                <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
                                     <span class="badge badge-pill px-3 font-weight-bold <?php echo $dokumenStatus[$data->status]['color'] ?>">
-                                        <?= $dokumenStatus[$data->status]['message'] . ($data->status != "hold" ? " Oleh " . ($data->verif_by == 'admin' ? "admin" : "UPT Balai") : " ")  ?>
+                                        <?= $dokumenStatus[$data->status]['message'] . ($data->status != "hold" ? " Oleh " . ($data->verif_by == 'admin' ? "admin" : "UPT Balai") : " ") ?>
                                     </span>
 
 
+                                </div>
+                                <?php echo $data->status != "hold" ? "Status Update : <b>" . date_indo($data->change_status_at) . "</b>" : '-' ?>
+
+                                <hr>
+
+                                <div class="btn-load mt-3 text-center">
+                                    <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Lihat">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true" title="Cetak" data-cetak="pk">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                    <?php if ($data->status == 'hold' and (!isset($balaiCreateForSatker))) { ?>
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    <?php } ?>
+                                    <?php if ($data->status == 'setuju'  and (!isset($balaiCreateForSatker))) { ?>
+                                        <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    <?php } ?>
+
                                     <?php if ($data->status == 'tolak'  and (!isset($balaiCreateForSatker))) : ?>
-                                        <button class="ml-2 btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>">
-                                            <i class="fas fa-edit"></i>Koreksi
+                                        <button class="btn btn-sm btn-outline-danger __prepare-revisi-dokumen" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" title="Koreksi">
+                                            <i class="fas fa-edit"></i>
                                         </button>
                                     <?php endif; ?>
                                 </div>
                             </td>
+                            <td class="pr-0 text-center">
+                                <?php if ($statusBA->status == 1 && $data->status == 'setuju' && $data->is_revision_same_year > 0) { ?>
 
-                            <td class="d-flex justify-content-center">
+
+
+                                    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                                        <span class="badge badge-pill px-3 font-weight-bold <?php echo $BAStatusVerif[$data->status_ba]['color'] ?>">
+                                            <?= $BAStatusVerif[$data->status_ba]['message'] . ($data->status_ba != "1" ? " Oleh " . ($data->verif_by == 'admin' ? "admin" : "UPT Balai") : " ")  ?>
+                                        </span>
+                                    </div>
+                                    <?php echo ($data->status_ba != null) ? "Status Update : <b>" . date_indo($data->change_status_ba_at) . "</b>" : 'Status Update : -' ?>
+
+
+
+                                    <hr>
+
+                                    <?php if ((!isset($balaiCreateForSatker))) { ?>
+
+                                        <button class="btn btn-sm btn-primary __edit-dokumen-berita-acara" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Input Berita Acara" data-statusba="<?= $data->status_ba != null ? $data->status_ba : 'belum-input' ?>">
+                                            <i class="fas fa-edit"></i> Berita Acara
+                                        </button>
+
+                                    <?php } ?>
+
+
+                                <?php } else { ?>
+
+                                    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                                        <span class="badge badge-pill px-3 font-weight-bold bg-danger text-white"> -
+                                        </span>
+                                    </div>
+                                <?php } ?>
+
+                                <?php if ($statusBA->status == 1 && $data->status_ba != null && $data->status == 'setuju' && $data->is_revision_same_year > 0) {
+                                ?>
+                                    <button class="btn btn-sm __lihat-dokumenBA btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Lihat">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true" title="Cetak Berita Acara" data-cetak="berita-acara">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                <?php }  ?>
+                            </td>
+
+                            <!-- <td class="d-flex justify-content-center">
                                 <div class="btn-load mt-3">
                                     <button class="btn btn-sm __lihat-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Lihat">
                                         <i class="fas fa-eye"></i>
@@ -204,23 +280,9 @@
                                         <button class="btn btn-sm btn-warning __edit-dokumen btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
-
-                                        <?php if ($statusBA->status == 1) { ?>
-                                            <button class="btn btn-sm btn-success __edit-dokumen-berita-acara btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Input Berita Acara">
-                                                <i class="fas fa-signature"></i>
-                                            </button>
-
-                                        <?php } ?>
-
-                                        <?php if ($statusBA->status == 1 && $data->status_ba == 1) {
-                                        ?>
-                                            <button class="btn btn-sm __cetak-dokumen <?php echo $data->status == 'setuju' ? 'btn-outline-success' : 'btn-outline-secondary' ?>" data-dokumen-master-id="<?php echo $dokumenMasterID ?>" data-number-revisioned="<?php echo $data->revision_master_number ?>" data-select-top="true" title="Cetak Berita Acara" data-cetak="berita-acara">
-                                                <i class="fas fa-print"></i>
-                                            </button>
-                                        <?php } ?>
                                     <?php } ?>
                                 </div>
-                            </td>
+                            </td> -->
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -307,9 +369,11 @@
 
             </div>
             <div class="modal-body">
-                <table class="table">
+
+                <div class="table-paket"></div>
+                <!-- <table class="table table-paket">
                     <thead class="table-primary">
-                        <tr class="text-center theader sticky-header-1" style="background-color: #a8b0ed;">
+                        <tr>
                             <th></th>
                             <th class="tdKode">Kode</th>
                             <th class="tdLabel">Paket</th>
@@ -319,14 +383,26 @@
                             <th class="tdNilai">Realisasi</th>
                             <th class="tdPersen">%keu</th>
                             <th class="tdPersen">%fisik</th>
-                            <th class="tdPersen">Output</th>
-                            <th class="tdPersen">Outcome</th>
+
+
+                            <th colspan="2" class="text-center">TARGET</th>
+                            <th colspan="2" class="text-center">CAPAIAN</th>
                         </tr>
+
+                        <tr>
+                            <th colspan="9"></th>
+                            <th>OUTPUT</th>
+                            <th>OUTCOME</th>
+                            <th>OUTPUT</th>
+                            <th>OUTCOME</th>
+                        </tr>
+
+
                     </thead>
                     <tbody id="tbody">
-                        <!-- Data rows go here -->
+                       
                     </tbody>
-                </table>
+                </table> -->
 
             </div>
             <div class="modal-footer">
@@ -388,6 +464,34 @@
     </div>
 </div>
 <!-- end-of: Modal Preview Cetak Dokumen -->
+
+
+<!-- Modal Preview Cetak Dokumen Berita ACARA-->
+<div class="modal fade" id="modal-preview-cetak-berita-acara" tabindex="-1" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content" style="height: 100% !important;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Preview Dokumen</h5>
+                <div class="d-flex">
+                    <button type="button" class="btn btn-modal-full"><i class="fas fa-external-link-alt"></i></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body p-0">
+                <div class="container-revision-alert-cetak-berita-acara"></div>
+                <iframe width="100%" style="height: 100vh !important" frameborder="0"></iframe>
+            </div>
+
+            <?php if ($isCanConfirm) { ?>
+                <div class="modal-footer p-0"></div>
+            <?php } ?>
+        </div>
+    </div>
+</div>
+<!-- end-of: Modal Preview Cetak Dokumen -->
+
 
 
 

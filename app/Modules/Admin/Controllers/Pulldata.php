@@ -57,8 +57,10 @@ class Pulldata extends \App\Controllers\BaseController
 
         if ($w == 0) {
             $jsonResponse =  json_encode(["message" => "tidak ada data"]);
+            ob_start();
             header('Content-Type: application/json');
             echo $jsonResponse;
+            ob_end_flush();
             exit;
         }
 
@@ -140,10 +142,12 @@ class Pulldata extends \App\Controllers\BaseController
 
         // Konversi array ke format JSON
         $jsonResponse = json_encode(array_values($nestedData), JSON_PRETTY_PRINT);
-
+        ob_start();
         // Menampilkan response JSON
         header('Content-Type: application/json');
         echo $jsonResponse;
+        ob_end_flush();
+        exit;
     }
 
     //format satu-satu

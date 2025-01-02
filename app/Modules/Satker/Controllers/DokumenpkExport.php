@@ -41,6 +41,11 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $this->templateInfo    = $this->db->table('dokumen_pk_template_info_' . session('userData.tahun'));
         $this->templateRowRumus = $this->db->table('dokumen_pk_template_rowrumus_' . session('userData.tahun'));
 
+        $this->dokumenpk_ba_notes = $this->db->table('dokumenpk_ba_notes');
+        $this->dokumenpk_revision_notes = $this->db->table('dokumenpk_revision_notes');
+
+
+
 
         $this->dokumenStatus = [
             'hold'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
@@ -148,7 +153,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $this->pdf_pageDokumenDetail($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome', $qrcode);
         }
 
-        $pdf->SetProtection(array('print'));
+        $pdf->SetProtection(array('print'), "", "monikaPK@SDA");
 
 
 
@@ -158,9 +163,23 @@ class DokumenpkExport extends \App\Controllers\BaseController
             exit;
         } else {
 
+
+            //list pesan revisi/koreksi/penolakan
+            $dokumenpk_revision_notes =  $this->dokumenpk_revision_notes
+                ->where("user_id", $dataDokumen['user_created'])
+                ->where("tahun", session('userData.tahun'))->get()->getResultArray();
+            // Mengubah format tanggal reject_date menjadi d/m/Y H:i:s
+            foreach ($dokumenpk_revision_notes as &$note) {
+                if ($note['reject_date']) {
+                    $note['reject_date'] = date('H:i, d/m/Y', strtotime($note['reject_date']));
+                }
+            }
+
+
             // $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
             return $this->respond([
-                'dokumen' => $dataDokumen
+                'dokumen' => $dataDokumen,
+                'pesan_perbaikan' => $dokumenpk_revision_notes
             ]);
         };
     }
@@ -213,6 +232,16 @@ class DokumenpkExport extends \App\Controllers\BaseController
             ->get()
             ->getRowArray();
 
+        $dokumenpk_ba_notes =  $this->dokumenpk_ba_notes->where('id_dokumen', $dataDokumen['id'])->get()->getResultArray();
+        // Mengubah format tanggal reject_date menjadi d/m/Y H:i:s
+        foreach ($dokumenpk_ba_notes as &$note) {
+            if ($note['reject_date']) {
+                $note['reject_date'] = date('H:i, d/m/Y', strtotime($note['reject_date']));
+            }
+        }
+
+
+
         if ($dataDokumen) {
             $this->dokumenBulan = bulan(date('m', strtotime($dataDokumen['created_at'])));
 
@@ -228,8 +257,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 if ($dataDokumen['kota'] != '') $this->dokumenLokasi = $dataDokumen['nmkabkota'];
             }
 
-            if ($dataDokumen['bulan'] != '') $this->dokumenBulan = $this->bulan[$dataDokumen['bulan'] - 1];
-            if ($dataDokumen['tanggal'] != '') $this->tanggal = $dataDokumen['tanggal'];
+            if ($dataDokumen['bulan'] != '') $this->dokumenBulan = $this->bulan[$dataDokumen['bulan_ttd_ba'] - 1];
+            if ($dataDokumen['tanggal'] != '') $this->tanggal = $dataDokumen['tanggal_ttd_ba'];
         }
         // $watermaskRevisi       = $dataDokumen['is_revision_same_year'] == '1' ? 'revision-same-year' : $dataDokumen['status'];
         // $watermarkRevisiNumber = $dataDokumen['is_revision_same_year'] == '1' ? $dataDokumen['revision_same_year_number'] : $dataDokumen['revision_number'];
@@ -256,7 +285,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $this->pdf_pageDokumenDetailBeritaAcara($pdf, $_dokumenSatkerID, $dataDokumen, 'outcome', $qrcode);
         }
 
-        $pdf->SetProtection(array('print'));
+        $pdf->SetProtection(array('print'), "", "monikaPK@SDA");
 
 
 
@@ -268,7 +297,8 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
             // $pdf->Output('F', 'dokumen-perjanjian-kinerja.pdf');
             return $this->respond([
-                'dokumen' => $dataDokumen
+                'dokumen' => $dataDokumen,
+                'pesan_perbaikan' => $dokumenpk_ba_notes
             ]);
         };
     }
@@ -654,11 +684,38 @@ class DokumenpkExport extends \App\Controllers\BaseController
                     case 'target':
                         // $targetValue = rupiahFormat($data_targetValue['target_value'], false, 3) . ' ' . $data['target_satuan'];
                         $rSeparator = explode('.', $data_targetValue['target_value']);
-                        $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                        // $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
 
-                            && $data_targetValue['template_row_id'] != '171009'
+                        //     && $data_targetValue['template_row_id'] != '171009'
 
-                            ? number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['target_value'])) . " " . $satuan_target;
+                        //     ? number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['target_value'])) . " " . $satuan_target;
+
+
+                        if ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009') {
+
+                            $targetValue = number_format($data_targetValue['target_value'], strlen($rSeparator[1]), ',', '.') . " " . $satuan_target;
+                        } else {
+
+                            $nilaiIKM = $data_targetValue['target_value'];
+
+
+                            if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                                $GradeIKM = 'A';
+                            } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                                $GradeIKM = 'B';
+                            } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                                $GradeIKM = 'C';
+                            } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                                $GradeIKM = 'D';
+                            } else {
+                                $GradeIKM = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                            }
+
+                            $targetValue = number_format($nilaiIKM, strlen($rSeparator[1]), ',', '.') . " " . $satuan_target . " (" . strtoupper($GradeIKM) . ")";
+                        }
+
+
+
                         // $targetValue = str_replace('.',',',$data_targetValue['target_value']) .  ' ' .  $satuan_target;
                         // $targetValue = (number_format($data_targetValue['target_value'],)) .  ' ' .  $satuan_target;
 
@@ -668,9 +725,35 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         // $targetValue = rupiahFormat($data_targetValue['outcome_value'], false, 3) . ' ' . $data['outcome_satuan'];
                         // $targetValue = rtrim(rtrim(number_format($data_targetValue['outcome_value'], 10, ',', '.'), '0'), ',') . ' ' . $satuan_outcome;
                         $rSeparator = explode('.', $data_targetValue['outcome_value']);
-                        $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+
+                        // $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                        //     && $data_targetValue['template_row_id'] != '171009'
+                        //     ? number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['outcome_value'])) .  ' ' .  $satuan_outcome;
+
+                        if (
+                            $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
                             && $data_targetValue['template_row_id'] != '171009'
-                            ? number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') : strtoupper($data_targetValue['outcome_value'])) .  ' ' .  $satuan_outcome;
+                        ) {
+                            $targetValue = number_format($data_targetValue['outcome_value'], strlen($rSeparator[1]), ',', '.') . " " . $satuan_outcome;
+                        } else {
+
+                            $nilaiIKM = $data_targetValue['outcome_value'];
+
+
+                            if ($nilaiIKM >= 88.31 && $nilaiIKM <= 100.00) {
+                                $GradeIKM = 'A';
+                            } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                                $GradeIKM = 'B';
+                            } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                                $GradeIKM = 'C';
+                            } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                                $GradeIKM = 'D';
+                            } else {
+                                $GradeIKM = 'Nilai IKM tidak valid'; // Jika nilai di luar rentang yang diharapkan
+                            }
+
+                            $targetValue =  number_format($nilaiIKM, strlen($rSeparator[1]), ',', '.') . " " . $satuan_outcome . " (" . strtoupper($GradeIKM) . ") ";
+                        }
 
 
                         break;
@@ -856,7 +939,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
     private function pdf_pageDokumenDetailBeritaAcara($pdf, $_dokumenSatkerID, $dataDokumen, $_detailDokumenType, $qrcode)
     {
-        $this->pdf_renderWatermarkKonsep($pdf, $dataDokumen, 6, 10);
+        $this->pdf_renderWatermarkKonsepBA($pdf, $dataDokumen, 6, 10);
 
         // header('Content-Type: text/html; charset=utf-8');
         $pdf->SetMargins(0, 16, 0, 0);
@@ -948,26 +1031,39 @@ class DokumenpkExport extends \App\Controllers\BaseController
         $pdf->Cell(15, 8, "KINERJA", 1, 0, 'C');
         $pdf->Ln();
 
-        $pdf->SetFont($this->fontFamily, 'B', 9);
-        $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
-        $pdf->Cell(30, 8, "OUTPUT", 1, 0, 'C');
-        $pdf->Cell(30, 8, "OUTCOME", 1, 0, 'C');
-        $pdf->Cell(30, 8, "OUTPUT", 1, 0, 'C');
-        $pdf->Cell(30, 8, "OUTCOME", 1, 0, 'C');
-        $pdf->Cell(15, 8, "%", 1, 0, 'C');
-        $pdf->Ln();
+        $widthTitleVolumeSatuan = 30;
+
+        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+
+            $pdf->SetFont($this->fontFamily, 'B', 9);
+            $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
+            $pdf->Cell(30, 8, "OUTPUT", 1, 0, 'C');
+            $pdf->Cell(30, 8, "OUTCOME", 1, 0, 'C');
+            $pdf->Cell(30, 8, "OUTPUT", 1, 0, 'C');
+            $pdf->Cell(30, 8, "OUTCOME", 1, 0, 'C');
+            $pdf->Cell(15, 8, "", 1, 0, 'C');
+            $pdf->Ln();
+
+            $widthTitleVolumeSatuan = 15;
+        }
+
+
 
         $pdf->SetFont($this->fontFamily, 'B', 9);
         $pdf->SetX((300 - array_sum($headerWidth)) / 2 + 130);
-        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Volume", 1, 0, 'C');
-        $pdf->Cell(15, 8, "Satuan", 1, 0, 'C');
-        $pdf->Cell(15, 8, "", 1, 0, 'C');
+        $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
+        $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
+        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+            $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
+            $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
+        }
+        $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
+        $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
+        if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+            $pdf->Cell($widthTitleVolumeSatuan, 8, "Volume", 1, 0, 'C');
+            $pdf->Cell($widthTitleVolumeSatuan, 8, "Satuan", 1, 0, 'C');
+        }
+        $pdf->Cell(15, 8, "%", 1, 0, 'C');
         $pdf->Ln();
 
 
@@ -1143,23 +1239,202 @@ class DokumenpkExport extends \App\Controllers\BaseController
                         break;
                 }
 
+
+
+                if ($dataDokumen['dokumen_type'] === 'balai') {
+
+                    $targetValue = 0 . " %";
+
+                    $sumOutputValue     = 0;
+                    $sumCapaianSatkerValue     = 0;
+                    $outputSatuan = '';
+                    $average = 0;
+
+
+                    $templateRowRumus = $this->templateRowRumus->select('rumus')->where(['template_id' => $data['template_id'], 'rowId' =>  $data['id']])->get()->getResult();
+                    foreach ($templateRowRumus as $key => $dataRumus) {
+                        $rumus = $this->dokumenSatker->select(
+                            'dokumenpk_satker_rows.outcome_value, dokumenpk_satker_rows.target_value, dokumenpk_satker_rows.template_row_id,
+                            dokumenpk_satker.satkerid,dokumenpk_satker.id,dokumenpk_satker_rows.target_sat,target_satuan,target_satuan,dokumenpk_satker_rows.capaian_outcome_value'
+                        )
+                            ->join('dokumenpk_satker_rows', 'dokumenpk_satker.id = dokumenpk_satker_rows.dokumen_id', 'left')
+                            ->join('dokumen_pk_template_row_' . session('userData.tahun'), "(dokumenpk_satker_rows.template_row_id=dokumen_pk_template_row_" . session('userData.tahun') . ".id)", 'left')
+                            ->join('dokumen_pk_template_rowrumus_' . session('userData.tahun'), "(dokumenpk_satker.template_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".template_id AND dokumenpk_satker_rows.template_row_id=dokumen_pk_template_rowrumus_" . session('userData.tahun') . ".rowId)", 'left')
+                            ->where('dokumen_pk_template_rowrumus_' . session('userData.tahun') . '.rumus', $dataRumus->rumus)
+                            ->where('dokumenpk_satker.balaiid', $dataDokumen['balaiid'])
+                            ->where('dokumenpk_satker.status', 'setuju')
+                            ->where('dokumenpk_satker.satkerid is not null')
+                            ->where('dokumenpk_satker.deleted_at is null')
+                            ->where('dokumenpk_satker.tahun', $this->user['tahun'])
+                            // ->where('dokumenpk_satker_rows.is_checked', '1')
+                            ->get()->getResult();
+
+                        $outcomeRumus = 0;
+                        $outputRumus = 0;
+                        $capaianRumus = 0;
+
+                        foreach ($rumus as $keyOutcome => $dataOutput) {
+                            $outputRumus += $dataOutput ? ($dataOutput->target_value != '' ? $dataOutput->target_value : 0) : 0;
+                            $capaianRumus += $dataOutput ? ($dataOutput->capaian_outcome_value != '' ? $dataOutput->capaian_outcome_value : 0) : 0;
+                            // $outputSatuan = $dataOutput->target_sat ?? trim(explode(";", $dataOutput->target_satuan)[0]);
+                            $outputSatuan = $data['outcome_satuan'];
+                        }
+                        if ($sumOutputValue == '' && $outcomeRumus > 0) $sumOutputValue = 0;
+                        if ($sumCapaianSatkerValue == '' &&  $capaianRumus > 0) $sumCapaianSatkerValue = 0;
+
+
+                        if ($outputRumus > 0) {
+                            $sumOutputValue  += $outputRumus;
+                        }
+
+                        if ($capaianRumus > 0) {
+                            $sumCapaianSatkerValue  += $capaianRumus;
+                        }
+                        $rSeparator = explode('.', $data['id'] != "291011" ?  $sumOutputValue : ($sumOutputValue / 3));
+                        $decimalLength = min(2, strlen($rSeparator[1])); // Mengambil panjang maksimum 2 karakter
+                        $outcomeSatker = number_format(($data['id'] == "291011" ? ($sumOutputValue / 3) : $sumOutputValue), $decimalLength, ',', '.');
+
+
+                        $rCapaianSeparator = explode('.', $data['id'] != "291011" ?  $sumCapaianSatkerValue : ($sumCapaianSatkerValue / 3));
+                        $CapaiandecimalLength = min(2, strlen($rCapaianSeparator[1])); // Mengambil panjang maksimum 2 karakter
+
+                        $CapaianSatkerOutcomeValue = number_format(($data['id'] == "291011" ? ($sumCapaianSatkerValue / 3) : $sumCapaianSatkerValue), $CapaiandecimalLength, ',', '.');
+                    }
+                }
+
+
+
+
+
+
+
+
                 //target (output & outcome)
+
                 $rSeparatorTarget = explode('.', $data_targetValue['target_value']);
-                $targetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['target_value'], strlen($rSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['target_value']));
+                // $targetValueNew = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['target_value'], strlen($rSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['target_value']));
+
+                //kondisi IKM
+                if ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009') {
+                    $targetValueNew = number_format($data_targetValue['target_value'], strlen($rSeparatorTarget[1]), ',', '.');
+                } else {
+                    $nilaiIKM = $data_targetValue['target_value'];
+
+
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 150.00) {
+                        $GradeIKM = 'A';
+                    } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                        $GradeIKM = 'B';
+                    } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                        $GradeIKM = 'C';
+                    } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                        $GradeIKM = 'D';
+                    } else {
+                        $GradeIKM = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                    }
+
+                    $targetValueNew = number_format($nilaiIKM, strlen($rSeparator[1]), ',', '.') . " (" . strtoupper($GradeIKM) . ")";
+                }
+
+
+
 
                 $rSeparatorOutcome = explode('.', $data_targetValue['outcome_value']);
-                $outcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                // $outcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                //     && $data_targetValue['template_row_id'] != '171009'
+                //     ? number_format($data_targetValue['outcome_value'], strlen($rSeparatorOutcome[1]), ',', '.') : strtoupper($data_targetValue['outcome_value']));
+
+                //kondisi IKM
+                if (
+                    $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
                     && $data_targetValue['template_row_id'] != '171009'
-                    ? number_format($data_targetValue['outcome_value'], strlen($rSeparatorOutcome[1]), ',', '.') : strtoupper($data_targetValue['outcome_value']));
+                ) {
+                    $outcomeValue = number_format($data_targetValue['outcome_value'], strlen($rSeparatorOutcome[1]), ',', '.');
+                } else {
+                    $nilaiIKM = $data_targetValue['outcome_value'];
+
+
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 150.00) {
+                        $GradeIKM = 'A';
+                    } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                        $GradeIKM = 'B';
+                    } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                        $GradeIKM = 'C';
+                    } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                        $GradeIKM = 'D';
+                    } else {
+                        $GradeIKM = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                    }
+
+                    $outcomeValue = number_format($nilaiIKM, strlen($rSeparatorOutcome[1]), ',', '.') . " (" . strtoupper($GradeIKM) . ")";
+                }
+
+
+
 
                 //capaian (output & outcome)
                 $CapaianrSeparatorTarget = explode('.', $data_targetValue['capaian_output_value']);
-                $CapaiantargetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['capaian_output_value'], strlen($CapaianrSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['capaian_output_value']));
+                // $CapaiantargetValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009' && $data_targetValue['template_row_id'] != '171009' ? number_format($data_targetValue['capaian_output_value'], strlen($CapaianrSeparatorTarget[1]), ',', '.') : strtoupper($data_targetValue['capaian_output_value']));
+
+                //kondisi IKM
+                if (
+                    $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                    && $data_targetValue['template_row_id'] != '171009'
+                ) {
+                    $CapaiantargetValue = number_format($data_targetValue['capaian_output_value'], strlen($CapaianrSeparatorTarget[1]), ',', '.');
+                } else {
+                    $nilaiIKM = $data_targetValue['capaian_output_value'];
+
+
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 150.00) {
+                        $GradeIKM = 'A';
+                    } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                        $GradeIKM = 'B';
+                    } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                        $GradeIKM = 'C';
+                    } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                        $GradeIKM = 'D';
+                    } else {
+                        $GradeIKM = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                    }
+
+                    $CapaiantargetValue = number_format($nilaiIKM, strlen($CapaianrSeparatorTarget[1]), ',', '.') . " (" . strtoupper($GradeIKM) . ")";
+                }
+
+
+
+
+
 
                 $CapaianrSeparatorOutcome = explode('.', $data_targetValue['capaian_outcome_value']);
-                $CapaianoutcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                // $CapaianoutcomeValue = ($data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                //     && $data_targetValue['template_row_id'] != '171009'
+                //     ? number_format($data_targetValue['capaian_outcome_value'], strlen($CapaianrSeparatorOutcome[1]), ',', '.') : strtoupper($data_targetValue['capaian_outcome_value']));
+
+                //kondisi IKM
+                if (
+                    $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
                     && $data_targetValue['template_row_id'] != '171009'
-                    ? number_format($data_targetValue['capaian_outcome_value'], strlen($CapaianrSeparatorOutcome[1]), ',', '.') : strtoupper($data_targetValue['capaian_outcome_value']));
+                ) {
+                    $CapaianoutcomeValue = number_format($data_targetValue['capaian_outcome_value'], strlen($CapaianrSeparatorOutcome[1]), ',', '.');
+                } else {
+                    $nilaiIKM = $data_targetValue['capaian_outcome_value'];
+
+
+                    if ($nilaiIKM >= 88.31 && $nilaiIKM <= 150.00) {
+                        $GradeIKM = 'A';
+                    } elseif ($nilaiIKM >= 76.61 && $nilaiIKM <= 88.30) {
+                        $GradeIKM = 'B';
+                    } elseif ($nilaiIKM >= 65.00 && $nilaiIKM <= 76.60) {
+                        $GradeIKM = 'C';
+                    } elseif ($nilaiIKM >= 25.00 && $nilaiIKM <= 64.99) {
+                        $GradeIKM = 'D';
+                    } else {
+                        $GradeIKM = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                    }
+
+                    $CapaianoutcomeValue = number_format($nilaiIKM, strlen($CapaianrSeparatorOutcome[1]), ',', '.') . " (" . strtoupper($GradeIKM) . ")";
+                }
 
 
                 if ($data_targetValue['target_value'] == 0) {
@@ -1167,6 +1442,23 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 } else {
 
                     $kinerja = ($data_targetValue['capaian_output_value'] / $data_targetValue['target_value']) * 100;
+
+
+                    if ($kinerja >= 88.31 && $kinerja <= 150.00) {
+                        $gradeKinerja = 'A';
+                    } elseif ($kinerja >= 76.61 && $kinerja <= 88.30) {
+                        $gradeKinerja = 'B';
+                    } elseif ($kinerja >= 65.00 && $kinerja <= 76.60) {
+                        $gradeKinerja = 'C';
+                    } elseif ($kinerja >= 25.00 && $kinerja <= 64.99) {
+                        $gradeKinerja = 'D';
+                    } else {
+                        $gradeKinerja = 'N/A'; // Jika nilai di luar rentang yang diharapkan
+                    }
+                }
+
+                if ($data_targetValue['target_value'] == 0 && $data_targetValue['capaian_output_value'] == 0) {
+                    $kinerja = 100;
                 }
 
 
@@ -1174,19 +1466,44 @@ class DokumenpkExport extends \App\Controllers\BaseController
                 $pdf->SetAligns(array('C', 'L', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'));
                 $pdf->SetValigns(array(true, false, true));
                 $pdf->SetLineHeight(6);
-                $pdf->Row(array(
-                    $numberText,
-                    $data['title'],
-                    $targetValue,
-                    $satuan_target,
-                    $outcomeValue,
-                    $satuan_outcome,
-                    $CapaiantargetValue,
-                    $satuan_target,
-                    $CapaianoutcomeValue,
-                    $satuan_outcome,
-                    str_replace(".", ",", number_format($kinerja, 2)),
-                ), $celTableDataFill);
+
+                if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
+                    $pdf->Row(array(
+                        $numberText,
+                        $data['title'],
+                        $targetValueNew,
+                        $satuan_target,
+                        // ($dataDokumen['dokumen_type'] === 'balai' ? $outcomeSatker : $outcomeValue),
+                        $outcomeValue,
+                        $satuan_outcome,
+                        $CapaiantargetValue,
+                        $satuan_target,
+                        // ($dataDokumen['dokumen_type'] === 'balai' ? $CapaianSatkerOutcomeValue : $CapaianoutcomeValue),
+                        $CapaianoutcomeValue,
+                        $satuan_outcome,
+                        (
+                            $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                            && $data_targetValue['template_row_id'] != '171009' ? number_format($kinerja, 2, ',', '.') : number_format($kinerja, 2, ',', '.') . " (" . $gradeKinerja . ")"
+                        )
+                    ), $celTableDataFill);
+                } else {
+                    // $tableDataWidth = [20, 110, 60, 60, 15];
+
+                    $pdf->SetWidths(array(20, 110, 30, 30, 30, 30, 15));
+                    $pdf->Row(array(
+                        $numberText,
+                        $data['title'],
+                        $targetValueNew,
+                        $satuan_target,
+                        $CapaiantargetValue,
+                        $satuan_target,
+                        (
+                            $data_targetValue['template_row_id'] != '151010' && $data_targetValue['template_row_id'] != '141009'
+                            && $data_targetValue['template_row_id'] != '171009' ? number_format($kinerja, 2, ',', '.') : number_format($kinerja, 2, ',', '.') . " (" . $gradeKinerja . ")"
+                        )
+                    ), $celTableDataFill);
+                }
+
 
                 // if ($data_targetValue['is_checked'] == '1')  $pdf->Cell($tableDataWidth[2], 6, $targetValue, 1, 0, 'C', $celTableDataFill);
             } else {
@@ -1292,16 +1609,16 @@ class DokumenpkExport extends \App\Controllers\BaseController
         /** TTD Section */
         $pdf->Ln(5);
 
-        $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt'] ? 'Plt. ' : '';
-        $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt'] ? 'Plt. ' : '';
+        $jabatanPihak1_isPlt = $dataDokumen['pihak1_is_plt_ba'] ? 'Plt. ' : '';
+        $jabatanPihak2_isPlt = $dataDokumen['pihak2_is_plt_ba'] ? 'Plt. ' : '';
         // $dokumenKopTitle1_prefix = ($dataDokumen['dokumen_type'] == "satker" && strpos($dataDokumen['pihak1_initial'], 'OPERASI DAN PEMELIHARAAN')) ? 'SATUAN KERJA' : '';
         $this->pdf_renderSectionTtd($pdf, array_sum($tableDataWidth), [
             'person1Title' => $jabatanPihak2_isPlt . $dataDokumen['pihak2_initial'],
-            'person1Name'  => $dataDokumen['pihak2_ttd'],
+            'person1Name'  => $dataDokumen['pihak2_ttd_ba'],
             'person2Date'  => $this->dokumenLokasi . ',   ' . $this->tanggal . ' '  . $this->dokumenBulan . ' ' . ($dataDokumen['tahun_ttd'] != '' ? $dataDokumen['tahun_ttd'] : $this->dokumenYear),
             // 'person2Title' => $jabatanPihak1_isPlt . $dokumenKopTitle1_prefix . $dataDokumen['pihak1_initial'],
             'person2Title' => $jabatanPihak1_isPlt . $dataDokumen['pihak1_initial'],
-            'person2Name'  => $dataDokumen['pihak1_ttd'],
+            'person2Name'  => $dataDokumen['pihak1_ttd_ba'],
         ], $_beritaacara = true);
     }
 
@@ -1395,9 +1712,6 @@ class DokumenpkExport extends \App\Controllers\BaseController
     private function pdf_renderWatermarkKonsep($pdf, $_dataDokumen, $topBorder, $topWatermark)
     {
 
-
-
-
         if ($_dataDokumen['is_revision_same_year'] < 1) {
             //     $created_at = $this->dokumenSatker->select('
             //     dokumenpk_satker.created_at
@@ -1457,6 +1771,29 @@ class DokumenpkExport extends \App\Controllers\BaseController
             $pdf->watermarkOffsetLeft        = 246;
             $pdf->watermarkBorder_width      = 24;
             $pdf->watermarkBorder_offsetLeft = 240;
+            $pdf->watermarkBorder_offsetTop = $topBorder;
+            $pdf->watermarkOffsetTop        = $topWatermark;
+
+
+            if ($_dataDokumen['status'] == 'hold' || $_dataDokumen['status'] == 'tolak') {
+                $pdf->watermarkText = 'KONSEP';
+                $pdf->watermarkOffsetLeft        = 254.5;
+                $pdf->watermarkBorder_width      = 24;
+                $pdf->watermarkBorder_offsetLeft = 250;
+                $pdf->watermarkBorder_offsetTop = $topBorder;
+                $pdf->watermarkOffsetTop        = $topWatermark;
+            }
+        }
+    }
+
+    private function pdf_renderWatermarkKonsepBA($pdf, $_dataDokumen, $topBorder, $topWatermark)
+    {
+
+        if ($_dataDokumen['status_ba'] === '0' || $_dataDokumen['status_ba'] === '2') {
+            $pdf->watermarkText = 'KONSEP';
+            $pdf->watermarkOffsetLeft        = 254.5;
+            $pdf->watermarkBorder_width      = 24;
+            $pdf->watermarkBorder_offsetLeft = 250;
             $pdf->watermarkBorder_offsetTop = $topBorder;
             $pdf->watermarkOffsetTop        = $topWatermark;
         }

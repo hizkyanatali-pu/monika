@@ -36,6 +36,9 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->program = $this->db->table('tprogram');
 
         $this->pkSettingBA          = $this->db->table('dokumenpk_setting_ba');
+        $this->dokumenpk_ba_notes = $this->db->table('dokumenpk_ba_notes');
+        $this->dokumenpk_revision_notes = $this->db->table('dokumenpk_revision_notes');
+
 
 
 
@@ -47,6 +50,13 @@ class Dokumenpk extends \App\Controllers\BaseController
             'setuju'   => ['message' => 'Telah di Setujui', 'color' => 'bg-success text-white'],
             'tolak'    => ['message' => 'Di Tolak', 'color' => 'bg-danger text-white'],
             'revision' => ['message' => 'Telah Di Revisi', 'color' => 'bg-dark text-white']
+        ];
+
+        $this->BAStatus = [
+            '0'     => ['message' => 'Menunggu Konfirmasi', 'color' => 'bg-secondary'],
+            '1'   => ['message' => 'Telah di Setujui', 'color' => 'bg-success text-white'],
+            '2'    => ['message' => 'Di Tolak', 'color' => 'bg-danger text-white'],
+            null => ['message' => 'Belum Input Berita Acara PK', 'color' => 'bg-secondary']
         ];
         $this->request = \Config\services::request();
     }
@@ -74,6 +84,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
+            dokumenpk_satker.change_status_ba_at,
             dokumenpk_satker.created_at,
             dokumen_pk_template_' . session('userData.tahun') . '.title as dokumenTitle
         ')
@@ -158,6 +169,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
             'dataDokumen'   => $dataDokumen,
             'dokumenStatus' => $this->dokumenStatus,
+            'BAStatusVerif' => $this->BAStatus,
             'statusBA'  => $qBaStatus
         ]);
     }
@@ -181,9 +193,12 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.revision_master_number,
             dokumenpk_satker.revision_number,
             dokumenpk_satker.status,
+            dokumenpk_satker.status_ba,
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
             dokumenpk_satker.created_at,
+            dokumenpk_satker.change_status_ba_at,
+
             dokumenpk_satker.satkerid,
             (CASE
             WHEN dokumenpk_satker.acc_by IS NULL THEN dokumenpk_satker.reject_by
@@ -222,6 +237,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         }
 
         $dataDokumen = $queryDataDokumen->get()->getResult();
+        $qBaStatus = $this->pkSettingBA->where('tahun', $this->user['tahun'])->get()->getRow();
+
 
 
 
@@ -244,7 +261,11 @@ class Dokumenpk extends \App\Controllers\BaseController
             'dataDokumen'   => $dataDokumen,
             'dokumenStatus' => $this->dokumenStatus,
 
-            'balaiCreateForSatker' =>  $_satkerId
+            'balaiCreateForSatker' =>  $_satkerId,
+            'statusBA'  => $qBaStatus,
+            'BAStatusVerif' => $this->BAStatus,
+
+
         ]);
     }
 
@@ -262,6 +283,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             dokumenpk_satker.status,
             dokumenpk_satker.is_revision_same_year,
             dokumenpk_satker.change_status_at,
+            dokumenpk_satker.change_status_ba_at,
             dokumenpk_satker.created_at,
             dokumenpk_satker.status_ba,
             dokumen_pk_template_' . session('userData.tahun') . '.title as dokumenTitle,
@@ -299,7 +321,9 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'dokumenTitle'               => $arr->dokumenTitle,
                 'userCreatedName'            => $arr->userCreatedName,
                 'satkerid'                   => instansi_name($arr->satkerid ?? $arr->balaiid)->nama_instansi,
-                'status_ba'                 => $arr->status_ba
+                'status_ba'                 => $arr->status_ba,
+                'change_status_ba_at'           => $arr->status_ba != null ? date_indo($arr->change_status_ba_at) : '-',
+
 
             ];
         }, $dataDokumen);
@@ -935,31 +959,62 @@ class Dokumenpk extends \App\Controllers\BaseController
         $listPesanRevision = [];
         $dataDokumen =  $this->dokumenSatker->where('id', $id)->get()->getRow();
 
-        if (!is_null($dataDokumen->revision_master_dokumen_id)) {
-            $dataListRevision = $this->dokumenSatker->where('status', 'revision')
-                ->where('id', $dataDokumen->revision_master_dokumen_id)
-                ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
-                ->get()->getResult();
+        // if (!is_null($dataDokumen->revision_master_dokumen_id)) {
+        //     $dataListRevision = $this->dokumenSatker->where('status', 'revision')
+        //         ->where('id', $dataDokumen->revision_master_dokumen_id)
+        //         ->orWhere('revision_master_dokumen_id', $dataDokumen->revision_master_dokumen_id)
+        //         ->get()->getResult();
+
+        //     $listPesanRevision = array_map(function ($arr) {
+        //         // var_dump($arr);die;
+        //         $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
+        //         return [
+        //             'tanggal'       => date_indo($arr->change_status_at) . " " . date("H:i", strtotime($arr->change_status_at)),
+        //             'pesan'         => $arr->revision_message,
+        //             'koreksi_by'    => $dataPengguna->nama ?? '',
+        //         ];
+        //     }, $dataListRevision);
+        // }
+
+        //list pesan revisi/koreksi/penolakan
+        $dokumenpk_revision_notes =  $this->dokumenpk_revision_notes
+            ->where("user_id", $dataDokumen->user_created)
+            ->where("tahun", session('userData.tahun'))->get()->getResult();
+
+
+        if ($dokumenpk_revision_notes) {
+
 
             $listPesanRevision = array_map(function ($arr) {
                 // var_dump($arr);die;
                 $dataPengguna = $this->kuUser->where('uid', $arr->reject_by)->get()->getRow();
                 return [
-                    'tanggal'       => date_indo($arr->change_status_at) . " " . date("H:i", strtotime($arr->change_status_at)),
+                    'tanggal'       => date_indo($arr->reject_date) . " " . date("H:i", strtotime($arr->reject_date)),
                     'pesan'         => $arr->revision_message,
                     'koreksi_by'    => $dataPengguna->nama ?? '',
                 ];
-            }, $dataListRevision);
+            }, $dokumenpk_revision_notes);
         }
 
 
+        $kegiatanData = $this->dokumenSatker_kegiatan->where('dokumen_id', $id)->get()->getResult();
 
+        $listAnggaran = array_map(function ($kegiatan) {
+            // Hapus desimal dengan floor() atau intval()
+            $anggaranTanpaDesimal = intval($kegiatan->anggaran); // Atau bisa menggunakan intval($kegiatan->anggaran)
+
+            return [
+                'id' => $kegiatan->id,
+                'nama' => $kegiatan->nama,
+                'anggaran' => $anggaranTanpaDesimal, // Anggaran tanpa desimal
+            ];
+        }, $kegiatanData);
 
         return $this->respond([
             'dokumen'      => $dataDokumen,
             'rows'         => $this->dokumenSatker_rows->where('dokumen_id', $id)->get()->getResult(),
             'paket'         => $this->dokumenSatker_paket->where('dokumen_id', $id)->get()->getResult(),
-            'kegiatan'     => $this->dokumenSatker_kegiatan->where('dokumen_id', $id)->get()->getResult(),
+            'kegiatan'     => $listAnggaran,
             'listRevision' => $listPesanRevision
         ]);
     }
@@ -1087,6 +1142,16 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function create()
     {
 
+        // http_response_code(500);
+
+        // // Mengirimkan response JSON yang berisi pesan kesalahan
+        // echo json_encode([
+        //     'status' => false,
+        //     'message' => 'Terjadi kesalahan pada server.'
+        // ]);
+
+        // exit;
+
         $createByAdmin = $this->session->get('createDokumenByAdmin');
         $replacements = [
             "." => "",
@@ -1207,6 +1272,20 @@ class Dokumenpk extends \App\Controllers\BaseController
                         ->get()->getFirstRow()->revision_number + 1;
                 }
 
+
+                $dokumenPK = $this->dokumenSatker->where('id', $revision_dokumenID)->get()->getRow();
+
+                $this->dokumenpk_revision_notes->insert([
+                    'id_dokumen'   =>  $revision_dokumenID,
+                    'revision_message'  => $revision_message ?? null,
+                    'reject_by'    => $this->user['idpengguna'],
+                    'reject_date'  => date("Y-m-d H:i:s"),
+                    'user_id'  => $dokumenPK->user_created,
+                    'revision_master_dokumen_id'  => $dokumenPK->revision_master_dokumen_id,
+                    'tahun'  => $dokumenPK->tahun,
+
+                ]);
+
                 $this->dokumenSatker->update([
                     'status' => 'revision'
                 ], [
@@ -1248,6 +1327,15 @@ class Dokumenpk extends \App\Controllers\BaseController
 
     public function edit()
     {
+        // http_response_code(500);
+
+        // // Mengirimkan response JSON yang berisi pesan kesalahan
+        // echo json_encode([
+        //     'status' => false,
+        //     'message' => 'Terjadi kesalahan pada server.'
+        // ]);
+
+        // exit;
         $dokumenID = $this->request->getPost('id');
         $replacements = [
             "." => "",
@@ -1310,7 +1398,15 @@ class Dokumenpk extends \App\Controllers\BaseController
     public function editBA()
     {
 
+        // http_response_code(500);
 
+        // // Mengirimkan response JSON yang berisi pesan kesalahan
+        // echo json_encode([
+        //     'status' => false,
+        //     'message' => 'Terjadi kesalahan pada server.'
+        // ]);
+
+        // exit; // Pastikan tidak ada output lebih lanjut
 
         $dokumenID = $this->request->getPost('id');
         $replacements = [
@@ -1324,31 +1420,57 @@ class Dokumenpk extends \App\Controllers\BaseController
         /* dokumen */
         $inserted_dokumenSatker = [
             'template_id'           => $this->request->getPost('templateID'),
-            'status_ba'             => 1,
-            // 'tahun'                 => $this->request->getPost('tahun'),
-            'created_at'            => date('Y-m-d H:i:s')
+            'status_ba'             => 0,
+            'bulan_ttd_ba'          => $this->request->getPost('bulan'),
+            'tanggal_ttd_ba'        => $this->request->getPost('tanggal'),
+            'change_status_ba_at'   => date('Y-m-d H:i:s'),
+
+            'pihak1_ttd_ba'            => $this->request->getPost('ttdPihak1'),
+            'pihak1_is_plt_ba'         => $this->request->getPost('ttdPihak1_isPlt'),
+            'pihak2_ttd_ba'            => $this->request->getPost('ttdPihak2'),
+            'pihak2_is_plt_ba'         => $this->request->getPost('ttdPihak2_isPlt'),
         ];
+
+
+
 
         if ($this->request->getPost('ttdPihak2Jabatan')) $inserted_dokumenSatker['pihak2_initial'] = $this->request->getPost('ttdPihak2Jabatan');
 
+
+
+
         $this->dokumenSatker->where('id', $dokumenID);
         $this->dokumenSatker->update($inserted_dokumenSatker);
+
+        if ($this->request->getPost('statusubahba')  === "true") {
+            // jika dokumen ada perubahan dari satker
+            $inserted_dokumenPerubahan = [
+                'id_dokumen'   =>  $dokumenID,
+                'notes_ba'     => $this->request->getPost('message'),
+                'reject_by'    => $this->user['idpengguna'],
+                'reject_date'  => date("Y-m-d H:i:s"),
+            ];
+            $this->dokumenpk_ba_notes->insert($inserted_dokumenPerubahan);
+        }
+
         /** end-of: dokumen */
 
 
 
 
-        // $_templateID = $this->request->getPost('templateID');
-        // if ($this->user['tahun'] != 2023) {
-        //     if (!in_array($_templateID, ['5', '6', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '29', '31', '32', '33', '34', '35', '36', '37', '38', '40', '42'])) {
+        $_templateID = $this->request->getPost('templateID');
+        if ($this->user['tahun'] != 2023) {
+            if (!in_array($_templateID, ['5', '6', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '29', '31', '32', '33', '34', '35', '36', '37', '38', '40', '42'])) {
 
-        //         /* dokumen paket */
-        //         $this->dokumenSatker_paket->where('dokumen_id', $dokumenID);
-        //         $this->dokumenSatker_paket->delete();
-        //         $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
-        //         /** end-of: dokumen rows */
-        //     }
-        // }
+                /* dokumen paket */
+                $this->dokumenSatker_paket->where('dokumen_id', $dokumenID);
+                $this->dokumenSatker_paket->delete();
+                $this->insertDokumenSatker_paket($this->request->getPost(), $dokumenID);
+                /** end-of: dokumen rows */
+            }
+        }
+
+
         $this->dokumenSatker_rows->where('dokumen_id', $dokumenID);
         $this->dokumenSatker_rows->delete();
 
@@ -1360,8 +1482,8 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'target_value'    => str_replace(',', '.', $arr['target']),
                 'target_sat'    =>  $arr['target_satuan'] ??  null,
                 'outcome_value'   => str_replace(',', '.', $arr['outcome']),
-                'capaian_output_value'  =>  $arr['capaian_output_value'],
-                'capaian_outcome_value'  =>  $arr['capaian_outcome_value'],
+                'capaian_output_value'  => str_replace(',', '.', $arr['capaian_output_value']),
+                'capaian_outcome_value'  =>  str_replace(',', '.', $arr['capaian_outcome_value']),
                 'is_checked'      => $arr['isChecked']
             ];
         },  $this->request->getPost()['rows']);
@@ -1426,6 +1548,14 @@ class Dokumenpk extends \App\Controllers\BaseController
                         'target_unit' => $paketId['target_satuan'],
                         'output_value' => $paketId['outcome_nilai'],
                         'output_unit' => $paketId['outcome_satuan'],
+
+                        // tambahan fitur berita acara
+                        'capaian_output_value' => $paketId['capaian_output_nilai'] ?? 0,
+                        'capaian_output_unit' => $paketId['target_satuan'] ?? null,
+
+                        'capaian_outcome_value' => $paketId['capaian_outcome_nilai'] ?? 0,
+                        'capaian_outcome_unit' => $paketId['outcome_satuan'] ?? null,
+
                         // 'isChecked' => $item['id']
 
                     ];
@@ -1444,6 +1574,13 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'output_unit' => $arr['output_unit'],
                 // 'outcome_value'   => str_replace(',', '.', $arr['outcome']),
                 // 'is_checked'      => $arr['isChecked']
+
+                //tambahan fitur Berita Acara
+                'capaian_output_value' => $arr['capaian_output_value'],
+                'capaian_output_unit' => $arr['target_unit'],
+
+                'capaian_outcome_value' => $arr['capaian_outcome_value'],
+                'capaian_outcome_unit' => $arr['output_unit'],
             ];
         }, $dataPaket);
 
