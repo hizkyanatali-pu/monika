@@ -189,9 +189,9 @@
                                             <div class="card-body font-weight-bold text-white" style="padding: 2rem;line-height: 12px;">
                                                 <p>PROGRES (%) </p>
                                                 <p>KEU</p>
-                                                <p>34,61</p>
+                                                <p><?= isset($keuProgressSda) ? number_format($keuProgressSda, 2, ',', '.') : 0 ?></p>
                                                 <p>Deviasi (%)</p>
-                                                <p>-10,88</p>
+                                                <p><?= $total_deviasi ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -200,9 +200,9 @@
                                             <div class="card-body font-weight-bold text-white" style="padding: 2rem;line-height: 12px;">
                                                 <p>PROGRES (%) </p>
                                                 <p>FISIK</p>
-                                                <p>40,22</p>
+                                                <p><?= isset($fisikProgressSda) ? number_format($fisikProgressSda, 2, ',', '.') : 0 ?></p>
                                                 <p>Deviasi (%)</p>
-                                                <p>-10,86</p>
+                                                <p><?= $total_deviasi ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -215,7 +215,7 @@
                                                     <h4 class="mb-0"><b> Total Pagu </b></h4>
                                                     <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            <?= toMilyar($pagu_total->total_pagu) ?>
+                                                            <?= toMilyar($pagu_total->total_pagu, true, 2) ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -229,7 +229,7 @@
                                                         <h4 class="mb-0"><b> Total Realisasi </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($real_total->total_real) ?>
+                                                                <?= toMilyar($real_total->total_real, true, 2) ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -242,7 +242,7 @@
                                                         <h4 class="mb-0"><b> Total Belum Realisasi </b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($selisih_total->selisih) ?>
+                                                                <?= toMilyar($selisih_total->selisih, true, 2) ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -258,7 +258,7 @@
                                                             <h4 class="mb-0"><b><?= $value->title ?></b></h4>
                                                             <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                                 <h5 class="mb-0">
-                                                                    <?= toMilyar($value->totalPagu) ?>
+                                                                    <?= toMilyar($value->totalPagu, true, 2) ?>
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -598,29 +598,31 @@
                                         $sum_total_progres = 0;
                                         $sum_total_keu_progres = 0;
                                         $sum_total_fis_progres = 0;
+                                        $sum_total_blokir = 0;
 
                                         foreach ($satker_desc as $key => $value): 
 
                                         $sum_total_progres += $value->total_progres;
+                                        $sum_total_blokir += $value->total_blokir;
                                         $sum_total_keu_progres += $value->total_keu_progres;
                                         $sum_total_fis_progres += $value->total_fis_progres;
                                     ?>  
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
                                             <td><?= $key+1 ?></td>
                                             <td><?= $value->satker ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= 0 ?></td>
-                                            <td><?= $value->total_keu_progres ?></td>
-                                            <td><?= $value->total_fis_progres ?></td>
+                                            <td><?= number_format($value->total_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_blokir, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_keu_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_fis_progres, 2, ',', '.') ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
-                                        <td>12</td>
+                                        <td>11</td>
                                         <td>Total</td>
-                                        <td><?= $sum_total_progres ?></td>
-                                        <td><?= 0 ?></td>
-                                        <td><?= $sum_total_keu_progres ?></td>
-                                        <td><?= $sum_total_fis_progres ?></td>
+                                        <td><?= number_format($sum_total_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_blokir, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_keu_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_fis_progres, 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -645,29 +647,31 @@
                                         $sum_total_progres = 0;
                                         $sum_total_keu_progres = 0;
                                         $sum_total_fis_progres = 0;
+                                        $sum_total_blokir = 0;
 
                                         foreach ($satker_asc as $key => $value): 
 
                                         $sum_total_progres += $value->total_progres;
+                                        $sum_total_blokir += $value->total_blokir;
                                         $sum_total_keu_progres += $value->total_keu_progres;
                                         $sum_total_fis_progres += $value->total_fis_progres;
                                     ?>  
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
                                             <td><?= $key+1 ?></td>
                                             <td><?= $value->satker ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= 0 ?></td>
-                                            <td><?= $value->total_keu_progres ?></td>
-                                            <td><?= $value->total_fis_progres ?></td>
+                                            <td><?= number_format($value->total_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_blokir, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_keu_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_fis_progres, 2, ',', '.') ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
-                                        <td>12</td>
+                                        <td>11</td>
                                         <td>Total</td>
-                                        <td><?= $sum_total_progres ?></td>
-                                        <td><?= 0 ?></td>
-                                        <td><?= $sum_total_keu_progres ?></td>
-                                        <td><?= $sum_total_fis_progres ?></td>
+                                        <td><?= number_format($sum_total_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_blokir, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_keu_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_fis_progres, 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -692,29 +696,31 @@
                                         $sum_total_progres = 0;
                                         $sum_total_keu_progres = 0;
                                         $sum_total_fis_progres = 0;
+                                        $sum_total_blokir = 0;
 
                                         foreach ($balai_desc as $key => $value): 
 
                                         $sum_total_progres += $value->total_progres;
+                                        $sum_total_blokir += $value->total_blokir;
                                         $sum_total_keu_progres += $value->total_keu_progres;
                                         $sum_total_fis_progres += $value->total_fis_progres;
                                     ?>  
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
                                             <td><?= $key+1 ?></td>
                                             <td><?= $value->balai ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= 0 ?></td>
-                                            <td><?= $value->total_keu_progres ?></td>
-                                            <td><?= $value->total_fis_progres ?></td>
+                                            <td><?= number_format($value->total_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_blokir, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_keu_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_fis_progres, 2, ',', '.') ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
-                                        <td>12</td>
+                                        <td>11</td>
                                         <td>Total</td>
-                                        <td><?= $sum_total_progres ?></td>
-                                        <td><?= 0 ?></td>
-                                        <td><?= $sum_total_keu_progres ?></td>
-                                        <td><?= $sum_total_fis_progres ?></td>
+                                        <td><?= number_format($sum_total_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_blokir, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_keu_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_fis_progres, 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -739,29 +745,31 @@
                                         $sum_total_progres = 0;
                                         $sum_total_keu_progres = 0;
                                         $sum_total_fis_progres = 0;
+                                        $sum_total_blokir = 0;
 
                                         foreach ($balai_asc as $key => $value): 
 
                                         $sum_total_progres += $value->total_progres;
+                                        $sum_total_blokir += $value->total_blokir;
                                         $sum_total_keu_progres += $value->total_keu_progres;
                                         $sum_total_fis_progres += $value->total_fis_progres;
                                     ?>  
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
                                             <td><?= $key+1 ?></td>
                                             <td><?= $value->balai ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= 0 ?></td>
-                                            <td><?= $value->total_keu_progres ?></td>
-                                            <td><?= $value->total_fis_progres ?></td>
+                                            <td><?= number_format($value->total_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_blokir, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_keu_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->total_fis_progres, 2, ',', '.') ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
-                                        <td>12</td>
+                                        <td>11</td>
                                         <td>Total</td>
-                                        <td><?= $sum_total_progres ?></td>
-                                        <td><?= 0 ?></td>
-                                        <td><?= $sum_total_keu_progres ?></td>
-                                        <td><?= $sum_total_fis_progres ?></td>
+                                        <td><?= number_format($sum_total_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_blokir, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_keu_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format($sum_total_fis_progres, 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -828,389 +836,6 @@
                                                 </div>
                                             </a>
                                         </div>
-                                        <ul class="tree-desktop">
-                                            <li class="" style="width: 33% !important">
-                                                <a href="javascript:;" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-2">
-                                                            <h4 class="mb-0"><b> TERKONTRAK </b></h4>
-                                                            <label><?= number_format($terkontrak['jml_paket'] + $persiapankontrak['jml_paket'], 0, ',', '.'); ?> Paket</label>
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
-                                                                    <?= toMilyar($terkontrak['nilai_kontrak'] + $persiapankontrak['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <ul style="padding:0">
-                                                    <li class="" style="width: 50% !important">
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> SYC </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <div class="border-single-tree-down"></div>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> RPM </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> SBSN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> PLN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="" style="width: 50% !important">
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> MYC </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <div class="border-single-tree-down"></div>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> RPM </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> SBSN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> PLN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li class="" style="width: 33% !important">
-                                                <a href="javascript:;" class="w-75">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-2">
-                                                            <h4 class="mb-0"><b> PROSES LELANG </b></h4>
-                                                            <label><?= number_format($proseslelang['jml_paket'], 0, ',', '.'); ?> Paket</label>
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
-                                                                    <?= toMilyar($proseslelang['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <ul style="padding:0">
-                                                    <li class="" style="width: 50% !important">
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> SYC </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <div class="border-single-tree-down"></div>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> RPM </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> SBSN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> PLN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="" style="width: 50% !important">
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> MYC </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <div class="border-single-tree-down"></div>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> RPM </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> SBSN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> PLN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li class="" style="width: 33% !important">
-                                                <a href="javascript:;" class="w-75">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-tree-2">
-                                                            <h4 class="mb-0"><b> BELUM LELANG </b></h4>
-                                                            <label><?= number_format($belumlelang['jml_paket'], 0, ',', '.'); ?> Paket</label>
-                                                            <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                <h5 class="mb-0">
-                                                                    <?= toMilyar($belumlelang['nilai_kontrak'], true, 2); ?>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <ul style="padding:0">
-                                                    <li class="" style="width: 50% !important">
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> SYC </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <div class="border-single-tree-down"></div>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> RPM </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> SBSN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> PLN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="" style="width: 50% !important">
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> MYC </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <div class="border-single-tree-down"></div>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> RPM </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100 mb-2">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> SBSN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:;" class="w-100">
-                                                            <div class="tree-content">
-                                                                <div class="card card-body bg-tree-2">
-                                                                    <h4 class="mb-0"><b> PLN </b></h4>
-                                                                    <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
-                                                                    <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                                        <h5 class="mb-0">
-                                                                            0 M
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
                                     </li>
                                 </ul>
                             </div>
@@ -1240,10 +865,10 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> SYC </b></h4>
-                                                    <label><?= formatNumber($rpmSyc['jml_paket']); ?> Paket</label>
+                                                    <label><?= $sub_belum_lelang->count_syc ?> Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            <?= toMilyar($rpmSyc['nilai_kontrak'], true, 2); ?>
+                                                            <?= toMilyar($sub_belum_lelang->sum_syc, true, 2); ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -1253,10 +878,10 @@
                                             <div class="tree-content">
                                                 <div class="card card-body bg-tree-2">
                                                     <h4 class="mb-0"><b> MYC BARU </b></h4>
-                                                    <label><?= formatNumber($rpmMyc['jml_paket']); ?> Paket</label>
+                                                    <label><?= $sub_belum_lelang->count_myc ?> Paket</label>
                                                     <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                         <h5 class="mb-0">
-                                                            <?= toMilyar($rpmMyc['nilai_kontrak'], true, 2); ?>
+                                                            <?= toMilyar($sub_belum_lelang->sum_myc, true, 2); ?>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -1461,6 +1086,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead class="text-white text-center" style="background-color: #1562aa;">
                                 <tr>
@@ -1473,96 +1099,19 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php foreach ($kegiatan as $key => $value): ?>
                                 <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Pengendalian</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?= $key+1 ?></td>
+                                    <td><?= $value->nmgiat ?></td>
+                                    <td><?= toMilyar($value->total_pagu, false, 2) ?></td>
+                                    <td><?= toMilyar($value->total_blokir, false, 2) ?></td>
+                                    <td><?= toMilyar($value->total_real, false, 2) ?></td>
+                                    <td><?= toMilyar($value->total_pagu - $value->total_real, false, 2) ?></td>
                                 </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Layanan</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Perencanaan</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Dukungan</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Kepatuhan</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Layanan</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Pengembangan</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Pengendalian</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Pembangunan</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Penyediaan</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>Operasi</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                <?php endforeach ?>
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1600,10 +1149,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SYC </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_terkontrak->count_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_terkontrak->sum_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1614,10 +1163,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_terkontrak->count_rpm_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_terkontrak->sum_rpm_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1627,10 +1176,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_terkontrak->count_sbsn_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_terkontrak->sum_sbsn_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1640,10 +1189,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_terkontrak->count_phln_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_terkontrak->sum_phln_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1655,10 +1204,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> MYC </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_terkontrak->count_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_terkontrak->sum_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1669,10 +1218,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_terkontrak->count_rpm_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_terkontrak->sum_rpm_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1682,10 +1231,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_terkontrak->count_sbsn_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_terkontrak->sum_sbsn_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1695,10 +1244,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_terkontrak->count_phln_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_terkontrak->sum_phln_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1746,10 +1295,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SYC </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_proses_lelang->count_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_proses_lelang->sum_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1760,10 +1309,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_proses_lelang->count_rpm_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_proses_lelang->sum_rpm_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1773,10 +1322,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_proses_lelang->count_sbsn_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_proses_lelang->sum_sbsn_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1786,10 +1335,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_proses_lelang->count_phln_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_proses_lelang->sum_phln_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1801,10 +1350,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> MYC </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_proses_lelang->count_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_proses_lelang->sum_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1815,10 +1364,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_proses_lelang->count_rpm_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_proses_lelang->sum_rpm_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1828,10 +1377,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_proses_lelang->count_sbsn_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_proses_lelang->sum_sbsn_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1841,10 +1390,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_proses_lelang->count_phln_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_proses_lelang->sum_phln_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1892,10 +1441,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SYC </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_belum_lelang->count_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_belum_lelang->sum_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1906,10 +1455,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_belum_lelang->count_rpm_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_belum_lelang->sum_rpm_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1919,10 +1468,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_belum_lelang->count_sbsn_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_belum_lelang->sum_sbsn_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1932,10 +1481,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_belum_lelang->count_phln_syc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_belum_lelang->sum_phln_syc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1947,10 +1496,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> MYC </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_belum_lelang->count_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_belum_lelang->sum_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1961,10 +1510,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> RPM </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_belum_lelang->count_rpm_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_belum_lelang->sum_rpm_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1974,10 +1523,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> SBSN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_belum_lelang->count_sbsn_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_belum_lelang->sum_sbsn_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1987,10 +1536,10 @@
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-tree-2">
                                                         <h4 class="mb-0"><b> PLN </b></h4>
-                                                        <label><?= formatNumber($nilai_sbsn['jml_paket']); ?> Paket</label>
+                                                        <label><?= $sub_belum_lelang->count_phln_myc; ?> Paket</label>
                                                         <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0 M
+                                                                <?= toMilyar($sub_belum_lelang->sum_phln_myc, false, 2); ?> M
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -2026,22 +1575,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                    $data_satker = ['Pengendalian','Layanan','Perencanaan','Dukungan','Kepatuhan','Layanan','Pengembangan','Pengendalian','Pembangunan'];
-                                    foreach ($data_satker as $key => $value): 
+                                <?php  
+                                    $value_total_pagu = 0;
+                                    $value_total_real = 0;
+                                    foreach ($kegiatan_syc as $key => $value): 
                                 ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
                                         <td><?= $key+1 ?></td>
-                                        <td><?= $value ?></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><?= $value->nmgiat ?></td>
+                                        <td><?= toMilyar($value->total_pagu, false, 2) ?></td>
+                                        <td><?= toMilyar($value->total_real, false, 2) ?></td>
                                     </tr>
-                                <?php endforeach ?>
+                                <?php  
+                                    $value_total_pagu += $value->total_pagu;
+                                    $value_total_real += $value->total_real;
+                                    endforeach ;
+                                ?>
                                 <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>10</td>
+                                    <td>11</td>
                                     <td>Total</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?= toMilyar($value_total_pagu, false, 2) ?></td>
+                                    <td><?= toMilyar($value_total_real, false, 2) ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -2070,22 +1624,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                    $data_satker = ['Pengendalian','Layanan','Perencanaan','Dukungan','Kepatuhan','Layanan','Pengembangan','Pengendalian','Pembangunan'];
-                                    foreach ($data_satker as $key => $value): 
+                                <?php  
+                                    $value_total_pagu = 0;
+                                    $value_total_real = 0;
+                                    foreach ($kegiatan_myc as $key => $value): 
                                 ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
                                         <td><?= $key+1 ?></td>
-                                        <td><?= $value ?></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><?= $value->nmgiat ?></td>
+                                        <td><?= toMilyar($value->total_pagu, false, 2) ?></td>
+                                        <td><?= toMilyar($value->total_real, false, 2) ?></td>
                                     </tr>
-                                <?php endforeach ?>
+                                <?php  
+                                    $value_total_pagu += $value->total_pagu;
+                                    $value_total_real += $value->total_real;
+                                    endforeach ;
+                                ?>
                                 <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td>10</td>
+                                    <td>11</td>
                                     <td>Total</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?= toMilyar($value_total_pagu, false, 2) ?></td>
+                                    <td><?= toMilyar($value_total_real, false, 2) ?></td>
                                 </tr>
                             </tbody>
                         </table>

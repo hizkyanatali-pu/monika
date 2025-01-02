@@ -171,15 +171,14 @@
                                         </div>
                                     </a>
                                     <ul>
-                                        <?php foreach ($pagu as $key => $value) : ?>
                                         <li class="" style="width: 33% !important">
                                             <a href="#" class="w-100">
                                                 <div class="tree-content">
                                                     <div class="card card-body bg-secondary text-white">
-                                                        <h4 class="mb-0"><b><?= $value->title ?></b></h4>
+                                                        <h4 class="mb-0"><b>RPM</b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toRupiah($value->totalPagu) ?>
+                                                                <?= toMilyar($pagu_all->total_rpm, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -192,7 +191,7 @@
                                                         <h4 class="mb-0"><b>Realisasi</b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0
+                                                                <?= toMilyar($pagu_all->total_real_rpm, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -205,14 +204,93 @@
                                                         <h4 class="mb-0"><b>Sisa Anggaran</b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                0
+                                                                <?= toMilyar($pagu_all->total_rpm-$pagu_all->total_real_rpm, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </a>
                                         </li>
-                                        <?php endforeach ?>
+                                        <li class="" style="width: 33% !important">
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-secondary text-white">
+                                                        <h4 class="mb-0"><b>SBSN</b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($pagu_all->total_sbsn, true, 2); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card bg-tree-3  text-white bg-tree-footer card-body shadow text-left">
+                                                        <h4 class="mb-0"><b>Realisasi</b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($pagu_all->total_real_sbsn, true, 2); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card bg-danger  text-white bg-tree-footer card-body shadow text-left">
+                                                        <h4 class="mb-0"><b>Sisa Anggaran</b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($pagu_all->total_sbsn-$pagu_all->total_real_sbsn, true, 2); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="" style="width: 33% !important">
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card card-body bg-secondary text-white">
+                                                        <h4 class="mb-0"><b>PLN</b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($pagu_all->total_phln, true, 2); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card bg-tree-3  text-white bg-tree-footer card-body shadow text-left">
+                                                        <h4 class="mb-0"><b>Realisasi</b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($pagu_all->total_real_phln, true, 2); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="border-single-tree-down"></div>
+                                            <a href="#" class="w-100">
+                                                <div class="tree-content">
+                                                    <div class="card bg-danger  text-white bg-tree-footer card-body shadow text-left">
+                                                        <h4 class="mb-0"><b>Sisa Anggaran</b></h4>
+                                                        <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                            <h5 class="mb-0">
+                                                                <?= toMilyar($pagu_all->total_phln-$pagu_all->total_real_phln, true, 2); ?>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
