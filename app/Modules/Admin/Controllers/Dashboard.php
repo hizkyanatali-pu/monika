@@ -524,7 +524,14 @@ class Dashboard extends \App\Controllers\BaseController
             'pagu' =>    $this->PulldataModel->getGraphicDataProgressPerSumberDana(),
             'jenisbelanja' =>  $this->PulldataModel->getGraphicDataProgressPerJenisBelanja(),
             'perkegiatan' =>  $this->PulldataModel->getGraphicDataProgressPerKegiatan(),
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
         ];
+        $qdata = $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS' AND md.tahun =" . session('userData.tahun'));
+        $data['total_deviasi'] = 0;
+        foreach ($qdata as $qdata_val) {
+            $data['total_deviasi'] += $qdata_val['jml_nilai_deviasi'];
+        }
 
 
         $data['pagu_total'] = $this->db_mysql->table("monika_data_{$tahun}")
@@ -539,7 +546,7 @@ class Dashboard extends \App\Controllers\BaseController
         FROM monika_data_{$tahun}";
         $data['selisih_total'] = $this->db_mysql->query($sql)->getRow();
 
-        $data['pagu_all'] = $this->db_mysql->table("monika_data_{$tahun}")
+        $data['pagu_all'] = $this->db_mysql->table("monika_data_{$tahun}") 
         ->selectSum('pagu_total', 'total_pagu')
         ->selectSum('pagu_rpm', 'total_rpm')
         ->selectSum('real_rpm', 'total_real_rpm')
@@ -550,7 +557,7 @@ class Dashboard extends \App\Controllers\BaseController
         ->get()->getRow();
 
         $data['satker_desc'] = $this->db_mysql->table("monika_data_{$tahun}")
-        ->select("m_satker.satker, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->select("m_satker.satker, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres, SUM(blokir) AS total_blokir")
         ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
         ->where("m_satker.satker is not null")
         ->groupBy('kdsatker')
@@ -559,7 +566,7 @@ class Dashboard extends \App\Controllers\BaseController
         ->get()->getResult();
 
         $data['satker_asc'] = $this->db_mysql->table("monika_data_{$tahun}")
-        ->select("m_satker.satker, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->select("m_satker.satker, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres, SUM(blokir) AS total_blokir")
         ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
         ->where("m_satker.satker is not null")
         ->groupBy('kdsatker')
@@ -568,7 +575,7 @@ class Dashboard extends \App\Controllers\BaseController
         ->get()->getResult();
 
         $data['balai_desc'] = $this->db_mysql->table("monika_data_{$tahun}")
-        ->select("m_balai.balai, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->select("m_balai.balai, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres, SUM(blokir) AS total_blokir")
         ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
         ->where("m_balai.balai is not null")
         ->join('m_balai',"m_satker.balaiid = m_balai.balaiid",'left')
@@ -578,7 +585,7 @@ class Dashboard extends \App\Controllers\BaseController
         ->get()->getResult();
 
         $data['balai_asc'] = $this->db_mysql->table("monika_data_{$tahun}")
-        ->select("m_balai.balai, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres")
+        ->select("m_balai.balai, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres, SUM(blokir) AS total_blokir")
         ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
         ->where("m_balai.balai is not null")
         ->join('m_balai',"m_satker.balaiid = m_balai.balaiid",'left')
@@ -586,7 +593,121 @@ class Dashboard extends \App\Controllers\BaseController
         ->orderBy('total_progres', 'ASC')
         ->limit(10)
         ->get()->getResult();
-        // echo json_encode($data);die;
+
+        $data['kegiatan'] = $this->db_mysql->table("tgiat")
+        ->select("tgiat.nmgiat as nmgiat, SUM(pagu_total) AS total_pagu, SUM(real_total) AS total_real, SUM(blokir) AS total_blokir")
+        ->join("monika_data_{$tahun}","tgiat.kdgiat = monika_data_{$tahun}.kdgiat",'left')
+        ->where("tgiat.tahun_anggaran",$tahun)
+        ->orderBy('tgiat.kdgiat', 'ASC')
+        ->groupBy('tgiat.kdgiat')
+        ->get()->getResult();
+
+        $data['sub_terkontrak'] = $this->db_mysql->table("monika_kontrak_{$tahun} kon")
+        ->select("
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as sum_rpm_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as sum_phln_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as sum_sbsn_syc,
+
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as sum_rpm_myc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as sum_phln_myc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as sum_sbsn_myc,
+
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' THEN dat.pagu_total ELSE 0 END) as sum_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' THEN dat.pagu_total ELSE 0 END) as sum_myc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as count_rpm_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as count_phln_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as count_sbsn_syc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as count_rpm_myc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as count_phln_myc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as count_sbsn_myc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' THEN dat.pagu_total ELSE 0 END) as count_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' THEN dat.pagu_total ELSE 0 END) as count_myc
+        ")
+        ->join("monika_data_{$tahun} dat","kon.kdpaket = dat.kdpaket",'left')
+        ->orderBy("kon.idpull", 'ASC')
+        ->orderBy("kon.status_tender", 'terkontrak')
+        ->get()->getRow();
+
+        $data['sub_proses_lelang'] = $this->db_mysql->table("monika_kontrak_{$tahun} kon")
+        ->select("
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as sum_rpm_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as sum_phln_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as sum_sbsn_syc,
+
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as sum_rpm_myc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as sum_phln_myc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as sum_sbsn_myc,
+
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' THEN dat.pagu_total ELSE 0 END) as sum_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' THEN dat.pagu_total ELSE 0 END) as sum_myc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as count_rpm_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as count_phln_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as count_sbsn_syc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as count_rpm_myc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as count_phln_myc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as count_sbsn_myc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' THEN dat.pagu_total ELSE 0 END) as count_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' THEN dat.pagu_total ELSE 0 END) as count_myc
+        ")
+        ->join("monika_data_{$tahun} dat","kon.kdpaket = dat.kdpaket",'left')
+        ->orderBy("kon.idpull", 'ASC')
+        ->orderBy("kon.status_tender", 'Proses Lelang')
+        ->get()->getRow();
+
+        $data['sub_belum_lelang'] = $this->db_mysql->table("monika_kontrak_{$tahun} kon")
+        ->select("
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as sum_rpm_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as sum_phln_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as sum_sbsn_syc,
+
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as sum_rpm_myc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as sum_phln_myc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as sum_sbsn_myc,
+
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' THEN dat.pagu_total ELSE 0 END) as sum_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' THEN dat.pagu_total ELSE 0 END) as sum_myc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as count_rpm_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as count_phln_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as count_sbsn_syc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as count_rpm_myc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as count_phln_myc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as count_sbsn_myc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' THEN dat.pagu_total ELSE 0 END) as count_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' THEN dat.pagu_total ELSE 0 END) as count_myc
+        ")
+        ->join("monika_data_{$tahun} dat","kon.kdpaket = dat.kdpaket",'left')
+        ->orderBy("kon.idpull", 'ASC')
+        ->orderBy("kon.status_tender", 'Belum Lelang')
+        ->get()->getRow();
+
+        $data['kegiatan_syc'] = $this->db_mysql->table("tgiat")
+        ->select("tgiat.nmgiat as nmgiat, SUM(dat.pagu_total) AS total_pagu, SUM(dat.real_total) AS total_real")
+        ->join("monika_data_{$tahun} dat","tgiat.kdgiat = dat.kdgiat",'left')
+        ->join("monika_kontrak_{$tahun} kon","kon.kdpaket = dat.kdpaket",'left')
+        ->where("tgiat.tahun_anggaran",$tahun)
+        ->like("kon.nmpaket", "%SYC%")
+        ->orderBy('tgiat.kdgiat', 'ASC')
+        ->groupBy('tgiat.kdgiat')
+        ->get()->getResult();
+
+        $data['kegiatan_myc'] = $this->db_mysql->table("tgiat")
+        ->select("tgiat.nmgiat as nmgiat, SUM(pagu_total) AS total_pagu, SUM(real_total) AS total_real")
+        ->join("monika_data_{$tahun} dat","tgiat.kdgiat = dat.kdgiat",'left')
+        ->join("monika_kontrak_{$tahun} kon","kon.kdpaket = dat.kdpaket",'left')
+        ->where("tgiat.tahun_anggaran",$tahun)
+        ->like("kon.nmpaket", "%SYC%")
+        ->orderBy('tgiat.kdgiat', 'ASC')
+        ->groupBy('tgiat.kdgiat')
+        ->get()->getResult();
 
         return view('Modules\Admin\Views\Dashboard_mobile',$data);
     }
@@ -656,6 +777,16 @@ class Dashboard extends \App\Controllers\BaseController
             'pagu' =>    $getGraphicData,
 
         );
+
+        $data['pagu_all'] = $this->db_mysql->table("monika_data_2024")
+        ->selectSum('pagu_total', 'total_pagu')
+        ->selectSum('pagu_rpm', 'total_rpm')
+        ->selectSum('real_rpm', 'total_real_rpm')
+        ->selectSum('pagu_sbsn', 'total_sbsn')
+        ->selectSum('real_sbsn', 'total_real_sbsn')
+        ->selectSum('pagu_phln', 'total_phln')
+        ->selectSum('real_phln', 'total_real_phln')
+        ->get()->getRow();
 
         return view('Modules\Admin\Views\Laporan\cetak', $data);
         $pdf = new Dompdf();
