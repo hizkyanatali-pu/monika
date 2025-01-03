@@ -1464,7 +1464,7 @@ class DokumenpkExport extends \App\Controllers\BaseController
 
                 $pdf->SetWidths(array($tableDataWidth[0], $width_cellTitle, $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4], $tableDataWidth[4]));
                 $pdf->SetAligns(array('C', 'L', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'));
-                $pdf->SetValigns(array(true, false, true));
+                $pdf->SetValigns(array(true, false, true, true, true, true, true, true, true, true, true));
                 $pdf->SetLineHeight(6);
 
                 if ($dataDokumen['dokumen_type'] != 'balai' && $dataDokumen['dokumen_type'] != 'eselon2') {
