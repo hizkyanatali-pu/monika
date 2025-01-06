@@ -193,7 +193,7 @@ class Auth extends \App\Controllers\BaseController
 		));
 
 
-		if($this->request->getPost('device') == "mobile"){
+		if ($this->request->getPost('device') == "mobile" and $user['uid'] == "admin") {
 			return redirect()->to('dashboard_mobile');
 		}
 		return redirect()->to('dashboard');
