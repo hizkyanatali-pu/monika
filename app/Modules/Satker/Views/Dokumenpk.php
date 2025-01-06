@@ -453,7 +453,7 @@
                 </div>
             </div>
             <div class="modal-body p-0">
-                <div class="container-revision-alert-cetak"></div>
+                <div class="container-revision-alert-cetak" style="max-height: 30vh;overflow-y: auto;"></div>
                 <iframe width="100%" style="height: 100vh !important" frameborder="0"></iframe>
             </div>
 
@@ -480,7 +480,7 @@
                 </div>
             </div>
             <div class="modal-body p-0">
-                <div class="container-revision-alert-cetak-berita-acara"></div>
+                <div class="container-revision-alert-cetak-berita-acara" style="max-height: 30vh;overflow-y: auto;"></div>
                 <iframe width="100%" style="height: 100vh !important" frameborder="0"></iframe>
             </div>
 

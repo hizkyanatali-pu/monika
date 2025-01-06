@@ -688,6 +688,8 @@
                     dokumenMasterID: res.dokumen.revision_master_dokumen_id ?? res.dokumen.id
                 });
             },
+
+            paramsAksi: "Edit",
             paramsBA: false
         })
 
@@ -720,6 +722,7 @@
                 $('#modalForm').find('#__add-item-kegiatan').addClass('d-none')
 
             },
+            paramsAksi: "Lihat",
             paramsBA: false
         })
 
@@ -749,6 +752,7 @@
                 $('#modalForm').find('#__add-item-kegiatan').addClass('d-none')
 
             },
+            paramsAksi: "Lihat",
             paramsBA: true
         })
 
@@ -781,6 +785,7 @@
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
             },
+            paramsAksi: "Edit",
             paramsBA: false
         })
     })
@@ -813,6 +818,7 @@
                 // console.log($('.__save-update-dokumen'))
                 $('#modalForm').find('.container-revision-alert').addClass('d-none')
             },
+            paramsAksi: "Edit",
             paramsBA: true
         })
     })
@@ -824,6 +830,7 @@
         dataId: '',
         templateId: '',
         beforeModalMount: () => {},
+        paramsAksi: "",
         paramsBA: ''
     }) {
         const promiseGetTemplate = new Promise((resolve, reject) => {
@@ -843,7 +850,7 @@
                     })
 
                     element_modalFormTitle.html(`
-                        <h6>Lihat Dokumen</h6>
+                        <h6> ${params.paramsAksi} Dokumen</h6>
                         <small>${ res.template.title }</small>
                     `)
 
@@ -1294,7 +1301,7 @@
         let _beritaAcara = $(this).data('beritaacara')
 
         Swal.fire({
-            title: "Kenapa dokumen ini di tolak?",
+            title: "Mengapa dokumen ini ditolak, tulis alasannya?",
             html: `<textarea class="form-control" name="pesan-tolak-dokumen" rows="10" placeholder="Tulis pesan untuk pembuat dokumen"></textarea>`,
             confirmButtonText: "Kirim, dan Tolak Dokumen",
             cancelButtonText: "Batal",
