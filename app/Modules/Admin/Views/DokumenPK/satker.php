@@ -304,7 +304,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 <!-- Modal Preview Cetak Dokumen -->
 <div class="modal fade" id="modal-preview-cetak" tabindex="-1" role="dialog" aria-labelledby="modal-preview-cetakTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="height: 100% !important;">
             <div class="modal-header">
                 <div class="clearfix w-100">
                     <div class="float-left">
@@ -317,7 +317,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                         </div>
                     </div>
                     <div class="float-right">
-                        <button type="button" class="btn btn-modal-full text-right" style="margin: -10px;"><i class="fas fa-external-link-alt"></i></button>
+                        <button type="button" class="btn btn-modal-full text-right"><i class=" fas fa-external-link-alt"></i></button>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -325,8 +325,8 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                 </div>
             </div>
             <div class="modal-body p-0">
-                <div class="container-revision-alert-cetak"></div>
-                <iframe width="100%" style="height: 80vh" frameborder="0"></iframe>
+                <div class="container-revision-alert-cetak" style="max-height: 30vh;overflow-y: auto;"></div>
+                <iframe width="100%" style="height: 100vh !important" frameborder="0"></iframe>
             </div>
             <div class="modal-footer p-0">
             </div>
@@ -438,7 +438,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 <div class="modal fade" id="modal-cetak-dokumen-revisioned" role="dialog" aria-labelledby="modal-cetak-dokumen-revisionedTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
 
-        <div class="modal-content">
+        <div class="modal-content" style="height: 100% !important;">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Pilih Dokumen :</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
