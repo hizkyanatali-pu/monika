@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Pantauan Pelaksanaan Anggaran TA 2024</title>
+    <title>Pantauan Pelaksanaan Anggaran TA <?= date('Y') ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <?php echo link_tag('css/tree.css'); ?>
     <style>
@@ -136,7 +136,7 @@
 <body>
     <section class="d-flex align-items-center ">
         <div>
-            <h1 class="fs-50">Pantauan <br>Pelaksanaan <br>Anggaran TA 2024</h1>
+            <h1 class="fs-50">Pantauan <br>Pelaksanaan <br>Anggaran TA <?= date('Y') ?></h1>
             <b class="fs-15">Status <?= date("d F Y, h:i") ?></b>
             <p class="text-footer fs-15">
                 KEMENTERIAN PEKERJAAN UMUM DAN PERUMAHAN RAKYAT <br>
@@ -301,18 +301,18 @@
                             <div class="card-body font-weight-bold">
                                 <p>PROGRES </p>
                                 <p>KEUANGAN</p>
-                                <p>34,61%</p>
+                                <p><?= isset($keuProgressSda) ? number_format($keuProgressSda, 2, ',', '.') : 0 ?></p>
                                 <p>Deviasi</p>
-                                <p>-10,88%</p>
+                                <p><?= $total_deviasi ?></p>
                             </div>
                         </div>
                         <div class="card border-0 text-center card-1">
                             <div class="card-body font-weight-bold">
                                 <p>PROGRES </p>
                                 <p>FISIK</p>
-                                <p>40,22%</p>
+                                <p><?= isset($fisikProgressSda) ? number_format($fisikProgressSda, 2, ',', '.') : 0 ?></p>
                                 <p>Deviasi</p>
-                                <p>-10,86%</p>
+                                <p><?= $total_deviasi ?></p>
                             </div>
                         </div>
                     </div>
@@ -322,7 +322,6 @@
                 </div>
                 <img class="img-footer" src="<?= base_url('images/laporan/5.png'); ?>" />
             </section>
-            <section></section>
         <?php }if ($value == "PROGRES PUPR PER UNIT ORGANISASI"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
@@ -386,7 +385,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <p class="fs-30">KINERJA & BLOKIR PER KEGIATAN TA 2024</p>
+                <p class="fs-30">KINERJA & BLOKIR PER KEGIATAN TA <?= date('Y') ?></p>
                 <table class="table table-1 table-bordered">
                     <thead>
                         <tr>
@@ -422,7 +421,7 @@
                     </tfoot>
                 </table>
             </section>
-        <?php }if ($value == "PAKET KEGIATAN KONTRAKTUAL TA 2024"){ ?>
+        <?php }if ($value == "PAKET KEGIATAN KONTRAKTUAL TA TAHUN"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -540,7 +539,7 @@
                 </div>
                 <img class="img-footer" src="<?= base_url('images/laporan/5.png'); ?>" />
             </section>
-        <?php }if ($value == "PAKET KEGIATAN BELUM LELANG TA 2024"){ ?>
+        <?php }if ($value == "PAKET KEGIATAN BELUM LELANG TA TAHUN"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -690,7 +689,7 @@
                     </ul>
                 </div>
             </section>
-        <?php }if ($value == "PROGRES PAKET BELUM LELANG TA 2024"){ ?>
+        <?php }if ($value == "PROGRES PAKET BELUM LELANG TA TAHUN"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -841,7 +840,7 @@
                     </ul>
                 </div>
             </section>
-        <?php }if ($value == "PAKET BELUM LELANG TA 2024 (RPM-SYC)"){ ?>
+        <?php }if ($value == "PAKET BELUM LELANG TA TAHUN (RPM-SYC)"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -876,7 +875,7 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PAKET BELUM LELANG TA 2024 (RPM-MYC)"){ ?>
+        <?php }if ($value == "PAKET BELUM LELANG TA TAHUN (RPM-MYC)"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -911,7 +910,7 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PAKET BELUM LELANG TA 2024 (PLN SYC)"){ ?>
+        <?php }if ($value == "PAKET BELUM LELANG TA TAHUN (PLN SYC)"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -946,7 +945,7 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PAKET BELUM LELANG TA 2024 (PLN-MYC)"){ ?>
+        <?php }if ($value == "PAKET BELUM LELANG TA TAHUN (PLN-MYC)"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -980,7 +979,7 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PAKET BELUM LELANG TA 2024 (PLN-MYC MENDAHULUI DIPA)"){ ?>
+        <?php }if ($value == "PAKET BELUM LELANG TA TAHUN (PLN-MYC MENDAHULUI DIPA)"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1055,11 +1054,11 @@
                             <th rowspan="2">Paket Pekerjaan</th>
                             <th rowspan="2">SYC / MYC</th>
                             <th>PAGU DIPA X Rp1000</th>
-                            <th colspan="2">PROGRES TERHADAP DIPA TA 2024</th>
+                            <th colspan="2">PROGRES TERHADAP DIPA TA <?= date('Y') ?></th>
                             <th colspan="2">PROGRES TERHADAP KONTRAK</th>
                         </tr>
                         <tr>
-                            <th>TA 2024</th>
+                            <th>TA <?= date('Y') ?></th>
                             <th>Keu (%)</th>
                             <th>Fisik (%)</th>
                             <th>Keu (%)</th>
@@ -1083,7 +1082,7 @@
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
-                <p class="fs-15 font-weight-bold">PAKET SELESAI TA 2024 (4 PAKET)</p>
+                <p class="fs-15 font-weight-bold">PAKET SELESAI TA <?= date("Y") ?> (4 PAKET)</p>
                 <table class="table table-bordered table-4">
                     <thead>
                         <tr>
@@ -1091,11 +1090,11 @@
                             <th rowspan="2">Paket Pekerjaan</th>
                             <th rowspan="2">SYC / MYC</th>
                             <th>PAGU DIPA X Rp1000</th>
-                            <th colspan="2">PROGRES TERHADAP DIPA TA 2024</th>
+                            <th colspan="2">PROGRES TERHADAP DIPA TA <?= date('Y') ?></th>
                             <th colspan="2">PROGRES TERHADAP KONTRAK</th>
                         </tr>
                         <tr>
-                            <th>TA 2024</th>
+                            <th>TA <?= date('Y') ?></th>
                             <th>Keu (%)</th>
                             <th>Fisik (%)</th>
                             <th>Keu (%)</th>
@@ -1115,7 +1114,7 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA 2024 (1)"){ ?>
+        <?php }if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (1)"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1202,13 +1201,13 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "RENCANA PEMANFAATAN RUPIAH MURNI TA 2024 (1)"){ ?>
+        <?php }if ($value == "RENCANA PEMANFAATAN RUPIAH MURNI TA TAHUN (1)"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
                 <img height="90%" src="<?= base_url('images/laporan/diagram6.png'); ?>" />
             </section>
-        <?php }if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA 2024 (2)"){ ?>
+        <?php }if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (2)"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1247,7 +1246,7 @@
                             <th rowspan="2">No </th>
                             <th rowspan="2">Proyek / Paket Pembangunan</th>
                             <th rowspan="2">Fisik Kumulatif (%)</th>
-                            <th colspan="2">TA 2024</th>
+                            <th colspan="2">TA <?= date('Y') ?></th>
                         </tr>
                         <tr>
                             <th>Pagu (Rp Miliar)</th>
@@ -1259,7 +1258,7 @@
                 <img width="100%" src="<?= base_url('images/laporan/diagram7.png'); ?>" />
                 <img class="img-footer" src="<?= base_url('images/laporan/5.png'); ?>" />
             </section>
-        <?php }if ($value == "PROGNOSIS SESUAI IEMONITORING SEBELUM PEMANFAATAN ANGGARAN TA 2024 PER UNIT KERJA"){ ?>
+        <?php }if ($value == "PROGNOSIS SESUAI IEMONITORING SEBELUM PEMANFAATAN ANGGARAN TA TAHUN PER UNIT KERJA"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1305,7 +1304,7 @@
                             <th rowspan="2">No </th>
                             <th rowspan="2">Proyek / Paket Pembangunan</th>
                             <th rowspan="2">Fisik Kumulatif (%)</th>
-                            <th colspan="2">TA 2024</th>
+                            <th colspan="2">TA <?= date('Y') ?></th>
                         </tr>
                         <tr>
                             <th>Pagu (Rp Miliar)</th>
@@ -1316,7 +1315,7 @@
                 </table>
                 <img width="100%" src="<?= base_url('images/laporan/diagram9.png'); ?>" />
             </section>
-        <?php }if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA 2024 (3)"){ ?>
+        <?php }if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (3)"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1401,7 +1400,7 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "RENCANA PEMANFAATAN RUPIAH MURNI TA 2024 (2)"){ ?>
+        <?php }if ($value == "RENCANA PEMANFAATAN RUPIAH MURNI TA TAHUN (2)"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>

@@ -525,7 +525,7 @@ class Dashboard extends \App\Controllers\BaseController
             'jenisbelanja' =>  $this->PulldataModel->getGraphicDataProgressPerJenisBelanja(),
             'perkegiatan' =>  $this->PulldataModel->getGraphicDataProgressPerKegiatan(),
             'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
-            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik')
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik'),
         ];
         $qdata = $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS' AND md.tahun =" . session('userData.tahun'));
         $data['total_deviasi'] = 0;
@@ -718,26 +718,26 @@ class Dashboard extends \App\Controllers\BaseController
             'report_list' => [
                 "PROGRES ANGGARAN PER SUMBER DANA", /*sudah ada, menu dashboard, PROGRESS PER SUMBER DANA*/
                 "PROGRES PUPR PER UNIT ORGANISASI", /*sudah ada, menu dashboard, PROGRES FISIK & KEUANGAN KEMENTERIAN PUPR*/
-                "PAKET KEGIATAN KONTRAKTUAL TA 2024", /*sudah ada, menu dashboard, POSTUR PAKET KONTRAKTUAL T.A. 2024 */
-                "PAKET KEGIATAN BELUM LELANG TA 2024", /*sudah ada, menu dashboard, POSTUR PAKET BELUM LELANG TA 2024 */
-                "PROGRES PAKET BELUM LELANG TA 2024", /*tidak ditemukan*/
-                "PAKET BELUM LELANG TA 2024 (RPM-SYC)", /*sudah ada, menu dashboard, DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN*/
-                "PAKET BELUM LELANG TA 2024 (RPM-MYC)", /*sudah ada, menu dashboard, DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN*/
-                "PAKET BELUM LELANG TA 2024 (PLN SYC)", /*sudah ada, menu dashboard, DAFTAR PAKET BELUM LELANG PHLN - MYC PROJECT LOAN*/
-                "PAKET BELUM LELANG TA 2024 (PLN-MYC)", /*sudah ada, menu dashboard, PAKET BELUM LELANG PHLN - MYC PROJECT LOAN*/
-                "PAKET BELUM LELANG TA 2024 (PLN-MYC MENDAHULUI DIPA)", /*tidak ditemukan*/
+                "PAKET KEGIATAN KONTRAKTUAL TA TAHUN", /*sudah ada, menu dashboard, POSTUR PAKET KONTRAKTUAL T.A. 2024 */
+                "PAKET KEGIATAN BELUM LELANG TA TAHUN", /*sudah ada, menu dashboard, POSTUR PAKET BELUM LELANG TA 2024 */
+                "PROGRES PAKET BELUM LELANG TA TAHUN", /*tidak ditemukan*/
+                "PAKET BELUM LELANG TA TAHUN (RPM-SYC)", /*sudah ada, menu dashboard, DAFTAR PAKET BELUM LELANG RPM - SYC PER KEGIATAN*/
+                "PAKET BELUM LELANG TA TAHUN (RPM-MYC)", /*sudah ada, menu dashboard, DAFTAR PAKET BELUM LELANG MYC PER KEGIATAN*/
+                "PAKET BELUM LELANG TA TAHUN (PLN SYC)", /*sudah ada, menu dashboard, DAFTAR PAKET BELUM LELANG PHLN - MYC PROJECT LOAN*/
+                "PAKET BELUM LELANG TA TAHUN (PLN-MYC)", /*sudah ada, menu dashboard, PAKET BELUM LELANG PHLN - MYC PROJECT LOAN*/
+                "PAKET BELUM LELANG TA TAHUN (PLN-MYC MENDAHULUI DIPA)", /*tidak ditemukan*/
                 "PAKET DENGAN SISA BELUM TERSERAP TERTINGGI", /*adanya terendah, re-query, menu dashboard, PROGRES 10 SATUAN KERJA TERENDAH TA 2024*/
                 "PROGRES PELAKSANAAN IKN", /*harus tanya pupr*/
                 "REKAPITULASI PAKET KEGIATAN BIDANG SDA DI KAWASAN IKN", /*harus tanya pupr*/
                 "REKAPITULASI PAKET KEGIATAN BIDANG SDA DI KAWASAN IKN (selesai)", /*harus tanya pupr*/
-                "PROGNOSIS PENYERAPAN ANGGARAN TA 2024 (1)", /*tidak ada, adanya Dana Tidak Terserap, di postur anggaran*/
-                "RENCANA PEMANFAATAN RUPIAH MURNI TA 2024 (1)", /*tidak ditemukan*/
-                "PROGNOSIS PENYERAPAN ANGGARAN TA 2024 (2)", /*tidak ada, adanya Dana Tidak Terserap, di postur anggaran*/
+                "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (1)", /*tidak ada, adanya Dana Tidak Terserap, di postur anggaran*/
+                "RENCANA PEMANFAATAN RUPIAH MURNI TA TAHUN (1)", /*tidak ditemukan*/
+                "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (2)", /*tidak ada, adanya Dana Tidak Terserap, di postur anggaran*/
                 "PROYEK BENDUNGAN PERLU PERHATIAN KHUSUS (1)", /*harus tanya pupr*/
-                "PROGNOSIS SESUAI IEMONITORING SEBELUM PEMANFAATAN ANGGARAN TA 2024 PER UNIT KERJA", /*tidak ditemukan*/
+                "PROGNOSIS SESUAI IEMONITORING SEBELUM PEMANFAATAN ANGGARAN TA TAHUN PER UNIT KERJA", /*tidak ditemukan*/
                 "PROYEK BENDUNGAN PERLU PERHATIAN KHUSUS (2)", /*harus tanya pupr*/
-                "PROGNOSIS PENYERAPAN ANGGARAN TA 2024 (3)", /*tidak ada, adanya Dana Tidak Terserap, di postur anggaran*/
-                "RENCANA PEMANFAATAN RUPIAH MURNI TA 2024 (2)", /*tidak ditemukan*/
+                "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (3)", /*tidak ada, adanya Dana Tidak Terserap, di postur anggaran*/
+                "RENCANA PEMANFAATAN RUPIAH MURNI TA TAHUN (2)", /*tidak ditemukan*/
             ]
         );
 
@@ -775,10 +775,17 @@ class Dashboard extends \App\Controllers\BaseController
             'tenderRpm' =>  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("RPM", null, null, false, $filterDateStart, $filterDateEnd),
             'tenderPhln' =>  $this->PohonAnggaran->getDataRencanaTenderBelumLelang("PHLN", null, null, false, $filterDateStart, $filterDateEnd),
             'pagu' =>    $getGraphicData,
-
+            'keuProgressSda'   => $this->RekapUnorModel->getProgresSda('progres_keu'),
+            'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik'),
         );
 
-        $data['pagu_all'] = $this->db_mysql->table("monika_data_2024")
+        $qdata = $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS' AND md.tahun =" . session('userData.tahun'));
+        $data['total_deviasi'] = 0;
+        foreach ($qdata as $qdata_val) {
+            $data['total_deviasi'] += $qdata_val['jml_nilai_deviasi'];
+        }
+
+        $data['pagu_all'] = $this->db_mysql->table("monika_data_".date('Y'))
         ->selectSum('pagu_total', 'total_pagu')
         ->selectSum('pagu_rpm', 'total_rpm')
         ->selectSum('real_rpm', 'total_real_rpm')
