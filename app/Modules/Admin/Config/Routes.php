@@ -436,7 +436,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
                 $routes->get('list-satker-balai', '\Modules\Satker\Controllers\Dokumenpk::listSatkerBalai');
 
                 $routes->group('satker', ['namespace' => 'App\Controllers'], function ($routes) {
-                    $routes->get('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
+                    $routes->post('get-data/(:any)/(:any)', '\Modules\Satker\Controllers\Dokumenpk::dataDokumenSatker/$1/$2');
                     $routes->get('get-list-revisioned/(:any)', '\Modules\Satker\Controllers\Dokumenpk::getListRevisioned/$1');
                     $routes->get('export-pdf/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdf/$1');
                     $routes->get('export-pdf-berita-acara/(:any)', '\Modules\Satker\Controllers\DokumenpkExport::pdfBeritaAcara/$1');

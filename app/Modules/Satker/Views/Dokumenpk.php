@@ -52,6 +52,20 @@
         text-align: left;
         border-bottom: 1px solid #ddd;
     }
+
+    .readonly-input {
+        /* background-color: #f7f8fa;
+        pointer-events: none;
+
+        border: 1px solid #ccc; */
+        background-color: #f7f8fa;
+        pointer-events: none;
+        /* Mencegah interaksi */
+        cursor: not-allowed;
+        /* Mengubah kursor untuk menunjukkan elemen tidak bisa diklik */
+        /* opacity: 0.5; */
+        /* Opsi untuk memberikan efek tampilan pudar */
+    }
 </style>
 
 <!-- Subheader -->
@@ -453,7 +467,7 @@
                 </div>
             </div>
             <div class="modal-body p-0">
-                <div class="container-revision-alert-cetak"></div>
+                <div class="container-revision-alert-cetak" style="max-height: 30vh;overflow-y: auto;"></div>
                 <iframe width="100%" style="height: 100vh !important" frameborder="0"></iframe>
             </div>
 
@@ -480,7 +494,7 @@
                 </div>
             </div>
             <div class="modal-body p-0">
-                <div class="container-revision-alert-cetak-berita-acara"></div>
+                <div class="container-revision-alert-cetak-berita-acara" style="max-height: 30vh;overflow-y: auto;"></div>
                 <iframe width="100%" style="height: 100vh !important" frameborder="0"></iframe>
             </div>
 
