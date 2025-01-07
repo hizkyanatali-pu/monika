@@ -295,7 +295,7 @@
                         inputValue_revisionSameYear = 1
                         render_warningDokumenYearRevisoin = `
                             <div class="bg-warning text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Peringatan</h5>
+                                <h5 class="alert-heading">Peringatan !</h5>
                                 <p>membuat dokumen baru akan merevisi dokumen yang telah anda buat sebelumnya</p>
                             </div>
                         `
@@ -779,11 +779,19 @@
                 $('.__save-dokumen').addClass('d-none')
                 $('.__save-update-dokumen').removeClass('d-none')
                 $('.__save-update-dokumen').attr('data-beritaacara', false);
-                $('.__save-update-dokumen').removeAttr('data-statusba')
+                $('.__save-update-dokumen').removeAttr('data-statusba');
+                // $('#modalForm').find('.container-revision-alert').addClass('d-none')
 
+                // if ($(this).data('template-id') == "29"
+                //     AND) {
+                //     $('#modalForm').find('.container-revision-alert').append(`
+                //     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                //         <h5 class="alert-heading">Informasi</h5>
+                //         <p>Dokumen perjanjian kinerja UPT Balai dapat dibuat atau diedit setelah seluruh satker menginputkan perjanjian kinerja dan menyetujuinya. Daftar satker dapat dilihat di bagian bawah formulir.</p>
+                //     </div>
+                // `)
+                // }
 
-                // console.log($('.__save-update-dokumen'))
-                $('#modalForm').find('.container-revision-alert').addClass('d-none')
             },
             paramsAksi: "Edit",
             paramsBA: false
@@ -1016,14 +1024,14 @@
 
                     $('select[name=created-tahun]').val(res.dokumen.tahun_ttd ?? res.dokumen.tahun).trigger('change')
 
-                    if (res.dokumen.revision_message != null) {
-                        $('.container-revision-alert').html(`
-                            <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                                <h5 class="alert-heading">Pesan !</h5>
-                                <p>${res.dokumen.revision_message}</p>
-                            </div>
-                        `)
-                    }
+                    // if (res.dokumen.revision_message != null) {
+                    //     $('.container-revision-alert').html(`
+                    //         <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+                    //             <h5 class="alert-heading">Pesan !</h5>
+                    //             <p>${res.dokumen.revision_message}</p>
+                    //         </div>
+                    //     `)
+                    // }
 
                     if (res.listRevision.length > 0) {
                         if (!params.paramsBA) {
@@ -1861,14 +1869,19 @@
 
 
 
+
         renderFormTemplate(params.dataId, params.data, params.target, params.paramsBA)
         // $('select[name=created-tahun]').val(<?php echo $sessionYear ?>).trigger('change')
 
         if (params.data.balaiValidasiSatker.valudasiCreatedDokumen == false) {
             // $('#modalForm').find('.container-revision-alert').addClass('d-none')
 
+
             if (params.data.template.type == 'master-balai' || params.data.template.type == 'balai') {
-                $('#modalForm').find('input').attr('disabled', 'disabled')
+
+                // $('#modalForm').find('.container-revision-alert').removeClass('d-none');
+
+                $('#modalForm').find('input').addClass("readonly-input")
                 $('#modalForm').find('select').attr('disabled', 'disabled')
                 $('#modalForm').find('.modal-footer').addClass('d-none')
             }
@@ -1902,10 +1915,11 @@
 
 
             if (params.data.template.type == 'master-balai' || params.data.template.type == 'balai') {
+
                 $('.container-revision-alert').append(`
                     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                        <h5 class="alert-heading">Informasi</h5>
-                        <p>Dokumen perjanjian kinerja dapat dibuat/diedit setelah seluruh satker menginputkan perjanjian kinerja masing-masing. Daftar satker dapat dilihat di bagian bawah formulir.</p>
+                        <h5 class="alert-heading">Informasi !</h5>
+                        <p>Dokumen perjanjian kinerja UPT Balai dapat dibuat atau diedit setelah seluruh satker menginputkan perjanjian kinerja dan disetujui. Daftar satker dapat dilihat di bagian bawah formulir.</p>
                     </div>
                 `)
 
@@ -1986,14 +2000,17 @@
             titleTheadTableOutcomeBalai = '',
             colspan = '2'
 
+        console.log(_data);
+
+
 
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
-            render_warningDokumenYearRevisoin = `
-                <div class="bg-warning text-white pt-3 pr-3 pb-1 pl-3" role="alert">
-                    <h5 class="alert-heading">Peringatan</h5>
-                    <p>membuat dokumen baru akan merevisi dokumen yang telah anda buat sebelumnya</p>
-                </div>
-            `
+            // render_warningDokumenYearRevisoin = `
+            //     <div class="bg-warning text-white pt-3 pr-3 pb-1 pl-3" role="alert">
+            //         <h5 class="alert-heading">Peringatan !</h5>
+            //         <p>membuat dokumen baru akan merevisi dokumen yang telah anda buat sebelumnya</p>
+            // //     </div>
+            // `
             inputValue_revisionSameYear = 1
 
             render_prepare_btnSubmitToRevision({
@@ -2005,6 +2022,8 @@
 
             setDetailDataInForm(_data.dokumenExistSameYear.last_dokumen_id, _beritaAcara)
         }
+
+
 
         if (_data && _data.dokumenExistSameYear && _data.dokumenExistSameYear.is_revision_same_year !== undefined) {
             if (_data.dokumenExistSameYear.is_revision_same_year != 0) {
@@ -2036,12 +2055,14 @@
                     titleTheadTableOutcomeBalai = '<td class="text-center" style="width: 10%">Target Satker</td>';
                     titleTheadTable = '<td class="text-center" style="width: 10%">Outcome Satker</td>';
                     theadBalaiTargetNumber += '<td class="text-center p-2">(4)</td>';
-                    title2 = ``
+                    title2 = `
+            `
                     break;
 
                 case 'eselon1':
                     titleTheadTable = 'Acuan';
-                    title2 = ``
+                    title2 = `
+            `
                     break;
                 default:
                     titleTheadTable = '';
@@ -2061,10 +2082,14 @@
 
             if (_beritaAcara == true) {
 
-                titleTheadTable = `<td class="text-center" style="width: 15%" colspan="${colspan}">Target ` + <?php echo $sessionYear ?> + '</td>';
-                title2 = `<td class="text-center" style="width: 15%" colspan="${colspan}">
-                            Capaian
-                        </td>`
+                titleTheadTable = ` < td class = "text-center"
+            style = "width: 15%"
+            colspan = "${colspan}" > Target ` + <?php echo $sessionYear ?> + '</td>';
+                title2 = ` < td class = "text-center"
+            style = "width: 15%"
+            colspan = "${colspan}" >
+                Capaian <
+                /td>`
 
                 // title3 = `<td class="text-center ${classDNoneOutcome}" style="width: 15%" colspan="2">
                 //             Kinerja
@@ -2087,9 +2112,10 @@
             <input type="hidden" name="revision_same_year" value="${inputValue_revisionSameYear}" />
 
             <div class="container-revision-alert">
-                ${render_warningDokumenYearRevisoin}
+              
             </div>
 
+             
             <table class="table table-bordered">
                 <thead>
                     <tr class="sticky-header-1">

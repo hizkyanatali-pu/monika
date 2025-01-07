@@ -52,6 +52,20 @@
         text-align: left;
         border-bottom: 1px solid #ddd;
     }
+
+    .readonly-input {
+        /* background-color: #f7f8fa;
+        pointer-events: none;
+
+        border: 1px solid #ccc; */
+        background-color: #f7f8fa;
+        pointer-events: none;
+        /* Mencegah interaksi */
+        cursor: not-allowed;
+        /* Mengubah kursor untuk menunjukkan elemen tidak bisa diklik */
+        /* opacity: 0.5; */
+        /* Opsi untuk memberikan efek tampilan pudar */
+    }
 </style>
 
 <!-- Subheader -->
