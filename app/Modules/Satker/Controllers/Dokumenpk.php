@@ -271,8 +271,12 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
 
-    public function dataDokumenSatker($_status, $_dokumenType, $instansi = '')
+    public function dataDokumenSatker($_status, $_dokumenType)
     {
+        // $_status = $this->request->getPost('status');
+        // $_dokumenType = $this->request->getPost('dokumenType');
+        $instansi = $this->request->getPost('instansi');
+        $statusBA = $this->request->getPost('statusBA');
 
         $dataDokumen = $this->dokumenSatker->select('
             dokumenpk_satker.id,
@@ -303,7 +307,18 @@ class Dokumenpk extends \App\Controllers\BaseController
             $dataDokumen->where("dokumenpk_satker.satkerid", $instansi);
         }
 
-        $dataDokumen = $dataDokumen->orderBy('dokumenpk_satker.status_ba', 'DESC')
+        if ($statusBA) {
+
+            $statusBA == "belum" ? $dataDokumen->where("dokumenpk_satker.status_ba", null) : $dataDokumen->where("dokumenpk_satker.status_ba", $statusBA);
+        }
+
+        if ($_status == "setuju") {
+            $dataDokumen = $dataDokumen->orderBy("CASE WHEN status_ba = 0 THEN 1 ELSE 2 END", '', false) // Prioritaskan status_ba = 0
+                ->orderBy("status_ba", "ASC"); // Urutkan sisanya secara ascending;
+        }
+
+
+        $dataDokumen = $dataDokumen
             ->get()->getResult();
 
 
@@ -316,7 +331,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                 'revision_number'            => $arr->revision_number,
                 'status'                     => $arr->status,
                 'is_revision_same_year'      => $arr->is_revision_same_year,
-                'change_status_at'           => $arr->status != 'hold' ? date_indo($arr->change_status_at) : '-',
+                'change_status_at'           =>  date_indo($arr->change_status_at) ?? '-',
                 'created_at'                 => $arr->created_at != null ? date_indo($arr->created_at) : '',
                 'dokumenTitle'               => $arr->dokumenTitle,
                 'userCreatedName'            => $arr->userCreatedName,

@@ -166,9 +166,9 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     </div>
                 </div>
                 <div class="col-12 mt-3">
-                    <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="hold">
+                    <!-- <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="hold">
                         <i class="fas fa-trash"></i> Arsipkan Data Terpilih
-                    </button>
+                    </button> -->
 
                     <button class="btn btn-primary mb-4 __refresh-data-table" data-status="hold">
                         <i class="fas fa-sync"></i> Refresh Data
@@ -207,15 +207,28 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                                 </select>
                             </div>
                         </div>
+                        <div class="m-form__group form-group row">
+                            <label class="col-3 col-form-label">Status Berita acara</label>
+                            <div class="col-6">
+                                <select class="form-control F_statusBA">
+                                    <option value="">Pilih Status Berita Acara</option>
+                                    <option value="belum">Belum Input</option>
+                                    <option value="0">Menunggu Verifikasi</option>
+                                    <option value="1">Disetujui</option>
+                                    <option value="2">DiTolak</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <button type="button" class="btn btn-primary filter-instansi" data-status="setuju">Cari</button>
                         <button type="button" class="btn btn-danger __refresh-data-table" data-status="setuju">Reset</button>
                         <!--end::Form-->
                     </div>
                 </div>
                 <div class="col-12 mt-3">
-                    <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="setuju">
+                    <!-- <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="setuju">
                         <i class="fas fa-trash"></i> Arsipkan Data Terpilih
-                    </button>
+                    </button> -->
 
                     <button class="btn btn-primary mb-4 __refresh-data-table" data-status="setuju">
                         <i class="fas fa-sync"></i> Refresh Data
@@ -263,9 +276,9 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                     </div>
                 </div>
                 <div class="col-12 mt-3">
-                    <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="tolak">
+                    <!-- <button class="btn btn-danger mb-4 __deletePermanenMultiple" data-target="tolak">
                         <i class="fas fa-trash"></i> Arsipkan Data Terpilih
-                    </button>
+                    </button> -->
 
                     <button class="btn btn-primary mb-4 __refresh-data-table" data-status="tolak">
                         <i class="fas fa-sync"></i> Refresh Data
@@ -609,6 +622,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
     $(document).on('click', '.__refresh-data-table', function() {
         let status = $(this).data('status')
         $('.F_instansi').val(null).trigger('change');
+        $('.F_statusBA').val('').trigger('change');
 
         switch (status) {
             case 'belum-input':
@@ -979,10 +993,18 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
 
 
-    function getData(_status, instansi = '') {
+    function getData(_status, instansi = '', statusBA = '') {
+        let data = {
+            status: _status,
+            // dokumenType: "<?php echo $dokumenType ?>", // Dokumen type yang sudah di-set sebelumnya
+            instansi: instansi,
+            statusBA: statusBA,
+            _: new Date().getTime() // Untuk menghindari cache
+        };
         $.ajax({
-            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>" + (instansi ? '/' + instansi : '') + "?_=" + new Date().getTime(),
-            type: 'GET',
+            url: "<?php echo site_url('dokumenpk/satker/get-data/') ?>" + _status + "/<?php echo $dokumenType ?>",
+            data: data,
+            type: 'POST',
             success: (res) => {
                 renderTableRow(_status, res.data)
             }
@@ -1346,6 +1368,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
     $(document).on('click', '.filter-instansi', function() {
         let status = $(this).data('status')
         let value_instansi = $('.tab-pane.active .F_instansi').val();
+        let value_Status_Ba = $('.tab-pane.active .F_statusBA').val();
         switch (status) {
             case 'belum-input':
                 element_tableBelumInput.clear().draw()
@@ -1361,7 +1384,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
             case 'setuju':
 
                 element_tableSetuju.clear();
-                getData(status, value_instansi)
+                getData(status, value_instansi, value_Status_Ba)
                 break;
 
             case 'tolak':
