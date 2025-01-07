@@ -795,6 +795,44 @@ class Dashboard extends \App\Controllers\BaseController
         ->selectSum('real_phln', 'total_real_phln')
         ->get()->getRow();
 
+        $tahun = 2024;
+        $data['kegiatan'] = $this->db_mysql->table("tgiat")
+        ->select("tgiat.nmgiat as nmgiat, SUM(pagu_total) AS total_pagu, SUM(real_total) AS total_real, SUM(blokir) AS total_blokir")
+        ->join("monika_data_{$tahun}","tgiat.kdgiat = monika_data_{$tahun}.kdgiat",'left')
+        ->where("tgiat.tahun_anggaran",$tahun)
+        ->orderBy('tgiat.kdgiat', 'ASC')
+        ->groupBy('tgiat.kdgiat')
+        ->get()->getResult();
+
+        $data['sub_belum_lelang'] = $this->db_mysql->table("monika_kontrak_{$tahun} kon")
+        ->select("
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as sum_rpm_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as sum_phln_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as sum_sbsn_syc,
+
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as sum_rpm_myc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as sum_phln_myc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as sum_sbsn_myc,
+
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' THEN dat.pagu_total ELSE 0 END) as sum_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' THEN dat.pagu_total ELSE 0 END) as sum_myc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as count_rpm_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as count_phln_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as count_sbsn_syc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as count_rpm_myc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as count_phln_myc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as count_sbsn_myc,
+
+            COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' THEN dat.pagu_total ELSE 0 END) as count_syc,
+            COUNT(CASE WHEN kon.nmpaket LIKE '%MYC%' THEN dat.pagu_total ELSE 0 END) as count_myc
+        ")
+        ->join("monika_data_{$tahun} dat","kon.kdpaket = dat.kdpaket",'left')
+        ->orderBy("kon.idpull", 'ASC')
+        ->orderBy("kon.status_tender", 'Belum Lelang')
+        ->get()->getRow();
+
         return view('Modules\Admin\Views\Laporan\cetak', $data);
         $pdf = new Dompdf();
         $pdf->set_option('isRemoteEnabled', TRUE);

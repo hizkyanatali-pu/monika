@@ -125,10 +125,13 @@
         height: 150vh;
     }
     .height-210{
-        height: 210vh;
+        height: 240vh;
     }
     .height-120{
         height: 120vh;
+    }
+    .height-170{
+        height: 170vh;
     }
     .height-130{
         height: 130vh;
@@ -579,7 +582,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="centered-xy height-150 bg-blue">
+                    <div class="centered-xy height-210 bg-blue">
                         <div class="w-100 table-responsive">
                             <h3 class="text-center text-white">Satker dengan Progres Tertinggi</h3>
                             <table class="table table-bordered">
@@ -677,7 +680,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="centered-xy height-120 bg-blue">
+                    <div class="centered-xy height-210 bg-blue">
                         <div class="w-100 table-responsive">
                             <h3 class="text-center text-white">Balai dengan Progres Tertinggi</h3>
                             <table class="table table-bordered">
@@ -726,7 +729,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="centered-xy height-130 bg-blue">
+                    <div class="centered-xy height-170 bg-blue">
                         <div class="w-100 table-responsive">
                             <h3 class="text-center text-white">Balai dengan Progres Terendah</h3>
                             <table class="table table-bordered">
