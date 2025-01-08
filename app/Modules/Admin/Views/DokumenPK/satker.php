@@ -1295,7 +1295,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
                     if (res.pesan_perbaikan.length > 0) {
                         element_iframePreviewDokumen.css({
-                            'height': '60vh'
+                            'height': '80vh'
                         })
                         // $('.container-revision-alert-cetak').html(`
                         //     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
