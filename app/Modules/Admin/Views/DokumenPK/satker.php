@@ -1078,7 +1078,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
                  ${data.status_ba === '0' ? 'Menunggu Verifikasi' : data.status_ba === '1' ? 'BA Telah Disetujui':data.status_ba === '2' ?'BA Ditolak':'Belum Input BA'}
                  </span>
                 </div>
-                    Status Update : <b>${data.change_status_ba_at}</b>
+                    Status Update : <b>${data.change_status_ba_at ?? "-"}</b>
                     <hr>
 
                     ${dataBeritaAcara}
@@ -1295,7 +1295,7 @@ $isAdmin = strpos($session->get('userData')['uid'], 'admin') !== false
 
                     if (res.pesan_perbaikan.length > 0) {
                         element_iframePreviewDokumen.css({
-                            'height': '60vh'
+                            'height': '80vh'
                         })
                         // $('.container-revision-alert-cetak').html(`
                         //     <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
