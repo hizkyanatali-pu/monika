@@ -525,58 +525,59 @@
                                         </div>
 
                                         <div class="float-right">
-                                            <i><b>*Dalam Miliar</b></i>
+                                            <i><b>*Dalam Ribu Rupiah</b></i>
                                         </div>
-
-                                        <table class="table table-bordered" style="width: 100%;">
-                                            <thead class="text-center text-white" style="background-color: #1562aa;">
-                                                <tr>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">No</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">Unit Organisasi</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="1">Pagu</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="1">Realisasi</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progres</th>
-
-                                                </tr>
-                                                <tr>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
-
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
-
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keu</th>
-                                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Fisik</th>
-
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($rekapunor['unor'] as $key => $val) { ?>
-
-                                                    <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram font-weight-bold' data-toggle='modal' data-target='#KegiatanModal'" : "") ?>>
-                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" scope="row"><?= ++$key ?></th>
-                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px"><?= $val['nmsingkat']; ?></td>
-                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= toMilyar($val['pagu_total'], true, 2); ?></td>
-                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= toMilyar($val["real_total"], true, 2); ?></td>
-
-                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
-                                                        <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" style="width: 100%;">
+                                                <thead class="text-center text-white" style="background-color: #1562aa;">
+                                                    <tr>
+                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">No</th>
+                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" rowspan="2">Unit Organisasi</th>
+                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="1">Pagu</th>
+                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="1">Realisasi</th>
+                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" colspan="2">Progres</th>
 
                                                     </tr>
+                                                    <tr>
+                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
+
+                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Total</th>
+
+                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keu</th>
+                                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Fisik</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($rekapunor['unor'] as $key => $val) { ?>
+
+                                                        <tr <?= ($val['kdunit'] == 06 ? "class='tdprogram font-weight-bold' data-toggle='modal' data-target='#KegiatanModal'" : "") ?>>
+                                                            <th style="padding: 0px 4px 0px 4px !important; font-size: 12px" scope="row"><?= ++$key ?></th>
+                                                            <td style="padding: 0px 4px 0px 4px !important; font-size: 12px"><?= $val['nmsingkat']; ?></td>
+                                                            <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['pagu_total'], 2, ',', '.'); ?></td>
+                                                            <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val["real_total"], 2, ',', '.'); ?></td>
+
+                                                            <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_keu'], 2, ',', '.'); ?> %</td>
+                                                            <td style="padding: 0px 4px 0px 4px !important; font-size: 12px" class="tdNilai text-right col-pagu_phln"><?= number_format($val['progres_fisik'], 2, ',', '.'); ?> %</td>
+
+                                                        </tr>
 
 
-                                                <?php   } ?>
+                                                    <?php   } ?>
 
-                                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                                    <td colspan="2">TOTAL</td>
-                                                    <td class="tdNilai text-right col-pagu_phln"><?= toMilyar($rekapunor['total']['pagu_total'], true, 2); ?></td>
+                                                    <tr class="text-center text-white" style="background-color: #1562aa;">
+                                                        <td colspan="2">TOTAL</td>
+                                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['pagu_total'], 2, ',', '.'); ?></td>
 
-                                                    <td class="tdNilai text-right col-pagu_phln"><?= toMilyar($rekapunor['total']["real_total"], true, 2); ?></td>
+                                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']["real_total"], 2, ',', '.'); ?></td>
 
-                                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_keu'], 2, ',', '.'); ?> %</td>
-                                                    <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_fisik'], 2, ',', '.'); ?> %</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
+                                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_keu'], 2, ',', '.'); ?> %</td>
+                                                        <td class="tdNilai text-right col-pagu_phln"><?= number_format($rekapunor['total']['progres_fisik'], 2, ',', '.'); ?> %</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

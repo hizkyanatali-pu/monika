@@ -4,6 +4,15 @@
     footer {
         display: none;
     }
+    .block_all{
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: white;
+        width: 100%;
+        height: 100vh;
+        z-index: 999;
+    }
 
     @media print {
         .pagebreak {
@@ -1567,6 +1576,8 @@
     </div>
 </div>
 
+<div class="block_all"></div>
+
 <footer>
     <img src="<?= base_url('images/footer.jpg'); ?>" class="w-100" alt="">
 </footer>
@@ -1591,6 +1602,12 @@
 
 
 <script>
+
+    if(( window.innerWidth <= 900 ) || ( window.innerHeight <= 700 )){
+        window.location.href = window.location.origin + '/dashboard_mobile'
+    }else{
+        $(".block_all").css("display","none")
+    }
     $(document).ready(function() {
         checkDefaultFilterMenu()
         actionFilterMenu()
