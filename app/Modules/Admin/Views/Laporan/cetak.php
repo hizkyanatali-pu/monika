@@ -406,12 +406,38 @@
                             <th>Deviasi</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                        <?php 
+                            $sum_total_pagu = 0;
+                            $sum_total_blokir = 0;
+                            $sum_total_real = 0;
+
+                            foreach ($kegiatan as $key => $value):
+
+                            $sum_total_pagu += $value->total_pagu;
+                            $sum_total_blokir += $value->total_blokir;
+                            $sum_total_real += $value->total_real; 
+                        ?>
+                        <tr>
+                            <td><?= $key+1 ?></td>
+                            <td><?= $value->nmgiat ?></td>
+                            <td><?= toMilyar($value->total_pagu, false, 2) ?></td>
+                            <td><?= toMilyar($value->total_blokir, false, 2) ?></td>
+                            <td><?= toMilyar($value->total_real, false, 2) ?></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <?php endforeach ?>
+                    </tbody>
                     <tfoot>
                         <th colspan="2">Total</th>
-                        <th>Data</th>
-                        <th>Data</th>
-                        <th>Data</th>
+                        <th><?= toMilyar($sum_total_pagu, false, 2) ?></th>
+                        <th><?= toMilyar($sum_total_blokir, false, 2) ?></th>
+                        <th><?= toMilyar($sum_total_real, false, 2) ?></th>
                         <th>Data</th>
                         <th>Data</th>
                         <th>Data</th>
@@ -421,6 +447,7 @@
                     </tfoot>
                 </table>
             </section>
+            <section></section>
         <?php }if ($value == "PAKET KEGIATAN KONTRAKTUAL TA TAHUN"){ ?>
             <section class="">
                 <h3><?= $value ?></h3>
