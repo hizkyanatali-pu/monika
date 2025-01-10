@@ -11,7 +11,7 @@
 		<div class="form-group text-center text-dark">
 			<img src="<?= base_url('images/logo_pu.jpg') ?>" width="10%" class="mb-2">
 			<h4 class="mb-0">DIREKTORAT JENDERAL SUMBER DAYA AIR</h4>
-			<h6 class="mb-0">Kementerian Pekerjaan Umum dan Perumahan Rakyat</h6>
+			<h6 class="mb-0">Kementerian Pekerjaan Umum</h6>
 		</div>
 
 		<div class="card shadow card-login">
@@ -155,11 +155,11 @@
 <?= $this->endSection() ?>
 <?= $this->section('footer_js') ?>
 <script>
-	if(( window.innerWidth <= 900 ) || ( window.innerHeight <= 700 )){
-        document.getElementById("device").value = "mobile"
-    }else{
-        document.getElementById("device").value = "desktop"
-    }
+	if ((window.innerWidth <= 900) || (window.innerHeight <= 700)) {
+		document.getElementById("device").value = "mobile"
+	} else {
+		document.getElementById("device").value = "desktop"
+	}
 </script>
 
 

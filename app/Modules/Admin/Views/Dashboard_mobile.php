@@ -527,7 +527,7 @@
                                         <div class="float-right">
                                             <i><b>*Dalam Ribu Rupiah</b></i>
                                         </div>
-                                        
+
                                         <div class="table-responsive">
                                             <table class="table table-bordered" style="width: 100%;">
                                                 <thead class="text-center text-white" style="background-color: #1562aa;">
@@ -603,6 +603,7 @@
                                         $sum_total_keu_progres = 0;
                                         $sum_total_fis_progres = 0;
                                         $sum_total_blokir = 0;
+                                        $count_satker_desc = count($satker_desc);
 
                                         foreach ($satker_desc as $key => $value): 
 
@@ -623,10 +624,10 @@
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
                                         <td>11</td>
                                         <td>Total</td>
-                                        <td><?= number_format($sum_total_progres, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_blokir, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_keu_progres, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_fis_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_progres), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_blokir), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_keu_progres/$count_satker_desc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_fis_progres/$count_satker_desc), 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -652,6 +653,7 @@
                                         $sum_total_keu_progres = 0;
                                         $sum_total_fis_progres = 0;
                                         $sum_total_blokir = 0;
+                                        $count_satker_asc = count($satker_asc);
 
                                         foreach ($satker_asc as $key => $value): 
 
@@ -672,10 +674,10 @@
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
                                         <td>11</td>
                                         <td>Total</td>
-                                        <td><?= number_format($sum_total_progres, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_blokir, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_keu_progres, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_fis_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_progres), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_blokir), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_keu_progres/$count_satker_asc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_fis_progres/$count_satker_asc), 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -701,6 +703,7 @@
                                         $sum_total_keu_progres = 0;
                                         $sum_total_fis_progres = 0;
                                         $sum_total_blokir = 0;
+                                        $count_balai_desc = count($balai_desc);
 
                                         foreach ($balai_desc as $key => $value): 
 
@@ -721,10 +724,10 @@
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
                                         <td>11</td>
                                         <td>Total</td>
-                                        <td><?= number_format($sum_total_progres, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_blokir, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_keu_progres, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_fis_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_progres), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_blokir), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_keu_progres/$count_balai_desc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_fis_progres/$count_balai_desc), 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -750,6 +753,7 @@
                                         $sum_total_keu_progres = 0;
                                         $sum_total_fis_progres = 0;
                                         $sum_total_blokir = 0;
+                                        $count_balai_asc = count($balai_asc);
 
                                         foreach ($balai_asc as $key => $value): 
 
@@ -770,10 +774,10 @@
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
                                         <td>11</td>
                                         <td>Total</td>
-                                        <td><?= number_format($sum_total_progres, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_blokir, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_keu_progres, 2, ',', '.') ?></td>
-                                        <td><?= number_format($sum_total_fis_progres, 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_progres), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_blokir), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_keu_progres/$count_balai_asc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_fis_progres/$count_balai_asc), 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>

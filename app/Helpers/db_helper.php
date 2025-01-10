@@ -433,8 +433,11 @@ function instansi_name($id)
     $db      = \Config\Database::connect();
 
     if (is_null($id)) return (object) ['nama_instansi' => null];
+    $session = session();
+    $user = $session->get('userData');
+    $table = $user['tahun'] > 2024 ? "m_satker_" . $user['tahun'] : "m_satker";
 
-    $builder = $db->query("SELECT IF(satker like '%BALAI%' AND balaiid != 97,CONCAT('SATUAN KERJA ',satker),satker) nama_instansi FROM m_satker WHERE 
+    $builder = $db->query("SELECT IF(satker like '%BALAI%' AND balaiid != 97,CONCAT('SATUAN KERJA ',satker),satker) nama_instansi FROM $table WHERE 
           satkerid = $id
          ")->getRow();
     if (empty($builder)) {

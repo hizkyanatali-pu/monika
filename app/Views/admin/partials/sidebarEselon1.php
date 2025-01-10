@@ -5,7 +5,7 @@ $request = \Config\Services::request();
 <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
     <div class="kt-aside__brand-logo">
         <a href="javascript:;">
-            <img alt="Logo" src="<?= base_url('images/logo-wide.png'); ?>" />
+            <img alt="Logo" width="150px" src="<?= base_url('images/logo-wide.png'); ?>" />
         </a>
     </div>
     <div class="kt-aside__brand-tools">
@@ -50,9 +50,8 @@ $request = \Config\Services::request();
                         $request->uri->getSegment(2) == 'eselon1' ||
                         $request->uri->getSegment(2) == 'arsip'
                     ) ? ' kt-menu__item--open kt-menu__item--here' : ''
-                ) ?>" 
-                aria-haspopup="true" data-ktmenu-submenu-toggle="hover"
-            >
+                ) ?>"
+                aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                 <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                     <i class="kt-menu__link-icon fas fa-book"></i>
                     <span class="kt-menu__link-text">Perjanjian Kinerja</span>

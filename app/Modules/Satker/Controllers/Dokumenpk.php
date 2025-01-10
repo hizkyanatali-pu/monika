@@ -30,7 +30,8 @@ class Dokumenpk extends \App\Controllers\BaseController
         $this->templateKegiatan = $this->db->table('dokumen_pk_template_kegiatan_' . session('userData.tahun'));
         $this->templateInfo     = $this->db->table('dokumen_pk_template_info_' . session('userData.tahun'));
 
-        $this->satker   = $this->db->table('m_satker');
+        // $this->satker   = $this->db->table('m_satker');
+        $this->satker   = session('userData.tahun') > 2024 ? $this->db->table('m_satker_' . session('userData.tahun')) : $this->db->table('m_satker');
         $this->balai    = $this->db->table('m_balai');
         $this->kegiatan = $this->db->table('tgiat');
         $this->program = $this->db->table('tprogram');
@@ -534,6 +535,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
         if ($session_userType == "satker") {
+
             $dataSatker = $this->satker->select("jabatan_penanda_tangan_pihak_1, jabatan_penanda_tangan_pihak_2, kota_penanda_tangan")->where('satkerid', $session_satkerId)->get()->getRow();
             $pihak1 = $dataSatker->jabatan_penanda_tangan_pihak_1;
             $pihak2 = $dataSatker->jabatan_penanda_tangan_pihak_2;
@@ -835,7 +837,7 @@ class Dokumenpk extends \App\Controllers\BaseController
             // if (count($balai_checklistSatker) == $totalSatkerIsCreated) $valudasiCreatedDokumen = true;
 
             $balai_checklistSatker = $this->satker->select("
-            m_satker.satker,m_satker.satkerid
+            satker,satkerid
         ")
                 ->where('balaiid', $session_balaiId)->get()->getResult();
             // foreach ($balai_checklistSatker as $data) {
@@ -1357,6 +1359,10 @@ class Dokumenpk extends \App\Controllers\BaseController
             "," => ".",
         ];
 
+
+        // $inserted_dokumenSatker['pihak1_initial'] = $this->request->getPost('ttdPihak1Initial');
+        // $inserted_dokumenSatker['pihak2_initial'] = $dataSatker->jabatan_penanda_tangan_pihak_2;
+
         /* dokumen */
         $inserted_dokumenSatker = [
             'template_id'           => $this->request->getPost('templateID'),
@@ -1370,6 +1376,8 @@ class Dokumenpk extends \App\Controllers\BaseController
             'bulan'                 => $this->request->getPost('bulan'),
             'tanggal'               => $this->request->getPost('tanggal'),
             // 'tahun'                 => $this->request->getPost('tahun'),
+            'pihak1_initial' => $this->request->getPost('ttdPihak1Initial'),
+            'pihak2_initial' => $this->request->getPost('ttdPihak2Initial'),
             'created_at'            => date('Y-m-d H:i:s')
         ];
 
