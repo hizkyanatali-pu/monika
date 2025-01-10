@@ -1789,9 +1789,9 @@
                     // }
 
                     if (res.pesan_perbaikan.length != null) {
-                        element_iframePreviewDokumen.css({
-                            'height': '100vh'
-                        })
+                        // element_iframePreviewDokumen.css({
+                        //     'height': '100vh'
+                        // })
                         $('.container-revision-alert-cetak').html(`
                         <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                             <h5 class="alert-heading">Daftar Pesan Perubahan !</h5>
@@ -1802,7 +1802,7 @@
                     `);
                     } else {
                         element_iframePreviewDokumen.css({
-                            'height': '80vh'
+                            'height': '70vh'
                         })
                         $('.container-revision-alert-cetak').html('')
                     }
@@ -1813,7 +1813,7 @@
 
                     if (_toConfirm) {
                         if (res.dokumen.status != 'setuju' && res.dokumen.status != 'tolak') {
-                            element_modalPreviewCetakDokumen.find('.modal-footer').html(`
+                            element_modalPreviewCetakDokumen.find('.modal-footer').addClass('bg-white').html(`
                                 <div class="p-2">
                                     <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}" data-beritaacara="0">
                                         <i class="fa fa-ban"></i> Tolak
@@ -1850,7 +1850,7 @@
                     if (res.pesan_perbaikan.length > 0) {
                         element_iframePreviewDokumen.css({
                             // 'height': '60vh'
-                            'height': '100vh'
+                            'height': '70vh'
                         })
                         $('.container-revision-alert-cetak').html(`
                         <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
@@ -1875,7 +1875,7 @@
 
                     if (_toConfirm) {
                         if (res.dokumen.status_ba != 1 && res.dokumen.status_ba != 2) {
-                            element_modalPreviewCetakDokumenBA.find('.modal-footer').html(`
+                            element_modalPreviewCetakDokumenBA.find('.modal-footer').addClass('bg-white').html(`
                                 <div class="p-2">
                                     <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}" data-beritaacara="1">
                                         <i class="fa fa-ban"></i> Tolak
@@ -2136,14 +2136,9 @@
 
             if (_beritaAcara == true) {
 
-                titleTheadTable = ` < td class = "text-center"
-            style = "width: 15%"
-            colspan = "${colspan}" > Target ` + <?php echo $sessionYear ?> + '</td>';
-                title2 = ` < td class = "text-center"
-            style = "width: 15%"
-            colspan = "${colspan}" >
-                Capaian <
-                /td>`
+                titleTheadTable = ` <td class = "text-center" style = "width: 15%" colspan = "${colspan}" > Target ` + <?php echo $sessionYear ?> + '</td>';
+                title2 = ` <td class = "text-center"
+            style = "width: 15%" colspan = "${colspan}" >Capaian </td>`
 
                 // title3 = `<td class="text-center ${classDNoneOutcome}" style="width: 15%" colspan="2">
                 //             Kinerja
