@@ -234,13 +234,13 @@
                                 </div>
                             </td>
                             <td class="pr-0 text-center">
-                                <?php if ($statusBA->status == 1 && $data->status == 'setuju' && $data->is_revision_same_year > 0) { ?>
+                                <?php if ($data->status == 'setuju' && $data->is_revision_same_year > 0) { ?>
 
 
 
                                     <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
                                         <span class="badge badge-pill px-3 font-weight-bold <?php echo $BAStatusVerif[$data->status_ba]['color'] ?>">
-                                            <?= $BAStatusVerif[$data->status_ba]['message'] . ($data->status_ba != "1" ? " Oleh " . ($data->verif_by == 'admin' ? "admin" : "UPT Balai") : " ")  ?>
+                                            <?= $BAStatusVerif[$data->status_ba]['message'] . ($data->status_ba != null ? " Oleh " . ($data->verif_by == 'admin' ? "admin" : "UPT Balai") : " ")  ?>
                                         </span>
                                     </div>
                                     <?php echo ($data->status_ba != null) ? "Status Update : <b>" . date_indo($data->change_status_ba_at) . "</b>" : 'Status Update : -' ?>
@@ -266,7 +266,7 @@
                                     </div>
                                 <?php } ?>
 
-                                <?php if ($statusBA->status == 1 && $data->status_ba != null && $data->status == 'setuju' && $data->is_revision_same_year > 0) {
+                                <?php if ($data->status_ba == 1 && $data->status == 'setuju' && $data->is_revision_same_year > 0) {
                                 ?>
                                     <button class="btn btn-sm __lihat-dokumenBA btn-outline-secondary" data-id="<?php echo $data->id ?>" data-template-id="<?php echo $data->template_id ?>" data-select-top="true" <?= (!isset($balaiCreateForSatker) and empty(session('userData.satker_id')) ? ' data-type="uptBalai-add"' : '') ?> title="Lihat">
                                         <i class="fas fa-eye"></i>

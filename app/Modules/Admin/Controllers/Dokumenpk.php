@@ -518,7 +518,7 @@ class Dokumenpk extends \App\Controllers\BaseController
                     $updatedData = [
                         'status'           => $newStatus,
                         'change_status_at' => date("Y-m-d H:i:s"),
-                        'status_ba'        => '0'
+                        'status_ba'        => null
                     ];
 
 
