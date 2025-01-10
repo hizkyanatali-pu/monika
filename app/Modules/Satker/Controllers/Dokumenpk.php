@@ -438,7 +438,7 @@ class Dokumenpk extends \App\Controllers\BaseController
 
 
         $balai_checklistSatker = $this->satker->select("
-            m_satker.satker,m_satker.satkerid
+            satker,satkerid
         ")
             ->where('balaiid', $session_balaiId)->get()->getResult();
 
