@@ -7,127 +7,149 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <?php echo link_tag('css/tree.css'); ?>
     <style>
-        body{
+        body {
             width: 100%;
             overflow-x: hidden;
         }
-        section{
+
+        section {
             height: 95vh;
             position: relative;
             margin-bottom: 20vh;
         }
+
         @media print {
             section {
                 clear: both;
                 page-break-after: always;
             }
         }
+
         .page-break {
             clear: both;
             page-break-after: always;
         }
-        .img-footer{
+
+        .img-footer {
             position: absolute;
             bottom: 0;
             right: 0;
             width: 200px;
             z-index: -1;
         }
-        .text-footer{
+
+        .text-footer {
             position: absolute;
             bottom: 0;
             left: 0;
         }
 
-        .fs-50{
+        .fs-50 {
             font-size: 50px;
         }
-        .fs-30{
+
+        .fs-30 {
             font-size: 30px;
         }
-        .fs-15{
+
+        .fs-15 {
             font-size: 15px;
         }
 
-        .card-1{
-            background: url("<?= base_url('images/laporan/9.png'); ?>") ;
+        .card-1 {
+            background: url("<?= base_url('images/laporan/9.png'); ?>");
             background-size: cover;
             background-position: center center;
         }
 
-        .card-2{
-            background: url("<?= base_url('images/laporan/9.png'); ?>") ;
+        .card-2 {
+            background: url("<?= base_url('images/laporan/9.png'); ?>");
             background-size: cover;
             background-position: center center;
         }
 
-        .card-3{
-            background: url("<?= base_url('images/laporan/10.png'); ?>") ;
-            background-size: 100% ;
+        .card-3 {
+            background: url("<?= base_url('images/laporan/10.png'); ?>");
+            background-size: 100%;
             background-repeat: no-repeat;
             background-position: center center;
         }
 
-        .card-4{
-            background: url("<?= base_url('images/laporan/11.png'); ?>") ;
-            background-size: 100% ;
-            padding:25px 0;
+        .card-4 {
+            background: url("<?= base_url('images/laporan/11.png'); ?>");
+            background-size: 100%;
+            padding: 25px 0;
             background-repeat: no-repeat;
             background-position: center center;
         }
 
-        .card-5{
-            background: url("<?= base_url('images/laporan/12.png'); ?>") ;
-            background-size: 100% ;
+        .card-5 {
+            background: url("<?= base_url('images/laporan/12.png'); ?>");
+            background-size: 100%;
             background-repeat: no-repeat;
             background-position: bottom;
             padding-bottom: 30px;
         }
 
-        th{
-            text-align: center; 
+        th {
+            text-align: center;
             vertical-align: middle;
         }
-        .table-1>thead>*>*, .table-1>tfoot>*>*{
+
+        .table-1>thead>*>*,
+        .table-1>tfoot>*>* {
             background-color: #ffc000 !important;
         }
-        .table-2>thead>*>*, .table-2>tfoot>*>*{
+
+        .table-2>thead>*>*,
+        .table-2>tfoot>*>* {
             background-color: #5e767e !important;
             color: white;
         }
-        .table-2>tbody>tr.head>*{
+
+        .table-2>tbody>tr.head>* {
             background-color: #ffc000 !important;
         }
-        .table-2>tbody>tr.subhead>*{
+
+        .table-2>tbody>tr.subhead>* {
             background-color: #66ff99 !important;
         }
-        .table-3>thead>*>*{
+
+        .table-3>thead>*>* {
             background-color: #074f69 !important;
             color: white;
         }
-        .table-3>tbody>tr.head>*{
+
+        .table-3>tbody>tr.head>* {
             background-color: #caedfb !important;
         }
-        .table-4>thead>*>*{
+
+        .table-4>thead>*>* {
             background-color: #224e7b !important;
             color: white;
         }
-        .table-4>tbody>tr.head>*{
+
+        .table-4>tbody>tr.head>* {
             background-color: #bfbfbe !important;
         }
-        .table-5>thead>*>*{
+
+        .table-5>thead>*>* {
             background-color: #ffc000 !important;
         }
-        .table-5>tbody>tr.head>*{
+
+        .table-5>tbody>tr.head>* {
             background-color: #caeefb !important;
         }
-        .table-6>thead>*>*{
+
+        .table-6>thead>*>* {
             background-color: #ffc000 !important;
         }
-        .table-7>thead>*>*{
+
+        .table-7>thead>*>* {
             background-color: #caeefb !important;
         }
-        .table-7>tbody>tr.head>*{
+
+        .table-7>tbody>tr.head>* {
             background-color: #ffc000 !important;
         }
     </style>
@@ -139,20 +161,20 @@
             <h1 class="fs-50">Pantauan <br>Pelaksanaan <br>Anggaran TA <?= date('Y') ?></h1>
             <b class="fs-15">Status <?= date("d F Y, h:i") ?></b>
             <p class="text-footer fs-15">
-                KEMENTERIAN PEKERJAAN UMUM DAN PERUMAHAN RAKYAT <br>
+                KEMENTERIAN PEKERJAAN UMUM<br>
                 DIREKTORAT JENDERAL SUMBER DAYA AIR
             </p>
         </div>
     </section>
     <?php foreach ($report_list_selected as $value): ?>
-        <?php if ($value == "PROGRES ANGGARAN PER SUMBER DANA"){ ?>
+        <?php if ($value == "PROGRES ANGGARAN PER SUMBER DANA") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
                 <?php $totalPagu = 0 ?>
-                    <?php foreach ($pagu as $key => $value) : ?>
-                        <?php $totalPagu += $value->totalPagu ?>
-                    <?php endforeach ?>
+                <?php foreach ($pagu as $key => $value) : ?>
+                    <?php $totalPagu += $value->totalPagu ?>
+                <?php endforeach ?>
                 <div class="row">
                     <div class="col-sm-8">
                         <div class="tree  pr-4">
@@ -204,7 +226,7 @@
                                                         <h4 class="mb-0"><b>Sisa Anggaran</b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($pagu_all->total_rpm-$pagu_all->total_real_rpm, true, 2); ?>
+                                                                <?= toMilyar($pagu_all->total_rpm - $pagu_all->total_real_rpm, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -244,7 +266,7 @@
                                                         <h4 class="mb-0"><b>Sisa Anggaran</b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($pagu_all->total_sbsn-$pagu_all->total_real_sbsn, true, 2); ?>
+                                                                <?= toMilyar($pagu_all->total_sbsn - $pagu_all->total_real_sbsn, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -284,7 +306,7 @@
                                                         <h4 class="mb-0"><b>Sisa Anggaran</b></h4>
                                                         <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
                                                             <h5 class="mb-0">
-                                                                <?= toMilyar($pagu_all->total_phln-$pagu_all->total_real_phln, true, 2); ?>
+                                                                <?= toMilyar($pagu_all->total_phln - $pagu_all->total_real_phln, true, 2); ?>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -322,7 +344,8 @@
                 </div>
                 <img class="img-footer" src="<?= base_url('images/laporan/5.png'); ?>" />
             </section>
-        <?php }if ($value == "PROGRES PUPR PER UNIT ORGANISASI"){ ?>
+        <?php }
+        if ($value == "PROGRES PUPR PER UNIT ORGANISASI") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -407,30 +430,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
-                            $sum_total_pagu = 0;
-                            $sum_total_blokir = 0;
-                            $sum_total_real = 0;
+                        <?php
+                        $sum_total_pagu = 0;
+                        $sum_total_blokir = 0;
+                        $sum_total_real = 0;
 
-                            foreach ($kegiatan as $key => $value):
+                        foreach ($kegiatan as $key => $value):
 
                             $sum_total_pagu += $value->total_pagu;
                             $sum_total_blokir += $value->total_blokir;
-                            $sum_total_real += $value->total_real; 
+                            $sum_total_real += $value->total_real;
                         ?>
-                        <tr>
-                            <td><?= $key+1 ?></td>
-                            <td><?= $value->nmgiat ?></td>
-                            <td><?= toMilyar($value->total_pagu, false, 2) ?></td>
-                            <td><?= toMilyar($value->total_blokir, false, 2) ?></td>
-                            <td><?= toMilyar($value->total_real, false, 2) ?></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                            <tr>
+                                <td><?= $key + 1 ?></td>
+                                <td><?= $value->nmgiat ?></td>
+                                <td><?= toMilyar($value->total_pagu, false, 2) ?></td>
+                                <td><?= toMilyar($value->total_blokir, false, 2) ?></td>
+                                <td><?= toMilyar($value->total_real, false, 2) ?></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
                         <?php endforeach ?>
                     </tbody>
                     <tfoot>
@@ -448,7 +471,8 @@
                 </table>
             </section>
             <section></section>
-        <?php }if ($value == "PAKET KEGIATAN KONTRAKTUAL TA TAHUN"){ ?>
+        <?php }
+        if ($value == "PAKET KEGIATAN KONTRAKTUAL TA TAHUN") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -566,7 +590,8 @@
                 </div>
                 <img class="img-footer" src="<?= base_url('images/laporan/5.png'); ?>" />
             </section>
-        <?php }if ($value == "PAKET KEGIATAN BELUM LELANG TA TAHUN"){ ?>
+        <?php }
+        if ($value == "PAKET KEGIATAN BELUM LELANG TA TAHUN") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -716,7 +741,8 @@
                     </ul>
                 </div>
             </section>
-        <?php }if ($value == "PROGRES PAKET BELUM LELANG TA TAHUN"){ ?>
+        <?php }
+        if ($value == "PROGRES PAKET BELUM LELANG TA TAHUN") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -867,7 +893,8 @@
                     </ul>
                 </div>
             </section>
-        <?php }if ($value == "PAKET BELUM LELANG TA TAHUN (RPM-SYC)"){ ?>
+        <?php }
+        if ($value == "PAKET BELUM LELANG TA TAHUN (RPM-SYC)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -902,7 +929,8 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PAKET BELUM LELANG TA TAHUN (RPM-MYC)"){ ?>
+        <?php }
+        if ($value == "PAKET BELUM LELANG TA TAHUN (RPM-MYC)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -937,7 +965,8 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PAKET BELUM LELANG TA TAHUN (PLN SYC)"){ ?>
+        <?php }
+        if ($value == "PAKET BELUM LELANG TA TAHUN (PLN SYC)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -972,7 +1001,8 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PAKET BELUM LELANG TA TAHUN (PLN-MYC)"){ ?>
+        <?php }
+        if ($value == "PAKET BELUM LELANG TA TAHUN (PLN-MYC)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1006,7 +1036,8 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PAKET BELUM LELANG TA TAHUN (PLN-MYC MENDAHULUI DIPA)"){ ?>
+        <?php }
+        if ($value == "PAKET BELUM LELANG TA TAHUN (PLN-MYC MENDAHULUI DIPA)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1040,7 +1071,8 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PAKET DENGAN SISA BELUM TERSERAP TERTINGGI"){ ?>
+        <?php }
+        if ($value == "PAKET DENGAN SISA BELUM TERSERAP TERTINGGI") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1063,13 +1095,15 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PROGRES PELAKSANAAN IKN"){ ?>
+        <?php }
+        if ($value == "PROGRES PELAKSANAAN IKN") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
                 <img height="90%" src="<?= base_url('images/laporan/diagram5.png'); ?>" />
             </section>
-        <?php }if ($value == "REKAPITULASI PAKET KEGIATAN BIDANG SDA DI KAWASAN IKN"){ ?>
+        <?php }
+        if ($value == "REKAPITULASI PAKET KEGIATAN BIDANG SDA DI KAWASAN IKN") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1105,7 +1139,8 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "REKAPITULASI PAKET KEGIATAN BIDANG SDA DI KAWASAN IKN (selesai)"){ ?>
+        <?php }
+        if ($value == "REKAPITULASI PAKET KEGIATAN BIDANG SDA DI KAWASAN IKN (selesai)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1141,7 +1176,8 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (1)"){ ?>
+        <?php }
+        if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (1)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1228,13 +1264,15 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "RENCANA PEMANFAATAN RUPIAH MURNI TA TAHUN (1)"){ ?>
+        <?php }
+        if ($value == "RENCANA PEMANFAATAN RUPIAH MURNI TA TAHUN (1)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
                 <img height="90%" src="<?= base_url('images/laporan/diagram6.png'); ?>" />
             </section>
-        <?php }if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (2)"){ ?>
+        <?php }
+        if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (2)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1263,7 +1301,8 @@
                 </textarea>
                 <img class="img-footer" src="<?= base_url('images/laporan/5.png'); ?>" />
             </section>
-        <?php }if ($value == "PROYEK BENDUNGAN PERLU PERHATIAN KHUSUS (1)"){ ?>
+        <?php }
+        if ($value == "PROYEK BENDUNGAN PERLU PERHATIAN KHUSUS (1)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1285,7 +1324,8 @@
                 <img width="100%" src="<?= base_url('images/laporan/diagram7.png'); ?>" />
                 <img class="img-footer" src="<?= base_url('images/laporan/5.png'); ?>" />
             </section>
-        <?php }if ($value == "PROGNOSIS SESUAI IEMONITORING SEBELUM PEMANFAATAN ANGGARAN TA TAHUN PER UNIT KERJA"){ ?>
+        <?php }
+        if ($value == "PROGNOSIS SESUAI IEMONITORING SEBELUM PEMANFAATAN ANGGARAN TA TAHUN PER UNIT KERJA") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1321,7 +1361,8 @@
                 </table>
                 <img class="img-footer" src="<?= base_url('images/laporan/5.png'); ?>" />
             </section>
-        <?php }if ($value == "PROYEK BENDUNGAN PERLU PERHATIAN KHUSUS (2)"){ ?>
+        <?php }
+        if ($value == "PROYEK BENDUNGAN PERLU PERHATIAN KHUSUS (2)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1342,7 +1383,8 @@
                 </table>
                 <img width="100%" src="<?= base_url('images/laporan/diagram9.png'); ?>" />
             </section>
-        <?php }if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (3)"){ ?>
+        <?php }
+        if ($value == "PROGNOSIS PENYERAPAN ANGGARAN TA TAHUN (3)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1427,7 +1469,8 @@
                     </tbody>
                 </table>
             </section>
-        <?php }if ($value == "RENCANA PEMANFAATAN RUPIAH MURNI TA TAHUN (2)"){ ?>
+        <?php }
+        if ($value == "RENCANA PEMANFAATAN RUPIAH MURNI TA TAHUN (2)") { ?>
             <section class="">
                 <h3><?= $value ?></h3>
                 <p>Status <?= date("d F Y, h:i") ?></p>
@@ -1441,4 +1484,5 @@
         window.print()
     </script>
 </body>
+
 </html>

@@ -64,6 +64,17 @@ class Pulldata extends \App\Controllers\BaseController
             exit;
         }
 
+        if ($_tahun > 2024) {
+            # code...
+            $querySatkerAlias = "SELECT * FROM m_satker_{$_tahun} where satkerid=$w";
+            $resultSatker =   $this->db->query($querySatkerAlias)->getRow();
+            $w =  $resultSatker->satkerid2;
+        }
+
+
+
+
+
         $where = "md.kdsatker IN ($w)";
 
         // $getSatker = $this->db->query("SELECT * from m_satker WHERE kdsatker IN ($w)")->getRow();
@@ -75,7 +86,15 @@ class Pulldata extends \App\Controllers\BaseController
         $validation = '';
         if ($templateid == 1 || $templateid == 2 || $templateid == 3 || $templateid == 4 || $templateid == 8) {
 
-            $validation = "AND sat NOT IN ('dokumen','layanan','laporan','0')";
+            // $validation = "AND sat NOT IN ('dokumen','layanan','laporan','0')";
+            $validation = "";
+        }
+
+        if ($_tahun < 2025) {
+            $mSatker = "m_satker s ON s.satkerid=md.kdsatker";
+            # code...
+        } else {
+            $mSatker = "m_satker_{$_tahun} s ON s.satkerid2=md.kdsatker";
         }
 
 
@@ -98,9 +117,9 @@ class Pulldata extends \App\Controllers\BaseController
         md.real_total as real_total, md.progres_keuangan, md.progres_fisik
 
         FROM monika_data_{$_tahun} md
-		LEFT JOIN m_satker s ON s.satkerid=md.kdsatker
+		LEFT JOIN {$mSatker}
 		LEFT JOIN m_balai b ON b.balaiid=s.balaiid WHERE
-        " . ($w ? "$where" : '') . "$validation ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
+        " . ($w ? "$where" : '') . "$validation GROUP BY md.kdpaket ORDER BY b.balaiid ASC, md.kdsatker ASC, md.kdpaket ASC";
 
 
 
