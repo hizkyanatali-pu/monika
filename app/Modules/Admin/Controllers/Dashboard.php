@@ -628,7 +628,7 @@ class Dashboard extends \App\Controllers\BaseController
         ")
         ->join("monika_data_{$tahun} dat","kon.kdpaket = dat.kdpaket",'left')
         ->orderBy("kon.idpull", 'ASC')
-        ->orderBy("kon.status_tender", 'terkontrak')
+        ->where("kon.status_tender", 'terkontrak')
         ->get()->getRow();
 
         $data['sub_proses_lelang'] = $this->db_mysql->table("monika_kontrak_{$tahun} kon")
@@ -657,7 +657,7 @@ class Dashboard extends \App\Controllers\BaseController
         ")
         ->join("monika_data_{$tahun} dat","kon.kdpaket = dat.kdpaket",'left')
         ->orderBy("kon.idpull", 'ASC')
-        ->orderBy("kon.status_tender", 'Proses Lelang')
+        ->where("kon.status_tender", 'Proses Lelang')
         ->get()->getRow();
 
         $data['sub_belum_lelang'] = $this->db_mysql->table("monika_kontrak_{$tahun} kon")
@@ -670,7 +670,7 @@ class Dashboard extends \App\Controllers\BaseController
             SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'PHLN' THEN dat.pagu_total ELSE 0 END) as sum_phln_myc,
             SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' AND kon.sumber_dana = 'SBSN' THEN dat.pagu_total ELSE 0 END) as sum_sbsn_myc,
 
-            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' THEN dat.pagu_total ELSE 0 END) as sum_syc,
+            SUM(CASE WHEN kon.nmpaket LIKE '%SYC%' THEN dat.pagu_total ELSE 0 END) as sum_syc, 
             SUM(CASE WHEN kon.nmpaket LIKE '%MYC%' THEN dat.pagu_total ELSE 0 END) as sum_myc,
 
             COUNT(CASE WHEN kon.nmpaket LIKE '%SYC%' AND kon.sumber_dana = 'RPM' THEN dat.pagu_total ELSE 0 END) as count_rpm_syc,
@@ -686,7 +686,7 @@ class Dashboard extends \App\Controllers\BaseController
         ")
         ->join("monika_data_{$tahun} dat","kon.kdpaket = dat.kdpaket",'left')
         ->orderBy("kon.idpull", 'ASC')
-        ->orderBy("kon.status_tender", 'Belum Lelang')
+        ->where("kon.status_tender", 'Belum Lelang')
         ->get()->getRow();
 
         $data['kegiatan_syc'] = $this->db_mysql->table("tgiat")
