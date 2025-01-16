@@ -5,7 +5,7 @@ $request = \Config\Services::request();
 <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
     <div class="kt-aside__brand-logo">
         <a href="javascript:;">
-            <img alt="Logo" src="<?= base_url('images/logo-wide.png'); ?>" />
+            <img alt="Logo" width="150px" src="<?= base_url('images/logo-wide.png'); ?>" />
         </a>
     </div>
     <div class="kt-aside__brand-tools">

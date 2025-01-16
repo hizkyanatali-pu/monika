@@ -38,6 +38,57 @@
             $(document).off('focusin.modal');
         });
 
+        // Menambahkan event listener untuk ikon edit
+        $(document).on('click', '.edit-jabatan', function() {
+
+            var typeTTD = $(this).data("typettd");
+
+
+
+            var $titleElement = typeTTD === "ttd1" ? $('.title-ttd-pihak1') : $('.title-ttd-pihak2');
+            var $valueTTD = typeTTD === "ttd1" ? $('#hidden-title-ttd-pihak1') : $('#hidden-title-ttd-pihak2');
+            var currentValue = $valueTTD.val();
+            $(this).removeClass('fa-pencil-alt').addClass('fa-check');
+            // Mengganti <small> dengan input text untuk editing
+            $titleElement.html('<input type="text" class="edit-input form-control" style="width:80%" value="' + currentValue + '">');
+
+            // Fokus ke input field agar pengguna bisa langsung mengetik
+            var $inputField = $titleElement.find('.edit-input');
+            $inputField.focus();
+
+            // Mengatur event ketika input hilang fokus (blur) untuk menyimpan perubahan
+            $inputField.on('blur', function() {
+                var newValue = $inputField.val();
+
+                // Mengganti input field kembali ke teks biasa setelah edit
+                $titleElement.text(newValue);
+
+                if (typeTTD == "ttd1") {
+                    $('#hidden-title-ttd-pihak1').val(newValue);
+
+                } else {
+
+                    $('#hidden-title-ttd-pihak2').val(newValue);
+
+                }
+
+                $('.edit-jabatan').removeClass('fa-check').addClass('fa-pencil-alt');
+
+
+
+
+                // Simpan atau kirim nilai baru ke server, misalnya menggunakan AJAX
+                // Contoh: updateData(newValue);
+            });
+
+            // Optional: Menambahkan aksi untuk menekan tombol Enter untuk menyimpan perubahan
+            $inputField.on('keypress', function(e) {
+                if (e.which === 13) { // 13 adalah kode untuk tombol Enter
+                    $inputField.blur();
+                }
+            });
+        });
+
     })
 
     // $(document).on('change', '.select-target-satuan', function() {
@@ -589,7 +640,8 @@
                                 dataID: dataID,
                                 message: $('textarea[name=pesan-revisi-dokumen]').val(),
                                 newStatus: 'hold',
-                                _beritaAcara: dataBeritaAcara
+                                _beritaAcara: dataBeritaAcara,
+                                editPK: "ya"
                             },
                             success: (res) => {
                                 // CheckConnection().then(result => {
@@ -991,6 +1043,8 @@
 
                     $('.title-ttd-pihak1').text(res.dokumen.pihak1_initial)
                     $('.title-ttd-pihak2').text(res.dokumen.pihak2_initial)
+
+
 
                     if ($('input[name=ttd-pihak2-jabatan]').length) {
                         $('input[name=ttd-pihak2-jabatan]').val(res.dokumen.pihak2_initial)
@@ -1507,7 +1561,9 @@
             kotaNama: $('input[name=created-kota-nama]').val(),
             bulan: $('select[name=created-bulan]').val(),
             tanggal: $('select[name=created-day]').val(),
-            tahun: $('select[name=created-tahun]').val()
+            tahun: $('select[name=created-tahun]').val(),
+            ttdPihak1Initial: $('input[name=title-ttd-pihak1]').val(),
+            ttdPihak2Initial: $('input[name=title-ttd-pihak2]').val(),
         }
         if ($('input[name=ttd-pihak2-jabatan]').length) inputValue.ttdPihak2Jabatan = $('input[name=ttd-pihak2-jabatan]').val()
 
@@ -1733,9 +1789,9 @@
                     // }
 
                     if (res.pesan_perbaikan.length != null) {
-                        element_iframePreviewDokumen.css({
-                            'height': '100vh'
-                        })
+                        // element_iframePreviewDokumen.css({
+                        //     'height': '100vh'
+                        // })
                         $('.container-revision-alert-cetak').html(`
                         <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
                             <h5 class="alert-heading">Daftar Pesan Perubahan !</h5>
@@ -1746,7 +1802,7 @@
                     `);
                     } else {
                         element_iframePreviewDokumen.css({
-                            'height': '80vh'
+                            'height': '70vh'
                         })
                         $('.container-revision-alert-cetak').html('')
                     }
@@ -1757,7 +1813,7 @@
 
                     if (_toConfirm) {
                         if (res.dokumen.status != 'setuju' && res.dokumen.status != 'tolak') {
-                            element_modalPreviewCetakDokumen.find('.modal-footer').html(`
+                            element_modalPreviewCetakDokumen.find('.modal-footer').addClass('bg-white').html(`
                                 <div class="p-2">
                                     <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}" data-beritaacara="0">
                                         <i class="fa fa-ban"></i> Tolak
@@ -1794,7 +1850,7 @@
                     if (res.pesan_perbaikan.length > 0) {
                         element_iframePreviewDokumen.css({
                             // 'height': '60vh'
-                            'height': '100vh'
+                            'height': '70vh'
                         })
                         $('.container-revision-alert-cetak').html(`
                         <div class="bg-danger text-white pt-3 pr-3 pb-1 pl-3" role="alert">
@@ -1819,7 +1875,7 @@
 
                     if (_toConfirm) {
                         if (res.dokumen.status_ba != 1 && res.dokumen.status_ba != 2) {
-                            element_modalPreviewCetakDokumenBA.find('.modal-footer').html(`
+                            element_modalPreviewCetakDokumenBA.find('.modal-footer').addClass('bg-white').html(`
                                 <div class="p-2">
                                     <button class="btn btn-sm btn-outline-danger mr-2 __tolak-dokumen" data-id="${_dokumenID}" data-beritaacara="1">
                                         <i class="fa fa-ban"></i> Tolak
@@ -2000,8 +2056,6 @@
             titleTheadTableOutcomeBalai = '',
             colspan = '2'
 
-        console.log(_data);
-
 
 
         if (_target == 'create' && _data.dokumenExistSameYear != null) {
@@ -2082,14 +2136,9 @@
 
             if (_beritaAcara == true) {
 
-                titleTheadTable = ` < td class = "text-center"
-            style = "width: 15%"
-            colspan = "${colspan}" > Target ` + <?php echo $sessionYear ?> + '</td>';
-                title2 = ` < td class = "text-center"
-            style = "width: 15%"
-            colspan = "${colspan}" >
-                Capaian <
-                /td>`
+                titleTheadTable = ` <td class = "text-center" style = "width: 15%" colspan = "${colspan}" > Target ` + <?php echo $sessionYear ?> + '</td>';
+                title2 = ` <td class = "text-center"
+            style = "width: 15%" colspan = "${colspan}" >Capaian </td>`
 
                 // title3 = `<td class="text-center ${classDNoneOutcome}" style="width: 15%" colspan="2">
                 //             Kinerja
@@ -2282,8 +2331,9 @@
                         </div>
                         <div>
                             <small class="title-ttd-pihak1">
-                                ${_data.penandatangan.pihak1}
-                            </small>
+                            ${_data.penandatangan.pihak1} 
+                            </small> <span><i class="fa fa-pencil-alt edit-jabatan" data-typettd="ttd1"></i></span>
+                            <input type="hidden" name="title-ttd-pihak1" id="hidden-title-ttd-pihak1" value="${_data.penandatangan.pihak1}">
                         </div>
                         <input class="form-control" name="ttd-pihak1" placeholder="Masukkan Nama Penanda Tangan" required  onkeyup="this.value = this.value.toUpperCase();" onkeypress="return inputHarusHurufDenganTitik(event)"  />
                         <small style="color: #fc0758; font-weight: bold">
@@ -2828,7 +2878,12 @@
 
     function renderFormTemplate_ttdPihak2(_dataPenandatanganPihak2, _inputDefaultValue) {
         let prefixJabatanPenandatangan = '', //_dataPenandatanganPihak2.includes('KEPALA') ? '' : 'KEPALA',
-            renderJalabatan = `<div><small class="title-ttd-pihak2">${prefixJabatanPenandatangan + ' ' + _dataPenandatanganPihak2}</small></div>`
+            renderJalabatan = `<div><small class="title-ttd-pihak2">${prefixJabatanPenandatangan + ' ' + _dataPenandatanganPihak2}</small> <span><i class="fa fa-pencil-alt edit-jabatan" data-typettd="ttd2"></i></span>
+                            <input type="hidden" name="title-ttd-pihak2" id="hidden-title-ttd-pihak2" value="${prefixJabatanPenandatangan + _dataPenandatanganPihak2}">
+            
+            </div>
+            
+            `
 
         if (_dataPenandatanganPihak2 == '') {
             let smallTitleClass = _inputDefaultValue == '' ? 'class="title-ttd-pihak2"' : ''
