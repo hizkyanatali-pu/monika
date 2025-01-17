@@ -194,7 +194,7 @@
                                                 <p>KEU</p>
                                                 <p><?= isset($keuProgressSda) ? number_format($keuProgressSda, 2, ',', '.') : 0 ?></p>
                                                 <p>Deviasi (%)</p>
-                                                <p><?= $total_deviasi ?></p>
+                                                <p><?= number_format($total_deviasi_keuangan, 2, ',', '.') ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +205,7 @@
                                                 <p>FISIK</p>
                                                 <p><?= isset($fisikProgressSda) ? number_format($fisikProgressSda, 2, ',', '.') : 0 ?></p>
                                                 <p>Deviasi (%)</p>
-                                                <p><?= $total_deviasi ?></p>
+                                                <p><?= number_format($total_deviasi_fisik, 2, ',', '.') ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -615,10 +615,10 @@
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
                                             <td><?= $key+1 ?></td>
                                             <td><?= $value->satker ?></td>
-                                            <td><?= number_format($value->total_progres, 2, ',', '.') ?></td>
-                                            <td><?= number_format($value->total_blokir, 2, ',', '.') ?></td>
-                                            <td><?= number_format($value->total_keu_progres, 2, ',', '.') ?></td>
-                                            <td><?= number_format($value->total_fis_progres, 2, ',', '.') ?></td>
+                                            <td><?= $value->total_progres ?></td>
+                                            <td><?= $value->total_blokir ?></td>
+                                            <td><?= $value->total_keu_progres ?></td>
+                                            <td><?= $value->total_fis_progres ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">

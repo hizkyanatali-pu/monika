@@ -528,11 +528,13 @@ class Dashboard extends \App\Controllers\BaseController
             'fisikProgressSda' => $this->RekapUnorModel->getProgresSda('progres_fisik'),
         ];
         $qdata = $this->PulldataModel->getBalaiPaket('balai', "b.st like 'BBWS' AND md.tahun =" . session('userData.tahun'));
-        $data['total_deviasi'] = 0;
+        $data['total_deviasi_keuangan'] = 0;
+        $data['total_deviasi_fisik'] = 0;
         foreach ($qdata as $qdata_val) {
-            $data['total_deviasi'] += $qdata_val['jml_nilai_deviasi'];
+            $data['total_deviasi_keuangan'] += $qdata_val['jml_persen_deviasi_keuangan'];
+            $data['total_deviasi_fisik'] += $qdata_val['jml_persen_deviasi_fisik'];
         }
-
+        // echo json_encode($data['total_deviasi_keuangan']);die;
 
         $data['pagu_total'] = $this->db_mysql->table("monika_data_{$tahun}")
         ->selectSum('pagu_total', 'total_pagu')
@@ -560,7 +562,7 @@ class Dashboard extends \App\Controllers\BaseController
         ->select("m_satker.satker, SUM(progres_keuangan) AS total_keu_progres, SUM(progres_fisik) AS total_fis_progres, SUM(progres_keuangan + progres_fisik) AS total_progres, SUM(blokir) AS total_blokir")
         ->join('m_satker',"m_satker.satkerid = monika_data_{$tahun}.kdsatker",'left')
         ->where("m_satker.satker is not null")
-        ->groupBy('kdsatker')
+        ->groupBy("kdsatker")
         ->orderBy('total_progres', 'DESC')
         ->limit(10)
         ->get()->getResult();

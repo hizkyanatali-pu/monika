@@ -473,6 +473,12 @@ $currentDayOfMonth = date('j');
 
                                     ?>
                                 <?php endforeach; ?>
+                                <tr>
+                                    <td><?= $total_deviasi ?></td>
+                                    <td><?= $total_deviasi ?></td>
+                                    <td><?= $total_deviasi ?></td>
+                                    <td><?= $total_deviasi ?></td>
+                                </tr>
                                 <tr style="background-color:#ccb3ff; border:2px solid #ccc;">
                                     <td class="text-center">TOTAL</td>
                                     <?= ($title == 'Semua Satker' || $title == 'Progres Per Provinsi' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
