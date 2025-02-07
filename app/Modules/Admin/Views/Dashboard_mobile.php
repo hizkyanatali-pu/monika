@@ -4,32 +4,41 @@
     footer {
         display: none;
     }
-    html { scroll-behavior: smooth; }
-    .card{
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .card {
         border: none;
     }
-    .icon-group{
+
+    .icon-group {
         padding: 0 30px;
         margin-bottom: 30px;
         text-align: center;
         cursor: pointer;
     }
-    .icon-group .icon:hover{
+
+    .icon-group .icon:hover {
         background-color: #5867dd;
         transition: .5s;
     }
-    .icon-group .icon{
+
+    .icon-group .icon {
         background-color: #f3cb3a;
         color: white;
         padding: 20px 27px 25px 27px;
         border-radius: 50%;
         padding-top: 35px;
     }
-    .icon-group p{
-        margin-top: 40px ;
+
+    .icon-group p {
+        margin-top: 40px;
         font-weight: 600;
     }
-    .icon-group2 div{
+
+    .icon-group2 div {
         /* padding: 30px 30px; */
         margin-bottom: 20px;
         background-color: #5867dd;
@@ -38,108 +47,135 @@
         cursor: pointer;
         color: white;
     }
-    .icon-group2 div:hover{
+
+    .icon-group2 div:hover {
         background-color: white;
         border: 1px solid #5867dd;
         color: #5867dd;
         transition: .3s;
     }
-    .icon-group2 div .icon{
+
+    .icon-group2 div .icon {
         padding: 20px;
         border-radius: 50%;
         padding-top: 35px;
     }
-    .icon-group2 div p{
+
+    .icon-group2 div p {
         margin-top: 20px !important;
         font-weight: 600;
-        margin:0;
+        margin: 0;
     }
 
-    .text-ellipsis-2{
+    .text-ellipsis-2 {
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
     }
-    .modal-header{
+
+    .modal-header {
         background-color: #5867dd;
         color: white !important;
         border: 1px solid #5867dd;
     }
-    .modal-header h5{
+
+    .modal-header h5 {
         color: white !important;
     }
-    .modal-header button{
+
+    .modal-header button {
         color: white !important;
     }
-    .card-1{
-        background: url("<?= base_url('images/laporan/9.png'); ?>") ;
+
+    .card-1 {
+        background: url("<?= base_url('images/laporan/9.png'); ?>");
         background-size: 36%;
         background-position: center center;
         background-repeat: no-repeat;
     }
+
     @media (min-width: 1050px) {
-        .tree li .tree-mobile, .tree-mobile{
+
+        .tree li .tree-mobile,
+        .tree-mobile {
             display: none;
         }
-        .w-flexible{
+
+        .w-flexible {
             width: 25%
         }
     }
+
     @media (max-width: 1050px) {
-        .tree li .tree-mobile, .tree-mobile{
+
+        .tree li .tree-mobile,
+        .tree-mobile {
             display: block !important;
         }
-        .tree-desktop{
+
+        .tree-desktop {
             display: none !important;
         }
-        .w-flexible{
+
+        .w-flexible {
             width: 100%
         }
-        .card-1{
+
+        .card-1 {
             background-size: 100%;
         }
     }
 
     /*new*/
-    .btn-progres{
+    .btn-progres {
         display: block;
         cursor: pointer;
     }
-    .btn-lelang{
+
+    .btn-lelang {
         display: block;
         cursor: pointer;
     }
-    .centered-xy{
+
+    .centered-xy {
         height: 90vh;
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 0 20px;
     }
-    .height-100{
+
+    .height-100 {
         height: 100vh;
     }
-    .height-150{
+
+    .height-150 {
         height: 150vh;
     }
-    .height-210{
+
+    .height-210 {
         height: 240vh;
     }
-    .height-120{
+
+    .height-120 {
         height: 120vh;
     }
-    .height-170{
+
+    .height-170 {
         height: 170vh;
     }
-    .height-130{
+
+    .height-130 {
         height: 130vh;
     }
-    .bg-blue{
+
+    .bg-blue {
         background-color: #00b0f0;
     }
-    .bg-yellow{
+
+    .bg-yellow {
         background-color: #ffc000;
     }
 </style>
@@ -254,46 +290,46 @@
                                         </div>
                                         <ul class="tree-desktop">
                                             <?php foreach ($pagu as $key => $value) : ?>
-                                            <li class="" style="width: 33% !important">
-                                                <a href="javascript:;" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card card-body bg-secondary text-white">
-                                                            <h4 class="mb-0"><b><?= $value->title ?></b></h4>
-                                                            <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
-                                                                <h5 class="mb-0">
-                                                                    <?= toMilyar($value->totalPagu, true, 2) ?>
-                                                                </h5>
+                                                <li class="" style="width: 33% !important">
+                                                    <a href="javascript:;" class="w-100">
+                                                        <div class="tree-content">
+                                                            <div class="card card-body bg-secondary text-white">
+                                                                <h4 class="mb-0"><b><?= $value->title ?></b></h4>
+                                                                <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        <?= toMilyar($value->totalPagu, true, 2) ?>
+                                                                    </h5>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </a>
-                                                <div class="border-single-tree-down"></div>
-                                                <a href="javascript:;" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card bg-tree-3  text-white bg-tree-footer card-body shadow">
-                                                            <h4 class="mb-0"><b>Realisasi</b></h4>
-                                                            <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
-                                                                <h5 class="mb-0">
-                                                                    0
-                                                                </h5>
+                                                    </a>
+                                                    <div class="border-single-tree-down"></div>
+                                                    <a href="javascript:;" class="w-100">
+                                                        <div class="tree-content">
+                                                            <div class="card bg-tree-3  text-white bg-tree-footer card-body shadow">
+                                                                <h4 class="mb-0"><b>Realisasi</b></h4>
+                                                                <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        0
+                                                                    </h5>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </a>
-                                                <div class="border-single-tree-down"></div>
-                                                <a href="javascript:;" class="w-100">
-                                                    <div class="tree-content">
-                                                        <div class="card bg-danger  text-white bg-tree-footer card-body shadow">
-                                                            <h4 class="mb-0"><b>Belum Realisasi</b></h4>
-                                                            <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
-                                                                <h5 class="mb-0">
-                                                                    0
-                                                                </h5>
+                                                    </a>
+                                                    <div class="border-single-tree-down"></div>
+                                                    <a href="javascript:;" class="w-100">
+                                                        <div class="tree-content">
+                                                            <div class="card bg-danger  text-white bg-tree-footer card-body shadow">
+                                                                <h4 class="mb-0"><b>Belum Realisasi</b></h4>
+                                                                <div class="card card-body p-1 bg-tree-footer text-dark mt-2">
+                                                                    <h5 class="mb-0">
+                                                                        0
+                                                                    </h5>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </a>
-                                            </li>
+                                                    </a>
+                                                </li>
                                             <?php endforeach ?>
                                         </ul>
                                     </li>
@@ -598,27 +634,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php 
-                                        $sum_total_progres = 0;
-                                        $sum_total_keu_progres = 0;
-                                        $sum_total_fis_progres = 0;
-                                        $sum_total_blokir = 0;
-                                        $count_satker_desc = count($satker_desc);
+                                    <?php
+                                    $sum_total_progres = 0;
+                                    $sum_total_keu_progres = 0;
+                                    $sum_total_fis_progres = 0;
+                                    $sum_total_blokir = 0;
+                                    $count_satker_desc = count($satker_desc);
 
-                                        foreach ($satker_desc as $key => $value): 
+                                    foreach ($satker_desc as $key => $value):
 
-                                        $sum_total_progres += $value->total_progres;
+                                        $sum_total_progres += $value->pagu_total;
                                         $sum_total_blokir += $value->total_blokir;
                                         $sum_total_keu_progres += $value->total_keu_progres;
                                         $sum_total_fis_progres += $value->total_fis_progres;
-                                    ?>  
+                                    ?>
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
-                                            <td><?= $key+1 ?></td>
+                                            <td><?= $key + 1 ?></td>
                                             <td><?= $value->satker ?></td>
-                                            <td><?= $value->total_progres ?></td>
-                                            <td><?= $value->total_blokir ?></td>
-                                            <td><?= $value->total_keu_progres ?></td>
-                                            <td><?= $value->total_fis_progres ?></td>
+                                            <td><?= number_format($value->pagu_total, 0, ',', '.'); ?></td>
+                                            <td><?= number_format($value->total_blokir, 0, ',', '.'); ?></td>
+                                            <td><?= number_format($value->total_keu_progres, 2, ',', '.'); ?></td>
+                                            <td><?= number_format($value->total_fis_progres, 2, ',', '.'); ?></td>
+
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
@@ -626,8 +663,8 @@
                                         <td>Total</td>
                                         <td><?= number_format(($sum_total_progres), 2, ',', '.') ?></td>
                                         <td><?= number_format(($sum_total_blokir), 2, ',', '.') ?></td>
-                                        <td><?= number_format(($sum_total_keu_progres/$count_satker_desc), 2, ',', '.') ?></td>
-                                        <td><?= number_format(($sum_total_fis_progres/$count_satker_desc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_keu_progres / $count_satker_desc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_fis_progres / $count_satker_desc), 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -648,27 +685,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php 
-                                        $sum_total_progres = 0;
-                                        $sum_total_keu_progres = 0;
-                                        $sum_total_fis_progres = 0;
-                                        $sum_total_blokir = 0;
-                                        $count_satker_asc = count($satker_asc);
+                                    <?php
+                                    $sum_total_progres = 0;
+                                    $sum_total_keu_progres = 0;
+                                    $sum_total_fis_progres = 0;
+                                    $sum_total_blokir = 0;
+                                    $count_satker_asc = count($satker_asc);
 
-                                        foreach ($satker_asc as $key => $value): 
+                                    foreach ($satker_asc as $key => $value):
 
-                                        $sum_total_progres += $value->total_progres;
+                                        $sum_total_progres += $value->pagu_total;
                                         $sum_total_blokir += $value->total_blokir;
                                         $sum_total_keu_progres += $value->total_keu_progres;
                                         $sum_total_fis_progres += $value->total_fis_progres;
-                                    ?>  
+                                    ?>
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
-                                            <td><?= $key+1 ?></td>
+                                            <td><?= $key + 1 ?></td>
                                             <td><?= $value->satker ?></td>
-                                            <td><?= number_format($value->total_progres, 2, ',', '.') ?></td>
-                                            <td><?= number_format($value->total_blokir, 2, ',', '.') ?></td>
-                                            <td><?= number_format($value->total_keu_progres, 2, ',', '.') ?></td>
-                                            <td><?= number_format($value->total_fis_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->pagu_total, 0, ',', '.'); ?></td>
+                                            <td><?= number_format($value->total_blokir, 0, ',', '.'); ?></td>
+                                            <td><?= number_format($value->total_keu_progres, 2, ',', '.'); ?></td>
+                                            <td><?= number_format($value->total_fis_progres, 2, ',', '.'); ?></td>
+
                                         </tr>
                                     <?php endforeach ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
@@ -676,8 +714,8 @@
                                         <td>Total</td>
                                         <td><?= number_format(($sum_total_progres), 2, ',', '.') ?></td>
                                         <td><?= number_format(($sum_total_blokir), 2, ',', '.') ?></td>
-                                        <td><?= number_format(($sum_total_keu_progres/$count_satker_asc), 2, ',', '.') ?></td>
-                                        <td><?= number_format(($sum_total_fis_progres/$count_satker_asc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_keu_progres / $count_satker_asc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_fis_progres / $count_satker_asc), 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -698,24 +736,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php 
-                                        $sum_total_progres = 0;
-                                        $sum_total_keu_progres = 0;
-                                        $sum_total_fis_progres = 0;
-                                        $sum_total_blokir = 0;
-                                        $count_balai_desc = count($balai_desc);
+                                    <?php
+                                    $sum_total_progres = 0;
+                                    $sum_total_keu_progres = 0;
+                                    $sum_total_fis_progres = 0;
+                                    $sum_total_blokir = 0;
+                                    $count_balai_desc = count($balai_desc);
 
-                                        foreach ($balai_desc as $key => $value): 
+                                    foreach ($balai_desc as $key => $value):
 
-                                        $sum_total_progres += $value->total_progres;
+                                        $sum_total_progres += $value->pagu_total;
                                         $sum_total_blokir += $value->total_blokir;
                                         $sum_total_keu_progres += $value->total_keu_progres;
                                         $sum_total_fis_progres += $value->total_fis_progres;
-                                    ?>  
+                                    ?>
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
-                                            <td><?= $key+1 ?></td>
+                                            <td><?= $key + 1 ?></td>
                                             <td><?= $value->balai ?></td>
-                                            <td><?= number_format($value->total_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->pagu_total, 2, ',', '.') ?></td>
                                             <td><?= number_format($value->total_blokir, 2, ',', '.') ?></td>
                                             <td><?= number_format($value->total_keu_progres, 2, ',', '.') ?></td>
                                             <td><?= number_format($value->total_fis_progres, 2, ',', '.') ?></td>
@@ -726,8 +764,8 @@
                                         <td>Total</td>
                                         <td><?= number_format(($sum_total_progres), 2, ',', '.') ?></td>
                                         <td><?= number_format(($sum_total_blokir), 2, ',', '.') ?></td>
-                                        <td><?= number_format(($sum_total_keu_progres/$count_balai_desc), 2, ',', '.') ?></td>
-                                        <td><?= number_format(($sum_total_fis_progres/$count_balai_desc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_keu_progres / $count_balai_desc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_fis_progres / $count_balai_desc), 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -748,24 +786,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php 
-                                        $sum_total_progres = 0;
-                                        $sum_total_keu_progres = 0;
-                                        $sum_total_fis_progres = 0;
-                                        $sum_total_blokir = 0;
-                                        $count_balai_asc = count($balai_asc);
+                                    <?php
+                                    $sum_total_progres = 0;
+                                    $sum_total_keu_progres = 0;
+                                    $sum_total_fis_progres = 0;
+                                    $sum_total_blokir = 0;
+                                    $count_balai_asc = count($balai_asc);
 
-                                        foreach ($balai_asc as $key => $value): 
+                                    foreach ($balai_asc as $key => $value):
 
-                                        $sum_total_progres += $value->total_progres;
+                                        $sum_total_progres += $value->pagu_total;
                                         $sum_total_blokir += $value->total_blokir;
                                         $sum_total_keu_progres += $value->total_keu_progres;
                                         $sum_total_fis_progres += $value->total_fis_progres;
-                                    ?>  
+                                    ?>
                                         <tr class="text-center text-white" style="background-color: #1562aa;">
-                                            <td><?= $key+1 ?></td>
+                                            <td><?= $key + 1 ?></td>
                                             <td><?= $value->balai ?></td>
-                                            <td><?= number_format($value->total_progres, 2, ',', '.') ?></td>
+                                            <td><?= number_format($value->pagu_total, 2, ',', '.') ?></td>
                                             <td><?= number_format($value->total_blokir, 2, ',', '.') ?></td>
                                             <td><?= number_format($value->total_keu_progres, 2, ',', '.') ?></td>
                                             <td><?= number_format($value->total_fis_progres, 2, ',', '.') ?></td>
@@ -776,8 +814,8 @@
                                         <td>Total</td>
                                         <td><?= number_format(($sum_total_progres), 2, ',', '.') ?></td>
                                         <td><?= number_format(($sum_total_blokir), 2, ',', '.') ?></td>
-                                        <td><?= number_format(($sum_total_keu_progres/$count_balai_asc), 2, ',', '.') ?></td>
-                                        <td><?= number_format(($sum_total_fis_progres/$count_balai_asc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_keu_progres / $count_balai_asc), 2, ',', '.') ?></td>
+                                        <td><?= number_format(($sum_total_fis_progres / $count_balai_asc), 2, ',', '.') ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -952,7 +990,7 @@
                                                 <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        <?= toMilyar($pagu_all->total_rpm-$pagu_all->total_real_rpm, true, 2); ?>
+                                                        <?= toMilyar($pagu_all->total_rpm - $pagu_all->total_real_rpm, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -1011,7 +1049,7 @@
                                                 <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        <?= toMilyar($pagu_all->total_sbsn-$pagu_all->total_real_sbsn, true, 2); ?>
+                                                        <?= toMilyar($pagu_all->total_sbsn - $pagu_all->total_real_sbsn, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -1057,7 +1095,7 @@
                                             <div class="card card-body bg-tree-2">
                                                 <h4 class="mb-0"><b> REALISASI </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
-                                                    <h5 class="mb-0">                                                        
+                                                    <h5 class="mb-0">
                                                         <?= toMilyar($pagu_all->total_real_phln, true, 2); ?>
                                                     </h5>
                                                 </div>
@@ -1070,7 +1108,7 @@
                                                 <h4 class="mb-0"><b> BELUM REALISASI </b></h4>
                                                 <div class="card card-body p-1 bg-tree-footer bg-secondary text-dark mt-2">
                                                     <h5 class="mb-0">
-                                                        <?= toMilyar($pagu_all->total_phln-$pagu_all->total_real_phln, true, 2); ?>
+                                                        <?= toMilyar($pagu_all->total_phln - $pagu_all->total_real_phln, true, 2); ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -1095,30 +1133,30 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="text-white text-center" style="background-color: #1562aa;">
-                                <tr>
-                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">NO</th>
-                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keg</th>
-                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Pagu</th>
-                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Blok</th>
-                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Real</th>
-                                    <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Sisa</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($kegiatan as $key => $value): ?>
-                                <tr class="text-center text-white" style="background-color: #1562aa;">
-                                    <td><?= $key+1 ?></td>
-                                    <td><?= $value->nmgiat ?></td>
-                                    <td><?= toMilyar($value->total_pagu, false, 2) ?></td>
-                                    <td><?= toMilyar($value->total_blokir, false, 2) ?></td>
-                                    <td><?= toMilyar($value->total_real, false, 2) ?></td>
-                                    <td><?= toMilyar($value->total_pagu - $value->total_real, false, 2) ?></td>
-                                </tr>
-                                <?php endforeach ?>
-                            </tbody>
-                        </table>
+                            <table class="table table-bordered">
+                                <thead class="text-white text-center" style="background-color: #1562aa;">
+                                    <tr>
+                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">NO</th>
+                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Keg</th>
+                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Pagu</th>
+                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Blok</th>
+                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Real</th>
+                                        <th style="padding: 0px 4px 0px 4px !important; font-size: 12px">Sisa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($kegiatan as $key => $value): ?>
+                                        <tr class="text-center text-white" style="background-color: #1562aa;">
+                                            <td><?= $key + 1 ?></td>
+                                            <td><?= $value->nmgiat ?></td>
+                                            <td><?= toMilyar($value->total_pagu, false, 2) ?></td>
+                                            <td><?= toMilyar($value->total_blokir, false, 2) ?></td>
+                                            <td><?= toMilyar($value->total_real, false, 2) ?></td>
+                                            <td><?= toMilyar($value->total_pagu - $value->total_real, false, 2) ?></td>
+                                        </tr>
+                                    <?php endforeach ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1583,21 +1621,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php  
-                                    $value_total_pagu = 0;
-                                    $value_total_real = 0;
-                                    foreach ($kegiatan_syc as $key => $value): 
+                                <?php
+                                $value_total_pagu = 0;
+                                $value_total_real = 0;
+                                foreach ($kegiatan_syc as $key => $value):
                                 ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
-                                        <td><?= $key+1 ?></td>
+                                        <td><?= $key + 1 ?></td>
                                         <td><?= $value->nmgiat ?></td>
                                         <td><?= toMilyar($value->total_pagu, false, 2) ?></td>
                                         <td><?= toMilyar($value->total_real, false, 2) ?></td>
                                     </tr>
-                                <?php  
+                                <?php
                                     $value_total_pagu += $value->total_pagu;
                                     $value_total_real += $value->total_real;
-                                    endforeach ;
+                                endforeach;
                                 ?>
                                 <tr class="text-center text-white" style="background-color: #1562aa;">
                                     <td>11</td>
@@ -1632,21 +1670,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php  
-                                    $value_total_pagu = 0;
-                                    $value_total_real = 0;
-                                    foreach ($kegiatan_myc as $key => $value): 
+                                <?php
+                                $value_total_pagu = 0;
+                                $value_total_real = 0;
+                                foreach ($kegiatan_myc as $key => $value):
                                 ?>
                                     <tr class="text-center text-white" style="background-color: #1562aa;">
-                                        <td><?= $key+1 ?></td>
+                                        <td><?= $key + 1 ?></td>
                                         <td><?= $value->nmgiat ?></td>
                                         <td><?= toMilyar($value->total_pagu, false, 2) ?></td>
                                         <td><?= toMilyar($value->total_real, false, 2) ?></td>
                                     </tr>
-                                <?php  
+                                <?php
                                     $value_total_pagu += $value->total_pagu;
                                     $value_total_real += $value->total_real;
-                                    endforeach ;
+                                endforeach;
                                 ?>
                                 <tr class="text-center text-white" style="background-color: #1562aa;">
                                     <td>11</td>
@@ -1959,22 +1997,22 @@
         actionFilterMenu()
     })
 
-    $(".button-rpmModal").click(function(e){
+    $(".button-rpmModal").click(function(e) {
         e.preventDefault()
         $("#RPMModal").modal('show')
     })
-    $(".button-sbsnModal").click(function(e){
+    $(".button-sbsnModal").click(function(e) {
         e.preventDefault()
         $("#SBSNModal").modal('show')
     })
-    $(".button-plnModal").click(function(e){
+    $(".button-plnModal").click(function(e) {
         e.preventDefault()
         $("#PLNModal").modal('show')
     })
 
     $('input:checkbox[name=filter-menu-all]').change(function() {
         let checked = true
-        if (! this.checked) checked = false
+        if (!this.checked) checked = false
         $('input:checkbox[name=filter-menu]').prop('checked', checked)
     })
 
@@ -1990,12 +2028,11 @@
         tempSave = []
 
         $('input:checkbox[name=filter-menu]').each((index, element) => {
-            let menuElement = $('#'+$(element).val())
-            
-            if($(element).is(':checked')) {
+            let menuElement = $('#' + $(element).val())
+
+            if ($(element).is(':checked')) {
                 menuElement.removeClass('d-none')
-            }
-            else {
+            } else {
                 menuElement.addClass('d-none')
 
                 if ($(element).data('always-show') != '1') {
@@ -2014,8 +2051,8 @@
 
     function checkDefaultFilterMenu() {
         JSON.parse(localStorage.getItem("filter-menu-dashboard")).forEach((data, index) => {
-            let checkElement = $('input:checkbox[name=filter-menu][value='+data.value+']')
-            
+            let checkElement = $('input:checkbox[name=filter-menu][value=' + data.value + ']')
+
             if (checkElement.data('always-show') != '1') checkElement.removeAttr('checked')
         })
     }
