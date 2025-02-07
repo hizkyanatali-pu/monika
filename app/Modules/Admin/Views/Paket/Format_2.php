@@ -413,7 +413,10 @@ $currentDayOfMonth = date('j');
                                 $total_real_sbsn = 0;
                                 $total_real_phln = 0;
                                 $total_real_total = 0;
+                                $total_deviasi_persen = 0;
                                 $total_deviasi = 0;
+
+                                $jumlah_data = 0;
 
                                 ?>
                                 <?php
@@ -457,6 +460,7 @@ $currentDayOfMonth = date('j');
                                         </td>
                                     </tr>
                                     <?php
+                                    $jumlah_data++;
                                     $total_paket += $data['jml_paket'];
                                     $total_pagu_rpm += $data['jml_pagu_rpm'];
                                     $total_pagu_sbsn += $data['jml_pagu_sbsn'];
@@ -468,11 +472,25 @@ $currentDayOfMonth = date('j');
                                     $total_real_phln += $data['jml_real_phln'];
                                     $total_real_total += $data['jml_real_total'];
 
+                                    $total_deviasi_persen += $data['jml_persen_deviasi'];
                                     $total_deviasi += $data['jml_nilai_deviasi'];
-
 
                                     ?>
                                 <?php endforeach; ?>
+
+                                <?php if ($jumlah_data > 0) {
+                                    $rata_rata_deviasi = $total_deviasi_persen / $jumlah_data;
+                                } else {
+                                    $rata_rata_deviasi = 0;
+                                }; ?>
+
+
+                                <!-- <tr>
+                                    <td><?= $total_deviasi ?></td>
+                                    <td><?= $total_deviasi ?></td>
+                                    <td><?= $total_deviasi ?></td>
+                                    <td><?= $total_deviasi ?></td>
+                                </tr> -->
                                 <tr style="background-color:#ccb3ff; border:2px solid #ccc;">
                                     <td class="text-center">TOTAL</td>
                                     <?= ($title == 'Semua Satker' || $title == 'Progres Per Provinsi' ?    '<th class="satker_">&nbsp;</th>' : '') ?>
@@ -488,6 +506,10 @@ $currentDayOfMonth = date('j');
                                         <td class="tdNilai text-right col-pagu_sbsn"><?php echo number_format($total_real_sbsn / 1000, 0, ',', '.'); ?></td>
                                         <td class="tdNilai text-right col-pagu_phln"><?php echo number_format($total_real_phln / 1000, 0, ',', '.'); ?></td>
                                         <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><?= number_format($rata_rata_deviasi, 2, ',', '.'); ?></td>
+                                        <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_deviasi, 0, ',', '.'); ?></td>
                                     <?php  } else {  ?>
 
                                         <td class="tdNilai text-right col-pagu_realisasi"><?php echo number_format($total_real_total / 1000, 0, ',', '.'); ?></td>
@@ -496,7 +518,7 @@ $currentDayOfMonth = date('j');
 
 
 
-                                    <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td>
+                                    <!-- <td colspan="4" class="tdPersen text-right last-col">&nbsp;</td> -->
                                 </tr>
                             <?php endif; ?>
                         </tbody>

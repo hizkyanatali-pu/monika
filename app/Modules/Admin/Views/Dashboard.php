@@ -4,7 +4,8 @@
     footer {
         display: none;
     }
-    .block_all{
+
+    .block_all {
         position: fixed;
         top: 0;
         left: 0;
@@ -102,29 +103,27 @@
         <div class="kt-subheader__main d-flex justify-content-between w-100">
             <div>
                 <h3 class="kt-subheader__title">
-                    Dashboard 
+                    Dashboard
                 </h3>
                 <span class="kt-subheader__separator kt-hidden"></span>
             </div>
             <div class="d-flex">
                 <form action="<?php echo site_url('dashboard') ?>" method="GET">
                     <div class="input-group mr-3">
-                        <input 
-                            type="date" 
+                        <input
+                            type="date"
                             class="form-control"
                             name="filter-date-start"
-                            value="<?php echo date('Y-01-01') ?>"
-                        >
+                            value="<?php echo date('Y-01-01') ?>">
                         <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon2">Sampai</span>
                         </div>
                         <div class="input-group-append">
-                            <input 
-                                type="date" 
+                            <input
+                                type="date"
                                 class="form-control"
                                 name="filter-date-end"
-                                value="<?php echo date('Y-m-d') ?>"
-                            >
+                                value="<?php echo date('Y-m-d') ?>">
                         </div>
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary" id="__terapkan-filter">
@@ -419,7 +418,7 @@
                         </div>
 
                         <!-- <div class="table-responsive tableFixHead"> -->
-                        
+
                         <?php $colspan = 8; ?>
                         <div class="table-responsive">
                             <table class="table-bordered mb-0 table-striped" id="tabletematik" width="100%">
@@ -439,10 +438,10 @@
                                         <th style="padding: 0px 4px 0px 4px !important;" class="progres_keu progres" style="width: 6%;">Rp</th>
                                         <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres" style="width: 6%;">%</th>
                                         <th style="padding: 0px 4px 0px 4px !important;" class="progres_fis progres" style="width: 6%;">%</th>
-    
+
                                     </tr>
                                 </thead>
-    
+
                                 <tbody id="tbody-utama">
                                     <?php
                                     $no = 1;
@@ -466,7 +465,7 @@
                                                 <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_keu) ?> %</td>
                                                 <td style="padding: 0px 4px 0px 4px !important;" class="text-right"><?php echo onlyTwoDecimal($value2->prog_fis) ?> %</td>
                                                 <td style="padding: 0px 4px 0px 4px !important;" class="col-sm-10"><?php echo $value2->ket ?></td>
-    
+
                                                 <!--<td><?php echo  "- " . str_replace("||", "<br> - ", str_replace(", ", ",", $value2->ket))  ?></td>-->
                                             </tr>
                                         <?php endforeach ?>
@@ -650,12 +649,12 @@
             <!--begin::Section-->
             <div class="kt-section  pb-4 pt-3">
 
-                <div class="kt-section__content" style="overflow-x: auto; width: ">
+                <div class="kt-section__content" style="overflow-x: auto;">
                     <!-- <div class="text-center mt-4">
                         <h4 class="text-dark"><b><?= $title; ?></b></h4>
                         <hr class="w-75 mb-0">
                     </div> -->
-                    
+
                     <div class="" style="width: 1400px; margin: 0px auto">
                         <div class="tree ml--105 pr-4">
                             <ul>
@@ -675,7 +674,7 @@
                                         </div>
                                     </a>
                                     <ul>
-    
+
                                         <li class="" style="width: 50% !important">
                                             <a href="#" class="w-50">
                                                 <div class="tree-content">
@@ -711,10 +710,10 @@
                                                             <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($rpmSycList as $key => $daftarsyc) { ?>
-    
+
                                                                     <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
-    
-    
+
+
                                                                 <?php } ?>
                                                             </div>
                                                         </div>
@@ -740,10 +739,10 @@
                                                             <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
                                                                 <h6>Antara Lain :</h6>
                                                                 <?php foreach ($rpmMycList as $key => $daftarsyc) { ?>
-    
+
                                                                     <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
-    
-    
+
+
                                                                 <?php } ?>
                                                             </div>
                                                         </div>
@@ -800,18 +799,18 @@
                                                     <div class="card bg-secondary text-dark bg-tree-footer card-body shadow text-left">
                                                         <h6>Antara Lain :</h6>
                                                         <?php foreach ($phlnMycList as $key => $daftarsyc) { ?>
-    
+
                                                             <p><?= ++$key . ". " . $daftarsyc['nmpaket'] ?></p>
-    
-    
+
+
                                                         <?php } ?>
                                                     </div>
                                                 </div>
                                             </a>
                                         </li>
-    
-    
-    
+
+
+
                                     </ul>
                                 </li>
                             </ul>
@@ -1308,13 +1307,13 @@
                                     <th style="padding: 0px 4px 0px 4px !important" style="text-align: center;">Kegiatan</th>
                                     <th style="padding: 0px 4px 0px 4px !important">Keuangan %</th>
                                     <th style="padding: 0px 4px 0px 4px !important">Fisik %</th>
-    
+
                                 </tr>
                             </thead>
                             <tbody>
-    
+
                                 <?php foreach ($perkegiatan as $key => $value) {
-    
+
                                     if ($value->kdgiat != '-') {
                                 ?>
                                         <tr>
@@ -1323,13 +1322,13 @@
                                             <td style="padding: 0px 4px 0px 4px !important"> <?= $value->nmgiat; ?></td>
                                             <td style="padding: 0px 4px 0px 4px !important"> <?= onlyTwoDecimal($value->keu); ?></td>
                                             <td style="padding: 0px 4px 0px 4px !important"> <?= onlyTwoDecimal($value->fis); ?></td>
-    
+
                                         </tr>
-    
+
                                 <?php  }
                                 } ?>
-    
-    
+
+
                             </tbody>
                         </table>
                     </div>
@@ -1345,8 +1344,8 @@
     <!-- END PROGRES  PROGRES KEUANGAN & FISIK PER KEGIATAN-->
 
     <?php
-        foreach ($qdata as $key1 => $progfis) { 
-        $elementId = $key1 == "Semua Satker" ? 'progres_10_satuan_kerja_terendah' : 'progres_keuangan_fisik_'.str_replace(' ', '_',  strtolower($key1));
+    foreach ($qdata as $key1 => $progfis) {
+        $elementId = $key1 == "Semua Satker" ? 'progres_10_satuan_kerja_terendah' : 'progres_keuangan_fisik_' . str_replace(' ', '_',  strtolower($key1));
     ?>
         <!-- PROGRESS KEU & FISIK BBWS -->
 
@@ -1541,7 +1540,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="modalFilterMenuLabel">Filter Menu</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -1553,16 +1552,15 @@
                 </div>
                 <?php foreach ($filterMenu as $keyFilterMenu => $dataFilterMenu) : ?>
                     <div class="form-check mt-2">
-                        <input 
-                            name="filter-menu" 
-                            class="form-check-input" 
-                            type="checkbox" 
-                            value="<?php echo $dataFilterMenu['menuId'] ?>" 
-                            data-label="<?php echo $dataFilterMenu['title'] ?>" 
+                        <input
+                            name="filter-menu"
+                            class="form-check-input"
+                            type="checkbox"
+                            value="<?php echo $dataFilterMenu['menuId'] ?>"
+                            data-label="<?php echo $dataFilterMenu['title'] ?>"
                             id="filter_<?php echo $dataFilterMenu['menuId'] ?>"
                             data-always-show="<?php echo $dataFilterMenu['alwaysShow'] ?>"
-                            checked
-                        >
+                            checked>
                         <label class="form-check-label" for="filter_<?php echo $dataFilterMenu['menuId'] ?>">
                             <?php echo $dataFilterMenu['title'] ?>
                         </label>
@@ -1602,11 +1600,10 @@
 
 
 <script>
-
-    if(( window.innerWidth <= 900 ) || ( window.innerHeight <= 700 )){
+    if ((window.innerWidth <= 900) || (window.innerHeight <= 700)) {
         window.location.href = window.location.origin + '/dashboard_mobile'
-    }else{
-        $(".block_all").css("display","none")
+    } else {
+        $(".block_all").css("display", "none")
     }
     $(document).ready(function() {
         checkDefaultFilterMenu()
@@ -1617,7 +1614,7 @@
 
     $('input:checkbox[name=filter-menu-all]').change(function() {
         let checked = true
-        if (! this.checked) checked = false
+        if (!this.checked) checked = false
         $('input:checkbox[name=filter-menu]').prop('checked', checked)
     })
 
@@ -1633,12 +1630,11 @@
         tempSave = []
 
         $('input:checkbox[name=filter-menu]').each((index, element) => {
-            let menuElement = $('#'+$(element).val())
-            
-            if($(element).is(':checked')) {
+            let menuElement = $('#' + $(element).val())
+
+            if ($(element).is(':checked')) {
                 menuElement.removeClass('d-none')
-            }
-            else {
+            } else {
                 menuElement.addClass('d-none')
 
                 if ($(element).data('always-show') != '1') {
@@ -1657,8 +1653,8 @@
 
     function checkDefaultFilterMenu() {
         JSON.parse(localStorage.getItem("filter-menu-dashboard")).forEach((data, index) => {
-            let checkElement = $('input:checkbox[name=filter-menu][value='+data.value+']')
-            
+            let checkElement = $('input:checkbox[name=filter-menu][value=' + data.value + ']')
+
             if (checkElement.data('always-show') != '1') checkElement.removeAttr('checked')
         })
     }
