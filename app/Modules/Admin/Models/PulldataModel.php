@@ -223,8 +223,8 @@ class PulldataModel extends Model
         ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100)  as jml_progres_fisik,
         
         (((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100)-((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100))  as jml_persen_deviasi,
-        ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) as jml_persen_deviasi_keuangan,
-        ((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) as jml_persen_deviasi_fisik,
+        100 - ((sum((md.pagu_total/100*md.progres_keuangan))/sum(md.pagu_total))*100) as jml_persen_deviasi_keuangan,
+        100 -((sum((md.pagu_total/100*md.progres_fisik))/sum(md.pagu_total))*100) as jml_persen_deviasi_fisik,
         
         /*
         CONCAT(
