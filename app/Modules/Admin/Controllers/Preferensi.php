@@ -218,7 +218,8 @@ class Preferensi extends \App\Controllers\BaseController
                 'nmfile' => $nmFile,
                 'sizefile' => $dataBerkas->getSize(),
                 'in_dt' => date("ymdHis"),
-                'in_uid' => $this->user['uid']
+                'in_uid' => $this->user['uid'],
+                'tahun' => $this->user['tahun']
             ];
 
             $q = $this->ImportdataSqliteModel->save($post);
@@ -251,6 +252,7 @@ class Preferensi extends \App\Controllers\BaseController
 
         $table = $this->db1->table('monika_pull_sqlite');
         $table->set('status_aktif', '0');
+        $table->where('tahun', session("userData.tahun"));
         $table->update();
 
         $table->set('status_aktif', '1');
@@ -390,7 +392,9 @@ class Preferensi extends \App\Controllers\BaseController
                 'sizefile' =>  $_FILES["file"]["size"] ?? '',
                 'in_dt' => date("ymdHis"),
                 'in_uid' => $this->user['uid'],
-                'nmfileoriginal' => $_REQUEST['name'] ?? ''
+                'nmfileoriginal' => $_REQUEST['name'] ?? '',
+                'tahun' => $this->user['tahun']
+
             ];
             $q = $this->ImportdataSqliteModel->save($post);
         }
@@ -403,7 +407,8 @@ class Preferensi extends \App\Controllers\BaseController
     public function DTlistdb()
     {
 
-        $customers =  $this->db1->table('monika_pull_sqlite')->select("in_dt,sizefile,nmfile,status_aktif,TIME(in_dt) as waktu,idpull");
+        $customers =  $this->db1->table('monika_pull_sqlite')->select("in_dt,sizefile,nmfile,status_aktif,TIME(in_dt) as waktu,idpull")
+            ->where("tahun", session("userData.tahun"));
 
         return DataTable::of($customers)->addNumbering('no')
             ->add('waktu', function ($row) {
@@ -518,6 +523,8 @@ class Preferensi extends \App\Controllers\BaseController
                     'sizefile' => filesize($l),
                     'in_dt' => date("ymdHis"),
                     'in_uid' => "server",
+                    'tahun' => $this->user['tahun'],
+
                     'type' => $tabel
                 ];
 
