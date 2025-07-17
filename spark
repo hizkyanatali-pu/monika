@@ -1,61 +1,44 @@
 #!/usr/bin/env php
 <?php
 
-/*
- * --------------------------------------------------------------------
- * CodeIgniter command-line tools
- * --------------------------------------------------------------------
- * The main entry point into the CLI system and allows you to run
- * commands and perform maintenance on your application.
- *
- * Because CodeIgniter can handle CLI requests as just another web request
- * this class mainly acts as a passthru to the framework itself.
- */
-
 define('SPARKED', true);
 
-/*
- *---------------------------------------------------------------
- * BOOTSTRAP THE APPLICATION
- *---------------------------------------------------------------
- * This process sets up the path constants, loads and registers
- * our autoloader, along with Composer's, loads our constants
- * and fires up an environment-specific bootstrapping.
- */
+ini_set('memory_limit', '1024M');
 
-// Refuse to run when called from php-cgi
-if (substr(php_sapi_name(), 0, 3) === 'cgi')
-{
-	die("The cli tool is not supported when running php-cgi. It needs php-cli to function!\n\n");
+if (PHP_SAPI !== 'cli') {
+    exit("This script can only be run from the command line.\n");
 }
 
-// Path to the front controller
-define('FCPATH', __DIR__ . '/public' . DIRECTORY_SEPARATOR);
+// Path constants
+define('APPPATH', realpath(__DIR__ . '/app') . DIRECTORY_SEPARATOR);
+define('ROOTPATH', realpath(__DIR__) . DIRECTORY_SEPARATOR);
+define('SYSTEMPATH', realpath(__DIR__ . '/vendor/codeigniter4/framework/system') . DIRECTORY_SEPARATOR);
+define('WRITEPATH', realpath(__DIR__ . '/writable') . DIRECTORY_SEPARATOR);
+define('FCPATH', realpath(__DIR__ . '/public') . DIRECTORY_SEPARATOR);
+define('CI_DEBUG', 1);
 
-// Load our paths config file
-require 'app/Config/Paths.php';
-// ^^^ Change this line if you move your application folder
+// Composer autoload
+require_once ROOTPATH . 'vendor/autoload.php';
 
-$paths = new Config\Paths();
+// Manual include config so class_exists() works
+require_once APPPATH . 'Config/Autoload.php';
+require_once APPPATH . 'Config/Modules.php';
 
-// Ensure the current directory is pointing to the front controller's directory
-chdir(FCPATH);
+// Load CI core
+require_once SYSTEMPATH . 'Config/AutoloadConfig.php';
+require_once SYSTEMPATH . 'Autoloader/Autoloader.php';
 
-$app = require rtrim($paths->systemDirectory, '/ ') . '/bootstrap.php';
+// Register CI Autoloader
+$loader = new CodeIgniter\Autoloader\Autoloader();
+$loader->initialize(new \Config\Autoload(), new \Config\Modules());
+$loader->register();
 
-// Grab our Console
-$console = new \CodeIgniter\CLI\Console($app);
+// ✅ Now Config\Services will work
+require_once SYSTEMPATH . 'Config/Services.php';
+require_once SYSTEMPATH . 'CodeIgniter.php';
 
-// We want errors to be shown when using it from the CLI.
-error_reporting(-1);
-ini_set('display_errors', 1);
+$app = \Config\Services::codeigniter();
+$app->initialize();
 
-// Show basic information before we do anything else.
-$console->showHeader();
-
-// fire off the command in the main framework.
-$response = $console->run();
-if ($response->getStatusCode() >= 300)
-{
-	exit($response->getStatusCode());
-}
+$code = $app->run();
+exit($code);
