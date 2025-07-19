@@ -1,0 +1,317 @@
+<?php
+$title = $title ?? '';
+?>
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>PU SDA-Monika - <?= $title; ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--begin::Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700">
+    <!--end::Fonts -->
+    <?php echo link_tag('plugins/flaticon/flaticon.css'); ?>
+
+    <?php echo link_tag('plugins/flaticon2/flaticon.css'); ?>
+
+    <?php echo link_tag('plugins/line-awesome/css/line-awesome.css'); ?>
+
+    <?php echo link_tag('plugins/@fortawesome/fontawesome-free/css/all.min.css'); ?>
+
+    <?php echo link_tag('plugins/perfect-scrollbar/css/perfect-scrollbar.css'); ?>
+
+    <?php echo link_tag('plugins/sweetalert2/dist/sweetalert2.css'); ?>
+
+    <?php echo link_tag('css/style.bundle.min.css?_=' . uniqid()); ?>
+
+    <?php echo link_tag('css/styles.css?_=' . uniqid()); ?>
+
+    <?php echo link_tag('https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css'); ?>
+
+    <?php echo link_tag('https://cdn.datatables.net/scroller/2.0.5/css/scroller.dataTables.min.css'); ?>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+
+    <!-- Tree -->
+    <?php echo link_tag('css/tree.css'); ?>
+
+    <!--begin::Layout Skins(used by all pages) -->
+
+    <?php echo link_tag('css/skins/header/base/light.css'); ?>
+
+    <?php echo link_tag('css/skins/header/menu/light.css'); ?>
+
+    <?php echo link_tag('css/skins/brand/light.css'); ?>
+
+    <?php echo link_tag('css/skins/aside/light.css'); ?>
+
+    <?php echo link_tag('css/custom.css?9888'); ?>
+    <!--end::Layout Skins -->
+
+</head>
+
+<body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-aside--minimize">
+    <!-- <body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading"> -->
+    <!-- begin:: Header Mobile -->
+    <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
+        <div class="kt-header-mobile__logo">
+            <a href="<?= site_url('pulldata/ditjensda'); ?>">
+                <img alt="Logo" src="<?= base_url('images/pu.png'); ?>" />
+            </a>
+        </div>
+        <div class="kt-header-mobile__toolbar">
+            <button class="kt-header-mobile__toggler kt-header-mobile__toggler--left" id="kt_aside_mobile_toggler"><span></span></button>
+            <!-- <button class="kt-header-mobile__toggler" id="kt_header_mobile_toggler"><span></span></button> -->
+            <button class="kt-header-mobile__topbar-toggler" id="kt_header_mobile_topbar_toggler"><i class="flaticon-more"></i></button>
+        </div>
+    </div>
+
+    <!-- end:: Header Mobile -->
+    <div class="kt-grid kt-grid--hor kt-grid--root">
+        <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+
+            <!-- begin:: Aside -->
+            <div class="kt-aside  kt-aside--fixed  kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop" id="kt_aside">
+                <?php
+                $session = session();
+
+                if (strpos($session->get('userData')['uid'], 'admin') !== false) echo $this->include('admin/partials/sidebar');
+
+                if (strtolower($session->get('userData')['user_type']) == 'satker') {
+                    if ($session->get('userData')['satker_grup_jabatan'] == 'eselon1') {
+                        echo $this->include('admin/partials/sidebarEselon1');
+                    } else {
+                        echo $this->include('admin/partials/sidebarSatker');
+                    }
+                }
+
+                if (strtolower($session->get('userData')['user_type']) == 'balai') echo $this->include('admin/partials/sidebarBalai');
+                ?>
+            </div>
+            <!-- end:: Aside -->
+
+            <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+                <!-- begin:: Header -->
+                <div id="kt_header" class="kt-header kt-grid__item  kt-header--fixed ">
+                    <?php echo $this->include('admin/partials/header') ?>
+                </div>
+                <!-- end:: Header -->
+
+                <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+                    <?php echo $this->renderSection('content') ?>
+                </div>
+
+                <!-- begin:: Footer -->
+                <div class="kt-footer  kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop p-0" id="kt_footer">
+                    <?php echo $this->include('admin/partials/footer') ?>
+                </div>
+                <!-- end:: Footer -->
+            </div>
+        </div>
+    </div>
+    <!-- begin::Scrolltop -->
+    <div id="kt_scrolltop" class="kt-scrolltop">
+        <i class="fa fa-arrow-up"></i>
+    </div>
+
+    <!-- end::Scrolltop -->
+    <script>
+        var KTAppOptions = {
+            "colors": {
+                "state": {
+                    "brand": "#ffb822",
+                    "dark": "#282a3c",
+                    "light": "#ffffff",
+                    "primary": "#ffb822",
+                    "success": "#34bfa3",
+                    "info": "#36a3f7",
+                    "warning": "#ffb822",
+                    "danger": "#fd3995"
+                },
+                "base": {
+                    "label": [
+                        "#c5cbe3",
+                        "#a1a8c3",
+                        "#3d4465",
+                        "#3e4466"
+                    ],
+                    "shape": [
+                        "#f0f3ff",
+                        "#d9dffa",
+                        "#afb4d4",
+                        "#646c9a"
+                    ]
+                }
+            }
+        };
+    </script>
+
+    <?php echo script_tag('js/jquery.js'); ?>
+
+    <?php echo script_tag('plugins/popper.js/dist/umd/popper.js'); ?>
+
+    <?php echo script_tag('plugins/bootstrap/dist/js/bootstrap.min.js?1'); ?>
+
+    <?php echo $this->renderSection('upper_footer_js') ?>
+
+    <?php echo script_tag('plugins/perfect-scrollbar/dist/perfect-scrollbar.js'); ?>
+
+    <?php echo script_tag('plugins/sticky-js/dist/sticky.min.js'); ?>
+
+    <?php echo script_tag('plugins/js-cookie/src/js.cookie.js'); ?>
+
+    <?php echo script_tag('plugins/sweetalert2/dist/sweetalert2.min.js'); ?>
+
+    <?php echo script_tag('js/scripts.bundle.js'); ?>
+
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        if(( window.innerWidth <= 900 ) || ( window.innerHeight <= 700 )){
+            $(".sidebar-menu-mobile").show()
+            $(".kt-header-mobile__toolbar").hide()
+        }else{
+            $(".sidebar-menu-mobile").hide()
+        }
+
+        function capture(_element, _fileName) {
+            const captureElement = document.querySelector(_element)
+            html2canvas(captureElement)
+                .then(canvas => {
+                    canvas.style.display = 'none'
+                    document.body.appendChild(canvas)
+                    return canvas
+                })
+                .then(canvas => {
+                    const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
+                    const a = document.createElement('a')
+                    a.setAttribute('download', _fileName + '.png')
+                    a.setAttribute('href', image)
+                    a.click()
+                    canvas.remove()
+                })
+        }
+
+        function setInputFilter(textbox, inputFilter, errMsg) {
+            // ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout"].forEach(function(event) {
+            textbox.on('keyup', function(e) {
+                if (inputFilter(this.value)) {
+                    alert(1)
+                    // Accepted value
+                    if (["keydown", "mousedown", "focusout"].indexOf(e.type) >= 0) {
+                        this.classList.remove("input-error");
+                        this.setCustomValidity("");
+                    }
+                    this.oldValue = this.value;
+                    this.oldSelectionStart = this.selectionStart;
+                    this.oldSelectionEnd = this.selectionEnd;
+                } else if (this.hasOwnProperty("oldValue")) {
+                    alert(2)
+                    // Rejected value - restore the previous one
+                    this.classList.add("input-error");
+                    this.setCustomValidity(errMsg);
+                    this.reportValidity();
+                    this.value = this.oldValue;
+                    this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                } else {
+                    // Rejected value - nothing to restore
+                    this.value = "";
+                }
+            });
+            // });
+        }
+
+        function isNumberKey(txt, evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            // if (charCode == 46 || charCode == 44) {           
+            if (charCode == 44) {
+                if (txt.value.indexOf('.') === -1 && txt.value.indexOf(',') === -1) {
+                    return true;
+                } else {
+
+                    return false;
+                }
+            } else {
+                // let offsetComma = txt.value.indexOf('.') === -1 ? txt.value.indexOf(',') : txt.value.indexOf('.')
+                let offsetComma = txt.value.indexOf(',');
+
+
+                if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+
+                    return false;
+                }
+
+                if ((txt.value.length - offsetComma) > 3) {
+                    if (offsetComma > 0) {
+                        return false;
+                    } else {
+                        return true
+                    }
+                }
+            }
+            console.log('del')
+            return true;
+        }
+
+        function inputHarusHuruf(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode > 32)
+                return false;
+            return true;
+        }
+
+        function inputHarusHurufDenganTitik(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 46 && charCode !== 32)
+                return false;
+            return true;
+        }
+
+
+        /* Fungsi formatRupiah */
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                split = number_string.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+            return prefix == undefined ? rupiah : rupiah ? "" + rupiah : "";
+        }
+
+        function CheckConnection() {
+            return new Promise((resolve, reject) => {
+                let isSlow;
+                let loaded;
+
+                loaded = false;
+                isSlow = setTimeout(() => {
+                    reject();
+                }, 3500);
+
+                const img = document.createElement("img");
+                img.src = "<?php echo base_url('logo.png') ?>" //"https://picsum.photos/640/480"
+                img.onload = () => {
+                    resolve(true)
+                    loaded = true;
+                    clearTimeout(isSlow);
+                };
+            })
+        }
+    </script>
+
+    <?php echo $this->renderSection('footer_js') ?>
+</body>
+
+</html>

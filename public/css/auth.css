@@ -1,0 +1,104 @@
+/* New */
+/* .login--col-left{
+    height: 100vh;
+    align-items: center;
+    display: flex;
+    background-color: #f2f3f8;
+}
+
+.login--col-right{
+  height: 100vh;
+  background-color: rgba(91, 106, 219, 0.575);
+  align-items: center;
+  display: flex;
+}
+
+.login--col-right .text-content {
+  color: white !important;
+}
+
+.fs-100{
+  font-size: 100px !important;
+}
+
+.fs-31px{
+  font-size: 31px !important;
+}
+
+.btn-login{
+  position: relative;
+}
+
+.icon-login{
+  font-size: 33px !important;
+  right: -3px;
+  position: absolute;
+  top: 19px;
+} */
+/* End NEw  */
+
+.bg-login{
+  z-index: -1;
+  position: relative;
+}
+
+.bg-login img{
+  height: 100vh;
+  width: 100%;
+}
+
+.form-login{
+  position: absolute;
+  top: 4rem;
+  left: 5rem;
+}
+
+.text-green{
+  color: #068683;
+}
+
+.input-group-text.bg-green{
+  color: white !important;
+  background-color: #068783;
+  border: 0px
+}
+
+.btn.btn-green{
+  color: white;
+  background-color: #068783;
+}
+
+.btn.btn-green:hover,
+.btn.btn-green:focus{
+  color: white;
+  background-color: #036a66;
+}
+
+.form-login .card-login{
+  border-radius: 20px;
+  background: rgb(212,223,241);
+  background: linear-gradient(0deg, rgba(212,223,241,1) 0%, rgba(239,239,239,1) 100%);
+}
+
+.form-login .card-login .card-input-login{
+  border-radius: 20px;
+  background-color: #73C9C3;
+}
+
+@media screen and (max-width: 575.98px) {
+  
+  .bg-login img{
+    /* width: 1000px;
+    margin-left: -670px;
+    height: unset;
+    zoom: 160%; */
+    display: none;
+  }
+
+  .form-login{
+    top: 15%;
+    left: 0;
+    padding: 20px;
+  }
+
+}
